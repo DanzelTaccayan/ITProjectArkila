@@ -11,7 +11,7 @@
 @stop
 @section('content')
 @section('form-body')
-          
+
 
 <div class="form-group">
   <label for="payor">User name:</label>
@@ -19,19 +19,19 @@
 </div>
 <div class="form-group">
   <label for="Particulars">Name:</label>
-  <span name="fullname">{{$driver_user->name}}</span>
+  <span name="fullname">{{$driver_user->first_name . " " . $driver_user->middle_name . " " . $driver_user->last_name}}</span>
 </div>
 <div class="form-group">
   <label for="Particulars">Email Address:</label>
   <span name="email">{{$driver_user->email}}</span>
-</div>          
+</div>
 
 
-<div class="well">                          
+<div class="well">
   <div class="box-body no-padding">
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#"><i class="fa fa-inbox"></i> Enable/Disable Account
-        <span class="label pull-right">         
+        <span class="label pull-right">
           <label class="switch">
             <input type="checkbox" class="status" data-id="{{$driver_user->id}}" @if ($driver_user->status == 'enable') checked @endif>
             <span class="slider round"></span>
@@ -41,7 +41,7 @@
     </ul>
   </div>
 
-  <button type="button" class="btn btn-danger btn-block" style="margin-top:5%" data-toggle="modal" data-target="#resetPass">Reset Password</button>  
+  <button type="button" class="btn btn-danger btn-block" style="margin-top:5%" data-toggle="modal" data-target="#resetPass">Reset Password</button>
 
   <!-- Modal for Reset Password-->
     <div class="modal fade" id="resetPass">
@@ -73,7 +73,7 @@
 
 
 </div>
-                   
+
 @endsection
 
 @section('scripts')

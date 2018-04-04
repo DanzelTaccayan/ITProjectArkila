@@ -23,11 +23,8 @@ class UserDriversManagementController extends Controller
         $defaultpassword = "driver!@bantrans";
         $driver_user->password = Hash::make($defaultpassword);
         $driver_user->save();
-
-        //Mail::to('932a782243-eb8d48@inbox.mailtrap.io')->send(new ResetPasswordMail);
-
-        session()->flash('message', 'Reset Password Successful! A Reset Password Link Has Been Sent to the User.');
-        return redirect('/home/user-management');
+        $driverName = $driver_user->first_name . " " . $driver_user->middle_name . " " . $driver_user->last_name;
+        return redirect('/home/user-management')->with('success', 'Password reset successful for ' . $driverName . '');
     }
 
     public function changeDriverStatus()

@@ -46,11 +46,12 @@ class HomeController extends Controller
         $fees = FeesAndDeduction::latest()->where('type','Fee')->get();
         $discounts = FeesAndDeduction::latest()->where('type','Discount')->get();
         $destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')->select('terminal.description as terminal', 'destination.destination_id','destination.description', 'destination.amount')->get();
-        $terminals = Terminal::all();
+        $terminals = Terminal::whereNotIn('terminal_id', [auth()->user()->terminal_id])->get();
+        $terminalsFee = Terminal::all();
         $tickets = Ticket::all();
         $features = Feature::all();
 
-        return view('settings.index', compact('fees','destinations', 'terminals', 'discounts','tickets','features'));
+        return view('settings.index', compact('fees','destinations', 'terminals', 'discounts','tickets','features','terminalsFee'));
     }
 
     public function usermanagement()

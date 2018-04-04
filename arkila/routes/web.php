@@ -35,7 +35,11 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
 
     //Operators
-    Route::resource('/home/operators', 'OperatorsController');
+    Route::resource('/home/operators', 'OperatorsController',[
+        'except' => ['destroy']
+    ]);
+    Route::delete('/home/operators/{archivedOperator}','OperatorsController@destroy')->name('operators.destroy');
+
     Route::get('/home/operators/profile/{operator}','OperatorsController@showProfile')->name('operators.showProfile');
 
     /************ Drivers ******************************/

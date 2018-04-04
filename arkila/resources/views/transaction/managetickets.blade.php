@@ -205,40 +205,41 @@
             </div>
         </div>
 
-        @foreach($terminal->transactions->where('status','Pending') as $transaction)
-
-            <div class="modal fade" id="changeDestination{{$transaction->ticket->ticket_id}}">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">{{$transaction->ticket->ticket_number}}</h4>
-                        </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="">Destination</label>
-                                    <select id="changeDestination{{$transaction->transaction_id}}" class="form-control select2">
-                                        @php $changeDestinationTerminal = \App\Terminal::where('terminal_id',$transaction->terminal_id)->first() ?? null; @endphp
-                                        @if(!is_null($changeDestinationTerminal))
-                                            @foreach( $changeDestinationTerminal->destinations as $destination)
-                                                <option @if($transaction->destination_id == $destination->destination_id){{'selected'}}@endif value="{{$destination->destination_id}}">{{$destination->description}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+        @if($terminal ?? null)
+            @foreach($terminal->transactions->where('status','Pending') as $transaction)
+                <div class="modal fade" id="changeDestination{{$transaction->ticket->ticket_id}}">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{{$transaction->ticket->ticket_number}}</h4>
+                            </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="">Destination</label>
+                                        <select id="changeDestination{{$transaction->transaction_id}}" class="form-control select2">
+                                            @php $changeDestinationTerminal = \App\Terminal::where('terminal_id',$transaction->terminal_id)->first() ?? null; @endphp
+                                            @if(!is_null($changeDestinationTerminal))
+                                                @foreach( $changeDestinationTerminal->destinations as $destination)
+                                                    <option @if($transaction->destination_id == $destination->destination_id){{'selected'}}@endif value="{{$destination->destination_id}}">{{$destination->description}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button value="{{$transaction->transaction_id}}" name="changeDestinationButton" type="submit" class="btn btn-primary">Change Destination</button>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button value="{{$transaction->transaction_id}}" name="changeDestinationButton" type="submit" class="btn btn-primary">Change Destination</button>
+                                </div>
+                        </div>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        @endforeach
+                <!-- /.modal -->
+            @endforeach
+        @endif
     </div>
     <div id="confirmBoxModal"></div>
 

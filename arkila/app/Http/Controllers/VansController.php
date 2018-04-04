@@ -74,6 +74,7 @@ class VansController extends Controller {
             'model_id' => $vanModel->model_id,
             'seating_capacity' => request('seatingCapacity')
         ]);
+
         $van->members()->attach(request('operator'));
 
         if(request('addDriver') === 'on'){

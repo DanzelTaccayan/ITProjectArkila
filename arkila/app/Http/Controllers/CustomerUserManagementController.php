@@ -24,11 +24,9 @@ class CustomerUserManagementController extends Controller
 
         $customer_user->password = Hash::make($defaultpassword);
         $customer_user->save();
+        $customerName = $customer_user->first_name . " " . $customer_user->middle_name . " " . $customer_user->last_name;
 
-      //  Mail::to('932a782243-eb8d48@inbox.mailtrap.io')->send(new ResetPasswordMail);
-
-        session()->flash('message', 'Reset Password Successful! A Reset Password Link Has Been Sent to the User.');
-        return redirect('/home/user-management');
+        return redirect('/home/user-management')->with('success', 'Password reset successful for ' . $customerName . '');
     }
 
     public function changeCustomerStatus()

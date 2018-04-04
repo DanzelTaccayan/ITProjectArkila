@@ -4,13 +4,13 @@
 @section('links')
 @parent
 <!-- additional CSS -->
-<link rel="stylesheet" href="tripModal.css"> 
+<link rel="stylesheet" href="tripModal.css">
 
 @stop
 @section('content')
 <div class="box">
 
-    <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
+
         <div class="col-xl-6">
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
@@ -22,8 +22,8 @@
                 <div class="tab-content">
                     <!-- /.tab-pane -->
                     <div class="tab-pane active" id="tab_2">
-                        
-                        
+
+
                         <div class="box-body">
                             <div class="table-responsive">
                             <table class="table table-bordered table-striped dataTable">
@@ -38,12 +38,12 @@
                                 <tbody>
                                     @foreach($userDrivers as $userDriver)
                                     <tr>
-                                        <td>{{$userDriver->name}}</td>
+                                        <td>{{$userDriver->first_name . " " . $userDriver->middle_name . " " . $userDriver->last_name}}</td>
                                         <td>{{$userDriver->username}}</td>
 
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/admin/{{$userDriver->userid}}/edit" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -70,12 +70,12 @@
                                 <tbody>
                                     @foreach($userCustomers as $userCustomer)
                                     <tr>
-                                        <td>{{$userCustomer->name}}</td>
+                                        <td>{{$userCustomer->first_name . " " . $userCustomer->middle_name . " " . $userCustomer->last_name}}</td>
                                         <td>{{$userCustomer->username}}</td>
                                         <td>{{$userCustomer->email}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/admin/{{$userCustomer->userid}}/edit" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
                                             </div>
                                         </td>
                                         @endforeach
@@ -93,7 +93,7 @@
             <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->
-    </div>
+
 </div>
 @endsection
 

@@ -16,7 +16,7 @@ class CreateArchiveVanTable extends Migration
         Schema::create('archive_van', function (Blueprint $table) {
             $table->increments('archive_van_id');
 
-            $table->string('plate_number', 8);
+            $table->string('plate_number', 9);
             $table->enum('archived', ['Driver', 'Operator', 'Van']);
 
             $table->timestamps();

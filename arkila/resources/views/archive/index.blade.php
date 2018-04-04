@@ -27,13 +27,13 @@
                     <td>
                         <div class="text-center">
                             <a href="{{ route('archive.showProfile', [$operator->archive_member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->operator_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->archive_member_id}}"><i class="fa fa-trash"></i> DELETE</button>
                         </div>
                         <!-- /.text -->
                     </td>
                 </tr>
                 <!-- Modal for Delete-->
-                <div class="modal fade" id="{{'deleteWarning'.$operator->operator_id}}">
+                <div class="modal fade" id="{{'deleteWarning'.$operator->archive_member_id}}">
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header bg-red">
@@ -48,7 +48,7 @@
                             </div>
                             <div class="modal-footer">
                                 @if($operators && $operator)
-                                <form action="{{ route('operators.destroy', [$operator->member_id]) }}" method="POST">
+                                <form action="{{ route('operators.destroy', [$operator->archive_member_id]) }}" method="POST">
                                     {{ csrf_field() }} {{method_field('DELETE')}}
                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                     <button type="submit" class="btn btn-danger">Delete</button>
