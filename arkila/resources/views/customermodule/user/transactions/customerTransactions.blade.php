@@ -33,8 +33,8 @@
                                                 <td>{{$rental->departure_time}}</td>
                                                 <td>
                                                     <div class="text-center">
-                                                        <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary" 
-                                                        data-toggle="modal" 
+                                                        <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
+                                                        data-toggle="modal"
                                                         data-target="#viewRental{{$rental->rent_id}}"
                                                         data-rentvehicle="{{$rental->vanmodel->description}}"
                                                         data-rentdestination="{{$rental->destination}}"
@@ -42,8 +42,16 @@
                                                         data-rentdays="{{$rental->number_of_days}}"
                                                         data-rentdate="{{$rental->departure_date}}"
                                                         data-renttime="{{$rental->departure_time}}"
-                                                        data-rentcomment="{{$rental->comments}}">View</button>
+                                                        data-rentcomment="{{$rental->comments}}"
+                                                        @if($rental->status === 'Accepted')
+
+                                                        @endif>View</button>
+                                                        @if($rental->status === 'Accepted')
+                                                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
+                                                        @elseif($rental->status === 'Declined')
                                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
+                                                        @endif
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -70,8 +78,8 @@
                                                 <td>{{$reservation->departure_time}}</td>
                                                 <td>
                                                     <div class="text-center">
-                                                        <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary" 
-                                                        data-toggle="modal" 
+                                                        <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary"
+                                                        data-toggle="modal"
                                                         data-target="#viewReservation{{$reservation->id}}"
                                                         data-reservedestination="{{$reservation->destination->description}}"
                                                         data-reservecontact="{{$reservation->contact_number}}"
@@ -202,6 +210,43 @@
         </div>
     </div>
     @endforeach
+    @foreach($rentals as $rental)
+    <div class="modal fade" id="cancelWarning{{$rental->rent_id}}">
+        <div class="modal-dialog">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Confirm</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body row" style="margin: 0% 1%;">
+                            <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
+                                <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
+                            </div>
+                            <div class="col-md-10">
+                                <p>Are you sure you want to cancel this request?</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
+                                {{csrf_field()}}
+                                {{method_field('DELETE')}}
+                                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.col -->
+            </div>
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @endforeach
     <!-- Delete Modal-->
     @foreach($rentals as $rental)
     <div class="modal fade" id="deleteWarning{{$rental->rent_id}}">
@@ -226,7 +271,7 @@
                         <div class="modal-footer">
                             <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
                                 {{csrf_field()}}
-                                {{method_field('DELETE')}} 
+                                {{method_field('DELETE')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>
@@ -264,7 +309,7 @@
                         <div class="modal-footer">
                             <form action="{{route('customermodule.deleteReservation', [$reservation->id])}}" method="POST">
                             {{csrf_field()}}
-                            {{method_field('DELETE')}} 
+                            {{method_field('DELETE')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>
@@ -278,7 +323,7 @@
         <!-- /.modal-dialog -->
     </div>
     @endforeach
-@stop 
+@stop
 
 @section('scripts')
 @parent

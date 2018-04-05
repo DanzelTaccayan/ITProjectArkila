@@ -6,8 +6,10 @@
             <div class="box">
                 <h2><i class="fa fa-check-circle" style="font-size: 100px; color: #4bca4b;"></i></h2>
                 <h3 class="text-center">Registered Successfully!</h3>
-                <p>iqwhduihawduiahdhwajkdh</p>
-                <a href="" class="btn btn-template-outlined"><i class="fa fa-chevron-left"> Back to home</i></a>
+                @if(session('success'))
+                  <p>{{session('success')}}</p>
+                @endif
+                <a href="{{route('customermodule.non-user.index')}}" class="btn btn-template-outlined"><i class="fa fa-chevron-left"> Back to home</i></a>
             </div>
         </div>
     </div>
