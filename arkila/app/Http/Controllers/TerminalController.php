@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Ticket;
 use App\Terminal;
 use App\Rules\checkCurrency;
+use DB;
+use Illuminate\Database\QueryException;
+
 class TerminalController extends Controller
 {
 
@@ -32,20 +35,32 @@ class TerminalController extends Controller
             "numberOfTickets" => 'required|numeric|digits_between:1,200'
         ]);
 
-        $terminal = Terminal::create([
-            "description" => request('addTerminalName'),
-            "booking_fee" => request('bookingFee'),
-        ]);
-
-        for($i =1; $i <= request('numberOfTickets'); $i++ ){
-            $ticketName = request('addTerminalName')[0].'-'.$i;
-            Ticket::create([
-                'ticket_number' => $ticketName,
-                'terminal_id' => $terminal->terminal_id,
-                'isAvailable' => 1
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            $terminal = Terminal::create([
+                "description" => request('addTerminalName'),
+                "booking_fee" => request('bookingFee'),
             ]);
 
+            for($i =1; $i <= request('numberOfTickets'); $i++ )
+            {
+                $ticketName = request('addTerminalName')[0].'-'.$i;
+                Ticket::create([
+                    'ticket_number' => $ticketName,
+                    'terminal_id' => $terminal->terminal_id,
+                    'isAvailable' => 1
+                ]);
+
+            }
         }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
 
         session()->flash('message', 'Terminal created successfully');
         return redirect('/home/settings');
@@ -77,10 +92,21 @@ class TerminalController extends Controller
             "editBookingFee" => [new checkCurrency, "numeric", "required","min:1","max:5000"],
             ]);
 
-        $terminal->update([
-            'description' => request('editTerminalName'),
-            'booking_fee' => request('editBookingFee'),
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            $terminal->update([
+                'description' => request('editTerminalName'),
+                'booking_fee' => request('editBookingFee'),
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
 
         session()->flash('message', 'Terminal updated successfully');
         return redirect('/home/settings');
@@ -94,7 +120,24 @@ class TerminalController extends Controller
      */
     public function destroy(Terminal $terminal)
     {
-        $terminal->delete();
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            $terminal->delete();
+        }
+        catch(QueryException $queryE)
+        {
+            DB::rollback();
+            return back()->withErrors($terminal->description.' cannot be deleted. The terminal is in used');
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
+
         session()->flash('message', 'Terminal deleted successfully');
         return back();
     }

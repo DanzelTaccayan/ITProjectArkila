@@ -46,7 +46,7 @@ class CreateMemberTable extends Migration
             $table->string('person_in_case_of_emergency', 120);
             $table->string('emergency_address', 50);
             $table->string('emergency_contactno', 13);
-            $table->string('SSS', 20);
+            $table->string('SSS', 20)->nullable();
             $table->string('license_number', 20)->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('notification', ['Enable', 'Disable'])->default('Enable');

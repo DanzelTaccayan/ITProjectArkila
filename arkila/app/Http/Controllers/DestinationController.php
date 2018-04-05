@@ -6,8 +6,9 @@ use App\Terminal;
 use App\Destination;
 use App\Rules\checkCurrency;
 use App\Rules\checkTerminal;
-use Illuminate\Http\Request;
+use DB;
 use Validator;
+use Illuminate\Database\QueryException;
 use Response;
 
 class DestinationController extends Controller
@@ -15,7 +16,7 @@ class DestinationController extends Controller
 
     public function create()
     {
-        $terminals = Terminal::all();
+        $terminals = Terminal::whereNotIn('terminal_id', [auth()->user()->terminal_id])->get();
         return view('settings.createDestination', compact('terminals'));
     }
 
@@ -27,12 +28,22 @@ class DestinationController extends Controller
             "addDestinationFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000']
         ]);
 
-
-        Destination::create([
-            "terminal_id" => request('addDestinationTerminal'),
-            "description" => request('addDestination'),
-            "amount" => request('addDestinationFare')
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            Destination::create([
+                "terminal_id" => request('addDestinationTerminal'),
+                "description" => request('addDestination'),
+                "amount" => request('addDestinationFare')
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
 
         session()->flash('message', 'Destination created successfully');
         return redirect('/home/settings');
@@ -48,10 +59,21 @@ class DestinationController extends Controller
         $this->validate(request(),[
             "editDestinationFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
         ]);
-            
-        $destination->update([
-            'amount' => request('editDestinationFare'),
-        ]);
+
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            $destination->update([
+                'amount' => request('editDestinationFare'),
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
 
         session()->flash('message','Destination updated successfully');
         return redirect('/home/settings');
@@ -59,7 +81,24 @@ class DestinationController extends Controller
 
     public function destroy(Destination $destination)
     {
-        $destination->delete();
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            $destination->delete();
+        }
+        catch(QueryException $queryE)
+        {
+            DB::rollback();
+            return back()->withErrors($destination->description.' cannot be deleted. The terminal is in used');
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
+
         session()->flash('message', 'Destination created successfully');
         return back();
     }
