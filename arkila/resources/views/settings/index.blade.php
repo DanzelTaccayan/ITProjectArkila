@@ -34,6 +34,26 @@
         
         <div class="box box-solid">
             <div class="box-header with-border">
+                <h3 class="box-title">Discounts</h3>
+                <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="col-md-6">
+                <label>Student/PWD/Senior: </label>
+                </div>
+                <div class="col-md-6">
+                <p>20%</p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm btn-flat btn-block pull-right">EDIT</button>
+            </div> 
+        </div>
+        
+        <div class="box box-solid">
+            <div class="box-header with-border">
                 <h3 class="box-title">Database</h3>
                 <div class="box-tools">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -82,7 +102,6 @@
                                     <td class="pull-right">{{$terminal->booking_fee}}</td>
                                     <td>
                                         <div class="text-center">                               
-                                            <a href="{{ route('terminal.edit', [$terminal->terminal_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                             <input type="hidden" name="_method" value="DELETE">
                                             <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteTerminal'.$terminal->terminal_id}}"><i class="fa fa-trash"></i> DELETE
                                             </button>
@@ -159,7 +178,7 @@
                                             <div class="text-center">
                                                 <a href="{{ route('destinations.edit', [$destination->destination_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit" ></i> EDIT</a>
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#{{'deleteDestination'.$destination->destination_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteDestination'.$destination->destination_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                             </div>
 
                                     </td>
