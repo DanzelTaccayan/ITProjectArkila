@@ -1,7 +1,7 @@
 <div id="accordion" class="mb-5">
   @if($announcements->count() > 0)
     @foreach($announcements as $announcement)
-    <div class="card">
+    <div class="card" style="background-color: #f1faa1;">
         <div id="AnnouncementHead{{$announcement->announcement_id}}" class="card-header">
             <h5 class="mb-0"><a data-toggle="collapse" href="#AnnouncementBody{{$announcement->announcement_id}}" aria-expanded="true">{{$announcement->title}}</a></h5>
         </div>
