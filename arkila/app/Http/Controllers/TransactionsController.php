@@ -116,7 +116,7 @@ class TransactionsController extends Controller {
 
 
             if($totalPassengers <= 10){
-                if(Trip::where('terminal_id',$terminal->terminal_id)->orderBy('queue_number','desc')->first() ?? null){
+                if(Trip::where('terminal_id',$terminal->terminal_id)->whereNotNull('queue_number')->first() ?? null){
                     $queueNumber = Trip::where('terminal_id',$terminal->terminal_id)->orderBy('queue_number','desc')->first()->queue_number+1;
                 }else{
                     $queueNumber = 1;
