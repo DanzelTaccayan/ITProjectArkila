@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\checkName;
 use App\Rules\checkTime;
+use App\Rules\checkAddress;
 use App\Rules\checkContactNum;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class RentalRequest extends FormRequest
                 "firstName" => ['bail',new checkName, 'required', 'max:35'],
                 "middleName" => ['bail',new checkName, 'max:35', 'nullable'],
                 "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
-                "destination" => "bail|required|regex:/^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/|max:50",
+                "destination" => ['bail',new checkAddress,'required','max:50'],
                 "model" => "bail|max:50",
                 "time" => ['bail',new checkTime, 'required'],
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
@@ -57,7 +58,7 @@ class RentalRequest extends FormRequest
                 "firstName" => ['bail',new checkName, 'required', 'max:35'],
                 "middleName" => ['bail',new checkName, 'max:35', 'nullable'],
                 "date" =>  'bail|required|date_format:m/d/Y|after_or_equal:today',
-                "destination" => "bail|required|regex:/^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/|max:50",
+                "destination" => ['bail',new checkAddress,'required','max:50'],
                 "model" => "bail|required|max:50",
                 "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
