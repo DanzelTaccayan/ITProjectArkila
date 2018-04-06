@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Reservations')
-@section('content-header', 'Reservations')
 @section('links')
 @parent
   <link rel="stylesheet" href="public\css\myOwnStyle.css">

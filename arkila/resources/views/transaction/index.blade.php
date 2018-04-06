@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Ticket Sale')
-@section('content-header', 'Ticket Sale')
 @section('links')
     @parent
     {{ Html::style('/jquery/bootstrap3-editable/css/bootstrap-editable.css') }}

@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <div class="row">
+                <div class="row text-center">
                     @foreach($discounts as $discount)
                     <div class="col-md-6">
                         <label>{{$discount->description}}</label>
@@ -53,7 +53,7 @@
                     @endforeach
                 </div>
                 
-                <a href="{{ route('discounts.edit', [$discount->fad_id]) }}" class="btn btn-primary btn-sm btn-block"> EDIT</a>         
+                <a href="{{ route('discounts.edit', [$discount->fad_id]) }}" class="btn btn-primary btn-sm btn-block btn-flat"> EDIT</a>         
             </div> 
         </div>
         

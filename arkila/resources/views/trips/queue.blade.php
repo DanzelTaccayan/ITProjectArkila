@@ -362,7 +362,7 @@ ol.vertical{
 
                 });
             }
-            
+
             $('button[name="destBtn"]').on('click',function(){
                 $.ajax({
                     method:'PATCH',

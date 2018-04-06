@@ -1,6 +1,5 @@
 @extends('layouts.master') 
 @section('title', 'List of Rentals') 
-@section('content-header', 'List of Rentals') 
 @section('links') 
     @parent 
     @stop 
