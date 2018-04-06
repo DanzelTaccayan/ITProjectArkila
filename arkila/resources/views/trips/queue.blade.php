@@ -348,7 +348,7 @@ ol.vertical{
                     method:'POST',
                     url: 'http://localhost:8000/specialUnitChecker',
                     data: {
-                        '_token': '0tmNPFJxvBQO22coaq5aXivyk9R8zX6BB7I5KhdY'
+                        '_token': '{{csrf_token()}}'
                     },
                     success: function(response){
                         if(response[0]) {
