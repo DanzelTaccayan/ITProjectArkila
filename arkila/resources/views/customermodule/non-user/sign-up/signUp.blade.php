@@ -8,39 +8,22 @@
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4" id="boxContainer">
-                    <form class="contact100-form" action="{{route('register')}}" method="POST">
+                    <form class="contact100-form" action="{{route('register')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
-                        <div class="wrap-input100{{ $errors->has('name') ? ' has-error' : '' }}" >
-                            <input id="customerName" class="input100" type="text" name="name" value="{{ old('name') }}" placeholder="Full Name" required>
-                            @if ($errors->has('name'))
-                                <span class="focus-input100">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </span>
-                            @endif    
+                        <div class="wrap-input100" >
+                            <input id="customerName" class="input100" type="text" name="name" value="{{ old('name') }}" placeholder="Full Name"  val-name required>
                         </div><!-- wrap-input100-->
-                        <div class="wrap-input100{{ $errors->has('username') ? ' has-error' : '' }}">
-                            <input id="customerUsername" class="input100" type="text" name="username" value="{{ old('username') }}" placeholder="Username" required>
-                            @if ($errors->has('username'))    
-                                <span class="focus-input100">
-                                    <strong>{{ $errors->first('username') }}</strong>
-                                </span>
-                            @endif
+                        <div class="wrap-input100">
+                            <input id="customerUsername" class="input100" type="text" name="username" value="{{ old('username') }}" placeholder="Username" val-name required>
+                            
                         </div><!-- wrap-input100-->
                         <div class="wrap-input100">
                             <input id="customerEmail" class="input100" type="text" name="email" value="{{ old('email') }}" placeholder="Email Address">
-                            @if ($errors->has('email'))
-                                <span class="focus-input100">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            @endif    
+                              
                         </div><!-- wrap-input100-->
-                        <div class="wrap-input100{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="wrap-input100">
                             <input id="customerPassword" class="input100" type="password" name="password" placeholder="Password" required>
-                            @if ($errors->has('password'))
-                                <span class="focus-input100">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif    
+                            
                         </div><!-- wrap-input100-->
                         <div class="wrap-input100">
                             <input id="customerRepeatPassword" class="input100" type="password" name="password_confirmation" placeholder="Repeat Password" required>
