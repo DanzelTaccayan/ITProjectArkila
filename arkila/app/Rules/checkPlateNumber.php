@@ -25,7 +25,7 @@ class checkPlateNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        return (preg_match('/^[A-Z\d]+$|^([A-Z\d])+[- ]([A-Z\d])+$/',$value));
+        return (preg_match('/^[A-Z\d]+$|^([A-Z\d])+[-]([A-Z\d])+$/',$value));
     }
 
     /**
