@@ -1,0 +1,16 @@
+.form-group{
+	width: 100%;
+}
+
+.heading h1, .panel-heading h1, 
+.heading h2, .panel-heading h2, 
+.heading h3, .panel-heading h3, 
+.heading h4, .panel-heading h4, 
+.heading h5, .panel-heading h5, 
+.heading h6, .panel-heading h6{
+	color: 	#3e3e62;
+}
+
+footer.main-footer {
+   padding: 0;
+}

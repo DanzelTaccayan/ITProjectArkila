@@ -40,6 +40,7 @@ class CustomerRentalRequest extends FormRequest
 
         if($dateFormatted !== $dateFormattedNow){
             return [
+            	"van_model" => "required|exists:van_model,description",
                 "rentalDestination" => "required|regex:/^[,\pL\s\-]+$/u|max:50",
                 "contactNumber" => ["required", new checkContactNum],
                 "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
@@ -49,6 +50,7 @@ class CustomerRentalRequest extends FormRequest
             ];
         }else{
             return [
+            	"van_model" => "required|exists:van_model,description",
                 "rentalDestination" => "required|regex:/^[,\pL\s\-]+$/u|max:50",
                 "contactNumber" => ["required", new checkContactNum],
                 "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
@@ -64,7 +66,8 @@ class CustomerRentalRequest extends FormRequest
         $dateNow = Carbon::now();
         $thisDate = $dateNow->setTimezone('Asia/Manila')->format('m/d/Y');
         return [
-            "date.after" => "The date must be after or equal" . $thisDate . "",
+        	"van_model.exists" => "The van model does not exist",
+            "date.after" => "The date must be after or equal " . $thisDate . "",
             "date.required" => "Please enter the preffered departure date",
             "date.date_format" => "The preferred date does not match the format mm/dd/yyyy",
             "numberOfDays.required" => "Please enter the number of days",
