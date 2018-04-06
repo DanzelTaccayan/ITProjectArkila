@@ -96,9 +96,5 @@
 @stop
 @section('scripts')
 @parent
-<script>
-    $(document).ready(function(){
-        $("#fareListAndQueue").load("{{route('index.getVanQueue')}}");
-    });
-</script>
+
 @endsection

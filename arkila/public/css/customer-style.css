@@ -14,3 +14,27 @@
 footer.main-footer {
    padding: 0;
 }
+
+.contact100-form {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 40px 55px 48px 55px;
+    margin-bottom: 50px;
+    box-shadow: 0px 5px 10px grey;
+    background-color: white;
+}
+
+.mainSection {
+    margin: 7%;
+}
+
+.input-group-num{
+    padding: 6px;
+    border: 1px solid #eadbdb;
+}

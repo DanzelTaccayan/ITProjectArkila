@@ -42,8 +42,41 @@
                             @endif
                             <td class="center-block">
                                 <div class="center-block">
-                                    @if ($rental->status == 'Paid' | $rental->status == 'Accepted')
-                                    <button class="btn btn-primary btn-sm" name="click" id="depart" value="Departed" data-toggle="modal" data-target="#{{'depart'.$rental->rent_id}}"><i class="fa fa-automobile"></i> Depart </button>
+                                    @if ($rental->status == 'Accepted')
+                                    <button class="btn btn-success btn-sm" name="click" id="paid" value="Paid" data-toggle="modal" data-target="#{{'paid'.$rental->rent_id}}"><i class="fa fa-automobile"></i> Paid </button>
+
+                                    <div class="modal fade" id="{{'paid'.$rental->rent_id}}">
+                                        <div class="modal-dialog">
+                                            <div class="col-md-offset-2 col-md-8">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-primary">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title"> Confirm</h4>
+                                                    </div>
+                                                    <div class="modal-body row" style="margin: 0% 1%;">
+
+                                                        <p style="font-size: 110%;">Are you sure rental from {{$rental->full_name}} has paid?</p>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{{ route('rental.update', $rental->rent_id) }}" method="POST" class="form-action">
+                                                            {{ csrf_field() }} {{ method_field('PATCH') }}
+
+                                                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" name="click" value="Departed" class="btn btn-primary btn-sm" style="width:22%;">Depart</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
+                                    @elseif ($rental->status == 'Paid')
+                                    <button class="btn btn-primary btn-sm" name="click" id="depart" value="Depart" data-toggle="modal" data-target="#{{'depart'.$rental->rent_id}}"><i class="fa fa-automobile"></i> Depart </button>
 
                                     <button class="btn btn-outline-danger btn-sm" name="click" id="depart" value="Cancelled" data-toggle="modal" data-target="#{{'cancel'.$rental->rent_id}}"><i class="fa fa-close"></i> Cancel </button>
 
@@ -115,8 +148,8 @@
                                     <!-- /.modal -->
 
                                     @elseif($rental->status == 'Pending')
-                                    <p>Waiting for a driver to respond...</p>
-                                    @else
+                                    <p>No Action</p>
+                                    @elseif ($rental->status == 'Departed')
                                     <button class="btn btn-danger btn-sm " data-toggle="modal" data-target="#{{'deleteRental'.$rental->rent_id}}"><i class="fa fa-trash"></i>Delete
                                                 </button>
 

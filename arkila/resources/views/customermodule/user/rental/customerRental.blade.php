@@ -1,62 +1,68 @@
 @extends('layouts.customer_user')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/background.jpg') }}');">
+<section class="mainSection">
         <div class="container">
             <div class="heading text-center">
                 <h2>Rent a Van</h2>
             </div>
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" id="boxContainer">
-                    <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST">
+                <div class="col-md-6 mx-auto" id="boxContainer">
+                    <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
-                        <div class="wrap-input100">
-                            <select id="vanType" name="van_model" class="input100">
+                        <div class="form-group">
+                            <label for="">Van Model: <span class="text-red">*</span></label>
+                            <select id="vanType" name="van_model" class="form-control">
                                 <option selected hidden disabled>Van Model</option>
                                 @foreach($vanmodels as $vanmodel)
                                     <option value="{{$vanmodel->model_id}}">{{$vanmodel->description}}</option>
                                 @endforeach
                             </select>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
-                        <div class="wrap-input100">
-                            <input id="rentalDestination" class="input100" type="texts" name="rentalDestination" placeholder="Destination">
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="">Destination: <span class="text-red">*</span></label>
+                            <input id="rentalDestination" class="form-control" type="texts" name="rentalDestination" val-rent-dest required>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="contactNumber" class="input100" type="text" placeholder="Contact Number" name="contactNumber" data-inputmask='"mask": "999-999-9999"' data-mask>
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Contact Number: <span class="text-red">*</span></label>
+                                    <div class="input-group">
+                                    <div class="input-group-num">
+                                        <span>+63</span>
+                                    </div>
+                                    <input id="contactNumber" class="form-control" type="text" name="contactNumber" data-inputmask='"mask": "999-999-9999"' data-mask val-phone required>
+                                    </div>
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="numberOfDays" class="input100" type="number" placeholder="Number of Days" name="numberOfDays">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Number of Days: <span class="text-red">*</span></label>
+                                    <input id="numberOfDays" class="form-control" type="number" name="numberOfDays" val-num-days required>
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="date" class="input100 datepicker" type="text" name="date" placeholder="Date">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Departure Date: <span class="text-red"> *</span></label>
+                                    <input id="date" class="form-control date-mask" type="text" name="date" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask val-book-date data-parsley-valid-departure required>
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
+                                <div class="form-group">
+                                    <label for="">Departure Time: <span class="text-red">*</span></label>
                                     <div class="bootstrap-timepicker">
-                                        <input type="text" id="timepicker" class="input100 timepicker" name="time" placeholder="Time">
-                                        <span class="focus-input100"></span>
+                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" val-book-time required>
                                     </div><!-- bootstrap-timepicker-->
-                                </div><!-- wrap-input100-->
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
-                        <div class="wrap-input100">
-                            <textarea id="message" class="input100" name="message" placeholder="Additional comments..."></textarea>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                        <div class="form-group">
+                            <label for="">Comment:</label>
+                            <textarea id="message" class="form-control" name="message" placeholder="Additional comments..." val-comment></textarea>
+                        </div>
                         <div class="container-contact100-form-btn">
                             <button type="button" class="contact100-form-btn" onclick="showSummary()" data-toggle="modal" data-target="#summary"><strong>Book</strong></button>
                         </div><!-- container-contact100-form-btn-->
@@ -133,12 +139,10 @@
             
         $('#timepicker').timepicker({
             showInputs: false,
-            defaultTime: false
+            defaultTime: false,
+            template: false
         });
         })
-
-        $('[data-mask]').inputmask()
-            $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
         
     // $('.summary-modal').click(function(){
     //         $('#vehicleType').text($('#vanType option:selected').text());
@@ -166,5 +170,11 @@
         document.getElementById('timeDepart').textContent = document.getElementById('timepicker').value;
         document.getElementById('comment').textContent = document.getElementById('message').value;
     }
+</script>
+<script>
+    $(function(){
+        $('[data-mask]').inputmask();
+        $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true});
+    });
 </script>
 @endsection
