@@ -39,9 +39,9 @@ class DriverRequest extends FormRequest
 
                 return [
                     'operator' => 'bail|nullable|exists:member,member_id|numeric',
-                    'lastName' => ['bail','required',new checkName,'max:25'],
-                    'firstName' => ['bail','required',new checkName,'max:25'],
-                    'middleName' => ['bail','nullable',new checkName,'nullable','max:25'],
+                    'lastName' => ['bail','required',new checkName,'max:3030'],
+                    'firstName' => ['bail','required',new checkName,'max:3030'],
+                    'middleName' => ['bail','nullable',new checkName,'nullable','max:3030'],
                     'contactNumber' => ['bail',new checkContactNum],
                     'address' => ['bail','required','max:100',new checkAddress],
                     'provincialAddress' => ['bail','required','max:100',new checkAddress],
@@ -79,9 +79,9 @@ class DriverRequest extends FormRequest
 
                 return [
                     'operator' => 'bail|nullable|exists:member,member_id|numeric',
-                    'lastName' => ['bail','required',new checkName,'max:25'],
-                    'firstName' => ['bail','required',new checkName,'max:25'],
-                    'middleName' => ['bail','nullable',new checkName,'nullable','max:25'],
+                    'lastName' => ['bail','required',new checkName,'max:30'],
+                    'firstName' => ['bail','required',new checkName,'max:30'],
+                    'middleName' => ['bail','nullable',new checkName,'nullable','max:30'],
                     'contactNumber' => ['bail',new checkContactNum],
                     'address' => ['bail','required','max:100',new checkAddress],
                     'provincialAddress' => ['bail','required','max:100',new checkAddress],
