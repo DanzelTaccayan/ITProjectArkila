@@ -285,18 +285,20 @@ class DriversController extends Controller
             if (request('operator') !== null) {
                 if($driver->operator->member_id ?? null){
                     $oldOperator = $driver->operator->member_id;
-                }
-                $newOperator = $request->operator;
 
-                if ($oldOperator != $newOperator) {
-                    $mem = $driver->member_id;
-                    $rep = Member::find($mem);
-                    $newRep = $rep->replicate();
-                    $newRep->SSS = '';
-                    $newRep->license_number = '';
-                    $newRep->status = 'Inactive';
-                    $newRep->created_at = $dateNow;
-                    $newRep->save();
+                    $newOperator = $request->operator;
+
+
+                    if ($oldOperator != $newOperator) {
+                        $mem = $driver->member_id;
+                        $rep = Member::find($mem);
+                        $newRep = $rep->replicate();
+                        $newRep->SSS = '';
+                        $newRep->license_number = '';
+                        $newRep->status = 'Inactive';
+                        $newRep->created_at = $dateNow;
+                        $newRep->save();
+                    }
                 }
             }
 
