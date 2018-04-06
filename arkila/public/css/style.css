@@ -477,6 +477,14 @@ textarea.parsley-error {
     background:#e9ecfd;
 }
 
+.notice-container{
+    border: 1px solid #d5d3d3;
+    padding: 5px;
+    overflow-x: auto;
+    height:60px;
+    background:#fff8c4;
+}
+
 .switch {
             position: relative;
             display: inline-block;

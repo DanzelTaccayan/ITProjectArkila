@@ -8,7 +8,11 @@
     <div class="box-body">
     <div class="table-responsive">
     	<div class="col-md-6">
+            @if(count(\App\Member::allOperators()->where('status','Active')->get()) > 0)
     		<a href="{{route('vans.create')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER VAN</a>
+            @else
+                <button title="Please add an operator first" class="btn btn-primary btn-sm btn-flat" disabled><i class="fa fa-plus"></i> REGISTER VAN</button>
+            @endif
             <button onclick="window.open('{{route('pdf.van')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
     	</div>
 

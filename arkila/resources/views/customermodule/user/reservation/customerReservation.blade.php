@@ -1,58 +1,67 @@
 @extends('layouts.customer_user')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/background.jpg') }}');">
+<section class="mainSection">
         <div class="container">
             <div class="heading text-center">
                 <h2>Reserve a Trip</h2>
             </div>
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" id="boxContainer">
-                    <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST">
+                <div class="col-md-6 mx-auto" id="boxContainer">
+                    <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
-                        <div class="wrap-input100">
-                            <select id="destination" name="destination" class="input100" placeholder="Destinations">
+                        <div class="form-group">
+                            <label for="">Destination: <span class="text-red">*</span></label>
+                            <select id="destination" name="destination" class="form-control">
                                 <option selected hidden disabled>Destination</option>
                                 @foreach($destinations as $destination)
                                     <option value="{{$destination->destination_id}}">{{$destination->description}}</option>
                                 @endforeach
                            </select>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                            
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="contactNumber" class="input100" type="text" placeholder="Contact Number(+63)" name="contactNumber" value="" data-inputmask='"mask": "999-999-9999"' data-mask>
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Contact Number: <span class="text-red">*</span></label>
+                                    <div class="input-group">
+                                    <div class="input-group-num">
+                                        <span>+63</span>
+                                    </div>
+                                    <input id="contactNumber" class="form-control" type="text" name="contactNumber" value="" data-inputmask='"mask": "999-999-9999"' data-mask val-phone required>
+                                    </div>
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="seats" class="input100" type="number" name="numberOfSeats" placeholder="Number of Seats">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Number of Person: <span class="text-red">*</span></label>
+                                    <input id="seats" class="form-control" type="number" name="numberOfSeats" val-num-seats required >
+                                    
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="date" class="input100 datepicker" type="text" name="date" placeholder="Date">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for="">Departure Date: <span class="text-red">*</span></label>
+                                    <input id="date" class="form-control date-mask" type="text" name="date" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask val-book-date data-parsley-valid-departure required>
+                                    
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
+                                <div class="form-group">
+                                    <label for="">Departure Time: <span class="text-red">*</span></label>
                                     <div class="bootstrap-timepicker">
-                                        <input type="text" id="timepicker" class="input100 timepicker" name="time" placeholder="Time">
-                                        <span class="focus-input100"></span>
+                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" val-book-time required>
+                                        
                                     </div><!-- bootstrap-timepicker-->
-                                </div><!-- wrap-input100-->
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
-                        <div class="wrap-input100">
-                            <textarea id="message" class="input100" name="message" placeholder="Additional comments..."></textarea>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                        <div class="form-group">
+                            <label for="">Comment:</label>
+                            <textarea id="message" class="form-control" name="message" placeholder="Additional comments..."></textarea>
+                            
+                        </div>
                         <div class="container-contact100-form-btn">
                             <button type="button" class="contact100-form-btn" onclick="showSummary()" data-toggle="modal" data-target="#addSuccess"><strong>Book</strong></button>
                         </div><!-- container-contact100-form-btn-->
@@ -128,7 +137,8 @@
             
         $('#timepicker').timepicker({
             showInputs: false,
-            defaultTime: false
+            defaultTime: false,
+            template: false
         });
         })
         $('[data-mask]').inputmask()
@@ -152,5 +162,11 @@
         document.getElementById('summaryComments').textContent = document.getElementById('message').value;
        
     }
+</script>
+<script>
+    $(function(){
+        $('[data-mask]').inputmask();
+        $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true});
+    });
 </script>
 @endsection

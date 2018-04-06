@@ -26,7 +26,6 @@ class VansController extends Controller {
     public function index()
     {
         $vans = Van::where('status','Active')->get();
-
         return view('vans.index', compact('vans'));
 
     }

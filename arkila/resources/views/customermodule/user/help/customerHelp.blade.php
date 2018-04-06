@@ -1,7 +1,6 @@
 @extends('layouts.customer_user')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}'); height: 100%;
-    background-size: cover;">
+<section class="mainSection">
         <div class="col-md-8 mx-auto">
             <div class="heading text-center">
                 <h2>FAQ's</h2>

@@ -333,10 +333,6 @@ iframe {
     padding: 0 15px 0 20px
 }
 
-#date {
-    padding: 0 15px 0 20px
-}
-
 input.input100 {
     height: 55px
 }
@@ -535,19 +531,6 @@ textarea.input100 {
     opacity: 1
 }
 
-#mainSection {
-    padding-top: 5%;
-    padding-bottom: 5%
-}
-
-#boxContainer {
-    box-shadow: 0 5px 10px grey;
-    background-color: white
-}
-
-#destination{
-    border: gray
-}
 
 .style-bar {
     background: white;

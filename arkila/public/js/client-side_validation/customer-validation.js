@@ -9,7 +9,7 @@ $('[name="last_name"]').attr('data-parsley-required-message','Please  enter a la
 $('[val-name]').attr('data-parsley-pattern-message','Please use letters (a-z) only.');
 
 $('[val-username]').parsley({
-  maxlength: 12,
+  maxlength: 15,
   pattern: /^[\dA-Za-z][A-Za-z\d.-]*[A-Za-z\d]$/,
   minlength: 6
 });

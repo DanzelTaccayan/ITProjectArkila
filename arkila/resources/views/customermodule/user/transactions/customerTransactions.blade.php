@@ -1,12 +1,12 @@
 @extends('layouts.customer_user')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}');">
+<section class="mainSection">
         <div id="content">
             <div class="container">
                 <div class="heading text-center">
                     <h2>MY TRANSACTIONS</h2>
                 </div>
-                <div class="col-md-8 mx-auto" id="boxContainer">
+                <div class="col-md-8 mx-auto boxContainer">
                     <div class="box border-bottom-0">
                         <ul class="nav nav-pills nav-fill">
                             <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>

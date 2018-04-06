@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}');">
+<section class="mainSection">
     <div class="container" id="content">
         <div class="heading text-center">
             <h2 style="color: #000040; padding-top:10px;">Change Password</h2>
