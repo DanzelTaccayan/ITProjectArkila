@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Rules\checkName;
 
 class RegisterController extends Controller
 {
@@ -57,11 +58,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'last_name' => 'required|string|max:50',
-            'first_name' => 'required|string|max:50',
+            'last_name' => ['required','string','max:30', new checkName],
+            'first_name' => ['required','string','max:30', new checkName],
             'username' => 'required|string|max:15|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|max:15|confirmed',
         ]);
     }
 

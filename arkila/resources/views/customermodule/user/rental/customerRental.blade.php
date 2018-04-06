@@ -1,62 +1,64 @@
 @extends('layouts.customer_user')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/background.jpg') }}');">
+<section id="mainSection">
         <div class="container">
             <div class="heading text-center">
                 <h2>Rent a Van</h2>
             </div>
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" id="boxContainer">
+                <div class="col-md-6 mx-auto" id="boxContainer">
                     <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST">
                         {{csrf_field()}}
-                        <div class="wrap-input100">
-                            <select id="vanType" name="van_model" class="input100">
+                        <div class="form-group">
+                            <label for=""></label>
+                            <select id="vanType" name="van_model" class="form-control">
                                 <option selected hidden disabled>Van Model</option>
                                 @foreach($vanmodels as $vanmodel)
                                     <option value="{{$vanmodel->model_id}}">{{$vanmodel->description}}</option>
                                 @endforeach
                             </select>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
-                        <div class="wrap-input100">
-                            <input id="rentalDestination" class="input100" type="texts" name="rentalDestination" placeholder="Destination">
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for=""></label>
+                            <input id="rentalDestination" class="form-control" type="texts" name="rentalDestination" placeholder="Destination">
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="contactNumber" class="input100" type="text" placeholder="Contact Number" name="contactNumber" data-inputmask='"mask": "999-999-9999"' data-mask>
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <input id="contactNumber" class="form-control" type="text" placeholder="Contact Number" name="contactNumber" data-inputmask='"mask": "999-999-9999"' data-mask>
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="numberOfDays" class="input100" type="number" placeholder="Number of Days" name="numberOfDays">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <input id="numberOfDays" class="form-control" type="number" placeholder="Number of Days" name="numberOfDays">
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="wrap-input100">
-                                    <input id="date" class="input100 datepicker" type="text" name="date" placeholder="Date">
-                                    <span class="focus-input100"></span>
-                                </div><!-- wrap-input100-->
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <input id="date" class="form-control datepicker" type="text" name="date" placeholder="Date">
+                                </div>
                             </div><!-- col-->
                             <div class="col-md-6">
-                                <div class="wrap-input100">
+                                <div class="form-group">
+                                    <label for=""></label>
                                     <div class="bootstrap-timepicker">
-                                        <input type="text" id="timepicker" class="input100 timepicker" name="time" placeholder="Time">
-                                        <span class="focus-input100"></span>
+                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" placeholder="Time">
                                     </div><!-- bootstrap-timepicker-->
-                                </div><!-- wrap-input100-->
+                                </div>
                             </div><!-- col-->
                         </div><!-- row-->
-                        <div class="wrap-input100">
-                            <textarea id="message" class="input100" name="message" placeholder="Additional comments..."></textarea>
-                            <span class="focus-input100"></span>
-                        </div><!-- wrap-input100-->
+                        <div class="form-group">
+                            <label for=""></label>
+                            <textarea id="message" class="form-control" name="message" placeholder="Additional comments..."></textarea>
+                            <span class="focus-form-control"></span>
+                        </div>
                         <div class="container-contact100-form-btn">
                             <button type="button" class="contact100-form-btn" onclick="showSummary()" data-toggle="modal" data-target="#summary"><strong>Book</strong></button>
                         </div><!-- container-contact100-form-btn-->
