@@ -14,7 +14,7 @@ class ViewQueueController extends Controller
     {
     	$terminals = Terminal::all();
     	$farelist = Destination::all();
-    	$trips = Trip::where('queue_number', 1)->get();
-    	return view('customermodule.user.indexFairListAndTrips', compact('terminals', 'farelist', 'trips'));
+    	
+    	return view('customermodule.user.fair_list.fairList', compact('terminals', 'farelist'));
     }
 }

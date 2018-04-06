@@ -6,11 +6,11 @@
                 <h2 style="color: #000040;">Fare list</h2>
               </div>
               <div class="row packages">
+               @foreach($terminals as $terminal)
                 <div class="col-md-3 mx-auto">
-                 <div></div>
                   <div class="package">
                     <div class="package-header light-gray">
-                      <h5>Fare list Cabanatuan</h5>
+                      <h5>Fare list {{$terminal->description}}</h5>
                     </div>
                     <div class="table-responsive">
                         <table class="table text-center">
@@ -21,56 +21,19 @@
                                 </tr>
                             </thead>
 
+                            @foreach($farelist as $fare)
+                              @if($fare->terminal_id == $terminal->terminal_id)
                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
+                                  <td>{{$fare->description}}</td>
+                                  <td>{{$fare->amount}}</td>
                                 </tr>
-                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
-                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
-                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
-                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
+                              @endif
+                            @endforeach
                         </table>
                      </div>
                   </div>
                 </div>
-                <div class="col-md-3 mx-auto">
-                  <div class="package">
-                    <div class="package-header light-gray">
-                      <h5>Fare list San Jose</h5>
-                    </div>
-                       <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th>Destination</th>
-                                    <th>Fare</th>
-                                </tr>
-                            </thead>
-
-                                <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
-                                 <tr>
-                                  <td>bengao</td>
-                                  <td>213123</td>
-                                </tr>
-                        </table>
-                     </div>
-                  </div>
-                </div>
+                @endforeach
               </div>
               <!-- Packages End-->
             </div>

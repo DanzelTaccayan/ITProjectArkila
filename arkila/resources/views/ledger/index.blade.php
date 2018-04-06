@@ -120,6 +120,7 @@
                             <td></td>
                         </tr>
                     </tbody>
+                @endif
                     <tfoot>
                         <tr>
                             <th></th>
@@ -131,7 +132,6 @@
                             <th></th>
                         </tr>
                     </tfoot>
-                @endif
             </table>
         </div>
     </div>

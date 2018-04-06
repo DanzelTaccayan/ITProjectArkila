@@ -40,7 +40,7 @@ class CustomerReservationRequest extends FormRequest
         if ($dateFormatted !== $dateFormattedNow) {
             return [
                 "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
-                "destination" => "bail|required|exists:destination,description",
+                "destination" => "bail|required|exists:destination,destination_id",
                 "time" => ['bail',new checkTime, 'required'],
                 "numberOfSeats" => "bail|required|numeric|digits_between:1,4|min:0|max:15",
                 "contactNumber" => ['bail',new checkContactNum],

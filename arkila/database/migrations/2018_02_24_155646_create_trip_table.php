@@ -20,7 +20,7 @@ class CreateTripTable extends Migration
             ->unsigned();
             $table->integer('terminal_id')
             ->unsigned();
-            $table->string('plate_number', 8);
+            $table->string('plate_number', 9);
 
             $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
             $table->enum('status', ['Departed', 'On Queue'])->default('On Queue');

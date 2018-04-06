@@ -21,7 +21,7 @@ class DriversController extends Controller
      */
     public function index()
     {
-        $drivers = Member::allDrivers()->get();
+        $drivers = Member::allDrivers()->where('status','Active')->get();
 
         return view('drivers.index', compact('drivers'));
     }
@@ -33,8 +33,8 @@ class DriversController extends Controller
      */
     public function create()
     {
-        $drivers = Member::allDrivers()->get();
-        $operators = Member::allOperators()->get();
+        $drivers = Member::allDrivers()->where('status','Active')->get();
+        $operators = Member::allOperators()->where('status','Active')->get();
         return view('drivers.create', compact('drivers','operators'));
     }
 
@@ -265,7 +265,7 @@ class DriversController extends Controller
      */
     public function edit(Member $driver)
     {
-        $operators = Member::allOperators()->get();
+        $operators = Member::allOperators()->where('status','Active')->get();
         return view('drivers.edit', compact('driver', 'operators'));
 
         //
@@ -283,18 +283,22 @@ class DriversController extends Controller
             $current_time = \Carbon\Carbon::now();
             $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
             if (request('operator') !== null) {
-                $oldOperator = $driver->operator->member_id;
-                $newOperator = $request->operator;
+                if($driver->operator->member_id ?? null){
+                    $oldOperator = $driver->operator->member_id;
 
-                if ($oldOperator != $newOperator) {
-                    $mem = $driver->member_id;
-                    $rep = Member::find($mem);
-                    $newRep = $rep->replicate();
-                    $newRep->SSS = '';
-                    $newRep->license_number = '';
-                    $newRep->status = 'Inactive';
-                    $newRep->created_at = $dateNow;
-                    $newRep->save();
+                    $newOperator = $request->operator;
+
+
+                    if ($oldOperator != $newOperator) {
+                        $mem = $driver->member_id;
+                        $rep = Member::find($mem);
+                        $newRep = $rep->replicate();
+                        $newRep->SSS = '';
+                        $newRep->license_number = '';
+                        $newRep->status = 'Inactive';
+                        $newRep->created_at = $dateNow;
+                        $newRep->save();
+                    }
                 }
             }
 

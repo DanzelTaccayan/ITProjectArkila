@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Van;
 use App\VanModel;
 use App\Http\Requests\RentalRequest;
+use Illuminate\Validation\Rule;
 
 class RentalsController extends Controller
 {
@@ -60,9 +61,9 @@ class RentalsController extends Controller
                 'rent_type' => 'Walk-in',
                 'status' => 'Pending',
 
-            ]);          
+            ]);
         } else {
-            
+
             $findModel = VanModel::all();
             $modelReq = $request->model;
             foreach ($findModel->where('description', $modelReq) as $find) {
@@ -88,10 +89,10 @@ class RentalsController extends Controller
 
             ]);
         }
-    
+
         return redirect('/home/rental/')->with('success', 'Rental request from ' . $request->lastName . ', ' . $request->firstName . ' was created successfully');
 
-    }    
+    }
 
 
     /**
@@ -100,14 +101,20 @@ class RentalsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */ 
+     */
     public function update(Rental $rental)
     {
+      $this->validate(request(),[
+        "click" => [
+          'required',
+          Rule::in(['Accepted', 'Declined', 'Departed', 'Pending', 'Cancelled', 'Expired'])
+        ],
+      ]);
         $rental->update([
             'status' => request('click'),
         ]);
         return redirect()->back()->with('success', 'Rental requested by ' . $rental->full_name . ' was marked as '. request('click'));
-        
+
     }
 
     /**

@@ -16,7 +16,7 @@ class CreateRentalTable extends Migration
         Schema::create('rental', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('rent_id');
-            $table->string('plate_number', 8)->nullable();
+            $table->string('plate_number', 9)->nullable();
             $table->integer('user_id')
                 ->nullable()
             ->unsigned();
@@ -35,7 +35,7 @@ class CreateRentalTable extends Migration
             $table->smallInteger('number_of_days');
             $table->string('destination');
             $table->string('contact_number', 13);
-            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired'])
+            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid'])
             ->default('Pending');
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->string('comments', 300)

@@ -28,25 +28,24 @@
     <label for="amount">Amount: <span class="text-red">*</span></label>
     <input type="number" class="form-control" name="amount" step="0.25" placeholder="Php 0.00" value="{{ $ledger->amount }}" required>
 </div>
-<div class="form-group" name="revenueExpense">
 
-<div class="form-group">
+<div class="form-group" name="revenueExpense">
     <div class="radio">
-        <label>Revenue</label>
         <div class="col-md-6">
+            <label for=""> Revenue</label>
             <label class="radio-inline">
                 <input type="radio" value="Revenue" name="type" class="with-gap" @if(old('type') || $ledger->type == 'Revenue') {{ 'checked' }} @endif>
             </label>
         </div>
-
         <div class="col-md-6">
-            <label>Expense</label>
+            <label for="">Expense</label>
             <label class="radio-inline">
-                <input type="radio" value="Expense" name="type" class="with-gap" @if(old('type') || $ledger->type == 'Expense') {{ 'checked' }} @endif>
+                 <input type="radio" value="Expense" name="type" class="with-gap" @if(old('type') || $ledger->type == 'Expense') {{ 'checked' }} @endif>
             </label>
         </div>
     </div>
 </div>
+    
 
 @endsection
 @section('form-btn')

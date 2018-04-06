@@ -112,20 +112,22 @@
             <div class="heading text-center">
                 <h2><i class="fa fa-bolt"></i> Weather Updates</h2>
             </div>
-            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
-                <!-- Baguio Weather Widget-->
-                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/baguio-city-12231"><img src="https://w.bookcdn.com/weather/picture/28_12231_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=37033" alt="booked.net"/></a>
-                <!-- weather widget end -->
-            </div>
-            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
-                <!-- San Jose Weather Widget-->
-                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/munoz-w434073"><img src="https://w.bookcdn.com/weather/picture/28_w434073_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=46479" alt="booked.net"/></a>
-                <!-- weather widget end -->
-            </div>
-            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
-                <!-- Cabanatuan Weather Widget-->
-                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/cabanatuan-city-33111"><img src="https://w.bookcdn.com/weather/picture/28_33111_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=68269" alt="booked.net"/></a>
-                <!-- weather widget end -->
+            <div class="row">
+                <div class="col-lg-4 text-center" style="padding-top:5px;">
+                    <!-- Baguio Weather Widget-->
+                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/baguio-city-12231"><img src="https://w.bookcdn.com/weather/picture/28_12231_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=37033" alt="booked.net"/></a>
+                    <!-- weather widget end -->
+                </div>
+                <div class="col-lg-4 text-center" style="padding-top:5px;">
+                    <!-- San Jose Weather Widget-->
+                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/munoz-w434073"><img src="https://w.bookcdn.com/weather/picture/28_w434073_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=46479" alt="booked.net"/></a>
+                    <!-- weather widget end -->
+                </div>
+                <div class="col-lg-4 text-center" style="padding-top:5px;">
+                    <!-- Cabanatuan Weather Widget-->
+                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/cabanatuan-city-33111"><img src="https://w.bookcdn.com/weather/picture/28_33111_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=68269" alt="booked.net"/></a>
+                    <!-- weather widget end -->
+                </div>
             </div>
         </div>
         <!-- container-->
@@ -144,7 +146,7 @@ myDiv.text(myDiv.text().substring(0,250) + '...')
 <script type="text/javascript">
     $(document).ready(function(){
         $("#announcements").load("{{route('customermodule.user.indexAnnouncements')}}");
-        $("#fareAndQueue").load("{{route('customermodule.user.indexFairListAndTrips')}}");
+        
     });
 </script>
 

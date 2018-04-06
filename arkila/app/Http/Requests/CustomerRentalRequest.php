@@ -40,7 +40,7 @@ class CustomerRentalRequest extends FormRequest
 
         if($dateFormatted !== $dateFormattedNow){
             return [
-            	"van_model" => "required|exists:van_model,description",
+            	"van_model" => "required|exists:van_model,model_id",
                 "rentalDestination" => "required|regex:/^[,\pL\s\-]+$/u|max:50",
                 "contactNumber" => ["required", new checkContactNum],
                 "numberOfDays" => "required|numeric|digits_between:1,2|min:1",

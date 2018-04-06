@@ -20,7 +20,7 @@ class OperatorsController extends Controller
      */
     public function index()
     {
-        $operators = Member::allOperators()->get();
+        $operators = Member::allOperators()->where('status','Active')->get();
         return view('operators.index', compact('operators'));
     }
 

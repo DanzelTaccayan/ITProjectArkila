@@ -15,9 +15,11 @@ class ViewRentalsController extends Controller
 {
     public function viewRentals()
     {
-        $rentals = Rental::all();
+        $user = User::find(Auth::id());
+        $model_id = $user->member->van->first()->model_id ?? null;
+        $rentals = Rental::where('model_id', $model_id)->get();
         $vans = Van::all();
-        return view('drivermodule.rentals.rental', compact('rentals', 'vans'));
+        return view('drivermodule.rentals.rental', compact('rentals', 'vans', 'model_id'));
     }
 
     public function updateRental(Rental $rental)
@@ -43,6 +45,7 @@ class ViewRentalsController extends Controller
                     'driver_id' => Auth::id(),
                     'status' => request('click'),
                 ]);
+                $message = 'You have accepted the rental request from ' . $rental->last_name . ', ' . $rental->first_name . ' going to ' . $rental->destination;
             } elseif ($rental->status == 'Pending') {
                 $rental->update([
                     'driver_id' => Auth::id(),
@@ -63,7 +66,7 @@ class ViewRentalsController extends Controller
                 ]);
             }
 
-            $message = 'You have accepted the rental request from ' . $rental->last_name . ', ' . $rental->first_name . ' going to ' . $rental->destination;
+
             return redirect()->back()->with('success', $message);
         }
     }
