@@ -15,7 +15,7 @@
 	@show
 </head>
 
-<body>
+<body style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}'); background-size: cover;">
         @include('layouts.partials.customer_header_user')
 
 

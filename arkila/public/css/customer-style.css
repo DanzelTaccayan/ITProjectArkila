@@ -30,8 +30,15 @@ footer.main-footer {
     background-color: white;
 }
 
+.boxContainer {
+    background-color: white;
+    margin-bottom: 50px;
+    box-shadow: 0px 5px 10px grey;
+}
+
 .mainSection {
     margin: 7%;
+    margin-bottom: 20%;
 }
 
 .input-group-num{

@@ -1,11 +1,11 @@
 @extends('layouts.landing')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}');">
+<section class="mainSection">
     <div class="container" id="content">
         <div class="heading text-center">
             <h2 style="color: #000040; padding-top:10px;">Change Password</h2>
         </div>
-        <div class="col-md-3 mx-auto" id="boxContainer" style="margin-top:75px; padding-top: 30px;">
+        <div class="col-md-3 mx-auto boxContainer" style=" padding: 30px;">
             <form action="{{route('drivermodule.changePassword', $customerId)}}" method="POST">
               {{csrf_field()}}
               {{method_field('PATCH')}}
