@@ -56,7 +56,6 @@
         @endforeach
     </select> 
     @endif
-
 </div>
 @endsection
 @section('others')
