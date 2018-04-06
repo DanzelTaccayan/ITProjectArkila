@@ -118,11 +118,13 @@ class TransactionsController extends Controller {
             if($totalPassengers <= 10){
                 if(Trip::where('terminal_id',$terminal->terminal_id)->whereNotNull('queue_number')->first() ?? null){
                     $queueNumber = Trip::where('terminal_id',$terminal->terminal_id)->orderBy('queue_number','desc')->first()->queue_number+1;
+                    \Log::info('If statement'.$queueNumber);
                 }else{
                     $queueNumber = 1;
+                    \Log::info('else statement'.$queueNumber);
                 }
 
-                Trip::create([
+                $tripa = Trip::create([
                     'driver_id' => $trip->driver_id,
                     'terminal_id' => $trip->terminal_id,
                     'plate_number' => $trip->plate_number,
@@ -130,6 +132,7 @@ class TransactionsController extends Controller {
                     'status' => 'On Queue',
                     'queue_number' => $queueNumber
                 ]);
+                \Log::info('After create '.$tripa);
             }
 
 
@@ -147,10 +150,12 @@ class TransactionsController extends Controller {
             }
 
             foreach($terminal->trips()->whereNotNull('queue_number')->get() as $trip){
-                $tripQueueNum = ($trip->queue_number)-1;
-                $trip->update([
-                   'queue_number' => $tripQueueNum
-                ]);
+                if(!$trip->queue_number == 1){
+                    $tripQueueNum = ($trip->queue_number)-1;
+                    $trip->update([
+                       'queue_number' => $tripQueueNum
+                    ]);
+                }
             }
 
             return 'success';
