@@ -25,7 +25,7 @@ class VansController extends Controller {
      */
     public function index()
     {
-        $vans = Van::all();
+        $vans = Van::where('status','Active')->get();
 
         return view('vans.index', compact('vans'));
 
@@ -37,14 +37,14 @@ class VansController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        $operators = Member::allOperators()->get();
+        $operators = Member::allOperators()->where('status','Active')->get();
         $models = VanModel::all();
         return view('vans.create',compact('operators','models'));
     }
 
     public function createFromOperator(Member $operator)
     {
-        $drivers = $operator->drivers()->doesntHave('van')->get();
+        $drivers = $operator->drivers()->doesntHave('van')->where('status','Active')->get();
         $models = VanModel::all();
         return view('vans.create',compact('drivers','operator','models'));
     }
@@ -168,8 +168,8 @@ class VansController extends Controller {
      */
     public function edit(Van $van)
     {
-        $operators = Member::allOperators()->get();
-        $drivers = Member::allDrivers()->get();
+        $operators = Member::allOperators()->where('status','Active')->get();
+        $drivers = Member::allDrivers()->where('status','Active')->get();
         return view('vans.edit', compact('van','operators','drivers'));
     }
 
@@ -272,8 +272,8 @@ class VansController extends Controller {
 
         if($operator != null) {
             $driversArr = [];
-            $driverOP = $operator->drivers()->get();
-            $driverNoOP = Member::allDrivers()->whereNull('operator_id')->get();
+            $driverOP = $operator->drivers()->where('status','Active')->get();
+            $driverNoOP = Member::allDrivers()->where('status','Active')->whereNull('operator_id')->get();
 
             $drivers = $driverOP->merge($driverNoOP);
 
