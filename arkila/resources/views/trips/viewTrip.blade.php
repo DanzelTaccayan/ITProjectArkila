@@ -77,9 +77,6 @@
                             </div>
                             <div class="box-body" id="inner-dest">
 
-                                <label for="">Total:</label>
-                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare}}" disabled>
-                                
                                 <div class="form-group inner-routes">
                                     <label for="">BanTrans: </label>
                                     @php $bantrans = 0; @endphp
@@ -96,6 +93,9 @@
                                     <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
                                 </div>
                                 
+                                <label for="">Total:</label>
+                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare}}" disabled>
+
                                 <hr>
                                 
                                 <label for="">Driver:</label>
