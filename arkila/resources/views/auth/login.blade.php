@@ -5,9 +5,7 @@
             <div class="heading text-center">
                 <h2 style="color: #002f43;">Sign In</h2>
             </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4" id="boxContainer">
+                <div class="col-md-4 mx-auto" id="boxContainer" style="padding-bottom:20px;">
                     <form class="contact100-form" method="POST" action="{{ route('login') }}">
                       {{csrf_field()}}
                         <div class="wrap-input100{{ $errors->has('username') ? ' has-error' : '' }}">
@@ -32,23 +30,19 @@
                           </label>
                         </div>
                         <div class="container-contact100-form-btn">
-                          <div class="row">
-                            <div class="col-md-2">
-                                <button type="submit" class="contact100-form-btn"><strong>Log In</strong></button>
-                            </div>
-                          </div>
-
-
+                            <button type="submit" class="contact100-form-btn"><strong>Log In</strong></button>
                             <a class="btn btn-link" href="{{ route('password.request') }}">
                                 Forgot Your Password?
                             </a>
+                            <a class="btn btn-link" href="{{ route('register')}}">
+                               Sign Up
+                            </a>
                         </div><!-- container-contact100-form-btn-->
+                        
                     </form>
                     <!-- contact100-form-->
                 </div>
                 <!-- boxContainer-->
-            </div>
-            <!-- row-->
         </div>
         <!-- container-->
     </section>

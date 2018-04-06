@@ -1,91 +1,71 @@
 @extends('layouts.customer_non_user')
 @section('content')
-<section style="background: url('{{ URL::asset('img/photogrid.jpg') }}') center center repeat; background-size: cover;" class="bar background-white relative-positioned">
-        <div class="container">
-            <!-- Carousel Start-->
-            <div class="home-carousel">
-                <div class="dark-mask mask-primary"></div>
-                <div class="container">
-                    <div class="homepage owl-carousel">
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-md-5 text-right">
-                                    <h1>3 Branches to serve you!</h1>
-                                    <p>Baguio. Cabanatuan. San Jose.</p>
-                                </div>
-                                <div class="col-md-7"><img src="{{ URL::asset('img/template-homepage.png') }}" alt="" class="img-fluid">
-                                </div>
-                                <!-- col-->
-                            </div>
-                            <!-- row-->
-                        </div>
-                        <!-- item-->
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-md-7 text-center"><img src="../img/template-mac.png" alt="" class="img-fluid"></div>
-                                <div class="col-md-5">
-                                    <h2>Baguio Terminal Operating Hours</h2>
-                                    <ul class="list-unstyled">
-                                        <li>Operating Hours 4:00 am - 6:00 pm daily</li>
-                                        <li>Office Hours 7:00 am - 7:00 pm daily</li>
-                                    </ul>
-                                </div>
-                                <!-- col-->
-                            </div>
-                            <!-- row-->
-                        </div>
-                        <!-- item-->
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-md-5 text-right">
-                                    <h1>Need a Van Rental for a special occasion?</h1>
-                                    <p>Ban Trans is here for you!</p>
-                                </div>
-                                <div class="col-md-7"><img src="../img/template-easy-customize.png" alt="" class="img-fluid"></div>
-                                <!-- col-->
-                            </div>
-                            <!-- row-->
-                        </div>
-                        <!-- item-->
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-md-7"><img src="../img/template-easy-code.png" alt="" class="img-fluid"></div>
-                                <div class="col-md-5">
-                                    <h1>Need a Seat Reservation for a Trip?</h1>
-                                    <p>We've got you!</p>
-                                </div>
-                                <!-- col-->
-                            </div>
-                            <!-- row-->
-                        </div>
-                        <!-- item-->
+<section id="packages" class="bar no-mb">
+        <div data-animate="fadeInUp" class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="heading text-center" >
+                <h2 style="color: #000040;">Fare list</h2>
+              </div>
+              <div class="row packages">
+                <div class="col-md-3 mx-auto">
+                  <div class="package">
+                    <div class="package-header light-gray">
+                      <h5>Fare list Cabanatuan</h5>
                     </div>
-                    <!-- homepage-->
-                </div>
-                <!-- container-->
-            </div>
-            <!-- Carousel End-->
-        </div>
-        <!-- container-->
-    </section>
-    <!-- section-->
+                    <div class="table-responsive">
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>Destination</th>
+                                    <th>Fare</th>
+                                </tr>
+                            </thead>
 
-    <section style="background: url(../img/fixed-background-2.jpg) center top no-repeat; background-size: cover;" class="bar text-center bg-fixed relative-positioned">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <div class="heading text-center" style="color:white;">
-                        <h2><i class="fa fa-car"></i> Fare Lists &#38; Current Trips</h2>
-                    </div>
-                    <div class="dark-mask">
-                    </div>
-                    <div id="fareListAndQueue" class="container">
-                    </div> 
+                                <tr>
+                                  <td>bengao</td>
+                                  <td>213123</td>
+                                </tr>
+                                 <tr>
+                                  <td>bengao</td>
+                                  <td>213123</td>
+                                </tr>
+                        </table>
+                     </div>
+                  </div>
                 </div>
+                <div class="col-md-3 mx-auto">
+                  <div class="package">
+                    <div class="package-header light-gray">
+                      <h5>Fare list San Jose</h5>
+                    </div>
+                       <div class="table-responsive">
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th>Destination</th>
+                                    <th>Fare</th>
+                                </tr>
+                            </thead>
+
+                                <tr>
+                                  <td>bengao</td>
+                                  <td>213123</td>
+                                </tr>
+                                 <tr>
+                                  <td>bengao</td>
+                                  <td>213123</td>
+                                </tr>
+                        </table>
+                     </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Packages End-->
             </div>
+          </div>
         </div>
-    </section><!-- section-->
+      </section>
 @stop
 @section('scripts')
 @parent

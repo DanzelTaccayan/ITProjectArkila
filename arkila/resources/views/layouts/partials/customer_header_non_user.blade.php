@@ -16,6 +16,30 @@
                         <li class="nav-item dropdown">
                             <a href="{{route('customermodule.non-user.index')}}">Home</a>
                         </li>
+                        <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Services</a>
+                            <ul class="dropdown-menu megamenu">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="../img/template-easy-customize.png" alt="" class="img-fluid d-none d-lg-block">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="list-unstyled">
+                                                <li class="nav-item">
+                                                    <a href="#rentals" class="nav-link">Rentals</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#reservations" class="nav-link">Reservation</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="" class="nav-link">Fare List</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item dropdown menu-large">
                             <a href="{{route('customermodule.non-user.about.customerAbout')}}">About</a>
                         </li>
