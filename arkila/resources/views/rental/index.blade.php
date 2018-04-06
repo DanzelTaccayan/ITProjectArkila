@@ -1,8 +1,8 @@
-@extends('layouts.master') 
-@section('title', 'List of Rentals') 
-@section('links') 
-    @parent 
-    @stop 
+@extends('layouts.master')
+@section('title', 'List of Rentals')
+@section('links')
+    @parent
+    @stop
 @section('content')
 <div class="box">
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($rentals as $rental) 
+                        @foreach($rentals as $rental)
                         <tr>
                             <td>{{ $rental->full_name }}</td>
                             <td>{{ $rental->destination }}</td>
@@ -38,8 +38,8 @@
                             @if ($rental->status == 'Pending')
                             <td>{{ $rental->status }}</td>
                             @else
-                            <td>{{ $rental->status }} by {{ $rental->users->last_name  }}, {{ $rental->users->first_name  }}</td>
-                            @endif                            
+                            <td>{{ $rental->status }} by {{ Auth::user()->last_name  }}, {{ Auth::user()->first_name  }}</td>
+                            @endif
                             <td class="center-block">
                                 <div class="center-block">
                                     @if ($rental->status == 'Paid' | $rental->status == 'Accepted')
@@ -167,7 +167,7 @@
         </div>
     </div>
 </div>
-    
+
 @endsection @section('scripts') @parent
 <script>
     $(function() {

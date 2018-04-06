@@ -1,6 +1,6 @@
-@extends('layouts.driver') 
-@section('title', 'Driver Profile') 
-@section('content-title', 'Driver Home') 
+@extends('layouts.driver')
+@section('title', 'Driver Profile')
+@section('content-title', 'Driver Home')
 @section('content')
 <div class="box">
     <div class="box-body">
@@ -21,7 +21,7 @@
     </thead>
     <tbody>
         @foreach($rentals->sortByDesc('status') as $rental)
-            @if ($rental->status == 'Pending' && $rental->model_id == Auth::user()->model_id || $rental->model_id == null)
+            @if ($rental->status == 'Pending' && ($rental->model_id == Auth::user()->model_id || $rental->model_id == null))
         <tr>
             <td>{{ $rental->rent_id }}</td>
             <td>{{ $rental->full_name }}</td>
@@ -33,6 +33,7 @@
             <td>{{ $rental->status }}</td>
             <td class="center-block">
                 <div class="text-center">
+
                     @if ($rental->status == 'Pending')
                     <form action="{{ route('drivermodule.updateRental', $rental->rent_id) }}" method="POST">
                         {{ csrf_field() }}
@@ -40,12 +41,8 @@
                         <button class="btn btn-success btn-sm" name="click" onclick="return ConfirmStatus()" value="Accepted"><i class="fa fa-automobile"></i> Accept</button>
 
                     </form>
-                    @elseif ($rental->status == 'Departed')
-                     <form method="POST" action="">
-                        {{csrf_field()}} {{method_field('DELETE')}}
-                        <button type="submit" class="btn btn-danger btn-sm" style="width:22%;">Delete</button>
 
-                    </form>                 
+
                     @endif
 
                 </div>
@@ -71,12 +68,13 @@
                         <button class="btn btn-success btn-sm" name="click" onclick="return ConfirmStatus()" value="Accepted"><i class="fa fa-automobile"></i> Accept</button>
 
                     </form>
-                    @elseif ($rental->status == 'Departed')
-                     <form method="POST" action="">
-                        {{csrf_field()}} {{method_field('DELETE')}}
-                        <button type="submit" class="btn btn-danger btn-sm" style="width:22%;">Delete</button>
+                    @elseif($rental->status == 'Accepted')
+                    <form action="{{ route('drivermodule.updateRental', $rental->rent_id) }}" method="POST">
+                        {{ csrf_field() }}
+                        {{ method_field('PATCH') }}
+                        <button class="btn btn-success btn-sm" name="click" onclick="return ConfirmStatus()" value="Cancelled"><i class="fa fa-automobile"></i> Cancel</button>
 
-                    </form>                 
+                    </form>
                     @endif
 
                 </div>
@@ -90,8 +88,8 @@
 </div>
     </div>
 
-@endsection 
-@section('scripts') 
+@endsection
+@section('scripts')
 @parent
 <script>
   $(function() {
