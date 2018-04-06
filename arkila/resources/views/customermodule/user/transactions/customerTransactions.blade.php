@@ -38,7 +38,7 @@
                                                         <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
                                                         data-toggle="modal"
                                                         data-target="#viewRental{{$rental->rent_id}}"
-                                                        data-rentvehicle="{{$rental->vanmodel->description}}"
+                                                        data-rentvehicle="{{$rental->vanmodel->description ?? null}}"
                                                         data-rentdestination="{{$rental->destination}}"
                                                         data-rentcontact="{{$rental->contact_number}}"
                                                         data-rentdays="{{$rental->number_of_days}}"
