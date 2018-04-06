@@ -27,14 +27,14 @@ class TripsController extends Controller
 
         $drivers = Member::whereNotIn('member_id', function($query){
             $query->select('driver_id')->from('trip')->whereNotNull('queue_number');
-        })->get();
+        })->where('status','active')->get();
 
         $vans = Van::whereNotIn('plate_number', function($query){
             $query->select('plate_number')
                 ->from('trip')
                 ->where('has_privilege',1)
                 ->orWhereNotNull('queue_number');
-        })->get();
+        })->where('status','active')->get();
 
 
         return view('trips.queue', compact('terminals','trips','vans','destinations','drivers'));
