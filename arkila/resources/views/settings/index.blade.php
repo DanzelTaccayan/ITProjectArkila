@@ -42,13 +42,18 @@
                 </div>
             </div>
             <div class="box-body">
-                <div class="col-md-6">
-                <label>Student/PWD/Senior: </label>
+                <div class="row">
+                    @foreach($discounts as $discount)
+                    <div class="col-md-6">
+                        <label>{{$discount->description}}</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{$discount->amount}}</p>
+                    </div>
+                    @endforeach
                 </div>
-                <div class="col-md-6">
-                <p>20%</p>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm btn-flat btn-block pull-right">EDIT</button>
+                
+                <a href="{{ route('discounts.edit', [$discount->fad_id]) }}" class="btn btn-primary btn-sm btn-block"> EDIT</a>         
             </div> 
         </div>
         
@@ -157,7 +162,7 @@
                         <div class="col-md-6 pull-left">
                             <a href="/home/settings/destinations/create" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"> </i> CREATE DESTINATION </a>
                         </div>
-                        <table class="table table-bordered table-striped dataTable">
+                        <table class="table table-bordered table-striped destination">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -328,6 +333,20 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': true,
+                'aoColumnDefs': [{
+                    'bSortable': false,
+                    'aTargets': [-1] /* 1st one, start by the right */
+                }]
+            }),
+            
+             $('.destination').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': true,
+                'order': [[ 2, "desc" ]],
                 'aoColumnDefs': [{
                     'bSortable': false,
                     'aTargets': [-1] /* 1st one, start by the right */

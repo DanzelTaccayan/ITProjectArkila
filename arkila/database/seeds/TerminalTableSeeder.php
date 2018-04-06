@@ -15,7 +15,7 @@ class TerminalTableSeeder extends Seeder
         Terminal::create([
             'terminal_id' => '1',
             'description' => 'Baguio City',
-            'booking_fee' => '100.00'
+            'booking_fee' => '20.00'
         ]);
 
     }

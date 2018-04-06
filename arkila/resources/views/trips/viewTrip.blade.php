@@ -76,6 +76,10 @@
                                 <h4>Shares</h4>
                             </div>
                             <div class="box-body" id="inner-dest">
+
+                                <label for="">Total:</label>
+                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare}}" disabled>
+                                
                                 <div class="form-group inner-routes">
                                     <label for="">BanTrans: </label>
                                     @php $bantrans = 0; @endphp
@@ -91,14 +95,11 @@
                                     @endforeach
                                     <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
                                 </div>
-
-                                <label for="">Driver:</label>
-                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare - $bantrans}}" disabled>
                                 
                                 <hr>
                                 
-                                <label for="">Total:</label>
-                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare}}" disabled>
+                                <label for="">Driver:</label>
+                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare - $bantrans}}" disabled>
                                 
                             </div>
                         </div>
