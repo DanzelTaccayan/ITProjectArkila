@@ -1,5 +1,5 @@
 @extends('layouts.customer_user') @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/background.jpg') }}');">
+<section class="mainSection">
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">

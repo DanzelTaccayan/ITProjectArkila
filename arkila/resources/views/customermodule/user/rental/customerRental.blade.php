@@ -82,7 +82,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background:#5cb85c; color:white; font-family: Montserrat-Regular;">
-                    <h4 class="text-center"><i class="fa fa-check-circle" style="font-size: 80px; padding-left:200px;"></i></h4>
+                    <h4 class="text-center"><i class="fa fa-info-circle" style="font-size: 80px; padding-left:200px;"></i></h4>
 
                 </div>
                 <div class="modal-body">
@@ -138,8 +138,6 @@
             });
             
         $('#timepicker').timepicker({
-            showInputs: false,
-            defaultTime: false,
             template: false
         });
         })
