@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DriverModuleControllers;
 
 use App\Rental;
 use App\Van;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -16,20 +17,22 @@ class ViewRentalsController extends Controller
         $vans = Van::all();
         return view('drivermodule.rentals.rental', compact('rentals', 'vans'));
     }
-    
+
     public function updateRental(Rental $rental)
     {
         $message = null;
         $request = request('click');
+        $plate_number = User::find(Auth::id());
         if ($rental->status == 'Accepted' && $request == 'Accepted' ) {
             return redirect()->back()->withErrors('Sorry, the rental request has been already accepted.');
         } else {
             if ($rental->status == 'Pending' && $rental->model_id == null) {
                 $rental->update([
+                    'plate_number' => $plate_number->member->van->first()->plate_number,
                     'model_id' => Auth::user()->model_id,
                     'driver_id' => Auth::id(),
                     'status' => request('click'),
-                ]);                    
+                ]);
             } elseif ($rental->status == 'Pending') {
                 $rental->update([
                     'driver_id' => Auth::id(),
@@ -50,5 +53,5 @@ class ViewRentalsController extends Controller
             return redirect()->back()->with('success', $message);
         }
     }
-    
+
 }

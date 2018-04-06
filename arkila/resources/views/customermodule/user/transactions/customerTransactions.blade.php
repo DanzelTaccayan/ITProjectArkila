@@ -28,9 +28,6 @@
                                         </thead>
                                         <tbody>
                                             @foreach($rentals as $rental)
-                                              @if($rental->status === 'Cancelled')
-                                                @continue;
-                                              @else
                                             <tr>
                                                 <td>{{$rental->destination}}</td>
                                                 <td>{{$rental->departure_date}}</td>
@@ -48,18 +45,18 @@
                                                         data-rentdate="{{$rental->departure_date}}"
                                                         data-renttime="{{$rental->departure_time}}"
                                                         data-rentcomment="{{$rental->comments}}"
-                                                        @if($rental->status === 'Accepted')
+                                                        @if($rental->status === 'Accepted' && $rental->model_id != null && $rental->plate_number != null)
                                                         @endif>View</button>
                                                         @if($rental->status === 'Accepted')
                                                           <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
                                                         @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
+                                                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
                                                         @endif
 
                                                     </div>
                                                 </td>
                                             </tr>
-                                              @endif
+
                                             @endforeach
                                         </tbody>
                                     </table>
