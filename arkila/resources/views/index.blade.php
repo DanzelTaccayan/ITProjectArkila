@@ -1,6 +1,5 @@
 @extends('layouts.customer_non_user')
 @section('content')
-<<<<<<< HEAD
 <section style="background: url('{{ URL::asset('img/photogrid.jpg') }}') center center repeat; background-size: cover;" class="bar background-white relative-positioned">
         <div class="container">
             <!-- Carousel Start-->
@@ -61,16 +60,41 @@
                         </div>
                         <!-- item-->
                     </div>
+                    <!-- homepage-->
                 </div>
+                <!-- container-->
             </div>
+            <!-- Carousel End-->
         </div>
-</section>
+        <!-- container-->
+    </section>
+    <!-- section-->
+      <section class="bar bg-gray no-mb padding-big text-md-center" id="rentals">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h2 class="text-uppercase">Rentals</h2>
+              <p class="mb-small">We offer van rentals to any destination of your choice. We have a variety of van models to choose from! <strong>Rent now, pay later! (one day validation)</strong></p>
+              <p><a href="{{route('customermodule.user.rental.customerRental')}}" class="btn btn-template-main">Rent Now</a></p>
+            </div>
+            <div class="col-md-6 text-center"><img src="img/template-easy-customize.png" alt="" class="img-fluid"></div>
+          </div>
+        </div>
+      </section>
+      <section class="bar no-mb color-white padding-big text-md-center bg-primary" id="reservations">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 text-center"><img src="img/template-easy-code.png" alt="" class="img-fluid"></div>
+            <div class="col-md-6">
+              <h2 class="text-uppercase">Reservations</h2>
+              <p class="mb-small">Get a privilege to be in our priority lane. Reserve a slot to one of our numerous destinations <strong>Reserve now, pay later! (one day validation)</strong></p>
+              <p><a href="{{route('customermodule.user.reservation.customerReservation')}}" class="btn btn-template-outlined-white">Reserve Now</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
 @stop
 @section('scripts')
 @parent
-<script>
-    $(document).ready(function(){
-        $("#fareListAndQueue").load("{{route('index.getVanQueue')}}");
-    });
-</script>
+
 @endsection

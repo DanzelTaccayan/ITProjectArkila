@@ -14,8 +14,7 @@ class ViewVanQueueNonUserController extends Controller
     {
     	$terminals = Terminal::all();
     	$farelist = Destination::all();
-    	$trips = Trip::where('queue_number', 1)->get();
-
-    	return view('customermodule.non-user.indexFairListAndTrips', compact('terminals', 'farelist', 'trips'));
+    	
+    	return view('customermodule.non-user.fare-list.fareList', compact('terminals', 'farelist'));
     }
 }

@@ -25,7 +25,7 @@
             <!-- bar-->
             <section class="bar mt-0" style="background-color: lightgray;">
                <div class="container">
-                <div class="row">
+               <div class="row">
                     <div class="col-md-4">
                         <div class="heading">
                             <h2>Our Mission</h2>

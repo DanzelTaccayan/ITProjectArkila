@@ -1,6 +1,6 @@
-@extends('layouts.customer_non_user')
+@extends('layouts.customer_user')
 @section('content')
-<section id="packages" class="bar no-mb">
+<section id="packages" class="bar no-mb" style="background-image: url('{{ URL::asset('img/customer_background.jpg') }}');">
         <div data-animate="fadeInUp" class="container">
               <div class="heading text-center" >
                 <h2 style="color: #000040;">Fare list</h2>
@@ -8,7 +8,8 @@
               <div class="row packages">
                @foreach($terminals as $terminal)
                 <div class="col-md-3 mx-auto">
-                  <div class="package">
+                 <div></div>
+                  <div class="package" style="background-color:white;">
                     <div class="package-header light-gray">
                       <h5>Fare list {{$terminal->description}}</h5>
                     </div>
@@ -35,7 +36,6 @@
                 </div>
                 @endforeach
               </div>
-              <!-- Packages End-->
             </div>
       </section>
 @stop

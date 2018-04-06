@@ -16,7 +16,7 @@ class CreateRentalTable extends Migration
         Schema::create('rental', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('rent_id');
-            $table->string('plate_number', 8)->nullable();
+            $table->string('plate_number', 9)->nullable();
             $table->integer('user_id')
                 ->nullable()
             ->unsigned();
