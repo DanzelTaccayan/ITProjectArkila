@@ -53,7 +53,7 @@ class VansController extends Controller {
 
     public function store(){
         $this->validate(request(), [
-            "operator" => ['numeric','exists:member,member_id',new checkOperator],
+            "operator" => ['required','numeric','exists:member,member_id',new checkOperator],
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
             "plateNumber" => [new checkPlateNumber,'unique:van,plate_number','required','between:6,9'],
             "vanModel" =>  ['required','max:30',new checkVanModel],
