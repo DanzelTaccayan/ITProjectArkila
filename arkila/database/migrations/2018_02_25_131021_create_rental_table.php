@@ -35,7 +35,7 @@ class CreateRentalTable extends Migration
             $table->smallInteger('number_of_days');
             $table->string('destination');
             $table->string('contact_number', 13);
-            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled'])
+            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired'])
             ->default('Pending');
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->string('comments', 300)
@@ -51,12 +51,12 @@ class CreateRentalTable extends Migration
             ->references('id')->on('users')
             ->onDelete('restrict')
             ->onUpdate('cascade');
-            
+
             $table->foreign('model_id')
             ->references('model_id')->on('van_model')
             ->onDelete('restrict')
             ->onUpdate('cascade');
-            
+
             $table->foreign('driver_id')
             ->references('id')->on('users')
             ->onDelete('restrict')

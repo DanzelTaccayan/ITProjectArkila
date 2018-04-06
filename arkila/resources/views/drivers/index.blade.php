@@ -1,4 +1,9 @@
-@extends('layouts.master') @section('title', 'List of Drivers') @section('content-header', 'List of Drivers') @section('content') @if(session()->get('opLink')) {{ session()->forget('opLink') }} @endif
+@extends('layouts.master') 
+@section('title', 'List of Drivers') 
+@section('content-header', 'List of Drivers') 
+@section('content')
+@if(session()->get('opLink')) {{ session()->forget('opLink') }} 
+@endif
 <div class="box">
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
        <div class="table-responsive">

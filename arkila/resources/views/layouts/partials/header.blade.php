@@ -194,7 +194,7 @@
                             <div class="box-footer">
                                 <div class="btn-group btn-group-justified">
                                   <div class="btn-group">
-                                      <a href="{{route('accountSettings')}}" class="btn btn-primary">Account Settings</a>
+                                      <a href="{{route('accountSettings')}}" class="btn btn-primary">Change Password</a>
                                   </div>
                                   <div class="btn-group">
                                       <a href="#" class="btn btn-default">Sign out</a>

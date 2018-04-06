@@ -255,7 +255,8 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation');
     /*Transactions*/
     Route::get('/home/view-transactions', 'CustomerModuleControllers\ViewTransactionsController@viewTransactions')->name('customermodule.user.transactions.customerTransactions');
-    Route::delete('/home/view-transactions/delete-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@destroyRental')->name('customermodule.deleteRental');
+    Route::patch('/home/view-transactions/delete-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@destroyRental')->name('customermodule.deleteRental');
+    Route::patch('/home/view-transactions/cancel-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@cancelRental')->name('customermodule.cancelRental');
     Route::delete('/home/view-transactions/delete-reservation/{reservation}', 'CustomerModuleControllers\ViewTransactionsController@destroyReservation')->name('customermodule.deleteReservation');
     /*Change Password*/
     Route::get('/home/change-password', 'CustomerModuleControllers\CustomerChangePasswordController@viewChangePassword')->name('customermodule.user.changepassword.index');

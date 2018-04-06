@@ -1,6 +1,5 @@
 @extends('layouts.master') 
 @section('title', 'View Driver')
-
 @section('content')
 
 <div class="box box-default with-shadow">
