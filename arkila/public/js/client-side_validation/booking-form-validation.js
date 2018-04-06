@@ -1,6 +1,6 @@
 
 $('[val-rent-dest]').parsley({
-	pattern: /^[,\pL\s\-]+$/,
+	pattern: /^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/,
 	maxlength: 50
 });
 
@@ -17,6 +17,8 @@ $('[val-num-seats]').parsley({
 });
 
 $('[val-num-days]').attr('data-parsley-required-message','Please enter a number of days.');
+
+$('[val-num-seats]').attr('data-parsley-required-message','Please enter number of person.');
 
  $('[val-book-date]').parsley({
     	pattern: /^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/
@@ -36,7 +38,7 @@ $('[val-num-days]').attr('data-parsley-required-message','Please enter a number 
     	var valueDay = parseInt(bdate_array[1]);
     	var nowYear = now.getFullYear(); 
     	var valueYear = parseInt(bdate_array[2]);
-        if(valueYear > nowYear || (valueYear === nowYear && ((valueMonth > nowMonth) || (valueMonth === nowMonth && valueDay >= nowDay)) ) ){
+        if(valueYear > nowYear || (valueYear === nowYear && ((valueMonth > nowMonth) || (valueMonth === nowMonth && valueDay > nowDay)) ) ){
         	return true;
         } else {
         	return false;
@@ -50,15 +52,18 @@ $('[val-num-days]').attr('data-parsley-required-message','Please enter a number 
     $('[val-book-time]').attr('data-parsley-required-message','Please enter a departure time.');
 
     //ANNOUNCEMENT VALIDATION
+    $('[val-comment]').parsley ({
+          maxlength: 300
+    })
 
 $('[val-announcement-title]').parsley({
   maxlength: 50
-})
+});
 
 $('[val-announcement-title]').attr('data-parsley-required-message','Please enter a title.');
 
 $('[val-announcement]').parsley({
   maxlength: 2500
-})
+});
 
 $('[val-announcement]').attr('data-parsley-required-message','Please enter an announcement.');
