@@ -74,11 +74,11 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        
+
         $user = User::create([
             'last_name' => $data['last_name'],
             'first_name' => $data['first_name'],
-            'middle_name' => $data['middle_name'], 
+            'middle_name' => $data['middle_name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'user_type' => 'Customer',
@@ -119,7 +119,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $this->guard()->logout();
-        return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
+        return redirect('/home/register/success')->with('success', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
 
 }

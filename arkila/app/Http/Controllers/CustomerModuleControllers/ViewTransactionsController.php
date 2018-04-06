@@ -14,8 +14,16 @@ class ViewTransactionsController extends Controller
     {
     	$rentals = Rental::orderBy('rental.created_at', 'desc')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
     	$reservations = Reservation::orderBy('reservation.created_at', 'desc')->where('user_id', Auth::id())->get();
-    	 
-    	return view('customermodule.user.transactions.customerTransactions', compact('rentals', 'reservations'));	
+
+    	return view('customermodule.user.transactions.customerTransactions', compact('rentals', 'reservations'));
+    }
+
+    public function cancelRental(Rental $rental)
+    {
+    	$rental->update([
+        
+      ]);
+    	return back()->with('success','Rental has been deleted successfully');
     }
 
     public function destroyRental(Rental $rental)

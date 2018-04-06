@@ -1,9 +1,9 @@
-@extends('layouts.customer_non_user')
+@extends('layouts.landing')
 @section('content')
-<section id="mainSection" style="background-image: url('{{ URL::asset('img/background.jpg') }}');">
+<section id="mainSection">
         <div class="container">
             <div class="heading text-center">
-                <h2>Sign In</h2>
+                <h2 style="color: #002f43;">Sign In</h2>
             </div>
             <div class="row">
                 <div class="col-md-4"></div>

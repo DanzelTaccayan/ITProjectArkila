@@ -72,7 +72,6 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                <input value="{{old('provincialAddress')}}" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" data-parsley-trigger="keyup" data-parsley-trigger="keyup" val-address required>
                                   <input type="text" name="birthDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('birthDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  data-parsley-trigger="keyup" data-parsley-errors-container="#errLegal" val-birthdate data-parsley-legal-age required>
                                 </div>
                                 <p id="errLegal"></p>

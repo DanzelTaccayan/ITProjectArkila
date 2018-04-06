@@ -1,6 +1,6 @@
 <div id="accordionFour">
   @foreach($terminals as $terminal)
-    <div class="card">
+    <div class="card" style="background-color: #a0b6ff;">
         <div id="FareList{{$terminal->terminal_id}}Head" class="card-header">
             <h5 class="mb-0"><a data-toggle="collapse" href="#FareList{{$terminal->terminal_id}}Body" aria-expanded="true">Fare List {{$terminal->description}}</a></h5>
         </div>
@@ -25,7 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="card">
+    <div class="card" style="background-color: #dce4ff">
         <div id="CurrentTrip{{$terminal->terminal_id}}Head" class="card-header">
             <h5 class="mb-0"><a data-toggle="collapse" href="#CurrentTrip{{$terminal->terminal_id}}Body" aria-expanded="false">Current Trip {{$terminal->description}}</a></h5>
         </div>
