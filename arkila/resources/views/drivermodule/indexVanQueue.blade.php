@@ -17,7 +17,6 @@
 
                 </div>
                 <div class="box-body">
-                  {{'pogi'}}
                     <table class="table table-bordered dataTable text-center">
                         <thead>
                             <tr>
