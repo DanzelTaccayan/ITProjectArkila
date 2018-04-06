@@ -29,14 +29,6 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper bg-image">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <h1>
-                    @yield('content-header')
-                </h1>
-            </section>
-            <!-- / .content-header -->
-
             <!-- Main content -->
             <section class="content">
               @yield('content')

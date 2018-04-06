@@ -1,6 +1,6 @@
 
 @extends('layouts.form')
-@section('title', 'Add Van Driver')
+@section('title', 'Edit Van')
 
 @if(session()->get('opLink'))
     @section('back-link',session()->get('opLink'))
@@ -57,10 +57,14 @@
 
 @section('others')
 <div class="form-group">
-       <span id ="checkBox">
-           <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
 
+       <span id ="checkBox">
+           @if($van->driver->first()->member_id ?? null)
+               @else
+               <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
+           @endif
        </span>
+
 
 
 @endsection
@@ -79,6 +83,10 @@
             });
 
             checkBoxChecker();
+
+            @if($van->driver->first()->member_id ?? null)
+                $('#checkBox').empty();
+            @endif
     });
 
         $('#driver').on('change', function() {

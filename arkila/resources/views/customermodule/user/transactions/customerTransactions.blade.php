@@ -22,6 +22,7 @@
                                                 <th class="text-center">Destination</th>
                                                 <th class="text-center">Date</th>
                                                 <th class="text-center">Time</th>
+                                                <th class="text-center">Status</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -31,30 +32,31 @@
                                                 <td>{{$rental->destination}}</td>
                                                 <td>{{$rental->departure_date}}</td>
                                                 <td>{{$rental->departure_time}}</td>
+                                                <td>{{$rental->status}}</td>
                                                 <td>
                                                     <div class="text-center">
                                                         <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
                                                         data-toggle="modal"
                                                         data-target="#viewRental{{$rental->rent_id}}"
-                                                        data-rentvehicle="{{$rental->vanmodel->description}}"
+                                                        data-rentvehicle="{{$rental->vanmodel->description ?? null}}"
                                                         data-rentdestination="{{$rental->destination}}"
                                                         data-rentcontact="{{$rental->contact_number}}"
                                                         data-rentdays="{{$rental->number_of_days}}"
                                                         data-rentdate="{{$rental->departure_date}}"
                                                         data-renttime="{{$rental->departure_time}}"
                                                         data-rentcomment="{{$rental->comments}}"
-                                                        @if($rental->status === 'Accepted')
-
+                                                        @if($rental->status === 'Accepted' && $rental->model_id != null && $rental->plate_number != null)
                                                         @endif>View</button>
                                                         @if($rental->status === 'Accepted')
                                                           <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
-                                                        @elseif($rental->status === 'Declined')
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
+                                                        @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
+                                                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
                                                         @endif
 
                                                     </div>
                                                 </td>
                                             </tr>
+
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -231,9 +233,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
+                            <form action="{{route('customermodule.cancelRental', [$rental->rent_id])}}" method="POST">
                                 {{csrf_field()}}
-                                {{method_field('DELETE')}}
+                                {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>
@@ -271,7 +273,7 @@
                         <div class="modal-footer">
                             <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
                                 {{csrf_field()}}
-                                {{method_field('DELETE')}}
+                                {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>

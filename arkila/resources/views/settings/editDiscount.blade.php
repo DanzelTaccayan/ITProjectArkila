@@ -6,10 +6,9 @@
 @section('form-title', 'EDIT DISCOUNT')
 @section('form-body')
 	
-	<div>
-	 	<label for="description">Description:</label>
-	 	<p class="info-container">{{$discount->description}}</p>
-	 	<input type="hidden" name="editDiscountDesc" value='{{$discount->description}}' required>
+	<div class="form-group">
+	 	<label for="description">Description: <span class="text-red">*</span></label>
+	 	<input type="input" class="form-control" name="editDiscountDesc" value="{{$discount->description}}" required>
 	 </div>
 
     <div class="form-group">

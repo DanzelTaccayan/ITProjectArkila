@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Trip Log')
-@section('content-header', 'Trip Log')
 @section('links')
 @parent
 <!-- additional CSS -->

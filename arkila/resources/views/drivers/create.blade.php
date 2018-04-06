@@ -375,6 +375,14 @@
                  }
              });
 
+             if($('input[name="sss"]').val() === ""){
+                 $('input[name="sss"]').val(null);
+             }
+
+             if($('input[name="spouseBirthDate"]').val() === ""){
+                 $('input[name="spouseBirthDate"]').val(null);
+             }
+
              if($('input[name="licenseExpiryDate"]').val() === ""){
                  $('input[name="licenseExpiryDate"]').val(null);
              }

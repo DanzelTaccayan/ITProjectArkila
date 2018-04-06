@@ -320,13 +320,21 @@
 
 <script>
     $(document).ready(function(){
-        $('input[type="submit"]').on('click',function(){
+        $('button[type="submit"]').on('click',function(){
             $('input[name="childrenBDay[]"]').each(function(key,value) {
                 if($(value).val() === '')
                 {
                     $(value).val(null);
                 }
             });
+
+            if($('input[name="sss"]').val() === ""){
+                $('input[name="sss"]').val(null);
+            }
+
+            if($('input[name="spouseBirthDate"]').val() === ""){
+                $('input[name="spouseBirthDate"]').val(null);
+            }
 
             if($('input[name="licenseExpiryDate"]').val() === ""){
                 $('input[name="licenseExpiryDate"]').val(null);

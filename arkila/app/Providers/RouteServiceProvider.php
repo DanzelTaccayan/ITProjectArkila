@@ -39,9 +39,6 @@ class RouteServiceProvider extends ServiceProvider
             return Member::allDrivers()->where('member_id',$value)->first() ?? abort(404);
         });
 
-        Route::bind('vanNd',function($value) {
-            return is_null(Van::find($value)->driver->first()) ? $value : abort(404);
-        });
 
         Route::bind('driver_user', function($value){
             return User::driver()->where('id',$value)->first() ?? abort(404);

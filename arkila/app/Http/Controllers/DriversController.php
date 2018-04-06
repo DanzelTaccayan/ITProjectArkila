@@ -179,6 +179,9 @@ class DriversController extends Controller
     }
 
     public function storeFromVan(Van $vanNd,DriverRequest $request){
+        if(count($vanNd->driver)){
+            $vanNd->members()->detach($vanNd->driver->first()->member_id);
+        }
 
         $driver = Member::create([
             'last_name'=> $request->lastName,

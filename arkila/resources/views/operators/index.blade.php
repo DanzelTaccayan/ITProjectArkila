@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'List of Operators')
-@section('content-header', 'List of Operators')
 @section('content')
 <div class="box">
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
