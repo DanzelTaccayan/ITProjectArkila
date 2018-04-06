@@ -25,7 +25,7 @@
                         <b>Contact Number</b> <p class="pull-right">{{ $operator->contact_number }}</p>
                     </li>
                     <li class="list-group-item">
-                        <b>Number of Vans</b> <p class="pull-right"> </p>
+                        <b>Number of Vans</b> <p class="pull-right"> {{ count($operator->vans) }} </p>
                     </li>
                     <li class="list-group-item">
                         <b>Number of Drivers</b> <p class="pull-right">{{ count($operator->drivers) }}</p>
