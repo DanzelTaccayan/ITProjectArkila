@@ -57,10 +57,13 @@
 
 @section('others')
 <div class="form-group">
-       <span id ="checkBox">
-           <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
 
+       <span id ="checkBox">
+           @if(!$van->driver->first()->member_id ?? null)
+               <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
+           @endif
        </span>
+
 
 
 @endsection
@@ -79,6 +82,10 @@
             });
 
             checkBoxChecker();
+
+            @if($van->driver->first()->member_id ?? null)
+                $('#checkBox').empty();
+            @endif
     });
 
         $('#driver').on('change', function() {

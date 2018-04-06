@@ -342,6 +342,27 @@ ol.vertical{
     <!-- List sortable -->
     <script>
         $(function() {
+
+            function specialUnitChecker(){
+                $.ajax({
+                    method:'POST',
+                    url: 'http://localhost:8000/specialUnitChecker',
+                    data: {
+                        '_token': '0tmNPFJxvBQO22coaq5aXivyk9R8zX6BB7I5KhdY'
+                    },
+                    success: function(response){
+                        if(response[0]) {
+                            $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
+                        }else{
+                            if(response[1]){
+                                $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
+                            }
+                        }
+                    }
+
+                });
+            }
+            
             $('button[name="destBtn"]').on('click',function(){
                 $.ajax({
                     method:'PATCH',
