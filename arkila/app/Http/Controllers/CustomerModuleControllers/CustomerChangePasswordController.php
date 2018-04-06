@@ -40,6 +40,7 @@ class CustomerChangePasswordController extends Controller
     public function updatePassword(User $customerId)
     {
       $checkCurrentPassword = Hash::check(request('current_password'), Auth::user()->password);
+      
       if(!$checkCurrentPassword){
           return redirect('/home/profile')->with('error', 'Password does not match');
       }
@@ -50,6 +51,6 @@ class CustomerChangePasswordController extends Controller
       Auth::user()->password = Hash::make(request('password'));
       Auth::user()->save();
       Auth::logout();
-      return redirect('/login')->with('success', 'Successfully changed password');
+      return redirect(route('login'))->with('success', 'Successfully changed password');
     }
 }

@@ -6,7 +6,7 @@
             <h2 style="color: #000040; padding-top:10px;">Change Password</h2>
         </div>
         <div class="col-md-3 mx-auto" id="boxContainer" style="margin-top:75px; padding-top: 30px;">
-            <form action="{{route('drivermodule.changePassword', $customerId)}}" method="POST">
+            <form action="{{route('customermodule.changePassword', $customerId)}}" method="POST">
               {{csrf_field()}}
               {{method_field('PATCH')}}
                 <div class="form-group" style="padding-top:10px;">
