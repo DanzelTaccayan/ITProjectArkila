@@ -1,4 +1,4 @@
-@extends('layouts.customer_non_user')
+@extends('layouts.landing')
 @section('content')
 <section id="mainSection">
         <div class="container">

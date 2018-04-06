@@ -1,1 +1,26 @@
-/* your styles go here */
+#mainSection {
+    padding-top: 5%;
+    padding-bottom: 5%
+}
+
+#boxContainer {
+    box-shadow: 0 5px 10px grey;
+    background-color: white
+}
+
+#destination{
+    border: gray
+}
+
+.style-bar {
+    background: white;
+    padding: 0
+}
+
+.zoom {
+    transition: transform .2s
+}
+
+.zoom:hover {
+    transform: scale(1.1)
+}

@@ -1,4 +1,4 @@
-@extends('layouts.customer_non_user')
+@extends('layouts.customer_user')
 @section('content')
 <section id="packages" class="bar no-mb">
         <div data-animate="fadeInUp" class="container">
