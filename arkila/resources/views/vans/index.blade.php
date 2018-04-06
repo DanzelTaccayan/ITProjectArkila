@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'List of Van') 
-@section('content-header', 'List of Van Units')
 @if(session()->get('opLink')) {{ session()->forget('opLink') }} @endif
 
 @section('content')

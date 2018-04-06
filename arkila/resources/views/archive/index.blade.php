@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Operator Archive')
-@section('content-header', 'Operator Archive')
 @section('content')
     {{session(['opLink'=> Request::url()])}} 
     
