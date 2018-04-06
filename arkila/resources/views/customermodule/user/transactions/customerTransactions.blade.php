@@ -22,15 +22,20 @@
                                                 <th class="text-center">Destination</th>
                                                 <th class="text-center">Date</th>
                                                 <th class="text-center">Time</th>
+                                                <th class="text-center">Status</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($rentals as $rental)
+                                              @if($rental->status === 'Cancelled')
+                                                @continue;
+                                              @else
                                             <tr>
                                                 <td>{{$rental->destination}}</td>
                                                 <td>{{$rental->departure_date}}</td>
                                                 <td>{{$rental->departure_time}}</td>
+                                                <td>{{$rental->status}}</td>
                                                 <td>
                                                     <div class="text-center">
                                                         <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
@@ -44,17 +49,17 @@
                                                         data-renttime="{{$rental->departure_time}}"
                                                         data-rentcomment="{{$rental->comments}}"
                                                         @if($rental->status === 'Accepted')
-
                                                         @endif>View</button>
                                                         @if($rental->status === 'Accepted')
                                                           <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
-                                                        @elseif($rental->status === 'Declined')
+                                                        @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
                                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
                                                         @endif
 
                                                     </div>
                                                 </td>
                                             </tr>
+                                              @endif
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -231,9 +236,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
+                            <form action="{{route('customermodule.cancelRental', [$rental->rent_id])}}" method="POST">
                                 {{csrf_field()}}
-                                {{method_field('DELETE')}}
+                                {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>
@@ -271,7 +276,7 @@
                         <div class="modal-footer">
                             <form action="{{route('customermodule.deleteRental', [$rental->rent_id])}}" method="POST">
                                 {{csrf_field()}}
-                                {{method_field('DELETE')}}
+                                {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                 <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
                             </form>

@@ -21,14 +21,16 @@ class ViewTransactionsController extends Controller
     public function cancelRental(Rental $rental)
     {
     	$rental->update([
-        
+        'status' => 'Cancelled',
       ]);
-    	return back()->with('success','Rental has been deleted successfully');
+    	return back()->with('success','Your rental has been cancelled successfully');
     }
 
     public function destroyRental(Rental $rental)
     {
-    	$rental->delete();
+      $rental->update([
+        'status' => 'Cancelled',
+      ]);
     	return back()->with('success','Rental has been deleted successfully');
     }
 
