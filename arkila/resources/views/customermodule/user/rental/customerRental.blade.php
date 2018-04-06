@@ -21,7 +21,7 @@
                         
                         <div class="form-group">
                             <label for="">Destination: <span class="text-red">*</span></label>
-                            <input id="rentalDestination" class="form-control" type="texts" name="rentalDestination" val-rent-dest required>
+                            <input id="rentalDestination" class="form-control" type="text" name="rentalDestination" val-rent-dest required>
                         </div>
                         
                         <div class="row">
