@@ -41,16 +41,31 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown menu-large">
-                            <a href="{{route('customermodule.user.transactions.customerTransactions')}}">My Transactions</a>
-                        </li>
-                        <li class="nav-item dropdown menu-large">
                             <a href="{{route('customermodule.user.about.customerAbout')}}">About</a>
                         </li>
                         <li class="nav-item dropdown menu-large">
                             <a href="{{route('customermodule.user.help.customerHelp')}}">Help</a>
                         </li>
-                        <li class="nav-item dropdown menu-large">
-                            <a href="{{route('customermodule.user.changepassword.index')}}">Change Password</a>
+                        <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle">My Account</a>
+                            <ul class="dropdown-menu megamenu">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="../img/template-easy-customize.png" alt="" class="img-fluid d-none d-lg-block">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <ul class="list-unstyled">
+                                                <li class="nav-item">
+                                                    <a href="{{route('customermodule.user.transactions.customerTransactions')}}" class="nav-link">My Transactions</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="{{route('customermodule.user.changepassword.index')}}" class="nav-link">Change Password</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown menu-large">
                             <a href="{{route('logout')}}" onclick="event.preventDefault();
