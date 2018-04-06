@@ -1,7 +1,7 @@
 $('[val-platenum]').parsley({
     minlength: 6,
 	maxlength: 9,
-    pattern: /^[A-Z\d]+$|^([A-Z\d])+[- ]([A-Z\d])+$/
+    pattern: /^[A-Z\d]+$|^([A-Z\d])+[-]([A-Z\d])+$/
 });	
 
 $('[val-platenum]').attr('data-parsley-required-message','Please enter a plate number.');
