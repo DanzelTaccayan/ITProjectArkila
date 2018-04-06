@@ -25,31 +25,33 @@
             <!-- bar-->
             <section class="bar mt-0" style="background-color: lightgray;">
                <div class="container">
-                <div class="col-md-4 mx-auto">
-                    <div class="heading">
-                        <h2>Our Mission</h2>
+               <div class="row">
+                    <div class="col-md-4">
+                        <div class="heading">
+                            <h2>Our Mission</h2>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore voluptatibus ipsa a sint unde, blanditiis beatae aliquid eveniet maxime in expedita voluptas perspiciatis nulla. Atque optio accusantium, nobis dignissimos tempora.</p>
                     </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore voluptatibus ipsa a sint unde, blanditiis beatae aliquid eveniet maxime in expedita voluptas perspiciatis nulla. Atque optio accusantium, nobis dignissimos tempora.</p>
+                    <div class="col-md-4">
+                        <div class="heading">
+                            <h2>Our services</h2>
+                        </div>
+                        <ul class="ul-icons list-unstyled">
+                            <li>
+                                <div class="icon-filled"><i class="fa fa-check"></i></div>Regular trips to Cabanatuan and San Jose including neighboring provinces
+                            </li>
+                            <li>
+                                <div class="icon-filled"><i class="fa fa-check"></i></div>Van Rentals to any destination.
+                            </li>
+                        </ul>
+                    </div><!-- col-->
+                    <div class="col-md-4">
+                        <div class="heading">
+                            <h2>Our Vision</h2>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore voluptatibus ipsa a sint unde, blanditiis beatae aliquid eveniet maxime in expedita voluptas perspiciatis nulla. Atque optio accusantium, nobis dignissimos tempora.</p>
+                    </div><!-- col-->
                 </div>
-                <div class="col-md-4 mx-auto">
-                    <div class="heading">
-                        <h2>Our services</h2>
-                    </div>
-                    <ul class="ul-icons list-unstyled">
-                        <li>
-                            <div class="icon-filled"><i class="fa fa-check"></i></div>Regular trips to Cabanatuan and San Jose including neighboring provinces
-                        </li>
-                        <li>
-                            <div class="icon-filled"><i class="fa fa-check"></i></div>Van Rentals to any destination.
-                        </li>
-                    </ul>
-                </div><!-- col-->
-                <div class="col-md-4 mx-auto">
-                    <div class="heading">
-                        <h2>Our Vision</h2>
-                    </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore voluptatibus ipsa a sint unde, blanditiis beatae aliquid eveniet maxime in expedita voluptas perspiciatis nulla. Atque optio accusantium, nobis dignissimos tempora.</p>
-                </div><!-- col-->
                 <!-- row-->
                 </div><!-- container-->
             </section>
