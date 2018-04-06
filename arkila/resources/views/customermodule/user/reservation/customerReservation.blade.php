@@ -12,7 +12,7 @@
                         {{csrf_field()}}
                         <div class="wrap-input100">
                             <select id="destination" name="destination" class="input100" placeholder="Destinations">
-                                <option selected hidden disabled>Van Model</option>
+                                <option selected hidden disabled>Destination</option>
                                 @foreach($destinations as $destination)
                                     <option value="{{$destination->destination_id}}">{{$destination->description}}</option>
                                 @endforeach

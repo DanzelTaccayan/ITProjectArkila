@@ -24,8 +24,12 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 
     {{ Html::style('css/style.css') }}
+    {{ Html::style('css/customer-style.css')}}
+
     {{ Html::style('css/client-side_validation/parsley.css') }}
+
     {{ Html::style('css/notifications/pnotify.custom.min.css') }}
+
     {{ Html::style('css/notifications/animate.css') }}
     
     <!-- Bootstrap Datepicker -->
