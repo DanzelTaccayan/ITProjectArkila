@@ -21,7 +21,7 @@
     </thead>
     <tbody>
         @foreach($rentals->sortByDesc('status') as $rental)
-            @if ($rental->status == 'Pending' && ($rental->model_id == Auth::user()->model_id || $rental->model_id == null))
+            @if ($rental->status == 'Pending' && ($rental->model_id == $model_id))
         <tr>
             <td>{{ $rental->rent_id }}</td>
             <td>{{ $rental->full_name }}</td>
@@ -49,7 +49,7 @@
             </td>
         </tr>
         @endif
-        @if ($rental->driver_id == Auth::id() && $rental->model_id == Auth::user()->model_id)
+        @if ($rental->driver_id == Auth::id() && $rental->model_id == $model_id)
         <tr>
             <td>{{ $rental->rent_id }}</td>
             <td>{{ $rental->full_name }}</td>
@@ -57,7 +57,7 @@
             <td>{{ $rental->departure_date }}</td>
             <td>{{ $rental->departure_time }}</td>
             <td>{{ $rental->contact_number }}</td>
-            <td>{{ $rental->vanmodel->description }}</td>
+            <td>{{ $rental->vanmodel->description ?? 'None'}}</td>
             <td>{{ $rental->status }}</td>
             <td class="center-block">
                 <div class="text-center">
