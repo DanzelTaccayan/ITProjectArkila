@@ -69,29 +69,41 @@
         <!-- section-->
     </section>
     <!-- section-->
-
+      <section class="bar bg-gray no-mb padding-big text-md-center" id="rentals">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h2 class="text-uppercase">Rentals</h2>
+              <p class="mb-small">We offer van rentals to any destination of your choice. We have a variety of van models to choose from! <strong>Rent now, pay later! (one day validation)</strong></p>
+              <p><a href="{{route('customermodule.user.rental.customerRental')}}" class="btn btn-template-main">Rent Now</a></p>
+            </div>
+            <div class="col-md-6 text-center"><img src="img/template-easy-customize.png" alt="" class="img-fluid"></div>
+          </div>
+        </div>
+      </section>
+      <section class="bar no-mb color-white padding-big text-md-center bg-primary" id="reservations">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 text-center"><img src="img/template-easy-code.png" alt="" class="img-fluid"></div>
+            <div class="col-md-6">
+              <h2 class="text-uppercase">Reservations</h2>
+              <p class="mb-small">Get a privilege to be in our priority lane. Reserve a slot to one of our numerous destinations <strong>Reserve now, pay later! (one day validation)</strong></p>
+              <p><a href="{{route('customermodule.user.reservation.customerReservation')}}" class="btn btn-template-outlined-white">Reserve Now</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
     <section style="background: url('{{ URL::asset('img/fixed-background-2.jpg') }}') center top no-repeat; background-size: cover;" class="bar text-center bg-fixed relative-positioned">
         <div class="dark-mask"></div>
-            <div class="container">
-            <div class="row">
-                <div class="col-md-6"> 
-                    <div class="heading text-center" style="color:white;">
-                        <h2><i class="fa fa-bullhorn"></i> Announcements</h2>
-                    </div>
-                    <div id="announcements" class="container">
-                    </div>
+        <div class="container">
+            <div class="col-md-8 mx-auto"> 
+                <div class="heading text-center" style="color:white;">
+                    <h2><i class="fa fa-bullhorn"></i> Announcements</h2>
                 </div>
-                <div class="col-md-6">
-                    <div class="heading text-center" style="color:white;">
-                        <h2><i class="fa fa-car"></i> Fare Lists &#38; Current Trips</h2>
-                    </div>
-                    <div id="fareAndQueue" class="container">
-                    </div>
+                <div id="announcements" class="container">
                 </div>
-            </div>
-                  
+            </div>                  
         </div>    
-        
     </section>
     <!-- section-->
     <section style="background: url('{{ URL::asset('img/bron_gradient.jpg') }}') center top no-repeat; background-size: cover;" class="bar text-center ">
@@ -100,24 +112,21 @@
             <div class="heading text-center">
                 <h2><i class="fa fa-bolt"></i> Weather Updates</h2>
             </div>
-            <div class="row">
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- Baguio Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/baguio-city-12231"><img src="https://w.bookcdn.com/weather/picture/28_12231_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=37033" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- San Jose Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/munoz-w434073"><img src="https://w.bookcdn.com/weather/picture/28_w434073_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=46479" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- Cabanatuan Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/cabanatuan-city-33111"><img src="https://w.bookcdn.com/weather/picture/28_33111_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=68269" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
+            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
+                <!-- Baguio Weather Widget-->
+                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/baguio-city-12231"><img src="https://w.bookcdn.com/weather/picture/28_12231_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=37033" alt="booked.net"/></a>
+                <!-- weather widget end -->
             </div>
-            <!-- row-->
+            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
+                <!-- San Jose Weather Widget-->
+                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/munoz-w434073"><img src="https://w.bookcdn.com/weather/picture/28_w434073_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=46479" alt="booked.net"/></a>
+                <!-- weather widget end -->
+            </div>
+            <div class="col-lg-4 mx-auto text-center" style="padding-top:5px;">
+                <!-- Cabanatuan Weather Widget-->
+                <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/cabanatuan-city-33111"><img src="https://w.bookcdn.com/weather/picture/28_33111_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=68269" alt="booked.net"/></a>
+                <!-- weather widget end -->
+            </div>
         </div>
         <!-- container-->
     </section>

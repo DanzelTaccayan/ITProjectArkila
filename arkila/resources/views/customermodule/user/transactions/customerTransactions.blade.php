@@ -6,106 +6,102 @@
                 <div class="heading text-center">
                     <h2>MY TRANSACTIONS</h2>
                 </div>
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8" id="boxContainer">
-                        <div class="box border-bottom-0">
-                            <ul class="nav nav-pills nav-fill">
-                                <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#reservations" data-toggle="tab">Reservations</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="active tab-pane table-responsive" id="rentals">
-                                    <table id="rentals" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Destination</th>
-                                                <th class="text-center">Date</th>
-                                                <th class="text-center">Time</th>
-                                                <th class="text-center">Status</th>
-                                                <th class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($rentals as $rental)
-                                            <tr>
-                                                <td>{{$rental->destination}}</td>
-                                                <td>{{$rental->departure_date}}</td>
-                                                <td>{{$rental->departure_time}}</td>
-                                                <td>{{$rental->status}}</td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
-                                                        data-toggle="modal"
-                                                        data-target="#viewRental{{$rental->rent_id}}"
-                                                        data-rentvehicle="{{$rental->vanmodel->description ?? null}}"
-                                                        data-rentdestination="{{$rental->destination}}"
-                                                        data-rentcontact="{{$rental->contact_number}}"
-                                                        data-rentdays="{{$rental->number_of_days}}"
-                                                        data-rentdate="{{$rental->departure_date}}"
-                                                        data-renttime="{{$rental->departure_time}}"
-                                                        data-rentcomment="{{$rental->comments}}"
-                                                        @if($rental->status === 'Accepted' && $rental->model_id != null && $rental->plate_number != null)
-                                                        @endif>View</button>
-                                                        @if($rental->status === 'Accepted')
-                                                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
-                                                        @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
-                                                          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
-                                                        @endif
+                <div class="col-md-8 mx-auto" id="boxContainer">
+                    <div class="box border-bottom-0">
+                        <ul class="nav nav-pills nav-fill">
+                            <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#reservations" data-toggle="tab">Reservations</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane table-responsive" id="rentals">
+                                <table id="rentals" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Destination</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Time</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($rentals as $rental)
+                                        <tr>
+                                            <td>{{$rental->destination}}</td>
+                                            <td>{{$rental->departure_date}}</td>
+                                            <td>{{$rental->departure_time}}</td>
+                                            <td>{{$rental->status}}</td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#viewRental{{$rental->rent_id}}"
+                                                    data-rentvehicle="{{$rental->vanmodel->description ?? null}}"
+                                                    data-rentdestination="{{$rental->destination}}"
+                                                    data-rentcontact="{{$rental->contact_number}}"
+                                                    data-rentdays="{{$rental->number_of_days}}"
+                                                    data-rentdate="{{$rental->departure_date}}"
+                                                    data-renttime="{{$rental->departure_time}}"
+                                                    data-rentcomment="{{$rental->comments}}"
+                                                    @if($rental->status === 'Accepted' && $rental->model_id != null && $rental->plate_number != null)
+                                                    @endif>View</button>
+                                                    @if($rental->status === 'Accepted')
+                                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
+                                                    @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
+                                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
+                                                    @endif
 
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- tab-pane-->
-                                <div class="tab-pane table-responsive" id="reservations">
-                                    <table id="reservations" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Destination</th>
-                                                <th class="text-center">Date</th>
-                                                <th class="text-center">Time</th>
-                                                <th class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($reservations as $reservation)
-                                            <tr>
-                                                <td>{{$reservation->destination->description}}</td>
-                                                <td>{{$reservation->departure_date}}</td>
-                                                <td>{{$reservation->departure_time}}</td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary"
-                                                        data-toggle="modal"
-                                                        data-target="#viewReservation{{$reservation->id}}"
-                                                        data-reservedestination="{{$reservation->destination->description}}"
-                                                        data-reservecontact="{{$reservation->contact_number}}"
-                                                        data-reserveseats="{{$reservation->number_of_seats}}"
-                                                        data-reservedate="{{$reservation->departure_date}}"
-                                                        data-reservetime="{{$reservation->departure_time}}"
-                                                        data-reservecomment="{{$reservation->comments}}">View</button>
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$reservation->id}}">Delete</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- tab-pane-->
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            <!-- tab-content-->
+                            <!-- tab-pane-->
+                            <div class="tab-pane table-responsive" id="reservations">
+                                <table id="reservations" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Destination</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Time</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($reservations as $reservation)
+                                        <tr>
+                                            <td>{{$reservation->destination->description}}</td>
+                                            <td>{{$reservation->departure_date}}</td>
+                                            <td>{{$reservation->departure_time}}</td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#viewReservation{{$reservation->id}}"
+                                                    data-reservedestination="{{$reservation->destination->description}}"
+                                                    data-reservecontact="{{$reservation->contact_number}}"
+                                                    data-reserveseats="{{$reservation->number_of_seats}}"
+                                                    data-reservedate="{{$reservation->departure_date}}"
+                                                    data-reservetime="{{$reservation->departure_time}}"
+                                                    data-reservecomment="{{$reservation->comments}}">View</button>
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$reservation->id}}">Delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- tab-pane-->
                         </div>
-                        <!-- box-->
+                        <!-- tab-content-->
                     </div>
-                    <!-- boxContainer-->
+                    <!-- box-->
                 </div>
-                <!-- row-->
+                <!-- boxContainer-->
             </div>
             <!-- container-->
         </div>

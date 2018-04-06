@@ -5,9 +5,11 @@ namespace App\Http\Controllers\DriverModuleControllers;
 use App\Rental;
 use App\Van;
 use App\User;
+use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ViewRentalsController extends Controller
 {
@@ -20,6 +22,14 @@ class ViewRentalsController extends Controller
 
     public function updateRental(Rental $rental)
     {
+      $this->validate(request(),[
+        "click" => [
+          'required',
+          Rule::in(['Accepted', 'Declined', 'Departed', 'Pending', 'Cancelled', 'Expired'])
+        ],
+      ]);
+
+
         $message = null;
         $request = request('click');
         $plate_number = User::find(Auth::id());
@@ -43,6 +53,10 @@ class ViewRentalsController extends Controller
                     'model_id' => Auth::user()->model_id,
                     'status' => request('click'),
                 ]);
+            } elseif($rental->status == 'Pending' && ($rental->model_id !== null && $rental->plate_number !== null)) {
+              $rental->update([
+                  'status' => request('click'),
+              ]);
             } else {
                 $rental->update([
                     'status' => request('click'),

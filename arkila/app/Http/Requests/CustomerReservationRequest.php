@@ -30,17 +30,17 @@ class CustomerReservationRequest extends FormRequest
     {
         $dateNow = Carbon::now();
         $thisDate = $dateNow->setTimezone('Asia/Manila');
-        
+
         $dateFormattedNow = $thisDate->format('m/d/Y');
         $timeFormattedNow = $thisDate->format('h:i A');
 
         $dateCarbon = new Carbon(request('date'));
         $dateFormatted = $dateCarbon->format('m/d/Y');
-        
+
         if ($dateFormatted !== $dateFormattedNow) {
             return [
                 "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
-                "destination" => "bail|required",
+                "destination" => "bail|required|exists:destination,description",
                 "time" => ['bail',new checkTime, 'required'],
                 "numberOfSeats" => "bail|required|numeric|digits_between:1,4|min:0|max:15",
                 "contactNumber" => ['bail',new checkContactNum],
@@ -49,7 +49,7 @@ class CustomerReservationRequest extends FormRequest
         } else {
             return [
                 "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
-                "destination" => "bail|required",
+                "destination" => "bail|required|exists:destination,description",
                 "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
                 "numberOfSeats" => "bail|required|numeric|digits_between:1,4|min:1|max:15",
                 "contactNumber" => ['bail',new checkContactNum],
@@ -58,12 +58,13 @@ class CustomerReservationRequest extends FormRequest
         }
     }
 
-    public function messages() 
+    public function messages()
     {
         $dateNow = Carbon::now();
         $thisDate = $dateNow->setTimezone('Asia/Manila')->format('h:i A');
 
         return [
+            "destination.exists" => "Invalid input for destinations",
             "date.required" => "Please enter the preffered departure date",
             "date.date_format" => "Please enter a valid date format (mm/dd/yyyy)",
             "time.required" => "Please enter the preffered departure time",
