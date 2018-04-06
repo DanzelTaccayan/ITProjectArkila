@@ -1,6 +1,6 @@
 
 @extends('layouts.form')
-@section('title', 'Add Van Driver')
+@section('title', 'Edit Van')
 
 @if(session()->get('opLink'))
     @section('back-link',session()->get('opLink'))
@@ -59,7 +59,8 @@
 <div class="form-group">
 
        <span id ="checkBox">
-           @if(!$van->driver->first()->member_id ?? null)
+           @if($van->driver->first()->member_id ?? null)
+               @else
                <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
            @endif
        </span>
