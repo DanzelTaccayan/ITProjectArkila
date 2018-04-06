@@ -3,6 +3,7 @@
 <section style="background: url('{{ URL::asset('img/photogrid.jpg') }}') center center repeat; background-size: cover;" class="bar background-white relative-positioned">
         <div class="container">
             <!-- Carousel Start-->
+            
             <div class="home-carousel">
                 <div class="dark-mask mask-primary"></div>
                 <div class="container">
