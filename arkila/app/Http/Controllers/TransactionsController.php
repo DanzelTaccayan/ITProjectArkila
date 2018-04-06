@@ -150,7 +150,7 @@ class TransactionsController extends Controller {
             }
 
             foreach($trips = $terminal->trips()->whereNotNull('queue_number')->get() as $trip){
-                if(count($trips) > 0){
+                if(count($trips) > 1){
                     $tripQueueNum = ($trip->queue_number)-1;
                     $trip->update([
                        'queue_number' => $tripQueueNum
