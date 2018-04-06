@@ -73,15 +73,8 @@
                                 <td class="text-right">{{$van->seating_capacity}}</td>
                                 <td>
                                     <div class="text-center">
-                                          
-                                        @if($van->driver()->first())
-                                            <a name="listDriver" data-val="{{ $van->operator()->first()->member_id }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-exchange"></i>Change Driver</a>
-                                        @else
-                                            <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i>Add Driver</a>
-                                        @endif
-
+                                        <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i>EDIT</a>
                                         <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->plate_number }}"><i class="fa fa-trash"></i> Delete</button>
-
                                     </div>
                                 </td>
                             </tr>
@@ -257,48 +250,6 @@
             })
         });
 
-        $('a[name="listDriver"]').on('click',function(e){
-            $('select[name="driver"]').empty();
-            $.ajax({
-                method:'POST',
-                url: '{{route("vans.listDrivers")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'operator':$(e.currentTarget).data('val')
-                },
-                success: function(drivers){
-
-                    $('#OpName').text($(e.currentTarget).parents().eq(2).siblings().eq(2).text());
-                    $('#formChangeDriver').attr('action',"/home/vans/"+$(e.currentTarget).parents().eq(2).siblings().eq(0).text());
-                    $('select[name="driver"]').append('<option value="">None</option>');
-
-                    drivers.forEach(function(driverObj){
-                        $('select[name="driver"]').append('<option value='+driverObj.id+'> '+driverObj.name+'</option>');
-                    });
-
-                }
-
-            });
-        });
-
-        $('a[name="vanInfo"]').on('click',function(e){
-            $.ajax({
-                method:'POST',
-                url: '{{route("vans.vanInfo")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'van':$(e.currentTarget).data('val')
-                },
-                success: function(vanInfo){
-                    $('#plateNumber').text(vanInfo.plateNumber);
-                    $('#vanModel').text(vanInfo.vanModel);
-                    $('#seatingCapacity').text(vanInfo.seatingCapacity);
-                    $('#operatorOfVan').text(vanInfo.operatorOfVan);
-                    $('#driverOfVan').text(vanInfo.driverOfVan);
-                }
-
-            });
-        });
     </script>
 
     @stop
