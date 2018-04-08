@@ -95,16 +95,17 @@ class TransactionsController extends Controller {
             }else{
                 $sop = null;
             }
-
+            $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
             $trip->update([
                 'status' => 'Departed',
                 'total_passengers' => $totalPassengers,
                 'total_booking_fee' => $totalBooking,
                 'community_fund' => $totalCommunity,
                 'SOP' => $sop,
-                'date_departed' => Carbon::now(),
+                'date_departed' => $dateDeparted,
                 'queue_number' => null,
-                'report_status' => 'Accepted'
+                'report_status' => 'Accepted',
+                'time_departed' => $dateDeparted->hour.':'.$dateDeparted->minute.':'.$dateDeparted->second
             ]);
 
 
@@ -124,7 +125,7 @@ class TransactionsController extends Controller {
 
                 }
 
-                $tripa = Trip::create([
+                Trip::create([
                     'driver_id' => $trip->driver_id,
                     'terminal_id' => $trip->terminal_id,
                     'plate_number' => $trip->plate_number,
@@ -132,7 +133,7 @@ class TransactionsController extends Controller {
                     'status' => 'On Queue',
                     'queue_number' => $queueNumber
                 ]);
-                \Log::info('After create '.$tripa);
+
             }
 
 
