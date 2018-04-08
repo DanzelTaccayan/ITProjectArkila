@@ -120,11 +120,11 @@
                                         <div class="box-footer">
                                             <div class="btn-group btn-group-justified">
                                                 <div class="btn-group">
-                                                    <a href="{{route('accountSettings')}}" class="btn btn-primary">Change Password</a>
-                                                </div>
-                                                <div class="btn-group">
-                                                    <a href="#" class="btn btn-default">Sign out</a>
-                                                </div>
+                                                    <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default">Sign out</a>
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                        {{csrf_field()}}
+                                                    </form>
+                                              </div>
                                             </div>
                                         </div>
                                         <!-- /.box-footer -->

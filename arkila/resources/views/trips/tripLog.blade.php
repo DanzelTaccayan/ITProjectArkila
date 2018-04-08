@@ -20,6 +20,7 @@
                     <th>Driver</th>
                     <th>Departed at</th>
                     <th>Destination</th>
+                    <th>Departure date</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -31,6 +32,7 @@
                     <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
                     <td>{{$superAdmin->description}}</td>
                     <td>{{$trip->terminal->description}}</td>
+                    <td>{{$trip->time_departed}} of {{$trip->date_departed}} </td>
                     <td>
                         <div class="text-center">
                             <a href="{{route('trips.viewTripLog', [$trip->trip_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
