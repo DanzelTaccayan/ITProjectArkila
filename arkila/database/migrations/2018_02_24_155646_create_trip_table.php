@@ -20,6 +20,9 @@ class CreateTripTable extends Migration
             ->unsigned();
             $table->integer('terminal_id')
             ->unsigned();
+            $table->integer('origin')
+            ->unsigned()
+            ->nullable();
             $table->string('plate_number', 9);
 
             $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
@@ -37,6 +40,11 @@ class CreateTripTable extends Migration
             $table->foreign('terminal_id')
             ->references('terminal_id')->on('terminal')
             ->onDelete('restrict')
+            ->onUpdate('cascade');
+
+            $table->foreign('origin')
+            ->references('terminal_id')->on('terminal')
+            ->onDelete('cascade')
             ->onUpdate('cascade');
 
             $table->foreign('plate_number')
