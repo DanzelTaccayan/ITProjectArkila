@@ -59,6 +59,7 @@
 
 
         @include('layouts.partials.footer')
+        @include('layouts.partials.queue_sidebar')
     </div>
     <!-- ./wrapper -->
 
