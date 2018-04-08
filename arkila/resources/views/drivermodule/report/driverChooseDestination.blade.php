@@ -18,6 +18,9 @@
                         <select id="selectDestination" class="form-control" name="chooseTerminal">
                           <option>Choose your Terminal</option>
                           @foreach($terminals as $terminal)
+                          @if($terminal->description == $superAdminTerminal)
+                            @continue
+                          @endif
                             <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
                           @endforeach
                         </select>

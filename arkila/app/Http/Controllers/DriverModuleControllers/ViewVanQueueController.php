@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Terminal;
 use App\Destination;
 use App\Trip;
+use App\User;
 use App\Member;
 class ViewVanQueueController extends Controller
 {
@@ -22,7 +23,20 @@ class ViewVanQueueController extends Controller
                     ->orderBy('trip.created_at','asc')
                     ->select('trip.trip_id as trip_id', 'trip.queue_number as queueId', 'trip.plate_number as plate_number', 'trip.remarks as remarks', 'terminal.description as terminaldesc')->get();
       // return response(view('drivermodule.index', compact('trips')), 200, ['Content-Type' => 'application/json']);
+      $superAdmin = User::where('user_type', 'Super-Admin')->first();
+      $superAdminTerminal = $superAdmin->terminal->terminal_id;
+      //dd($terminals);
+      // foreach($terminals as $key => $value){
+      //   //echo $superAdminTerminal . " " . "<br/>";
+      //   if($value->terminal_id == $superAdminTerminal){
+      //       continue;
+      //   }
 
-      return view('drivermodule.indexVanQueue', compact('destinations', 'terminals', 'trips'));
+      //   if($key == 1){
+      //     echo $key . " " . "<br/>";
+      //   } 
+        
+      // }
+      return view('drivermodule.indexVanQueue', compact('destinations', 'terminals', 'trips', 'superAdminTerminal'));
     }
 }
