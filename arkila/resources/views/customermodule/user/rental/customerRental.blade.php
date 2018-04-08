@@ -64,9 +64,9 @@
                             <textarea id="message" class="form-control" name="message" placeholder="Additional comments..." val-comment></textarea>
                         </div>
                         <div class="container-contact100-form-btn">
-                            <button type="button" class="contact100-form-btn" onclick="showSummary()" data-toggle="modal" data-target="#summary"><strong>Book</strong></button>
+                            <button type="submit" class="contact100-form-btn" ><strong>Book</strong></button>
                         </div><!-- container-contact100-form-btn-->
-                    
+                    </form>
                     <!-- contact100-form-->
                 </div>
                 <!-- boxContainer-->
@@ -74,59 +74,8 @@
             <!-- row-->
         </div>
         <!-- container-->
-    </section>
-    <!--    main section-->
-    
-    <!-- Success Modal-->
-    <div id="summary" aria-hidden="true" class="modal fade summary-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background:#5cb85c; color:white; font-family: Montserrat-Regular;">
-                    <h4 class="text-center"><i class="fa fa-info-circle" style="font-size: 80px; padding-left:200px;"></i></h4>
-
-                </div>
-                <div class="modal-body">
-                    <p class="text-center" style="margin-bottom:10px;"><strong>Summary</strong></p>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <th>Type of Vehicle</th>
-                                <td id="vehicleType"></td>
-                            </tr>
-                            <tr>
-                                <th>Destination</th>
-                                <td id="dest"></td>
-                            </tr>
-                            <tr>
-                                <th>Contact Number</th>
-                                <td id="contactNo"></td>
-                            </tr>
-                            <tr>
-                                <th>Number of Days</th>
-                                <td id="numDays"></td>
-                            </tr>
-                            <tr>
-                                <th>Date</th>
-                                <td id="dateDepart"></td>
-                            </tr>
-                            <tr>
-                                <th>Time</th>
-                                <td id="timeDepart"></td>
-                            </tr>
-                            <tr>
-                                <th>Comments</th>
-                                <td id="comment"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="contact100-form-btn"><strong>Submit</strong></button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
+</section>
+<!--    main section-->
 @stop
 @section('scripts')
 @parent

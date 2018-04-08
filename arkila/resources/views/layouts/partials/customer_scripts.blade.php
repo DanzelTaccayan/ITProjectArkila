@@ -37,4 +37,11 @@
     <!-- Select 2-->
     {{ Html::script('customer/bower_components/select2/dist/js/select2.full.min.js') }}
     
+    <!-- DataTables -->
+    {{ Html::script('customer/bower_components/datatables.net/js/jquery.dataTables.min.js') }}
+
+    <!-- DataTables -->
+    {{ Html::script('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}
+    {{ Html::script('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}
+    
     
