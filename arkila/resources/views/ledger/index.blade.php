@@ -120,18 +120,18 @@
                             <td></td>
                         </tr>
                     </tbody>
-                @endif
                     <tfoot>
                         <tr>
                             <th></th>
                             <th></th>
                             <th>TOTAL:</th>
-                            <th class="text-right">{{$ledger->total_revenue}}</th>
+                            <th class="text-right">0</th>
                             <th class="text-right">{{$ledger->total_expense}}</th>
                             <th class="text-right">{{ number_format($ledger->balance, 2) }}</th>
                             <th></th>
                         </tr>
                     </tfoot>
+                @endif
             </table>
         </div>
     </div>
