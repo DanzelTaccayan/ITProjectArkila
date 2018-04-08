@@ -32,7 +32,7 @@
                     <span>Ticket Management</span>
                 </a>
             </li>
-            <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservation') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
                     <span>Rental and Resevation</span>
@@ -42,7 +42,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::is('home/rental') ? 'active' : '' }}"><a href="{{route('rental.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
-                    <li class="{{ Request::is('home/reservation') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
+                    <li class="{{ Request::is('home/reservations') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
                 </ul>
             </li>
             <li class="treeview {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }}">

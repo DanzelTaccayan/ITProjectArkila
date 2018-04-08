@@ -28,7 +28,7 @@
                     <i class="fa fa-home"></i> <span>Home</span>
                 </a>
             </li>
-            <li class="{{ Request::is('/home/view-rentals') ? 'active' : '' }}">
+            <li class="{{ Request::is('home/view-rentals') ? 'active' : '' }}">
                 <a href="{{ route('drivermodule.rentals.rental') }}">
                     <i class="fa fa-home"></i> <span>Rentals</span>
                 </a>

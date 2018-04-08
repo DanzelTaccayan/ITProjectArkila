@@ -13,7 +13,7 @@
 </head>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav">
+<body class="hold-transition skin-blue layout-top-nav sidebar-collapse">
     <div class="wrapper">
         @include('layouts.partials.header_2')
         <!-- Full Width Column -->
@@ -59,6 +59,8 @@
         <!-- /.content-wrapper -->
 
         @include('layouts.partials.footer')
+
+        @include('layouts.partials.queue_sidebar')
     </div>
     <!-- ./wrapper -->
 

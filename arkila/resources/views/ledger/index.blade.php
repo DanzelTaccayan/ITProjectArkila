@@ -96,42 +96,42 @@
                             <td></td>
                             <td>Booking Fee(Baguio)</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->booking_fee}}</td>
+                            <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->booking_fee}}</td>
+                            <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>SOP</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->sop}}</td>
+                            <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->sop}}</td>
+                            <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Expired Ticket</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->expired_ticket}}</td>
+                            <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
                             <td></td>
-                            <td class="text-right">{{$ledger->expired_ticket}}</td>
+                            <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
                             <td></td>
                         </tr>
                     </tbody>
-                @endif
                     <tfoot>
                         <tr>
                             <th></th>
                             <th></th>
                             <th>TOTAL:</th>
-                            <th class="text-right">{{$ledger->total_revenue}}</th>
-                            <th class="text-right">{{$ledger->total_expense}}</th>
+                            <th class="text-right">{{ number_format($ledger->total_revenue, 2)}}</th>
+                            <th class="text-right">{{ number_format($ledger->total_expense, 2) }}</th>
                             <th class="text-right">{{ number_format($ledger->balance, 2) }}</th>
                             <th></th>
                         </tr>
                     </tfoot>
+                @endif
             </table>
         </div>
     </div>

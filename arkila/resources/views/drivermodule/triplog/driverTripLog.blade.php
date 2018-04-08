@@ -10,7 +10,8 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="driverLog" class="table table-bordered table-striped">
+            <div class="table-responsive">
+                <table id="driverLog" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Trip No.</th>
@@ -51,7 +52,8 @@
                     @php $tripNo++; @endphp
                     @endforeach
                 </tbody>
-            </table>
+                </table>
+            </div>
         </div>
         <!-- /.box-body -->
     </div>

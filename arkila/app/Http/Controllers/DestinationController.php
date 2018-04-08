@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\checkDestinationUniqueness;
 use App\Terminal;
 use App\Destination;
 use App\Rules\checkCurrency;
@@ -23,8 +24,8 @@ class DestinationController extends Controller
     public function store()
     {
         $this->validate(request(),[
-            "addDestination" => "unique:destination,description|regex:/^[,\pL\s\-]+$/u|required|max:40",
             "addDestinationTerminal" => ['required', new checkTerminal, 'max:40'],
+            "addDestination" => [new checkDestinationUniqueness,'regex:/^[,\pL\s\-]+$/u','required','max:40'],
             "addDestinationFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000']
         ]);
 

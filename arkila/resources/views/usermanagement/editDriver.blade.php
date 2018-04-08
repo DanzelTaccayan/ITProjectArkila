@@ -23,7 +23,7 @@
 </div>
 <div class="form-group">
   <label for="Particulars">Email Address:</label>
-  <span name="email">{{$driver_user->email}}</span>
+  <span name="email">n/a</span>
 </div>
 
 

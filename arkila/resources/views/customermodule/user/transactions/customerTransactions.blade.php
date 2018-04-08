@@ -6,7 +6,7 @@
                 <div class="heading text-center">
                     <h2>MY TRANSACTIONS</h2>
                 </div>
-                <div class="col-md-8 mx-auto boxContainer">
+                <div class="col-md-12 mx-auto boxContainer">
                     <div class="box border-bottom-0">
                         <ul class="nav nav-pills nav-fill">
                             <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>
@@ -14,7 +14,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane table-responsive" id="rentals">
-                                <table id="rentals" class="table table-striped">
+                                <table id="rental" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Destination</th>
@@ -61,12 +61,13 @@
                             </div>
                             <!-- tab-pane-->
                             <div class="tab-pane table-responsive" id="reservations">
-                                <table id="reservations" class="table table-striped">
+                                <table id="reservation" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Destination</th>
                                             <th class="text-center">Date</th>
                                             <th class="text-center">Time</th>
+                                            <th class="text-center">Status</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -76,6 +77,7 @@
                                             <td>{{$reservation->destination->description}}</td>
                                             <td>{{$reservation->departure_date}}</td>
                                             <td>{{$reservation->departure_time}}</td>
+                                            <td>{{$reservation->status}}</td>
                                             <td>
                                                 <div class="text-center">
                                                     <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary"
@@ -212,8 +214,7 @@
     <div class="modal fade" id="cancelWarning{{$rental->rent_id}}">
         <div class="modal-dialog">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-8 mx-auto">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Confirm</h4>
@@ -233,7 +234,7 @@
                                 {{csrf_field()}}
                                 {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
                             </form>
                         </div>
                     </div>
@@ -250,8 +251,7 @@
     <div class="modal fade" id="deleteWarning{{$rental->rent_id}}">
         <div class="modal-dialog">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-8 mx-auto">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Confirm</h4>
@@ -271,7 +271,7 @@
                                 {{csrf_field()}}
                                 {{method_field('PATCH')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
                             </form>
                         </div>
                     </div>
@@ -309,7 +309,7 @@
                             {{csrf_field()}}
                             {{method_field('DELETE')}}
                                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                <button type="submit" class="btn btn-danger" style="width:30%;">Yes</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
                             </form>
                         </div>
                     </div>
@@ -356,4 +356,24 @@
             });
         </script>
     @endforeach
+    <script>
+        $(document).ready(function() {
+            $('#rental').DataTable({
+                'paging': false,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': true
+            });
+            $('#reservation').DataTable({
+                'paging': false,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': true
+            });
+        });
+    </script>
 @stop

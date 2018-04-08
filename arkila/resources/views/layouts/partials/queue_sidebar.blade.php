@@ -2,8 +2,7 @@
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
         <li class="active"><a href="#control-sidebar-queue-tab" data-toggle="tab"><i class="fa fa-list-ol"></i></a></li>
-        <li><a href="#control-sidebar-remarked-tab" data-toggle="tab"><i class="fa fa-thumb-tack text-red"></i></a></li>
-        <li><a href="#control-sidebar-remarked-tab" data-toggle="tab"><i class="fa fa-thumb-tack text-red"></i></a></li>
+        <li><a href="#control-sidebar-remarked-tab" data-toggle="tab"><i class="fa fa-ticket text-yellow"></i></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -93,7 +92,7 @@
           </select>
         </div>
           <div id="sellButtContainerSideBar" class="pull-right">
-              <button type="button" class="btn btn-info btn-flat" @if($counterTicketSideBar) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
+              <button type="button" class="btn btn-primary btn-sm" @if($counterTicketSideBar) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>SELL</button>
           </div>
         </div>
         <!-- /.tab-pane -->
