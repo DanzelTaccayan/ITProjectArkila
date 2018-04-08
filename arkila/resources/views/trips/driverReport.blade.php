@@ -21,6 +21,7 @@
                     <th>Driver</th>
                     <th>Departed at</th>
                     <th>Destination</th>
+                    <th>Daparture date</th>
                     <th>Status</th>
                     <th class="text-center">Action</th>
                 </tr>
@@ -33,6 +34,7 @@
                     <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
                     <td>{{$superAdmin->description}}</td>
                     <td>{{$trip->terminal->description}}</td>
+                    <td>{{$trip->time_departed}} of {{$trip->date_departed}}</td>
                     <th>{{$trip->report_status}}</th>
                     <td>
                         <div class="text-center">
