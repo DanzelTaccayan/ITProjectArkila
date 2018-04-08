@@ -266,7 +266,8 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     Route::get('/home/about', 'CustomerModuleControllers\ViewAboutController@viewAbout')->name('customermodule.user.about.customerAbout');
     /*Help*/
     Route::get('/home/customer/help', 'CustomerModuleControllers\ViewHelpController@viewHelp')->name('customermodule.user.help.customerHelp');
-
+    /*Notifications*/
+    Route::get('/notifications', 'CustomerModuleControllers\ViewNotificationsController@notificaitons')->name('customermodule.notifications');
 });
 /******************************************************************************/
 /******************************************************************************/

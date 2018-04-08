@@ -149,50 +149,7 @@
 
                                     @elseif($rental->status == 'Pending')
                                     <p>No Action</p>
-                                    @elseif ($rental->status == 'Departed')
-                                    <button class="btn btn-danger btn-sm " data-toggle="modal" data-target="#{{'deleteRental'.$rental->rent_id}}"><i class="fa fa-trash"></i>Delete
-                                                </button>
 
-                                    <!-- Modal for Delete-->
-                                    <div class="modal fade" id="{{'deleteRental'.$rental->rent_id}}">
-                                        <div class="modal-dialog">
-                                            <div class="col-md-offset-2 col-md-8">
-                                                <div class="modal-content">
-                                                    <div class="modal-header bg-red">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title"> Confirm</h4>
-                                                    </div>
-                                                    <div class="modal-body row" style="margin: 0% 1%;">
-                                                        <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                            <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                        </div>
-                                                        <div class="col-md-10">
-                                                            <p style="font-size: 110%;">Are you sure you want to delete rental #{{$rental->rent_id}}?</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <form method="POST" action="{{ route('rental.destroy', [$rental->rent_id]) }}">
-                                                            {{csrf_field()}} {{method_field('DELETE')}}
-
-                                                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
-                                                            <button type="submit" class="btn btn-danger btn-sm" style="width:22%;">Delete</button>
-
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.col -->
-                                        </div>
-                                        <!-- /.modal-dialog -->
-                                    </div>
-                                    <!-- /.modal -->
-
-
-                                </div>
-                            </td>
-                        </tr>
                         @endif @endforeach
                     </tbody>
                 </table>

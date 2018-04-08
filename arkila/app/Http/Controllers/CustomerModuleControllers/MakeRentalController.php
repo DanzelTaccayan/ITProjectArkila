@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 class MakeRentalController extends Controller
 {
     public function createRental()
-    {	
+    {
     	$vanmodels = VanModel::all();
     	return view('customermodule.user.rental.customerRental', compact('vanmodels'));
     }
@@ -56,7 +56,8 @@ class MakeRentalController extends Controller
     		]);
     	}
 
-    	
+      $user = User::find(Auth::id());
+      $user->notify(new CustomerRent($user, $rent));
     	return 	redirect(route('customermodule.user.transactions.customerTransactions'))->with('success', 'Successfully made a rental');
     }
 }

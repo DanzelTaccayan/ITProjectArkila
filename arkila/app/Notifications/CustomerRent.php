@@ -46,7 +46,7 @@ class CustomerRent extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'rent_id' => $this->rent->rent_id,
+            'rent_info' => $this->rent,
             'user_id' => $this->user->id,
             'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
         ];
