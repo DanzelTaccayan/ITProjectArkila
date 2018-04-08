@@ -1,8 +1,9 @@
 @extends('layouts.form')
 @section('title', 'Edit Profile')
-@section('form-title', 'EDIT PROFILE')
+@section('form-title', 'CHANGE PASSWORD')
 @section('form-action', route('superadminmodule.changePassword', [$superAdminid]))
 @section('method_field', method_field('PATCH'))
+@section('back-link', route('home'))
 @section('form-body')
 
     <div class="form-group">

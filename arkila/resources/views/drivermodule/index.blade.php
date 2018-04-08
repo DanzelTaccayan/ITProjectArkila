@@ -16,5 +16,17 @@ $(document).ready(function(){
 });
 
 </script>
+<script>
+  $(function() {
 
+        $('.queueTable').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true
+        })
+    })
+</script>
 @endsection

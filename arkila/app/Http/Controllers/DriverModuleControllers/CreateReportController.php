@@ -23,9 +23,9 @@ class CreateReportController extends Controller
   public function chooseTerminal()
   {
     $terminals = Terminal::orderBy('terminal_id')->get();
-    //$destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
-    // $fads = FeesAndDeduction::where('type','=','Discount')->get();
-    return view('drivermodule.report.driverChooseDestination',compact('terminals'));
+    $superAdmin = User::where('user_type', 'Super-Admin')->first();
+    $superAdminTerminal = $superAdmin->terminal->description;
+    return view('drivermodule.report.driverChooseDestination',compact('terminals', 'superAdminTerminal'));
 
   }
 

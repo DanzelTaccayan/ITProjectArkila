@@ -177,7 +177,7 @@
                                 <tr>
                                     <td>{{$destination->description}}</td>
                                     <td class="pull-right">{{$destination->amount}}</td>
-                                    <td>{{$destination->terminal}}</td>
+                                    <td>{{$destination->terminal->description}}</td>
                                     <td>
 
                                             <div class="text-center">

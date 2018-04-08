@@ -2,37 +2,6 @@
     {{ Html::script('adminlte/bower_components/jquery/dist/jquery.min.js') }}
     <!-- jQuery UI 1.11.4 -->
     {{ Html::script('adminlte/bower_components/jquery-ui/jquery-ui.min.js') }}
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-        $.widget.bridge('uibutton', $.ui.button);
-        
-    </script>
-    <!-- Special Unit Checker -->
-  <script>
-      $(function(){
-          function specialUnitChecker(){
-              $.ajax({
-                  method:'POST',
-                  url: '{{route("trips.specialUnitChecker")}}',
-                  data: {
-                      '_token': '{{csrf_token()}}'
-                  },
-                  success: function(response){
-                      if(response[0]) {
-                          $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                      }else{
-                          if(response[1]){
-                              $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
-                          }
-                      }
-                  }
-
-              });
-          }
-
-          specialUnitChecker();
-      });
-  </script>
     <!-- Bootstrap 3.3.7 -->
     {{ Html::script('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}
     <!-- Morris.js charts -->
@@ -76,7 +45,6 @@
     {{ Html::script('js/client-side_validation/van-validation.js') }}
     {{ Html::script('js/client-side_validation/settings-validation.js') }}
     {{ Html::script('js/client-side_validation/booking-form-validation.js') }}
-    {{ Html::script('js/client-side_validation/reservation-form-validation.js') }}
     {{ Html::script('js/client-side_validation/driver-report-validation.js') }}
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
@@ -267,3 +235,35 @@
 
         });
     </script>
+
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+        
+    </script>
+    <!-- Special Unit Checker -->
+  <script>
+      $(function(){
+          function specialUnitChecker(){
+              $.ajax({
+                  method:'POST',
+                  url: '{{route("trips.specialUnitChecker")}}',
+                  data: {
+                      '_token': '{{csrf_token()}}'
+                  },
+                  success: function(response){
+                      if(response[0]) {
+                          $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
+                      }else{
+                          if(response[1]){
+                              $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
+                          }
+                      }
+                  }
+
+              });
+          }
+
+          specialUnitChecker();
+      });
+  </script>

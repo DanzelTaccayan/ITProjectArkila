@@ -8,7 +8,7 @@
         <div class="box">
           @include('message.success')
             <div class="box-header">
-                <h3>Choose Terminal</h3>
+                <h3>From</h3>
             </div>
             <form>
             <div class="box-body">
@@ -18,6 +18,9 @@
                         <select id="selectDestination" class="form-control" name="chooseTerminal">
                           <option>Choose your Terminal</option>
                           @foreach($terminals as $terminal)
+                          @if($terminal->description == $superAdminTerminal)
+                            @continue
+                          @endif
                             <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
                           @endforeach
                         </select>
