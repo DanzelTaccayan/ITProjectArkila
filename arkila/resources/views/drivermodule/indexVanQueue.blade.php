@@ -38,11 +38,9 @@
                         @foreach($trips as $trip)
                         <tr>
                             @if($trip->terminaldesc == $value->description)
-                            <td> 
-                                {{$trip->queue_number}}
-                            </td>
-                            <td>{{$trip->plate_number}}</td>
-                            <td>{{$trip->remarks}}</td>
+                                <td>{{$trip->queueId}}</td>
+                                <td>{{$trip->plate_number}}</td>
+                                <td>{{$trip->remarks}}</td>
                             @endif
                         </tr>
 
