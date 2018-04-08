@@ -45,7 +45,7 @@ class HomeController extends Controller
     public function settings(){
         $fees = FeesAndDeduction::latest()->where('type','Fee')->get();
         $discounts = FeesAndDeduction::latest()->where('type','Discount')->get();
-        $destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')->select('terminal.description as terminal', 'destination.destination_id','destination.description', 'destination.amount')->get();
+        $destinations = Destination::all();
         $terminals = Terminal::whereNotIn('terminal_id', [auth()->user()->terminal_id])->get();
         $terminalsFee = Terminal::all();
         $tickets = Ticket::all();
