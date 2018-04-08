@@ -8,7 +8,7 @@
         <div class="box">
           @include('message.success')
             <div class="box-header">
-                <h3>Choose Terminal</h3>
+                <h3>From</h3>
             </div>
             <form>
             <div class="box-body">

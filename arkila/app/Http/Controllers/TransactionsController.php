@@ -10,6 +10,7 @@ use App\Transaction;
 use App\Ticket;
 use Carbon\Carbon;
 use App\Member;
+use DateTimeZone;
 
 class TransactionsController extends Controller {
     /**
