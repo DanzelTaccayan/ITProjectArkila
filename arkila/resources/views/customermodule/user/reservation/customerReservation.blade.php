@@ -63,9 +63,9 @@
                             
                         </div>
                         <div class="container-contact100-form-btn">
-                            <button type="button" class="contact100-form-btn" onclick="showSummary()" data-toggle="modal" data-target="#addSuccess"><strong>Book</strong></button>
+                            <button type="submit" class="contact100-form-btn"><strong>Book</strong></button>
                         </div><!-- container-contact100-form-btn-->
-                    
+                    </form>
                     <!-- contact100-form-->
                 </div>
                 <!-- col-->
@@ -75,56 +75,7 @@
         <!-- container-->
     </section>
     <!-- main section-->
-    
-    <div id="addSuccess" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="background:#5cb85c; color:white; font-family: Montserrat-Regular;">
-                    <h4 class="text-center"><i class="fa fa-info-circle" style="font-size: 80px; padding-left:200px;"></i></h4>
-                </div>
-                <div class="modal-body">
 
-                    <p class="text-center" style="margin-bottom:10px;"><strong>Reservation Summary</strong></p>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <th>Destination</th>
-                                <td id="summaryDest"></td>
-                            </tr>
-                            <tr>
-                                <th>Contact Number</th>
-                                <td id="summaryContact"></td>
-                            </tr>
-                            <tr>
-                                <th>Number of Seats</th>
-                                <td id="summarySeats"></td>
-                            </tr>
-                            <tr>
-                                <th>Date</th>
-                                <td id="summaryDate"></td>
-                            </tr>
-                            <tr>
-                                <th>Time</th>
-                                <td id="summaryTime"></td>
-                            </tr>
-                            <tr>
-                                <th>Comments</th>
-                                <td id="summaryComments"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="contact100-form-btn"><strong>Submit</strong></button>
-                </div>
-                <!-- modal-body-->
-            </div>
-            </form>
-            <!-- modal-content-->
-        </div>
-        <!-- modal-dialog-->
-    </div>
-    <!-- addSuccess-->
 @stop 
 @section('scripts')
 @parent

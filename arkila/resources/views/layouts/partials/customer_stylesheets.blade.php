@@ -41,8 +41,13 @@
     <!-- Select 2-->
     {{ Html::style('customer/bower_components/select2/dist/css/select2.min.css') }}
         
-            
+    <!-- Glyphicons -->        
     {{ Html::style('customer/bower_components/bootstrap/dist/css/glyphicon.css') }}
+    
+    <!-- DataTables -->
+    {{ Html::style('customer/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}
+    <!-- DataTables -->
+    {{ Html::style('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}
 
         
     
