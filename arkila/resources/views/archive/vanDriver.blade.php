@@ -30,7 +30,7 @@
                             <td>{{$driver->address}}</td>
                             <td>{{$driver->age}}</td>
                             <td>{{ $driver->contact_number }}</td>
-                            <td></td>
+                            <td>{{ \Carbon\Carbon::parse($driver->created_at)->toDayDateTimeString() }}</td>
                             <td>
                                 <div class="text-center">
                                     <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>VIEW</a>
@@ -59,7 +59,7 @@
                             <td>{{$van->plate_number}}</td>
                             <td>{{$van->vanmodel->description}}</td>
                             <td class="text-right">{{$van->seating_capacity}}</td>
-                            <td></td>
+                            <td>{{ \Carbon\Carbon::parse($van->created_at)->toDayDateTimeString() }}</td>
                             <td>
                                 <div class="text-center">
                                     <a data-val='#' class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>View</a>
