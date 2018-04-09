@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Member;
-use App\ArchiveMember;
-use App\ArchiveVan;
 use PDF;
 use DB;
 use Carbon\Carbon;
@@ -188,7 +186,7 @@ class OperatorsController extends Controller
      * @param  ArchiveMember $archivedOperator
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ArchiveMember $archivedOperator)
+    public function destroy()
     {
         // Start transaction!
         DB::beginTransaction();
@@ -262,59 +260,40 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try
         {
-            $operatorId = $archive->member_id;
-            if ($archive->drivers->count() == 0 && $archive->van->count() == 0)
+            //Count the drivers of the operator and archive them
+            if($archive->drivers()->count())
             {
-                ArchiveMember::create([
-                    'operator_id' => $operatorId,
-                    'archived' => 'Operator',
-                ]);
-
-            }
-            else
-            {
-                foreach ($archive->van as $vans)
-                {
-                    $driver = $vans->driver()->first()->member_id ?? $vans->driver()->first();
-
-                    $vanid = $vans->plate_number;
-                    $van = ArchiveVan::create([
-                        'plate_number' => $vanid,
-                        'archived' => 'Operator',
-                    ]);
-                    $van->archiveMember()->attach($operatorId);
-
-                    if ($driver !== null) {
-                        $van->archiveMember()->attach($driver);
-
-                    }
-                }
-                foreach ($archive->drivers as $count => $driver)
-                {
-                    $counter = $count+1;
-                    if ($archive->drivers->count() >= $counter) {
-                        $id = $driver->member_id;
-                        $driverId = ArchiveMember::create([
-                            'operator_id' => $operatorId,
-                            'driver_id' => $id,
-                            'archived' => 'Operator',
-                        ]);
-                    }
-                }
-                if($archive->drivers->count() == 0)
-                {
-                    ArchiveMember::create([
-                        'operator_id' => $operatorId,
-                        'archived' => 'Operator',
+                foreach($archive->drivers as $driver){
+                    $driver->archivedOperator()->attach($archive->member_id);
+                    $driver->update([
+                        'operator_id' => null
                     ]);
                 }
             }
 
+            //Count the vans of the operator and archive them
+            if($archive->van()->count())
+            {
+                foreach($archive->van as $van){
+
+                    //archive operator and van
+                    $van->archivedMember()->attach($archive->member_id);
+                    $van->members()->detach($archive->member_id);
+                    //archive the driver and van
+                    if($van->driver()->first()){
+                        $van->archivedMember()->attach($van->driver()->first()->member_id);
+                        $van->members()->detach($van->driver()->first()->member_id);
+                    }
+
+                    $van->update([
+                        'status' => 'Inactive'
+                    ]);
+                }
+            }
 
             $archive->update([
                 'status' => 'Inactive',
                 'notification' => 'Disable',
-
             ]);
         }
         catch(\Exception $e)

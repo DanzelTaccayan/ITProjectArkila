@@ -35,6 +35,18 @@ class Member extends Model
       return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function archivedOperator() {
+        return $this->belongsToMany(Member::class,'archive_member','driver_id','operator_id')->withTimestamps();
+    }
+
+    public function archivedDriver() {
+        return $this->belongsToMany(Member::class,'archive_member','operator_id','driver_id')->withTimestamps();
+    }
+
+    public function archivedVan(){
+        return $this->belongsToMany(Van::class,'archive_van','member_id','plate_number','')->withTimestamps();
+    }
+
     public function countDriverTrip(){
       return $this->trips();
     }
@@ -117,13 +129,4 @@ class Member extends Model
         $this->attributes['emergency_contactno'] = '+63'.$contactArr[0].$contactArr[1].$contactArr[2];
     }
 
-    public function archivedOperator() {
-        return $this->hasMany(ArchiveMember::class, 'operator_id');
-
-    }
-
-    public function archivedDriver() {
-        return $this->hasMany(ArchiveMember::class, 'driver_id');
-
-    }
 }

@@ -69,7 +69,7 @@
                                 <p>Are you sure you want to delete "{{ $van->model }}" with plate number of "{{$van->plate_number}}"</p>
                             </div>
                             <div class="modal-footer">
-                                <form method="POST" action="{{route('vans.archiveDelete',[$van->plate_number])}}">
+                                <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">
                                     {{csrf_field()}}
                                     {{method_field('PATCH')}}
                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>

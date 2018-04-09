@@ -20,13 +20,12 @@
             <tbody>
                 @foreach ($operators as $operator)
                 <tr>
-                    <td>{{ $operator->operator->full_name }}</td>
-                    <td>{{ $operator->operator->contact_number }}</td>
-                    <td>{{ $operator->operator->address }}</td>
+                    <td>{{ $operator->full_name }}</td>
+                    <td>{{ $operator->contact_number }}</td>
+                    <td>{{ $operator->address }}</td>
                     <td>
                         <div class="text-center">
-                            <a href="{{ route('archive.showProfile', [$operator->archive_member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->archive_member_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                            <a href="{{ route('archive.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                         </div>
                         <!-- /.text -->
                     </td>
@@ -43,11 +42,11 @@
                                 <h1>
                                     <i class="fa fa-exclamation-triangle pull-left text-yellow"></i>
                                 </h1>
-                                <p>Are you sure you want to delete "{{ $operator->operator->full_name }}"</p>
+                                <p>Are you sure you want to delete "{{ $operator->full_name }}"</p>
                             </div>
                             <div class="modal-footer">
                                 @if($operators && $operator)
-                                <form action="{{ route('operators.destroy', [$operator->archive_member_id]) }}" method="POST">
+                                <form action="{{ route('operators.destroy', [$operator->member_id]) }}" method="POST">
                                     {{ csrf_field() }} {{method_field('DELETE')}}
                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                     <button type="submit" class="btn btn-danger">Delete</button>
