@@ -30,36 +30,6 @@
                         <!-- /.text -->
                     </td>
                 </tr>
-                <!-- Modal for Delete-->
-                <div class="modal fade" id="{{'deleteWarning'.$operator->archive_member_id}}">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header bg-red">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                <h4 class="modal-title"> Confirm</h4>
-                            </div>
-                            <div class="modal-body">
-                                <h1>
-                                    <i class="fa fa-exclamation-triangle pull-left text-yellow"></i>
-                                </h1>
-                                <p>Are you sure you want to delete "{{ $operator->full_name }}"</p>
-                            </div>
-                            <div class="modal-footer">
-                                @if($operators && $operator)
-                                <form action="{{ route('operators.destroy', [$operator->member_id]) }}" method="POST">
-                                    {{ csrf_field() }} {{method_field('DELETE')}}
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                                @endif
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
-                <!-- /.modal -->
                 @endforeach
             </tbody>
         </table>
