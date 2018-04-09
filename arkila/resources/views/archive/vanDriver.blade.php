@@ -11,7 +11,7 @@
         <div class="tab-content">
 
             <div class="active tab-pane" id="drivers">
-                <table class="table table-bordered table-striped driverVan">
+                <table id="driver" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="tab-pane" id="vans"> 
-                <table class="table table-bordered table-striped driverVan">
+                <table id="van" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Plate Number</th>
@@ -80,13 +80,28 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
-        $('.driverVan').DataTable({
+        $('#driver').DataTable({
             'paging': true,
             'lengthChange': true,
             'searching': true,
             'ordering': true,
             'info': true,
             'autoWidth': true,
+            'order': [[ 4, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] 
+            }]
+        }),
+
+        $('#van').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 3, "desc" ]],
             'aoColumnDefs': [{
                 'bSortable': false,
                 'aTargets': [-1] 

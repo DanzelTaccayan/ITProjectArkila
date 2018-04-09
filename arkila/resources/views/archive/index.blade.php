@@ -57,6 +57,7 @@
             'ordering': true,
             'info': true,
             'autoWidth': true,
+            'order': [[ 3, "desc" ]],
             'aoColumnDefs': [
                 { 'bSortable': false, 'aTargets': [-1]}
             ]
