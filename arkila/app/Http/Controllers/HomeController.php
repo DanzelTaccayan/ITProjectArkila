@@ -13,7 +13,6 @@ use App\Van;
 use App\Member;
 use App\Reservation;
 use App\Rental;
-use App\ArchiveMember;
 
 
 class HomeController extends Controller
@@ -63,18 +62,16 @@ class HomeController extends Controller
     }
 
     public function archive() {
-        $operators = ArchiveMember::allOperators()->groupBy('operator_id')->get();
+        $operators = Member::allOperators()->where('status','Inactive')->get();
 
         return view('archive.index', compact('operators'));
 
     }
 
-    public function showProfile(ArchiveMember $archive)
-    {           
-        $drivers = Member::where('operator_id',$archive->operator_id)->get();
-        // dd($driver);
+    public function showProfile(Member $archive)
+    {
 
-        return view('archive.operatorArchive',compact('archive', 'drivers'));
+        return view('archive.operatorArchive',compact('archive'));
     }
 
     public function vanDriver(Member $operator) {

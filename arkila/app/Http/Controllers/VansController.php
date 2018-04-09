@@ -180,31 +180,49 @@ class VansController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Van $van) {
-        //$current_time = \Carbon\Carbon::now();
-       // $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-        // $oldVan = $van->driver()->first()->member_id ?? $van->driver()->first();
-        // $newVan = $request->driver;
-
-        // // $plate = $request->pla
-
-        // if ($oldVan != $newVan)
-        // {
-        //     $mem = $van->plate_number;
-        //     $rep = Van::find($mem);
-        //     $newRep = $rep->replicate();
-        //     $newRep->plate_number = 
-        //     $newRep->status = 'Inactive';
-        //     $newRep->created_at = $dateNow;
-        //     $newRep->save();
-
-        // }
 
         if(request('addDriver') != 'on'){
             $this->validate(request(), [
                 "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
                 "operator" => ['required','exists:member,member_id', new checkOperator]
             ]);
+
+            //Archiving
+            if($van->operator()->first())
+            {
+                if(request('operator') == $van->operator()->first()->member_id){
+                    //check if the van has a past driver
+                    if($van->driver()->first())
+                    {
+                        if(request('driver') != $van->driver()->first()->member_id)
+                        {
+                            //archive the relationship of the van and the driver
+                            $van->archivedMember()->attach($van->driver()->first()->member_id);
+                        }
+                    }
+
+                }
+                else
+                {
+                    //Archive the old operator and van
+                    $van->archivedMember()->attach($van->operator()->first()->member_id);
+
+
+                    //Archive the relationship of the old operator and driver
+                    if($van->driver()->first())
+                    {
+                        $van->driver()->first()->archivedOperator()->attach($van->operator()->first()->member_id);
+
+                        if(request('driver') != $van->driver()->first()->member_id)
+                        {
+                            //archive the relationship of the van and the driver
+                            $van->archivedMember()->attach($van->driver()->first()->member_id);
+                        }
+                    }
+
+                }
+            }
 
             //Find the past Operator and Driver
             $driver = $van->driver()->first();
@@ -321,14 +339,32 @@ class VansController extends Controller {
         }
     }
 
-    public function archiveDelete(Request $request, Van $van)
+    public function archiveVan(Van $van)
     {
+        //Archive its operator
+        if($van->operator()->first()){
+            $van->archivedMember()->attach($van->operator()->first()->member_id);
+            $van->members()->detach($van->operator()->first()->member_id);
+        }
+
+        //Archive its driver
+        if($van->driver()->first()){
+            $van->archivedMember()->attach($van->driver()->first()->member_id);
+            $van->members()->detach($van->driver()->first()->member_id);
+        }
+
+        //Archive the relationship of the driver and operator, if they exists
+        if($van->driver()->first() && $van->operator()->first()){
+            $van->operator()->first()->archivedDriver()->attach($van->driver()->first()->member_id);
+        }
+
         $van->update([
            'status' => 'Inactive',
         ]);
+
         return back();
 
-        }
+    }
 
     public function generatePDF()
     {

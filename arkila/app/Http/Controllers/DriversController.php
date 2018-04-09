@@ -280,28 +280,15 @@ class DriversController extends Controller
      */
     public function update(DriverRequest $request, Member $driver)
     {
-            $current_time = \Carbon\Carbon::now();
-            $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
-            if (request('operator') !== null) {
-                if($driver->operator->member_id ?? null){
-                    $oldOperator = $driver->operator->member_id;
 
-                    $newOperator = $request->operator;
-
-
-                    if ($oldOperator != $newOperator) {
-                        $mem = $driver->member_id;
-                        $rep = Member::find($mem);
-                        $newRep = $rep->replicate();
-                        $newRep->SSS = '';
-                        $newRep->license_number = '';
-                        $newRep->status = 'Inactive';
-                        $newRep->created_at = $dateNow;
-                        $newRep->save();
-                    }
+            if (request('operator') !== null && $request->operator != $driver->operator_id) {
+                if($driver->van()->first()){
+                    $driver->archivedVan()->attach($driver->van()->first()->plate_number);
+                    $driver->van()->detach($driver->van()->first()->plate_number);
                 }
+                $driver->archivedOperator()->attach($driver->operator_id);
             }
-
+            $dateNow = Carbon::now()->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
             $driver->update([
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
@@ -388,12 +375,27 @@ class DriversController extends Controller
         return $result;
     }
 
-    public function archiveDelete(Request $request, Member $driver)
+    public function archiveDriver(Member $driver)
     {
+        if($driver->operator_id)
+        {
+            $driver->archivedOperator()->attach($driver->operator_id);
             $driver->update([
-                'status' => 'Inactive',
+               'operator_id' => null
             ]);
-            return back();
+        }
+
+        if($driver->van()->first())
+        {
+            $driver->archivedVan()->attach($driver->van()->first()->plate_number);
+            $driver->van()->detach($driver->van()->first()->plate_number);
+        }
+
+        $driver->update([
+            'status' => 'Inactive',
+        ]);
+
+        return back();
     }
 
     public function generatePDF()

@@ -30,6 +30,10 @@ class Van extends Model
             
     }
 
+    public function archivedMember(){
+        return $this->belongsToMany(Member::class,'archive_van','plate_number','member_id')->withTimestamps();
+    }
+
     public function driver(){
         return $this->members()->where('role','Driver');
     }

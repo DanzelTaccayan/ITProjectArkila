@@ -129,7 +129,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive', 'HomeController@archive')->name('archive.index');
     Route::get('/home/operatorVanDriver/{operator}', 'HomeController@vanDriver')->name('archive.vanDriver');
     Route::get('/home/archive/profile/{archive}','HomeController@showProfile')->name('archive.showProfile');
-    Route::patch('/home/operators/{driver}/archiveDelete', 'DriversController@archiveDelete')->name('drivers.archiveDelete');
+    Route::patch('/home/operators/{driver}/archiveDriver', 'DriversController@archiveDriver')->name('drivers.archiveDriver');
     Route::post('/home/operators/{archive}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
 
 
@@ -173,7 +173,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
     Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
     /********Archive ********/
-    Route::patch('/home/vans/{van}/archiveVan', 'VansController@archiveDelete')->name('vans.archiveDelete');
+    Route::patch('/home/vans/{van}/archiveVan', 'VansController@archiveVan')->name('vans.archiveVan');
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
     Route::get('/operators/generatePDF', 'OperatorsController@generatePDF')->name('pdf.operators');
     Route::get('/drivers/generatePerDriver/{driver}', 'DriversController@generatePerDriver')->name('pdf.perDriver');

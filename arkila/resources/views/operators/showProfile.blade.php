@@ -99,7 +99,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 
-                                               <form method="POST" action="{{route('vans.archiveDelete',[$van->plate_number])}}">
+                                               <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">
                                                     {{csrf_field()}}
                                                     {{method_field('PATCH')}}
 
@@ -182,7 +182,7 @@
                                                </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{{route('drivers.archiveDelete',[$driver->member_id])}}" method="POST">
+                                                <form action="{{route('drivers.archiveDriver',[$driver->member_id])}}" method="POST">
                                                      {{ csrf_field() }} {{method_field('PATCH')}}
                                                     
                                                     <button type="button" class="btn btn-default btn-sm btn-flat" data-dismiss="modal">No</button>

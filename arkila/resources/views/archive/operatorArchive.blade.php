@@ -19,20 +19,20 @@
             <div class="box-body box-profile">
                 <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="Operator profile picture">
 
-                <h3 class="profile-username text-center">{{ $archive->operator->full_name }}</h3>
+                <h3 class="profile-username text-center">{{ $archive->full_name }}</h3>
                 <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                        <b>Contact Number</b> <p class="pull-right">{{ $archive->operator->contact_number }}</p>
+                        <b>Contact Number</b> <p class="pull-right">{{ $archive->contact_number }}</p>
                     </li>
                     <li class="list-group-item">
-                        <b>Number of Vans</b> <p class="pull-right">{{ count($archive->archiveVan) }}  </p>
+                        <b>Number of Vans</b> <p class="pull-right">{{ count($archive->archivedVan) }}  </p>
                     </li>
                     <li class="list-group-item">
-                        <b>Number of Drivers</b> <p class="pull-right">{{ count($archive->driver_id) }}</p>
+                        <b>Number of Drivers</b> <p class="pull-right">{{ count($archive->archivedDriver) }}</p>
                     </li>
                 </ul>
-                <a href="{{route('operators.show',[$archive->operator->member_id])}}" class="btn btn-primary btn-block btn-sm"><b>View All Information</b></a>
-                <a href="{{route('operators.destroy', [$archive->operator->member_id])}}" class="btn btn-block btn-outline-danger btn-sm"><b>Permanently Delete</b></a>
+                <a href="{{route('operators.show',[$archive->member_id])}}" class="btn btn-primary btn-block btn-sm"><b>View All Information</b></a>
+                <a href="{{route('operators.destroy', [$archive->member_id])}}" class="btn btn-block btn-outline-danger btn-sm"><b>Permanently Delete</b></a>
             </div>
             <!-- /.box-body -->
         </div>
@@ -57,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($archive->archiveVan as $vans)
+                        @foreach ($archive->archivedVan as $vans)
                             <tr>
                                 <td>{{ $vans->plate_number }}</td>
                                 <td>
@@ -124,12 +124,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($drivers as $driver)
+                        @foreach ($archive->archivedDriver as $driver)
                             <tr>
                                 <td>{{ $driver->first_name }}</td>
                                 <td>{{ $driver->age }}</td>
                                 <td>{{ $driver->contact_number }}</td>
-                                <td>{{ $archive->archiveVan()->first()->plate_number ?? $archive->archiveVan()->first() }}</td>
+                                <td>{{ $archive->archivedVan()->first()->plate_number ?? null }}</td>
                                 <td>
                         
                                     
