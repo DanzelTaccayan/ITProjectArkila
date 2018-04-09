@@ -164,7 +164,7 @@
                                 </div>
                             </li>
                             <li class="footer box-body text-center">
-                                <a href="{{route('announcements.index')}}">View all announcement</a>
+                                <a href="{{route('announcements.index')}}">View all announcements</a>
                             </li>
                         </form>
                     </ul>
