@@ -35,7 +35,7 @@ class CreateReportController extends Controller
                     ->where('terminal.terminal_id', '=', $terminals->terminal_id)
                     ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
     $fads = FeesAndDeduction::where('type','=','Discount')->get();
-    $member = Member::where('user_id', Auth::id())->first();  
+    $member = Member::where('user_id', Auth::id())->first();
     return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fads', 'member'));
   }
   public function storeReport(Terminal $terminal, CreateReportRequest $request)
@@ -57,6 +57,7 @@ class CreateReportController extends Controller
      if($totalPassengers >=  10){
         Trip::create([
          'driver_id' => $driver_id->member_id,
+         'origin' => $terminal->terminal_id,
          'terminal_id' => $terminal->terminal_id,
          'plate_number' => $plateNumber->plate_number,
          'status' => 'Departed',
@@ -71,6 +72,7 @@ class CreateReportController extends Controller
      }else if($totalPassengers <  10){
           Trip::create([
            'driver_id' => $driver_id->member_id,
+           'origin' => $terminal->terminal_id,
            'terminal_id' => $terminal->terminal_id,
            'plate_number' => $plateNumber->plate_number,
            'status' => 'Departed',

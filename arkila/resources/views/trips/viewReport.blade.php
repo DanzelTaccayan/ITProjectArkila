@@ -89,7 +89,9 @@
                                     @foreach($destinations as $key => $values)
                                         @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
                                     @endforeach
-                                    <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
+                                    @if($trip->origin == null)
+                                      <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
+                                    @endif
                                 </div>
                             </div>
                         </div>
