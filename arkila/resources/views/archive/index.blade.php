@@ -24,7 +24,7 @@
                     <td>{{ $operator->full_name }}</td>
                     <td>{{ $operator->contact_number }}</td>
                     <td>{{ $operator->address }}</td>
-                    <td>{{ \Carbon\Carbon::parse($operator->pivot->created_at)->toDayDateTimeString() }}</td>
+                    <td>{{ \Carbon\Carbon::parse($operator->created_at)->toDayDateTimeString() }}</td>
                     <td>
                         <div class="text-center">
                             <a href="{{ route('archive.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
