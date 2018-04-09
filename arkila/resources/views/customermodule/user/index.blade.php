@@ -52,7 +52,7 @@
                                 <div class="col-md-7"><img src="../img/template-easy-code.png" alt="" class="img-fluid"></div>
                                 <div class="col-md-5">
                                     <h1>Need a Seat Reservation for a Trip?</h1>
-                                    <p>We've got you!</p>
+                                    <p>We got you!</p>
                                 </div>
                                 <!-- col-->
                             </div>

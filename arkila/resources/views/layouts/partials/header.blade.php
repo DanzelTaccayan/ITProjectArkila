@@ -144,15 +144,14 @@
 
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}
-                            <li class="header box-body">Enter Announcement:
-                                <span class="pull-right">
-                                        <select name="viewer">
-                                            <option value="Public">Public</option>
-                                            <option value="Driver Only">Driver Only</option>
-                                            <option value="Customer Only">Customer Only</option>
-                                            <option value="Only Me">Only Me</option>
-                                        </select>
-                                </span>
+                            <li class="header box-body">
+                                <h4>Enter Announcement:</h4>
+                                <select class="form-control" name="viewer">
+                                    <option value="Public">Public</option>
+                                    <option value="Driver Only">Driver Only</option>
+                                    <option value="Customer Only">Customer Only</option>
+                                    <option value="Only Me">Only Me</option>
+                                </select>
                             </li>
                             <li class="box-body">
                                 <div class="form-group">
@@ -169,7 +168,7 @@
                                 </div>
                             </li>
                             <li class="footer box-body text-center">
-                                <a href="{{route('announcements.index')}}">View all announcement</a>
+                                <a href="{{route('announcements.index')}}">View all announcements</a>
                             </li>
                         </form>
                     </ul>

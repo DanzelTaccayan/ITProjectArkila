@@ -119,7 +119,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="sssO">SSS No:</label>
-                        <input id="sssO" name="sss" value="{{  old('sss') ?? $operator->SSS }}" type="text" class="form-control" placeholder="SSS No." val-sss required data-inputmask='"mask": "99-9999999-9"' data-mask data-parsley-trigger="keyup">
+                        <input id="sssO" name="sss" value="{{  old('sss') ?? $operator->SSS }}" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask data-parsley-trigger="keyup">
                     </div>
                 </div>
             </div>
