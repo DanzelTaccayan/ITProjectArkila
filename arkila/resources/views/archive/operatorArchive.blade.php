@@ -88,7 +88,7 @@
                                 <td>{{ $archive->archivedVan()->first()->plate_number ?? null }}</td>
                                 <td>
                                     <div class="text-center">
-                                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>View</a>
+                                        <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>View</a>
                                     </div>                                                
                                 </td>
                             </tr>

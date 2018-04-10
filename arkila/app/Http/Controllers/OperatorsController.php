@@ -290,10 +290,11 @@ class OperatorsController extends Controller
                     ]);
                 }
             }
-
+            $date_archived = Carbon::now('Asia/Manila')->toDateTimeString();
             $archive->update([
                 'status' => 'Inactive',
                 'notification' => 'Disable',
+                'date_archived' => $date_archived
             ]);
         }
         catch(\Exception $e)
@@ -305,6 +306,25 @@ class OperatorsController extends Controller
         DB::commit();
 
         return redirect(route('operators.index'));
+    }
+
+    public function restoreArchivedOperator(Member $archivedOperator)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try{
+            $archivedOperator->update([
+                'status' => 'Active',
+                'date_archived' => null
+            ]);
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
+        DB::commit();
+        return back();
     }
 
 }

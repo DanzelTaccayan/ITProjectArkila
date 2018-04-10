@@ -5,7 +5,11 @@
 <div class="box box-default with-shadow">
     <div class="box-header with-border text-center">
         <h4>
-            <a href="{{route('operators.showProfile',[$operator->member_id])}}" class="pull-left"><i class="fa  fa-chevron-left"></i></a>
+            @if($operator->status == 'Active')
+                <a href="{{route('operators.showProfile',[$operator->member_id])}}" class="pull-left"><i class="fa  fa-chevron-left"></i></a>
+            @else
+                <a href="{{route('archive.showProfile',[$operator->member_id])}}" class="pull-left"><i class="fa  fa-chevron-left"></i></a>
+            @endif
         </h4>
         <h3 class="box-title">
             View Operator Information

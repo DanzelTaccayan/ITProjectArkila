@@ -131,7 +131,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive/profile/{archive}','HomeController@showProfile')->name('archive.showProfile');
     Route::patch('/home/operators/{driver}/archiveDriver', 'DriversController@archiveDriver')->name('drivers.archiveDriver');
     Route::post('/home/operators/{archive}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
-
+    Route::patch('/home/archive/operator/{archivedOperator}/restore','OperatorsController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
+    Route::patch('/home/archive/driver/{archivedDriver}/restore','DriversController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
 
 
     Route::resource('/home/rental', 'RentalsController',[
