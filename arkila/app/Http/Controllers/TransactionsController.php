@@ -170,17 +170,26 @@ class TransactionsController extends Controller {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
-            
+            $seatingCapacity = Transaction::find(request('transaction')[0])->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+3;
 
-            foreach(request('transactions') as $transactionId){
-                $transaction = Transaction::find($transactionId);
+            if($seatingCapacity <= count(request('transactions')))
+            {
+                foreach(request('transactions') as $transactionId)
+                {
+                    $transaction = Transaction::find($transactionId);
                     $transaction->update([
                         'status' => 'OnBoard',
                         'trip_id' => null
                     ]);
+                }
+
+                return 'success';
+            }
+            else
+            {
+                return 'The tickets boarded is greater than the seating capacity of the van on deck';
             }
 
-            return 'success';
         }else{
             return 'error no transaction given';
         }
