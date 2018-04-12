@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="heading">
-                            <h2>About Ban Trans</h2>
+                            <h2>About Us</h2>
                         </div>
                         <p class="lead">Ban Trans is a van transport association established in Baguio City in 2006 for UV Express franchisees or operators. It has three terminals located in Baguio City, Cabanatuan City, and San Jose City.</p>
                         <ul>
