@@ -7,7 +7,7 @@
     <div class="col-md-offset-1 col-md-10">
         <div id="terminal" class="tab-pane">
             <div class="box box-solid">
-                <div class="box-header">
+                <div class="box-header with-border text-center">
                     <h3 class="box-title">{{$terminals->description}}</h3>
                 </div>
 
@@ -16,6 +16,7 @@
                       {{csrf_field()}}
                       <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
                         <div class="col-md-6">
+                            <div class="text-center"><h4>ROUTES</h4></div>
                           @php $counter = 0; @endphp
                           @foreach($destinations as $destination)
                             <div class='form-group'>
@@ -29,8 +30,9 @@
                           @endforeach
                         </div>
                         <div class="col-md-6">
+                            <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
                             <div class="form-group">
-                                <label for="departureDate" class="col-sm-4">Date of Departure:</label>
+                                <label for="departureDate" class="col-sm-4">Departure Date:</label>
                                 <div class="col-sm-8">
                                     <div class="input-group date">
                                         <div class="input-group-addon">
@@ -40,11 +42,10 @@
                                     </div>
                                     <p id="errDateDeparted"></p>
                                 </div>
-
                             </div>
                             <div class="form-group">
                                 <div class="bootstrap-timepicker">
-                                    <label for="timeDepart" class="col-sm-4">Time of Departure:</label>
+                                    <label for="timeDepart" class="col-sm-4">Departure Time:</label>
                                     <div class=" col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -56,31 +57,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-5">
-                                    <div class='form-group'>
-                                        <label for=''>Total Passengers: </label>
-                                        <p id="totalPassenger">{{old('totalPassengers')}}</p>
-                                        <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
-                                    </div>
-                                </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-5">
-                                    <div class='form-group clearfix'>
-                                        <label for=''>Total Booking Fee: </label>
-                                        <p data-bookingfee="{{$terminals->booking_fee}}" id="totalFee">{{old('totalBookingFee')}}</p>
-                                        <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
-                                    </div>
+                            <div class='form-group'>
+                                <label for="" class="col-sm-4">Total Passengers:</label>
+                                <div class=" col-sm-6">
+                                <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
+                                <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
                                 </div>
                             </div>
                             @if($fads->count() > 0)
-                            <label for='Discounts'> Number of Customers with Discounts: </label>
-                            <div class="form-horizontal">
                               @php $c = 0; @endphp
                                 @foreach($fads as $fad)
                                   <div class='form-group'>
-                                      <label for='Discounts' class="col-sm-4"> {{$fad->description}} Discount: </label>
+                                      <label for='Discounts' class="col-sm-4">Passengers with Discounts:</label>
                                       <div class="col-sm-6">
                                         <input type="hidden" name="discountId[]" value="{{$fad->fad_id}}">
                                           <input value="{{old('numberOfDiscount.'.$c)}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
@@ -88,7 +76,6 @@
                                   </div>
                                     @php $c++; @endphp
                                 @endforeach
-                            </div>
                             @endif
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>

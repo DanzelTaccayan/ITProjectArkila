@@ -4,11 +4,11 @@
         <div class="item  active">
             <div class="box">
                 <div class="box-header with-border text-center">
-                    <h4>{{$announcements->first()->title}}</h4>
+                    <h4 class="title-limit">{{$announcements->first()->title}}</h4>
                 </div>
-                <div class="box-body text-center">
+                <div class="box-body text-center" style="height:200px;">
                     <div style="width:70%; margin-left:15%;">
-                        <p>{{$announcements->first()->description}}</p>
+                        <p class="text-limit">{{$announcements->first()->description}}</p>
                     </div>
                 </div>
                 <div class="box-footer text-center">
@@ -20,11 +20,11 @@
         <div class="item">
             <div class="box">
                 <div class="box-header with-border text-center">
-                    <h4>{{$announcement->title}}</h4>
+                    <h4 class="title-limit">{{$announcement->title}}</h4>
                 </div>
-                <div class="box-body text-center">
+                <div class="box-body text-center" style="height:200px;">
                     <div style="width:70%; margin-left:15%;">
-                        <p>{{$announcement->description}}</p>
+                        <p  class="text-limit">{{$announcement->description}}</p>
                     </div>
                 </div>
                 <div class="box-footer text-center">
@@ -49,7 +49,7 @@
 
 <!--See More Announcements Modal-->
 <div class="modal fade" id="seeMoreAnnouncements">
-    <div class="modal-dialog" style="margin-top:150px;">
+    <div class="modal-dialog modal-lg" style="margin-top:20%">
         <div class="col-md-offset-2 col-md-8">
             <div class="modal-content">
                 <div class="modal-header">
@@ -59,9 +59,15 @@
                 </div>
                 <!-- /.modal-header -->
                 <div class="modal-body row" style="margin: 0% 1%;">
-                    <p class="announcement-body" style="font-size: 110%;"></p>
+                    <p class="announcement-body" style="font-size: 110%; text-align: justify;"></p>
                 </div>
                 <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal" aria-label="Close">Close</button>
+                    </div>
+                    
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>

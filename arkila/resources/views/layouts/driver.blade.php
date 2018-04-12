@@ -14,11 +14,10 @@
     @show
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini fixed">
+<body class="hold-transition skin-blue layout-top-nav">
     <div class="wrapper">
-        @include('layouts.partials.header_4')
+        @include('layouts.partials.header_5')
         <!-- Left side column. contains the logo and sidebar -->
-        @include('layouts.partials.driver_sidebar')
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper bg-image-driver">
             <!-- Content Header (Page header) -->
@@ -45,7 +44,6 @@
     @include('message.error') 
     @include('message.success') 
     @show
-
 </body>
 
 </html>

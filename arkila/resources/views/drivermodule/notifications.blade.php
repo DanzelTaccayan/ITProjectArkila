@@ -3,40 +3,38 @@
 @section('content-title', 'Driver Profile')
 @section('content')
 <div class="desktop">
-  <div class="col-md-6">
-    <div class="box">
-        <div class="box-header with-border">
-            <i class="fa fa-bell"></i>
-            <h3 class="box-title">Notifications</h3>
+  <div class="col-md-9">
 
-            <div class="pull-right">
-              <a href="#">Mark All as Read</a>
-            </div>
+        <div>
+            
+            <h4><i class="fa fa-bell pull-left"></i> Notifications</h4>
+
+            <a href="#"  class="pull-right">Mark All as Read</a>
+            <div class="clearfix">  </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body">
+        <div class="">
           <div class="list-group">
-            <a href="" class="list-group-item">
-                  <p><span class="text-green fa fa-check-circle"></span> Accepted </p>
-                  <small>10/10/2018 01:00 PM</small>
+            <a href="" class="list-group-item" style="margin-top: 5px;">
+                  <p style="margin:0 0 0;"> Accepted </p>
+                  <span class="text-green fa fa-check-circle"></span> <small>10/10/2018 01:00 PM</small>
             </a>
-            <a href="" class="list-group-item">
-              <p><span class="text-red fa fa-times-circle"></span> Deleted/Cancelled</p>
+            <a href="" class="list-group-item" style="margin-top: 5px;">
+              <p style="margin:0 0 0;"><span class="text-red fa fa-times-circle"></span> Deleted/Cancelled</p>
               <small>10/10/2018 01:00 PM</small>
             </a>
-            <a href="" class="list-group-item">
-              <p><span class="text-blue fa fa-info-circle"></span> Information </p>
+            <a href="" class="list-group-item" style="margin-top: 5px;">
+              <p style="margin:0 0 0;"><span class="text-blue fa fa-info-circle"></span> Information </p>
               <small>10/10/2018 01:00 PM</small>
             </a>
-            <a href="" class="list-group-item">
-              <p><span class="text-yellow fa fa-truck"></span> Departed </p>
+            <a href="" class="list-group-item" style="margin-top: 5px;">
+              <p style="margin:0 0 0;"><span class="text-yellow fa fa-truck"></span> Departed </p>
               <small>10/10/2018 01:00 PM</small>
             </a>
           </div>
 
         </div>
         <!-- /.box-body -->
-    </div>
     <!-- /.box -->
   </div>
 </div>
@@ -44,7 +42,7 @@
 
 @endsection @section('scripts') @parent
 
-
+{{-- 
 <style>
     /* if desktop */
 
@@ -78,6 +76,6 @@
             display: none;
         }
     }
-</style>
+</style> --}}
 
 @endsection

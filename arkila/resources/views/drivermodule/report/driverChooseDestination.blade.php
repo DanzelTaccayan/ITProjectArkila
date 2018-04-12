@@ -7,8 +7,8 @@
     <div class="col-md-6">
         <div class="box">
           @include('message.success')
-            <div class="box-header">
-                <h3>From</h3>
+            <div class="box-header text-center">
+                <h3>Choose Origin:</h3>
             </div>
             <form>
             <div class="box-body">
@@ -16,7 +16,7 @@
                       {{csrf_field()}}
                       <div class="list-group">
                         <select id="selectDestination" class="form-control" name="chooseTerminal">
-                          <option>Choose your Terminal</option>
+                          <option>Choose Terminal</option>
                           @foreach($terminals as $terminal)
                           @if($terminal->description == $superAdminTerminal)
                             @continue
@@ -31,7 +31,10 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <button type="button" id="createReport" class="btn btn-primary btn-group-justified">Select Terminal</button>
+              <div class="text-center">
+                <button type="button" id="createReport" class="btn btn-primary">Proceed <i class="fa fa-chevron-right"></i></button>
+              </div>
+                
             </div>
             <!-- /.box-footer -->
             </form>

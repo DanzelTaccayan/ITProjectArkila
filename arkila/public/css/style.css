@@ -441,7 +441,7 @@ textarea.parsley-error {
 }
 
 .bg-image-driver {
-  background-image: url("../img/bg2-image.png");
+  background-image: url("../img/bg2-image.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size:cover;
@@ -622,4 +622,26 @@ input:checked+.slider:before {
 .control-sidebar-bg, .control-sidebar {
   right: -300px;
   width: 300px;
+}
+
+.profile-user-img {
+  height: 100px;
+  width: 100px;
+}
+
+.text-limit {
+  overflow: hidden;
+  display: -webkit-box;
+   -webkit-line-clamp: 8; /* Limit to 3 lines */
+   -webkit-box-orient: vertical;
+   text-align:justify ;
+}
+
+.title-limit {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  
 }
