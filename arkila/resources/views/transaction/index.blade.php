@@ -36,14 +36,14 @@
             box-shadow:0px 0px 15px 0px rgba(0, 0, 0, 0.96);
         }
         .scrollbar {
-      padding:0px;
-      height: 100%;
-    float: left;
-    width: 100%;
-    background: #fff;
-    overflow-y: scroll;
-    margin-bottom: 15px;
-}
+            padding:0px;
+            height: 100%;
+            float: left;
+            width: 100%;
+            background: #fff;
+            overflow-y: scroll;
+            margin-bottom: 15px;
+        }
 
 .ticket-overflow {
     min-height: 320px;
@@ -64,7 +64,7 @@
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: #33b5e5; }
 
-  .square::-webkit-scrollbar-track {
+.square::-webkit-scrollbar-track {
   border-radius: 0 !important; }
 
 .square::-webkit-scrollbar-thumb {
@@ -86,9 +86,13 @@
     z-index:1100;
 }
 
-#driverChange{
+.text-white{
     color: white;
 }
+.popover-title{
+    color: black;
+}
+
     </style>
     @stop
 @section('content')
@@ -178,7 +182,8 @@
                                                             <span class="col-md-6">
                                                                 <h6>Driver:</h6>
                                                                  <h4>
-                                                                    <a href="#" id="driverChange{{$terminal->terminal_id}}"></a>
+                                                                    <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
+                                                                    <i class='fa fa-pencil'></i>
                                                                 </h4>
                                                             </span>
                                                              <span class="pull-right btn-group">

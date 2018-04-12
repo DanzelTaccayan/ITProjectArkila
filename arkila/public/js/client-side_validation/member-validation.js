@@ -100,14 +100,14 @@
 
     window.Parsley.addValidator('expireDate', {
       validateString: function(value) {
-      	var bdate_array = value.split('/')
+      	var edate_array = value.split('/')
       	var now = new Date()
       	var nowMonth = (now.getMonth() + 1);
-      	var valueMonth = parseInt(bdate_array[0]);
+      	var valueMonth = parseInt(edate_array[0]);
     	var nowDay = now.getDate();
-    	var valueDay = parseInt(bdate_array[1]);
+    	var valueDay = parseInt(edate_array[1]);
     	var nowYear = now.getFullYear(); 
-    	var valueYear = parseInt(bdate_array[2]);
+    	var valueYear = parseInt(edate_array[2]);
         if(valueYear > nowYear || (valueYear === nowYear && ((valueMonth > nowMonth) || (valueMonth === nowMonth && valueDay > nowDay)) ) ){
         	return true;
         } else {
@@ -162,3 +162,5 @@
     });
 
     $('[val-dependent-bdate]').attr('data-parsley-pattern-message','Please enter a valid date format (mm/dd/yyyy).');
+
+    

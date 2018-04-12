@@ -21,24 +21,10 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Last Name: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" id="lastName" value="{{ old('lastName') }}" val-name required>
+                                <label>Customer Name: <span class="text-red">*</span></label>
+                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" id="lastName" value="{{ old('lastName') }}" val-fullname required>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>First Name: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="First Name" name="firstName" id="firstName" value="{{ old('firstName') }}" val-name required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Middle Name:</label>
-                                <input type="text" class="form-control" placeholder="Middle Name" name="middleName" id="middleName" value="{{ old('middleName') }}" val-name>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label>Contact Number: <span class="text-red">*</span></label>
@@ -50,32 +36,46 @@
                                 </div>
                                 <p id="errContactNumber"></p>
                             </div>
-                        </div>
+                        </div> 
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label>Destination: <span class="text-red">*</span></label>
                                 <input type="text" class="form-control" placeholder="Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Type of Van:</label>
-                                <select class="form-control" name="model" id="model">
-                                    <option value="" selected>Select Model</option>
+                                <label>Van:</label>
+                                <select class="form-control select2" name="model" id="model">
+                                    <option value="" selected>Select Van Unit</option>
                                 @foreach ($models as $model)
                                    <option value="{{ $model->description }}" @if($model->description == old('model') ) {{'selected'}} @endif>{{ $model->description }}</option>
                                    @endforeach
                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Driver:</label>
+                                <select class="form-control select2" name="model" id="model">
+                                    <option value="" selected>Select Driver</option>
+                                @foreach ($models as $model)
+                                   <option value="{{ $model->description }}" @if($model->description == old('model') ) {{'selected'}} @endif>{{ $model->description }}</option>
+                                   @endforeach
+                               </select>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Number of Days: <span class="text-red">*</span></label>
                                 <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" val-num-days required>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Departure Date: <span class="text-red">*</span></label>
