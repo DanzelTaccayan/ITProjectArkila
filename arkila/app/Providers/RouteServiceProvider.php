@@ -39,6 +39,13 @@ class RouteServiceProvider extends ServiceProvider
             return Member::allDrivers()->where('member_id',$value)->first() ?? abort(404);
         });
 
+        Route::bind('archivedOperator', function($value){
+           return Member::allOperators()->where('status','Inactive')->where('member_id',$value)->first() ?? abort(404);
+        });
+
+        Route::bind('archivedDriver', function($value){
+            return Member::allDrivers()->where('status','Inactive')->where('member_id',$value)->first() ?? abort(404);
+        });
 
         Route::bind('driver_user', function($value){
             return User::driver()->where('id',$value)->first() ?? abort(404);

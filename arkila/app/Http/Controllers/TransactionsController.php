@@ -170,16 +170,26 @@ class TransactionsController extends Controller {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
+            $seatingCapacity = Transaction::find(request('transaction')[0])->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+3;
 
-            foreach(request('transactions') as $transactionId){
-                $transaction = Transaction::find($transactionId);
+            if($seatingCapacity <= count(request('transactions')))
+            {
+                foreach(request('transactions') as $transactionId)
+                {
+                    $transaction = Transaction::find($transactionId);
                     $transaction->update([
                         'status' => 'OnBoard',
                         'trip_id' => null
                     ]);
+                }
+
+                return 'success';
+            }
+            else
+            {
+                return 'The tickets boarded is greater than the seating capacity of the van on deck';
             }
 
-            return 'success';
         }else{
             return 'error no transaction given';
         }
@@ -321,17 +331,12 @@ class TransactionsController extends Controller {
     public function listTickets(Terminal $terminal) {
         $ticketsArr = [];
         $tickets = $terminal->tickets()->where('isAvailable', 1)->orderBy('ticket_id','asc')->get();
-        $seatingCapacity = ($terminal->trips->where('queue_number',1)->first()->van->seating_capacity)+2;
 
-        for($i=0; $i < $seatingCapacity ; $i++){
-            if(count($tickets) > $i){
-                array_push($ticketsArr,[
-                    'id' => $tickets[$i]->ticket_id,
-                    'ticket_number' => $tickets[$i]->ticket_number
-                ]);
-            }else{
-                continue;
-            }
+        foreach($tickets as $ticket){
+            array_push($ticketsArr,[
+                'id' => $ticket->ticket_id,
+                'ticket_number' => $ticket->ticket_number
+            ]);
         }
 
         return response()->json($ticketsArr);

@@ -97,6 +97,10 @@ class Member extends Model
         return Carbon::parse($value)->format('m/d/Y');
     }
 
+    public function getDateArchivedAttribute($value){
+        return Carbon::parse($value)->format('M d, Y h:i:s A');
+    }
+
     public function setBirthDateAttribute($value){
         $this->attributes['birth_date'] = Carbon::parse($value);
     }

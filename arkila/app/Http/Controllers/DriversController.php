@@ -414,4 +414,14 @@ class DriversController extends Controller
 
     }
 
+    public function restoreArchivedDriver(Member $archivedDriver)
+    {
+        $archivedDriver->update([
+            'status' => 'Active',
+            'date_archived' => null
+        ]);
+
+        return back();
+    }
+
 }
