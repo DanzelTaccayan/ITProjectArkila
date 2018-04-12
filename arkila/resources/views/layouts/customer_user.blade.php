@@ -8,10 +8,10 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    
+
 	@section('links')
         @parent
- 		@include('layouts.partials.customer_stylesheets')	
+ 		@include('layouts.partials.customer_stylesheets')
 	@show
 </head>
 
@@ -25,7 +25,7 @@
 
         @include('layouts.partials.customer_footer')
 
-
+@include('layouts.partials.customer_notification')
     <!-- ./wrapper -->
     @section('scripts')
     @parent
@@ -33,7 +33,7 @@
 		@include('message.error')
 		@include('message.success')
 
-		
+
 	@show
 </body>
 

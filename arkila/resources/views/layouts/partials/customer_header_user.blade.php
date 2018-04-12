@@ -75,6 +75,7 @@
                                 {{csrf_field()}}
                             </form>
                         </li>
+                        
                     </ul>
                 </div>
                 <div id="search" class="collapse clearfix">
