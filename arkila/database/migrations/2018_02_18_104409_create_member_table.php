@@ -51,6 +51,7 @@ class CreateMemberTable extends Migration
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('notification', ['Enable', 'Disable'])->default('Enable');
             $table->date('expiry_date')->nullable();
+            $table->dateTime('date_archived')->nullable();
             $table->decimal('monthly_dues', 7, 2);
             $table->timestamps();
 

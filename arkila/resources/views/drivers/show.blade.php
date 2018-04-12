@@ -5,7 +5,15 @@
 <div class="box box-default with-shadow">
     <div class="box-header with-border text-center">
         <h4>
-            <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous()) {{session()->get('opLink')}} @else {{ route('drivers.index') }} @endif" class="pull-left"><i class="fa fa-chevron-left"></i></a>
+            <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous())
+            {{session()->get('opLink')}}
+            @else
+                @if($driver->status === 'Active')
+                    {{route('drivers.index') }}
+                @else
+                    {{route(URL::previous())}}
+                @endif
+            @endif" class="pull-left"><i class="fa fa-chevron-left"></i></a>
         </h4>
         <h3 class="box-title">
             View Driver Information
