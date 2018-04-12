@@ -43,6 +43,12 @@
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
     
     <!-- Van Queue Sidebar -->
+
+    <script>    
+    $(function () {
+        $('.select2').select2();
+    })
+    </script>
     <script>
         $('#addQueueSideBarButt').on('click', function() {
             var destination = $('#destinationInputSideBar').val();

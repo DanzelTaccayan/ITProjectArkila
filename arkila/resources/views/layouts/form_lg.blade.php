@@ -13,11 +13,11 @@
 </head>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav sidebar-collapse">
+<body class="hold-transition skin-blue layout-top-nav">
     <div class="wrapper">
         @include('layouts.partials.header_2')
         <!-- Full Width Column -->
-        <div class="content- bgform-image">
+        <div class="content-wrapper bgform-image">
             <div class="container">
 
                 <form id="@yield('form-id')" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="">
