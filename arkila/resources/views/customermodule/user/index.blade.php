@@ -51,7 +51,7 @@
                             <div class="row">
                                 <div class="col-md-7"><img src="../img/template-easy-code.png" alt="" class="img-fluid"></div>
                                 <div class="col-md-5">
-                                    <h1>Need a Seat Reservation for a Trip?</h1>
+                                    <h1>Need a Reservation for a Trip?</h1>
                                     <p>We got you!</p>
                                 </div>
                                 <!-- col-->
@@ -105,35 +105,7 @@
             </div>                  
         </div>    
     </section>
-    <!-- section-->
-    <section style="background: url('{{ URL::asset('img/bron_gradient.jpg') }}') center top no-repeat; background-size: cover;" class="bar text-center ">
-        <div class="dark-mask"></div>
-        <div class="container">
-            <div class="heading text-center">
-                <h2><i class="fa fa-bolt"></i> Weather Updates</h2>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- Baguio Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/baguio-city-12231"><img src="https://w.bookcdn.com/weather/picture/28_12231_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=37033" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- San Jose Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/munoz-w434073"><img src="https://w.bookcdn.com/weather/picture/28_w434073_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=46479" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
-                <div class="col-lg-4 text-center" style="padding-top:5px;">
-                    <!-- Cabanatuan Weather Widget-->
-                    <!-- weather widget start --><a target="_blank" href="http://www.booked.net/weather/cabanatuan-city-33111"><img src="https://w.bookcdn.com/weather/picture/28_33111_1_1_e67e22_250_d35401_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=w209&anc_id=68269" alt="booked.net"/></a>
-                    <!-- weather widget end -->
-                </div>
-            </div>
-        </div>
-        <!-- container-->
-    </section>
-    <!-- section-->
-    
+    <!-- section-->   
 
 @endsection
 @section('scripts')
