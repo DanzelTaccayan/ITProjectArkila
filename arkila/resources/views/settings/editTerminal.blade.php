@@ -16,10 +16,6 @@
             <label for="">Booking Fee: <span class="text-red">*</span></label>
             <input class="form-control" type="number" step="0.25" name="editBookingFee" value="{{$terminal->booking_fee}}" val-settings-amount required>
         </div>
-        <div class="form-group">
-            <label>Number of Tickets: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" name="editTickets" value="" val-settings-amount required>
-        </div>
     </div>
 
 @endsection
