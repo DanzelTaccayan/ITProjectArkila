@@ -51,7 +51,7 @@
                             <div class="row">
                                 <div class="col-md-7"><img src="../img/template-easy-code.png" alt="" class="img-fluid"></div>
                                 <div class="col-md-5">
-                                    <h1>Need a Seat Reservation for a Trip?</h1>
+                                    <h1>Need a Reservation for a Trip?</h1>
                                     <p>We got you!</p>
                                 </div>
                                 <!-- col-->
