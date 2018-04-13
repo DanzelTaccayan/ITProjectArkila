@@ -19,7 +19,7 @@
 </div>
 <div class="form-group">
   <label for="Particulars">Name:</label>
-  <span name="fullname">{{$customer_user->name}}</span>
+  <span name="fullname">{{$customer_user->first_name . " " . $customer_user->middle_name . " " . $customer_user->last_name}}</span>
 </div>
 <div class="form-group">
   <label for="Particulars">Email Address:</label>
