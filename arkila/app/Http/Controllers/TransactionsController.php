@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Destination;
 use App\FeesAndDeduction;
 use App\Ledger;
 use App\Trip;
@@ -314,23 +315,33 @@ class TransactionsController extends Controller {
         return response()->json($destinationArr);
     }
 
-    public function listDiscounts() {
-        $discountArr = [];
-        $discounts = FeesAndDeduction::discounts()->get();
+    public function listDiscountedTickets(Destination $destination) {
+        $ticketsArr = [];
+        $tickets = $destination
+            ->tickets()
+            ->where('isAvailable', 1)
+            ->where('type','Discount')
+            ->orderBy('ticket_id','asc')
+            ->get();
 
-        foreach ($discounts as $discount){
-            array_push($discountArr,[
-                'id' => $discount->fad_id,
-                'description' => $discount->description
+        foreach($tickets as $ticket){
+            array_push($ticketsArr,[
+                'id' => $ticket->ticket_id,
+                'ticket_number' => $ticket->ticket_number
             ]);
         }
 
-        return response()->json($discountArr);
+        return response()->json($ticketsArr);
     }
 
-    public function listTickets(Terminal $terminal) {
+    public function listTickets(Destination $destination) {
         $ticketsArr = [];
-        $tickets = $terminal->tickets()->where('isAvailable', 1)->orderBy('ticket_id','asc')->get();
+        $tickets = $destination
+            ->tickets()
+            ->where('isAvailable', 1)
+            ->where('type','Regular')
+            ->orderBy('ticket_id','asc')
+            ->get();
 
         foreach($tickets as $ticket){
             array_push($ticketsArr,[

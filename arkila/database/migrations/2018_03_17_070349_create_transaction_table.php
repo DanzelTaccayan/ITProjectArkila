@@ -23,9 +23,6 @@ class CreateTransactionTable extends Migration
             ->nullable();
             $table->integer('destination_id')
             ->unsigned();
-            $table->integer('fad_id')
-            ->nullable()
-            ->unsigned();
             $table->integer('trip_id')
                 ->nullable()
             ->unsigned();
@@ -47,10 +44,6 @@ class CreateTransactionTable extends Migration
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
-            $table->foreign('fad_id')
-            ->references('fad_id')->on('fees_and_deduction')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
 
             $table->foreign('trip_id')
             ->references('trip_id')->on('trip')

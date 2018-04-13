@@ -17,13 +17,14 @@ class CreateTicketTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('ticket_id');
             $table->string('ticket_number');
-            $table->integer('terminal_id')
+            $table->integer('destination_id')
                 ->unsigned();
             $table->boolean('isAvailable');
+            $table->enum('type',['Discount','Regular']);
             $table->timestamps();
 
-            $table->foreign('terminal_id')
-                ->references('terminal_id')->on('terminal')
+            $table->foreign('destination_id')
+                ->references('destination_id')->on('destination')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

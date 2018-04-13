@@ -12,8 +12,8 @@ class Ticket extends Model
         'ticket_id',
     ];
 
-    public function terminal(){
-        return $this->belongsTo(Terminal::Class,'terminal_id');
+    public function destination(){
+        return $this->belongsTo(Destination::Class,'destination_id');
     }
 
 }
