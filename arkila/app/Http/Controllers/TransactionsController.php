@@ -243,8 +243,8 @@ class TransactionsController extends Controller {
         ]);
 
         //put transaction into ledger
-        if($transaction->feesAndDeduction){
-                $discount = $transaction->feesAndDeduction->amount;
+        if($transaction->ticket->type === 'Discount'){
+                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
         }else{
                 $discount = 0;
         }
@@ -280,11 +280,14 @@ class TransactionsController extends Controller {
             ]);
 
             //put transaction into ledger
-            if($transaction->feesAndDeduction){
-                $discount = $transaction->feesAndDeduction->amount;
-            }else{
+            if($transaction->ticket->type === 'Discount')
+            {
+                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
+            }else
+            {
                 $discount = 0;
             }
+            
             $computedAmount = ($transaction->destination->amount) - $discount;
             Ledger::create([
                 'description' => 'Expired Ticket',
