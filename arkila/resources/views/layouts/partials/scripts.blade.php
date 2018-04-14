@@ -87,6 +87,10 @@
                 checkDiscountBoxSideBar();
             });
 
+            $('#destinationTicketSideBar').on('change',function(){
+               checkDiscountBoxSideBar();
+            });
+
             $('#terminalTicketSideBar').on('change',function(){
                 listDestinationsSideBar();
             });
@@ -94,7 +98,6 @@
             $(document.body).on('click','#sellButtSideBar',function(){
                 var terminalSideBar = $('#terminalTicketSideBar').val();
                 var destination = $('#destinationTicketSideBar').val();
-                var discount = $('#discountTicketSideBar').val();
                 var ticket= $('#ticketSellSideBar').val();
 
                 $.ajax({
@@ -104,7 +107,6 @@
                         '_token': '{{csrf_token()}}',
                         'terminal': terminalSideBar,
                         'destination': destination,
-                        'discount': discount,
                         'ticket': ticket
                     },
                     success: function(){
@@ -129,6 +131,7 @@
                 }else{
                     $('#discountTicketSideBar').prop('disabled',true);
                     $('#discountTicketSideBar').append('<option value="" selected>Check the checkbox to enable discount</option>');
+                    listTickets();
                 }
             }
 
@@ -158,11 +161,14 @@
 
                         }
                     });
-                }else{
+                }
+                else
+                {
                     $('#destinationTicketSideBar').prop('disabled', true);
                     $('#destinationTicketSideBar').append('<option value="">No Available Destination</option>');
                 }
             }
+
             function listDiscountedSideBarTickets(){
                 $('#ticketSellSideBar').empty();
                 $.ajax({
@@ -181,7 +187,6 @@
                             tickets.forEach(function (ticket) {
                                 $('#ticketSellSideBar').append('<option value=' + ticket.id + '> ' + ticket.ticket_number + '</option>');
                             });
-                            checkSellButton();
                         }
 
                     }
