@@ -39,7 +39,7 @@
             <div class="info-box-content">
               <span class="info-box-text text-center" style="margin: 5px;">Reservations</span>
               <span>
-                <a href="{{route('rental.index')}}" type="button" class="btn btn-success center-block"><i class="fa fa-eye"></i> View requests</a>
+                <a href="{{route('reservations.index')}}" type="button" class="btn btn-success center-block"><i class="fa fa-eye"></i> View requests</a>
               </span>
             </div>
             <!-- /.info-box-content -->
