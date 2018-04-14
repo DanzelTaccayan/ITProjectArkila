@@ -1,7 +1,7 @@
-@extends('layouts.driver')
-@section('title', 'Driver Report')
-@section('content-title', 'Driver Report')
+@extends('layouts.master')
+@section('title', 'Create Report')
 @section('content')
+
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
@@ -44,11 +44,13 @@
     </div>
     <!-- /.col -->
 </div>
-<!-- /.row -->
+
 
 @endsection
-@section('scripts')
+
+@section('scripts') 
 @parent
+
 <script type="text/javascript">
   $('#selectDestination').on('change', function(){
     var terminalId = $(this).val();
@@ -58,4 +60,5 @@
     });
   });
 </script>
+
 @endsection

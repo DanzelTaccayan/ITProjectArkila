@@ -4,6 +4,59 @@
 @section('content') 
 @if ($announcements->count() > 0) 
 
+<div class="box box-warning with-shadow">   
+
+    <div class="box-header with-border text-center">
+        <h3 class="box-title">
+            Create Announcement
+        </h3>
+
+        <div class="box-tools">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <form method="post" action="{{ route('announcements.index') }}">
+        {{ csrf_field() }}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Title: <span class="text-red">*</span></label>
+                    <input type="text" name="title" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group pull-right">
+                    <label>Viewer: <span class="text-red">*</span></label>
+                    <select name="viewer" class="form-control">
+                        <option value="Public">Public</option>
+                        <option value="Driver Only">Driver Only</option>
+                        <option value="Customer Only">Customer Only</option>
+                        <option value="Only Me">Only Me</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Content: <span class="text-red">*</span></label>
+            <textarea name="announce" width="30%" class="form-control" rows="5"></textarea>
+        </div>
+        
+    </div>
+
+    <div class="box-footer">
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <button type="submit" class="btn btn-primary btn-sm">POST</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
 @include('message.error')
     @foreach ($announcements->sortByDesc('created_at') as $announcement)
 
@@ -26,9 +79,9 @@
             </h6>
 
             <div class="box-tools">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                  </div>
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+            </div>
 
         </div>
         <div class="box-body">
@@ -37,8 +90,8 @@
 
         <div class="box-footer">
             <div class="pull-right">
-                <a href="{{route('announcements.edit', [$announcement->announcement_id])}}" class="btn btn-primary btn-create"><i class="fa fa-pencil"></i> Edit</a>
-                <button class="btn btn-outline-danger btn-create" data-toggle="modal" data-target="#{{'announcement'.$announcement->announcement_id}}"><i class="fa fa-trash"></i> Delete</button>
+                <a href="{{route('announcements.edit', [$announcement->announcement_id])}}" class="btn btn-primary btn-create btn-sm"><i class="fa fa-pencil"></i> EDIT</a>
+                <button class="btn btn-outline-danger btn-create btn-sm" data-toggle="modal" data-target="#{{'announcement'.$announcement->announcement_id}}"><i class="fa fa-trash"></i> DELETE</button>
 
             </div>
         </div>

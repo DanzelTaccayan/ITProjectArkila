@@ -23,6 +23,7 @@ class MakeRentalController extends Controller
 
     public function storeRental(CustomerRentalRequest $request)
     {
+    	// dd($request->van_model == null ? true : false);
     	if($request->message == null){
     		$rent = Rental::create([
     			"user_id" => Auth::id(),

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Carbon\Carbon;
 use App\Rules\checkName;
 use App\Rules\checkTime;
+use App\Rules\checkAddress;
 use Illuminate\Http\Request;
 use App\Rules\checkContactNum;
 use Illuminate\Foundation\Http\FormRequest;
@@ -40,8 +41,8 @@ class CustomerRentalRequest extends FormRequest
 
         if($dateFormatted !== $dateFormattedNow){
             return [
-            	"van_model" => "required|exists:van_model,model_id",
-                "rentalDestination" => "required|regex:/^[,\pL\s\-]+$/u|max:50",
+            	"van_model" => "nullable|exists:van_model,model_id",
+                "rentalDestination" => ["required",new checkAddress,"max:50"],
                 "contactNumber" => ["required", new checkContactNum],
                 "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
                 "date" => "required|date_format:m/d/Y|after_or_equal:today",
@@ -50,8 +51,8 @@ class CustomerRentalRequest extends FormRequest
             ];
         }else{
             return [
-            	"van_model" => "required|exists:van_model,description",
-                "rentalDestination" => "required|regex:/^[,\pL\s\-]+$/u|max:50",
+            	"van_model" => "nullable|exists:van_model,model_id",
+                "rentalDestination" => ["required",new checkAddress,"max:50"],
                 "contactNumber" => ["required", new checkContactNum],
                 "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
                 "date" => "required|date_format:m/d/Y|after:" . $timeFormattedNow,
