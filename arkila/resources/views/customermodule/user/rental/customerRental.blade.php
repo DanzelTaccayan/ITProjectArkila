@@ -10,9 +10,9 @@
                     <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
-                            <label for="">Van Model: <span class="text-red">*</span></label>
+                            <label for="">Van Model: </label>
                             <select id="vanType" name="van_model" class="form-control">
-                                <option selected hidden disabled>Van Model</option>
+                                <option selected value="">All Van Model</option>
                                 @foreach($vanmodels as $vanmodel)
                                     <option value="{{$vanmodel->model_id}}">{{$vanmodel->description}}</option>
                                 @endforeach

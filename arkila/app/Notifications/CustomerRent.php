@@ -7,6 +7,7 @@ use App\Rental;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class CustomerRent extends Notification implements ShouldQueue
@@ -34,7 +35,7 @@ class CustomerRent extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -46,26 +47,18 @@ class CustomerRent extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'id' => $this->id,
-            'read_at' => null,
-            'data' => [
-              'rent_info' => $this->rent,
-              'user_id' => $this->user->id,
-              'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
-            ]
+          'rent_info' => $this->rent,
+          'user_id' => $this->user->id,
+          'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
         ];
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+    public function toBroadcast($notifiable)
     {
-        return [
-            //
-        ];
+        return new BroadcastMessage([
+          'rent_info' => $this->rent,
+          'user_id' => $this->user->id,
+          'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
+        ]);
     }
 }

@@ -287,7 +287,7 @@ class TransactionsController extends Controller {
             {
                 $discount = 0;
             }
-            
+
             $computedAmount = ($transaction->destination->amount) - $discount;
             Ledger::create([
                 'description' => 'Expired Ticket',
