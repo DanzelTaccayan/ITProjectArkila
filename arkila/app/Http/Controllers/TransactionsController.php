@@ -40,7 +40,6 @@ class TransactionsController extends Controller {
         $this->validate(request(),[
             'terminal' => 'exists:terminal,terminal_id',
             'destination' => 'exists:destination,destination_id',
-            'discount' => 'nullable|exists:fees_and_deduction,fad_id',
             'ticket.*' => 'exists:ticket,ticket_id'
         ]);
 
@@ -50,7 +49,6 @@ class TransactionsController extends Controller {
                     'terminal_id' => request('terminal'),
                     'ticket_id' => $ticketId,
                     'destination_id' => request('destination'),
-                    'fad_id' => request('discount'),
                     'trip_id' => null,
                     'status' => 'Pending'
                 ]);
@@ -171,9 +169,9 @@ class TransactionsController extends Controller {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
-            $seatingCapacity = Transaction::find(request('transaction')[0])->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+3;
+            $seatingCapacity = Transaction::find(request('transactions')[0])->destination->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+8;
 
-            if($seatingCapacity <= count(request('transactions')))
+            if($seatingCapacity >= count(request('transactions')))
             {
                 foreach(request('transactions') as $transactionId)
                 {
