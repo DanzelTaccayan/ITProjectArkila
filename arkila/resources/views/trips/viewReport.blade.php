@@ -71,30 +71,6 @@
                             <name>{{$trip->time_departed}}</name>
                         </div>
 
-                        <div class="box" style="margin: 3% 0%">
-                            <div class="box-header text-center">
-                                <h4>Shares</h4>
-                            </div>
-                            <div class="box-body" id="inner-dest">
-                                <div class="form-group inner-routes">
-                                    <label for="">BanTrans: </label>
-                                    @php $bantrans = 0; @endphp
-                                    @if($trip->SOP == null)
-                                        @php $bantrans = $trip->total_booking_fee + $trip->community_fund  @endphp
-                                    @else
-                                        @php $bantrans = $trip->total_booking_fee + $trip->SOP + $trip->community_fund  @endphp
-                                    @endif
-
-                                    @php $totalfare = 0; @endphp
-                                    @foreach($destinations as $key => $values)
-                                        @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
-                                    @endforeach
-                                    @if($trip->origin == null)
-                                      <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
                         <div class="text-center" style="margin: 5%;">
                             <div class="row">
                                 <div class="col col-md-6">

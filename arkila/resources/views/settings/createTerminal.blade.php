@@ -14,10 +14,6 @@
             <label>Booking Fee: <span class="text-red">*</span> </label>
             <input type="number" class="form-control" step="0.25" name="bookingFee" val-settings-amount required>
         </div>
-        <div class="form-group">
-            <label>Number of Tickets: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" name="numberOfTickets" val-settings-amount required>
-        </div>
     </div>
 
 @endsection

@@ -136,7 +136,7 @@
                                 <i class="fa fa-bullhorn"></i>
                                 <span class="label label-danger"></span>
                             </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" style="width: 420px;">
 
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}
@@ -159,8 +159,10 @@
                                     <label for="">Message:</label>
                                     <textarea name="announce" rows="5" class="form-control" placeholder="" maxlength="1000" required></textarea>
                                 </div>
-                                <div class="pull-right">
-                                    <button class="btn btn-warning">ANNOUNCE</button>
+                                <div class="btn-group btn-group-justified">
+                                    <div class="btn-group">
+                                        <button class="btn btn-warning btn-group-justified">ANNOUNCE</button>
+                                    </div>
                                 </div>
                             </li>
                             <li class="footer box-body text-center">

@@ -11,6 +11,7 @@ use DB;
 use Validator;
 use Illuminate\Database\QueryException;
 use Response;
+use App\Ticket;
 
 class DestinationController extends Controller
 {
@@ -26,18 +27,43 @@ class DestinationController extends Controller
         $this->validate(request(),[
             "addDestinationTerminal" => ['required', new checkTerminal, 'max:40'],
             "addDestination" => [new checkDestinationUniqueness,'regex:/^[,\pL\s\-]+$/u','required','max:40'],
-            "addDestinationFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000']
+            "addDestinationFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+            "numberOfTickets" => 'required|numeric|digits_between:1,200'
         ]);
 
         // Start transaction!
         DB::beginTransaction();
         try
         {
-            Destination::create([
+            $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+            $destination = Destination::create([
                 "terminal_id" => request('addDestinationTerminal'),
                 "description" => request('addDestination'),
                 "amount" => request('addDestinationFare')
             ]);
+
+            foreach($discountedTickets as $discountedTicket)
+            {
+                $ticketNumber = request('addDestination').'-'.$discountedTicket;
+                Ticket::create([
+                    'ticket_number' => $ticketNumber,
+                    'destination_id' => $destination->destination_id,
+                    'isAvailable' => 1,
+                    'type' => 'Discount'
+                ]);
+            }
+
+            for($i =1; $i <= request('numberOfTickets'); $i++ )
+            {
+                $ticketName = request('addDestination').'-'.$i;
+                Ticket::create([
+                    'ticket_number' => $ticketName,
+                    'destination_id' => $destination->destination_id,
+                    'isAvailable' => 1,
+                    'type' => 'Regular'
+                ]);
+            }
         }
         catch(\Exception $e)
         {

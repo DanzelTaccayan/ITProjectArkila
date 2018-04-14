@@ -76,9 +76,7 @@
                                 <h4>Shares</h4>
                             </div>
                             <div class="box-body" id="inner-dest">
-
                                 <div class="form-group inner-routes">
-                                    <label for="">BanTrans: </label>
                                     @php $bantrans = 0; @endphp
                                     @if($trip->SOP == null)
                                         @php $bantrans = $trip->total_booking_fee + $trip->community_fund  @endphp
@@ -90,13 +88,8 @@
                                     @foreach($destinations as $key => $values)
                                         @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
                                     @endforeach
-                                    <input class="form-control pull-right" type="number" id="" style="width:30%;" value="{{floatval($bantrans)}}" disabled>
+                                   
                                 </div>
-                                
-                                <label for="">Total:</label>
-                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare}}" disabled>
-
-                                <hr>
                                 
                                 <label for="">Driver:</label>
                                 <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare - $bantrans}}" disabled>

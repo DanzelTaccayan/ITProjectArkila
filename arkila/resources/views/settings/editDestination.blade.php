@@ -17,6 +17,11 @@
         <input type="number" class="form-control" name="editDestinationFare" step = "0.25" value="{{$destination->amount}}" val-settings-amount required>
      </div>
 
+     <div class="form-group">
+		<label>Number of Tickets: <span class="text-red">*</span> </label>
+        <input type="number" class="form-control" name="editTickets" value="PALAGYAN NA LANG HEHE" val-settings-amount required>
+     </div>
+
 @endsection
 @section('form-btn')
     <button type="submit" class="btn btn-primary">Save Changes</button>

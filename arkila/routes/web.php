@@ -163,8 +163,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     ]);
     Route::patch('/home/transactions/{terminal}', 'TransactionsController@update')->name('transactions.update');
     Route::get('/listDestinations/{terminal}','TransactionsController@listDestinations')->name('transactions.listDestinations');
-    Route::get('/listDiscounts','TransactionsController@listDiscounts')->name('transactions.listDiscounts');
-    Route::get('/listTickets/{terminal}','TransactionsController@listTickets')->name('transactions.listTickets');
+    Route::get('/listTickets/{destination}','TransactionsController@listTickets')->name('transactions.listTickets');
+    Route::get('/listDiscountedTickets/{destination}','TransactionsController@listDiscountedTickets')->name('transactions.listDiscountedTickets');
     Route::patch('/updatePendingTransactions', 'TransactionsController@updatePendingTransactions')->name('transactions.updatePendingTransactions');
     Route::patch('/updateOnBoardTransactions', 'TransactionsController@updateOnBoardTransactions')->name('transactions.updateOnBoardTransactions');
     Route::get('/listSourceDrivers','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');

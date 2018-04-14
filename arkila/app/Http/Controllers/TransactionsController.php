@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Destination;
 use App\FeesAndDeduction;
 use App\Ledger;
 use App\Trip;
@@ -39,7 +40,6 @@ class TransactionsController extends Controller {
         $this->validate(request(),[
             'terminal' => 'exists:terminal,terminal_id',
             'destination' => 'exists:destination,destination_id',
-            'discount' => 'nullable|exists:fees_and_deduction,fad_id',
             'ticket.*' => 'exists:ticket,ticket_id'
         ]);
 
@@ -49,7 +49,6 @@ class TransactionsController extends Controller {
                     'terminal_id' => request('terminal'),
                     'ticket_id' => $ticketId,
                     'destination_id' => request('destination'),
-                    'fad_id' => request('discount'),
                     'trip_id' => null,
                     'status' => 'Pending'
                 ]);
@@ -170,9 +169,9 @@ class TransactionsController extends Controller {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
-            $seatingCapacity = Transaction::find(request('transaction')[0])->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+3;
+            $seatingCapacity = Transaction::find(request('transactions')[0])->destination->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+8;
 
-            if($seatingCapacity <= count(request('transactions')))
+            if($seatingCapacity >= count(request('transactions')))
             {
                 foreach(request('transactions') as $transactionId)
                 {
@@ -244,8 +243,8 @@ class TransactionsController extends Controller {
         ]);
 
         //put transaction into ledger
-        if($transaction->feesAndDeduction){
-                $discount = $transaction->feesAndDeduction->amount;
+        if($transaction->ticket->type === 'Discount'){
+                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
         }else{
                 $discount = 0;
         }
@@ -281,11 +280,14 @@ class TransactionsController extends Controller {
             ]);
 
             //put transaction into ledger
-            if($transaction->feesAndDeduction){
-                $discount = $transaction->feesAndDeduction->amount;
-            }else{
+            if($transaction->ticket->type === 'Discount')
+            {
+                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
+            }else
+            {
                 $discount = 0;
             }
+            
             $computedAmount = ($transaction->destination->amount) - $discount;
             Ledger::create([
                 'description' => 'Expired Ticket',
@@ -314,23 +316,33 @@ class TransactionsController extends Controller {
         return response()->json($destinationArr);
     }
 
-    public function listDiscounts() {
-        $discountArr = [];
-        $discounts = FeesAndDeduction::discounts()->get();
+    public function listDiscountedTickets(Destination $destination) {
+        $ticketsArr = [];
+        $tickets = $destination
+            ->tickets()
+            ->where('isAvailable', 1)
+            ->where('type','Discount')
+            ->orderBy('ticket_id','asc')
+            ->get();
 
-        foreach ($discounts as $discount){
-            array_push($discountArr,[
-                'id' => $discount->fad_id,
-                'description' => $discount->description
+        foreach($tickets as $ticket){
+            array_push($ticketsArr,[
+                'id' => $ticket->ticket_id,
+                'ticket_number' => $ticket->ticket_number
             ]);
         }
 
-        return response()->json($discountArr);
+        return response()->json($ticketsArr);
     }
 
-    public function listTickets(Terminal $terminal) {
+    public function listTickets(Destination $destination) {
         $ticketsArr = [];
-        $tickets = $terminal->tickets()->where('isAvailable', 1)->orderBy('ticket_id','asc')->get();
+        $tickets = $destination
+            ->tickets()
+            ->where('isAvailable', 1)
+            ->where('type','Regular')
+            ->orderBy('ticket_id','asc')
+            ->get();
 
         foreach($tickets as $ticket){
             array_push($ticketsArr,[

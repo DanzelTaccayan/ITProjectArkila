@@ -21,7 +21,8 @@
                             <th>Date</th>
                             <th>Time</th>
                             <th>Contact Number</th>
-                            <th>Van Model</th>
+                            <th>Van</th>
+                            <th>Driver</th>
                             <th>Status</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -29,12 +30,13 @@
                     <tbody>
                         @foreach($rentals as $rental)
                         <tr>
-                            <td>{{ $rental->full_name }}</td>
+                            <td>{{ $rental->customer_name }}</td>
                             <td>{{ $rental->destination }}</td>
                             <td>{{ $rental->departure_date }}</td>
                             <td>{{ $rental->departure_time }}</td>
                             <td>{{ $rental->contact_number }}</td>
-                            <td>{{ $rental->vanmodel->description ?? 'None' }}</td>
+                            <td>{{ $rental->plate_number }}</td>
+                            <td>{{ $rental->driver->full_name ?? 'None' }}</td>
                             @if ($rental->status == 'Pending')
                             <td>{{ $rental->status }}</td>
                             @else

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Trip;
+use App\Ticket;
 use App\Van;
 use App\Member;
 use App\User;
@@ -443,7 +444,18 @@ class TripsController extends Controller
 
     public function viewTripLog(Trip $trip)
     {
-        $destinations = Transaction::join('destination', 'destination.destination_id', '=', 'transaction.destination_id')->join('trip', 'trip.trip_id', '=', 'transaction.trip_id')->where('transaction.trip_id', $trip->trip_id)->selectRaw('transaction.trip_id as tripid, destination.description as destdesc, destination.amount as amount, COUNT(destination.description) as counts')->groupBy(['transaction.trip_id','destination.description'])->get();
+        $destinations = Transaction::join('destination', 'destination.destination_id', '=', 'transaction.destination_id')
+        ->join('trip', 'trip.trip_id', '=', 'transaction.trip_id')
+        ->where('transaction.trip_id', $trip->trip_id)
+        ->selectRaw('transaction.trip_id as tripid, destination.description as destdesc, destination.amount as amount, COUNT(destination.description) as counts')
+        ->groupBy(['transaction.trip_id','destination.description'])->get();
+        $tickets = Transaction::join('ticket', 'transaction.ticket_id','=','ticket.ticket_id')
+        ->where('trip_id',$trip->trip_id)->get();
+        foreach($tickets as $ticket){
+            if($ticket->type === "Discount"){
+
+            }    
+        }                            
         $user = User::where('user_type','Super-admin')->first();
         $superAdmin = $user->terminal;
         return view('trips.viewTrip', compact('destinations', 'trip', 'superAdmin'));

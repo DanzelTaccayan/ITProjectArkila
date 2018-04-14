@@ -304,8 +304,6 @@
         $(function(){
             checkTerminals();
             listDestinations();
-            listDiscounts();
-
 
             var hash = window.location.hash;
             hash && $('ul.nav a[href="' + hash + '"]').tab('show');
@@ -388,44 +386,14 @@
             function checkDiscountBox(){
                 if($('#checkDiscount').is(':checked')){
                     $('#discount').prop('disabled',false);
-                    listDiscounts();
+                    listDiscountedTickets();
                 }else{
                     $('#discount').prop('disabled',true);
                     $('#discount').empty();
+                    listTickets();
                 }
             }
 
-            function listDiscounts(){
-                $('#discount').empty();
-
-                if($('#terminal').val() && $('#destination').val()){
-                    $.ajax({
-                        method:'GET',
-                        url: '{{route('transactions.listDiscounts')}}',
-                        data: {
-                            '_token': '{{csrf_token()}}'
-                        },
-                        success: function(discounts){
-                            console.log(discounts);
-                            if(discounts.length === 0){
-                                $('#checkDiscount').prop('disabled',true);
-                                $('#discount').prop('disabled',true);
-                                $('#discount').append('<option value="">No Available Discounts</option>');
-                            }
-                            else{
-                                $('#checkDiscount').prop('disabled',false);
-                                discounts.forEach(function(discounts){
-                                    $('#discount').append('<option value='+discounts.id+'> '+discounts.description+'</option>');
-                                });
-                            }
-
-                        }
-                    });
-                }else{
-                    $('#discount').append('<option value="">No Available Discounts</option>');
-                    $('#discount').prop('disabled',true);
-                }
-            }
 
             function listDestinations() {
                 $('#destination').empty();
@@ -481,6 +449,30 @@
 
                         }
                     });
+
+            }
+
+
+            function listDiscountedTickets() {
+                $('#ticket').empty();
+                $.ajax({
+                    method: 'GET',
+                    url: '/listDiscountedTickets/' + $('#destination').val(),
+                    success: function (tickets) {
+
+                        if (tickets.length === 0) {
+                            $('#ticket').prop('disabled', true);
+                        }
+                        else {
+                            $('#ticket').prop('disabled', false);
+                            tickets.forEach(function (ticket) {
+                                $('#ticket').append('<option value=' + ticket.id + '> ' + ticket.ticket_number + '</option>');
+                            });
+                            checkSellButton();
+                        }
+
+                    }
+                });
 
             }
 
