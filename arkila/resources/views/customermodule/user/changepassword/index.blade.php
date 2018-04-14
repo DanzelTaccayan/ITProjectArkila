@@ -5,11 +5,11 @@
         <div class="heading text-center">
             <h2 style="color: #000040; padding-top:10px;">Change Password</h2>
         </div>
-        <div class="col-md-3 mx-auto" id="boxContainer" style="margin-top:75px; padding-top: 30px;">
-            <form action="{{route('customermodule.changePassword', $customerId)}}" method="POST">
+        <div class="col-md-5 mx-auto" id="boxContainer">
+            <form class="contact100-form" action="{{route('customermodule.changePassword', $customerId)}}" method="POST">
               {{csrf_field()}}
               {{method_field('PATCH')}}
-                <div class="form-group" style="padding-top:10px;">
+                <div class="form-group">
                     <input type="hidden" id="userid" value="{{$customerId}}">
                     <label>Current Password:</label>
                     <input id="current_password" name="current_password" type="password" class="form-control">
@@ -20,12 +20,15 @@
                     <input name="password" type="password" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input name="password_confirmation" type="password" class="form-control">
                     <label>Confirm Password:</label>
+                    <input name="password_confirmation" type="password" class="form-control">
+                    
                 </div>
-                <div class="pull-right" style="padding-bottom:10px;">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+                    <div class="container-contact100-form-btn">
+                            <button type="submit" class="contact100-form-btn">
+                                <strong>Change Password</strong>
+                            </button>
+                        </div>
                 <div class="clearfix"></div>
             </form>
         </div>

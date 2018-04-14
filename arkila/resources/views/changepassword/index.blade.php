@@ -1,5 +1,5 @@
 @extends('layouts.form')
-@section('title', 'Edit Profile')
+@section('title', 'Change Password')
 @section('form-title', 'CHANGE PASSWORD')
 @section('form-action', route('superadminmodule.changePassword', [$superAdminid]))
 @section('method_field', method_field('PATCH'))
@@ -7,7 +7,7 @@
 @section('form-body')
 
     <div class="form-group">
-      <input type="hidden" id="userid" value="{{$superAdminid}}">
+        <input type="hidden" id="userid" value="{{$superAdminid}}">
         <label>Current Password:</label>
         <input id="current_password" name="current_password" type="password" class="form-control">
         <div id="pass_response" class="response"></div>
