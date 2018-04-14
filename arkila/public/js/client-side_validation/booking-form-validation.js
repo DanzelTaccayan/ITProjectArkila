@@ -1,6 +1,6 @@
 
 $('[val-rent-dest]').parsley({
-	pattern: /^[\dA-Za-z][A-Za-z\d .,-]*[A-Za-z\d]$/,
+	pattern: /([A-Za-z\d ]|[\d #])[A-Za-z\d .,-]*[A-Za-z\d ]$/,
 	maxlength: 50
 });
 
