@@ -36,7 +36,7 @@
                             <td>{{ $rental->departure_time }}</td>
                             <td>{{ $rental->contact_number }}</td>
                             <td>{{ $rental->plate_number }}</td>
-                            <td>{{ $rental->driver->full_name }}</td>
+                            <td>{{ $rental->driver->full_name ?? 'None' }}</td>
                             @if ($rental->status == 'Pending')
                             <td>{{ $rental->status }}</td>
                             @else

@@ -23,6 +23,7 @@ class MakeRentalController extends Controller
 
     public function storeRental(CustomerRentalRequest $request)
     {
+    	// dd($request->van_model == null ? true : false);
     	if($request->message == null){
     		$rent = Rental::create([
     			"user_id" => Auth::id(),
@@ -56,8 +57,8 @@ class MakeRentalController extends Controller
     		]);
     	}
 
-      $user = User::find(Auth::id());
-      $user->notify(new CustomerRent($user, $rent));
+      // $user = User::find(Auth::id());
+      // $user->notify(new CustomerRent($user, $rent));
     	return 	redirect(route('customermodule.user.transactions.customerTransactions'))->with('success', 'Successfully made a rental');
     }
 }

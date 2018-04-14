@@ -188,7 +188,7 @@
                                                     <button class="btn btn-danger btn-sm" type="submit" name="butt" onclick="return ConfirmStatus()" value="Declined"><i class="fa fa-close"></i> Decline</button> 
                                                 @elseif ($reservation->status == 'Paid')
                                                 
-                                                    <button class="btn btn-danger btn-sm" type="submit" name="butt" onclick="return ConfirmStatus()" value="Cancelled"><i class="fa fa-close"></i> Cancel</button> 
+                                                    <span>No Action</span>
                                         </form>
                                                 @else
                                                     <form method="POST" action="/home/reservations/{{$reservation->reservation_id}}" class="delete">

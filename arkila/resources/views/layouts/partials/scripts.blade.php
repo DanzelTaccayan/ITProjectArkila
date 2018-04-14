@@ -51,6 +51,11 @@
     
     <!-- Awesome Functions-->
     {{ Html::script('js/awesome-functions-min.js') }}
+    <script>    
+    $(function () {
+        $('.select2').select2();
+    })
+    </script>
 
     <!-- Van Queue Sidebar -->
     <script>

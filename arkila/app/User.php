@@ -108,7 +108,7 @@ class User extends Authenticatable
       return $this->user_type === 'Customer';
     }
 
-    
+
 
     // public function sendPasswordResetNotification($token)
     // {

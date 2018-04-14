@@ -4,15 +4,15 @@
     <div class="list-group-header">
       <h4 class="text-center">NOTIFICATIONS</h4>
     </div>
-    @forelse(auth()->user()->unreadNotifications as $notification)
+    {{Auth::user()->unreadNotifications}}
+    @foreach(auth()->user()->unreadNotifications as $notification)
     <a href="" class="list-group-item">
           <p><span class="text-green fa fa-check-circle"></span> Accepted {{$notification->type}} </p>
           <small>10/10/2018 01:00 PM</small>
     </a>
-    @empty
-      <p>No notifications</p>
-    @endforelse
-    <a href="" class="list-group-item">
+
+    @endforeach
+    <!-- <a href="" class="list-group-item">
       <p><span class="text-red fa fa-times-circle"></span> Deleted/Cancelled</p>
       <small>10/10/2018 01:00 PM</small>
     </a>
@@ -23,6 +23,6 @@
     <a href="" class="list-group-item">
       <p><span class="text-yellow fa fa-truck"></span> Departed </p>
       <small>10/10/2018 01:00 PM</small>
-    </a>
+    </a> -->
   </div>
 </div>
