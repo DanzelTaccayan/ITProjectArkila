@@ -17,6 +17,9 @@
         </div>
     </div>
     <div class="box-body">
+        <form method="post" action="{{ route('announcements.index') }}">
+        {{ csrf_field() }}
+        
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -38,8 +41,8 @@
         </div>
         
         <div class="form-group">
-            <label for="">Content: <span class="text-red">*</span></label>
-            <textarea width="30%" class="form-control" rows="5"></textarea>
+            <label>Content: <span class="text-red">*</span></label>
+            <textarea name="announce" width="30%" class="form-control" rows="5"></textarea>
         </div>
         
     </div>
@@ -51,7 +54,7 @@
             </div>
         </div>
     </div>
-    
+    </form>
 </div>
 
 @include('message.error')
