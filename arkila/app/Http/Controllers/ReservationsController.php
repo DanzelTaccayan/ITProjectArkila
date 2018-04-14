@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\Destination;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class ReservationsController extends Controller
@@ -89,11 +90,10 @@ class ReservationsController extends Controller
      */
     public function update(Reservation $reservation)
     {
-        dd(request('butt'));
         $this->validate(request(),[
             "butt" => [
               'required',
-              Rule::in(['Accepted', 'Declined', 'Departed', 'Pending', 'Cancelled'])
+              Rule::in(['Accepted', 'Declined', 'Departed', 'Paid', 'Cancelled'])
             ],
           ]);
     
