@@ -44,17 +44,17 @@
         </div>
         
     </div>
-        <div class="box-footer">
-            <div style="overflow:auto;">
-                <div style="float:right;">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
+
+    <div class="box-footer">
+        <div style="overflow:auto;">
+            <div style="float:right;">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </div>
     </div>
     
 </div>
-
+  
 
 @endsection
 
