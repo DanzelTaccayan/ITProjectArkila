@@ -6,7 +6,7 @@
                 <div class="heading text-center">
                     <h2>MY TRANSACTIONS</h2>
                 </div>
-                <div class="col-md-12 mx-auto boxContainer">
+                <div class="col-md-9 mx-auto boxContainer">
                     <div class="box border-bottom-0">
                         <ul class="nav nav-pills nav-fill">
                             <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>
@@ -14,25 +14,32 @@
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane table-responsive" id="rentals">
-                                <table id="rental" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Destination</th>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Time</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($rentals as $rental)
-                                        <tr>
-                                            <td>{{$rental->destination}}</td>
-                                            <td>{{$rental->departure_date}}</td>
-                                            <td>{{$rental->departure_time}}</td>
-                                            <td>{{$rental->status}}</td>
-                                            <td>
-                                                <div class="text-center">
+                                <ul class="list-group">
+                                    @foreach($rentals as $rental)
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                        <div class="col-md-6">
+                                        
+                                        <p>{{$rental->destination}}</p>
+                                        
+                                        <small>
+                                            @if($rental->status === 'Pending')
+                                        <i class="fa fa-circle-o" style="color:orange;"></i>
+                                        Request:
+                                        @elseif($rental->status === 'Accepted')
+                                        <i class="fa fa-check-circle" style="color:green;"></i>
+                                        Request:
+                                        @elseif($rental->status === 'Declined' | $rental->status ==='Cancelled' )
+                                        <i class="fa fa-times-circle" style="color:red;"></i>
+                                        Request:
+                                         @elseif($rental->status === 'Departed')
+                                        <i class="fa fa-truck" style="color:blue;"></i>
+                                        Departed: 
+                                        @endif
+                                        <span style="color: gray;">{{$rental->departure_date}} {{$rental->departure_time}}</span></small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="pull-right">
                                                     <button id="viewRentalModal{{$rental->rent_id}}" type="button" class="btn btn-primary"
                                                     data-toggle="modal"
                                                     data-target="#viewRental{{$rental->rent_id}}"
@@ -48,16 +55,15 @@
                                                     @if($rental->status === 'Accepted')
                                                       <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelWarning{{$rental->rent_id}}">Cancel</button>
                                                     @elseif($rental->status === 'Declined' || $rental->status === 'Pending')
-                                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Delete</button>
+                                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$rental->rent_id}}">Cancel</button>
                                                     @endif
 
                                                 </div>
-                                            </td>
-                                        </tr>
-
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
                             </div>
                             <!-- tab-pane-->
                             <div class="tab-pane table-responsive" id="reservations">
@@ -89,7 +95,7 @@
                                                     data-reservedate="{{$reservation->departure_date}}"
                                                     data-reservetime="{{$reservation->departure_time}}"
                                                     data-reservecomment="{{$reservation->comments}}">View</button>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$reservation->id}}">Delete</button>
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$reservation->id}}">Cancel</button>
                                                 </div>
                                             </td>
                                         </tr>
