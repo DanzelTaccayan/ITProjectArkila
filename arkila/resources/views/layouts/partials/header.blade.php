@@ -180,31 +180,26 @@
                         <img src="{{ URL::asset('img/user_icon.png') }}" class="user-image" alt="User Image">
                         <span class="hidden-xs">Admin</span>
                     </a>
-
-                        <!-- Profile Image -->
-                        <div class="box box-solid dropdown-menu">
-                            <div class="box-body box-profile">
-                                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/user_icon.png') }}" alt="User profile picture">
-
-                                <h3 class="profile-username text-center">Admin</h3>
-
-                                <div class="btn-group btn-group-justified">
-                                  <div class="btn-group">
-                                      <a href="{{route('accountSettings')}}" class="btn btn-primary">Change Password</a>
-                                  </div>
-                                  <div class="btn-group">
-                                        <a  href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default">Sign out</a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{csrf_field()}}
-                                        </form>
-                                  </div>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                                
-                            <!-- /.box-footer -->
-                        </div>
-                        <!-- /.box -->
+                    <ul class="dropdown-menu">
+                        <!-- The user image in the menu -->
+                        <li class="user-header">
+                          <img src="{{URL::asset('img/user_icon.png')}}" class="img-circle" alt="User Image">
+                            <p>Admin</p>
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                          <div class="pull-left">
+                            <a href="{{route('accountSettings')}}" class="btn btn-default btn-flat">Profile
+                           </a>
+                          </div>
+                          <div class="pull-right">
+                             <a  href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default">Sign out</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{csrf_field()}}
+                            </form>
+                          </div>
+                        </li>
+                    </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>
