@@ -55,15 +55,17 @@
                 <li>
                   <!-- Inner Menu: contains the notifications -->
                   <ul class="menu">
+                    @foreach(auth()->user()->unreadNotifications as $notification)
                     <li><!-- start notification -->
-                      <a href="#">
-                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                      <a href="">
+                        <i class="fa fa-users text-aqua"></i> {{$notification}}
                       </a>
                     </li>
+                    @endforeach
                     <!-- end notification -->
                   </ul>
                 </li>
-                <li class="footer"><a href="#">View all</a></li>
+                <li class="footer"><a href="{{route('drivermodule.notifications')}}">View all</a></li>
               </ul>
             </li>
             <!-- User Account Menu -->
@@ -82,12 +84,12 @@
 
                   @php $fullname = null; @endphp
                 @if(Auth::user()->middle_name !== null)
-                    @php 
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->middle_name . " " .     Auth::user()->last_name; 
+                    @php
+                        $fullname = Auth::user()->first_name . " " . Auth::user()->middle_name . " " .     Auth::user()->last_name;
                     @endphp
                 @else
-                    @php 
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->last_name; 
+                    @php
+                        $fullname = Auth::user()->first_name . " " . Auth::user()->last_name;
                     @endphp
                 @endif
                 <p>{{$fullname}}</p>

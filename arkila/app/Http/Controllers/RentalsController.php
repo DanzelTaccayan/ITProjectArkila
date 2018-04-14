@@ -57,7 +57,7 @@ class RentalsController extends Controller
                 'number_of_days' => $request->days,
                 'contact_number' => $request->contactNumber,
                 'rent_type' => 'Walk-in',
-                'status' => 'Pending',
+                'status' => 'Paid',
 
             ]);
 
@@ -78,7 +78,7 @@ class RentalsController extends Controller
       $this->validate(request(),[
         "click" => [
           'required',
-          Rule::in(['Accepted', 'Declined', 'Departed', 'Pending', 'Cancelled', 'Expired'])
+          Rule::in(['Paid', 'Departed', 'Cancelled', 'Refunded'])
         ],
       ]);
         $rental->update([

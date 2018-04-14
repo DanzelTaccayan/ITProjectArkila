@@ -26,9 +26,7 @@ class MakeRentalController extends Controller
     	if($request->message == null){
     		$rent = Rental::create([
     			"user_id" => Auth::id(),
-	    		"first_name" => Auth::user()->first_name,
-	    		"last_name" => Auth::user()->last_name,
-	    		"middle_name" => Auth::user()->middle_name,
+	    		"customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
 	    		"departure_date" => $request->date,
 	    		"departure_time" => $request->time,
 	    		"model_id" => $request->van_model,

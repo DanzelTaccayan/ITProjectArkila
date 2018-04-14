@@ -36,16 +36,17 @@
                             <td>{{ $rental->departure_time }}</td>
                             <td>{{ $rental->contact_number }}</td>
                             <td>{{ $rental->plate_number }}</td>
+                            @if ($rental->rent_type == 'Walk-in')
                             <td>{{ $rental->driver->full_name ?? 'None' }}</td>
-                            @if ($rental->status == 'Pending')
-                            <td>{{ $rental->status }}</td>
                             @else
-                            <td>{{ $rental->status }} by {{ Auth::user()->last_name  }}, {{ Auth::user()->first_name  }}</td>
+                            <td>{{ $rental->users->last_name ?? 'None' }}, {{ $rental->users->first_name ?? 'None'  }}</td>
                             @endif
+
+                            <td>{{ $rental->status }}</td>
                             <td class="center-block">
                                 <div class="center-block">
                                     @if ($rental->status == 'Accepted')
-                                    <button class="btn btn-success btn-sm" name="click" id="paid" value="Paid" data-toggle="modal" data-target="#{{'paid'.$rental->rent_id}}"><i class="fa fa-automobile"></i> Paid </button>
+                                    <button class="btn btn-success btn-sm" name="click" id="paid" data-toggle="modal" data-target="#{{'paid'.$rental->rent_id}}"><i class="fa fa-automobile"></i> Paid </button>
 
                                     <div class="modal fade" id="{{'paid'.$rental->rent_id}}">
                                         <div class="modal-dialog">
@@ -66,7 +67,7 @@
                                                             {{ csrf_field() }} {{ method_field('PATCH') }}
 
                                                             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                                                            <button type="submit" name="click" value="Departed" class="btn btn-primary btn-sm" style="width:22%;">Depart</button>
+                                                            <button type="submit" name="click" value="Paid" class="btn btn-primary btn-sm" style="width:22%;">Paid</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -152,7 +153,14 @@
                                     @elseif($rental->status == 'Pending')
                                     <p>No Action</p>
 
-                        @endif @endforeach
+                        @elseif ($rental->status == 'Cancelled' && $rental->driver_id !== null && $rental->model_id !==null && $rental->plate_number !== null)
+                          <form action="{{ route('rental.update', $rental->rent_id) }}" method="POST" class="form-action">
+                              {{ csrf_field() }} {{ method_field('PATCH') }}
+
+                              <button type="submit" name="click" value="Refunded" class="btn btn-primary btn-sm" style="width:22%;">Refund</button>
+                          </form>
+                        @endif
+                         @endforeach
                     </tbody>
                 </table>
             </div>

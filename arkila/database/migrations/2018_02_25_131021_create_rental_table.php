@@ -23,6 +23,11 @@ class CreateRentalTable extends Migration
              $table->integer('driver_id')
             ->nullable()
             ->unsigned();
+
+            $table->integer('model_id')
+            ->unsigned()
+            ->nullable();
+
             $table->string('customer_name', 50);
 
             $table->string('departure_date');
@@ -30,8 +35,10 @@ class CreateRentalTable extends Migration
             $table->smallInteger('number_of_days');
             $table->string('destination');
             $table->string('contact_number', 13);
-            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid'])
+            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
+            $table->enum('cancelled_by', ['Customer', 'Driver'])
+            ->nullable();
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->string('comments', 300)
             ->nullable();
@@ -49,6 +56,11 @@ class CreateRentalTable extends Migration
 
             $table->foreign('driver_id')
             ->references('id')->on('users')
+            ->onDelete('restrict')
+            ->onUpdate('cascade');
+
+            $table->foreign('model_id')
+            ->references('model_id')->on('van_model')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
