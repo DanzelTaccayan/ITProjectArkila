@@ -7,6 +7,8 @@ use App\Rules\checkName;
 use App\Rules\checkTime;
 use App\Rules\checkAddress;
 use App\Rules\checkContactNum;
+use App\Rules\checkPlateNumber;
+use App\Rules\checkDriver;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -41,12 +43,11 @@ class RentalRequest extends FormRequest
 
         if ($dateFormatted !== $dateFormattedNow) {
             return [
-                "lastName" => ['bail',new checkName, 'required', 'max:35'],
-                "firstName" => ['bail',new checkName, 'required', 'max:35'],
-                "middleName" => ['bail',new checkName, 'max:35', 'nullable'],
+                "name" => ['bail',new checkName, 'required', 'max:35'],
                 "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
                 "destination" => ['bail',new checkAddress,'required','max:50'],
-                "model" => "bail|max:50",
+                "plateNumber" => [new checkPlateNumber,'required','between:6,9'],
+                "driver" => ['numeric',new checkDriver],
                 "time" => ['bail',new checkTime, 'required'],
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
                 "contactNumber" => ['bail',new checkContactNum],
@@ -54,12 +55,11 @@ class RentalRequest extends FormRequest
             ];
         } else {
             return [
-                "lastName" => ['bail',new checkName, 'required', 'max:35'],
-                "firstName" => ['bail',new checkName, 'required', 'max:35'],
-                "middleName" => ['bail',new checkName, 'max:35', 'nullable'],
+                "name" => ['bail',new checkName, 'required', 'max:35'],
                 "date" =>  'bail|required|date_format:m/d/Y|after_or_equal:today',
                 "destination" => ['bail',new checkAddress,'required','max:50'],
-                "model" => "bail|required|max:50",
+                "plateNumber" => [new checkPlateNumber,'required','between:6,9'],
+                "driver" => ['numeric', new checkDriver],
                 "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
                 "contactNumber" => ['bail',new checkContactNum],
@@ -73,12 +73,8 @@ class RentalRequest extends FormRequest
         $dateNow = Carbon::now()->format('h:i A');
 
         return [
-            "lastName.required" => "Please enter the customers last name",
-            "lastName.max" => "Last name must be less than or equal to 35 characters",
-            "firstName.required" => "Please enter the customers first name",
-            "firstName.max" => "First name must be less than or equal to 35 characters",
-            "middleName.required" => "Please enter the customers middle name",
-            "middleName.max" => "Middle name must be less than or equal to 35 characters",
+            "name.required" => "Please enter the customers name",
+            "name.max" => "Customer name must be less than or equal to 35 characters",
 
             "date.required" => "Please enter the preffered departure date",
             "date.date_format" => "The preferred date does not match the format mm/dd/yyyy",

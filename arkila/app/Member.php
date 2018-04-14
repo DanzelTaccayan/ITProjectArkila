@@ -19,6 +19,10 @@ class Member extends Model
         return $this->hasMany(Dependent::class,'member_id','member_id');
     }
 
+    public function rental(){
+    	return $this->belongsTo(Rental::Class, 'rent_id');
+    }
+
     public function operator(){
         return $this->belongsTo(Member::class, 'operator_id');
     }
@@ -56,7 +60,6 @@ class Member extends Model
             $this->children()->create(compact('children_name','birthdate'));
         }
     }
-
 
     public static function scopeAllOperators($query){
         return $query->where('role','Operator');
