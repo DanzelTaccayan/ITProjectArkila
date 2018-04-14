@@ -52,21 +52,18 @@
                 <h4>Shares</h4>
             </div>
             <div id="share">
-                <div>
-                    <label for="">BanTrans: </label>
-                    @php $bantrans = 0; @endphp
-                    @if($trip->SOP == null)
-                        @php $bantrans = $trip->total_booking_fee + $trip->community_fund  @endphp
-                    @else
-                        @php $bantrans = $trip->total_booking_fee + $trip->SOP + $trip->community_fund  @endphp
-                    @endif
+               
+                @php $bantrans = 0; @endphp
+                @if($trip->SOP == null)
+                    @php $bantrans = $trip->total_booking_fee + $trip->community_fund  @endphp
+                @else
+                    @php $bantrans = $trip->total_booking_fee + $trip->SOP + $trip->community_fund  @endphp
+                @endif
 
-                    @php $totalfare = 0; @endphp
-                    @foreach($destinations as $key => $values)
-                        @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
-                    @endforeach
-                    <input type="text" value="{{floatval($bantrans)}}" disabled>
-                </div>
+                @php $totalfare = 0; @endphp
+                @foreach($destinations as $key => $values)
+                    @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
+                @endforeachs  
 
                 <label for="">Driver:</label>
                 <input type="text" value="{{$totalfare}}" disabled>

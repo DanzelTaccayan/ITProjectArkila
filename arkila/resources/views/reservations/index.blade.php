@@ -166,7 +166,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($reservations->where('type', 'Online')->where('status', 'Pending') as $reservation)
+                                    @foreach ($reservations->where('type', 'Online') as $reservation)
                                     <tr>
                                         <td>{{ $reservation->id }}</td>
                                         <td>{{ $reservation->name }}</td>
@@ -179,16 +179,17 @@
                                         <td class="center-block">
 
 
-                                            
+                                        <form action="{{ route('reservations.update', $reservation->id) }}" method="POST" class="form-action">
+
                                                 {{ csrf_field() }} {{ method_field('PATCH') }} 
                                                 @if ($reservation->status == 'Pending')
                                                     <button class="btn btn-success btn-sm" type="submit" name="butt" onclick="return ConfirmStatus()" value="Paid"><i class="fa fa-automobile"></i> Paid</button>
                                                 
                                                     <button class="btn btn-danger btn-sm" type="submit" name="butt" onclick="return ConfirmStatus()" value="Declined"><i class="fa fa-close"></i> Decline</button> 
                                                 @elseif ($reservation->status == 'Paid')
-
                                                 
                                                     <button class="btn btn-danger btn-sm" type="submit" name="butt" onclick="return ConfirmStatus()" value="Cancelled"><i class="fa fa-close"></i> Cancel</button> 
+                                        </form>
                                                 @else
                                                     <form method="POST" action="/home/reservations/{{$reservation->reservation_id}}" class="delete">
                                                         {{csrf_field()}} {{method_field('DELETE')}}
