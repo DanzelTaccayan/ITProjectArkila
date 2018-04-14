@@ -23,15 +23,10 @@ class CreateRentalTable extends Migration
              $table->integer('driver_id')
             ->nullable()
             ->unsigned();
-            $table->string('first_name', 50);
-            $table->string('last_name', 50);
-            $table->string('middle_name', 50)
-            ->nullable();
+            $table->string('customer_name', 50);
+
             $table->string('departure_date');
             $table->string('departure_time', 8);
-            $table->integer('model_id')
-            ->unsigned()
-            ->nullable();
             $table->smallInteger('number_of_days');
             $table->string('destination');
             $table->string('contact_number', 13);
@@ -49,11 +44,6 @@ class CreateRentalTable extends Migration
 
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
-
-            $table->foreign('model_id')
-            ->references('model_id')->on('van_model')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 

@@ -18,6 +18,10 @@ class Rental extends Model
     	return $this->belongsTo(Van::Class, 'plate_number');
     }
 
+    public function driver(){
+    	return $this->hasOne(Member::Class, 'member_id', 'driver_id');
+    }
+
     public function users(){
     	return $this->belongsTo(User::Class, 'driver_id', 'id');
     }

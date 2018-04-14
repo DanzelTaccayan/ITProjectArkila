@@ -7,6 +7,7 @@ use App\Rental;
 use Carbon\Carbon;
 use App\Van;
 use App\VanModel;
+use App\Member;
 use App\Http\Requests\RentalRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,8 +33,9 @@ class RentalsController extends Controller
      */
     public function create()
     {
-        $models = VanModel::all();
-        return view('rental.create', compact('models'));
+        $vans = Van::all();
+        $drivers = Member::allDrivers()->get();
+        return view('rental.create', compact('vans', 'drivers'));
     }
     /**
      * Store a newly created resource in storage.
@@ -43,16 +45,12 @@ class RentalsController extends Controller
      */
     public function store(RentalRequest $request)
     {
-        if($request->model == null) {
-
-            $lastName = ucwords(strtolower($request->lastName));
-            $firstName = ucwords(strtolower($request->firstName));
-            $middleName = ucwords(strtolower($request->middleName));
+        $fullName = ucwords(strtolower($request->name));
 
             Rental::create([
-                'last_name' => $lastName,
-                'first_name' => $firstName,
-                'middle_name' => $middleName,
+                'customer_name' => $fullName,
+                'plate_number' => $request->plateNumber,
+                'driver_id' => $request->driver,
                 'departure_date' => $request->date,
                 'departure_time' => $request->time,
                 'destination' => $request->destination,
@@ -62,35 +60,8 @@ class RentalsController extends Controller
                 'status' => 'Pending',
 
             ]);
-        } else {
 
-            $findModel = VanModel::all();
-            $modelReq = $request->model;
-            foreach ($findModel->where('description', $modelReq) as $find) {
-                $findModelID = $find->model_id;
-            }
-
-            $lastName = ucwords(strtolower($request->lastName));
-            $firstName = ucwords(strtolower($request->firstName));
-            $middleName = ucwords(strtolower($request->middleName));
-
-            Rental::create([
-                'last_name' => $lastName,
-                'first_name' => $firstName,
-                'middle_name' => $middleName,
-                'model_id' => $findModelID,
-                'departure_date' => $request->date,
-                'departure_time' => $request->time,
-                'destination' => $request->destination,
-                'number_of_days' => $request->days,
-                'contact_number' => $request->contactNumber,
-                'rent_type' => 'Walk-in',
-                'status' => 'Pending',
-
-            ]);
-        }
-
-        return redirect('/home/rental/')->with('success', 'Rental request from ' . $request->lastName . ', ' . $request->firstName . ' was created successfully');
+            return redirect('/home/rental/')->with('success', 'Rental request from ' . $fullName . ' was created successfully');
 
     }
 
