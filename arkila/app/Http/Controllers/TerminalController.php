@@ -31,29 +31,17 @@ class TerminalController extends Controller
     {
         $this->validate(request(),[
             "addTerminalName" => "unique:terminal,description|regex:/^[,\pL\s\-]+$/u|required|max:40",
-            "bookingFee" => [new checkCurrency, "numeric", "required","min:1","max:5000"],
-            "numberOfTickets" => 'required|numeric|digits_between:1,200'
+            "bookingFee" => [new checkCurrency, "numeric", "required","min:1","max:5000"]
         ]);
 
         // Start transaction!
         DB::beginTransaction();
         try
         {
-            $terminal = Terminal::create([
+            Terminal::create([
                 "description" => request('addTerminalName'),
                 "booking_fee" => request('bookingFee'),
             ]);
-
-            for($i =1; $i <= request('numberOfTickets'); $i++ )
-            {
-                $ticketName = request('addTerminalName')[0].'-'.$i;
-                Ticket::create([
-                    'ticket_number' => $ticketName,
-                    'terminal_id' => $terminal->terminal_id,
-                    'isAvailable' => 1
-                ]);
-
-            }
         }
         catch(\Exception $e)
         {

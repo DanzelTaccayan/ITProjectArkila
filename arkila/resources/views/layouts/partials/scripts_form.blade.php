@@ -43,6 +43,12 @@
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
     
     <!-- Van Queue Sidebar -->
+
+    <script>    
+    $(function () {
+        $('.select2').select2();
+    })
+    </script>
     <script>
         $('#addQueueSideBarButt').on('click', function() {
             var destination = $('#destinationInputSideBar').val();
@@ -115,42 +121,10 @@
             function checkDiscountBoxSideBar(){
                 if($('#checkDiscountTicketSideBar').is(':checked')){
                     $('#discountTicketSideBar').prop('disabled',false);
-                    listDiscounts();
+                    listDiscountedSideBarTickets();
                 }else{
                     $('#discountTicketSideBar').prop('disabled',true);
                     $('#discountTicketSideBar').append('<option value="" selected>Check the checkbox to enable discount</option>');
-                }
-            }
-
-
-            function listDiscounts(){
-                $('#discountTicketSideBar').empty();
-
-                if($('#terminalTicketSideBar').val() && $('#destinationTicketSideBar').val()){
-                    $.ajax({
-                        method:'GET',
-                        url: '{{route('transactions.listDiscounts')}}',
-                        data: {
-                            '_token': '{{csrf_token()}}'
-                        },
-                        success: function(discounts){
-                            if(discounts.length === 0){
-                                $('#checkDiscountTicketSideBar').prop('disabled',true);
-                                $('#discountTicketSideBar').prop('disabled',true);
-                                $('#discountTicketSideBar').append('<option value="" selected>No Available Discounts</option>');
-                            }
-                            else{
-                                $('#checkDiscountTicketSideBar').prop('disabled',false);
-                                discounts.forEach(function(discounts){
-                                    $('#discountTicketSideBar').append('<option value='+discounts.id+'> '+discounts.description+'</option>');
-                                });
-                            }
-
-                        }
-                    });
-                }else{
-                    $('#discountTicketSideBar').append('<option value="">No Available Discounts</option>');
-                    $('#discountTicketSideBar').prop('disabled',true);
                 }
             }
 
@@ -208,7 +182,32 @@
 
                     }
                 });
+            }
 
+            function listDiscountedSideBarTickets(){
+                $('#ticketSellSideBar').empty();
+                $.ajax({
+                    method: 'GET',
+                    url: '/listDiscountedTickets/' + $('#terminalTicketSideBar').val(),
+                    data: {
+                        '_token': '{{csrf_token()}}'
+                    },
+                    success: function (tickets) {
+
+                        if (tickets.length === 0) {
+                            $('#ticketSellSideBar').prop('disabled', true);
+                            $('#ticketSellSideBar').append('<option value =""> Tickets Not Available</option>');
+                        }
+                        else {
+                            $('#ticketSellSideBar').prop('disabled', false);
+                            tickets.forEach(function (ticket) {
+                                $('#ticketSellSideBar').append('<option value=' + ticket.id + '> ' + ticket.ticket_number + '</option>');
+                            });
+                            checkSellButton();
+                        }
+
+                    }
+                });
             }
 
             function checkSellButton(){

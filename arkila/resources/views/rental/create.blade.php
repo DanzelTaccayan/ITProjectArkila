@@ -21,24 +21,10 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Last Name: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="Last Name" name="lastName" id="lastName" value="{{ old('lastName') }}" val-name required>
+                                <label>Customer Name: <span class="text-red">*</span></label>
+                                <input type="text" class="form-control" placeholder="Customer Name" name="name" id="name" value="{{ old('name') }}" val-fullname required>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>First Name: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="First Name" name="firstName" id="firstName" value="{{ old('firstName') }}" val-name required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Middle Name:</label>
-                                <input type="text" class="form-control" placeholder="Middle Name" name="middleName" id="middleName" value="{{ old('middleName') }}" val-name>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label>Contact Number: <span class="text-red">*</span></label>
@@ -50,32 +36,46 @@
                                 </div>
                                 <p id="errContactNumber"></p>
                             </div>
-                        </div>
+                        </div> 
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label>Destination: <span class="text-red">*</span></label>
                                 <input type="text" class="form-control" placeholder="Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>Type of Van:</label>
-                                <select class="form-control" name="model" id="model">
-                                    <option value="" selected>Select Model</option>
-                                @foreach ($models as $model)
-                                   <option value="{{ $model->description }}" @if($model->description == old('model') ) {{'selected'}} @endif>{{ $model->description }}</option>
+                                <label>Van:</label>
+                                <select class="form-control select2" name="plateNumber" id="plateNumber">
+                                    <option value="" selected>Select Van Unit</option>
+                                @foreach ($vans as $van)
+                                   <option value="{{ $van->plate_number }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
                                    @endforeach
                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Driver:</label>
+                                <select class="form-control select2" name="driver" id="driver">
+                                    <option value="" selected>Select Driver</option>
+                                @foreach ($drivers as $driver)
+                                   <option value="{{ $driver->member_id }}" @if($driver->member_id == old('driver') ) {{'selected'}} @endif>{{ $driver->full_name }}</option>
+                                   @endforeach
+                               </select>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Number of Days: <span class="text-red">*</span></label>
                                 <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" val-num-days required>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Departure Date: <span class="text-red">*</span></label>
@@ -114,8 +114,10 @@
                             <dd id="contactView"></dd>
                             <dt>Destination:</dt>
                             <dd id="destView"></dd>
-                            <dt>Van Model:</dt>
+                            <dt>Van:</dt>
                             <dd id="vanView"></dd>
+                            <dt>Driver:</dt>
+                            <dd id="driverView"></dd>
                             <dt>Number of Days:</dt>
                             <dd id="daysView"></dd>
                             <dt>Departure Date:</dt>
@@ -197,20 +199,21 @@
           navigateTo(0); // Start at the beginning
         });
 
-                function getData() {
-            var firstName = document.getElementById('firstName').value;
-            var lastName = document.getElementById('lastName').value;
-            var middleName = document.getElementById('middleName').value;
+        function getData() {
 
-            document.getElementById('nameView').textContent = lastName + ', ' + firstName + ' ' + middleName;
+            var name = document.getElementById('name').value;
+            document.getElementById('nameView').textContent = name;
 
             var contactNumber = document.getElementById('contactNumber').value;
             document.getElementById('contactView').textContent = contactNumber;
 
+            var driver = $("#driver option:selected").text();
+            document.getElementById('driverView').textContent = driver;
+
             var destination = document.getElementById('destination').value;
             document.getElementById('destView').textContent = destination;
 
-            var vanType = document.getElementById('model').value;
+            var vanType = document.getElementById('plateNumber').value;
             document.getElementById('vanView').textContent = vanType;
 
             var days = document.getElementById('days').value;

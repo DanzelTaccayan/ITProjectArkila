@@ -46,13 +46,13 @@ class DriverRequest extends FormRequest
                     'address' => ['bail','required','max:100',new checkAddress],
                     'provincialAddress' => ['bail','required','max:100',new checkAddress],
                     'birthDate' => ['bail','required','date_format:m/d/Y','after:1/1/1900', new checkAge],
-                    'birthPlace' => ['bail',new checkName,'required','max:35'],
+                    'birthPlace' => ['bail','regex:/[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-,]*[a-zA-Z ]$/','required','max:35'],
                     'gender' => [
                         'bail',
                         'required',
                         Rule::in(['Male', 'Female'])
                     ],
-                    'citizenship' => 'bail|alpha|required|max:25',
+                    'citizenship' => 'bail|regex:/[a-zA-Z ]$/|required|max:25',
                     'civilStatus' => [
                         'bail',
                         'required',
@@ -86,13 +86,13 @@ class DriverRequest extends FormRequest
                     'address' => ['bail','required','max:100',new checkAddress],
                     'provincialAddress' => ['bail','required','max:100',new checkAddress],
                     'birthDate' => ['bail','required','date_format:m/d/Y','after:1/1/1900', new checkAge],
-                    'birthPlace' => ['bail',new checkName,'required','max:35'],
+                    'birthPlace' => ['bail','regex: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-,]*[a-zA-Z ]$/','required','max:35'],
                     'gender' => [
                         'bail',
                         'required',
                         Rule::in(['Male', 'Female'])
                     ],
-                    'citizenship' => 'bail|alpha|required|max:35',
+                    'citizenship' => 'bail|regex:/[a-zA-Z ]$/|required|max:35',
                     'civilStatus' => [
                         'bail',
                         'required',

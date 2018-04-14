@@ -1,13 +1,5 @@
 @extends('layouts.master') 
 @section('title', 'Show Profile') 
-@section('links')
-    @parent
-    <style>
-        .profile-user-img {
-            height: 100px;
-        }
-    </style>
-@endsection
 @section('content')
     {{session(['opLink'=> Request::url()])}}
 

@@ -27,6 +27,10 @@
         <label>Fare: <span class="text-red">*</span></label>
         <input type="number" class="form-control" name="addDestinationFare" step="0.25" placeholder="Php 0.00"  val-settings-amount required>
     </div>
+    <div class="form-group">
+        <label>Number of Tickets: <span class="text-red">*</span> </label>
+        <input type="number" class="form-control" name="numberOfTickets" val-settings-amount required>
+    </div>
 
     @endsection
     @section('form-btn')

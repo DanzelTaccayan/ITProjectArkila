@@ -2,7 +2,7 @@
   // Validate name.
     $('[val-name]').parsley({
       maxlength: 30,
-      pattern: /^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/,
+      pattern: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z ]$/,
       minlength: 2
     });	
 
@@ -21,10 +21,10 @@
 
   // Validate address.
     $('[val-address]').parsley({
-    	pattern: /^[\dA-Za-z][A-Za-z\d .,-]*[A-Za-z\d]$/,
+    	pattern: /([A-Za-z\d ]|[\d #])[A-Za-z\d .,-]*[A-Za-z\d ]$/,
     	maxlength: 100
     });
-    $('[val-address]').attr('data-parsley-pattern-message','Please  use only letters (a-z) and numbers.');
+    $('[val-address]').attr('data-parsley-pattern-message','Please  use only letters (a-z),numbers and symbols (.,-#). Only letters and numbers are allowed at the end.');
     $('[name="address"]').attr('data-parsley-required-message','Please enter an address.');
     $('[name="provincialAddress"]').attr('data-parsley-required-message','Please enter a provincial address.');
 
@@ -57,7 +57,7 @@
 
   // Validate birth place.
     $('[val-birthplace]').parsley({
-    	pattern: /^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/,
+    	pattern: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-,]*[a-zA-Z ]$/,
     	maxlength: 35
     });
     $('[val-birthplace]').attr('data-parsley-pattern-message','Please use letters (a-z) only.');
@@ -67,7 +67,7 @@
   // Validate citizenship.
     $('[val-citizenship]').parsley({
     	maxlength: 25,
-    	pattern: /^[a-zA-Z]+$/
+    	pattern: /[a-zA-Z ]$/
     });
     $('[val-citizenship]').attr('data-parsley-required-message','Please enter a citizenship.');
     $('[val-citizenship]').attr('data-parsley-pattern-message','Please use letters only (a-z).');
@@ -100,14 +100,14 @@
 
     window.Parsley.addValidator('expireDate', {
       validateString: function(value) {
-      	var bdate_array = value.split('/')
+      	var edate_array = value.split('/')
       	var now = new Date()
       	var nowMonth = (now.getMonth() + 1);
-      	var valueMonth = parseInt(bdate_array[0]);
+      	var valueMonth = parseInt(edate_array[0]);
     	var nowDay = now.getDate();
-    	var valueDay = parseInt(bdate_array[1]);
+    	var valueDay = parseInt(edate_array[1]);
     	var nowYear = now.getFullYear(); 
-    	var valueYear = parseInt(bdate_array[2]);
+    	var valueYear = parseInt(edate_array[2]);
         if(valueYear > nowYear || (valueYear === nowYear && ((valueMonth > nowMonth) || (valueMonth === nowMonth && valueDay > nowDay)) ) ){
         	return true;
         } else {
@@ -141,15 +141,17 @@
     $('[val-fullname]').parsley({
       minlength: 5,
       maxlength: 50,
-      pattern: /^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/
+      pattern: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z ]$/
     });
 
     $('[val-fullname]').attr('data-parsley-pattern-message','Please use letters (a-z) only.');
     // Validate occupation
     $('[val-occupation]').parsley({
-      maxlength: 30
+      maxlength: 30,
+      pattern: /([a-zA-Z- ()])+$/
     });
 
+    $('[val-occupation]').attr('data-parsley-pattern-message', 'Please use letters (a-z) only.')
 
   // Validate contact person.
     $('[name="contactPerson"]').attr('data-parsley-required-message','Please enter name of the contact person.');
@@ -162,3 +164,5 @@
     });
 
     $('[val-dependent-bdate]').attr('data-parsley-pattern-message','Please enter a valid date format (mm/dd/yyyy).');
+
+    

@@ -1,35 +1,35 @@
 @extends('layouts.driver')
 @section('title', 'Driver Profile')
 @section('content-title', 'Driver Home') @section('content')
-<div class="col-md-offset-1 col-md-3">
-    {{Session::get('error')}}
-    @include('message.success')
+<div class="col-md-6">
     <!-- Profile Image -->
     <div class="box box-primary">
         <div class="box-body box-profile">
-            <img class="profile-user-img img-responsive img-circle" src="../dist/img/user4-128x128.jpg" alt="User profile picture">
+            <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" alt="User profile picture">
             <h3 class="profile-username text-center">{{ $profile->first_name.' '.$profile->middle_name.' '.$profile->last_name }}</h3>
             <p class="text-muted text-center"></p>
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
-            <ul class="nav nav-pills nav-stacked">
-                <li>
-                    <a href="#">
-                       <i class="fa fa-bell"></i> Notifications
-                        <span class="label pull-right">
-                            <label class="switch">
-                                <input type="checkbox" class="status" data-id="{{$profile->member_id}}"
-                                @if($profile->notification === 'Enable') checked @endif>
-                                <span class="slider round"></span>
-                            </label>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            <div class="text-center">
+            <div class="col-md-6">
+                <div class="text-center form-group">
                 <button type="button" class="btn btn-primary btn-group-justified text-center" data-toggle="modal" data-target="#driverChangePassword">Change Password</button>
             </div>
+            </div>
+            <div class="col-md-6">
+                <div>
+                <i class="fa fa-bell"></i> Enable/Disable Notifications
+                <span class="label pull-right">
+                    <label class="switch">
+                        <input type="checkbox" class="status" data-id="{{$profile->member_id}}"
+                        @if($profile->notification === 'Enable') checked @endif>
+                        <span class="slider round"></span>
+                    </label>
+                </span>
+                </div>
+            </div>
+                       
+            
             <!-- /.text -->
         </div>
         <!-- /.box-footer -->
@@ -40,31 +40,35 @@
 
 <div class="col-md-6">
     <div class="box">
-        <div class="box-header">
+        <div class="box-header text-center">
             <h3 class="box-title">Personal Info</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <div class="form-group" class="control-label">
-                <label for="">Contact Number:</label>
-                <input value="{{$profile->contact_number}}" id="" name="" type="text" class="form-control" disabled>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="">Contact Number:</label>
+                    <p class="info-container">{{$profile->contact_number}}</p>
+                </div>
+                <!-- /.form -->
+                <div class="col-md-8">
+                    <label for="">Address:</label>
+                    <p class="info-container">{{$profile->address}}</p>
+                </div>
             </div>
             <!-- /.form -->
-            <div class="form-group" class="control-label">
-                <label for="">Address:</label>
-                <input value="{{$profile->address}}" id="" name="" type="text" class="form-control" disabled>
-            </div>
-            <!-- /.form -->
-            <div class="form-group" class="control-label">
+            <div class="row">
+            <div class="col-md-4">
                 <label for="">Birthday:</label>
-                <input value="{{$profile->birth_date}}" id="" name="" type="text" class="form-control" disabled>
+                <p class="info-container">{{$profile->birth_date}}</p>
             </div>
             <!-- /.form -->
-            <div class="form-group" class="control-label">
+            <div class="col-md-4">
                 <label for="">Trips Completed:</label>
-                <input value="{{$counter}}" id="" name="" type="text" class="form-control" disabled>
+                <p class="info-container">{{$counter}}</p>
             </div>
             <!-- /.form -->
+            </div>
         </div>
         <!-- /.box-body -->
     </div>
@@ -91,18 +95,18 @@
                                 <div class="form-group" class="control-label">
                                     <input type="hidden" id="userid" value="{{$driverId}}">
                                     <label for="">Current password:</label>
-                                    <input value="" id="current_password" name="current_password" type="password" class="form-control">
+                                    <input value="" id="current_password" name="current_password" type="password" class="info-container">
                                     <div id="pass_response" class="response"></div>
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group" class="control-label">
                                     <label for="">New Password:</label>
-                                    <input value="" id="" name="password" type="password" class="form-control" required>
+                                    <input value="" id="" name="password" type="password" class="info-container" required>
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group" class="control-label">
                                     <label for="">Confirm New Password:</label>
-                                    <input value="" id="" name="password_confirmation" type="password" class="form-control" required>
+                                    <input value="" id="" name="password_confirmation" type="password" class="info-container" required>
                                 </div>
                                 <!-- /.form-group -->
 
@@ -138,7 +142,7 @@
 
     /* Hide default HTML checkbox */
 
-    .switch input {
+    .switch p {
         display: none;
     }
 
@@ -168,15 +172,15 @@
         transition: .4s;
     }
 
-    input:checked+.slider {
+    p:checked+.slider {
         background-color: #2196F3;
     }
 
-    input:focus+.slider {
+    p:focus+.slider {
         box-shadow: 0 0 1px #2196F3;
     }
 
-    input:checked+.slider:before {
+    p:checked+.slider:before {
         -webkit-transform: translateX(13px);
         -ms-transform: translateX(13px);
         transform: translateX(13px);

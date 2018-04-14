@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\Destination;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class ReservationsController extends Controller
@@ -57,12 +58,13 @@ class ReservationsController extends Controller
             return back()->withInput()->withErrors('Invalid Destination!');
         }
         
-        
+        $name = ucwords(strtolower($request->name));
+
         $timeRequest = new Carbon(request('time'));
         $timeFormatted = $timeRequest->format('h:i A');
 
         Reservation::create([
-            'name' => $request->name,
+            'name' => $name,
             'departure_date' => $request->date,
             'departure_time' => $timeFormatted,
             'destination_id' => $findThis,
@@ -88,7 +90,13 @@ class ReservationsController extends Controller
      */
     public function update(Reservation $reservation)
     {
-        //
+        $this->validate(request(),[
+            "butt" => [
+              'required',
+              Rule::in(['Accepted', 'Declined', 'Departed', 'Paid', 'Cancelled'])
+            ],
+          ]);
+    
         $reservation->update([
 
             'status' => request('butt'),

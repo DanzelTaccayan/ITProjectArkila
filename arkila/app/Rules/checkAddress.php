@@ -26,7 +26,7 @@ class checkAddress implements Rule
     public function passes($attribute, $value)
     {
 
-        return (preg_match('/^[\dA-Za-z][A-Za-z\d .,-]*[A-Za-z\d]$/',$value));
+        return (preg_match('/([A-Za-z\d ]|[\d #])[A-Za-z\d .,-]*[A-Za-z\d ]$/',$value));
     }
 
     /**

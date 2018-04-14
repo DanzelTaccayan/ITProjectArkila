@@ -48,7 +48,7 @@
                         <label>{{$discount->description}}</label>
                     </div>
                     <div class="col-md-6">
-                        <p>{{$discount->amount}}</p>
+                        <p>{{$discount->amount}}%</p>
                     </div>
                     @endforeach
                 </div>
