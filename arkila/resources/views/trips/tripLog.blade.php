@@ -12,6 +12,11 @@
     <!-- /.box-header -->
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
         <div class="table-responsive">
+
+        <div class="col col-md-6">
+            <a href="/home/trips/createReport" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE REPORT</a>
+        </div>
+            
         <table class="table table-bordered table-striped tripLog">
             <thead>
                 <tr>
@@ -59,7 +64,7 @@
     $(function() {
         $('.tripLog').DataTable({
             'paging': true,
-            'lengthChange': true,
+            'lengthChange': false,
             'searching': true,
             'ordering': true,
             'info': true,
