@@ -44,7 +44,7 @@
                             <div class="form-group">
                                 <label for="van" class="col-sm-4">Plate Number:</label> 
                                 <div class="col-sm-8">
-                                <select name="driver" id="driver" class="form-control select2">
+                                <select name="plateNumber" id="driver" class="form-control select2">
                                     @foreach($plate_numbers as $plate_number)
                                     <option value="{{$plate_number->plate_number}}">{{$plate_number->plate_number}}</option>
                                     @endforeach
@@ -98,6 +98,12 @@
                                     @php $c++; @endphp
                                 @endforeach
                             @endif
+
+                            @php $totalfare = 0; @endphp
+                            @foreach($destinations as $key => $values)
+                                @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
+                            @endforeach
+                            <input type="hidden" name="totalBookingFee" value="">
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
@@ -161,9 +167,7 @@
 
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;
-        var bookingFee = document.getElementById('totalFee');
-        bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
-        document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
+        document.getElementById('totalBookingFee').value = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
     }
 
     //document.getElementById('dest').value = document.getElementById('termId').value;

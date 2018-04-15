@@ -79,8 +79,8 @@ class CreateReportRequest extends FormRequest
 
     public function messages()
     {
-      $member = Member::where('user_id', Auth::id())->first();
-      $member_van = $member->van->first();
+      // $member = Member::where('user_id', Auth::id())->first();
+      // $member_van = $member->van->first();
       $messages = [
         "dateDeparted.required" => "Please enter the date of departure",
         "dateDeparted.date_format" => "Please enter the correct format for the date of departure: mm/dd/yyyy",

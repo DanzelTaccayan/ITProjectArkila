@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Van;
-use App\User;
-use App\Trip;
-use App\Member;
-use App\Terminal;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AdminCreateDriverReportRequest;
+use App\Http\Controllers\Controller;
+use App\Rules\checkCurrency;
+use App\Rules\checkTime;
+use Carbon\Carbon;
+use App\FeesAndDeduction;
 use App\Destination;
 use App\Transaction;
-use App\FeesAndDeduction;
-use App\Http\Requests\CreateReportRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Terminal;
+use App\Ledger;
+use App\Member;
+use App\Ticket;
+use App\Trip;
+use App\User;
+use App\Van;
 
 class AdminCreateDriverReportController extends Controller
 {
@@ -27,9 +33,15 @@ class AdminCreateDriverReportController extends Controller
 
   public function createReport(Terminal $terminals)
   {
-    $destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
-                    ->where('terminal.terminal_id', '=', $terminals->terminal_id)
-                    ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
+  	if($terminals->terminal_id == Auth::user()->terminal_id){
+  		$destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
+            ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();	
+  	}else{
+  		$destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
+        	->where('terminal.terminal_id', '=', $terminals->terminal_id)
+            ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
+  	}
+    
     $driverAndOperators = Member::where('role', 'Operator')->orWhere('role', 'Driver')->get();
     $plate_numbers = Van::all();                
     $fads = FeesAndDeduction::where('type','=','Discount')->get();
@@ -37,51 +49,66 @@ class AdminCreateDriverReportController extends Controller
     return view('trips.createReport', compact('terminals', 'destinations', 'fads', 'member', 'driverAndOperators', 'plate_numbers'));
   }
 
-  public function storeReport(Terminal $terminal, CreateReportRequest $request)
+  public function storeReport(Terminal $terminals, AdminCreateDriverReportRequest $request)
   {
+  	
    	$totalPassengers = $request->totalPassengers;
     $totalBookingFee = $request->totalBookingFee;
     $totalPassenger = (float)$request->totalPassengers;
     $communityFund = number_format(5 * $totalPassenger, 2, '.', '');
     $user = new User;
-    $plateNumber = $user->join('member', 'users.id', '=', 'member.user_id')
-          ->join('member_van', 'member.member_id', '=', 'member_van.member_id')
-          ->join('van', 'member_van.plate_number', '=', 'van.plate_number')
-          ->where('users.id', Auth::id())->select('van.plate_number as plate_number')->first();
+    $plateNumber = $request->plateNumber;
      $driver_id = $request->driverAndOperator;
 
      $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
      $timeDepartedFormat = $timeDeparted->format('H:i:s');
      $dateDeparted = $request->dateDeparted;
      if($totalPassengers >=  10){
-        Trip::create([
-         'driver_id' => $driver_id->member_id,
-         'origin' => $terminal->terminal_id,
-         'terminal_id' => $terminal->terminal_id,
-         'plate_number' => $plateNumber->plate_number,
+        $trip = Trip::create([
+         'driver_id' => $driver_id,
+         'origin' => $terminals->terminal_id,
+         'terminal_id' => $terminals->terminal_id,
+         'plate_number' => $plateNumber,
          'status' => 'Departed',
          'total_passengers' => $totalPassengers,
          'total_booking_fee' => $request->totalBookingFee,
          'community_fund' => $communityFund,
          'date_departed' => $request->dateDeparted,
          'time_departed' => $timeDepartedFormat,
-         'report_status' => 'Pending',
+         'report_status' => 'Accepted',
          'SOP' => 100.00,
        ]);
+       
+       if($terminals->terminal_id == Auth::user()->terminal_id){
+       	$insertLegderQuery = array(
+       		array('description' => 'SOP', 'amount' => $trip->SOP, 'type' => 'Revenue'),
+       		array('description' => 'Booking Fee', 'amount' => $trip->total_booking_fee, 'type' => 'Revenue'),
+       	);
+       	
+       	Ledger::insert($insertLegderQuery);	   	
+       } 
      }else if($totalPassengers <  10){
-          Trip::create([
-           'driver_id' => $driver_id->member_id,
+          $trip = Trip::create([
+           'driver_id' => $driver_id,
            'origin' => $terminal->terminal_id,
-           'terminal_id' => $terminal->terminal_id,
-           'plate_number' => $plateNumber->plate_number,
+           'terminal_id' => $terminals->terminal_id,
+           'plate_number' => $plateNumber,
            'status' => 'Departed',
            'total_passengers' => $totalPassengers,
            'total_booking_fee' => $request->totalBookingFee,
            'community_fund' => $communityFund,
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
-           'report_status' => 'Pending',
+           'report_status' => 'Accepted',
          ]);
+
+    	if($terminals->terminal_id == Auth::user()->terminal_id){
+    		Ledger::create([
+	       		'description' => 'Booking Fee',
+	       		'amount' => $trip->total_booking_fee,
+	       		'type' => 'Revenue', 		
+	       	]);
+       	}        
      }
 
     $destinationArr = request('destination');
@@ -108,7 +135,7 @@ class AdminCreateDriverReportController extends Controller
         for($i = 1; $i <= $innerTicketValues; $i++){
           Transaction::create([
             "destination_id" => $innerTicketKeys,
-            'terminal_id' => $terminal->terminal_id,
+            'terminal_id' => $terminals->terminal_id,
             "trip_id" => $tripId->trip_id,
             "status" => 'Departed',
           ]);
