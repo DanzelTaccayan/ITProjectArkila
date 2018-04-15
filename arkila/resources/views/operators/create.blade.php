@@ -14,10 +14,15 @@
         </div>
 
         <div class="box-body">
-
                 <!-- One "tab" for each step in the form: -->
                 <div class="form-section">
                     <h4>Personal Information</h4>
+                    <form action="">
+                        <div class="form-group">
+                           <label>Add profile image</label>
+                           <input type="file" name="pic" accept="image/*">
+                        </div>
+                    </form>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">

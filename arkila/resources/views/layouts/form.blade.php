@@ -21,7 +21,7 @@
 
         <!-- Full Width Column -->
         <div class="content-wrapper bgform-image">
-                        <div class="container">
+                <div class="container">
                     <section class="content">
                         <div class="form-box">
                             <form action="@yield('form-action')" method="POST" data-parsley-validate="">

@@ -17,6 +17,12 @@
         {{method_field("PATCH")}}
         <div class="box-body">
             <h4>Personal Information</h4>
+            <form action="">
+                <div class="form-group">
+                   <label>Edit profile image</label>
+                   <input type="file" name="pic" accept="image/*">
+                </div>
+            </form>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
