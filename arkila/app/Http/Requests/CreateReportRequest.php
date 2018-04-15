@@ -115,7 +115,7 @@ class CreateReportRequest extends FormRequest
               $messages['numberOfDiscount.'.$key.'.numeric'] = "The number of discount must be numeric";
               break;
           }else if($value > $member_van->seating_capacity){
-              $messages['numberOfDiscount.'.$key.'.max'] = "The number of discount cannot be greater than".$member_van->seating_capacity.", the seating capacity of the van";
+              $messages['numberOfDiscount.'.$key.'.max'] = "The number of discount cannot be greater than 18";
           }
         }
       }
