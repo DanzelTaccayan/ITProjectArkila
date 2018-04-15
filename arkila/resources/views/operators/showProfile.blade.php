@@ -9,7 +9,7 @@
         <!-- Profile Image -->
         <div class="box box-primary" style = "box-shadow: 0px 5px 10px gray;">
             <div class="box-body box-profile">
-                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="Operator profile picture">
+                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
 
                 <h3 class="profile-username text-center">{{ $operator->full_name }}</h3>
                 <ul class="list-group list-group-unbordered">
@@ -116,11 +116,7 @@
                 
                 <div class="tab-pane" id="drivers">
                     <div class="col-md-6">
-                       @if ($operator->drivers->count() < $operator->van->count())
-                            <a href="{{route('drivers.createFromOperator',[$operator->member_id])}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus-circle"></i> Add Driver</a>
-                        @else
-                            <a href="" class="btn btn-primary btn-sm btn-flat disabled"><i class="fa fa-plus-circle"></i> Add Driver </a>
-                        @endif    
+                        <a href="{{route('drivers.createFromOperator',[$operator->member_id])}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus-circle"></i> Add Driver</a>
                     </div>
                     <table id="driver" class="table table-bordered table-striped">
 
