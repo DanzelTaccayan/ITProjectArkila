@@ -27,8 +27,8 @@ class CreateReportRequest extends FormRequest
      */
     public function rules()
     {
-        $member = Member::where('user_id', Auth::id())->first();
-        $member_van = $member->van->first();
+        // $member = Member::where('user_id', Auth::id())->first();
+        // $member_van = $member->van->first();
 
         $rules = [
           "dateDeparted" => "required|date_format:m/d/Y",
@@ -36,8 +36,8 @@ class CreateReportRequest extends FormRequest
           "numberOfDiscount" => "array",
           "qty" => "present|array",
           //"numberOfDiscount.*" => "nullable|numeric|min:1",
-          "totalPassengers" => "numeric|min:1|max:".$member_van->seating_capacity."|required",
-          "totalBookingFee" => ['required', new checkCurrency],
+          "totalPassengers" => "numeric|min:1|max:18|required",
+          
         ];
 
         $qtyCounter = 0;
@@ -67,7 +67,7 @@ class CreateReportRequest extends FormRequest
 
          if($this->request->get('numberOfDiscount') !== null){
            foreach($this->request->get('numberOfDiscount') as $key => $value){
-             $rules['numberOfDiscount.'.$key] = 'nullable|numeric|min:1|max:'.$member_van->seating_capacity;
+             $rules['numberOfDiscount.'.$key] = 'nullable|numeric|min:1|max:18';
            }
          }
 
@@ -85,7 +85,6 @@ class CreateReportRequest extends FormRequest
         "timeDeparted.required" => "Please enter time of departure",
         "totalPassengers.numeric" => "Please enter a valid number for the total number of passengers",
         "totalPassengers.required" => "Please enter the number of passengers per destination",
-        "totalBookingFee.required" => "Please enter the booking fee of your trip",
         "numberOfDiscount.array" => "Cannot proceed with unless you refresh",
       ];
 
