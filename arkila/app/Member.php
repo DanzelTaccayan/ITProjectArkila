@@ -109,17 +109,25 @@ class Member extends Model
     }
 
     public function setSpouseBirthdateAttribute($value){
-        if(is_null($value)){
+        if(is_null($value))
+        {
             $this->attributes['spouse_birthdate'] = $value;
         }
-        else{
+        else
+        {
             $this->attributes['spouse_birthdate'] = Carbon::parse($value);
         }
 
     }
 
     public function setExpiryDateAttribute($value){
-        $this->attributes['expiry_date'] = Carbon::parse($value);
+        if(is_null($value)){
+            $this->attributes['expiry_date'] = $value;
+
+        }
+        else{
+            $this->attributes['expiry_date'] = Carbon::parse($value);
+        }
     }
 
     public function setContactNumberAttribute($value){

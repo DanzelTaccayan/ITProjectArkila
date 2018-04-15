@@ -53,6 +53,7 @@ class CreateMemberTable extends Migration
             $table->date('expiry_date')->nullable();
             $table->dateTime('date_archived')->nullable();
             $table->decimal('monthly_dues', 7, 2);
+            $table->string('profile_picture')->default('user.jpg');
             $table->timestamps();
 
             $table->foreign('user_id')

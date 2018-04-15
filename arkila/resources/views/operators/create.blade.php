@@ -20,7 +20,7 @@
                     <form action="">
                         <div class="form-group">
                            <label>Add profile image</label>
-                           <input type="file" name="pic" accept="image/*">
+                           <input type="file" name="profilePicture" accept="image/*">
                         </div>
                     </form>
                     <div class="row">

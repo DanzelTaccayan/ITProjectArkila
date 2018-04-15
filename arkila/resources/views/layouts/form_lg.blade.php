@@ -20,7 +20,7 @@
         <div class="content-wrapper bgform-image">
             <div class="container">
 
-                <form id="@yield('form-id')" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="">
+                <form id="@yield('form-id')" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="" enctype="multipart/form-data">
                 {{csrf_field()}}
                 @yield('method_field')
 
