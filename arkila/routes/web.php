@@ -157,6 +157,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/showConfirmationBox/{encodedTrips}','TripsController@showConfirmationBox');
     Route::get('/showConfirmationBoxOB/{encodedTrips}','TripsController@showConfirmationBoxOb');
     Route::get('/listQueueNumbers/{terminal}','TripsController@listQueueNumbers')->name('trips.listQueueNumbers');
+    Route::get('/home/terminal', 'AdminCreateDriverReportController@chooseTerminal')->name('trips.admin.chooseDestination');
+    Route::get('/home/terminal/{terminals}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
+    Route::post('/home/terminal/{terminals}/create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
     /* Transactions(Ticket) */
     Route::resource('/home/transactions', 'TransactionsController',[
         'except' => ['create','show','edit','update']
