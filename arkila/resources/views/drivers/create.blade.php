@@ -66,6 +66,14 @@
                             @endif
                         </div>
                         </div>
+                        <div class="col-md-4 pull-right">
+                            <form action="">
+                                <div class="form-group">
+                                   <label>Add profile image</label>
+                                   <input type="file" name="pic" accept="image/*">
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
