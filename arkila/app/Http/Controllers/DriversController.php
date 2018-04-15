@@ -76,10 +76,10 @@ class DriversController extends Controller
             'expiry_date' => $request->licenseExpiryDate,
         ]);
 
-        if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
         {
-
-            $children = array_combine($request->children,$request->childrenBDay);
+            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
             $createdDriver->addChildren($children);
             $createdDriver->update([
                 'number_of_children' => sizeof($children)
@@ -140,14 +140,16 @@ class DriversController extends Controller
             'expiry_date' => $request->licenseExpiryDate,
         ]);
 
-        if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
         {
-            $children = array_combine($request->children,$request->childrenBDay);
+            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
             $driver->addChildren($children);
             $driver->update([
                 'number_of_children' => sizeof($children)
             ]);
         }
+
 
         //Add Account for the driver
         $createdDriverUser = User::create([
@@ -212,14 +214,17 @@ class DriversController extends Controller
             'expiry_date' => $request->licenseExpiryDate,
         ]);
 
-        if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
         {
-            $children = array_combine($request->children,$request->childrenBDay);
+            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
             $driver->addChildren($children);
             $driver->update([
                 'number_of_children' => sizeof($children)
             ]);
         }
+
+
 
         $vanNd->members()->attach($driver);
 
@@ -320,16 +325,17 @@ class DriversController extends Controller
 
             ]);
 
-        if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
         {
-
-            $children = array_combine($request->children,$request->childrenBDay);
+            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
             $driver->children()->delete();
             $driver->addChildren($children);
             $driver->update([
                 'number_of_children' => sizeof($children)
             ]);
         }
+
 
         if(session()->get('opLink')){
             $routeOP = session()->get('opLink');
@@ -357,19 +363,19 @@ class DriversController extends Controller
 
     }
 
-    private function arrayChecker($array){
-        $result = true;
+    private function arrayChecker($array)
+    {
+        $result = [];
 
         if (is_array($array) || is_object($array))
         {
-            foreach($array as $arrayContent){
-                if(is_null($arrayContent)){
-                    $result = false;
-                    break;
+            foreach($array as $arrayContent)
+            {
+                if(!is_null($arrayContent))
+                {
+                    array_push($result,$arrayContent);
                 }
             }
-        }else{
-            $result= false;
         }
 
         return $result;

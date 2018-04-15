@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Member;
+use Illuminate\Support\Facades\Log;
 use PDF;
 use DB;
 use Carbon\Carbon;
@@ -73,9 +74,10 @@ class OperatorsController extends Controller
 
             ]);
 
-            if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+            if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+                count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
             {
-                $children = array_combine($request->children,$request->childrenBDay);
+                $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
                 $createdOperator->addChildren($children);
                 $createdOperator->update([
                     'number_of_children' => sizeof($children)
@@ -160,9 +162,10 @@ class OperatorsController extends Controller
                 'expiry_date' => $request->licenseExpiryDate,
             ]);
 
-            if($this->arrayChecker($request->children) && $this->arrayChecker($request->childrenBDay))
+            if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
+                count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
             {
-                $children = array_combine($request->children,$request->childrenBDay);
+                $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
                 $operator->children()->delete();
                 $operator->addChildren($children);
                 $operator->update([
@@ -173,6 +176,7 @@ class OperatorsController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
+            Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again');
         }
         DB::commit();
@@ -180,59 +184,19 @@ class OperatorsController extends Controller
         return redirect()->route('operators.show', compact('operator'))->with('success', 'Information updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  ArchiveMember $archivedOperator
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy()
-    {
-        // Start transaction!
-        DB::beginTransaction();
-        try
-        {
-            //Member Table Operator
-            $operator = Member::find($archivedOperator->operator_id);
-
-            if(count($operator->drivers)){
-                $operator->drivers()->update(['operator_id'=>null]);
-            }
-            $operator->van()->detach();
-            $operator->delete();
-
-            //Archived Table Operator
-            $archivedOperator->archiveVan()->detach();
-            $archivedOperator->delete();
-        }
-        catch(\Exception $e)
-        {
-            DB::rollback();
-            return back()->withErrors($e->getMessage());
-        }
-        DB::commit();
-
-        return back();
-    }
-
     private function arrayChecker($array)
     {
-        $result = true;
+        $result = [];
 
         if (is_array($array) || is_object($array))
         {
             foreach($array as $arrayContent)
             {
-                if(is_null($arrayContent))
+                if(!is_null($arrayContent))
                 {
-                    $result = false;
-                    break;
+                    array_push($result,$arrayContent);
                 }
             }
-        }
-        else
-        {
-            $result= false;
         }
 
         return $result;
