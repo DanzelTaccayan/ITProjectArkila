@@ -31,25 +31,25 @@
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
 
                             <div class="form-group">
-                                <label for="driver" class="col-sm-4">Driver:</label> 
+                                <label for="driver" class="col-sm-4">Driver:</label>
                                 <div class="col-sm-8">
                                 <select name="driverAndOperator" id="driver" class="form-control select2">
                                     @foreach($driverAndOperators as $driverAndOperator)
                                     <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
                                     @endforeach
-                                </select>  
-                                </div>      
+                                </select>
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="van" class="col-sm-4">Plate Number:</label> 
+                                <label for="van" class="col-sm-4">Plate Number:</label>
                                 <div class="col-sm-8">
                                 <select name="plateNumber" id="driver" class="form-control select2">
                                     @foreach($plate_numbers as $plate_number)
                                     <option value="{{$plate_number->plate_number}}">{{$plate_number->plate_number}}</option>
                                     @endforeach
-                                </select>  
-                                </div>      
+                                </select>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -83,27 +83,25 @@
                                 <div class=" col-sm-6">
                                 <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
                                 <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
+                                <input type="hidden" id="totalFee" value="{{$terminals->booking_fee}}">
+                                <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
-                            @if($fads->count() > 0)
-                              @php $c = 0; @endphp
-                                @foreach($fads as $fad)
+
                                   <div class='form-group'>
                                       <label for='Discounts' class="col-sm-4">Passengers with Discounts:</label>
                                       <div class="col-sm-6">
                                         <input type="hidden" name="discountId[]" value="{{$fad->fad_id}}">
-                                          <input value="{{old('numberOfDiscount.'.$c)}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
+                                        <input value="{{old('numberOfDiscount.'.$c)}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
                                       </div>
                                   </div>
-                                    @php $c++; @endphp
-                                @endforeach
-                            @endif
+
 
                             @php $totalfare = 0; @endphp
                             @foreach($destinations as $key => $values)
                                 @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
                             @endforeach
-                            <input type="hidden" name="totalBookingFee" value="">
+                            
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
@@ -151,7 +149,7 @@
 
 @endsection
 
-@section('scripts') 
+@section('scripts')
 @parent
 
 
@@ -167,7 +165,8 @@
 
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;
-        document.getElementById('totalBookingFee').value = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
+        var bookingFee = document.getElementById('totalFee');
+        document.getElementById('totalBookingFee').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
 
     //document.getElementById('dest').value = document.getElementById('termId').value;

@@ -62,6 +62,8 @@
                                 <div class=" col-sm-6">
                                 <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
                                 <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
+                                <input type="hidden" id="totalFee" value="{{$terminals->booking_fee}}">
+                                <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
                             @if($fads->count() > 0)
@@ -144,8 +146,8 @@
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;
         var bookingFee = document.getElementById('totalFee');
-        bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
-        document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.getAttribute('data-bookingfee');
+        //bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.value;
+        document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
 
     //document.getElementById('dest').value = document.getElementById('termId').value;

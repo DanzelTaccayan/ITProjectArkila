@@ -34,7 +34,7 @@
               <div class="text-center">
                 <button type="button" id="createReport" class="btn btn-primary">Proceed <i class="fa fa-chevron-right"></i></button>
               </div>
-                
+
             </div>
             <!-- /.box-footer -->
             </form>
@@ -48,7 +48,7 @@
 
 @endsection
 
-@section('scripts') 
+@section('scripts')
 @parent
 
 <script type="text/javascript">
