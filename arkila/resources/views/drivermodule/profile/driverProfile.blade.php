@@ -11,23 +11,12 @@
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
-            <div class="col-md-6">
+            <div class="text-center">
                 <div class="text-center form-group">
-                <button type="button" class="btn btn-primary btn-group-justified text-center" data-toggle="modal" data-target="#driverChangePassword">Change Password</button>
+                <button type="button" class="btn btn-primary text-center" data-toggle="modal" data-target="#driverChangePassword" style="width:280px;">Change Password</button>
             </div>
             </div>
-            <div class="col-md-6">
-                <div>
-                <i class="fa fa-bell"></i> Enable/Disable Notifications
-                <span class="label pull-right">
-                    <label class="switch">
-                        <input type="checkbox" class="status" data-id="{{$profile->member_id}}"
-                        @if($profile->notification === 'Enable') checked @endif>
-                        <span class="slider round"></span>
-                    </label>
-                </span>
-                </div>
-            </div>
+          
                        
             
             <!-- /.text -->
@@ -93,23 +82,40 @@
                             <form action="{{route('drivermodule.changePassword',[$driverId])}}" method="POST">
                                 {{csrf_field()}} {{method_field('PATCH')}}
                                 <div class="form-group" class="control-label">
-                                    <input type="hidden" id="userid" value="{{$driverId}}">
-                                    <label for="">Current password:</label>
-                                    <input value="" id="current_password" name="current_password" type="password" class="info-container">
-                                    <div id="pass_response" class="response"></div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input type="hidden" id="userid" value="{{$driverId}}">
+                                            <label for="">Current password:</label>
+                                        </div>
+                                        <div class="col-md-8"> 
+                                            <input value="" id="current_password" name="current_password" type="password" class="info-container">
+                                            <div id="pass_response" class="response"></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group" class="control-label">
-                                    <label for="">New Password:</label>
-                                    <input value="" id="" name="password" type="password" class="info-container" required>
+                                   <div class="row">
+                                       <div class="col-md-4">
+                                           <label for="">New Password:</label>
+                                       </div>
+                                       <div class="col-md-8">
+                                           <input value="" id="" name="password" type="password" class="info-container" required>
+                                       </div>
+                                   </div>
                                 </div>
                                 <!-- /.form-group -->
                                 <div class="form-group" class="control-label">
-                                    <label for="">Confirm New Password:</label>
-                                    <input value="" id="" name="password_confirmation" type="password" class="info-container" required>
+                                   <div class="row">
+                                       <div class="col-md-4">
+                                           <label for="">Confirm New Password:</label>
+                                       </div>
+                                       <div class="col-md-8">
+                                           <input value="" id="" name="password_confirmation" type="password" class="info-container" required>
+                                       </div>
+                                   </div>  
                                 </div>
                                 <!-- /.form-group -->
-
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -117,7 +123,7 @@
                 </div>
                 <!-- /.modal-body -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-group-justified text-center">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-group-justified text-center">Save Changes</button>
                 </div>
                 <!-- /.modal-footer -->
                 </form>
