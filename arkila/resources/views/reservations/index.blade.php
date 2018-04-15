@@ -29,7 +29,7 @@
                                         <th>Name</th>
                                         <th>Contact Number</th>
                                         <th>Destination</th>
-                                        <th>Preffered Date</th>
+                                        <th>Preferred Date</th>
                                         <th>Time</th>
                                         <th>Amount</th>
                                         <th>Status</th>
@@ -179,14 +179,14 @@
                                             @if ($reservation->status == 'Pending')
                                                 <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'paid'.$reservation->id}}"><i class="fa fa-automobile"></i>PAID</button>
                                                 
-                                                                   <!-- Modal for Paid-->
+                                                <!-- Modal for Paid-->
                                                 <div class="modal fade" id="{{'paid'.$reservation->id}}">
                                                     <div class="modal-dialog">
                                                         <div class="col-md-offset-2 col-md-8">
                                                             <div class="modal-content">
                                                                 <div class="modal-header bg-primary">
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span></button>
+                                                                    <span aria-hidden="true">&times;</span></button>
                                                                     <h4 class="modal-title"> Confirm</h4>
                                                                 </div>
                                                                 <div class="modal-body row">     
