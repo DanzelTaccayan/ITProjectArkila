@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{route('drivermodule.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('trips.admin.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
                         <div class="col-md-6">
@@ -29,6 +29,29 @@
                         </div>
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
+
+                            <div class="form-group">
+                                <label for="driver" class="col-sm-4">Driver:</label> 
+                                <div class="col-sm-8">
+                                <select name="driverAndOperator" id="driver" class="form-control select2">
+                                    @foreach($driverAndOperators as $driverAndOperator)
+                                    <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
+                                    @endforeach
+                                </select>  
+                                </div>      
+                            </div>
+
+                            <div class="form-group">
+                                <label for="van" class="col-sm-4">Plate Number:</label> 
+                                <div class="col-sm-8">
+                                <select name="driver" id="driver" class="form-control select2">
+                                    @foreach($plate_numbers as $plate_number)
+                                    <option value="{{$plate_number->plate_number}}">{{$plate_number->plate_number}}</option>
+                                    @endforeach
+                                </select>  
+                                </div>      
+                            </div>
+
                             <div class="form-group">
                                 <label for="departureDate" class="col-sm-4">Departure Date:</label>
                                 <div class="col-sm-8">

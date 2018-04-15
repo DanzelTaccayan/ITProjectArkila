@@ -28,7 +28,7 @@ class CreateReportRequest extends FormRequest
     public function rules()
     {
         $member = Member::where('user_id', Auth::id())->first();
-        $member_van = $member->van->first();
+        $member_van = $member->van->first() ?? null;
 
         $rules = [
           "dateDeparted" => "required|date_format:m/d/Y",

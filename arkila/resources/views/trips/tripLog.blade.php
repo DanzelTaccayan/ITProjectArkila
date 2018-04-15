@@ -14,7 +14,7 @@
         <div class="table-responsive">
 
         <div class="col col-md-6">
-            <a href="/home/trips/createReport" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE REPORT</a>
+            <a href="{{route('trips.admin.chooseDestination')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE REPORT</a>
         </div>
             
         <table class="table table-bordered table-striped tripLog">

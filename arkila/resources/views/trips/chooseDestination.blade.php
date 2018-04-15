@@ -55,7 +55,7 @@
   $('#selectDestination').on('change', function(){
     var terminalId = $(this).val();
     $('#createReport').click(function(){
-      window.location.href = '/home/create-report/'+terminalId;
+      window.location.href = '/home/terminal/'+terminalId+'/create-report';
       return false;
     });
   });
