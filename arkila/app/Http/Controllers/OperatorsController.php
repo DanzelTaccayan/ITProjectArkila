@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 use DB;
 use Carbon\Carbon;
-
+use Image;
 use App\Http\Requests\OperatorRequest;
 
 class OperatorsController extends Controller
@@ -45,7 +46,19 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try
         {
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture')){
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
+
+               Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+            }
+
             $createdOperator = Member::create([
+                'profile_picture' => $profilePictureName,
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
@@ -87,7 +100,9 @@ class OperatorsController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
+            Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again');
+
         }
         DB::commit();
 
@@ -133,8 +148,25 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try
         {
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture'))
+            {
+                if(Storage::has($operator->profile_picture))
+                {
+                    Storage::delete($operator->profile_picture);
+                }
+
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
+
+                Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+            }
 
             $operator -> update([
+                'profile_picture' => $profilePictureName,
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
