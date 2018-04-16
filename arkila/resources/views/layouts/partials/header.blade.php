@@ -100,34 +100,45 @@
                                 <span class="label label-warning"></span>
                             </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">Notifications</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 <li>
                                     <a href="#">
-                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                            </a>
+                                        <p style="margin:0 0 0;"> Booking request </p>
+                                        <span class="text-orange fa fa-book"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                                <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
-                                            </a>
+                                        <p style="margin:0 0 0;"> Accepted </p>
+                                        <span class="text-green fa fa-check-circle"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                                <i class="fa fa-users text-red"></i> 5 new members joined
-                                            </a>
+                                        <p style="margin:0 0 0;">Deleted/Cancelled</p>
+                                        <span class="text-red fa fa-times-circle"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                                <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                            </a>
+                                        <p style="margin:0 0 0;">
+                                            Information </p>
+                                            <span class="text-gray fa fa-info-circle"></span> 
+                                            <small>10/10/2018 01:00 PM</small>
+                                        </a>
                                 </li>
                                 <li>
                                     <a href="#">
-                                                <i class="fa fa-user text-red"></i> You changed your username
-                                            </a>
+                                        <p style="margin:0 0 0;"> Departed </p>
+                                        <span class="text-blue fa fa-truck"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
