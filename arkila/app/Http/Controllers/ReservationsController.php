@@ -93,17 +93,17 @@ class ReservationsController extends Controller
     public function update(Reservation $reservation)
     {
         $this->validate(request(),[
-            "butt" => [
+            "click" => [
               'required',
-              Rule::in(['Accepted', 'Declined', 'Departed', 'Paid', 'Cancelled'])
+              Rule::in(['Accepted', 'Declined'])
             ],
           ]);
     
         $reservation->update([
 
-            'status' => request('butt'),
+            'status' => request('click'),
         ]);
-        session()->flash('message', 'Reservation marked '. request('butt'));
+        session()->flash('message', 'Reservation marked '. request('click'));
         return redirect()->back();
     }
 

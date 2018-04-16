@@ -17,7 +17,7 @@ class CreateCompanyProfileTable extends Migration
             $table->increments('id');
             $table->string('email');
             $table->string('contact_number');
-            $table->string('Address');
+            $table->string('address');
             $table->timestamps();
         });
     }
