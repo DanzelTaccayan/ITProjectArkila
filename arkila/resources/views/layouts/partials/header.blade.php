@@ -191,7 +191,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                           <div class="pull-left">
-                            <a href="{{route('accountSettings')}}" class="btn btn-default btn-flat">Profile
+                            <a href="{{route('profile.index')}}" class="btn btn-default btn-flat">Profile
                            </a>
                           </div>
                           <div class="pull-right">

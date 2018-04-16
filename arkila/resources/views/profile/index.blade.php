@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6">
             @endforeach
-                <button class="btn btn-primary btn-block">Change Password</button>
+            <a href="{{route('accountSettings')}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-pencil-square-o"></i> Change Password</a>
             </div>
         </div> 
     </div>
