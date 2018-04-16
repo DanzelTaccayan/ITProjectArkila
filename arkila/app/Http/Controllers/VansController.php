@@ -6,6 +6,7 @@ use App\Rules\checkDriver;
 use App\Rules\checkPlateNumber;
 use App\Rules\checkOperator;
 use App\Rules\checkVanModel;
+use App\Trip;
 use App\Van;
 use App\Member;
 use App\VanModel;
@@ -270,19 +271,6 @@ class VansController extends Controller {
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Van $van)
-    {
-        $van->members()->detach();
-        $van->delete();
-    	return back();
-
-    }
 
     public function listDrivers(){
         $operator = Member::find(request('operator'));
@@ -341,6 +329,16 @@ class VansController extends Controller {
 
     public function archiveVan(Van $van)
     {
+        //update queue_list if the van is on queue
+        if($vanOnQueue = $van->trips()->whereNotNull('queue_number')->first()){
+            foreach(Trip::whereNotNull('queue_number')->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip){
+                $trip->update([
+                   'queue_number' =>  $trip->queue_number -1
+                ]);
+            }
+
+            $vanOnQueue->delete();
+        }
         //Archive its operator
         if($van->operator()->first()){
             $van->archivedMember()->attach($van->operator()->first()->member_id);
