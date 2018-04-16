@@ -46,22 +46,22 @@
             <!-- Notifications Menu -->
             <li class="dropdown notifications-menu">
               <!-- Menu toggle button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <a href="#" id="notifications" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-bell-o"></i>
-                <span class="label label-warning">10</span>
+                <span class="label label-warning"></span>
               </a>
               <ul class="dropdown-menu">
-                <li class="header">You have 10 notifications</li>
+                <li class="header"></li>
                 <li>
                   <!-- Inner Menu: contains the notifications -->
                   <ul class="menu">
-                    @foreach(auth()->user()->unreadNotifications as $notification)
+
                     <li><!-- start notification -->
-                      <a href="">
-                        <i class="fa fa-users text-aqua"></i> {{$notification}}
+                      <a  href="">
+                        <i class="fa fa-users text-aqua"></i>
                       </a>
                     </li>
-                    @endforeach
+
                     <!-- end notification -->
                   </ul>
                 </li>
