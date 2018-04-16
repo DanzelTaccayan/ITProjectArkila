@@ -174,10 +174,8 @@
                                         <td class="text-center">
 
 
-                                        <form action="{{ route('reservations.update', $reservation->id) }}" method="POST" class="form-action">
-                                            {{ csrf_field() }} {{ method_field('PATCH') }} 
                                             @if ($reservation->status == 'Pending')
-                                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'paid'.$reservation->id}}"><i class="fa fa-automobile"></i>PAID</button>
+                                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'paid'.$reservation->id}}"><i class="fa fa-automobile"></i>Accept</button>
                                                 
                                                 <!-- Modal for Paid-->
                                                 <div class="modal fade" id="{{'paid'.$reservation->id}}">
@@ -190,7 +188,7 @@
                                                                     <h4 class="modal-title"> Confirm</h4>
                                                                 </div>
                                                                 <div class="modal-body row">     
-                                                                    <p style="font-size: 110%;">Are you sure you want to change the status to "paid"?</p>
+                                                                    <p style="font-size: 110%;">Are you sure you want to accept reservation #{{$reservation->id}}?</p>
                                                                     
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -198,7 +196,7 @@
                                                                         {{ csrf_field() }} {{ method_field('PATCH') }}
 
                                                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Discard</button>
-                                                                        <button type="submit" name="click" value="Cancelled" class="btn btn-primary btn-sm" style="width:22%;">Cancel</button>
+                                                                        <button type="submit" name="click" value="Accepted" class="btn btn-primary btn-sm" style="width:22%;">Accept</button>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -210,7 +208,7 @@
                                                 </div>
                                                 <!-- /.modal -->
 
-                                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'cancel'.$reservation->id}}"><i class="fa fa-automobile"></i> CANCEL</button>
+                                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'cancel'.$reservation->id}}"><i class="fa fa-automobile"></i> Decline</button>
 
                                                  <!-- Modal for Cancelation-->
                                                 <div class="modal fade" id="{{'cancel'.$reservation->id}}">
@@ -227,7 +225,7 @@
                                                                         <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
                                                                     </div>
                                                                     <div class="col-md-10">
-                                                                        <p style="font-size: 110%;">Are you sure you want to cancel Reservation #{{$rental->rent_id}}?</p>
+                                                                        <p style="font-size: 110%;">Are you sure you want to decline Reservation #{{$reservation->id}}?</p>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -235,7 +233,7 @@
                                                                         {{ csrf_field() }} {{ method_field('PATCH') }}
 
                                                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Discard</button>
-                                                                        <button type="submit" name="click" value="Cancelled" class="btn btn-danger btn-sm" style="width:22%;">Cancel</button>
+                                                                        <button type="submit" name="click" value="Declined" class="btn btn-danger btn-sm" style="width:22%;">Decline</button>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -248,10 +246,11 @@
                                                 <!-- /.modal -->
 
                                                
-                                            @elseif ($reservation->status == 'Paid')
-                                                <span>No Action</span>                                               
+                                            @elseif ($reservation->status == 'Accepted')
+                                            <button type="submit" class="btn btn-primary btn-sm" style="width:100%;">Sell</button>
+                                            @else
+                                            <span>No Action</span>
                                             @endif
-                                         </form>    
                                            
                                         </td>
                                     </tr>
