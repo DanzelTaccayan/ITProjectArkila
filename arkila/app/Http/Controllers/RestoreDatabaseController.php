@@ -12,6 +12,8 @@ class RestoreDatabaseController extends Controller{
     }
 
     public function restoreDatabase() {
-        $this->manager->makeRestore()->run('local', '/database-backup/arkilaBackup2018_04_01', 'mysql', 'null');
+        $this->manager->makeRestore()->run('local', '/database-backup/arkilaBackup.gz', 'mysql', 'gzip');
+
+        return back()->with('success','Successfully Restored Database Backup');
     }
 }

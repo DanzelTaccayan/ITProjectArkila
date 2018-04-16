@@ -26,8 +26,11 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->command(
-           'db:backup --database=mysql --destination=local --destinationPath=/database-backup/arkilaBackup --timestamp="Y_m_d" --compression=null'
-         )->everyMinute();
+           'db:backup --database=mysql --destination=local --destinationPath=/database-backup/arkilaBackup --compression=gzip'
+         )->daily()
+        ->before(function(){
+            \File::cleanDirectory(storage_path('app/database-backup'));
+        });
     }
 
     /**
