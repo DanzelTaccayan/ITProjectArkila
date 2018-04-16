@@ -7,10 +7,17 @@
 
                 <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="profile picture">
             @foreach ($profiles as $profile)
+                
                 <div class="form-group">
-                    <label>Contact Number:</label>
-                    <input type="text" class="form-control" value="{{$profile->contact_number}}" disabled>
+                    <label>Contact Number: <span class="text-red">*</span></label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <span>+63</span>
+                      </div>
+                      <input type="text" name="contactNumber"  class="form-control" value="{{$profile->contact_number}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' disabled>
+                    </div>
                 </div>
+
                 <div class="form-group">
                     <label>Address:</label>
                     <input type="text" class="form-control" value="{{$profile->address}}" disabled>
