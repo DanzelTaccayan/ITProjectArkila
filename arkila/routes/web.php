@@ -139,6 +139,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['show','edit']
     ]);
 
+    Route::resource('/home/admin/profile', 'ProfileController',[
+        'except' => ['show','store', 'create', 'destroy']
+    ]);
 
     /* Trips */
     Route::post('/home/trips/{destination}/{van}/{member}', 'TripsController@store')->name('trips.store');

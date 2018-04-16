@@ -38,7 +38,7 @@ class OperatorRequest extends FormRequest
             case 'POST':
             {
                 return [
-                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:1000',
+                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
                     'lastName' => ['bail','required',new checkName,'max:30'],
                     'firstName' => ['bail','required',new checkName,'max:30'],
                     'middleName' => ['bail','nullable',new checkName,'max:30'],
@@ -78,7 +78,7 @@ class OperatorRequest extends FormRequest
             {
 //                dd($this->all());
                     return [
-                        'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:1000',
+                        'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
                         'lastName' => ['bail','required',new checkName,'max:30'],
                         'firstName' => ['bail','required',new checkName,'max:30'],
                         'middleName' => ['bail','nullable',new checkName,'max:30'],

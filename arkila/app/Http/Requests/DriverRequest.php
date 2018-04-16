@@ -38,7 +38,7 @@ class DriverRequest extends FormRequest
             {
 
                 return [
-                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:1000',
+                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
                     'operator' => 'bail|nullable|exists:member,member_id|numeric',
                     'lastName' => ['bail','required',new checkName,'max:3030'],
                     'firstName' => ['bail','required',new checkName,'max:3030'],
@@ -79,7 +79,7 @@ class DriverRequest extends FormRequest
             {
 
                 return [
-                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:1000',
+                    'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
                     'operator' => 'bail|nullable|exists:member,member_id|numeric',
                     'lastName' => ['bail','required',new checkName,'max:30'],
                     'firstName' => ['bail','required',new checkName,'max:30'],

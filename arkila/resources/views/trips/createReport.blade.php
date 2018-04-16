@@ -31,6 +31,13 @@
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
 
                             <div class="form-group">
+                                <label for="departureDate" class="col-sm-4">Destination Terminal:</label>
+                                <div class="col-sm-8">
+                                    <input name="destinationTerm" type="text" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="driver" class="col-sm-4">Driver:</label>
                                 <div class="col-sm-8">
                                 <select name="driverAndOperator" id="driver" class="form-control select2">

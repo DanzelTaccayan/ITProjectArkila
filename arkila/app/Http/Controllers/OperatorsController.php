@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use PDF;
 use DB;
 use Carbon\Carbon;
@@ -151,9 +151,10 @@ class OperatorsController extends Controller
             $profilePictureName = 'avatar.jpg';
             if($request->file('profilePicture'))
             {
-                if(Storage::has($operator->profile_picture))
+                if(File::exists(public_path('uploads/profilePictures/'.$operator->profile_picture)))
                 {
-                    Storage::delete($operator->profile_picture);
+
+                    File::delete(public_path('uploads/profilePictures/'.$operator->profile_picture));
                 }
 
                 $dateNow = Carbon::now();

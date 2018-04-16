@@ -8,7 +8,8 @@ use App\User;
 use App\Http\Requests\DriverRequest;
 use PDF;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Image;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -46,8 +47,19 @@ class DriversController extends Controller
      */
     public function store(DriverRequest $request)
     {
+        $profilePictureName = 'avatar.jpg';
+        if($request->file('profilePicture')){
+            $dateNow = Carbon::now();
+            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                $request->file('profilePicture')->getClientOriginalExtension();
+
+            Image::make($request->file('profilePicture'))
+                ->resize(300, 300)
+                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+        }
 
         $createdDriver = Member::create([
+            'profile_picture' => $profilePictureName,
             'last_name'=> $request->lastName,
             'first_name' => $request->firstName,
             'operator_id' => $request->operator,
@@ -111,8 +123,19 @@ class DriversController extends Controller
     }
 
     public function storeFromOperator(Member $operator, DriverRequest $request){
+        $profilePictureName = 'avatar.jpg';
+        if($request->file('profilePicture')){
+            $dateNow = Carbon::now();
+            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                $request->file('profilePicture')->getClientOriginalExtension();
+
+            Image::make($request->file('profilePicture'))
+                ->resize(300, 300)
+                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+        }
 
         $driver = $operator->drivers()->create([
+            'profile_picture' => $profilePictureName,
             'last_name'=> $request->lastName,
             'first_name' => $request->firstName,
             'middle_name' => $request->middleName,
@@ -185,7 +208,19 @@ class DriversController extends Controller
             $vanNd->members()->detach($vanNd->driver->first()->member_id);
         }
 
+        $profilePictureName = 'avatar.jpg';
+        if($request->file('profilePicture')){
+            $dateNow = Carbon::now();
+            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                $request->file('profilePicture')->getClientOriginalExtension();
+
+            Image::make($request->file('profilePicture'))
+                ->resize(300, 300)
+                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+        }
+
         $driver = Member::create([
+            'profile_picture' => $profilePictureName,
             'last_name'=> $request->lastName,
             'first_name' => $request->firstName,
             'middle_name' => $request->middleName,
@@ -294,7 +329,27 @@ class DriversController extends Controller
                 $driver->archivedOperator()->attach($driver->operator_id);
             }
             $dateNow = Carbon::now()->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
+
+        $profilePictureName = 'avatar.jpg';
+        if($request->file('profilePicture'))
+        {
+            if(File::exists(public_path('uploads/profilePictures/'.$driver->profile_picture)))
+            {
+
+                File::delete(public_path('uploads/profilePictures/'.$driver->profile_picture));
+            }
+
+            $dateNow = Carbon::now();
+            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                $request->file('profilePicture')->getClientOriginalExtension();
+
+            Image::make($request->file('profilePicture'))
+                ->resize(300, 300)
+                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+        }
+
             $driver->update([
+                'profile_picture' => $profilePictureName,
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'operator_id' => $request->operator,

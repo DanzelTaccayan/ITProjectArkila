@@ -8,7 +8,7 @@
                 </div>
                 <div class="box-body text-center" style="height:200px;">
                     <div style="width:70%; margin-left:15%;">
-                        <p class="text-limit">{{$announcements->first()->description}}</p>
+                        <p class="text-limit-8">{{$announcements->first()->description}}</p>
                     </div>
                 </div>
                 <div class="box-footer text-center">
@@ -20,11 +20,11 @@
         <div class="item">
             <div class="box">
                 <div class="box-header with-border text-center">
-                    <h4 class="title-limit">{{$announcement->title}}</h4>
+                    <h4 class="title-limit-5">{{$announcement->title}}</h4>
                 </div>
                 <div class="box-body text-center" style="height:200px;">
                     <div style="width:70%; margin-left:15%;">
-                        <p  class="text-limit">{{$announcement->description}}</p>
+                        <p  class="text-limit-8">{{$announcement->description}}</p>
                     </div>
                 </div>
                 <div class="box-footer text-center">
