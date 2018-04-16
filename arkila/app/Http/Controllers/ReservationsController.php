@@ -7,6 +7,7 @@ use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\Destination;
 use App\Terminal;
+use App\FeesAndDeduction;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -21,9 +22,12 @@ class ReservationsController extends Controller
     {
         //
         $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
+    
         $reservations = Reservation::all();
         $destinations = Destination::all();
-        return view('reservations.index', compact('reservations', 'destinations', 'terminals'));
+        $discounts = FeesAndDeduction::where('type', 'Discount')->get();
+        
+        return view('reservations.index', compact('discounts','reservations', 'destinations', 'terminals'));
     }
 
     /**
@@ -77,9 +81,7 @@ class ReservationsController extends Controller
             'status' => 'Paid',
 
         ]);
-        session()->flash('message', 'Reservation was created successfully');
-        return redirect('/home/reservations/');
-        // return redirect()->back()->withErrors();
+        return redirect('/home/reservations/')->with('success', 'Reservation by '. $name .' was created successfully');
     }
 
 
@@ -118,5 +120,14 @@ class ReservationsController extends Controller
         //
         $reservation->delete();
         return back()->with('message', 'Successfully Deleted');
+    }
+
+    public function find(Request $request){
+        $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
+        ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
+        ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
+        ->where('reservation.id', '=', $request->id)->get();
+
+        return response()->json($data);
     }
 }
