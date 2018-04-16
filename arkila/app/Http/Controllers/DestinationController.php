@@ -19,7 +19,8 @@ class DestinationController extends Controller
     public function create()
     {
         $terminals = Terminal::whereNotIn('terminal_id', [auth()->user()->terminal_id])->get();
-        return view('settings.createDestination', compact('terminals'));
+        $destinations = Destination::all();
+        return view('settings.createDestination', compact('terminals','destinations'));
     }
 
     public function store()

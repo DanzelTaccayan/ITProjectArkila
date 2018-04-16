@@ -10,8 +10,13 @@
 @section('form-body')
     @if(count($terminals) > 0)
     <div class="form-group">
-        <label>Destination: <span class="text-red">*</span></label>
-        <input name="addDestination" type="text" class="form-control" val-settings-desc required>
+        <label>Destination Name: <span class="text-red">*</span></label>
+        <input list="destinations" name="addDestination" type="text" class="form-control" val-settings-desc required>
+         <datalist id="destinations">
+            @foreach($destinations as $destination)
+            <option value="{{$destination->description}}">
+            @endforeach
+    </datalist>
     </div>
     <div class="form-group">
         <label>Terminal:</label>
@@ -24,7 +29,11 @@
 
     </div>
     <div class="form-group">
-        <label>Fare: <span class="text-red">*</span></label>
+        <label>Regular Fare: <span class="text-red">*</span></label>
+        <input type="number" class="form-control" name="addDestinationFare" step="0.25" placeholder="Php 0.00"  val-settings-amount required>
+    </div>
+    <div class="form-group">
+        <label>Discounted Fare: <span class="text-red">*</span></label>
         <input type="number" class="form-control" name="addDestinationFare" step="0.25" placeholder="Php 0.00"  val-settings-amount required>
     </div>
     <div class="form-group">
