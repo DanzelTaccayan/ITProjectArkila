@@ -66,19 +66,13 @@
                                 <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
-                            @if($fads->count() > 0)
-                              @php $c = 0; @endphp
-                                @foreach($fads as $fad)
                                   <div class='form-group'>
                                       <label for='Discounts' class="col-sm-4">Passengers with Discounts:</label>
                                       <div class="col-sm-6">
                                         <input type="hidden" name="discountId[]" value="{{$fad->fad_id}}">
-                                          <input value="{{old('numberOfDiscount.'.$c)}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
+                                          <input value="{{old('numberOfDiscount')}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
                                       </div>
                                   </div>
-                                    @php $c++; @endphp
-                                @endforeach
-                            @endif
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>

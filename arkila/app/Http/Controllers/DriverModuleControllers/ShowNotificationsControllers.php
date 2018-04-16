@@ -11,4 +11,9 @@ class ShowNotificationsControllers extends Controller
     {
       return view('drivermodule.notifications');
     }
+
+    public function notifications()
+    {
+        return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+    }
 }
