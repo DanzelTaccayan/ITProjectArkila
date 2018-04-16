@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\Destination;
+use App\Terminal;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -19,9 +20,10 @@ class ReservationsController extends Controller
     public function index()
     {
         //
+        $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
         $reservations = Reservation::all();
         $destinations = Destination::all();
-        return view('reservations.index', compact('reservations', 'destinations'));
+        return view('reservations.index', compact('reservations', 'destinations', 'terminals'));
     }
 
     /**
