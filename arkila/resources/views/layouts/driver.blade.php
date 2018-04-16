@@ -9,8 +9,20 @@
     <title>Ban Trans | @yield('title')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    @section('links') 
-    @include('layouts.partials.stylesheets') 
+    <script>
+        window.Laravel = @php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); @endphp
+    </script>
+
+    @if(!auth()->guest())
+        <script>
+            window.Laravel.userId = @php echo auth()->user()->id; @endphp
+        </script>
+    @endif
+
+    @section('links')
+    @include('layouts.partials.stylesheets')
     @show
 </head>
 
@@ -38,11 +50,14 @@
     </div>
     <!-- ./wrapper -->
 
-    @section('scripts') 
-    @parent 
-    @include('layouts.partials.scripts') 
-    @include('message.error') 
-    @include('message.success') 
+    @section('scripts')
+    @parent
+    @include('layouts.partials.scripts')
+    <script type="text/javascript">
+    
+    </script>
+    @include('message.error')
+    @include('message.success')
     @show
 </body>
 

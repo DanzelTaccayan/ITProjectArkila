@@ -27,7 +27,7 @@ class AdminCreateDriverReportController extends Controller
     $terminals = Terminal::orderBy('terminal_id')->get();
     $superAdmin = User::where('user_type', 'Super-Admin')->first();
     $superAdminTerminal = Terminal::where('terminal_id', Auth::user()->terminal_id)->first() ?? null;
-    
+
     return view('trips.chooseDestination',compact('terminals', 'superAdminTerminal'));
   }
 
@@ -35,23 +35,23 @@ class AdminCreateDriverReportController extends Controller
   {
   	if($terminals->terminal_id == Auth::user()->terminal_id){
   		$destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
-            ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();	
+            ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
   	}else{
   		$destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
         	->where('terminal.terminal_id', '=', $terminals->terminal_id)
             ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
   	}
-    
+
     $driverAndOperators = Member::where('role', 'Operator')->orWhere('role', 'Driver')->get();
-    $plate_numbers = Van::all();                
-    $fads = FeesAndDeduction::where('type','=','Discount')->get();
+    $plate_numbers = Van::all();
+    $fad = FeesAndDeduction::where('type','=','Discount')->first();
     $member = Member::where('user_id', Auth::id())->first();
-    return view('trips.createReport', compact('terminals', 'destinations', 'fads', 'member', 'driverAndOperators', 'plate_numbers'));
+    return view('trips.createReport', compact('terminals', 'destinations', 'fad', 'member', 'driverAndOperators', 'plate_numbers'));
   }
 
   public function storeReport(Terminal $terminals, AdminCreateDriverReportRequest $request)
   {
-  	
+
    	$totalPassengers = $request->totalPassengers;
     $totalBookingFee = $request->totalBookingFee;
     $totalPassenger = (float)$request->totalPassengers;
@@ -78,15 +78,15 @@ class AdminCreateDriverReportController extends Controller
          'report_status' => 'Accepted',
          'SOP' => 100.00,
        ]);
-       
+
        if($terminals->terminal_id == Auth::user()->terminal_id){
        	$insertLegderQuery = array(
        		array('description' => 'SOP', 'amount' => $trip->SOP, 'type' => 'Revenue'),
        		array('description' => 'Booking Fee', 'amount' => $trip->total_booking_fee, 'type' => 'Revenue'),
        	);
-       	
-       	Ledger::insert($insertLegderQuery);	   	
-       } 
+
+       	Ledger::insert($insertLegderQuery);
+       }
      }else if($totalPassengers <  10){
           $trip = Trip::create([
            'driver_id' => $driver_id,
@@ -106,9 +106,9 @@ class AdminCreateDriverReportController extends Controller
     		Ledger::create([
 	       		'description' => 'Booking Fee',
 	       		'amount' => $trip->total_booking_fee,
-	       		'type' => 'Revenue', 		
+	       		'type' => 'Revenue',
 	       	]);
-       	}        
+       	}
      }
 
     $destinationArr = request('destination');
@@ -167,7 +167,7 @@ class AdminCreateDriverReportController extends Controller
            }
          }
      }
-    } 
-  return redirect('home/trip-log')->with('success', 'Report created successfully!'); 
+    }
+  return redirect('home/trip-log')->with('success', 'Report created successfully!');
   }
 }

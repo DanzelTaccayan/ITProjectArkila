@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(VanModelTableSeeder::class);
         $this->call(VanTableSeeder::class);
         $this->call(VanMemberTableSeeder::class);
+        $this->call(CompanyProfileSeeder::class);
     }
 }

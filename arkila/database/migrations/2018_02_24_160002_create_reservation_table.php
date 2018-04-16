@@ -28,7 +28,7 @@ class CreateReservationTable extends Migration
             $table->smallInteger('number_of_seats');
             $table->string('contact_number', 13);
             $table->decimal('amount', 7, 2);
-            $table->enum('status', ['Pending', 'Departed', 'Declined', 'Paid', 'Cancelled']);
+            $table->enum('status', ['Accepted', 'Pending', 'Declined', 'Paid']);
             $table->enum('type', ['Walk-in', 'Online']);
             $table->string('comments', 300)
             ->nullable();
