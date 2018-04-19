@@ -237,7 +237,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
   Route::get('/home/driver/help', 'DriverModuleControllers\ViewDriverHelpController@viewDriverHelp')->name('drivermodule.help.driverHelp');
   /*Notifications*/
   Route::get('/home/notifications', 'DriverModuleControllers\ShowNotificationsControllers@index')->name('drivermodule.notifications');
-  Route::get('/driverNotifications', 'DriverModuleControllers\ShowNotificationsControllers@notifications')->name('drivermodule.notifs');
+  Route::get('/driverNotifications', 'DriverModuleControllers\ShowNotificationsControllers@notifications')->name('drivermodule.getNotifs');
 });
 /******************************************************************************/
 /******************************************************************************/
