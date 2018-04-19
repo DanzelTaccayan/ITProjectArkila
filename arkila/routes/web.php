@@ -143,6 +143,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['show','store', 'create', 'destroy']
     ]);
 
+    Route::get('/findDestinationTerminal', 'ReservationsController@find');
+
     /* Trips */
     Route::post('/home/trips/{destination}/{van}/{member}', 'TripsController@store')->name('trips.store');
     Route::get('/listSpecialUnits/{terminal}','TripsController@listSpecialUnits')->name('trips.listSpecialUnits');
