@@ -21,7 +21,7 @@ class RentalsObserver{
       ->orWhere('user_type', 'Driver')
       ->where('van_model.model_id', $rent->model_id)
       ->get();
-      
+
     foreach($userDriverAndAdmin as $userNotif){
       $userNotif->notify(new CustomerRent($user, $rent));
     }

@@ -7,6 +7,7 @@
     <meta name="_token" content="{{ csrf_token() }}" />
     <link rel="icon" href="{{ URL::asset('img/apple-touch-icon.png') }}">
     <title>Ban Trans | @yield('title')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <script>
@@ -17,7 +18,7 @@
 
     @if(!auth()->guest())
         <script>
-            window.Laravel.userId = @php echo auth()->user()->id; @endphp
+            Laravel.userId = @php echo auth()->user()->id; @endphp
         </script>
     @endif
 
@@ -53,9 +54,7 @@
     @section('scripts')
     @parent
     @include('layouts.partials.scripts')
-    <script type="text/javascript">
-    
-    </script>
+    <script type="text/javascript" src="/js/app.js"></script>
     @include('message.error')
     @include('message.success')
     @show
