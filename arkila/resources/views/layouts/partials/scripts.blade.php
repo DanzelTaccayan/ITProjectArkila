@@ -7,6 +7,8 @@
     <!-- Morris.js charts -->
     {{ Html::script('adminlte/bower_components/raphael/raphael.min.js') }}
     {{ Html::script('adminlte/bower_components/morris.js/morris.min.js') }}
+    <!-- ChartJs charts -->
+    {{Html::script('adminlte/bower_components/Chart.js/Chart.js')}}
     <!-- Select2 -->
     {{ Html::script('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}
     <!-- InputMask -->

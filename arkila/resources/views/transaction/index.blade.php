@@ -119,7 +119,11 @@
                                      <label for="">Destination</label>
                                     <select name="destination" id="destination" class="form-control">
                                     </select>
-                                    <label for="">Discount</label>
+                                    <label for="">Regular Tickets</label>
+                                    <input type="text" class="form-control">
+                                    <label for="">Discounted Tickets</label>
+                                    <input type="text" class="form-control">
+                                    {{-- <label for="">Discount</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                           <input id="checkDiscount" type="checkbox">
@@ -129,13 +133,56 @@
                                     </div>
                                     <label for="">Ticket</label>
                                         <select name="tickets" id="ticket" class="form-control select2" multiple="multiple" data-placeholder="Select Ticket">
-                                        </select>
+                                        </select> --}}
                             </div>
 
                             <div class="box-footer">
-                                <div id="sellButtContainer" class="pull-right">
-                                    <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">Sell</button>
                                 </div>
+                                {{-- <div id="sellButtContainer" class="pull-right">
+                                    <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
+                                </div> --}}
+                                <div class="modal fade" id="modal-default">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">Default Modal</h4>
+                                      </div>
+                                      <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                            <label for=""></label>
+                                                <label for="">Regular</label>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Asingan 1</li>
+                                                    <li class="list-group-item">Asingan 2</li>
+                                                    <li class="list-group-item">Asingan 3</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Discounted</label>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Asingan A</li>
+                                                    <li class="list-group-item">Asingan B</li>
+                                                </ul>
+                                            </div>    
+                                        </div>
+                                        
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                      </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                  </div>
+                                  <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
                             </div>
                             </form>
                         </div>

@@ -25,6 +25,7 @@
     {{ Html::script('adminlte/plugins/iCheck/icheck.min.js') }}
     <!-- SlimScroll -->
     {{ Html::script('adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}
+    {{Html::script('adminlte/bower_components/Chart.js/Chart.js')}}
     <!-- FastClick -->
     {{ Html::script('adminlte/bower_components/fastclick/lib/fastclick.js') }}
     <!-- AdminLTE App -->
