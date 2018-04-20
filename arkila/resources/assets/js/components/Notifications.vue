@@ -7,6 +7,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="#" @click="markNotificationAsRead">Mark All As Read</a>
       <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
     </li>
     <li class="footer"><a href="#">View all</a></li>
@@ -21,6 +22,13 @@
     data(){
       return {
         unreadNotifications: this.unreads
+      }
+    },
+    methods: {
+      markNotificationAsRead() {
+        if (this.unreadNotifications.length) {
+          axios.get('/markAsRead');
+        }
       }
     },
     mounted() {

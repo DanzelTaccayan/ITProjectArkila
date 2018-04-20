@@ -26,4 +26,9 @@ class RentalsObserver{
       $userNotif->notify(new CustomerRent($user, $rent));
     }
   }
+
+  public function updated(Rental $rent)
+  {
+    
+  }
 }
