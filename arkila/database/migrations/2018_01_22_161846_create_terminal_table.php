@@ -18,6 +18,8 @@ class CreateTerminalTable extends Migration
             $table->increments('terminal_id', 10);
             $table->string('description', 50);
             $table->double('booking_fee', 3)->unsigned();
+            $table->boolean('isMain')
+            ->default(false);
             $table->timestamps();
         });
     }

@@ -17,9 +17,8 @@ class CreateVanTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('van_id');
             $table->string('plate_number', 9)
-            ->unique()
-            ->nullable();
-
+            ->unique();
+            
             $table->integer('model_id')
             ->unsigned();
             $table->string('seating_capacity', 2);
