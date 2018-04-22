@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTerminalDestinationTable extends Migration
+class CreateTerminalRouteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,29 +13,21 @@ class CreateTerminalDestinationTable extends Migration
      */
     public function up()
     {
-        Schema::create('terminal_destination', function (Blueprint $table) {
-            $table->integer('destination_id')
-            ->unsigned();
+        Schema::create('terminal_route', function (Blueprint $table) {
             $table->integer('terminal_id')
             ->unsigned();
-            $table->integer('terminal_origin')
+            $table->integer('route_id')
             ->unsigned();
 
-            $table->foreign('destination_id')
-            ->references('destination_id')->on('destination')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
             $table->foreign('terminal_id')
-            ->references('terminal_id')->on('terminal')
+            ->references('id')->on('destination')
             ->onDelete('cascade')
             ->onUpdate('cascade');
 
-            $table->foreign('terminal_origin')
-            ->references('terminal_origin')->on('terminal')
+            $table->foreign('route_id')
+            ->references('id')->on('destination')
             ->onDelete('cascade')
             ->onUpdate('cascade');
-
         });
     }
 
@@ -46,6 +38,6 @@ class CreateTerminalDestinationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terminal_destination');
+        Schema::dropIfExists('terminal_route');
     }
 }

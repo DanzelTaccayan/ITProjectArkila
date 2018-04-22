@@ -25,7 +25,7 @@ class CreateTicketTable extends Migration
             $table->timestamps();
 
             $table->foreign('destination_id')
-                ->references('destination_id')->on('destination')
+                ->references('id')->on('destination')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
