@@ -18,13 +18,12 @@ class CreateTripTable extends Migration
             $table->increments('trip_id');
             $table->integer('driver_id')
             ->unsigned();
-            $table->integer('terminal_id')
+            
+            $table->integer('van_id')
             ->unsigned();
-            $table->integer('origin')
-            ->unsigned()
-            ->nullable();
-            $table->string('plate_number', 9);
-
+            
+            $table->string('terminal_name', 50);
+            $table->string('origin', 50);
             $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
             $table->enum('status', ['Departed', 'On Queue'])->default('On Queue');
             $table->smallInteger('total_passengers')->nullable();
@@ -37,18 +36,8 @@ class CreateTripTable extends Migration
             $table->boolean('has_privilege');
             $table->enum('report_status', ['Pending', 'Accepted', 'Declined'])->default('Pending');
 
-            $table->foreign('terminal_id')
-            ->references('terminal_id')->on('terminal')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
-
-            $table->foreign('origin')
-            ->references('terminal_id')->on('terminal')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-            $table->foreign('plate_number')
-            ->references('plate_number')->on('van')
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 

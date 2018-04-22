@@ -20,8 +20,7 @@ class CreateReservationTable extends Migration
             ->unsigned()
             ->nullable();
 
-            $table->integer('destination_id')
-            ->unsigned();
+            $table->string('destination_name');
             $table->string('name', 70);
             $table->string('departure_date', 10);
             $table->string('departure_time', 8);
@@ -40,10 +39,6 @@ class CreateReservationTable extends Migration
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
-            $table->foreign('destination_id')
-            ->references('destination_id')->on('destination')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
         });
     }
 

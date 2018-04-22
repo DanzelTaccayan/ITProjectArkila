@@ -18,7 +18,8 @@ class CreateMemberVanTable extends Migration
             $table->integer('member_id')
             ->unsigned()
             ->nullable();
-            $table->string('plate_number')
+            $table->integer('van_id')
+            ->unsigned()
             ->nullable();
 
             $table->foreign('member_id')
@@ -26,8 +27,8 @@ class CreateMemberVanTable extends Migration
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
-            $table->foreign('plate_number')
-            ->references('plate_number')->on('van')
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 

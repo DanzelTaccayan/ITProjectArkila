@@ -15,6 +15,7 @@ class CreateVanTable extends Migration
     {
         Schema::create('van', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+            $table->increments('van_id');
             $table->string('plate_number', 9)
             ->unique()
             ->nullable();
@@ -23,16 +24,15 @@ class CreateVanTable extends Migration
             ->unsigned();
             $table->string('seating_capacity', 2);
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->string('location', 50);
 
 
             $table->timestamps();
 
-            $table->primary('plate_number');
-
             $table->foreign('model_id')
             ->references('model_id')->on('van_model')
             ->onDelete('restrict')
-            ->onUpdate('cascade');
+            ->onUpdate('restrict');
 
 
         });

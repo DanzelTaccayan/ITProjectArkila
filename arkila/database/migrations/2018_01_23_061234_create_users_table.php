@@ -31,22 +31,8 @@ class CreateUsersTable extends Migration
             ->unsigned()
             ->nullable();
 
-            $table->integer('model_id')
-            ->unsigned()
-            ->nullable();
-
             $table->rememberToken();
             $table->timestamps();
-
-            $table->foreign('terminal_id')
-            ->references('terminal_id')->on('terminal')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-            $table->foreign('model_id')
-            ->references('model_id')->on('van_model')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
 
         });
     }

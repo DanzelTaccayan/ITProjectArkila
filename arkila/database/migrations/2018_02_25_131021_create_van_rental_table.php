@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRentalTable extends Migration
+class CreateVanRentalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,13 @@ class CreateRentalTable extends Migration
      */
     public function up()
     {
-        Schema::create('rental', function (Blueprint $table) {
+        Schema::create('van_rental', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('rent_id');
-            $table->string('plate_number', 9)->nullable();
+            $table->integer('van_id')
+            ->unsigned()
+            ->nullable();
             $table->integer('user_id')
-                ->nullable()
-            ->unsigned();
-             $table->integer('driver_id')
-            ->nullable()
-            ->unsigned();
-
-            $table->integer('model_id')
             ->unsigned()
             ->nullable();
 
@@ -42,25 +37,15 @@ class CreateRentalTable extends Migration
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->string('comments', 300)
             ->nullable();
-            $table->timestamps();
-
-            $table->foreign('plate_number')
-            ->references('plate_number')->on('van')
+            $table->timestamps();    
+            
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
-
-            $table->foreign('driver_id')
-            ->references('id')->on('users')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
-
-            $table->foreign('model_id')
-            ->references('model_id')->on('van_model')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
@@ -74,6 +59,6 @@ class CreateRentalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rental');
+        Schema::dropIfExists('van_rental');
     }
 }

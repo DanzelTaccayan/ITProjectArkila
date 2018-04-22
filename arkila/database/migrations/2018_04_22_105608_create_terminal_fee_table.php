@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFeesaanddeductionTable extends Migration
+class CreateTerminalFeeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateFeesaanddeductionTable extends Migration
      */
     public function up()
     {
-        Schema::create('fees_and_deduction', function (Blueprint $table) {
+        Schema::create('fee', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('fad_id');
+            $table->increments('fee_id');
             $table->string('description', 30);
-            $table->double('amount')->unsigned();
-            $table->enum('type', ['Discount', 'Fee']);
+            $table->decimal('fare', 7, 2)
+            ->unsigned();
             $table->timestamps();
-
         });
     }
 
@@ -31,6 +30,6 @@ class CreateFeesaanddeductionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fees_and_deduction');
+        Schema::dropIfExists('fee');
     }
 }

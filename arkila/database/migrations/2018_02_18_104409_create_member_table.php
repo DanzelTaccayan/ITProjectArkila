@@ -17,7 +17,7 @@ class CreateMemberTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('member_id');
             $table->integer('user_id')
-                ->nullable()
+            ->nullable()
             ->unsigned();
 
             $table->integer('operator_id')
@@ -31,18 +31,8 @@ class CreateMemberTable extends Migration
             $table->string('address',100);
             $table->string('provincial_address',100);
             $table->date('birth_date');
-            $table->string('birth_place', 50);
             $table->smallInteger('age');
             $table->enum('gender', ['Male', 'Female']);
-            $table->string('citizenship', 35);
-            $table->enum('civil_status', ['Single', 'Married', 'Divorced', 'Widowed']);
-            $table->smallInteger('number_of_children')->nullable();
-            $table->string('spouse', 120)->nullable();
-            $table->date('spouse_birthdate')->nullable();
-            $table->string('father_name', 120)->nullable();
-            $table->string('father_occupation', 50)->nullable();
-            $table->string('mother_name', 120)->nullable();
-            $table->string('mother_occupation', 50)->nullable();
             $table->string('person_in_case_of_emergency', 120);
             $table->string('emergency_address', 50);
             $table->string('emergency_contactno', 13);
