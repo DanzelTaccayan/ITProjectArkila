@@ -170,6 +170,8 @@ return [
          */
         BackupManager\Laravel\Laravel55ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        AustinHeap\Database\Encryption\EncryptionServiceProvider::class,
+        Barryvdh\DomPDF\serviceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -179,9 +181,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\RentalServiceProvider::class,
-        /******PDF Generator */
-        Barryvdh\DomPDF\serviceProvider::class,
-
     ],
 
     /*
@@ -233,7 +232,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'DatabaseEncryption' => AustinHeap\Database\EncryptionFacade::class
     ],
 
 ];

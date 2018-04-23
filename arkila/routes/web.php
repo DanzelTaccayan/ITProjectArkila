@@ -238,6 +238,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
   /*Notifications*/
   Route::get('/home/notifications', 'DriverModuleControllers\ShowNotificationsControllers@index')->name('drivermodule.notifications');
   Route::get('/driverNotifications', 'DriverModuleControllers\ShowNotificationsControllers@notifications')->name('drivermodule.getNotifs');
+  Route::get('/markAsRead', 'DriverModuleControllers\ShowNotificationsControllers@markAsRead')->name('drivermodule.markAsRead');
 });
 /******************************************************************************/
 /******************************************************************************/

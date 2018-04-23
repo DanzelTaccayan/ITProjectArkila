@@ -41,10 +41,10 @@
         <!-- /.navbar-collapse -->
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
-          <ul id="app" class="nav navbar-nav">
+          <ul class="nav navbar-nav">
 
             <!-- Notifications Menu -->
-            <notification v-bind:unreads="{{auth()->user()->unreadNotifications}}"></notification>
+            <notification :userid="{{auth()->id()}}" :unreads="{{auth()->user()->unreadNotifications}}"></notification>
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
@@ -54,7 +54,7 @@
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs">Alexander Pierce</span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" role="menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
                   <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="img-circle" alt="User Image">

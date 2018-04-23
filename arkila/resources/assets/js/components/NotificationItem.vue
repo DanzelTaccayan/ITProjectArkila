@@ -14,7 +14,7 @@
       }
     },
     mounted(){
-      this.notificationUrl="home/view-rentals"
+      this.notificationUrl="/home/view-rentals"
     }
   }
 </script>

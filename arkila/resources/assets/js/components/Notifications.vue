@@ -7,7 +7,8 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <notification-item v-for="unread in unreadNotifications" v-bind:unread="unread"></notification-item>
+      <a href="#" @click="markNotificationAsRead">Mark All As Read</a>
+      <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
     </li>
     <li class="footer"><a href="#">View all</a></li>
   </ul>
@@ -16,17 +17,24 @@
 <script>
   import NotificationItem from './NotificationItem.vue';
   export default{
-    props:['unreads'],
+    props:['unreads', 'userid'],
     components:{NotificationItem},
     data(){
       return {
         unreadNotifications: this.unreads
       }
     },
+    methods: {
+      markNotificationAsRead() {
+        if (this.unreadNotifications.length) {
+          axios.get('/markAsRead');
+        }
+      }
+    },
     mounted() {
       console.log('Component mounted');
       console.log(Laravel.userId);
-      Echo.private(`App.User.${Laravel.userId}`)
+      Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
         console.log(notification);
         let newUnreadNotifications = {

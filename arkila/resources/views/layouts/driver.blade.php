@@ -28,7 +28,7 @@
 </head>
 
 <body class="hold-transition skin-blue layout-top-nav">
-    <div class="wrapper">
+    <div id="app" class="wrapper">
         @include('layouts.partials.header_5')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- Content Wrapper. Contains page content -->
