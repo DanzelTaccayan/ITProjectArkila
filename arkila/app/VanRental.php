@@ -18,10 +18,6 @@ class VanRental extends Model
     	return $this->belongsTo(Van::Class, 'van_id');
     }
 
-    public function users(){
-    	return $this->belongsTo(User::Class, 'driver_id', 'id');
-    }
-
     public function getFullNameAttribute(){
         return "{$this->first_name} {$this->last_name}";
     }
@@ -34,5 +30,4 @@ class VanRental extends Model
         $contactArr = explode('-',$value);
         $this->attributes['contact_number'] = '+63'.$contactArr[0].$contactArr[1].$contactArr[2];
     }
-    
 }
