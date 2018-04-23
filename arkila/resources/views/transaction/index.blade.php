@@ -98,7 +98,7 @@
 @section('content')
 <div class="row">
 
-                    <div class="col-md-3">
+                    <div class="col-md-5">
 
                         <div class="box box-solid">
                             <div class="box-header with-border">
@@ -107,7 +107,7 @@
                             <form action="">
                             <div class="box-body">
                                     <label for="">Terminal</label>
-                                    <select name="terminal" id="terminal" class="form-control">
+                                    <select name="terminal" id="terminal" class="form-control select2">
                                         @php $counter = 0; @endphp
                                         @foreach($terminals as $terminal)
                                             @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
@@ -117,7 +117,7 @@
                                         @endforeach
                                      </select>
                                      <label for="">Destination</label>
-                                    <select name="destination" id="destination" class="form-control">
+                                    <select name="destination" id="destination" class="form-control select2">
                                     </select>
                                     <label for="">Regular Tickets</label>
                                     <input type="text" class="form-control">
@@ -138,7 +138,7 @@
 
                             <div class="box-footer">
                                 <div class="pull-right">
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">Sell</button>
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-default">SELL</button>
                                 </div>
                                 {{-- <div id="sellButtContainer" class="pull-right">
                                     <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
@@ -190,7 +190,7 @@
                         <a href="{{route('transactions.manageTickets')}}" class="btn btn-warning btn-flat btn-block">Manage Tickets</a>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         <div class="box box-solid">
                             <div class="box-body">
                                 <div class="nav-tabs-custom">
@@ -226,7 +226,7 @@
                                                             </span>
                                                         </div>
                                                         <div id="changedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
-                                                            <span class="col-md-6">
+                                                            <span class="col-md-8">
                                                                 <h6>Driver:</h6>
                                                                  <h4>
                                                                     <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
