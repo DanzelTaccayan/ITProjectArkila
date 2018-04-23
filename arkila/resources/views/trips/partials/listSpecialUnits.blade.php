@@ -28,8 +28,8 @@
                             <form action="{{route('trips.putOnDeck',[$trip->trip_id])}}" method="POST">
                                 {{method_field('PATCH')}}
                                 {{csrf_field()}}
-                                <a class="btn btn-default btn-xs itemSpBtn{{$trip->trip_id}}"> <i class="fa fa-times"></i></a>
-                                <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></button>
+                                <a class="btn btn-default btn-xs itemSpBtn{{$trip->trip_id}}">NO</a>
+                                <button type="submit" class="btn btn-primary btn-xs">YES</button>
                             </form>
                         </div>
                     </div>
@@ -45,8 +45,8 @@
                             <form method="POST" action="{{route('trips.destroy',[$trip->trip_id])}}">
                                  {{method_field('DELETE')}}
                                  {{csrf_field()}}
-                                <a class="btn btn-default btn-xs itemSpBtn{{$trip->trip_id}}"> <i class="fa fa-times"></i></a>
-                                <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                <a class="btn btn-default btn-xs itemSpBtn{{$trip->trip_id}}"> NO</a>
+                                <button class="btn btn-danger btn-xs">YES</button>
                             </form>
                         </div>
                     </div>
