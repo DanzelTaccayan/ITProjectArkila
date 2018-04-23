@@ -16,16 +16,21 @@ class CreateDestinationTable extends Migration
         Schema::create('destination', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->integer('origin')
+            ->unsigned();
+            $table->integer('destination')
+            ->unsigned();
 
-            $table->string('name');
-            $table->decimal('booking_fee', 11, 2);
-            $table->decimal('fare_amount', 11, 2);
-            $table->decimal('st_fare_amount', 11, 2);
-            $table->boolean('is_terminal');
-            $table->boolean('main_terminal');
+            $table->foreign('origin')
+            ->references('terminal_id')->on('terminal')
+            ->onDelete('restrict')
+            ->onUpdate('cascade');
 
-            $table->timestamps();
-            
+            $table->foreign('destination')
+            ->references('terminal_id')->on('terminal')
+            ->onDelete('restrict')
+            ->onUpdate('cascade');
+
         });
     }
     

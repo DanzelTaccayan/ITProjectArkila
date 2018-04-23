@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTerminalRouteTable extends Migration
+class CreateDestinationRouteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,21 @@ class CreateTerminalRouteTable extends Migration
      */
     public function up()
     {
-        Schema::create('terminal_route', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->integer('terminal_id')
+        Schema::create('destination_route', function (Blueprint $table) {
+            $table->integer('destination_id')
             ->unsigned();
             $table->integer('route_id')
             ->unsigned();
 
-            $table->foreign('terminal_id')
+            $table->foreign('destination_id')
             ->references('id')->on('destination')
-            ->onDelete('cascade')
+            ->onDelete('restrict')
             ->onUpdate('cascade');
 
             $table->foreign('route_id')
-            ->references('id')->on('destination')
-            ->onDelete('cascade')
+            ->references('route_id')->on('route')
+            ->onDelete('restrict')
             ->onUpdate('cascade');
-
         });
     }
 
@@ -40,6 +38,6 @@ class CreateTerminalRouteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terminal_route');
+        Schema::dropIfExists('destination_route');
     }
 }
