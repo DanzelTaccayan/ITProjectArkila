@@ -21,7 +21,7 @@ class CreateLedgerTable extends Migration
             ->nullable();
             $table->string('or_number')
             ->nullable();
-            $table->decimal('amount', 7, 2);
+            $table->decimal('amount', 11, 2);
 
             $table->enum('type', ['Revenue', 'Expense']);
 

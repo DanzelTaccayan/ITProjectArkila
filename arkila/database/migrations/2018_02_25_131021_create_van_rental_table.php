@@ -23,19 +23,19 @@ class CreateVanRentalTable extends Migration
             ->unsigned()
             ->nullable();
 
-            $table->string('customer_name', 50);
+            $table->string('customer_name');
 
-            $table->string('departure_date');
-            $table->string('departure_time', 8);
+            $table->date('departure_date');
+            $table->time('departure_time');
             $table->smallInteger('number_of_days');
             $table->string('destination');
-            $table->string('contact_number', 13);
+            $table->string('contact_number');
             $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
             $table->enum('cancelled_by', ['Customer', 'Driver'])
             ->nullable();
             $table->enum('rent_type', ['Online', 'Walk-in']);
-            $table->string('comments', 300)
+            $table->text('comments')
             ->nullable();
             $table->timestamps();    
             

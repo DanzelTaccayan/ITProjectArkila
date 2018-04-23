@@ -14,6 +14,7 @@ class CreateTerminalRouteTable extends Migration
     public function up()
     {
         Schema::create('terminal_route', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->integer('terminal_id')
             ->unsigned();
             $table->integer('route_id')
@@ -28,6 +29,7 @@ class CreateTerminalRouteTable extends Migration
             ->references('id')->on('destination')
             ->onDelete('cascade')
             ->onUpdate('cascade');
+
         });
     }
 

@@ -17,14 +17,15 @@ class CreateArchiveVanTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('archive_van_id');
 
-            $table->string('plate_number', 9);
+            $table->integer('van_id')
+            ->unsigned();
             $table->integer('member_id')
-                ->unsigned();
+            ->unsigned();
 
             $table->timestamps();
 
-            $table->foreign('plate_number')
-            ->references('plate_number')->on('van')
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 

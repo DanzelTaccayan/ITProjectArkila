@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use App\Van;
 use App\User;
 
-class Rental extends Model
+class VanRental extends Model
 {
-    protected $table = 'rental';
+    protected $table = 'van_rental';
     protected $primaryKey = 'rent_id';
     protected $guarded = [
         'rent_id',
     ];
 
     public function van(){
-    	return $this->belongsTo(Van::Class, 'plate_number');
-    }
-
-    public function driver(){
-    	return $this->hasOne(Member::Class, 'member_id', 'driver_id');
+    	return $this->belongsTo(Van::Class, 'van_id');
     }
 
     public function users(){
@@ -28,10 +24,6 @@ class Rental extends Model
 
     public function getFullNameAttribute(){
         return "{$this->first_name} {$this->last_name}";
-    }
-
-    public function vanmodel(){
-    	return $this->belongsTo(VanModel::Class, 'model_id');
     }
 
     public function user(){

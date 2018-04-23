@@ -18,9 +18,9 @@ class CreateTicketTable extends Migration
             $table->increments('ticket_id');
             $table->string('ticket_number');
             $table->integer('destination_id')
-                ->unsigned();
+            ->unsigned();
             $table->boolean('isAvailable');
-            $table->decimal('fare', 7, 2);
+            $table->decimal('fare', 11, 2);
             $table->enum('type',['Discount','Regular']);
             $table->timestamps();
 

@@ -21,15 +21,15 @@ class CreateReservationTable extends Migration
             ->nullable();
 
             $table->string('destination_name');
-            $table->string('name', 70);
-            $table->string('departure_date', 10);
-            $table->string('departure_time', 8);
+            $table->string('name');
+            $table->string('departure_date');
+            $table->string('departure_time');
             $table->smallInteger('number_of_seats');
-            $table->string('contact_number', 13);
-            $table->decimal('amount', 7, 2);
+            $table->string('contact_number');
+            $table->decimal('amount', 11, 2);
             $table->enum('status', ['Accepted', 'Pending', 'Declined', 'Paid']);
             $table->enum('type', ['Walk-in', 'Online']);
-            $table->string('comments', 300)
+            $table->string('comments')
             ->nullable();
 
             $table->timestamps();

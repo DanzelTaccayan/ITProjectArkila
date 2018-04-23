@@ -16,8 +16,8 @@ class CreateFeeTable extends Migration
         Schema::create('fee', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('fee_id');
-            $table->string('description', 30);
-            $table->decimal('fare', 7, 2)
+            $table->string('description');
+            $table->decimal('amount', 11, 2)
             ->unsigned();
             $table->timestamps();
         });

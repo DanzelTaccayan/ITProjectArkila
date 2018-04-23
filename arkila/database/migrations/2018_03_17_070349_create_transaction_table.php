@@ -26,7 +26,7 @@ class CreateTransactionTable extends Migration
             $table->string('destination_name');
             $table->string('terminal_name');
 
-            $table->decimal('amount_paid', 7, 2);
+            $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending', 'Cancelled', 'Departed','OnBoard','Refunded','Deleted']);
 
             $table->foreign('ticket_id')

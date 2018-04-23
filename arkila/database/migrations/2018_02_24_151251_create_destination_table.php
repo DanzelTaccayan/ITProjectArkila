@@ -18,9 +18,9 @@ class CreateDestinationTable extends Migration
             $table->increments('id');
 
             $table->string('name');
-            $table->decimal('booking_fee', 7, 2);
-            $table->decimal('fare_amount', 7, 2);
-            $table->decimal('st_fare_amount', 7, 2);
+            $table->decimal('booking_fee', 11, 2);
+            $table->decimal('fare_amount', 11, 2);
+            $table->decimal('st_fare_amount', 11, 2);
             $table->boolean('is_terminal');
             $table->boolean('main_terminal');
 

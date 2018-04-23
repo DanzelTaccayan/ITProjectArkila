@@ -3,35 +3,31 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Rental;
+use App\VanRental;
 class Van extends Model
 {
     protected $table = 'van';
-	protected $primaryKey = 'plate_number';
+	protected $primaryKey = 'van_id';
 	public $incrementing = false;
 	protected $keyType = 'String';
-    protected $fillable = [
-    	'plate_number',
-        'model_id',
-        'seating_capacity',
-        'status',
+    protected $guarded = [
+    	'van_id',
 	];  
 	//
 
     public function members(){
-        return $this->belongsToMany(Member::class,'member_van','plate_number','member_id');
+        return $this->belongsToMany(Member::class,'member_van','van_id','member_id');
     }
     public function rental(){
-    	return $this->hasOne(Rental::Class, 'rent_id');
+    	return $this->hasOne(VanRental::Class, 'rent_id');
     }
 
-    public function vanModel() {
+    public function model() {
         return $this->belongsTo(VanModel::Class, 'model_id');
-            
     }
 
     public function archivedMember(){
-        return $this->belongsToMany(Member::class,'archive_van','plate_number','member_id')->withTimestamps();
+        return $this->belongsToMany(Member::class,'archive_van','van_id','member_id')->withTimestamps();
     }
 
     public function driver(){
@@ -43,7 +39,7 @@ class Van extends Model
     }
 
     public function trips(){
-    	return $this->hasMany(Trip::Class, 'plate_number');
+    	return $this->hasMany(Trip::Class, 'trip_id');
     }
 
     public function updateQueue($queue_number){
