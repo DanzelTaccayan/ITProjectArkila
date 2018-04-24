@@ -12,7 +12,4 @@ class Route extends Model
         'route_id',
     ];
 
-    public function destination(){
-        return $this->belongsToMany(Destination::class,'destination_route','route_id','id');
-    }
 }
