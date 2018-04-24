@@ -32,6 +32,12 @@
                     <span>Ticket Management</span>
                 </a>
             </li>
+            <li class="#">
+                <a href="#">
+                    <i class="fa fa-home"></i>
+                    <span>Terminals</span>
+                </a>
+            </li>
             <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
