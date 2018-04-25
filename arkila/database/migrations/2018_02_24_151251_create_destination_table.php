@@ -16,7 +16,7 @@ class CreateDestinationTable extends Migration
         Schema::create('destination', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('destination_id');
-            $table->string('name');
+            $table->string('destination_name');
             $table->decimal('booking_fee', 11, 2)
             ->nullable();
             $table->decimal('short_trip_fare', 11, 2)
