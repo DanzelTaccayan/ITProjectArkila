@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateArchiveMemberTable extends Migration
+class CreateMemberHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateArchiveMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('archive_member', function (Blueprint $table) {
+        Schema::create('member_history', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('archive_member_id');
+            $table->increments('member_history_id');
 
             $table->integer('operator_id')
             ->unsigned()
@@ -46,6 +46,6 @@ class CreateArchiveMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archive_member');
+        Schema::dropIfExists('member_history');
     }
 }

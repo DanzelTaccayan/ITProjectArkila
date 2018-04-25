@@ -23,8 +23,8 @@ class CreateTransactionTable extends Migration
             $table->integer('trip_id')
             ->nullable()
             ->unsigned();
-            $table->string('destination_name');
-            $table->string('terminal_name');
+            $table->string('destination');
+            $table->string('origin');
 
             $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending', 'Cancelled', 'Departed','OnBoard','Refunded','Deleted']);

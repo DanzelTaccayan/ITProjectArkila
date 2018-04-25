@@ -22,18 +22,12 @@ class CreateTripTable extends Migration
             $table->integer('van_id')
             ->unsigned();
             
-            $table->string('terminal_name');
+            $table->string('destination');
             $table->string('origin');
-            $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
-            $table->enum('status', ['Departed', 'On Queue'])->default('On Queue');
             $table->smallInteger('total_passengers')->nullable();
             $table->decimal('total_booking_fee', 11, 2)->nullable();
             $table->decimal('community_fund', 11, 2);
             $table->decimal('SOP', 11, 2)->nullable();
-            $table->date('date_departed')->nullable();
-            $table->time('time_departed')->nullable();
-            $table->integer('queue_number')->nullable();
-            $table->boolean('has_privilege');
             $table->enum('report_status', ['Pending', 'Accepted', 'Declined'])->default('Pending');
 
             $table->foreign('van_id')

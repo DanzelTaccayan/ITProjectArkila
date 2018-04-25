@@ -27,7 +27,6 @@ class CreateVanRentalTable extends Migration
 
             $table->date('departure_date');
             $table->time('departure_time');
-            $table->smallInteger('number_of_days');
             $table->string('destination');
             $table->string('contact_number');
             $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])

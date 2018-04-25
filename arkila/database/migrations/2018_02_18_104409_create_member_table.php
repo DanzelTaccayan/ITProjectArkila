@@ -31,7 +31,6 @@ class CreateMemberTable extends Migration
             $table->string('address');
             $table->string('provincial_address');
             $table->date('birth_date');
-            $table->smallInteger('age');
             $table->enum('gender', ['Male', 'Female']);
             $table->string('person_in_case_of_emergency');
             $table->string('emergency_address');

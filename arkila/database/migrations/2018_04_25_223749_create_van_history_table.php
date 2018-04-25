@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateArchiveVanTable extends Migration
+class CreateVanHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateArchiveVanTable extends Migration
      */
     public function up()
     {
-        Schema::create('archive_van', function (Blueprint $table) {
+        Schema::create('van_history', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('archive_van_id');
+            $table->increments('van_history_id');
 
             $table->integer('van_id')
             ->unsigned();
@@ -33,7 +33,6 @@ class CreateArchiveVanTable extends Migration
                 ->references('member_id')->on('member')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
-
         });
     }
 
@@ -44,6 +43,6 @@ class CreateArchiveVanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archive_van');
+        Schema::dropIfExists('van_history');
     }
 }
