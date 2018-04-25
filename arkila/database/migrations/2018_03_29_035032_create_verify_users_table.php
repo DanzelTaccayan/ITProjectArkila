@@ -14,6 +14,7 @@ class CreateVerifyUsersTable extends Migration
     public function up()
     {
         Schema::create('verify_users', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->integer('user_id');
             $table->string('token');
             $table->timestamps();

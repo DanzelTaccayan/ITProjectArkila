@@ -14,6 +14,7 @@ class CreateLedgerTable extends Migration
     public function up()
     {
         Schema::create('ledger', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('ledger_id');
 
             $table->string('description');
