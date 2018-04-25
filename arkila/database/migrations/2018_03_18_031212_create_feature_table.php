@@ -13,11 +13,11 @@ class CreateFeatureTable extends Migration
      */
     public function up()
     {
-        Schema::create('features', function (Blueprint $table) {
+        Schema::create('feature', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('description');
-            $table->enum('Status', ['enable', 'disable'])->nullable();
+            $table->enum('status', ['enable', 'disable'])->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateFeatureTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('features');
+        Schema::dropIfExists('feature');
     }
 }
