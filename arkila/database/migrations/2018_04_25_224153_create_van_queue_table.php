@@ -22,13 +22,15 @@ class CreateVanQueueTable extends Migration
             ->nullable();
 
             $table->integer('driver_id')
-                ->unsigned()
-                ->nullable();
+            ->unsigned()
+            ->nullable();
 
             $table->integer('van_id')
             ->unsigned();
 
-            $table->integer('queue_number')->nullable();
+            $table->integer('queue_number')
+            ->nullable();
+
             $table->boolean('has_privilege');
             $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
 
