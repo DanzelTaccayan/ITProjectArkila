@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\Destination;
-use App\Terminal;
-use App\FeesAndDeduction;
+use App\Fee;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -21,11 +20,11 @@ class ReservationsController extends Controller
     public function index()
     {
         //
-        $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
+        // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
     
         $reservations = Reservation::all();
         $destinations = Destination::all();
-        $discounts = FeesAndDeduction::where('type', 'Discount')->get();
+        $discounts = Fee::where('type', 'Discount')->get();
         
         return view('reservations.index', compact('discounts','reservations', 'destinations', 'terminals'));
     }

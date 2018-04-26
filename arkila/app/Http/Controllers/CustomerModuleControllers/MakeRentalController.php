@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\CustomerModuleControllers;
 
 use App\User;
-use App\Rental;
+use App\VanRental;
 use App\VanModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class MakeRentalController extends Controller
     {
     	// dd($request->van_model == null ? true : false);
     	if($request->message == null){
-    		$rent = Rental::create([
+    		$rent = VanRental::create([
     			"user_id" => Auth::id(),
 	    		"customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
 	    		"departure_date" => $request->date,
@@ -38,7 +38,7 @@ class MakeRentalController extends Controller
 	    		"rent_type" => 'Online',
     		]);
     	}else{
-    		$rent = Rental::create([
+    		$rent = VanRental::create([
     			"user_id" => Auth::id(),
 	    		"first_name" => Auth::user()->first_name,
 	    		"last_name" => Auth::user()->last_name,
