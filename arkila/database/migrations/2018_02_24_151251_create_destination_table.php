@@ -21,6 +21,8 @@ class CreateDestinationTable extends Migration
             ->nullable();
             $table->decimal('short_trip_fare', 11, 2)
             ->nullable();
+            $table->decimal('short_trip_fare_discount', 11, 2)
+            ->nullable();
             $table->boolean('is_terminal');
             $table->boolean('is_main_terminal');
             $table->timestamps();
