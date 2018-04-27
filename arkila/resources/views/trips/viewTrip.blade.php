@@ -21,21 +21,36 @@
                             </div>
                             <div class="box-body" id="inner-dest">
 
-                                @php $totalPassengers = 0; @endphp
-                                @foreach($destinations as $key => $values)
-                                    @if($trip->trip_id == $values->tripid)
-                                    @php $innerRoutesArr[$key] = $values; @endphp
-                                <div class="form-group inner-routes">
-                                    <label for="">{{$values->destdesc}}</label>
-                                    <input class="form-control pull-right" type="number" id="qty{{$trip->trip_id}}" style="width:30%;" value="{{$values->counts}}" disabled>
-                                </div>
-                                    @php $totalPassengers = $totalPassengers + $values->counts; @endphp
-                                    @endif
-                                @endforeach
-                                
+                                <table class="table table-bordered table-striped table-responsive">
+                                    <tbody>
+                                        <tr>
 
-                                <label for="">Total</label>
-                                <input id="" class="form-control pull-right" type="text" id="total" style="width:30%;" value="{{$totalPassengers}}" disabled>
+                                            <th>Route</th>
+                                            <th>#Passenger</th>
+                                            <th>#Discounted</th>
+                                        </tr>
+                                        <tr>
+                                        @php $totalPassengers = 0; @endphp
+                                        @foreach($destinations as $key => $values)
+                                            @if($trip->trip_id == $values->tripid)
+                                            @php $innerRoutesArr[$key] = $values; @endphp
+                                            <td >{{$values->destdesc}}</td>
+                                            <td class="text-right">{{$values->counts}}</td>
+                                            <td class="text-right">1</th>
+                                        </tr>
+                                        @php $totalPassengers = $totalPassengers + $values->counts; @endphp
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right">{{$totalPassengers}}</th>
+                                            <th class="text-right">3</th> 
+                                        </tr>
+
+                                    </tfoot>
+                                </table> 
                             </div>
                         </div>
 
