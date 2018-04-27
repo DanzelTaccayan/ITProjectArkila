@@ -12,15 +12,15 @@
         </div>
         <div class="form-group">
             <label>Regular Fare: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" step="0.25" name="regularFare" required>
+            <input type="number" class="form-control" min="0" step="0.25" name="regularFare" required>
         </div>
         <div class="form-group">
             <label>Discounted Fare: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" step="0.25" name="regularFare">
+            <input type="number" class="form-control" min="0" step="0.25" name="regularFare">
         </div>
         <div class="form-group">
             <label>Number of Tickets: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" step="0.25" name="numticket" required="">
+            <input type="number" class="form-control" min="0" step="0.25" name="numticket" required="">
         </div>
         <div class="form-group">
         	<label>Type:</label>
@@ -41,11 +41,32 @@
     <div class="form-section">
     	<div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" step="0.25" name="bookingFee" required>
+          <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" required>
       </div>
       <div class="form-group">
-          <label>Short Trip Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" step="  0.25" name="sTripFare">
+          <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
+          <input type="number" class="form-control" min="0" step="0.25" name="sTripFare">
+      </div>
+       <div class="form-group">
+          <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
+          <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare">
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label>Origin Terminal: <span class="text-red">*</span> </label>
+        <input type="text" class="form-control" name="originTerm" required>
+      </div>
+      
+      <div class="form-group">
+          <label>Destination Terminal: <span class="text-red">*</span> </label>
+          <div class="checkbox">
+            <label><input type="checkbox" value="">Cabanatuan</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" value="">San Jose City</label>
+          </div>
       </div>
     </div>
 
@@ -57,8 +78,8 @@
 	@section('form-btn')
      <div style="overflow:auto;">
           <div class="form-navigation" style="float:right;">
-              <button type="button" id="prevBtn"  class="previous btn btn-default">Previous</button>
-              <button type="button" id="nextBtn"  class="next btn btn-primary">Next</button>
+              <button type="button" id="prevBtn" class="previous btn btn-default">Previous</button>
+              <button type="button" id="nextBtn" class="next btn btn-primary">Next</button>
               <input type="submit" class="btn btn-primary">
           </div>
       </div>
