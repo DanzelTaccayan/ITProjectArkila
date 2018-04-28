@@ -436,13 +436,13 @@ ol.vertical{
             $('#specialUnitList').load('/listSpecialUnits/'+terminal);
         });
 
-    @foreach($trips as $trip)
+    @foreach($queues as $queue)
 
-      $('#remark{{$trip->trip_id}}').editable({
+      $('#remark{{$queue->van_queue_id}}').editable({
           name: "remarks",
           type: "select",
           title: "Update Remark",
-        value: "@if(is_null($trip->remarks)){{'NULL'}}@else{{$trip->remarks}}@endif",
+        value: "@if(is_null($queue->remarks)){{'NULL'}}@else{{$queue->remarks}}@endif",
           source: [
                 {value: 'NULL', text: '...'},
                 {value: 'CC', text: 'CC'},
@@ -450,7 +450,7 @@ ol.vertical{
                 {value: 'OB', text: 'OB'}
              ],
         url:'{{route('trips.updateRemarks',[$trip->trip_id])}}',
-        pk: '{{$trip->trip_id}}',
+        pk: '{{$queue->van_queue_id}}',
         validate: function(value){
              if($.trim(value) == ""){
                     return "This field is required";
@@ -474,8 +474,8 @@ ol.vertical{
       });
 
     @endforeach
-    @foreach($trips as $trip)
-              $('#queue{{$trip->trip_id}}').editable({
+    @foreach($queues as $queue)
+              $('#queue{{$queue->van_queue_id}}').editable({
                   name: 'queue',
                   value: '{{ $trip->queue_number }}',
                   type: 'select',

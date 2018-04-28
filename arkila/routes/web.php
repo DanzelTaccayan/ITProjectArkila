@@ -148,24 +148,28 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     /* Trips */
     Route::post('/home/trips/{destination}/{van}/{member}', 'TripsController@store')->name('trips.store');
     Route::get('/listSpecialUnits/{terminal}','TripsController@listSpecialUnits')->name('trips.listSpecialUnits');
-    Route::patch('/home/trips/{trip}', 'TripsController@updateRemarks')->name('trips.updateRemarks');
     Route::patch('/home/trips/changeDestination/{trip}', 'TripsController@updateDestination')->name('trips.updateDestination');
     Route::resource('/home/trips', 'TripsController',[
         'except' => ['index','create','show','edit','update']
     ]);
-    Route::resource('/home/vanqueue','VanQueueController');
-    Route::post('/vanqueue', 'TripsController@updateVanQueue')->name('trips.updateVanQueue');
+
     Route::get('/showTrips/{terminal}', 'TripsController@showTrips');
-    Route::patch('/updateQueueNumber/{trip}', 'TripsController@updateQueueNumber')->name('trips.updateQueueNumber');
-    Route::post('/specialUnitChecker','TripsController@specialUnitChecker')->name('trips.specialUnitChecker');
+    Route::patch('/updateQueueNumber/{trip}', 'TripsController@updateQueueNumber')->name('vanqueue.updateQueueNumber');
+    Route::post('/vanqueue', 'TripsController@updateVanQueue')->name('trips.updateVanQueue');
     Route::patch('/putOnDeck/{trip}','TripsController@putOnDeck')->name('trips.putOnDeck');
-    Route::post('/changeRemarksOB/{trip}','TripsController@changeRemarksOB')->name('trips.changeRemarksOB');
-    Route::get('/showConfirmationBox/{encodedTrips}','TripsController@showConfirmationBox');
-    Route::get('/showConfirmationBoxOB/{encodedTrips}','TripsController@showConfirmationBoxOb');
+    Route::post('/changeRemarksOB/{trip}','TripsController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
     Route::get('/listQueueNumbers/{terminal}','TripsController@listQueueNumbers')->name('trips.listQueueNumbers');
     Route::get('/home/terminal', 'AdminCreateDriverReportController@chooseTerminal')->name('trips.admin.chooseDestination');
     Route::get('/home/terminal/{terminals}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
     Route::post('/home/terminal/{terminals}/create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
+
+    /* Van Queue */
+     Route::resource('/home/vanqueue','VanQueueController');
+     Route::post('/specialUnitChecker','VanQueueController@specialUnitChecker')->name('vanqueue.specialUnitChecker');
+     Route::patch('/home/trips/{vanOnQueue}', 'TripsController@updateRemarks')->name('vanqueue.updateRemarks');
+     Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
+     Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
+
     /* Transactions(Ticket) */
     Route::resource('/home/transactions', 'TransactionsController',[
         'except' => ['create','show','edit','update']
