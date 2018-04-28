@@ -15,20 +15,34 @@
                     <form action="{{route('drivermodule.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
-                        <div class="col-md-6">
+                         <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
+                            <div class="col-sm-4">
+                                
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="text-center">#Passengers</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="text-center">#Discounted</label>
+                            </div>
                           @php $counter = 0; @endphp
                           @foreach($destinations as $destination)
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">{{$destination->description}}</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <input type="hidden" name="destination[]" value="{{$destination->destid}}">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="hidden" name="discount[]" value="">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
                                 </div>
                             </div>
                             @php $counter++; @endphp
                           @endforeach
                         </div>
+                     
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
                             <div class="form-group">
@@ -66,13 +80,7 @@
                                 <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
-                                  <div class='form-group'>
-                                      <label for='Discounts' class="col-sm-4">Passengers with Discounts:</label>
-                                      <div class="col-sm-6">
-                                        <input type="hidden" name="discountId[]" value="{{$fad->fad_id}}">
-                                          <input value="{{old('numberOfDiscount')}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
-                                      </div>
-                                  </div>
+                                  
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
