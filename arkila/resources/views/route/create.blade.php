@@ -56,7 +56,7 @@
     <div class="form-section">
       <div class="form-group">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
-        <input type="text" class="form-control" name="originTerm" required>
+        <input type="text" class="form-control" name="originTerm" disabled>
       </div>
       
       <div class="form-group">
@@ -68,11 +68,6 @@
             <label><input type="checkbox" value="">San Jose City</label>
           </div>
       </div>
-    </div>
-
-    <div style="text-align:center;margin-top:40px;">
-        <span class="step"></span>
-        <span class="step"></span>
     </div>
 
 	@section('form-btn')
@@ -91,8 +86,8 @@
 
    <script type="text/javascript">
         $(function () {
-          var $sections = $('.form-section');
 
+          var $sections = $('.form-section');
           function navigateTo(index) {
             // Mark the current section with the class 'current'
             $sections
@@ -104,6 +99,7 @@
             var atTheEnd = index >= $sections.length - 1;
             $('.form-navigation .next').toggle(!atTheEnd);
             $('.form-navigation [type=submit]').toggle(atTheEnd);
+
           }
 
           function curIndex() {
@@ -118,11 +114,7 @@
 
           // Next button goes forward iff current block validates
           $('.form-navigation .next').click(function() {
-            $('.parsley-form').parsley().whenValidate({
-              group: 'block-' + curIndex()
-            })  .done(function() {
               navigateTo(curIndex() + 1);
-            });
           });
 
           // Prepare sections by setting the `data-parsley-group` attribute to 'block-0', 'block-1', etc.

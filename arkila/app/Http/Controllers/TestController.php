@@ -13,7 +13,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        return view('terminal.create');
+        return view('route.create');
     }
 
     /**
