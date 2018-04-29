@@ -46,9 +46,23 @@ class Destination extends Model
         ->withPivot('route');
     }
 
+
     public function vanQueue()
     {
         return $this->hasMany(VanQueue::class, 'destination_id');
+    }
+
+    public static function scopeAllTerminal($query)
+    {
+        return $query->where([
+            ['is_terminal','1'],
+            ['is_main_terminal', '0'],
+        ]);
+    }
+
+    public static function scopeAllRoute($query)
+    {
+        return $query->where('is_terminal','0');
     }
 
     // public function route(){
