@@ -28,11 +28,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function terminal()
-    {
-        return $this->hasOne(Terminal::class, 'terminal_id');
-    }
-
     public function member()
     {
         return $this->hasOne(Member::class, 'user_id', 'id');
@@ -50,12 +45,7 @@ class User extends Authenticatable
 
     public function rental()
     {
-      return $this->hasMany(Rental::class, 'user_id', 'id');
-    }
-
-    public function rentals()
-    {
-      return $this->hasMany(Rental::class, 'driver_id', 'id');
+      return $this->hasMany(VanRental::class, 'user_id', 'id');
     }
 
     public function scopeStatusEnable($query)

@@ -13,14 +13,7 @@ class Member extends Model
     ];
 
     public function van(){
-        return $this->belongsToMany(Van::class,'member_van','member_id','plate_number');
-    }
-    public function children(){
-        return $this->hasMany(Dependent::class,'member_id','member_id');
-    }
-
-    public function rental(){
-    	return $this->belongsTo(Rental::Class, 'rent_id');
+        return $this->belongsToMany(Van::class,'member_van','member_id','van_id');
     }
 
     public function operator(){
@@ -48,17 +41,11 @@ class Member extends Model
     }
 
     public function archivedVan(){
-        return $this->belongsToMany(Van::class,'archive_van','member_id','plate_number','')->withTimestamps();
+        return $this->belongsToMany(Van::class,'archive_van','member_id','van_id','')->withTimestamps();
     }
 
     public function countDriverTrip(){
       return $this->trips();
-    }
-
-    public function addChildren($children){
-        foreach($children as $children_name=>$birthdate){
-            $this->children()->create(compact('children_name','birthdate'));
-        }
     }
 
     public static function scopeAllOperators($query){
@@ -68,7 +55,6 @@ class Member extends Model
     public static function scopeAllDrivers($query){
         return $query->where('role','Driver');
     }
-
 
     public function getEditContactNumberAttribute(){
         return substr($this->contact_number, 3);
@@ -86,16 +72,6 @@ class Member extends Model
         return  Carbon::parse($value)->format('m/d/Y');
     }
 
-    public function getSpouseBirthdateAttribute($value){
-        if(is_null($value)){
-            return null;
-        }
-        else {
-            return Carbon::parse($value)->format('m/d/Y');
-        }
-
-    }
-
     public function getExpiryDateAttribute($value){
         return Carbon::parse($value)->format('m/d/Y');
     }
@@ -106,18 +82,6 @@ class Member extends Model
 
     public function setBirthDateAttribute($value){
         $this->attributes['birth_date'] = Carbon::parse($value);
-    }
-
-    public function setSpouseBirthdateAttribute($value){
-        if(is_null($value))
-        {
-            $this->attributes['spouse_birthdate'] = $value;
-        }
-        else
-        {
-            $this->attributes['spouse_birthdate'] = Carbon::parse($value);
-        }
-
     }
 
     public function setExpiryDateAttribute($value){

@@ -21,7 +21,7 @@
                 </a>
             </li>
             <li class="{{ Request::is('home/trips') ? 'active' : '' }}">
-                <a href="{{route('trips.index')}}">
+                <a href="{{route('vanqueue.index')}}">
                     <i class="fa fa-list-ol"></i>
                     <span>Van Queue</span>
                 </a>

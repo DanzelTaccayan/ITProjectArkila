@@ -12,13 +12,10 @@ class VanModel extends Model
     protected $fillable = [
         'description',
     ];
+    
     public function van() {
-    	return $this->hasMany(Van::Class, 'plate_number');
+    	return $this->hasMany(Van::Class, 'van_id');
         
-    }
-
-    public function rental(){
-    	return $this->hasOne(Rental::Class, 'rent_id');
     }
 
 }

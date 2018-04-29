@@ -18,37 +18,20 @@ class CreateTripTable extends Migration
             $table->increments('trip_id');
             $table->integer('driver_id')
             ->unsigned();
-            $table->integer('terminal_id')
+            
+            $table->integer('van_id')
             ->unsigned();
-            $table->integer('origin')
-            ->unsigned()
-            ->nullable();
-            $table->string('plate_number', 9);
-
-            $table->enum('remarks', ['OB', 'CC', 'ER'])->nullable();
-            $table->enum('status', ['Departed', 'On Queue'])->default('On Queue');
+            
+            $table->string('destination');
+            $table->string('origin');
             $table->smallInteger('total_passengers')->nullable();
-            $table->decimal('total_booking_fee', 7, 2)->nullable();
-            $table->decimal('community_fund', 7, 2);
-            $table->decimal('SOP', 7, 2)->nullable();
-            $table->date('date_departed')->nullable();
-            $table->time('time_departed')->nullable();
-            $table->integer('queue_number')->nullable();
-            $table->boolean('has_privilege');
+            $table->decimal('total_booking_fee', 11, 2)->nullable();
+            $table->decimal('community_fund', 11, 2);
+            $table->decimal('SOP', 11, 2)->nullable();
             $table->enum('report_status', ['Pending', 'Accepted', 'Declined'])->default('Pending');
 
-            $table->foreign('terminal_id')
-            ->references('terminal_id')->on('terminal')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
-
-            $table->foreign('origin')
-            ->references('terminal_id')->on('terminal')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-            $table->foreign('plate_number')
-            ->references('plate_number')->on('van')
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 

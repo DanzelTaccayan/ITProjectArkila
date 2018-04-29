@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Rental;
+use App\VanRental;
 use Carbon\Carbon;
 use App\Van;
 use App\VanModel;
@@ -21,7 +21,7 @@ class RentalsController extends Controller
     public function index()
     {
         //
-        $rentals = Rental::all();
+        $rentals = VanRental::all();
         $vans = Van::all();
         return view('rental.index', compact('vans', 'rentals'));
     }
@@ -73,7 +73,7 @@ class RentalsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Rental $rental)
+    public function update(VanRental $rental)
     {
       $this->validate(request(),[
         "click" => [
@@ -94,7 +94,7 @@ class RentalsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rental $rental)
+    public function destroy(VanRental $rental)
     {
         $rental->delete();
         return back()->with('message', 'Successfully Deleted');

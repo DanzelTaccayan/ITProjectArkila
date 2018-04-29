@@ -17,16 +17,6 @@ class Transaction extends Model
     //   'trip_id',
     //   'status',
     // ];
-    public function destination()
-    {
-        return $this->belongsTo(Destination::class, 'destination_id');
-    }
-
-
-    public function feesAndDeduction()
-    {
-        return $this->belongsTo(FeesAndDeduction::class, 'fad_id');
-    }
 
     public function trip()
     {
@@ -36,9 +26,5 @@ class Transaction extends Model
     public function ticket()
     {
         return $this->belongsTo(Ticket::Class, 'ticket_id');
-    }
-
-    public function terminal(){
-        return $this->belongsTo(Terminal::Class, 'terminal_id');
     }
 }

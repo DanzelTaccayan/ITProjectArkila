@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Ticket;
-
-use App\FeesAndDeduction;
 use App\Destination;
 use App\Feature;
 use App\Terminal;
@@ -12,7 +10,8 @@ use App\User;
 use App\Van;
 use App\Member;
 use App\Reservation;
-use App\Rental;
+use App\VanRental;
+use App\Fee;
 
 
 class HomeController extends Controller
@@ -37,20 +36,17 @@ class HomeController extends Controller
         $numberOfOperators = count(Member::allOperators()->get());
         $numberOfVans = count(Van::all());
         $numberOfReservations =count(Reservation::all());
-        $numberOfRentals = count(Rental::all());
+        $numberOfRentals = count(VanRental::all());
         return view('home', compact('numberOfOperators','numberOfVans','numberOfReservations','numberOfRentals'));
     }
 
     public function settings(){
-        $fees = FeesAndDeduction::latest()->where('type','Fee')->get();
-        $discounts = FeesAndDeduction::latest()->where('type','Discount')->get();
-        $destinations = Destination::all();
-        $terminals = Terminal::whereNotIn('terminal_id', [auth()->user()->terminal_id])->get();
-        $terminalsFee = Terminal::all();
+        $fees = Fee::latest()->get();
+        $terminalsFee = Destination::all();
         $tickets = Ticket::all();
         $features = Feature::all();
 
-        return view('settings.index', compact('fees','destinations', 'terminals', 'discounts','tickets','features','terminalsFee'));
+        return view('settings.index', compact('fees','tickets','features','terminalsFee'));
     }
 
     public function usermanagement()

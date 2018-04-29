@@ -14,6 +14,7 @@ class CreateLedgerTable extends Migration
     public function up()
     {
         Schema::create('ledger', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('ledger_id');
 
             $table->string('description');
@@ -21,7 +22,7 @@ class CreateLedgerTable extends Migration
             ->nullable();
             $table->string('or_number')
             ->nullable();
-            $table->decimal('amount', 7, 2);
+            $table->decimal('amount', 11, 2);
 
             $table->enum('type', ['Revenue', 'Expense']);
 

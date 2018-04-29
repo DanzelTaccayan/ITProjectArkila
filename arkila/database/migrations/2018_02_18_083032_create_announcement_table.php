@@ -16,8 +16,8 @@ class CreateAnnouncementTable extends Migration
         Schema::create('announcement', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('announcement_id');
-            $table->string('title', 50);
-            $table->string('description', 1000);
+            $table->string('title');
+            $table->text('description');
             $table->enum('viewer', ['Public','Driver Only', 'Customer Only', 'Only Me']);
             $table->timestamps();
         });

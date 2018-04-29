@@ -151,8 +151,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/trips/{trip}', 'TripsController@updateRemarks')->name('trips.updateRemarks');
     Route::patch('/home/trips/changeDestination/{trip}', 'TripsController@updateDestination')->name('trips.updateDestination');
     Route::resource('/home/trips', 'TripsController',[
-        'except' => ['create','show','edit','update']
+        'except' => ['index','create','show','edit','update']
     ]);
+    Route::resource('/home/vanqueue','VanQueueController');
     Route::post('/vanqueue', 'TripsController@updateVanQueue')->name('trips.updateVanQueue');
     Route::get('/showTrips/{terminal}', 'TripsController@showTrips');
     Route::patch('/updateQueueNumber/{trip}', 'TripsController@updateQueueNumber')->name('trips.updateQueueNumber');

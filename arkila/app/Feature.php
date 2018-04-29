@@ -8,5 +8,5 @@ class Feature extends Model
 {
 
     protected $guarded = ['id'];
-    protected $table = 'features';
+    protected $table = 'feature';
 }

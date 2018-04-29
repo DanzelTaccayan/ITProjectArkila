@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateArchiveMemberTable extends Migration
+class CreateVanHistoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,23 @@ class CreateArchiveMemberTable extends Migration
      */
     public function up()
     {
-        Schema::create('archive_member', function (Blueprint $table) {
+        Schema::create('van_history', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('archive_member_id');
+            $table->increments('van_history_id');
 
-            $table->integer('operator_id')
-            ->unsigned()
-            ->nullable();
-
-            $table->integer('driver_id')
-                ->unsigned()
-                ->nullable();
+            $table->integer('van_id')
+            ->unsigned();
+            $table->integer('member_id')
+            ->unsigned();
 
             $table->timestamps();
 
-            $table->foreign('operator_id')
-            ->references('member_id')->on('member')
+            $table->foreign('van_id')
+            ->references('van_id')->on('van')
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
-            $table->foreign('driver_id')
+            $table->foreign('member_id')
                 ->references('member_id')->on('member')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
@@ -46,6 +43,6 @@ class CreateArchiveMemberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archive_member');
+        Schema::dropIfExists('van_history');
     }
 }

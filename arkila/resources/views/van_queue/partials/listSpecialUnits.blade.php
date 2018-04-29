@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-xs-12">
                         <div class="pull-right">
-                            <form method="POST" action="{{route('trips.destroy',[$trip->trip_id])}}">
+                            <form method="POST" action="{{route('van_queue',[$trip->trip_id])}}">
                                  {{method_field('DELETE')}}
                                  {{csrf_field()}}
                                 <a class="btn btn-default btn-xs itemSpBtn{{$trip->trip_id}}"> NO</a>

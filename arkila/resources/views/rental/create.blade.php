@@ -51,7 +51,7 @@
                                 <select class="form-control select2" name="plateNumber" id="plateNumber">
                                     <option value="" selected>Select Van Unit</option>
                                 @foreach ($vans as $van)
-                                   <option value="{{ $van->plate_number }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
+                                   <option value="{{ $van->van_id }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
                                    @endforeach
                                </select>
                             </div>

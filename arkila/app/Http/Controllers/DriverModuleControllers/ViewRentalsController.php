@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\DriverModuleControllers;
 
-use App\Rental;
+use App\VanRental;
 use App\Van;
 use App\User;
 use Validator;
@@ -17,12 +17,12 @@ class ViewRentalsController extends Controller
     {
         $user = User::find(Auth::id());
         $model_id = $user->member->van->first()->model_id ?? null;
-        $rentals = Rental::where('model_id', $model_id)->orWhere('model_id', null)->get();
+        $rentals = VanRental::where('model_id', $model_id)->orWhere('model_id', null)->get();
         $vans = Van::all();
         return view('drivermodule.rentals.rental', compact('rentals', 'vans', 'model_id'));
     }
 
-    public function updateRental(Rental $rental)
+    public function updateRental(VanRental $rental)
     {
       $this->validate(request(),[
         "click" => [
