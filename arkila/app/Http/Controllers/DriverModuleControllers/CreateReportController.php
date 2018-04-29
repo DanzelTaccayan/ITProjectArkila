@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Rules\checkCurrency;
 use App\Rules\checkTime;
 use Carbon\Carbon;
-use App\FeesAndDeduction;
 use App\Destination;
 use App\Transaction;
 use App\Terminal;
@@ -17,24 +16,21 @@ use App\Member;
 use App\Ticket;
 use App\Trip;
 use App\User;
-
+use App\Fee;
 class CreateReportController extends Controller
 {
   public function chooseTerminal()
   {
-    $terminals = Terminal::orderBy('terminal_id')->get();
-    $superAdmin = User::where('user_type', 'Super-Admin')->first();
-    $superAdminTerminal = $superAdmin->terminal->description;
-    return view('drivermodule.report.driverChooseDestination',compact('terminals', 'superAdminTerminal'));
+    $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
+    $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
+    return view('drivermodule.report.driverChooseDestination',compact('origins','mainTerminal'));
 
   }
 
-  public function createReport(Terminal $terminals)
+  public function createReport(Destination $terminals)
   {
-    $destinations = Destination::join('terminal', 'destination.terminal_id', '=', 'terminal.terminal_id')
-                    ->where('terminal.terminal_id', '=', $terminals->terminal_id)
-                    ->select('terminal.terminal_id as term_id','terminal.description as termdesc', 'destination.destination_id as destid', 'destination.description')->get();
-    $fad = FeesAndDeduction::where('type','=','Discount')->first();
+    $destinations = $terminals->routeFromDestination;
+    $fees = Fee::all();
     $member = Member::where('user_id', Auth::id())->first();
     return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fad', 'member'));
   }

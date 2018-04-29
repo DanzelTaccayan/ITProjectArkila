@@ -17,11 +17,8 @@
                       <div class="list-group">
                         <select id="selectDestination" class="form-control" name="chooseTerminal">
                           <option>Choose Terminal</option>
-                          @foreach($terminals as $terminal)
-                          @if($terminal->description == $superAdminTerminal)
-                            @continue
-                          @endif
-                            <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
+                          @foreach($origins as $origin)
+                            <option value="{{$origin->destination_id}}">{{$origin->destination_name}} to {{$mainTerminal->destination_name}}</option>
                           @endforeach
                         </select>
                       </div>
@@ -34,7 +31,7 @@
               <div class="text-center">
                 <button type="button" id="createReport" class="btn btn-primary">Proceed <i class="fa fa-chevron-right"></i></button>
               </div>
-                
+
             </div>
             <!-- /.box-footer -->
             </form>

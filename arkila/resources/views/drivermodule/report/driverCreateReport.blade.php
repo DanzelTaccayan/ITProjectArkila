@@ -18,7 +18,7 @@
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
-                                
+
                             </div>
                             <div class="col-sm-4">
                                 <label class="text-center">#Passengers</label>
@@ -29,8 +29,8 @@
                           @php $counter = 0; @endphp
                           @foreach($destinations as $destination)
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->description}}</label>
-                                <div class="col-sm-4">
+                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
+                                <div class="col-sm-6">
                                     <input type="hidden" name="destination[]" value="{{$destination->destid}}">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
                                 </div>
@@ -42,7 +42,7 @@
                             @php $counter++; @endphp
                           @endforeach
                         </div>
-                     
+
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
                             <div class="form-group">
@@ -79,8 +79,7 @@
                                 <input type="hidden" id="totalFee" value="{{$terminals->booking_fee}}">
                                 <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
-                            </div>
-                                  
+                          </div>
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
