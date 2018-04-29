@@ -119,7 +119,7 @@
                         <!-- The user image in the menu -->
                         <li class="user-header">
                           <img src="{{ URL::asset('img/bantrans-logo.png') }}" class="img-circle" alt="User Image">
-                            <p>BanTrans - Admin</p>
+                            <p>Ban Trans - Admin</p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">

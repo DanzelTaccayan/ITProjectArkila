@@ -8,7 +8,7 @@
             </div>
             <div class="pull-left info">
               <p>Ban Trans - Admin</p>
-              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+              <p>UV Express</p>
             </div>
         </div>
         <!-- /.search form -->
