@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\RouteRequest;
 use App\Destination;
 use App\Ticket;
+
 
 class RoutesController extends Controller
 {
@@ -37,16 +39,16 @@ class RoutesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RouteRequest $request)
     {
-        $name = ucwords(strtolower($request->addName));
+        $name = ucwords(strtolower($request->addTerminal));
         $terminals = Destination::allTerminal()->get();
         $main = Destination::where('is_main_terminal', '1')->first();
         $message = null;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
         if ($request->termRoute == 'Terminal')
-        {
+        {    
             $terminal = Destination::create([
                 'destination_name' => $name,
                 'booking_fee' => $request->bookingFee,
@@ -120,8 +122,6 @@ class RoutesController extends Controller
                     ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
                 } 
             }   
-
-
             $message = 'The route '. $name .' has been successfully created';
 
         }

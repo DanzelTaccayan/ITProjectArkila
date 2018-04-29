@@ -8,19 +8,19 @@
 	 <div class="form-section">
         <div class="form-group">
             <label>Name: <span class="text-red">*</span> </label>
-            <input type="text" class="form-control" name="addName" required>
+            <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
         </div>
         <div class="form-group">
             <label>Regular Fare: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" min="0" step="0.25" name="regularFare" required>
+            <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
         </div>
         <div class="form-group">
             <label>Discounted Fare: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" min="0" step="0.25" name="discountedFare">
+            <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}">
         </div>
         <div class="form-group">
             <label>Number of Tickets: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" min="0" step="0.25" name="numticket" required="">
+            <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
         </div>
         <div class="form-group">
         	<label>Type:</label>
@@ -41,26 +41,26 @@
     <div class="form-section">
     	<div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" required>
+          <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
       </div>
       <div class="form-group" id="shotTripReg">
           <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="sTripFare">
+          <input type="number" class="form-control" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}">
       </div>
        <div class="form-group" id="shotTripDis">
           <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare">
+          <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}">
       </div>
     <div class="form-group" id="origin" style="display:none">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
         <input type="text" class="form-control" name="originTerm" disabled>
       </div>
       
-      <div class="form-group" id="destination" style="display:none">
+      <div class="form-group" id="destination">
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" name="dest[{{$count}}]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
+            <label><input type="checkbox" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
           </div>
           @endforeach
       </div>
