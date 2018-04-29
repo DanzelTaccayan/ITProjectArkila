@@ -20,7 +20,7 @@
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
                             @foreach ($terminals as $terminal)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">BAGUIO - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
                             @endforeach
                             </ul>
                         </div>
@@ -31,7 +31,7 @@
                             @foreach ($terminals as $terminal)
                                 
                                 <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
-                                    <h3 class="profile-username text-center"><strong>BAGUIO - CABANATUAN</strong></h3> 
+                                    <h3 class="profile-username text-center"><strong>{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}</strong></h3> 
                                     <div class="col-md-6">
                                         <a href="{{route('route.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
                                     </div>
@@ -47,8 +47,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($terminal->routeFromDestination as $routes)
                                               <tr>
-                                                <td>wow</td>
+                                                <td>{{$routes->destination_name}}</td>
                                                 <td class="text-right">200</td>
                                                 <td class="text-right">500</td>
                                                 <td class="text-right">120</td>
@@ -59,6 +60,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                        @endforeach
                                             
                                             <!--DELETE MODAL MIGUEL-->
                                             <div class="modal fade" id="#">
