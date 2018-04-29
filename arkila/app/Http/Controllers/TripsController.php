@@ -16,32 +16,7 @@ use Illuminate\Validation\Rule;
 
 class TripsController extends Controller
 {
-    public function updateDestination(Trip $trip)
-    {
-        $this->validate(request(),[
-            'destination' => 'required|exists:terminal,terminal_id'
-        ]);
-        if(request('destination') != $trip->terminal_id){
-                $queueNum = count(Trip::where('terminal_id',request('destination'))->whereNotNull('queue_number')->get())+1;
-                $trips =Trip::where('terminal_id',$trip->terminal_id)->whereNotNull('queue_number')->get();
 
-                foreach( $trips as $tripObj){
-                    if($trip->trip_id == $tripObj->trip_id || $tripObj->queue_number < $trip->queue_number ){
-                        continue;
-                    }else{
-                        $tripObj->update([
-                            'queue_number' => ($tripObj->queue_number)-1
-                        ]);
-                    }
-                }
-
-                $trip->update([
-                    'terminal_id' => request('destination'),
-                    'queue_number' => $queueNum
-                ]);
-        }
-        return 'success';
-    }
 
     public function updateQueueNumber(Trip $trip)
     {
@@ -174,8 +149,6 @@ class TripsController extends Controller
 
     }
 
-
-
     public function putOnDeck(Trip $trip){
         $trips = Trip::where('terminal_id',$trip->terminal_id)->whereNotNull('queue_number')->get();
 
@@ -194,8 +167,6 @@ class TripsController extends Controller
 
         return back();
     }
-
-
 
     public function changeRemarksOB(Trip $trip)
     {
@@ -225,7 +196,6 @@ class TripsController extends Controller
         }
     }
 
-
     public function tripLog()
     {
         $trips = Trip::departed()->accepted()->get();
@@ -249,7 +219,6 @@ class TripsController extends Controller
         $superAdmin = $user->terminal;
         return view('trips.viewReport', compact('destinations', 'trip', 'superAdmin'));
     }
-
 
     public function listQueueNumbers(Terminal $terminal)
     {

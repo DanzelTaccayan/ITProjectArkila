@@ -20,11 +20,13 @@ class VanQueueController extends Controller
         $terminals = Destination::where('is_main_terminal',0);
         $queues = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
 
-        $drivers = Member::whereNotIn('member_id', function($query){
+        $drivers = Member::whereNotIn('member_id', function($query)
+        {
             $query->select('driver_id')->from('van_queue');
         })->where('status','Active')->get();
 
-        $vans = Van::whereNotIn('van_id', function($query){
+        $vans = Van::whereNotIn('van_id', function($query)
+        {
             $query->select('van_id')
                 ->from('van_queue')
                 ->where('has_privilege',1)
@@ -61,7 +63,8 @@ class VanQueueController extends Controller
             session()->flash('success', 'Van Succesfully Added to the queue');
             return 'success';
         }
-        else{
+        else
+        {
             session()->flash('error', 'Van is already on the Queue');
             return 'Van is already on the Queue';
         }
@@ -75,6 +78,33 @@ class VanQueueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateDestination(Trip $trip)
+    {
+        $this->validate(request(),[
+            'destination' => 'required|exists:terminal,terminal_id'
+        ]);
+        if(request('destination') != $trip->terminal_id){
+            $queueNum = count(Trip::where('terminal_id',request('destination'))->whereNotNull('queue_number')->get())+1;
+            $trips =Trip::where('terminal_id',$trip->terminal_id)->whereNotNull('queue_number')->get();
+
+            foreach( $trips as $tripObj){
+                if($trip->trip_id == $tripObj->trip_id || $tripObj->queue_number < $trip->queue_number ){
+                    continue;
+                }else{
+                    $tripObj->update([
+                        'queue_number' => ($tripObj->queue_number)-1
+                    ]);
+                }
+            }
+
+            $trip->update([
+                'terminal_id' => request('destination'),
+                'queue_number' => $queueNum
+            ]);
+        }
+        return 'success';
+    }
+
     public function updateRemarks(VanQueue $vanOnQueue)
     {
 
