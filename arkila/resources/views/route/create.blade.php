@@ -16,7 +16,7 @@
         </div>
         <div class="form-group">
             <label>Discounted Fare: <span class="text-red">*</span> </label>
-            <input type="number" class="form-control" min="0" step="0.25" name="regularFare">
+            <input type="number" class="form-control" min="0" step="0.25" name="discountedFare">
         </div>
         <div class="form-group">
             <label>Number of Tickets: <span class="text-red">*</span> </label>
@@ -27,12 +27,12 @@
 	        <div class="radio text-center">
 	            <label for=""> Terminal</label>
 	            <label class="radio-inline">
-	                <input type="radio" name="termRoute" checked="checked"  value="Terminal" class="flat-blue">
+	                <input type="radio" name="termRoute" onclick="javascript:radioSelect();" id="terminal" checked="checked"  value="Terminal" class="flat-blue">
 	            </label>
 
 	            <label for="">Route</label>
 	            <label class="radio-inline">
-	                <input type="radio" name="termRoute" value="Route" class="flat-blue" >
+	                <input type="radio" name="termRoute" id="route" onclick="javascript:radioSelect();" value="Route" class="flat-blue" >
 	            </label>
 	        </div>
         </div>
@@ -43,32 +43,31 @@
           <label>Booking Fee: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" required>
       </div>
-      <div class="form-group">
+      <div class="form-group" id="shotTripReg">
           <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="0" step="0.25" name="sTripFare">
       </div>
-       <div class="form-group">
+       <div class="form-group" id="shotTripDis">
           <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare">
       </div>
-    </div>
-
-    <div class="form-section">
-      <div class="form-group">
+    <div class="form-group" id="origin" style="display:none">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
         <input type="text" class="form-control" name="originTerm" disabled>
       </div>
       
-      <div class="form-group">
+      <div class="form-group" id="destination" style="display:none">
           <label>Destination Terminal: <span class="text-red">*</span> </label>
+          @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" value="">Cabanatuan</label>
+            <label><input type="checkbox" name="dest[{{$count}}]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
           </div>
-          <div class="checkbox">
-            <label><input type="checkbox" value="">San Jose City</label>
-          </div>
+          @endforeach
       </div>
     </div>
+
+    <!-- <div class="form-section">
+    </div> -->
 
 	@section('form-btn')
      <div style="overflow:auto;">
@@ -123,6 +122,7 @@
           });
           navigateTo(0); // Start at the beginning
         });
+
     </script>
 
 @endsection
