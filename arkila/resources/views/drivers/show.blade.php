@@ -20,8 +20,11 @@
         </h3>
     </div>
     <div class="box-body">
+        <button onclick="window.open('{{route('pdf.perDriver', [$driver->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
+
         <h3><i class="fa fa-user"></i> {{$driver->last_name}}, {{$driver->first_name}} {{$driver->middle_name}}
         </h3>
+
         <hr>
         <div class="row">
             <div class="col-md-4">
@@ -91,9 +94,6 @@
                     <p id="contactNumberD" name="contactNumberD" type="text" class="info-container">{{$driver->emergency_contactno}}</p>
                 </div>
             </div>
-        </div>
-        <div>
-            <button onclick="window.open('{{route('pdf.perDriver', [$driver->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT</button>   
         </div>
     </div>
 </div>
