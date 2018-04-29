@@ -65,10 +65,6 @@ class Destination extends Model
         return $query->where('is_terminal','0');
     }
 
-    public function ticket() {
-        return $this->hasMany(Ticket::Class,'ticket_id');
-    }
-
     // public function route(){
     //     return $this->belongsToMany(Destination::class,'route_terminal','destination_id','route');
     // }
