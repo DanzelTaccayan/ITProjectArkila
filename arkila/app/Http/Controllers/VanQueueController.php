@@ -41,18 +41,19 @@ class VanQueueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Terminal $destination, Van $van, Member $member )
+    public function store(Destination $destination, Van $van, Member $member )
     {
-        if( is_null(Trip::where('terminal_id',$destination->terminal_id)
-            ->where('plate_number',$van->plate_number)
-            ->whereNotNull('queue_number')->first()) ){
-            $queueNumber = Trip::where('terminal_id',$destination->terminal_id)
+        if( is_null(VanQueue::where('destination_id',$destination->destination_id)
+            ->where('van_id',$van->van_id)
+            ->whereNotNull('queue_number')->first()) )
+        {
+            $queueNumber = VanQueue::where('destination_id',$destination->destination_id)
                     ->whereNotNull('queue_number')
                     ->count()+1;
 
-            Trip::create([
-                'terminal_id' => $destination->terminal_id,
-                'plate_number' => $van->plate_number,
+            VanQueue::create([
+                'destination_id' => $destination->destination_id,
+                'van_id' => $van->van_id,
                 'driver_id' => $member->member_id,
                 'remarks' => NULL,
                 'queue_number' => $queueNumber
@@ -74,7 +75,7 @@ class VanQueueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateRemarks(Trip $trip)
+    public function updateRemarks(VanQueue $vanOnQueue)
     {
 
         $this->validate(request(),[
@@ -83,16 +84,103 @@ class VanQueueController extends Controller
 
 
         if(request('value') === 'NULL'){
-            $trip->update([
+            $vanOnQueue->update([
                 'remarks' => NULL
             ]);
         }else{
-            $trip->update([
+            $vanOnQueue->update([
                 'remarks' => request('value')
             ]);
         }
 
         return 'success';
+    }
+
+    public function specialUnitChecker()
+    {
+        $firstOnQueue = VanQueue::where('queue_number',1)->get();
+        $successfullyUpdated = [];
+        $pendingUpdate = [];
+        $responseArr = [];
+
+        foreach($firstOnQueue as $first)
+        {
+            if($first->remarks == "ER" || $first->remarks == 'CC')
+            {
+
+                $first->update([
+                    'queue_number' => null,
+                    'has_privilege' => 1
+                ]);
+                array_push($successfullyUpdated,$first->van_queue_id);
+
+                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', $first->destination_id)->get();
+
+                foreach($queue as $vanOnQueue)
+                {
+                    $queueNumber = ($vanOnQueue->queue_number)-1;
+                    $vanOnQueue->update([
+                        'queue_number'=> $queueNumber
+                    ]);
+                }
+
+            }elseif($first->remarks =='OB')
+            {
+                array_push($pendingUpdate,$first->van_queue_id);
+            }
+        }
+        $responseArr[0] = http_build_query($successfullyUpdated);
+        $responseArr[1] = http_build_query($pendingUpdate);
+
+        return response()->json($responseArr);
+    }
+
+    public function showConfirmationBox($encodedQueue)
+    {
+        $queue = [];
+        parse_str($encodedQueue,$queue);
+        if(!is_array($queue))
+        {
+            abort(404);
+        }else
+        {
+            $vansObjArr = [];
+            foreach($queue as $vanOnQueue)
+            {
+                if($vanObj = VanQueue::find($vanOnQueue))
+                {
+                    array_push($vansObjArr,$vanObj);
+                }else
+                {
+                    abort(404);
+                }
+            }
+        }
+        return view('van_queue.partials.confirmDialogBox',compact('vansObjArr'));
+    }
+
+    public function showConfirmationBoxOb($encodedQueue)
+    {
+        $queue = [];
+        parse_str($encodedQueue,$queue);
+        if(!is_array($queue))
+        {
+            abort(404);
+        }else
+        {
+            $vansObjArr = [];
+            foreach($queue as $vanOnQueue)
+            {
+                if($vanObj = VanQueue::find($vanOnQueue))
+                {
+                    array_push($vansObjArr,$vanObj);
+                }else
+                {
+                    abort(404);
+                }
+            }
+        }
+        return view('message.confirm',compact('vansObjArr'));
     }
 
 }
