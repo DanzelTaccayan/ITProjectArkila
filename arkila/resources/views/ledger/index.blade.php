@@ -15,7 +15,7 @@
                 <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>
             Add Revenue/Expense 
         </a>
-                <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT</button>
+                <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>
             </div>
             <table class="table table-bordered table-striped dailyLedgerTable">
                 <thead>
