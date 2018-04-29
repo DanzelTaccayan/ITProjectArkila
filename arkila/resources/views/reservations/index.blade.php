@@ -79,7 +79,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
                                 <div class="col-md-6">
-                                    <a href="/home/reservations/create" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
+                                    <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
                                 </div>
 
                                 <table class="table table-bordered table-striped listReservation">

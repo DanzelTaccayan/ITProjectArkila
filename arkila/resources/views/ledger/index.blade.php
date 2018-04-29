@@ -12,7 +12,7 @@
         <h2 class="text-center">{{ $date->formatLocalized('%A %d %B %Y') }}</h2>
         <div class="table-responsive">
             <div class="col col-md-6">
-                <a href="{{route('ledger.create')}}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-plus"></i>
+                <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>
             Add Revenue/Expense 
         </a>
                 <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT</button>

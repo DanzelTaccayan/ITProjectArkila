@@ -18,40 +18,6 @@ class TripsController extends Controller
 {
 
 
-
-
-
-
-
-
-
-    public function updateDestination(Trip $trip)
-    {
-        $this->validate(request(),[
-            'destination' => 'required|exists:terminal,terminal_id'
-        ]);
-        if(request('destination') != $trip->terminal_id){
-                $queueNum = count(Trip::where('terminal_id',request('destination'))->whereNotNull('queue_number')->get())+1;
-                $trips =Trip::where('terminal_id',$trip->terminal_id)->whereNotNull('queue_number')->get();
-
-                foreach( $trips as $tripObj){
-                    if($trip->trip_id == $tripObj->trip_id || $tripObj->queue_number < $trip->queue_number ){
-                        continue;
-                    }else{
-                        $tripObj->update([
-                            'queue_number' => ($tripObj->queue_number)-1
-                        ]);
-                    }
-                }
-
-                $trip->update([
-                    'terminal_id' => request('destination'),
-                    'queue_number' => $queueNum
-                ]);
-        }
-        return 'success';
-    }
-
     public function updateQueueNumber(Trip $trip)
     {
         $tripsArr = [];
@@ -183,42 +149,6 @@ class TripsController extends Controller
 
     }
 
-    public function specialUnitChecker()
-    {
-        $firstOnQueue = Trip::where('queue_number',1)->get();
-        $successfullyUpdated = [];
-        $pendingUpdate = [];
-        $responseArr = [];
-
-            foreach($firstOnQueue as $first) {
-                if($first->remarks == "ER" || $first->remarks == 'CC'){
-
-                    $first->update([
-                        'queue_number' => null,
-                        'has_privilege' => 1
-                    ]);
-                    array_push($successfullyUpdated,$first->trip_id);
-
-                    $trips = Trip::whereNotNull('queue_number')->where('terminal_id', $first->terminal_id)->get();
-
-                    foreach($trips as $trip) {
-                        $queueNumber = ($trip->queue_number)-1;
-                        $trip->update([
-                            'queue_number'=> $queueNumber
-                            ]);
-
-                    }
-
-                }elseif($first->remarks =='OB') {
-                    array_push($pendingUpdate,$first->trip_id);
-                }
-            }
-            $responseArr[0] = http_build_query($successfullyUpdated);
-            $responseArr[1] = http_build_query($pendingUpdate);
-
-            return response()->json($responseArr);
-    }
-
     public function putOnDeck(Trip $trip){
         $trips = Trip::where('terminal_id',$trip->terminal_id)->whereNotNull('queue_number')->get();
 
@@ -236,44 +166,6 @@ class TripsController extends Controller
         ]);
 
         return back();
-    }
-
-    public function showConfirmationBox($encodedTrips)
-    {
-        $trips = [];
-        parse_str($encodedTrips,$trips);
-        if(!is_array($trips)){
-            abort(404);
-        }else{
-            $tripsObjArr = [];
-            foreach($trips as $trip){
-                if($tripObj = Trip::find($trip)){
-                    array_push($tripsObjArr,$tripObj);
-                }else{
-                    abort(404);
-                }
-            }
-        }
-        return view('trips.partials.confirmDialogBox',compact('tripsObjArr'));
-    }
-
-    public function showConfirmationBoxOb($encodedTrips)
-    {
-        $trips = [];
-        parse_str($encodedTrips,$trips);
-        if(!is_array($trips)){
-            abort(404);
-        }else{
-            $tripsObjArr = [];
-            foreach($trips as $trip){
-                if($tripObj = Trip::find($trip)){
-                    array_push($tripsObjArr,$tripObj);
-                }else{
-                    abort(404);
-                }
-            }
-        }
-        return view('message.confirm',compact('tripsObjArr'));
     }
 
     public function changeRemarksOB(Trip $trip)
@@ -304,7 +196,6 @@ class TripsController extends Controller
         }
     }
 
-
     public function tripLog()
     {
         $trips = Trip::departed()->accepted()->get();
@@ -328,7 +219,6 @@ class TripsController extends Controller
         $superAdmin = $user->terminal;
         return view('trips.viewReport', compact('destinations', 'trip', 'superAdmin'));
     }
-
 
     public function listQueueNumbers(Terminal $terminal)
     {

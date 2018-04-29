@@ -96,6 +96,7 @@ ol.vertical{
 .queuenum a:hover{
   background: #eb6b5c;
   transition: all .3s ease-out;
+
 }
 .queuenum a:afters{
   position: absolute; 
@@ -105,10 +106,12 @@ ol.vertical{
     top: 50%;
     margin-top: -.5em;
     transition: all .3s ease-out;
+
 }
-.queuenum a:hover:after{
-    left: -.5em;
+.queue-item:hover{
+    left: -.5em;    
     border-left-color: #fa8072;    
+    cursor: move;
 
 }
 
@@ -162,7 +165,7 @@ ol.vertical{
                        </select>
 
                        <label for="">Destination</label>
-                      <select @if($vans->first() == null | $terminals->first() ==null | $drivers ->first() ==null) {{'disabled'}} @endif name="destination" id="destination" class="form-control">
+                      <select @if($vans->first() == null | $terminals->first() ==null | $drivers ->first() ==null) {{'disabled'}} @endif name="destination" id="destination" class="form-control select2">
                           @if($terminals->first() != null)
                             @foreach ($terminals as $terminal)
                                 <option value="{{$terminal->terminal_id}}">{{ $terminal->description }}</option>
@@ -189,13 +192,13 @@ ol.vertical{
 
                       <div class="box-footer">
                           <div class="pull-right">
-                              <button id="addQueueButt" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                              <button id="addQueueButt" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> ADD</button>
                           </div>
                       </div>
                     @else
                     <div class="box-footer">
                         <div class="pull-right">
-                            <button  data-toggle="tooltip" class="btn btn-primary" title="Please add vans, destinations, or drivers before adding a van to the queue" disabled><i class="fa fa-plus"></i> Add </button>
+                            <button  data-toggle="tooltip" class="btn btn-primary btn-sm" title="Please add vans, destinations, or drivers before adding a van to the queue" disabled><i class="fa fa-plus"></i> ADD </button>
                         </div>
                     </div>
                 @endif
@@ -436,13 +439,13 @@ ol.vertical{
             $('#specialUnitList').load('/listSpecialUnits/'+terminal);
         });
 
-    @foreach($trips as $trip)
+    @foreach($queues as $queue)
 
-      $('#remark{{$trip->trip_id}}').editable({
+      $('#remark{{$queue->van_queue_id}}').editable({
           name: "remarks",
           type: "select",
           title: "Update Remark",
-        value: "@if(is_null($trip->remarks)){{'NULL'}}@else{{$trip->remarks}}@endif",
+        value: "@if(is_null($queue->remarks)){{'NULL'}}@else{{$queue->remarks}}@endif",
           source: [
                 {value: 'NULL', text: '...'},
                 {value: 'CC', text: 'CC'},
@@ -450,7 +453,7 @@ ol.vertical{
                 {value: 'OB', text: 'OB'}
              ],
         url:'{{route('trips.updateRemarks',[$trip->trip_id])}}',
-        pk: '{{$trip->trip_id}}',
+        pk: '{{$queue->van_queue_id}}',
         validate: function(value){
              if($.trim(value) == ""){
                     return "This field is required";
@@ -474,8 +477,8 @@ ol.vertical{
       });
 
     @endforeach
-    @foreach($trips as $trip)
-              $('#queue{{$trip->trip_id}}').editable({
+    @foreach($queues as $queue)
+              $('#queue{{$queue->van_queue_id}}').editable({
                   name: 'queue',
                   value: '{{ $trip->queue_number }}',
                   type: 'select',

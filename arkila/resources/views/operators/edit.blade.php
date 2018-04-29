@@ -16,7 +16,7 @@
         {{csrf_field()}}
         {{method_field("PATCH")}}
         <div class="box-body">
-            <h4>Personal Information</h4>
+            <h4>{{old('lastName') ?? $operator->last_name }}, {{old('firstName')  ?? $operator->first_name}} {{  old('middleName')  ?? $operator->middle_name }}</h4>
             <form action="">
                 <div class="form-group">
                    <label>Edit profile image</label>
@@ -72,64 +72,10 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label for="birthdateO">Birthdate: <span class="text-red">*</span></label>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <input value="{{ old('birthDate') ?? $operator->birth_date }}" id="birthdateO" name="birthDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errLegal" data-parsley-legal-age val-birthdate required  data-parsley-trigger="keyup">
-                        </div>
-                        <p id="errLegal"></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="birthplaceO">Birthplace: <span class="text-red">*</span></label>
-                        <input value="{{old('birthPlace') ?? $operator->birth_place }}" id="birthplaceO" name="birthPlace" type="text" class="form-control" placeholder="Birthplace" val-birthplace required data-parsley-trigger="keyup">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="genderO">Gender: <span class="text-red">*</span></label>
-                        <div class="radio">
-                            <label for="genderMaleO"> Male</label>
-                            <label class="radio-inline">
-                                <input type="radio" name="gender" id="genderMaleO" value="Male" class="flat-blue" @if(old('gender') || $operator->gender == 'Male') {{ 'checked' }} @endif>
-                            </label>
-                            <label for="genderFemaleO">Female</label>
-                            <label class="radio-inline">
-                                    <input type="radio" name="gender" id="genderFemaleO" value="Female" class="flat-blue" @if(old('gender') || $operator->gender == 'Female') {{ 'checked' }} @endif>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="citizenshipO">Citizenship: <span class="text-red">*</span></label>
-                        <input value="{{ old('citizenship') ?? $operator->citizenship }}" id="citizenshipO" name="citizenship" type="text" class="form-control" placeholder="Citizenship" val-citizenship required data-parsley-trigger="keyup">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="civilStatusO">Civil Status:</label>
-                        <select id="civilStatusO" name="civilStatus" class="form-control">
-                                <option @if(old('civilStatus') || $operator->civil_status == 'Single') {{ 'selected' }}  @endif >Single</option>
-                                <option @if(old('civilStatus') || $operator->civil_status == 'Married') {{ 'selected' }}  @endif>Married</option>
-                                <option @if(old('civilStatus') || $operator->civil_status == 'Divorced') {{ 'selected' }}  @endif>Divorced</option>
-                                <option @if(old('civilStatus') || $operator->civil_status == 'Widowed') {{ 'selected' }} @endif>Widowed</option>
-                            </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
                         <label for="sssO">SSS No:</label>
                         <input id="sssO" name="sss" value="{{  old('sss') ?? $operator->SSS }}" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask data-parsley-trigger="keyup">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="licenseNoO">License No: <span class="text-red">*</span></label>
@@ -149,55 +95,7 @@
                     </div>
                 </div>
             </div>
-            <h4>Family Information</h4>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="spouseNameO">Name of Spouse:</label>
-                        <input value="{{ old('nameOfSpouse') ?? $operator->spouse }}"  id="spouseNameO" name="nameOfSpouse" type="text" class="form-control" placeholder="Name of Spouse" val-fullname data-parsley-trigger="keyup">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="spouseBirthDateO">Birthdate of Spouse:</label>
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <input value="{{  old('spouseBirthDate') ?? $operator->spouse_birthdate }}" id="spouseBirthDateO" name="spouseBirthDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errSpouseBirthdate" data-parsley-legal-age val-spouse-bdate data-parsley-trigger="keyup">
-                        </div>
-                        <p id="errSpouseBirthdate"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="fathersNameO">Father's Name:</label>
-                        <input value="{{ old('fathersName') ?? $operator->father_name }}"  id="fathersNameO" name="fathersName" type="text" class="form-control" placeholder="Father's Name" val-fullname data-parsley-trigger="keyup">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="occupationFatherO">Occupation:</label>
-                        <input value="{{  old('fatherOccupation') ?? $operator->father_occupation }}" id="occupationFatherO" name="fatherOccupation" type="text" class="form-control" placeholder="Occupation" val-occupation data-parsley-trigger="keyup">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="mothersNameO">Mother's Maiden Name:</label>
-                        <input value="{{ old('mothersName') ?? $operator->mother_name }}" id="mothersNameO" name="mothersName" type="text" class="form-control" placeholder="Mother's Maiden Name" val-fullname data-parsley-trigger="keyup">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="occupationMotherO">Occupation:</label>
-                        <input value="{{ old('motherOccupation') ?? $operator->mother_occupation }}" id="occupationMotherO" name="motherOccupation" type="text" class="form-control" placeholder="Occupation" val-occupation data-parsley-trigger="keyup">
-                    </div>
-                </div>
-            </div>
+            <hr>    
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -222,94 +120,6 @@
                         </div>
                         <p id="errContactPersonPhone"></p>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <Label for="dependentsO">Dependents:</Label>
-                    <table class="table table-hover custab">
-                        <thead>
-                            <th>Name</th>
-                            <th>Birthdate</th>
-                            <th>
-                                <div class="pull-right">
-                                    <button type="button" class="btn btn-primary btn-sm btn-flat" onclick="addDependent()"><i class="fa fa-plus"></i> ADD DEPENDENT</button>
-                                </div>
-                            </th>
-                        </thead>
-                        <tbody id="childrens">
-                        @if(old('children'))
-
-                            @for($i = 0; $i < count(old('children')); $i++)
-                                <tr>
-                                    <td>
-                                        <input value="{{old('children.'.$i)}}" name="children[]" type="text" placeholder="Name of Child" class="form-control" maxlength="120">
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input value="{{old('childrenBDay.'.$i)}}" name="childrenBDay[]" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="pull-right">
-                                            @if(count(old('children')) > 1)
-                                                <button type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                            @else
-                                                <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                </tr>
-                            @endfor
-                        @elseif ($operator->children->first())
-                            @foreach($operator->children as $child)
-                                <tr>
-                                    <td>
-                                        <input value="{{$child->children_name}}" name="children[]" type="text" placeholder="Name of Child" class="form-control" maxlength="120">
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input value="{{$child->birthdate}}" name="childrenBDay[]" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="pull-right">
-                                            <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td>
-                                    <input name="children[]" type="text" placeholder="Name of Child" class="form-control" maxlength="120">
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input name="childrenBDay[]" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="pull-right">
-                                        <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                    </div>
-                                </td>
-
-                            </tr>
-                        @endif
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>

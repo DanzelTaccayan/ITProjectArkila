@@ -20,7 +20,7 @@
     </style>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini fixed">
+<body class="skin-blue sidebar-mini fixed sidebar-collapse">
     <div class="wrapper">
         @include('layouts.partials.header')
 

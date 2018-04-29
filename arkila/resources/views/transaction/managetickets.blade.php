@@ -102,7 +102,7 @@
                     <div class="box-body">
 
                         <label for="">Terminal</label>
-                        <select name="terminal" id="terminal" class="form-control">
+                        <select name="terminal" id="terminal" class="form-control select2">
                             @php $counter = 0; @endphp
                             @foreach($terminals as $terminal)
                                 @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
@@ -111,7 +111,7 @@
                             @endforeach
                         </select>
                         <label for="">Destination</label>
-                        <select name="destination" id="destination" class="form-control">
+                        <select name="destination" id="destination" class="form-control select2">
                         </select>
                         <label for="">Discount</label>
                         <div class="input-group">
@@ -128,7 +128,7 @@
 
                     <div class="box-footer">
                         <div id="sellButtContainer" class="pull-right">
-                            <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
+                            <button type="button" class="btn btn-success btn-sm" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>SELL</button>
                         </div>
                     </div>
                 </form>

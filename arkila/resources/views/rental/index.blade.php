@@ -10,7 +10,7 @@
             <!-- Custom Tabs -->
             <div class="table-responsive">
                 <div class="col-md-6">
-                    <a href="/home/rental/create" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RENTAL</a>
+                    <a href="/home/rental/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RENTAL</a>
                 </div>
 
                 <table id="listRent" class="table table-bordered table-striped rentalTable">
