@@ -237,7 +237,7 @@
           function specialUnitChecker(){
               $.ajax({
                   method:'POST',
-                  url: '{{route("trips.specialUnitChecker")}}',
+                  url: '{{route("vanqueue.specialUnitChecker")}}',
                   data: {
                       '_token': '{{csrf_token()}}'
                   },

@@ -1,7 +1,7 @@
 @extends('layouts.form')
 @section('title', 'Create New Terminal/Destination')
-@section('back-link', route('settings.index'))
-@section('form-action', route('terminal.store'))
+@section('back-link', route('route.index'))
+@section('form-action', route('route.store'))
 @section('form-title', 'CREATE TERMINAL/ROUTE')
 @section('form-body')
 

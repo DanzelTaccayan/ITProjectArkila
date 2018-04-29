@@ -11,44 +11,62 @@ class Destination extends Model
 	protected $primaryKey = 'destination_id';
     protected $guarded = ['destination_id',];
 
-    public function tickets(){
+    public function tickets()
+    {
         return $this->hasMany(Ticket::class, 'destination_id');
     }
 
-    public function routeOrigin(){
+    public function routeOrigin()
+    {
         return $this->belongsToMany(Destination::class,'route_terminal','route','terminal_origin')
         ->withPivot('terminal_destination');
     }
 
-    public function routeDestination(){
+    public function routeDestination()
+    {
         return $this->belongsToMany(Destination::class,'route_terminal','route','terminal_destination')
         ->withPivot('terminal_origin');
     }
 
-    public function routeFromOrigin(){
+    public function routeFromOrigin()
+    {
         return $this->belongsToMany(Destination::class,'route_terminal','terminal_origin','route')
         ->withPivot('terminal_destination');
     }
 
-    public function routeFromDestination(){
+    public function routeFromDestination()
+    {
         return $this->belongsToMany(Destination::class,'route_terminal','terminal_destination','route')
         ->withPivot('terminal_origin');
     }
 
-    public function terminalOrigin(){
+    public function terminalOrigin()
+    {
         return $this->belongsToMany(Destination::class,'route_terminal','terminal_destination','terminal_origin')
         ->withPivot('route');
     }
 
-    public static function scopeAllTerminal($query){
+
+    public function vanQueue()
+    {
+        return $this->hasMany(VanQueue::class, 'destination_id');
+    }
+
+    public static function scopeAllTerminal($query)
+    {
         return $query->where([
             ['is_terminal','1'],
             ['is_main_terminal', '0'],
         ]);
     }
 
-    public static function scopeAllRoute($query){
+    public static function scopeAllRoute($query)
+    {
         return $query->where('is_terminal','0');
+    }
+
+    public function ticket() {
+        return $this->hasMany(Ticket::Class,'ticket_id');
     }
 
     // public function route(){
