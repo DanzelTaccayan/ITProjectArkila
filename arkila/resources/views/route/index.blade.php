@@ -15,23 +15,25 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="">
-                            <a href="" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
+                            <a href="{{route('route.create')}}" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
                         </div>
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
-                                <li class="active"><a href="#vans" data-toggle="tab">BAGUIO - CABANATUAN<span class="badge badge-pill pull-right">12</span></a></li>
-                                <li><a href="#drivers" data-toggle="tab">BAGUIO - SAN JOSE<span class="badge badge-pill  pull-right">31</span></a></li>
+                            @foreach ($terminals as $terminal)
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
+                            @endforeach
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
+                            @foreach ($terminals as $terminal)
                                 
-                                <div class="tab-pane active " id="vans">
-                                    <h3 class="profile-username text-center"><strong>BAGUIO - CABANATUAN</strong></h3> 
+                                <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                                    <h3 class="profile-username text-center"><strong>{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}</strong></h3> 
                                     <div class="col-md-6">
-                                        <a href="" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
+                                        <a href="{{route('route.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
                                     </div>
                                     <table id="van" class="table table-bordered table-striped table-responsive datatablesRoute">
                                         <thead>
@@ -45,8 +47,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($terminal->routeFromDestination as $routes)
                                               <tr>
-                                                <td>Asigan</td>
+                                                <td>{{$routes->destination_name}}</td>
                                                 <td class="text-right">200</td>
                                                 <td class="text-right">500</td>
                                                 <td class="text-right">120</td>
@@ -57,6 +60,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                        @endforeach
                                             
                                             <!--DELETE MODAL MIGUEL-->
                                             <div class="modal fade" id="#">
@@ -99,7 +103,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="tab-pane" id="drivers">
+                                @endforeach
+                                <div class="tab-pane" id="#terminal2">
                                     <h3 class="profile-username text-center"><strong>BAGUIO - SAN JOSE CITY</strong></h3> 
                                     <div class="col-md-6"> 
                                         <a href="" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>

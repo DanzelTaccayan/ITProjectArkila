@@ -1,5 +1,14 @@
 @extends('layouts.form_lg') 
 @section('title', 'Operator Registration')
+@section('links')
+@parent
+<style>
+    th{
+        width:200px;
+        padding:20px;
+    }
+</style>
+@endsection
 @section('form-id','regForm')
 @section('form-action',route('operators.store'))
 @section('form-body')
@@ -14,32 +23,141 @@
         </div>
 
         <div class="box-body">
+          <div class="row">
+            <div class="col-md-7">
+              <h4>Personal Information</h4>
+              <hr>
+              <table class="table table-bordered table-striped">
+                  <tbody>
+                    <tr>
+                      <th>Last Name <span class="text-red">*</span></th>
+                      <td><input value="{{old('lastName')}}" name="lastName" type="text" class="form-control val-name" placeholder="Last Name" val-name required></td>
+                    </tr>
+                    <tr>
+                      <th>First Name <span class="text-red">*</span></th>
+                      <td><input value="{{old('firstName')}}" name="firstName" type="text" class="form-control" placeholder="First Name" val-name required></td>
+                    </tr>
+                    <tr>
+                      <th>Middle Name</th>
+                      <td><input value="{{old('middleName')}}" name="middleName" type="text" class="form-control" placeholder="Middle Name" val-name></td>
+                    </tr>
+                    <tr>
+                      <th>Contact Number <span class="text-red">*</span></th>
+                      <td><div class="input-group">
+                                  <div class="input-group-addon">
+                                    <span>+63</span>
+                                  </div>
+                                  <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" val-phone required>
+                                </div>
+                                <p id="errContactNumber"></p></td>
+                    </tr>
+                    <tr>
+                      <th>Address: <span class="text-red">*</span></th>
+                      <td><input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" val-address  required></td>
+                    </tr>
+                    <tr>
+                      <th>Gender: <span class="text-red">*</span></th>
+                      <td>
+                        <div class="radio">
+                            <label for=""> Male</label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" checked="checked"  value="Male" class="flat-blue" @if(old('gender') == 'Male') {{'checked'}}@endif>
+                            </label>
+                            <label for="">Female</label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" value="Female" class="flat-blue" @if(old('gender') == 'Female') {{'checked'}}@endif>
+                            </label>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>SSS No</th>
+                      <td>
+                        <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>License No</th>
+                      <td>
+                        <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license data-inputmask='"mask": "A99-99-999999"' data-mask>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>License Expiry Date</th>
+                      <td>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
+                        </div>
+                        <p id= "errExpireDate"></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Profile Picture</th>
+                      <td><input type="file" name="profilePicture" accept="image/*"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <h4>Contact Person</h4>
+                <hr>
+                <table class="table table-bordered table-striped">
+                  <tbody>
+                    <tr>
+                      <th>Name</th>
+                      <td>
+                        <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-name required>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Address</th>
+                      <td>
+                         <input value="{{old('contactPersonAddress')}}" name="contactPersonAddress" type="text" class="form-control" placeholder="Address" val-address required>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Contact Number</th>
+                      <td>
+                        <div class="input-group">
+                          <div class="input-group-addon">
+                            <span>+63</span>
+                          </div>
+                          <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required>
+                        </div>
+                        <p id="errContactPersonPhone"></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+                
                 <!-- One "tab" for each step in the form: -->
                 <div class="form-section">
-                    <h4>Personal Information</h4>
-                    <form action="">
+                    {{-- <form action="">
                         <div class="form-group">
                            <label>Add profile image</label>
                            <input type="file" name="profilePicture" accept="image/*">
                         </div>
-                    </form>
-                    <div class="row">
+                    </form> --}}
+                    {{-- <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Last Name: <span class="text-red">*</span></label>
-                                <input value="{{old('lastName')}}" name="lastName" type="text" class="form-control val-name" placeholder="Last Name" data-parsley-trigger="keyup" val-name required> 
+                                <input value="{{old('lastName')}}" name="lastName" type="text" class="form-control val-name" placeholder="Last Name" val-name required> 
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>First Name: <span class="text-red">*</span></label>
-                                <input value="{{old('firstName')}}" name="firstName" type="text" class="form-control" placeholder="First Name" data-parsley-trigger="keyup" val-name required>
+                                <input value="{{old('firstName')}}" name="firstName" type="text" class="form-control" placeholder="First Name" val-name required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Middle Name:</label>
-                                <input value="{{old('middleName')}}" name="middleName" type="text" class="form-control" placeholder="Middle Name" data-parsley-trigger="keyup" val-name>
+                                <input value="{{old('middleName')}}" name="middleName" type="text" class="form-control" placeholder="Middle Name" val-name>
                             </div>
                         </div>
                     </div>
@@ -51,7 +169,7 @@
                                   <div class="input-group-addon">
                                     <span>+63</span>
                                   </div>
-                                  <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" data-parsley-trigger="keyup" val-phone required>
+                                  <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" val-phone required>
                                 </div>
                                 <p id="errContactNumber"></p>
                             </div>
@@ -59,87 +177,46 @@
                         <div class="col-md-4">
                              <div class="form-group">
                                 <label>Address: <span class="text-red">*</span></label>
-                                <input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" data-parsley-trigger="keyup" val-address  required>
+                                <input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" val-address  required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Provincial Address: <span class="text-red">*</span></label>
-                                <input value="{{old('provincialAddress')}}" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" data-parsley-trigger="keyup" data-parsley-trigger="keyup" val-address required>
+                                <input value="{{old('provincialAddress')}}" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" val-address required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Birthdate: <span class="text-red">*</span></label>
-                               <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input type="text" name="birthDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('birthDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask  data-parsley-trigger="keyup" data-parsley-errors-container="#errLegal" val-birthdate data-parsley-legal-age required>
-                                </div>
-                                <p id="errLegal"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Birthplace: <span class="text-red">*</span></label>
-                                <input value="{{old('birthPlace')}}" name="birthPlace" type="text" class="form-control" placeholder="Birthplace" data-parsley-trigger="keyup" val-birthplace required>
-                            </div>
-                        </div>
-                    
-                    
-                        <div class="col-md-4">
+                       <div class="col-md-4">
                             <div class="form-group">
                                 <label>Gender: <span class="text-red">*</span></label>
                                 <div class="radio">
                                     <label for=""> Male</label>
                                     <label class="radio-inline">
-                                        <input @if(old('gender') == 'Male') {{'checked'}} @endif type="radio" name="gender" value="Male" class="flat-blue" checked="checked">
+                                        <input type="radio" name="gender" checked="checked"  value="Male" class="flat-blue" @if(old('gender') == 'Male') {{'checked'}}@endif>
                                     </label>
                                     <label for="">Female</label>
                                     <label class="radio-inline">
-                                        <input @if(old('gender') == 'Female') {{'checked'}} @endif type="radio" name="gender" value="Female" class="flat-blue">
+                                        <input type="radio" name="gender" value="Female" class="flat-blue" @if(old('gender') == 'Female') {{'checked'}}@endif>
                                     </label>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Citizenship: <span class="text-red">*</span></label>
-                                <input value="{{old('citizenship')}}" name="citizenship" type="text" class="form-control" placeholder="Citizenship" data-parsley-trigger="keyup" val-citizenship required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Civil Status:</label>
-                                <select name="civilStatus" class="form-control">
-                                   <option value="Single" @if(old('civilStatus') == 'Single') {{'selected'}} @endif>Single</option>
-                                   <option value="Married" @if(old('civilStatus') == 'Married') {{'selected'}} @endif>Married</option>
-                                   <option value="Divorced" @if(old('civilStatus') == 'Divorced') {{'selected'}} @endif>Divorced</option>
-                                   <option value="Widowed" @if(old('civilStatus') == 'Widowed') {{'selected'}} @endif>Widowed</option>
-                               </select>
-                            </div>
-                        </div>
-                    
-                    
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>SSS No:</label>
-                                <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." data-parsley-trigger="keyup" val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                                <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
                             </div>
                         </div>
-                    </div> 
-                    <div class="row">   
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>License No:</label>
-                                <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." data-parsley-trigger="keyup" val-license data-inputmask='"mask": "A99-99-999999"' data-mask>
+                                <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license data-inputmask='"mask": "A99-99-999999"' data-mask>
                             </div>
                         </div>
+                    </div> 
+                    <div class="row"> 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>License Expiry Date:</label>
@@ -147,75 +224,24 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
+                                    <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
                                 </div>
                                 <p id= "errExpireDate"></p>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-section">
-                    <h4>Family Information</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name of Spouse:</label>
-                                <input value="{{old('nameOfSpouse')}}" name="nameOfSpouse" type="text" class="form-control" placeholder="Name of Spouse" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Birthdate of Spouse:</label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input type="text" name="spouseBirthDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('spouseBirthDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errSpouseBirthdate" val-spouse-bdate>
-                                </div>
-                                <p id="errSpouseBirthdate"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Father's Name:</label>
-                                <input value="{{old('fathersName')}}" name="fathersName" type="text" class="form-control" placeholder="Father's Name" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Occupation:</label>
-                                <input value="{{old('fatherOccupation')}}" name="fatherOccupation" type="text" class="form-control" placeholder="Occupation" data-parsley-trigger="keyup" val-occupation>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                             <div class="form-group">
-                                <label>Mother's Maiden Name:</label>
-                                <input value="{{old('mothersName')}}" name="mothersName" type="text" class="form-control" placeholder="Mother's Maiden Name" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Occupation:</label>
-                                <input value="{{old('motherOccupation')}}" name="motherOccupation" type="text" class="form-control" placeholder="Occupation" data-parsley-trigger="keyup" val-occupation>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    </div> --}}
+                    <hr>    {{-- 
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Contact Person: <span class="text-red">*</span></label>
-                                <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" data-parsley-trigger="keyup" val-name required>
+                                <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-name required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Address: <span class="text-red">*</span></label>
-                                <input value="{{old('contactPersonAddress')}}" name="contactPersonAddress" type="text" class="form-control" placeholder="Address" data-parsley-trigger="keyup" val-address required>
+                                <input value="{{old('contactPersonAddress')}}" name="contactPersonAddress" type="text" class="form-control" placeholder="Address" val-address required>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -225,84 +251,12 @@
                                   <div class="input-group-addon">
                                     <span>+63</span>
                                   </div>
-                                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errContactPersonPhone" val-phone required>
+                                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required>
                                 </div>
                                 <p id="errContactPersonPhone"></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <Label>Dependents:</Label>
-                            <table class="table table-hover custab">
-                                <thead>
-                                    <th>Name</th>
-                                    <th>Birthdate</th>
-                                    <th>
-                                        <div class="pull-right">
-                                            <button type="button" class="btn btn-primary btn-sm btn-flat" onclick="addDependent()"><i class="fa fa-plus"></i> ADD DEPENDENT</button>
-                                        </div>
-                                    </th>
-                                </thead>
-                                <tbody id="childrens">
-
-                                @if(old('children'))
-
-                                    @for($i = 0; $i < count(old('children')); $i++)
-                                        <tr>
-                                            <td>
-                                                <input value="{{old('children.'.$i)}}" name="children[]" type="text" placeholder="Name of Child" class="form-control" val-fullname>
-                                            </td>
-                                            <td>
-                                                <div class="input-group">
-                                                  <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                  </div>
-                                                  <input type="text" name="childrenBDay[]" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('childrenBDay.'.$i)}}" data-inputmask="'alias': 'mm/dd/yyyy'" 
-                                                 data mask>
-                                                </div>
-                                                <p id=""></p>
-                                            </td>
-                                            <td>
-                                                <div class="pull-right">
-                                                    @if(count(old('children')) > 1)
-                                                        <button type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                                    @else
-                                                        <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                                    @endif
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                    @endfor
-                                @else
-                                    <tr>
-                                        <td>
-                                            <input name="children[]" type="text" placeholder="Name of Child" class="form-control" val-fullname>
-                                        </td>
-                                        <td>
-                                            <div class="input-group">
-                                              <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                              </div>
-                                              <input type="text" name="childrenBDay[]" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                            </div>
-                                            <p id=""></p>
-                                        </td>
-                                        <td>
-                                        <div class="pull-right">
-                                        <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                    </div>
-                                        </td>
-
-                                    </tr>
-                                @endif
-                        
-                                </tbody>
-                            </table>
-                    
-                        </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 

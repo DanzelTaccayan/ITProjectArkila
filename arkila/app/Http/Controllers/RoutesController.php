@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Destination;
 
-class TestController extends Controller
+class RoutesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,9 @@ class TestController extends Controller
      */
     public function index()
     {
-        return view('route.create');
+        $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::all()->where('is_main_terminal', 1);
+        return view('route.index', compact('terminals', 'mainTerminal'));
     }
 
     /**
@@ -23,7 +26,7 @@ class TestController extends Controller
      */
     public function create()
     {
-        //
+        return view('route.create');
     }
 
     /**
@@ -34,9 +37,7 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        $anak = $request->children;
-        $bday = $request->date;
-        dd(compact('anak', 'bday'));
+        //
     }
 
     /**

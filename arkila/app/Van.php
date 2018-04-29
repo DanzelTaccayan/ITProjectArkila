@@ -15,37 +15,46 @@ class Van extends Model
 	];  
 	//
 
-    public function members(){
+    public function members()
+    {
         return $this->belongsToMany(Member::class,'member_van','van_id','member_id');
     }
-    public function rental(){
+    public function rental()
+    {
     	return $this->hasOne(VanRental::Class, 'rent_id');
     }
 
-    public function model() {
+    public function model()
+    {
         return $this->belongsTo(VanModel::Class, 'model_id');
     }
 
-    public function archivedMember(){
+    public function archivedMember()
+    {
         return $this->belongsToMany(Member::class,'archive_van','van_id','member_id')->withTimestamps();
     }
 
-    public function driver(){
+    public function driver()
+    {
         return $this->members()->where('role','Driver');
     }
 
-    public function operator(){
+    public function operator()
+    {
         return $this->members()->where('role','Operator');
     }
 
-    public function trips(){
-    	return $this->hasMany(Trip::Class, 'trip_id');
+    public function vanQueue()
+    {
+    	return $this->hasMany(VanQueue::Class, 'trip_id');
     }
 
-    public function updateQueue($queue_number){
+    public function updateQueue($queue_number)
+    {
         $queue_number+=1;
-        if(!is_null($this->trips()->where('queue_number','!=',null)->first())){
-            $this->trips()->where('queue_number','!=',null)->first()->update(compact('queue_number'));
+        if(!is_null($this->vanQueue()->where('queue_number','!=',null)->first()))
+        {
+            $this->vanQueue()->where('queue_number','!=',null)->first()->update(compact('queue_number'));
         }
     }
 

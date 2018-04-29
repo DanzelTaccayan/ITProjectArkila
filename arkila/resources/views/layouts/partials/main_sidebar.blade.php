@@ -8,7 +8,7 @@
             </div>
             <div class="pull-left info">
               <p>Ban Trans - Admin</p>
-              <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+              <p>UV Express</p>
             </div>
         </div>
         <!-- /.search form -->
@@ -21,7 +21,7 @@
                 </a>
             </li>
             <li class="{{ Request::is('home/trips') ? 'active' : '' }}">
-                <a href="{{route('trips.index')}}">
+                <a href="{{route('vanqueue.index')}}">
                     <i class="fa fa-list-ol"></i>
                     <span>Van Queue</span>
                 </a>
@@ -30,6 +30,12 @@
                 <a href="{{route('transactions.index')}}">
                     <i class="fa fa-ticket"></i>
                     <span>Ticket Management</span>
+                </a>
+            </li>
+            <li class="{{ Request::is('home/route') ? 'active' : '' }}">
+                <a href="/home/route">
+                    <i class="fa fa-road"></i>
+                    <span>Routes</span>
                 </a>
             </li>
             <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
@@ -98,7 +104,7 @@
             </li>
             <li class="{{ Request::is('home/archive') ? 'active' : '' }}">
                 <a href="{{route('archive.index')}}">
-                    <i class="fa fa-archive"></i> <span>Operator Archive</span>
+                    <i class="fa fa-archive"></i> <span>Operator History</span>
                 </a>
             </li>
 

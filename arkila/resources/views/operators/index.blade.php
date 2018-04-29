@@ -5,8 +5,8 @@
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
        <div class="table-responsive">
         <div class="col col-md-6">
-            <a href="/home/operators/create" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER OPERATOR</a>
-            <button onclick="window.open('{{route('pdf.operators')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
+            <a href="/home/operators/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER OPERATOR</a>
+            <button onclick="window.open('{{route('pdf.operators')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT OPERATOR LIST</button>
         </div>
         
         <!-- /.col -->
@@ -25,7 +25,7 @@
                 @foreach ($operators->where('status', 'Active')->sortByDesc('member_id') as $operator)
                 <tr>
                     <td class="hidden-xs" name="opId">{{ $operator->member_id }}</td>
-                    <td><a href="/home/operators/{{ $operator->member_id }}">{{ $operator->first_name }} {{ $operator->middle_name }} {{ $operator->last_name }}</a></td>
+                    <td>{{ $operator->first_name }} {{ $operator->middle_name }} {{ $operator->last_name }}</td>
                     <td>{{ $operator->contact_number }}</td>
                     <td>
                         <div class="text-center">

@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('password');
 
-            $table->enum('user_type', ['Driver', 'Customer', 'Admin', 'Super-Admin']);
+            $table->enum('user_type', ['Driver', 'Customer', 'Super-Admin']);
             $table->enum('status', ['enable', 'disable']);
 
             $table->integer('terminal_id')
