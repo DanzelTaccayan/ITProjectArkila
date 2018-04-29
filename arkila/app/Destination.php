@@ -40,6 +40,16 @@ class Destination extends Model
         ->withPivot('route');
     }
 
+    public static function scopeAllTerminal($query){
+        return $query->where([
+            ['is_terminal','1'],
+            ['is_main_terminal', '0'],
+        ]);
+    }
+
+    public static function scopeAllRoute($query){
+        return $query->where('is_terminal','0');
+    }
 
     // public function route(){
     //     return $this->belongsToMany(Destination::class,'route_terminal','destination_id','route');

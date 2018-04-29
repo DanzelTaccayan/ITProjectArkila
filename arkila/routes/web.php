@@ -34,7 +34,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/ledger', 'DailyLedgerController');
 
     Route::resource('/home/announcements', 'AnnouncementsController');
-
+    Route::resource('/home/route', 'RoutesController',[
+        'except' => ['destroy', 'update', 'show', 'edit']
+    ]);
 
     //Operators
     Route::resource('/home/operators', 'OperatorsController',[
