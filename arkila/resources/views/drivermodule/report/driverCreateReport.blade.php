@@ -20,7 +20,7 @@
                           @php $counter = 0; @endphp
                           @foreach($destinations as $destination)
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->description}}</label>
+                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
                                 <div class="col-sm-6">
                                     <input type="hidden" name="destination[]" value="{{$destination->destid}}">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
@@ -66,13 +66,6 @@
                                 <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
-                                  <div class='form-group'>
-                                      <label for='Discounts' class="col-sm-4">Passengers with Discounts:</label>
-                                      <div class="col-sm-6">
-                                        <input type="hidden" name="discountId[]" value="{{$fad->fad_id}}">
-                                          <input value="{{old('numberOfDiscount')}}" class='form-control col-sm-9' type='number' name='numberOfDiscount[]' val-report-discount>
-                                      </div>
-                                  </div>
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
