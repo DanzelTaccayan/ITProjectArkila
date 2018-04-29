@@ -3,30 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Destination;
-use App\FeesAndDeduction;
 use App\Ledger;
 use App\Trip;
-use App\Terminal;
 use App\Transaction;
 use App\Ticket;
 use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
 
-class TransactionsController extends Controller {
+class TransactionsController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
+    public function index()
+    {
+        $terminals = Destination::where('is_main_terminal','!=','1')->get();
 
         return view('transaction.index',compact('terminals'));
     }
 
-    public function manageTickets(){
-        $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
+    public function manageTickets()
+    {
+        $terminals = Destination::whereNotIn('is_main_terminal','!=','1')->get();
 
         return view('transaction.managetickets',compact('terminals'));
     }
@@ -38,7 +39,6 @@ class TransactionsController extends Controller {
      */
     public function store() {
         $this->validate(request(),[
-            'terminal' => 'exists:terminal,terminal_id',
             'destination' => 'exists:destination,destination_id',
             'ticket.*' => 'exists:ticket,ticket_id'
         ]);
@@ -46,7 +46,7 @@ class TransactionsController extends Controller {
         foreach (request('ticket') as $ticketId){
             if( !(Transaction::where([['ticket_id',$ticketId],['status','Pending']])->first()) ) {
                 Transaction::create([
-                    'terminal_id' => request('terminal'),
+                    'destination_id' => request('terminal'),
                     'ticket_id' => $ticketId,
                     'destination_id' => request('destination'),
                     'trip_id' => null,
@@ -70,20 +70,22 @@ class TransactionsController extends Controller {
      * @param  Trip $trip
      * @return \Illuminate\Http\Response
      */
-    public function update(Terminal $terminal) {
-        if( $trip = $terminal->trips->where('queue_number',1)->first() ){
+    public function update(Destination $terminal) {
+        if( $trip = $terminal->vanQueue()->where('queue_number',1)->first() )
+        {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
             $totalPassengers = count(request('transactions'));
 
 
-            $totalBooking = (Terminal::find(auth()->user()->terminal_id)->booking_fee) * $totalPassengers;
+            $totalBooking = (Destination::find(auth()->user()->terminal_id)->booking_fee) * $totalPassengers;
 
 
-            $totalCommunity = (FeesAndDeduction::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
+            $totalCommunity = (Fee::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
 
-            if($totalPassengers >= 10){
+            if($totalPassengers >= 10)
+            {
                 $sop = 100;
 
                 Ledger::create([
@@ -92,7 +94,9 @@ class TransactionsController extends Controller {
                     'type' => 'Revenue'
                 ]);
 
-            }else{
+            }
+            else
+            {
                 $sop = null;
             }
             $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
@@ -116,11 +120,15 @@ class TransactionsController extends Controller {
             ]);
 
 
-            if($totalPassengers <= 10){
-                if(Trip::where('terminal_id',$terminal->terminal_id)->whereNotNull('queue_number')->first() ?? null){
+            if($totalPassengers <= 10)
+            {
+                if(Trip::where('terminal_id',$terminal->terminal_id)->whereNotNull('queue_number')->first() ?? null)
+                {
                     $queueNumber = Trip::where('terminal_id',$terminal->terminal_id)->orderBy('queue_number','desc')->first()->queue_number+1;
 
-                }else{
+                }
+                else
+                {
                     $queueNumber = 1;
 
                 }
@@ -137,7 +145,8 @@ class TransactionsController extends Controller {
             }
 
 
-            foreach(request('transactions') as $transactionId){
+            foreach(request('transactions') as $transactionId)
+            {
                 $transaction = Transaction::find($transactionId);
 
                         $transaction->update([
@@ -150,8 +159,10 @@ class TransactionsController extends Controller {
                         ]);
             }
 
-            foreach($trips = $terminal->trips()->whereNotNull('queue_number')->get() as $trip){
-                if(count($trips) > 1){
+            foreach($trips = $terminal->trips()->whereNotNull('queue_number')->get() as $trip)
+            {
+                if(count($trips) > 1)
+                {
                     $tripQueueNum = ($trip->queue_number)-1;
                     $trip->update([
                        'queue_number' => $tripQueueNum
@@ -164,8 +175,10 @@ class TransactionsController extends Controller {
         return 'Failed';
     }
 
-    public function updatePendingTransactions() {
-        if(request('transactions')){
+    public function updatePendingTransactions()
+    {
+        if(request('transactions'))
+        {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
@@ -189,20 +202,25 @@ class TransactionsController extends Controller {
                 return 'The tickets boarded is greater than the seating capacity of the van on deck';
             }
 
-        }else{
+        }
+        else
+        {
             return 'error no transaction given';
         }
 
     }
 
 
-    public function updateOnBoardTransactions() {
-        if(request('transactions')){
+    public function updateOnBoardTransactions()
+    {
+        if(request('transactions'))
+        {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
 
-            foreach(request('transactions') as $transactionId){
+            foreach(request('transactions') as $transactionId)
+            {
                 $transaction = Transaction::find($transactionId);
                 $transaction->update([
                     'status' => 'Pending',
@@ -211,13 +229,16 @@ class TransactionsController extends Controller {
             }
 
             return 'success';
-        }else{
+        }
+        else
+        {
             return 'error no transaction given';
         }
 
     }
 
-    public function changeDestination(Transaction $transaction) {
+    public function changeDestination(Transaction $transaction)
+    {
         $this->validate(request(),[
             'changeDestination' => 'required|exists:destination,destination_id'
         ]);
@@ -233,7 +254,8 @@ class TransactionsController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction) {
+    public function destroy(Transaction $transaction)
+    {
         $this->validate(request(),[
             'delete' => 'exists|ticket,ticket_id'
         ]);
@@ -243,9 +265,12 @@ class TransactionsController extends Controller {
         ]);
 
         //put transaction into ledger
-        if($transaction->ticket->type === 'Discount'){
+        if($transaction->ticket->type === 'Discount')
+        {
                 $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
-        }else{
+        }
+        else
+        {
                 $discount = 0;
         }
         $computedAmount = $transaction->destination->amount - $discount;
@@ -262,18 +287,21 @@ class TransactionsController extends Controller {
         return 'success';
     }
 
-    public function multipleDelete(){
+    public function multipleDelete()
+    {
         $transactionObjArr = [];
         $this->validate(request(),[
             'delete.*' => 'exists:transaction,transaction_id'
         ]);
 
 
-        foreach(request('delete') as $transactionId){
+        foreach(request('delete') as $transactionId)
+        {
             array_push($transactionObjArr, Transaction::find($transactionId));
         }
 
-        foreach($transactionObjArr as $transaction){
+        foreach($transactionObjArr as $transaction)
+        {
 
             $transaction->update([
                 'status' => 'Deleted'
@@ -303,10 +331,12 @@ class TransactionsController extends Controller {
         return 'success';
     }
 
-    public function listDestinations(Terminal $terminal) {
+    public function listDestinations(Destination $terminal)
+    {
         $destinationArr = [];
 
-        foreach($terminal->destinations as $destination){
+        foreach($terminal->destinations as $destination)
+        {
             array_push($destinationArr,[
                 'id'=> $destination->destination_id,
                 'description' => $destination->description
@@ -316,7 +346,8 @@ class TransactionsController extends Controller {
         return response()->json($destinationArr);
     }
 
-    public function listDiscountedTickets(Destination $destination) {
+    public function listDiscountedTickets(Destination $destination)
+    {
         $ticketsArr = [];
         $tickets = $destination
             ->tickets()
@@ -335,7 +366,8 @@ class TransactionsController extends Controller {
         return response()->json($ticketsArr);
     }
 
-    public function listTickets(Destination $destination) {
+    public function listTickets(Destination $destination)
+    {
         $ticketsArr = [];
         $tickets = $destination
             ->tickets()
@@ -354,10 +386,12 @@ class TransactionsController extends Controller {
         return response()->json($ticketsArr);
     }
 
-    public function manage() {
+    public function manage()
+    {
         return view('transaction.managetickets');
     }
-    public function listSourceDrivers(){
+    public function listSourceDrivers()
+    {
         $drivers = [];
 
         foreach(Member::where('status','Active')->whereNotNull('license_number')->get() as $member){
@@ -372,7 +406,8 @@ class TransactionsController extends Controller {
 
     }
 
-    public function changeDriver(Trip $trip){
+    public function changeDriver(Trip $trip)
+    {
         $this->validate(request(),[
            'value' => 'exists:member,member_id'
         ]);
@@ -384,11 +419,13 @@ class TransactionsController extends Controller {
         return 'success';
     }
 
-    public function getTicketManagementPartial(Terminal $terminal) {
+    public function getTicketManagementPartial(Destination $terminal)
+    {
         return view('transaction.managetickets',compact('terminal'));
     }
 
-    public function refund(Transaction $transaction){
+    public function refund(Transaction $transaction)
+    {
         $transaction->update([
             'status' => 'Refunded'
         ]);
