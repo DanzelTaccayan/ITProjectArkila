@@ -104,7 +104,7 @@
             </li>
             <li class="{{ Request::is('home/archive') ? 'active' : '' }}">
                 <a href="{{route('archive.index')}}">
-                    <i class="fa fa-archive"></i> <span>Operator Archive</span>
+                    <i class="fa fa-archive"></i> <span>Operator History</span>
                 </a>
             </li>
 
