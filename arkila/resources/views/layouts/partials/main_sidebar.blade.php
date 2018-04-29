@@ -32,10 +32,10 @@
                     <span>Ticket Management</span>
                 </a>
             </li>
-            <li class="#">
-                <a href="#">
-                    <i class="fa fa-home"></i>
-                    <span>Terminals</span>
+            <li class="{{ Request::is('home/route') ? 'active' : '' }}">
+                <a href="/home/route">
+                    <i class="fa fa-road"></i>
+                    <span>Routes</span>
                 </a>
             </li>
             <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
