@@ -146,7 +146,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/findDestinationTerminal', 'ReservationsController@find');
 
     /* Trips */
-    Route::post('/home/trips/{destination}/{van}/{member}', 'TripsController@store')->name('trips.store');
     Route::get('/listSpecialUnits/{terminal}','TripsController@listSpecialUnits')->name('trips.listSpecialUnits');
     Route::patch('/home/trips/changeDestination/{trip}', 'TripsController@updateDestination')->name('trips.updateDestination');
     Route::resource('/home/trips', 'TripsController',[
@@ -164,7 +163,11 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/terminal/{terminals}/create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
 
     /* Van Queue */
-     Route::resource('/home/vanqueue','VanQueueController');
+     //Only working routes are: index, update and destroy
+     Route::resource('/home/vanqueue','VanQueueController',[
+         'except' => ['create','show','edit','store']
+     ]);
+     Route::post('/home/trips/{destination}/{van}/{member}', 'TripsController@store')->name('trips.store');
      Route::post('/specialUnitChecker','VanQueueController@specialUnitChecker')->name('vanqueue.specialUnitChecker');
      Route::patch('/home/trips/{vanOnQueue}', 'TripsController@updateRemarks')->name('vanqueue.updateRemarks');
      Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');

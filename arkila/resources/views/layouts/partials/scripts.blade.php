@@ -69,7 +69,7 @@
             if( destination != "" && van != "" && driver != ""){
                 $.ajax({
                     method:'POST',
-                    url: '/home/trips/'+destination+'/'+van+'/'+driver,
+                    url: '/home/vanqueue/'+destination+'/'+van+'/'+driver,
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
@@ -253,7 +253,7 @@
           function specialUnitChecker(){
               $.ajax({
                   method:'POST',
-                  url: '{{route("trips.specialUnitChecker")}}',
+                  url: '{{route("vanqueue.specialUnitChecker")}}',
                   data: {
                       '_token': '{{csrf_token()}}'
                   },
