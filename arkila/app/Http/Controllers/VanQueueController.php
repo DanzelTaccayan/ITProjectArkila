@@ -18,7 +18,7 @@ class VanQueueController extends Controller
     public function index()
     {
         $terminals = Destination::where('is_main_terminal',0);
-        $queues = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
+        $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
 
         $drivers = Member::whereNotIn('member_id', function($query)
         {
@@ -34,7 +34,7 @@ class VanQueueController extends Controller
         })->where('status','Active')->get();
 
 
-        return view('van_queue.queue', compact('terminals','queues','vans','destinations','drivers'));
+        return view('van_queue.queue', compact('terminals','queue','vans','destinations','drivers'));
     }
 
     /**
