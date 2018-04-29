@@ -9,7 +9,7 @@
        <div class="table-responsive">
         <div class="col-md-6">
             <a href="{{route('drivers.create')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus-circle"></i> REGISTER DRIVER</a>
-            <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
+            <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
         </div>
         <table id="driverList" class="table table-bordered table-striped">
             <thead>
