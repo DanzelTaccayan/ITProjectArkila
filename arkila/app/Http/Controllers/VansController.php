@@ -16,8 +16,8 @@ use PDF;
 
 
 
-class VansController extends Controller {
-
+class VansController extends Controller
+{
 
     /**
      * Display a listing of the resource.
@@ -36,7 +36,8 @@ class VansController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(){
+    public function create()
+    {
         $operators = Member::allOperators()->where('status','Active')->get();
         $models = VanModel::all();
         return view('vans.create',compact('operators','models'));
@@ -49,9 +50,8 @@ class VansController extends Controller {
         return view('vans.create',compact('drivers','operator','models'));
     }
 
-
-
-    public function store(){
+    public function store()
+    {
         $this->validate(request(), [
             "operator" => ['required','numeric','exists:member,member_id',new checkOperator],
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
@@ -60,47 +60,65 @@ class VansController extends Controller {
             "seatingCapacity" => 'required|between:10,15|numeric'
         ]);
 
-        if($model= VanModel::where('description',request('vanModel'))->first()){
-            $vanModel = $model;
-        }
-        else{
-            $vanModel = VanModel::create([
-                'description' => request('vanModel')
-            ]);
-        }
-
-        $van = Van::create([
-            'plate_number' => request('plateNumber'),
-            'model_id' => $vanModel->model_id,
-            'seating_capacity' => request('seatingCapacity')
-        ]);
-
-        $van->members()->attach(request('operator'));
-
-        if(request('addDriver') === 'on'){
-            session(['type' => 'createFromIndex']);
-            return redirect(route('drivers.createFromVan',[$van->plate_number]));
-        }
-        else{
-            if($newDriver = Member::find(request('driver'))){
-
-                if ($newDriver->operator_id == null) {
-                    $newDriver->update([
-                        'operator_id' => request('operator')
-                    ]);
-                }
-
-                if ($newDriver->van()->first() != null) {
-                    $newDriver->van()->detach();
-                }
-
-                $van->members()->attach($newDriver);
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            if($model= VanModel::where('description',request('vanModel'))->first())
+            {
+                $vanModel = $model;
             }
-            return redirect(route('vans.index'));
+            else
+            {
+                $vanModel = VanModel::create([
+                    'description' => request('vanModel')
+                ]);
+            }
+
+            $van = Van::create([
+                'plate_number' => request('plateNumber'),
+                'model_id' => $vanModel->model_id,
+                'seating_capacity' => request('seatingCapacity')
+            ]);
+
+            $van->members()->attach(request('operator'));
+
+            if(request('addDriver') === 'on')
+            {
+                session(['type' => 'createFromIndex']);
+                return redirect(route('drivers.createFromVan',[$van->plate_number]));
+            }
+            else
+            {
+                if($newDriver = Member::find(request('driver')))
+                {
+
+                    if ($newDriver->operator_id == null)
+                    {
+                        $newDriver->update([
+                            'operator_id' => request('operator')
+                        ]);
+                    }
+
+                    if ($newDriver->van()->first() != null)
+                    {
+                        $newDriver->van()->detach();
+                    }
+
+                    $van->members()->attach($newDriver);
+                }
+
+            }
         }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
+        DB::commit();
+        return redirect(route('vans.index'));
+
     }
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -117,48 +135,62 @@ class VansController extends Controller {
             "seatingCapacity" => 'required|between:10,15|numeric'
         ]);
 
-        if($model= VanModel::where('description',request('vanModel'))->first()){
-            $vanModel = $model;
-        }
-        else{
-            $vanModel = VanModel::create([
-                'description' => request('vanModel')
-            ]);
-        }
-
-        $van = Van::create([
-            'plate_number' => request('plateNumber'),
-            'model_id' => $vanModel->model_id,
-            'seating_capacity' => request('seatingCapacity')
-        ]);
-
-        $van->members()->attach($operator->member_id);
-        session()->flash('message','Van successfully created');
-
-        if(request('addDriver') === 'on'){
-            session(['type' => $operator->member_id]);
-            return redirect(route('drivers.createFromVan',[$van->plate_number]));
-        }else{
-            if($newDriver = Member::find(request('driver'))) {
-                if ($newDriver->operator_id == null) {
-                    $newDriver->update([
-                        'operator_id' => request('operator')
-                    ]);
-                }
-
-                if ($newDriver->van()->first() != null) {
-                    $newDriver->van()->detach();
-                }
-                $van->members()->attach($newDriver);
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+            if($model= VanModel::where('description',request('vanModel'))->first())
+            {
+                $vanModel = $model;
+            }
+            else
+            {
+                $vanModel = VanModel::create([
+                    'description' => request('vanModel')
+                ]);
             }
 
-            return redirect(route('operators.showProfile',[$operator->member_id]));
+            $van = Van::create([
+                'plate_number' => request('plateNumber'),
+                'model_id' => $vanModel->model_id,
+                'seating_capacity' => request('seatingCapacity')
+            ]);
+
+            $van->members()->attach($operator->member_id);
+            session()->flash('message','Van successfully created');
+
+            if(request('addDriver') === 'on'){
+                session(['type' => $operator->member_id]);
+                return redirect(route('drivers.createFromVan',[$van->plate_number]));
+            }
+            else
+            {
+                if($newDriver = Member::find(request('driver')))
+                {
+                    if ($newDriver->operator_id == null)
+                    {
+                        $newDriver->update([
+                            'operator_id' => request('operator')
+                        ]);
+                    }
+
+                    if ($newDriver->van()->first() != null)
+                    {
+                        $newDriver->van()->detach();
+                    }
+                    $van->members()->attach($newDriver);
+                }
+            }
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-
+        DB::commit();
+        return redirect(route('operators.showProfile',[$operator->member_id]));
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -270,7 +302,6 @@ class VansController extends Controller {
             return redirect(route('drivers.createFromVan',[$van->plate_number]));
         }
     }
-
 
     public function listDrivers(){
         $operator = Member::find(request('operator'));

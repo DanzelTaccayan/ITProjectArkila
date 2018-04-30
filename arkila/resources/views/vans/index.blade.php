@@ -35,7 +35,7 @@
 							{{ $van->driver()->first()->full_name ?? null }}
 							</td>
 							<td>{{ $van->operator()->first()->full_name ??  null }}</td>
-							<td>{{$van->vanModel->description}}</td>
+							<td>{{$van->model->description}}</td>
 							<td class="pull-right">{{$van->seating_capacity}}</td>
 							<td>
 								<div class="text-center">
