@@ -81,6 +81,10 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
+
+            $terminal->routeOrigin()
+            ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
+
             $message = 'The terminal '. $name .' has been successfully created';
         }
         else 

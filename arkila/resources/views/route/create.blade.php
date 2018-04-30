@@ -61,7 +61,7 @@
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}></label>
+            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
           </div>
           @endforeach
       </div>
