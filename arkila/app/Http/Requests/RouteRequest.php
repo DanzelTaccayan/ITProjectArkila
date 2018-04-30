@@ -27,9 +27,10 @@ class RouteRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        if ($request->termRoute == 'Terminal')
+
+        if ($request->destType == 'Terminal')
         {
-            
+
             return [
                 "addTerminal" => ['required', 'max:70'],
                 "bookingFee" => 'required|numeric',
