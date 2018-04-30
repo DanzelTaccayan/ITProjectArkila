@@ -37,7 +37,7 @@ class RouteRequest extends FormRequest
                 "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "numticket" => 'required|numeric|digits_between:1,1000',
-                "termRoute" => [
+                "destType" => [
                     'required',
                     Rule::in(['Terminal', 'Route'])
                 ],    
@@ -50,7 +50,7 @@ class RouteRequest extends FormRequest
                 "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "numticket" => 'required|numeric|digits_between:1,1000',
-                "termRoute" => [
+                "destType" => [
                     'required',
                     Rule::in(['Terminal', 'Route'])
                 ],
