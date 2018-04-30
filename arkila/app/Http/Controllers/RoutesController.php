@@ -27,11 +27,20 @@ class RoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createRoute()
     {
         $terminals = Destination::allTerminal()->get();
-        return view('route.create', compact('terminals'));
+        $type = 'Route';
+        return view('route.create', compact('terminals', 'type'));
     }
+
+    public function createTerminal()
+    {
+        $terminals = Destination::allTerminal()->get();
+        $type = 'Terminal';
+        return view('route.create', compact('terminals', 'type'));
+    }
+
 
     /**
      * Store a newly created resource in storage.

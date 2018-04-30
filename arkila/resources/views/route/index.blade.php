@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="">
-                            <a href="{{route('route.create')}}" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
+                            <a href="{{route('terminalCreate.create')}}" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
                         </div>
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
