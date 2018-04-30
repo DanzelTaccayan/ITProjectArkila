@@ -61,7 +61,7 @@
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" name="dest[]" value="{{$terminal->destination_id}}" required>{{$terminal->destination_name}}></label>
+            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}></label>
           </div>
           @endforeach
       </div>
@@ -163,11 +163,13 @@
               $("#terminalForm").hide();
               $(".terminalInput").val("");
               $(".terminalRequired").prop('required',false);
+              $(".routeRequired").prop('required',true);
           })
         $("#terminalRadio").click(function(){
               $("#routeForm").hide();
               $("#terminalForm").show();
               $(".terminalRequired").prop('required',true);
+              $(".routeRequired").prop('required',false);
           })
       });
     </script>
