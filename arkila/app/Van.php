@@ -8,8 +8,6 @@ class Van extends Model
 {
     protected $table = 'van';
 	protected $primaryKey = 'van_id';
-	public $incrementing = false;
-	protected $keyType = 'String';
     protected $guarded = [
     	'van_id',
 	];  
