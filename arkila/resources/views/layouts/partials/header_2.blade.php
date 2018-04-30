@@ -4,7 +4,7 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
-        <a href="{{ route('home') }}" class="logo">
+        <a href="vanqueue" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>Ban</b>Trans</span>
         </a>
