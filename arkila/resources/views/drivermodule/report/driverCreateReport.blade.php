@@ -14,7 +14,12 @@
                 <div class="box-body">
                     <form action="{{route('drivermodule.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
-                      <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
+                      @php $destination_name = null; @endphp
+                      @foreach($terminals->routeFromDestination as $terminal)
+                        @php $destination_name = $terminal->pivot->terminal_origin; @endphp
+                        @break;
+                      @endforeach
+                      <input type="hidden" name="destinationName" value="{{$destination_name}}">
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
@@ -36,7 +41,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="hidden" name="discount[]" value="">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
                                 </div>
                             </div>
                             @php $counter++; @endphp

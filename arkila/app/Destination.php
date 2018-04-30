@@ -46,6 +46,11 @@ class Destination extends Model
         ->withPivot('route');
     }
 
+    public function terminalDestination()
+    {
+        return $this->belongsToMany(Destination::class,'route_terminal','terminal_origin','terminal_destination')
+        ->withPivot('route');
+    }
 
     public function vanQueue()
     {

@@ -55,6 +55,9 @@
         <div class="box">
             <div class="box-body">          
                <div class="table-responsive">
+                    <div class="col col-md-6">
+                       <h4><strong>FEES</strong></h4>
+                    </div>
                     <table class="table table-bordered table-striped dataTable">
                         <thead>
                             <tr>
