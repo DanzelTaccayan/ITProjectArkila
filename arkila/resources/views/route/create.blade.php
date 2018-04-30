@@ -27,42 +27,45 @@
 	        <div class="radio text-center">
 	            <label for=""> Terminal</label>
 	            <label class="radio-inline">
-	                <input type="radio" name="termRoute" onclick="javascript:radioSelect();" id="terminal" checked="checked"  value="Terminal" class="flat-blue">
+	                <input type="radio" name="desttype"  id="terminalRadio" checked="checked"  value="Terminal" class="flat-blue">
 	            </label>
 
 	            <label for="">Route</label>
 	            <label class="radio-inline">
-	                <input type="radio" name="termRoute" id="route" onclick="javascript:radioSelect();" value="Route" class="flat-blue" >
+	                <input type="radio" name="desttype" id="routeRadio" value="Route" class="flat-blue" >
 	            </label>
 	        </div>
         </div>
     </div>
 
     <div class="form-section">
-    	<div class="form-group">
-          <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+      <div id="terminalForm">
+      	<div class="form-group">
+            <label>Booking Fee: <span class="text-red">*</span> </label>
+            <input type="number" class="form-control" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+        </div>
+        <div class="form-group" id="shotTripReg">
+            <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
+            <input type="number" class="form-control" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}">
+        </div>
+         <div class="form-group" id="shotTripDis">
+            <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
+            <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}">
+        </div>
       </div>
-      <div class="form-group" id="shotTripReg">
-          <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}">
-      </div>
-       <div class="form-group" id="shotTripDis">
-          <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}">
-      </div>
-    <div class="form-group" id="origin" style="display:none">
-        <label>Origin Terminal: <span class="text-red">*</span> </label>
-        <input type="text" class="form-control" name="originTerm" disabled>
-      </div>
-      
-      <div class="form-group" id="destination">
-          <label>Destination Terminal: <span class="text-red">*</span> </label>
-          @foreach($terminals as $count => $terminal)
-          <div class="checkbox">
-            <label><input type="checkbox" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
-          </div>
-          @endforeach
+      <div id="routeForm">
+        <div class="form-group" id="origin">
+          <label>Origin Terminal: <span class="text-red">*</span> </label>
+          <input type="text" class="form-control" name="originTerm" disabled>
+        </div>
+        <div class="form-group" id="destination">
+            <label>Destination Terminal: <span class="text-red">*</span> </label>
+            @foreach($terminals as $count => $terminal)
+            <div class="checkbox">
+              <label><input type="checkbox" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
+            </div>
+            @endforeach
+        </div>
       </div>
     </div>
 
@@ -123,6 +126,45 @@
           navigateTo(0); // Start at the beginning
         });
 
+    </script>
+
+    {{-- <script>
+      $(function() {
+      var routeForm = $('#routeForm')
+      var terminalForm = $('#terminalForm')
+
+        group = $('input[type="radio"][name="desttype"]');
+
+        group.change(function(){
+          routeForm.toggle(group.filter(':checked').val() === 'Route');
+          terminalForm.toggle(group.filter(':checked').val() === 'Terminal');
+        }).change();
+
+     });
+
+        $('input:radio[name="desttype"]').change{
+          function(){
+            if(this.checked && this.value == 'Route'){
+              alert('HAHAHA');
+              $("#routeForm").show();
+              $("#terminalForm").hide();
+
+            }
+          }
+        });
+    </script> --}}
+    <script>
+      $(function() {
+        $("#routeForm").hide();
+        $("#routeRadio").click(function(){
+              $("#routeForm").show();
+              $("#terminalForm").hide();
+          })
+        $("#terminalRadio").click(function(){
+              $("#routeForm").hide();
+              $("#terminalForm").show();
+          })
+      });
     </script>
 
 @endsection
