@@ -18,7 +18,7 @@ class DriverAuthenticated
     {
       if(Auth::check()){
         if(Auth::user()->isSuperAdmin() && Auth::user()->isEnable()){
-          return redirect(route('home'));
+          return redirect('home/vanqueue');
         }
 
         if(Auth::user()->isAdmin() && Auth::user()->isEnable()){
