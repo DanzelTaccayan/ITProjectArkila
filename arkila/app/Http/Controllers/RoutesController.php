@@ -27,11 +27,20 @@ class RoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createRoute()
     {
         $terminals = Destination::allTerminal()->get();
-        return view('route.create', compact('terminals'));
+        $type = 'Route';
+        return view('route.create', compact('terminals', 'type'));
     }
+
+    public function createTerminal()
+    {
+        $terminals = Destination::allTerminal()->get();
+        $type = 'Terminal';
+        return view('route.create', compact('terminals', 'type'));
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -47,7 +56,7 @@ class RoutesController extends Controller
         $message = null;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-        if ($request->termRoute == 'Terminal')
+        if ($request->destType == 'Terminal')
         {    
             $terminal = Destination::create([
                 'destination_name' => $name,
@@ -81,11 +90,14 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
+
+            $terminal->routeOrigin()
+            ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
+
             $message = 'The terminal '. $name .' has been successfully created';
         }
         else 
         {
-
             $route = Destination::create([
                 'destination_name' => $name,
                 'is_terminal' => false,
@@ -115,7 +127,7 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
-
+            
             foreach ($terminals as $count => $terminal) {
                 if (isset($request->dest[$count])) {
                     $route->routeOrigin()

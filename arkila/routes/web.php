@@ -35,8 +35,13 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
     Route::resource('/home/announcements', 'AnnouncementsController');
     Route::resource('/home/route', 'RoutesController',[
-        'except' => ['destroy', 'update', 'show', 'edit']
+        'except' => ['create', 'update', 'show', 'edit']
     ]);
+
+    Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
+    Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
+    // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');
+    // Route::post('/home/route/store', 'RoutesController@storeRoute')->name('route.update');
 
     //Operators
     Route::resource('/home/operators', 'OperatorsController',[

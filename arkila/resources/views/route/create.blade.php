@@ -2,7 +2,11 @@
 @section('title', 'Create New Terminal/Destination')
 @section('back-link', route('route.index'))
 @section('form-action', route('route.store'))
-@section('form-title', 'CREATE TERMINAL/ROUTE')
+@if($type == 'Route')
+@section('form-title', 'CREATE ROUTE')
+@elseif ($type == 'Terminal')
+@section('form-title', 'CREATE TERMINAL')
+@endif
 @section('form-body')
 
   <div class="form-section">
@@ -22,7 +26,7 @@
           <label>Number of Tickets: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
       	<label>Type:</label>
         <div class="radio text-center">
             <label for=""> Terminal</label>
@@ -35,8 +39,10 @@
                 <input type="radio" name="destType" id="routeRadio" value="Route" class="flat-blue" >
             </label>
         </div>
-      </div>
+      </div> -->
   </div>
+  @if($type == 'Terminal')
+  <input type="hidden" name="destType" value="Terminal">
   <div class="form-section">
     <div id="terminalForm">
     	<div class="form-group">
@@ -52,6 +58,9 @@
           <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
       </div>
     </div>
+    @endif
+    @if($type == 'Route')
+    <input type="hidden" name="destType" value="Route">
     <div id="routeForm">
       <div class="form-group" id="origin">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
@@ -61,12 +70,14 @@
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}></label>
+            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
           </div>
           @endforeach
       </div>
     </div>
   </div>
+    @endif
+
 
     <!-- <div class="form-section">
     </div> -->
