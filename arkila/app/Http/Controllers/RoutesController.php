@@ -89,7 +89,6 @@ class RoutesController extends Controller
         }
         else 
         {
-
             $route = Destination::create([
                 'destination_name' => $name,
                 'is_terminal' => false,
@@ -119,7 +118,7 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
-
+            
             foreach ($terminals as $count => $terminal) {
                 if (isset($request->dest[$count])) {
                     $route->routeOrigin()

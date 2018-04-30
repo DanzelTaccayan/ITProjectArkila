@@ -29,6 +29,7 @@ class RouteRequest extends FormRequest
     {
         if ($request->termRoute == 'Terminal')
         {
+            
             return [
                 "addTerminal" => ['required', 'max:70'],
                 "bookingFee" => 'required|numeric',
@@ -45,16 +46,19 @@ class RouteRequest extends FormRequest
         }
         else
         {
+            
             return [
                 "addTerminal" => ['required', 'max:70'],
                 "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "numticket" => 'required|numeric|digits_between:1,1000',
+                "dest" => 'required',
+                "dest.*" => 'numeric',
                 "destType" => [
                     'required',
                     Rule::in(['Terminal', 'Route'])
                 ],
-                "dest.*" => 'required|numeric',
+                
             ];
             
         }
