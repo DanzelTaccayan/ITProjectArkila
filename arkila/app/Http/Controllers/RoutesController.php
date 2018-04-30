@@ -18,7 +18,7 @@ class RoutesController extends Controller
     public function index()
     {
         $terminals = Destination::allTerminal()->get();
-        $mainTerminal = Destination::all()->where('is_main_terminal', 1);
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
         return view('route.index', compact('terminals', 'mainTerminal'));
     }
 

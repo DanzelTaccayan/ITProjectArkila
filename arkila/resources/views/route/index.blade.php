@@ -20,7 +20,7 @@
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
                             @foreach ($terminals as $terminal)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
                             @endforeach
                             </ul>
                         </div>
