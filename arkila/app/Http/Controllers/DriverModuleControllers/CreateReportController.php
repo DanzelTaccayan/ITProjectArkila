@@ -39,45 +39,41 @@ class CreateReportController extends Controller
     $totalPassengers = $request->totalPassengers;
     $totalBookingFee = $request->totalBookingFee;
     $totalPassenger = (float)$request->totalPassengers;
-    $communityFund = number_format(5 * $totalPassenger, 2, '.', '');
-    $user = new User;
-    $plateNumber = $user->join('member', 'users.id', '=', 'member.user_id')
-          ->join('member_van', 'member.member_id', '=', 'member_van.member_id')
-          ->join('van', 'member_van.plate_number', '=', 'van.plate_number')
-          ->where('users.id', Auth::id())->select('van.plate_number as plate_number')->first();
-     $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
-
-     $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
-     $timeDepartedFormat = $timeDeparted->format('H:i:s');
-     $dateDeparted = $request->dateDeparted;
+    $cf = Fee::where('description', 'Community Fee')->first();
+    $communityFund = number_format($cf * $totalPassenger, 2, '.', '');
+    $sop = Fee::where('description', 'SOP')->first();
+    $driver_user = User::find(Auth::id());
+    $van_id = $driver_user->member->van->first()->van_id;
+    $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
+    $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
+    $timeDepartedFormat = $timeDeparted->format('H:i:s');
+    $dateDeparted = $request->dateDeparted;
      if($totalPassengers >=  10){
         Trip::create([
          'driver_id' => $driver_id->member_id,
-         'origin' => $terminal->terminal_id,
-         'terminal_id' => $terminal->terminal_id,
-         'plate_number' => $plateNumber->plate_number,
-         'status' => 'Departed',
+         'van_id' => $van_id,
+         'destination' => $request->destinationName,
+         'origin' => $terminal->destination_name,
          'total_passengers' => $totalPassengers,
-         'total_booking_fee' => $request->totalBookingFee,
+         'total_booking_fee' => $totalBookingFee,
          'community_fund' => $communityFund,
+         'SOP' => $sop,
+         'report_status' => 'Pending',
          'date_departed' => $request->dateDeparted,
          'time_departed' => $timeDepartedFormat,
-         'report_status' => 'Pending',
-         'SOP' => 100.00,
        ]);
      }else if($totalPassengers <  10){
           Trip::create([
-           'driver_id' => $driver_id->member_id,
-           'origin' => $terminal->terminal_id,
-           'terminal_id' => $terminal->terminal_id,
-           'plate_number' => $plateNumber->plate_number,
-           'status' => 'Departed',
-           'total_passengers' => $totalPassengers,
-           'total_booking_fee' => $request->totalBookingFee,
-           'community_fund' => $communityFund,
-           'date_departed' => $request->dateDeparted,
-           'time_departed' => $timeDepartedFormat,
-           'report_status' => 'Pending',
+            'driver_id' => $driver_id->member_id,
+            'van_id' => $van_id,
+            'destination' => $request->destinationName,
+            'origin' => $terminal->destination_name,
+            'total_passengers' => $totalPassengers,
+            'total_booking_fee' => $totalBookingFee,
+            'community_fund' => $communityFund,
+            'report_status' => 'Pending',
+            'date_departed' => $request->dateDeparted,
+            'time_departed' => $timeDepartedFormat,
          ]);
      }
 
