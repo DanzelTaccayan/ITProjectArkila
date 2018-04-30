@@ -47,7 +47,7 @@ class RoutesController extends Controller
         $message = null;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-        if ($request->termRoute == 'Terminal')
+        if ($request->destType == 'Terminal')
         {    
             $terminal = Destination::create([
                 'destination_name' => $name,
