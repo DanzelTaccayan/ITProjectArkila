@@ -34,10 +34,13 @@
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
-                                <button onclick="window.open('{{route('pdf.perOperator', [$operator->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
                                 <h3 class="profile-username"><strong>{{ $operator->full_name }}</strong></h3> 
                                 <div class="active tab-pane" id="info">
-                                    <h4>Personal Information</h4> 
+                                    <div style="margin-bottom: 3%;">
+                                        <button onclick="window.open('{{route('pdf.perOperator', [$operator->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
+                                        <h4>Personal Information</h4> 
+                                    </div>
+
                                     <table class="table table-bordered table-striped table-responsive">
                                         <tbody>
                                             <tr>

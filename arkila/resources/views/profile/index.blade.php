@@ -9,13 +9,8 @@
             @foreach ($profiles as $profile)
                 
                 <div class="form-group">
-                    <label>Contact Number: <span class="text-red">*</span></label>
-                    <div class="input-group">
-                      <div class="input-group-addon">
-                        <span>+63</span>
-                      </div>
-                      <input type="text" name="contactNumber"  class="form-control" value="{{$profile->contact_number}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' disabled>
-                    </div>
+                    <label>Contact Number:</label>
+                    <input type="text" name="contactNumber" class="form-control" value="{{$profile->contact_number}}" disabled>
                 </div>
 
                 <div class="form-group">

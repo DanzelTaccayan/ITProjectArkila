@@ -11,25 +11,17 @@
 
        
         <div class="form-group">
-            <label for="contactNumber">Contact Number: <span class="text-red">*</span></label>
-            <div class = "input-group">
-                <div class = "input-group-addon">
-                    <span>+63</span>
-                </div>
-                <input value="{{$profile->contact_number}}" id="contactNumber" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errContactNumber" val-phone required>
-            </div>
-            
-            <p id="errContactNumber"></p>
-
+            <label for="contactNumber">Contact Number: </label>
+            <input value="{{$profile->contact_number}}" type="text" class="form-control" required>    
         </div>
 
         <div class="form-group">
-            <label>Address: <span class="text-red">*</span></label>
-            <input type="text" class="form-control" name="address" value="{{$profile->address}}" required>
+            <label>Address:</label>
+            <input type="text" class="form-control" name="address" value="{{$profile->address}}">
         </div>
         <div class="form-group">
-            <label>Email:  <span class="text-red">*</span></label>
-            <input type="text" class="form-control" name="email" value="{{$profile->email}}" required>
+            <label>Email: </label>
+            <input type="text" class="form-control" name="email" value="{{$profile->email}}">
         </div>
     </div>
 
