@@ -29,6 +29,7 @@
       </div>
   </div>
   @if ($type == 'Terminal')
+  <input type="hidden" name="type" value="Terminal">
   <div class="form-section">
     <div id="terminalForm">
       <div class="form-group">
@@ -45,6 +46,7 @@
       </div>
     </div>
     @elseif ($type == 'Route')
+    <input type="hidden" name="type" value="Route">
     <div class="form-section">
     <div id="terminalForm">
       <div class="form-group" id="origin">

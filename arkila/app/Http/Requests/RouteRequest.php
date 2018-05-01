@@ -27,19 +27,18 @@ class RouteRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-
-        if ($request->destType == 'Terminal')
+        if ($request->type == 'Terminal')
         {
 
             return [
-                "addTerminal" => ['required', 'max:70'],
+                "addTerminal" => 'required|unique:destination,destination_name|max:70',
                 "bookingFee" => 'required|numeric',
                 "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "numticket" => 'required|numeric|digits_between:1,1000',
-                "destType" => [
+                "type" => [
                     'required',
                     Rule::in(['Terminal', 'Route'])
                 ],    
@@ -49,13 +48,13 @@ class RouteRequest extends FormRequest
         {
             
             return [
-                "addTerminal" => ['required', 'max:70'],
+                "addTerminal" => 'required|unique:destination,destination_name|max:70',
                 "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                 "numticket" => 'required|numeric|digits_between:1,1000',
                 "dest" => 'required',
                 "dest.*" => 'numeric',
-                "destType" => [
+                "type" => [
                     'required',
                     Rule::in(['Terminal', 'Route'])
                 ],
