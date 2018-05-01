@@ -7,17 +7,7 @@
         width:200px;
         padding:20px;
     }
-    .form-heading{
-        background: #1f94d9;
-        padding: 10px;
-        margin: 0;
-        color: white;
-        margin-right: 250px;
-    }
-
-    .form-border{
-        border: 2px solid #dddddd;
-    }
+    
 </style>
 @endsection
 @section('form-id','regForm')
@@ -28,7 +18,7 @@
     <div class="box box-primary with-shadow">
       <div class="box-header with-border text-center">
           <h4>
-          <a href="{{route('operators.index')}}" class="pull-left"><i class="fa  fa-chevron-left"></i></a>    
+          <a href="{{route('operators.index')}}" class="pull-left"><i class="fa  fa-chevron-left"></i></a>
           </h4>
           <h4 class="box-title">
               OPERATOR REGISTRATION
@@ -55,15 +45,14 @@
                     <th>Contact Number <span class="text-red">*</span></th>
                     <td>  
                       <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" val-phone required>
-                      <p id="errContactNumber"></p>
                     </td>
                   </tr>
                   <tr>
-                    <th>Address: <span class="text-red">*</span></th>
+                    <th>Address <span class="text-red">*</span></th>
                     <td><input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" val-address  required></td>
                   </tr>
                   <tr>
-                    <th>Gender: <span class="text-red">*</span></th>
+                    <th>Gender <span class="text-red">*</span></th>
                     <td>
                       <div class="radio">
                           <label for=""> Male</label>
@@ -92,13 +81,7 @@
                   <tr>
                     <th>License Expiry Date</th>
                     <td>
-                      <div class="input-group date">
-                          <div class="input-group-addon">
-                              <i class="fa fa-calendar"></i>
-                          </div>
-                          <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
-                      </div>
-                      <p id= "errExpireDate"></p>
+                        <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
                     </td>
                   </tr>
                   <tr>
@@ -111,19 +94,19 @@
           <table class="table table-bordered table-striped form-border">
             <tbody>
               <tr>
-                <th>Name</th>
+                <th>Name <span class="text-red">*</span></th>
                 <td>
                   <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-name required>
                 </td>
               </tr>
               <tr>
-                <th>Address</th>
+                <th>Address <span class="text-red">*</span></th>
                 <td>
                    <input value="{{old('contactPersonAddress')}}" name="contactPersonAddress" type="text" class="form-control" placeholder="Address" val-address required>
                 </td>
               </tr>
               <tr>
-                <th>Contact Number</th>
+                <th>Contact Number <span class="text-red">*</span></th>
                 <td>
                   <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required>
                   <p id="errContactPersonPhone"></p>
