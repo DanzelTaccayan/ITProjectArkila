@@ -287,7 +287,7 @@ ol.vertical{
                             <div class="queue-body scrollbar scrollbar-info thin">  
                               <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization">
                                   @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
-                                    <li class="queue-item form-horizontal" data-plate="{{ $vanOnQueue->van->plate_number}}" data-remark="{{ $vanOnQueue->remarks }}">
+                                    <li class="queue-item form-horizontal" data-vanId="{{ $vanOnQueue->van->van_id}}" data-remark="{{ $vanOnQueue->remarks }}">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
                                             <a href="" id="queue{{$vanOnQueue->van_queue_id}}" class="queue-editable">{{ $vanOnQueue->queue_number }}</a>
@@ -298,7 +298,7 @@ ol.vertical{
                                               <p class="hidden">{{ $vanOnQueue->van->plate_number }}</p>
                                               {{ $vanOnQueue->van->plate_number }}
                                               <div class="pull-right">
-                                                  <i class="badge badge-pill badge-default">{{ $vanOnQueue->remarks }}</i>
+                                                  <i id="badge{{$vanOnQueue->van_queue_id}}" class="badge badge-pill badge-default">{{ $vanOnQueue->remarks }}</i>
                                                   <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%">
                                                     <i class="fa fa-gear"></i>
                                                   </button>
@@ -317,14 +317,16 @@ ol.vertical{
                                           <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Remark:</label>
                                              <div class="col-sm-3">
-                                              <select id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                <option value="">CC</option>
+                                              <select name="remark" id="remark{{$vanOnQueue->van_queue_id}}" class="form-control">
+                                                <option value="CC">CC</option>
+                                                <option value="ER">ER</option>
+                                                <option value="OB">OB</option>
                                               </select>
                                              </div>
                                            </div>
                                            <div class="pull-right"> 
                                               <button class="btn btn-default btn-sm itemBtn{{$vanOnQueue->van_queue_id}}">CANCEL</button>
-                                              <button name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">UPDATE</button>
+                                              <button name="updateRemarksButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">UPDATE</button>
                                              </div>
                                              <div class="clearfix"> </div>
                                         </div>
@@ -363,7 +365,7 @@ ol.vertical{
                                         <div id="deleteitem{{$vanOnQueue->van_queue_id}}" class="hidden">
                                                 <p><strong>{{ $vanOnQueue->van->plate_number }}</strong> will be deleted. Do you want to continue?</p>
                                             <div class="pull-right">
-                                                <form method="POST" action="{{route('trips.destroy',[$vanOnQueue->van_queue_id])}}">
+                                                <form method="POST" action="{{route('vanqueue.destroy',[$vanOnQueue->van_queue_id])}}">
                                                     {{method_field('DELETE')}}
                                                     {{csrf_field()}}
                                                   <a class="btn btn-default btn-sm itemBtn{{$vanOnQueue->van_queue_id}}"> CANCEL</a>
@@ -416,44 +418,97 @@ ol.vertical{
   </script>
     <!-- List sortable -->
     <script>
-        $(function() {
+        $(function()
+        {
+            //Update Remarks
+            $('button[name="updateRemarksButton"]').on('click',function()
+            {
+                var queueId = $(this).data('val');
 
-            function specialUnitChecker(){
-                $.ajax({
+                $.ajax(
+                    {
+                        method:'PATCH',
+                        url: '/home/vanqueue/'+queueId+'/updateRemarks',
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'remark' : $('#remark'+queueId).val()
+                            },
+                        success: function()
+                        {
+                            $("#remarkitem"+queueId).hide();
+                            $("#item"+queueId).show();
+                            $('#badge'+queueId).append($('#remark'+queueId).val());
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully update remark",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+                        }
+                    });
+
+            });
+
+            function specialUnitChecker()
+            {
+                $.ajax(
+                {
                     method:'POST',
-                    url: 'http://localhost:8000/specialUnitChecker',
-                    data: {
+                    url: '/specialUnitChecker',
+                    data:
+                    {
                         '_token': '{{csrf_token()}}'
                     },
-                    success: function(response){
-                        if(response[0]) {
+                    success: function(response)
+                    {
+                        if(response[0])
+                        {
                             $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                        }else{
-                            if(response[1]){
+                        }
+                        else
+                        {
+                            if(response[1])
+                            {
                                 $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
                             }
                         }
                     }
-
                 });
             }
 
-            $('button[name="destBtn"]').on('click',function(){
-                $.ajax({
+            $('button[name="destBtn"]').on('click',function()
+            {
+                $.ajax(
+                {
                     method:'PATCH',
                     url:'/home/trips/changeDestination/'+$(this).data('val'),
-                    data: {
+                    data:
+                    {
                         '_token': '{{csrf_token()}}',
                         'destination': $('#destOption'+$(this).data('val')).val()
                     },
-                    success: function(){
+                    success:
+                    function()
+                    {
                         location.reload();
                     }
-
                 });
             });
 
             $('#specialUnitList').load('/listSpecialUnits/'+$('#destinationTerminals li.active').data('val'));
+
             $('#addQueueButt').on('click', function() {
                 var destination = $('#destination').val();
                 var van = $('#van').val();
@@ -462,14 +517,13 @@ ol.vertical{
                 if( destination != "" && van != "" && driver != ""){
                     $.ajax({
                         method:'POST',
-                        url: '/home/trips/'+destination+'/'+van+'/'+driver,
+                        url: '/home/vanqueue/'+destination+'/'+van+'/'+driver,
                         data: {
                             '_token': '{{csrf_token()}}'
                         },
                         success: function(){
                             location.reload();
                         }
-
                     });
 
                 }
@@ -487,7 +541,7 @@ ol.vertical{
           _super($item, container);
 
           $.ajax({
-            method:'POST',
+            method:'PATCH',
             url: '{{route("vanqueue.updateVanQueue")}}',
             data: {
                 '_token': '{{csrf_token()}}',
@@ -511,82 +565,15 @@ ol.vertical{
             $('#specialUnitList').load('/listSpecialUnits/'+terminal);
         });
 
-    @foreach($queue as $vanOnQueue)
 
-      $('#remark{{$vanOnQueue->van_queue_id}}').editable({
-          name: "remarks",
-          type: "select",
-          title: "Update Remark",
-        value: "@if(is_null($vanOnQueue->remarks)){{'NULL'}}@else{{$vanOnQueue->remarks}}@endif",
-          source: [
-                {value: 'NULL', text: '...'},
-                {value: 'CC', text: 'CC'},
-                {value: 'ER', text: 'ER'},
-                {value: 'OB', text: 'OB'}
-             ],
-        url:'{{route('trips.updateRemarks',[$vanOnQueue->van_queue_id])}}',
-        pk: '{{$vanOnQueue->van_queue_id}}',
-        validate: function(value){
-             if($.trim(value) == ""){
-                    return "This field is required";
-             }
-        },
-        ajaxOptions: {
-            type: 'PATCH',
-            headers: { 'X-CSRF-TOKEN': '{{csrf_token()}}' }
-        },
-        error: function(response) {
-            if(response.status === 500) {
-                return 'Service unavailable. Please try later.';
-            } else {
-                console.log(response);
-                return response.responseJSON.message;
-            }
-        },
-        success: function(response){
-            specialUnitChecker();
-        }
-      });
-
-    @endforeach
-    @foreach($queue as $vanOnQueue)
-              $('#queue{{$vanOnQueue->van_queue_id}}').editable({
-                  name: 'queue',
-                  value: '{{ $vanOnQueue->queue_number }}',
-                  type: 'select',
-                  title:'Queue number',
-                  url: '{{route('trips.updateQueueNumber',[$vanOnQueue->van_queue_id])}}',
-                  pk: '{{$vanOnQueue->van_queue_id}}',
-                  validate: function(value){
-                      if($.trim(value) == ""){
-                          return "This field is required";
-                      }
-                  },
-                    source: '{{route('trips.listQueueNumbers',[$vanOnQueue->destination_id])}}',
-                  ajaxOptions: {
-                        type: 'PATCH',
-                        headers: { 'X-CSRF-TOKEN': '{{csrf_token()}}' }
-                  },
-                  error: function(response) {
-                        if(response.status === 500) {
-                            return 'Service unavailable. Please try later.';
-                        } else {
-                            console.log(response);
-                            return response.responseJSON.message;
-                        }
-                  },
-                  success: function(){
-                      location.reload();
-                  }
-              });
-            @endforeach
 
         });
 </script>
 
     @foreach($terminals as $terminal)
     <script>
-          function search{{$terminal->destination_id}}() {
+          function search{{$terminal->destination_id}}()
+          {
                 // Declare variables
                 var input, filter, ol, li, p, i;
                 input = document.getElementById('queueSearch{{$terminal->destination_id}}');
@@ -595,11 +582,15 @@ ol.vertical{
                 li = ol.getElementsByClassName('queue-item');
 
                 // Loop through all list items, and hide those who don't match the search query
-                for (i = 0; i < li.length; i++) {
+                for (i = 0; i < li.length; i++)
+                {
                     p = li[i].getElementsByTagName('p')[0];
-                    if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    if (p.innerHTML.toUpperCase().indexOf(filter) > -1)
+                    {
                         li[i].style.display = "";
-                    } else {
+                    }
+                    else
+                    {
                         li[i].style.display = "none";
                     }
                 }
@@ -626,29 +617,29 @@ ol.vertical{
             $("#item{{$vanOnQueue->van_queue_id}}").hide();
             $("#remarkitem{{$vanOnQueue->van_queue_id}}").show();
             $("#remarkitem{{$vanOnQueue->van_queue_id}}").removeClass("hidden");
-        })
+        });
         $("#posBtn{{$vanOnQueue->van_queue_id}}").click(function(){
             $("#item{{$vanOnQueue->van_queue_id}}").hide();
             $("#positem{{$vanOnQueue->van_queue_id}}").show();
             $("#positem{{$vanOnQueue->van_queue_id}}").removeClass("hidden");
-        })
+        });
         $("#destBtn{{$vanOnQueue->van_queue_id}}").click(function(){
             $("#item{{$vanOnQueue->van_queue_id}}").hide();
             $("#destitem{{$vanOnQueue->van_queue_id}}").show();
             $("#destitem{{$vanOnQueue->van_queue_id}}").removeClass("hidden");
-        })
+        });
         $(".itemBtn{{$vanOnQueue->van_queue_id}}").click(function(){
             $("#remarkitem{{$vanOnQueue->van_queue_id}}").hide();
             $("#positem{{$vanOnQueue->van_queue_id}}").hide();
             $("#destitem{{$vanOnQueue->van_queue_id}}").hide();
             $("#deleteitem{{$vanOnQueue->van_queue_id}}").hide();
             $("#item{{$vanOnQueue->van_queue_id}}").show();
-        })
+        });
         $("#deleteBtn{{$vanOnQueue->van_queue_id}}").click(function(){
             $("#item{{$vanOnQueue->van_queue_id}}").hide();
             $("#deleteitem{{$vanOnQueue->van_queue_id}}").show();
             $("#deleteitem{{$vanOnQueue->van_queue_id}}").removeClass("hidden");
-        })
+        });
       });
     </script>
     @endforeach

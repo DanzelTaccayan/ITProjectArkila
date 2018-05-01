@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Destination;
 use App\Rules\checkDriver;
 use App\Rules\checkPlateNumber;
 use App\Rules\checkOperator;
@@ -12,12 +13,19 @@ use App\Member;
 use App\VanModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
 use PDF;
 
 
 
 class VansController extends Controller
 {
+    protected $mainTerminal;
+
+    public function __construct()
+    {
+        $this->mainTerminal = Destination::where('is_main_terminal',1)->first();
+    }
 
     /**
      * Display a listing of the resource.
@@ -28,7 +36,6 @@ class VansController extends Controller
     {
         $vans = Van::where('status','Active')->get();
         return view('vans.index', compact('vans'));
-
     }
 
     /**
@@ -78,7 +85,8 @@ class VansController extends Controller
             $van = Van::create([
                 'plate_number' => request('plateNumber'),
                 'model_id' => $vanModel->model_id,
-                'seating_capacity' => request('seatingCapacity')
+                'seating_capacity' => request('seatingCapacity'),
+                'location' => $this->mainTerminal->destination_name
             ]);
 
             $van->members()->attach(request('operator'));
@@ -86,7 +94,8 @@ class VansController extends Controller
             if(request('addDriver') === 'on')
             {
                 session(['type' => 'createFromIndex']);
-                return redirect(route('drivers.createFromVan',[$van->plate_number]));
+                DB::commit();
+                return redirect(route('drivers.createFromVan',[$van->van_id]));
             }
             else
             {
@@ -109,15 +118,14 @@ class VansController extends Controller
                 }
 
             }
+            DB::commit();
         }
         catch(\Exception $e)
         {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        DB::commit();
         return redirect(route('vans.index'));
-
     }
 
     /**
@@ -153,17 +161,14 @@ class VansController extends Controller
             $van = Van::create([
                 'plate_number' => request('plateNumber'),
                 'model_id' => $vanModel->model_id,
-                'seating_capacity' => request('seatingCapacity')
+                'seating_capacity' => request('seatingCapacity'),
+                'location' => $this->mainTerminal->destination_name
             ]);
 
             $van->members()->attach($operator->member_id);
             session()->flash('message','Van successfully created');
 
-            if(request('addDriver') === 'on'){
-                session(['type' => $operator->member_id]);
-                return redirect(route('drivers.createFromVan',[$van->plate_number]));
-            }
-            else
+            if(request('addDriver') != 'on')
             {
                 if($newDriver = Member::find(request('driver')))
                 {
@@ -181,6 +186,7 @@ class VansController extends Controller
                     $van->members()->attach($newDriver);
                 }
             }
+            DB::commit();
         }
         catch(\Exception $e)
         {
@@ -188,8 +194,15 @@ class VansController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        DB::commit();
-        return redirect(route('operators.showProfile',[$operator->member_id]));
+        if(request('addDriver') === 'on')
+        {
+            session(['type' => $operator->member_id]);
+            return redirect(route('drivers.createFromVan',[$van->van_id]));
+        }
+        else
+        {
+            return redirect(route('operators.showProfile',[$operator->member_id]));
+        }
     }
 
     /**
@@ -212,116 +225,141 @@ class VansController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Van $van) {
+    public function update(Van $van)
+    {
 
-
-        if(request('addDriver') != 'on'){
+        if(request('addDriver') != 'on')
+        {
             $this->validate(request(), [
                 "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
                 "operator" => ['required','exists:member,member_id', new checkOperator]
             ]);
 
-            //Archiving
-            if($van->operator()->first())
+            // Start transaction!
+            DB::beginTransaction();
+            try
             {
-                if(request('operator') == $van->operator()->first()->member_id){
-                    //check if the van has a past driver
-                    if($van->driver()->first())
-                    {
-                        if(request('driver') != $van->driver()->first()->member_id)
-                        {
-                            //archive the relationship of the van and the driver
-                            $van->archivedMember()->attach($van->driver()->first()->member_id);
-                        }
-                    }
-
-                }
-                else
+                //Archiving
+                if($van->operator()->first())
                 {
-                    //Archive the old operator and van
-                    $van->archivedMember()->attach($van->operator()->first()->member_id);
-
-
-                    //Archive the relationship of the old operator and driver
-                    if($van->driver()->first())
+                    if(request('operator') == $van->operator()->first()->member_id)
                     {
-                        $van->driver()->first()->archivedOperator()->attach($van->operator()->first()->member_id);
-
-                        if(request('driver') != $van->driver()->first()->member_id)
+                        //check if the van has a past driver
+                        if($van->driver()->first())
                         {
-                            //archive the relationship of the van and the driver
-                            $van->archivedMember()->attach($van->driver()->first()->member_id);
+                            if(request('driver') != $van->driver()->first()->member_id)
+                            {
+                                //archive the relationship of the van and the driver
+                                $van->archivedMember()->attach($van->driver()->first()->member_id);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //Archive the old operator and van
+                        $van->archivedMember()->attach($van->operator()->first()->member_id);
+
+                        //Archive the relationship of the old operator and driver
+                        if($van->driver()->first())
+                        {
+                            $van->driver()->first()->archivedOperator()->attach($van->operator()->first()->member_id);
+
+                            if(request('driver') != $van->driver()->first()->member_id)
+                            {
+                                //archive the relationship of the van and the driver
+                                $van->archivedMember()->attach($van->driver()->first()->member_id);
+                            }
                         }
                     }
-
                 }
-            }
 
-            //Find the past Operator and Driver
-            $driver = $van->driver()->first();
-            $operator = $van->operator()->first();
+                //Find the past Operator and Driver
+                $driver = $van->driver()->first();
+                $operator = $van->operator()->first();
 
-            //Detach the driver and Operator
-            if($driver){
-                $van->members()->detach($driver->member_id);
-            }
-            $van->members()->detach($operator->member_id);
-
-            //Find the New Operator then attach it to the van
-            $newOperator = Member::find(request('operator'));
-            $van->members()->attach($newOperator->member_id);
-
-            if(!is_null(request('driver'))) {
-                //Find the New Driver then check if it has any operator, then update its operator and attach the new driver to the van
-                $newDriver = Member::find(request('driver'));
-                $newDriver->update([
-                    'operator_id' => $van->operator()->first()->member_id
-                ]);
-                if($newDriver->van()->first() != null){
-                    $newDriver->van()->detach();
+                //Detach the driver and Operator
+                if($driver)
+                {
+                    $van->members()->detach($driver->member_id);
                 }
-                $van->members()->attach($newDriver);
+                $van->members()->detach($operator->member_id);
+
+                //Find the New Operator then attach it to the van
+                $newOperator = Member::find(request('operator'));
+                $van->members()->attach($newOperator->member_id);
+
+                if(!is_null(request('driver')))
+                {
+                    //Find the New Driver then check if it has any operator, then update its operator and attach the new driver to the van
+                    $newDriver = Member::find(request('driver'));
+                    $newDriver->update([
+                        'operator_id' => $van->operator()->first()->member_id
+                    ]);
+                    if($newDriver->van()->first() != null)
+                    {
+                        $newDriver->van()->detach();
+                    }
+                    $van->members()->attach($newDriver);
+                }
+                DB::commit();
+                session()->flash('message','Van '.request('plateNumber').'Successfully Edited');
+            }
+            catch(\Exception $e)
+            {
+                DB::rollback();
+                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
             }
 
-            session()->flash('message','Van '.request('plateNumber').'Successfully Edited');
-
-            if(session()->get('opLink')){
+            if(session()->get('opLink'))
+            {
                 return redirect(session()->get('opLink'));
             }
-            else{
+            else
+            {
                 return redirect(route('vans.index'));
             }
-
         }
-        else{
-            if(session()->get('opLink')){
+        else
+        {
+            if(session()->get('opLink'))
+            {
                 session(['type' => $van->operator->first()->member_id]);
-            }else{
+            }
+            else
+            {
                 session(['type' => 'createFromIndex']);
             }
-            return redirect(route('drivers.createFromVan',[$van->plate_number]));
+            return redirect(route('drivers.createFromVan',[$van->van_id]));
         }
     }
 
-    public function listDrivers(){
+    public function listDrivers()
+    {
         $operator = Member::find(request('operator'));
 
-        if($operator != null) {
+        if($operator != null)
+        {
             $driversArr = [];
             $driverOP = $operator->drivers()->where('status','Active')->get();
             $driverNoOP = Member::allDrivers()->where('status','Active')->whereNull('operator_id')->get();
 
             $drivers = $driverOP->merge($driverNoOP);
 
-            foreach($drivers as $driver){
-                if(request('vanDriver')){
-                    if($driver->member_id != request('vanDriver')){
+            foreach($drivers as $driver)
+            {
+                if(request('vanDriver'))
+                {
+                    if($driver->member_id != request('vanDriver'))
+                    {
                         array_push($driversArr, [
                             "id" => $driver->member_id,
                             "name" => $driver->full_name
                         ]);
                     }
-                }else{
+                }
+                else
+                {
                     array_push($driversArr, [
                         "id" => $driver->member_id,
                         "name" => $driver->full_name
@@ -337,14 +375,15 @@ class VansController extends Controller
 
     }
 
-    public function vanInfo(){
+    public function vanInfo()
+    {
         $van = Van::find(request('van'));
 
         $vanModel = $van->vanModel->description;
 
         if($van != null){
             $vanInfo = [
-                'plateNumber' => $van->plate_number,
+                'plateNumber' => $van->van_id,
                 'vanModel' => $vanModel,
                 'seatingCapacity' => $van->seating_capacity,
                 'operatorOfVan' => $van->operator()->first()->full_name,
@@ -353,46 +392,63 @@ class VansController extends Controller
 
             return response()->json($vanInfo);
         }
-        else{
+        else
+        {
             return "Van not found";
         }
     }
 
     public function archiveVan(Van $van)
     {
-        //update queue_list if the van is on queue
-        if($vanOnQueue = $van->trips()->whereNotNull('queue_number')->first()){
-            foreach(Trip::whereNotNull('queue_number')->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip){
-                $trip->update([
-                   'queue_number' =>  $trip->queue_number -1
-                ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try
+        {
+
+            //update queue_list if the van is on queue
+            if($vanOnQueue = $van->trips()->whereNotNull('queue_number')->first())
+            {
+                foreach(Trip::whereNotNull('queue_number')->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip)
+                {
+                    $trip->update([
+                        'queue_number' =>  $trip->queue_number -1
+                    ]);
+                }
+                $vanOnQueue->delete();
             }
 
-            $vanOnQueue->delete();
-        }
-        //Archive its operator
-        if($van->operator()->first()){
-            $van->archivedMember()->attach($van->operator()->first()->member_id);
-            $van->members()->detach($van->operator()->first()->member_id);
-        }
+            //Archive its operator
+            if($van->operator()->first())
+            {
+                $van->archivedMember()->attach($van->operator()->first()->member_id);
+                $van->members()->detach($van->operator()->first()->member_id);
+            }
 
-        //Archive its driver
-        if($van->driver()->first()){
-            $van->archivedMember()->attach($van->driver()->first()->member_id);
-            $van->members()->detach($van->driver()->first()->member_id);
+            //Archive its driver
+            if($van->driver()->first())
+            {
+                $van->archivedMember()->attach($van->driver()->first()->member_id);
+                $van->members()->detach($van->driver()->first()->member_id);
+            }
+
+            //Archive the relationship of the driver and operator, if they exists
+            if($van->driver()->first() && $van->operator()->first())
+            {
+                $van->operator()->first()->archivedDriver()->attach($van->driver()->first()->member_id);
+            }
+
+            $van->update([
+                'status' => 'Inactive',
+            ]);
+
+            DB::commit();
         }
-
-        //Archive the relationship of the driver and operator, if they exists
-        if($van->driver()->first() && $van->operator()->first()){
-            $van->operator()->first()->archivedDriver()->attach($van->driver()->first()->member_id);
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
-        $van->update([
-           'status' => 'Inactive',
-        ]);
-
         return back();
-
     }
 
     public function generatePDF()

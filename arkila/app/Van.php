@@ -44,7 +44,7 @@ class Van extends Model
 
     public function vanQueue()
     {
-    	return $this->hasMany(VanQueue::Class, 'trip_id');
+    	return $this->hasMany(VanQueue::Class, 'van_id','van_id');
     }
 
     public function updateQueue($queue_number)

@@ -169,7 +169,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/home/vanqueue/changeDestination/{vanOnQueue}', 'VanQueueController@updateDestination')->name('vanqueue.updateDestination');
      Route::patch('/updateQueueNumber/{vanOnQueue}', 'VanQueueController@updateQueueNumber')->name('vanqueue.updateQueueNumber');
      Route::post('/specialUnitChecker','VanQueueController@specialUnitChecker')->name('vanqueue.specialUnitChecker');
-     Route::patch('/home/trips/{vanOnQueue}', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
+     Route::patch('/home/vanqueue/{vanOnQueue}/updateRemarks', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
      Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
      Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
      Route::get('/listSpecialUnits/{terminal}','VanQueueController@listSpecialUnits')->name('vanqueue.listSpecialUnits');

@@ -33,7 +33,6 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Contact Number</th>
-                <th>Age</th>
                 <th>Operator</th>
             </tr>
         </thead>
@@ -44,7 +43,6 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $driver->last_name }}, {{ $driver->first_name }}</td>
                 <td>{{ $driver->contact_number }}</td>
-                <td>{{ $driver->age }}</td>
                 <td>{{ $driver->operator->full_name ?? 'None' }}</td>
 
             </tr>

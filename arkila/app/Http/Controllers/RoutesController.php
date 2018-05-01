@@ -30,15 +30,17 @@ class RoutesController extends Controller
     public function createRoute()
     {
         $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
         $type = 'Route';
-        return view('route.create', compact('terminals', 'type'));
+        return view('route.create', compact('terminals', 'type', 'mainTerminal'));
     }
 
     public function createTerminal()
     {
         $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
         $type = 'Terminal';
-        return view('route.create', compact('terminals', 'type'));
+        return view('route.create', compact('terminals', 'type', 'mainTerminal'));
     }
 
 

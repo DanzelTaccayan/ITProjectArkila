@@ -26,36 +26,37 @@
 </div>
 <div class="form-group">
     <label for="amount">Amount: <span class="text-red">*</span></label>
-    <input type="number" class="form-control" name="amount" step="0.25" placeholder="Php 0.00" value="{{ $ledger->amount }}" required>
+    <input type="number" class="form-control" name="amount" step="0.25" min="0" placeholder="Php 0.00" value="{{ $ledger->amount }}" required>
 </div>
 
-<div class="form-group" name="revenueExpense">
-    <div class="radio">
-        <div class="col-md-6">
-            <label for=""> Revenue</label>
-            <label class="radio-inline">
-                <input type="radio" value="Revenue" name="type" class="with-gap" @if(old('type') || $ledger->type == 'Revenue') {{ 'checked' }} @endif>
-            </label>
-        </div>
-        <div class="col-md-6">
-            <label for="">Expense</label>
-            <label class="radio-inline">
-                 <input type="radio" value="Expense" name="type" class="with-gap" @if(old('type') || $ledger->type == 'Expense') {{ 'checked' }} @endif>
-            </label>
-        </div>
-    </div>
+<div class="radio" style="margin-left: 7% ">        
+    <label class="radio-inline">
+    <input type="radio" name="type" id="rev" class="flat-blue" value="Revenue"  checked @if(old('type') || $ledger->type == 'Revenue') {{ 'checked' }} @endif>
+    </label>
+    <label class="form-check-label" for="rev"> Revenue</label>
+
+    <label class="radio-inline">
+        <input type="radio" name="type" id="exp" class="flat-blue" value="Expense" @if(old('type') || $ledger->type == 'Expense') {{ 'checked' }} @endif>
+    </label>  
+    <label class="form-check-label" for="exp">Expense</label>
 </div>
     
 
 @endsection
 @section('form-btn')
-
     <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
-
 
 @endsection
 
 @section('scripts')
 @parent
+    <script type="text/javascript">
+        $(function () {
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+              checkboxClass: 'icheckbox_flat-blue',
+              radioClass   : 'iradio_flat-blue'
+            });
+        });
+   </script>
 
 @endsection
