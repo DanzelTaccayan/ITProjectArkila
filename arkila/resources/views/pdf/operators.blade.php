@@ -33,7 +33,8 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Contact Number</th>
-                <th>Age</th>
+                <th>No. of Van</th>
+                <th>No. of Driver</th>
             </tr>
         </thead>
 
@@ -43,7 +44,8 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $operator->last_name }}, {{ $operator->first_name }}</td>
                 <td>{{ $operator->contact_number }}</td>
-                <td>{{ $operator->age }}</td>
+                <td class="text-right">{{count($operator->van)}}</td>
+                <td class="text-right">{{count($operator->drivers)}}</td>
 
             </tr>
         @endforeach

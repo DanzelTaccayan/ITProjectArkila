@@ -9,7 +9,7 @@
     <div class="table-responsive">
     	<div class="col-md-6">
             @if(count(\App\Member::allOperators()->where('status','Active')->get()) > 0)
-    		<a href="{{route('vans.create')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER VAN</a>
+    		<a href="{{route('vans.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER VAN</a>
             @else
                 <button title="Please add an operator first" class="btn btn-success btn-sm btn-flat" disabled><i class="fa fa-plus"></i> REGISTER VAN</button>
             @endif
@@ -106,7 +106,14 @@
             'aoColumnDefs': [{
                 'bSortable': false,
                 'aTargets': [-1] /* 1st one, start by the right */
-            }]
+                },
+                { 
+                "width": "13%", "targets": 4
+                },
+                {
+                "width": "13%", "targets": 0 
+                }
+            ]
         });
 
 
