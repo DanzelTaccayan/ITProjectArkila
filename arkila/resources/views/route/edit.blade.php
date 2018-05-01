@@ -24,7 +24,7 @@
       </div>
       <div class="form-group">
           <label>Number of Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="" required="">
+          <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{$route->number_of_tickets}}" required="">
       </div>
   </div>
   @if($route->is_terminal == true)
@@ -48,7 +48,7 @@
     <div id="terminalForm">
       <div class="form-group" id="origin">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
-        <input type="text" class="form-control" name="originTerm" disabled>
+        <input type="text" class="form-control" name="originTerm" value="{{$mainTerminal->destination_name}}" disabled>
       </div>
       <div class="form-group" id="destination">
           <label>Destination Terminal: <span class="text-red">*</span> </label>
