@@ -22,7 +22,7 @@
     <div class="box-body">
         <button onclick="window.open('{{route('pdf.perDriver', [$driver->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
 
-        <h3><i class="fa fa-user"></i> {{$driver->last_name}}, {{$driver->first_name}} {{$driver->middle_name}}
+        <h3><i class="fa fa-user"></i>{{trim(strtoupper($driver->full_name))}}
         </h3>
 
         <hr>

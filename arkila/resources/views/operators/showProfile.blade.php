@@ -42,7 +42,7 @@
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
-                                <h3 class="profile-username"><strong>{{ $operator->full_name }}</strong></h3> 
+                                <h3 class="profile-username"><strong>{{trim(strtoupper($operator->full_name))}}</strong></h3> 
                                 <div class="active tab-pane" id="info">
                                     <div style="margin-bottom: 3%;">
                                         <button onclick="window.open('{{route('pdf.perOperator', [$operator->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>

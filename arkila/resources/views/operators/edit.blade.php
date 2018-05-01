@@ -51,7 +51,7 @@
                 </form>
                 <div class="padding-side-15">
                     <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
-                    <h4 class="name-heading">{{old('lastName') ?? $operator->last_name }}, {{old('firstName')  ?? $operator->first_name}} {{  old('middleName')  ?? $operator->middle_name }}</h4>
+                    <h4 class="name-heading">{{trim(strtoupper($operator->full_name))}}</h4>
                     <h4 class="form-heading">Personal Information</h4>
                     <table class="table table-bordered table-striped form-border">
                         <tbody>

@@ -26,8 +26,8 @@
                 @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
                 <tr>
                     <th>{{$driver->member_id}}</th>
-                    <td>{{$driver->operator->full_name ?? null}}</td>
-                    <td>{{$driver->full_name}}</td>
+                    <td>{{trim(strtoupper($driver->operator->full_name)) ?? null}}</td>
+                    <td>{{trim(strtoupper($driver->full_name))}}</td>
                     <td>{{$driver->contact_number}}</td>
                     <td>
                         <div class="text-center">
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="modal-body row" style="margin: 0% 1%;">
                                             <h1><i class="fa fa-exclamation-triangle pull-left text-yellow">  </i></h1>
-                                            <p>Are you sure you want to delete "{{ $driver->full_name }}"?</p>
+                                            <p>Are you sure you want to delete "{{trim(strtoupper($driver->full_name))}}"?</p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">

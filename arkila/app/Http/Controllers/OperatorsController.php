@@ -46,10 +46,6 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try
         {
-            $lastName = trim(strtoupper($request->lastName));
-            $firstName = trim(strtoupper($request->firstName));
-            $middleName = trim(strtoupper($request->middleName));
-
             $profilePictureName = 'avatar.jpg';
             if($request->file('profilePicture')){
                 $dateNow = Carbon::now();
@@ -63,25 +59,25 @@ class OperatorsController extends Controller
 
             $createdOperator = Member::create([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $lastName,
-                'first_name' => $firstName,
-                'middle_name' => $middleName,
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Operator',
                 'address' => $request->address,
-                // 'provincial_address' => $request->provincialAddress,
-                // 'birth_date' => $request->birthDate,
-                // 'birth_place' => $request->birthPlace,
-                // 'age' => $request->birthDate,
+                'provincial_address' => $request->provincialAddress,
+                'birth_date' => $request->birthDate,
+                'birth_place' => $request->birthPlace,
+                'age' => $request->birthDate,
                 'gender' => $request->gender,
-                // 'citizenship' => $request->citizenship,
-                // 'civil_status' => $request->civilStatus,
-                // 'spouse' => $request->nameOfSpouse,
-                // 'spouse_birthdate' => $request->spouseBirthDate,
-                // 'father_name' => $request->fathersName,
-                // 'father_occupation' => $request->fatherOccupation,
-                // 'mother_name' => $request->mothersName,
-                // 'mother_occupation' => $request->motherOccupation,
+                'citizenship' => $request->citizenship,
+                'civil_status' => $request->civilStatus,
+                'spouse' => $request->nameOfSpouse,
+                'spouse_birthdate' => $request->spouseBirthDate,
+                'father_name' => $request->fathersName,
+                'father_occupation' => $request->fatherOccupation,
+                'mother_name' => $request->mothersName,
+                'mother_occupation' => $request->motherOccupation,
                 'person_in_case_of_emergency' => $request->contactPerson,
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
@@ -152,10 +148,6 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try
         {
-            $lastName = trim(strtoupper($request->lastName));
-            $firstName = trim(strtoupper($request->firstName));
-            $middleName = trim(strtoupper($request->middleName));
-
             $profilePictureName = 'avatar.jpg';
             if($request->file('profilePicture'))
             {
@@ -176,9 +168,9 @@ class OperatorsController extends Controller
 
             $operator -> update([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $lastName,
-                'first_name' => $firstName,
-                'middle_name' => $middleName,
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Operator',
                 'address' => $request->address,

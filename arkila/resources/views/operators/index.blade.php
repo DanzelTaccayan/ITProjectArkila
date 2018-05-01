@@ -27,7 +27,7 @@
                 @foreach ($operators->where('status', 'Active')->sortByDesc('member_id') as $operator)
                 <tr>
                     <td class="hidden-xs" name="opId">{{ $operator->member_id }}</td>
-                    <td>{{ $operator->first_name }} {{ $operator->middle_name }} {{ $operator->last_name }}</td>
+                    <td>{{trim(strtoupper($operator->full_name))}}</td>
                     <td>{{ $operator->contact_number }}</td>
                     <td class="text-right">{{count($operator->van)}}</td>
                     <td class="text-right">{{count($operator->drivers)}}</td>
