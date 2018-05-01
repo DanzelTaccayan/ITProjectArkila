@@ -40,7 +40,7 @@
 							<td>
 								<div class="text-center">
 
-                                    <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm btn-driver"><i class="fa fa-user-plus"></i>EDIT</a>
+                                    <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm btn-driver"><i class="fa fa-edit"></i>EDIT</a>
                                     <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->plate_number }}"><i class="fa fa-trash"></i> DELETE</button>
 		                        </div>
 
