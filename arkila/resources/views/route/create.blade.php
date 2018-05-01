@@ -2,7 +2,12 @@
 @section('title', 'Create New Terminal/Destination')
 @section('back-link', route('route.index'))
 @section('form-action', route('route.store'))
-@section('form-title', 'CREATE TERMINAL/ROUTE')
+@if ($type == 'Terminal')
+@section('form-title', 'CREATE TERMINAL')
+@elseif ($type == 'Route')
+@section('form-title', 'CREATE ROUTE')
+@endif
+
 @section('form-body')
 
   <div class="form-section">
