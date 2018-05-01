@@ -28,6 +28,7 @@
           <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
       </div>
   </div>
+  @if ($type == 'Terminal')
   <div class="form-section">
     <div id="terminalForm">
       <div class="form-group">
@@ -43,20 +44,23 @@
           <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
       </div>
     </div>
-    <div id="routeForm">
+    @elseif ($type == 'Route')
+    <div class="form-section">
+    <div id="terminalForm">
       <div class="form-group" id="origin">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
-        <input type="text" class="form-control" name="originTerm" disabled>
+        <input type="text" class="form-control" name="originTerm" value="{{$mainTerminal->destination_name}}" disabled>
       </div>
       <div class="form-group" id="destination">
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}></label>
+            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
           </div>
           @endforeach
       </div>
     </div>
+    @endif
   </div>
 
     <!-- <div class="form-section">
@@ -119,50 +123,6 @@
           navigateTo(0); // Start at the beginning
         });
     </script>
-    </script>
-
-    {{-- <script>
-      $(function() {
-      var routeForm = $('#routeForm')
-      var terminalForm = $('#terminalForm')
-
-        group = $('input[type="radio"][name="desttype"]');
-
-        group.change(function(){
-          routeForm.toggle(group.filter(':checked').val() === 'Route');
-          terminalForm.toggle(group.filter(':checked').val() === 'Terminal');
-        }).change();
-
-     });
-
-        $('input:radio[name="desttype"]').change{
-          function(){
-            if(this.checked && this.value == 'Route'){
-              alert('HAHAHA');
-              $("#routeForm").show();
-              $("#terminalForm").hide();
-
-            }
-          }
-        });
-    </script> --}}
-    <script>
-      $(function() {
-        $("#routeForm").hide();
-        $("#routeRadio").click(function(){
-              $("#routeForm").show();
-              $("#terminalForm").hide();
-              $(".terminalInput").val("");
-              $(".terminalRequired").prop('required',false);
-              $(".routeRequired").prop('required',true);
-          })
-        $("#terminalRadio").click(function(){
-              $("#routeForm").hide();
-              $("#terminalForm").show();
-              $(".terminalRequired").prop('required',true);
-              $(".routeRequired").prop('required',false);
-          });
-      });
     </script>
 
 @endsection
