@@ -668,6 +668,11 @@ input:checked+.slider:before {
   padding-left: 10%;
 }
 
+.padding-side-15{
+  padding-right: 15%;
+  padding-left: 15%;
+}
+
 .padding-side-25{
   padding-right: 25%;
   padding-left: 25%;
@@ -681,6 +686,11 @@ input:checked+.slider:before {
 .margin-side-10{
   margin-right: 10%;
   margin-left: 10%;
+}
+
+.margin-side-15{
+  margin-right: 15%;
+  margin-left: 15%;
 }
 
 .margin-side-20{

@@ -6,6 +6,11 @@
     th{
         width:80px;
     }
+    .profile-btn-group{
+        padding-left:  25px;
+        padding-right: 25px;
+        margin-top: 10px;
+    }
 </style>
 @endsection
 @section('content')
@@ -18,17 +23,20 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="">
+                        <div class="profile-side">   
                             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
+                            <div class="profile-btn-group"> 
                             <a href="{{route('operators.edit',[$operator->member_id])}}" class="btn btn-block btn-primary btn-sm"><b>Update Information</b></a>
                             <a href="{{route('archive.vanDriver',[$operator->member_id])}}" class="btn btn-block btn-default btn-sm"><b>Archive</b></a>
-                        </div>
-                        <div class="" style="border: 1px solid lightgray; margin: 5px;">
-                            <ul class="nav nav-stacked">
-                                <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
-                                <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill pull-right">{{count($operator->van)}}</span></a></li>
-                                <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill  pull-right">{{count($operator->drivers)}}</span></a></li>
-                            </ul>
+                            </div>
+                            <hr>    
+                            <div class="" style="border: 1px solid lightgray; margin: 5px;">
+                                <ul class="nav nav-stacked">
+                                    <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
+                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill pull-right">{{count($operator->van)}}</span></a></li>
+                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill  pull-right">{{count($operator->drivers)}}</span></a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-9"> 
