@@ -57,13 +57,16 @@ class DriversController extends Controller
                 ->resize(300, 300)
                 ->save( public_path('uploads/profilePictures/'.$profilePictureName));
         }
+        $lastName = trim(strtoupper($request->lastName));
+        $firstName = trim(strtoupper($request->firstName));
+        $middleName = trim(strtoupper($request->middleName));
 
         $createdDriver = Member::create([
             'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
+            'last_name'=> $lastName,
+            'first_name' => $firstName,
             'operator_id' => $request->operator,
-            'middle_name' => $request->middleName,
+            'middle_name' => $middleName,
             'contact_number' => $request->contactNumber,
             'role' => 'Driver',
             'address' => $request->address,
@@ -123,6 +126,10 @@ class DriversController extends Controller
     }
 
     public function storeFromOperator(Member $operator, DriverRequest $request){
+        $lastName = trim(strtoupper($request->lastName));
+        $firstName = trim(strtoupper($request->firstName));
+        $middleName = trim(strtoupper($request->middleName));
+
         $profilePictureName = 'avatar.jpg';
         if($request->file('profilePicture')){
             $dateNow = Carbon::now();
@@ -136,9 +143,9 @@ class DriversController extends Controller
 
         $driver = $operator->drivers()->create([
             'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
+            'last_name'=> $lastName,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
             'contact_number' => $request->contactNumber,
             'role' => 'Driver',
             'address' => $request->address,
@@ -207,7 +214,9 @@ class DriversController extends Controller
         if(count($vanNd->driver)){
             $vanNd->members()->detach($vanNd->driver->first()->member_id);
         }
-
+        $lastName = trim(strtoupper($request->lastName));
+        $firstName = trim(strtoupper($request->firstName));
+        $middleName = trim(strtoupper($request->middleName));
         $profilePictureName = 'avatar.jpg';
         if($request->file('profilePicture')){
             $dateNow = Carbon::now();
@@ -221,9 +230,9 @@ class DriversController extends Controller
 
         $driver = Member::create([
             'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
+            'last_name'=> $lastName,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
             'contact_number' => $request->contactNumber,
             'role' => 'Driver',
             'operator_id' => $vanNd->operator()->first()->member_id,
@@ -347,13 +356,16 @@ class DriversController extends Controller
                 ->resize(300, 300)
                 ->save( public_path('uploads/profilePictures/'.$profilePictureName));
         }
+        $lastName = trim(strtoupper($request->lastName));
+        $firstName = trim(strtoupper($request->firstName));
+        $middleName = trim(strtoupper($request->middleName));
 
             $driver->update([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
                 'operator_id' => $request->operator,
-                'middle_name' => $request->middleName,
+                'middle_name' => $middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Driver',
                 'address' => $request->address,
