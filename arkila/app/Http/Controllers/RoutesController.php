@@ -159,9 +159,20 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Destination $route)
     {
-        //
+        $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
+        $routeId = $route->destination_id;
+        $fareReg = Ticket::where([
+            ['type', 'Regular'],
+            ['destination_id', $routeId],
+            ])->first();
+        $fareDis = Ticket::where([
+            ['type', 'Discount'],
+            ['destination_id', $routeId],
+            ])->first();
+        return view('route.edit', compact('route', 'fareReg', 'fareDis', 'terminals', '$mainTerminal'));
     }
 
     /**

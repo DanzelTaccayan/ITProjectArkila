@@ -2,43 +2,50 @@
 @section('title', 'Create New Terminal/Destination')
 @section('back-link', route('route.index'))
 @section('form-action', route('route.store'))
-@section('form-title', 'EDIT TERMINAL/ROUTE')
+@if($route->is_terminal == true)
+@section('form-title', 'EDIT TERMINAL')
+@elseif($route->is_terminal == false)
+@section('form-title', 'EDIT ROUTE')
+@endif
 @section('form-body')
 
   <div class="form-section">
       <div class="form-group">
           <label>Name: <span class="text-red">*</span> </label>
-          <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
+          <input type="text" class="form-control" name="addTerminal" value="{{$route->destination_name}}" required>
       </div>
       <div class="form-group">
           <label>Regular Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
+          <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{$fareReg->fare}}" required>
       </div>
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}">
+          <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{$fareDis->fare}}">
       </div>
       <div class="form-group">
           <label>Number of Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
+          <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="" required="">
       </div>
   </div>
+  @if($route->is_terminal == true)
   <div class="form-section">
     <div id="terminalForm">
       <div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{$route->booking_fee}}" required>
       </div>
       <div class="form-group" id="shotTripReg">
           <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{$route->short_trip_fare}}" required>
       </div>
        <div class="form-group" id="shotTripDis">
           <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{$route->short_trip_fare_discount}}" required>
       </div>
     </div>
-    <div id="routeForm">
+    @elseif($route->is_terminal == false)
+    <div class="form-section">
+    <div id="terminalForm">
       <div class="form-group" id="origin">
         <label>Origin Terminal: <span class="text-red">*</span> </label>
         <input type="text" class="form-control" name="originTerm" disabled>
@@ -47,11 +54,12 @@
           <label>Destination Terminal: <span class="text-red">*</span> </label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
-            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}></label>
+            <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}"@foreach($route->routeDestination as $routeDes)@if($routeDes->destination_id == $terminal->destination_id) {{'checked'}}@endif @endforeach>{{$terminal->destination_name}}</label>
           </div>
           @endforeach
       </div>
     </div>
+    @endif
   </div>
 
     <!-- <div class="form-section">
@@ -114,50 +122,6 @@
           navigateTo(0); // Start at the beginning
         });
     </script>
-    </script>
-
-    {{-- <script>
-      $(function() {
-      var routeForm = $('#routeForm')
-      var terminalForm = $('#terminalForm')
-
-        group = $('input[type="radio"][name="desttype"]');
-
-        group.change(function(){
-          routeForm.toggle(group.filter(':checked').val() === 'Route');
-          terminalForm.toggle(group.filter(':checked').val() === 'Terminal');
-        }).change();
-
-     });
-
-        $('input:radio[name="desttype"]').change{
-          function(){
-            if(this.checked && this.value == 'Route'){
-              alert('HAHAHA');
-              $("#routeForm").show();
-              $("#terminalForm").hide();
-
-            }
-          }
-        });
-    </script> --}}
-    <script>
-      $(function() {
-        $("#routeForm").hide();
-        $("#routeRadio").click(function(){
-              $("#routeForm").show();
-              $("#terminalForm").hide();
-              $(".terminalInput").val("");
-              $(".terminalRequired").prop('required',false);
-              $(".routeRequired").prop('required',true);
-          })
-        $("#terminalRadio").click(function(){
-              $("#routeForm").hide();
-              $("#terminalForm").show();
-              $(".terminalRequired").prop('required',true);
-              $(".routeRequired").prop('required',false);
-          });
-      });
     </script>
 
 @endsection

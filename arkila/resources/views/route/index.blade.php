@@ -55,7 +55,7 @@
                                                 <td class="text-right">120</td>
                                                 <td>
                                                     <div class="text-center">
-                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
+                                                        <a href="{{route('route.edit', [$routes->destination_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
                                                         <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="HHE"><i class="fa fa-trash"></i> DELETE</button>
                                                     </div>
                                                 </td>
