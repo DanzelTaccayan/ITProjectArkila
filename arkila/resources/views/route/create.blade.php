@@ -22,20 +22,6 @@
           <label>Number of Tickets: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
       </div>
-      <div class="form-group">
-        <label>Type:</label>
-        <div class="radio" style="margin-left: 7%">         
-            <label class="radio-inline">
-                <input type="radio" name="destType"  id="terminalRadio" checked="checked"  value="Terminal" class="flat-blue">
-            </label>
-            <label for="terminalRadio"> Terminal</label>
-
-            <label class="radio-inline">
-                <input type="radio" name="destType" id="routeRadio" value="Route" class="flat-blue" >
-            </label>
-            <label for="routeRadio">Route</label>
-        </div>
-      </div>
   </div>
   <div class="form-section">
     <div id="terminalForm">
@@ -171,12 +157,6 @@
               $(".terminalRequired").prop('required',true);
               $(".routeRequired").prop('required',false);
           });
-
-         $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
-            checkboxClass: 'icheckbox_flat-blue',
-            radioClass   : 'iradio_flat-blue'
-          });
-
       });
     </script>
 
