@@ -34,13 +34,14 @@ class CreateReportController extends Controller
     $member = Member::where('user_id', Auth::id())->first();
     return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fad', 'member'));
   }
-  public function storeReport(Terminal $terminal, CreateReportRequest $request)
+  public function storeReport(Destination $terminal, CreateReportRequest $request)
   {
+    //dd(request('destination'));
     $totalPassengers = $request->totalPassengers;
     $totalBookingFee = $request->totalBookingFee;
     $totalPassenger = (float)$request->totalPassengers;
     $cf = Fee::where('description', 'Community Fee')->first();
-    $communityFund = number_format($cf * $totalPassenger, 2, '.', '');
+    $communityFund = number_format($cf->amount * $totalPassenger, 2, '.', '');
     $sop = Fee::where('description', 'SOP')->first();
     $driver_user = User::find(Auth::id());
     $van_id = $driver_user->member->van->first()->van_id;
@@ -77,16 +78,21 @@ class CreateReportController extends Controller
          ]);
      }
 
-    $destinationArr = request('destination');
+    $destinationIdArr = request('destination');
+    $destinationNameArr = null;
+    foreach($destinationIdArr  as $key => $value){
+      $d = Destination::find($value);
+      $destinationNameArr[$key] = $d->destination_name;
+    }
+
     $numOfPassengers = request('qty');
-    $discountArr = request('discountId');
-    $numOfDiscount = request('numberOfDiscount');
+    $numOfDiscount = request('dis');
     $ticketArr = null;
     $discountTransactionArr = null;
-
+    dd($numOfDiscount);
     for($i = 0; $i < count($numOfPassengers); $i++){
       if(!($numOfPassengers[$i] == null)){
-        $ticketArr[$i] = array($destinationArr[$i] => $numOfPassengers[$i]);
+        $ticketArr[$i] = array($destinationNameArr[$i] => $numOfPassengers[$i]);
       }else{
         continue;
       }
@@ -94,15 +100,14 @@ class CreateReportController extends Controller
 
     $tripId = Trip::latest()->select('trip_id')->first();
     $insertTicketArr = array_values($ticketArr);
-
     foreach($insertTicketArr as $ticketKey => $innerTicketArrays){
       foreach($innerTicketArrays as $innerTicketKeys => $innerTicketValues){
 
         for($i = 1; $i <= $innerTicketValues; $i++){
           Transaction::create([
-            "destination_id" => $innerTicketKeys,
-            'terminal_id' => $terminal->terminal_id,
             "trip_id" => $tripId->trip_id,
+            "destination" => $innerTicketKeys,
+            "origin" => $terminal->destination_name,
             "status" => 'Departed',
           ]);
         }

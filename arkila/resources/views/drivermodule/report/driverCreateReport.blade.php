@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{route('drivermodule.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('drivermodule.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       @php $destination_name = null; @endphp
                       @foreach($terminals->routeFromDestination as $terminal)
@@ -36,11 +36,10 @@
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
                                 <div class="col-sm-6">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destid}}">
+                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="hidden" name="discount[]" value="">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
                                 </div>
                             </div>
@@ -91,6 +90,32 @@
                             <!-- /.box-footer -->
                         </div>
                         <!-- /.col -->
+
+                                <!--               DISCOUNT MODAL-->
+                                <div class="modal fade" id="discountModal">
+                                    <div class="modal-dialog" style="margin-top:150px;">
+                                        <div class="col-md-offset-2 col-md-8">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-blue">
+                                                    Confirm
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <p>Are you sure you want to add these tickets?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                </div>
+                                                <!-- /.modal-footer -->
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                                </form>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -98,31 +123,6 @@
         </div>
         <!-- /.tab-pane -->
 
-        <!--               DISCOUNT MODAL-->
-        <div class="modal fade" id="discountModal">
-            <div class="modal-dialog" style="margin-top:150px;">
-                <div class="col-md-offset-2 col-md-8">
-                    <div class="modal-content">
-                        <div class="modal-header bg-blue">
-                            Confirm
-                        </div>
-                        <div class="modal-body text-center">
-                            <p>Are you sure you want to add these tickets?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                        <!-- /.modal-footer -->
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        </form>
     </div>
     <!-- /.col -->
 </div>
