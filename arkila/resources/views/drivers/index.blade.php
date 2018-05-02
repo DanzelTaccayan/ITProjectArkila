@@ -8,7 +8,7 @@
     <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
        <div class="table-responsive">
         <div class="col-md-6">
-            <a href="{{route('drivers.create')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus-circle"></i> REGISTER DRIVER</a>
+            <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>
             <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
         </div>
         <table id="driverList" class="table table-bordered table-striped">
@@ -26,8 +26,8 @@
                 @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
                 <tr>
                     <th>{{$driver->member_id}}</th>
-                    <td>{{$driver->operator->full_name ?? null}}</td>
-                    <td>{{$driver->full_name}}</td>
+                    <td>{{trim(strtoupper($driver->operator->full_name)) ?? null}}</td>
+                    <td>{{trim(strtoupper($driver->full_name))}}</td>
                     <td>{{$driver->contact_number}}</td>
                     <td>
                         <div class="text-center">
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="modal-body row" style="margin: 0% 1%;">
                                             <h1><i class="fa fa-exclamation-triangle pull-left text-yellow">  </i></h1>
-                                            <p>Are you sure you want to delete "{{ $driver->full_name }}"?</p>
+                                            <p>Are you sure you want to delete "{{trim(strtoupper($driver->full_name))}}"?</p>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">

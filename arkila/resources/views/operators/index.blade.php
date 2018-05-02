@@ -17,6 +17,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Contact Number</th>
+                    <th>No. of Van</th>
+                    <th>No. of Driver</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -25,8 +27,10 @@
                 @foreach ($operators->where('status', 'Active')->sortByDesc('member_id') as $operator)
                 <tr>
                     <td class="hidden-xs" name="opId">{{ $operator->member_id }}</td>
-                    <td>{{ $operator->first_name }} {{ $operator->middle_name }} {{ $operator->last_name }}</td>
+                    <td>{{trim(strtoupper($operator->full_name))}}</td>
                     <td>{{ $operator->contact_number }}</td>
+                    <td class="text-right">{{count($operator->van)}}</td>
+                    <td class="text-right">{{count($operator->drivers)}}</td>
                     <td>
                         <div class="text-center">
                             <a href="{{ route('operators.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
@@ -93,7 +97,10 @@
             'autoWidth': false,
             'order': [[ 0, "desc" ]],
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [-1]}
+                { 'bSortable': false, 'aTargets': [-1]},
+                { "width": "5%", "targets": 0 },
+                { "width": "9%", "targets": 3 },
+                { "width": "10%", "targets": 4 }
             ]
         })
     })

@@ -652,3 +652,65 @@ input:checked+.slider:before {
   text-overflow: ellipsis;
   
 }
+
+.item-center{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.padding-side-5{
+  padding-right: 5%;
+  padding-left: 5%;
+}
+
+.padding-side-10{
+  padding-right: 10%;
+  padding-left: 10%;
+}
+
+.padding-side-15{
+  padding-right: 15%;
+  padding-left: 15%;
+}
+
+.padding-side-25{
+  padding-right: 25%;
+  padding-left: 25%;
+}
+
+.margin-side-5{
+  margin-right: 5%;
+  margin-left: 5%;
+}
+
+.margin-side-10{
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+.margin-side-15{
+  margin-right: 15%;
+  margin-left: 15%;
+}
+
+.margin-side-20{
+  margin-right: 20%;
+  margin-left: 20%;
+}
+
+.margin-side-25{
+  margin-right: 25%;
+  margin-left: 25%;
+}
+
+.form-heading{
+  background: #1f94d9;
+  padding: 10px;
+  margin: 0;
+  color: white;
+  margin-right: 250px;
+}
+
+.form-border{
+  border: 2px solid #dddddd;
+}

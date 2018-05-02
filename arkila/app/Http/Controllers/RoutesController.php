@@ -15,11 +15,14 @@ class RoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Destination $route)
     {
+        $routeId = $route->destination_id;
+        $fareReg = Ticket::where('type', 'Regular')->groupBy('destination_id')->get();
+        $fareDis = Ticket::where('type', 'Discount')->groupBy('destination_id')->get();
         $terminals = Destination::allTerminal()->get();
         $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
-        return view('route.index', compact('terminals', 'mainTerminal'));
+        return view('route.index', compact('terminals', 'mainTerminal', 'fareReg', 'fareDis'));
     }
 
     /**
@@ -27,11 +30,22 @@ class RoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createRoute()
     {
         $terminals = Destination::allTerminal()->get();
-        return view('route.create', compact('terminals'));
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
+        $type = 'Route';
+        return view('route.create', compact('terminals', 'type', 'mainTerminal'));
     }
+
+    public function createTerminal()
+    {
+        $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
+        $type = 'Terminal';
+        return view('route.create', compact('terminals', 'type', 'mainTerminal'));
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -47,7 +61,7 @@ class RoutesController extends Controller
         $message = null;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-        if ($request->termRoute == 'Terminal')
+        if ($request->type == 'Terminal')
         {    
             $terminal = Destination::create([
                 'destination_name' => $name,
@@ -56,6 +70,7 @@ class RoutesController extends Controller
                 'short_trip_fare_discount' => $request->sdTripFare,
                 'is_terminal' => true,
                 'is_main_terminal' => false,
+                'number_of_tickets' => $request->numticket,
             ]);
 
             foreach($discountedTickets as $discountedTicket)
@@ -81,15 +96,19 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
+
+            $terminal->routeOrigin()
+            ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
+
             $message = 'The terminal '. $name .' has been successfully created';
         }
         else 
         {
-
             $route = Destination::create([
                 'destination_name' => $name,
                 'is_terminal' => false,
                 'is_main_terminal' => false,
+                'number_of_tickets' => $request->numticket,
             ]);
 
             foreach($discountedTickets as $discountedTicket)
@@ -115,7 +134,7 @@ class RoutesController extends Controller
                     'type' => 'Regular'
                 ]);
             }
-
+            
             foreach ($terminals as $count => $terminal) {
                 if (isset($request->dest[$count])) {
                     $route->routeOrigin()
@@ -145,9 +164,20 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Destination $route)
     {
-        //
+        $terminals = Destination::allTerminal()->get();
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
+        $routeId = $route->destination_id;
+        $fareReg = Ticket::where([
+            ['type', 'Regular'],
+            ['destination_id', $routeId],
+            ])->first();
+        $fareDis = Ticket::where([
+            ['type', 'Discount'],
+            ['destination_id', $routeId],
+            ])->first();
+        return view('route.edit', compact('route', 'fareReg', 'fareDis', 'terminals', 'mainTerminal'));
     }
 
     /**
@@ -168,8 +198,28 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Destination $route)
     {
-        //
+        $main = Destination::where('is_main_terminal', '1')->first();
+        $message = null;
+        if ($route->is_terminal == true)
+        {
+            foreach($route->routeFromDestination as $routes)
+            {
+                $routes->routeOrigin()->detach($main->destination_id);
+                $routes->delete();
+            }
+            $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+        }
+        else
+        {
+            $route->routeOrigin()->detach($main->destination_id);
+            $route->delete();
+            $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+
+        }
+
+        return back()->with('success', $message);
+
     }
 }

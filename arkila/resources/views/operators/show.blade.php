@@ -16,7 +16,7 @@
         </h3>
     </div>
     <div class="box-body">
-        <h3><i class="fa fa-user"></i> {{$operator->last_name}}, {{$operator->first_name}} {{$operator->middle_name}}
+        <h3><i class="fa fa-user"></i>{{trim(strtoupper($operator->full_name))}}
         </h3>
         <hr>
         <div class="row">

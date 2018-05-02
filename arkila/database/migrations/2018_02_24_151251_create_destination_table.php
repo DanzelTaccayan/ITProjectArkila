@@ -25,6 +25,8 @@ class CreateDestinationTable extends Migration
             ->nullable();
             $table->boolean('is_terminal');
             $table->boolean('is_main_terminal');
+            $table->integer('number_of_tickets')
+            ->nullable();
             $table->timestamps();
         });
     }

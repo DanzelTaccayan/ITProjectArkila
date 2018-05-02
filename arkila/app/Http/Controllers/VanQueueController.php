@@ -6,7 +6,9 @@ use App\VanQueue;
 use App\Destination;
 use App\Member;
 use App\Van;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class VanQueueController extends Controller
 {
@@ -17,9 +19,9 @@ class VanQueueController extends Controller
      */
     public function index()
     {
-        $terminals = Destination::where('is_main_terminal',0);
+        $mainTerminal = Destination::where('is_main_terminal',1)->first();
+        $terminals = Destination::allTerminal()->get();
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
-
         $drivers = Member::whereNotIn('member_id', function($query)
         {
             $query->select('driver_id')->from('van_queue');
@@ -31,8 +33,10 @@ class VanQueueController extends Controller
                 ->from('van_queue')
                 ->where('has_privilege',1)
                 ->orWhereNotNull('queue_number');
-        })->where('status','Active')->get();
-
+        })
+            ->where('status','Active')
+            ->where('location',$mainTerminal->destination_name)
+            ->get();
 
         return view('van_queue.queue', compact('terminals','queue','vans','destinations','drivers'));
     }
@@ -45,28 +49,41 @@ class VanQueueController extends Controller
      */
     public function store(Destination $destination, Van $van, Member $member )
     {
-        if( is_null(VanQueue::where('destination_id',$destination->destination_id)
-            ->where('van_id',$van->van_id)
-            ->whereNotNull('queue_number')->first()) )
+        // Start transaction!
+        DB::beginTransaction();
+        try
         {
-            $queueNumber = VanQueue::where('destination_id',$destination->destination_id)
-                    ->whereNotNull('queue_number')
-                    ->count()+1;
+            if( is_null(VanQueue::where('destination_id',$destination->destination_id)
+                ->where('van_id',$van->van_id)
+                ->whereNotNull('queue_number')->first()) )
+            {
+                $queueNumber = VanQueue::where('destination_id',$destination->destination_id)
+                        ->whereNotNull('queue_number')
+                        ->count()+1;
 
-            VanQueue::create([
-                'destination_id' => $destination->destination_id,
-                'van_id' => $van->van_id,
-                'driver_id' => $member->member_id,
-                'remarks' => NULL,
-                'queue_number' => $queueNumber
-            ]);
-            session()->flash('success', 'Van Succesfully Added to the queue');
-            return 'success';
+                VanQueue::create([
+                    'destination_id' => $destination->destination_id,
+                    'van_id' => $van->van_id,
+                    'driver_id' => $member->member_id,
+                    'remarks' => NULL,
+                    'queue_number' => $queueNumber
+                ]);
+                session()->flash('success', 'Van Succesfully Added to the queue');
+                DB::commit();
+                return 'success';
+            }
+            else
+            {
+                session()->flash('error', 'Van is already on the Queue');
+                return 'Van is already on the Queue';
+            }
+
         }
-        else
+        catch(\Exception $e)
         {
-            session()->flash('error', 'Van is already on the Queue');
-            return 'Van is already on the Queue';
+            DB::rollback();
+            dd($e);
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
     }
@@ -84,13 +101,13 @@ class VanQueueController extends Controller
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
 
         $beingTransferredKey = $vanOnQueue->queue_number;
-        $beingReplacedKey = request('value');
+        $beingReplacedKey = request('new_queue_num');
 
         $beingTransferredVal = $vanOnQueue->van_queue_id;
-        $beingReplacedVal = VanQueue::where('queue_number',request('value'))->first()->van_queue_id;
+        $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
 
         $vanCount = VanQueue::whereNotNull('queue_number')->count();
-
+        $responseArr = [];
         $this->validate(request(),[
             'value' => 'required|digits_between:1,'.$vanCount,
         ]);
@@ -122,6 +139,11 @@ class VanQueueController extends Controller
                 $vanQueue->update([
                     'queue_number' => $queueNum
                 ]);
+
+                array_push($responseArr,[
+                'vanId' => $vanQueue->van_queue_id,
+                'queueNumber' => $vanQueue->queue_number
+            ]);
             }
 
         }
@@ -143,8 +165,15 @@ class VanQueueController extends Controller
                 $vanQueue->update([
                     'queue_number' => $queueNum
                 ]);
+
+                array_push($responseArr,[
+                    'vanId' => $vanQueue->van_queue_id,
+                    'queueNumber' => $vanQueue->queue_number
+                ]);
             }
         }
+
+        return response()->json($responseArr);
     }
 
     public function updateDestination(VanQueue $vanOnQueue)
@@ -188,13 +217,13 @@ class VanQueueController extends Controller
         ]);
 
 
-        if(request('value') === 'NULL'){
+        if(request('remark') === 'NULL'){
             $vanOnQueue->update([
                 'remarks' => NULL
             ]);
         }else{
             $vanOnQueue->update([
-                'remarks' => request('value')
+                'remarks' => request('remark')
             ]);
         }
 
@@ -207,23 +236,34 @@ class VanQueueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(VanQueue $vanOnQueue)
+    public function destroy(VanQueue $vanqueue)
     {
-        if($vanOnQueue->queue_number)
+        // Start transaction!
+        DB::beginTransaction();
+        try
         {
-            $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->get();
-            foreach($queue as $vanOnQueueObject)
+            if($vanqueue->queue_number)
             {
-                if($vanOnQueueObject->queue_number > $vanOnQueue->queue_number)
+                $queue = VanQueue::where('destination_id',$vanqueue->destination_id)->get();
+                foreach($queue as $vanOnQueueObject)
                 {
-                    $vanOnQueueObject->update([
-                        'queue_number' => $vanOnQueueObject->queue_number-1
-                    ]);
+                    if($vanOnQueueObject->queue_number > $vanqueue->queue_number)
+                    {
+                        $vanOnQueueObject->update([
+                            'queue_number' => $vanOnQueueObject->queue_number-1
+                        ]);
+                    }
                 }
             }
-        }
 
-        $vanOnQueue->delete();
+            $vanqueue->delete();
+            DB::commit();
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
 
         session()->flash('success', 'Van on Queue Successfully Removed');
         return back();
@@ -331,7 +371,7 @@ class VanQueueController extends Controller
         {
             foreach($vans[0] as $key => $vanInfo)
             {
-                if($van = Van::find($vanInfo['van_id']))
+                if($van = Van::find($vanInfo['vanid']))
                 {
                     $van->updateQueue($key);
                 }

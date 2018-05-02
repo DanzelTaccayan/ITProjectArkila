@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="">
-                            <a href="{{route('route.create')}}" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
+                            <a href="{{route('terminalCreate.create')}}" class="btn btn-block btn-success btn-sm"> <i class="fa fa-plus"></i> <b>ADD TERMINAL</b></a>
                         </div>
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
@@ -50,20 +50,23 @@
                                         @foreach($terminal->routeFromDestination as $routes)
                                               <tr>
                                                 <td>{{$routes->destination_name}}</td>
-                                                <td class="text-right">200</td>
-                                                <td class="text-right">500</td>
-                                                <td class="text-right">120</td>
+                                                @foreach($fareReg->where('destination_id', $routes->destination_id) as $regular)
+                                                <td class="text-right">{{$regular->fare}}</td>
+                                                @endforeach
+                                                @foreach($fareDis->where('destination_id', $routes->destination_id) as $discounted)
+                                                <td class="text-right">{{$discounted->fare}}</td>
+                                                @endforeach
+                                                <td class="text-right">{{$routes->number_of_tickets}}</td>
                                                 <td>
                                                     <div class="text-center">
-                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i> EDIT</a>
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="HHE"><i class="fa fa-trash"></i> DELETE</button>
+                                                        <a href="{{route('route.edit', [$routes->destination_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'route'.$routes->destination_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endforeach
                                             
                                             <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="#">
+                                            <div class="modal fade" id="{{'route'.$routes->destination_id}}">
                                                 <div class="modal-dialog">
                                                     <div class="col-md-offset-2 col-md-8">
                                                         <div class="modal-content">
@@ -77,14 +80,14 @@
                                                                    <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
                                                                </div>
                                                                <div class="col-md-10">
-                                                                <p style="font-size: 110%;">Are you sure you want to delete ""</p>
+                                                                <p style="font-size: 110%;">Are you sure you want to delete "{{$routes->destination_name}}"</p>
                                                                </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 
-                                                               <form method="POST" action="">
-                                                                    <!-- {{csrf_field()}}
-                                                                    {{method_field('PATCH')}} -->
+                                                               <form method="POST" action="{{route('route.destroy', [$routes->destination_id])}}">
+                                                                    {{csrf_field()}}
+                                                                    {{method_field('DELETE')}}
 
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                                                     <button type="submit" class="btn btn-danger" style="width:22%;">Delete</button>
@@ -99,6 +102,7 @@
                                             </div>
                                             <!-- /.modal -->
                                     
+                                            @endforeach
                                             
                                         </tbody>
                                     </table>
@@ -193,7 +197,7 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': true,
-                'order': [[ 0, "desc" ]],
+                'order': [[ 1, "desc" ]],
                 'aoColumnDefs': [{
                     'bSortable': false,
                     'aTargets': [-1] /* 1st one, start by the right */

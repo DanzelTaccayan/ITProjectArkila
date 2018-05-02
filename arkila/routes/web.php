@@ -35,8 +35,13 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
     Route::resource('/home/announcements', 'AnnouncementsController');
     Route::resource('/home/route', 'RoutesController',[
-        'except' => ['destroy', 'update', 'show', 'edit']
+        'except' => ['create', 'update', 'show']
     ]);
+
+    Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
+    Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
+    // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');
+    // Route::post('/home/route/store', 'RoutesController@storeRoute')->name('route.update');
 
     //Operators
     Route::resource('/home/operators', 'OperatorsController',[
@@ -164,7 +169,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/home/vanqueue/changeDestination/{vanOnQueue}', 'VanQueueController@updateDestination')->name('vanqueue.updateDestination');
      Route::patch('/updateQueueNumber/{vanOnQueue}', 'VanQueueController@updateQueueNumber')->name('vanqueue.updateQueueNumber');
      Route::post('/specialUnitChecker','VanQueueController@specialUnitChecker')->name('vanqueue.specialUnitChecker');
-     Route::patch('/home/trips/{vanOnQueue}', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
+     Route::patch('/home/vanqueue/{vanOnQueue}/updateRemarks', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
      Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
      Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
      Route::get('/listSpecialUnits/{terminal}','VanQueueController@listSpecialUnits')->name('vanqueue.listSpecialUnits');

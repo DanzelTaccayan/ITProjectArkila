@@ -9,7 +9,7 @@
     <div class="table-responsive">
     	<div class="col-md-6">
             @if(count(\App\Member::allOperators()->where('status','Active')->get()) > 0)
-    		<a href="{{route('vans.create')}}" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER VAN</a>
+    		<a href="{{route('vans.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER VAN</a>
             @else
                 <button title="Please add an operator first" class="btn btn-success btn-sm btn-flat" disabled><i class="fa fa-plus"></i> REGISTER VAN</button>
             @endif
@@ -35,12 +35,12 @@
 							{{ $van->driver()->first()->full_name ?? null }}
 							</td>
 							<td>{{ $van->operator()->first()->full_name ??  null }}</td>
-							<td>{{$van->vanModel->description}}</td>
+							<td>{{$van->model->description}}</td>
 							<td class="pull-right">{{$van->seating_capacity}}</td>
 							<td>
 								<div class="text-center">
 
-                                    <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm btn-driver"><i class="fa fa-user-plus"></i>EDIT</a>
+                                    <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm btn-driver"><i class="fa fa-edit"></i>EDIT</a>
                                     <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->plate_number }}"><i class="fa fa-trash"></i> DELETE</button>
 		                        </div>
 
@@ -106,7 +106,14 @@
             'aoColumnDefs': [{
                 'bSortable': false,
                 'aTargets': [-1] /* 1st one, start by the right */
-            }]
+                },
+                { 
+                "width": "13%", "targets": 4
+                },
+                {
+                "width": "13%", "targets": 0 
+                }
+            ]
         });
 
 
