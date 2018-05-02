@@ -24,8 +24,27 @@
                             <div class="col-sm-4">
                                 <label class="text-center">#Discounted</label>
                             </div>
+
+
+                            <!-- TO MAIN TERMINAL -->
+                            <div class='form-group'>
+                                <label for="" class="col-sm-4">Short Trip</label>
+                                <div class="col-sm-6">
+                                    <input type="hidden" name="destination[]" value="{{$destination->destid}}">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="hidden" name="discount[]" value="">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
+                                </div>
+                            </div>
+
+
+
+
                           @php $counter = 0; @endphp
                           @foreach($destinations as $destination)
+                            <!-- FROM MAIN TERMINAL -->
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">{{$destination->description}}</label>
                                 <div class="col-sm-4">

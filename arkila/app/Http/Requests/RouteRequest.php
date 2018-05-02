@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\checkCurrency;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use App\Destination;
 
 
 class RouteRequest extends FormRequest
@@ -33,7 +34,6 @@ class RouteRequest extends FormRequest
             {
                 if ($request->type == 'Terminal')
                 {
-
                     return [
                         "addTerminal" => 'required|unique:destination,destination_name|max:70',
                         "bookingFee" => 'required|numeric',
@@ -68,11 +68,12 @@ class RouteRequest extends FormRequest
             }
             case 'PATCH':
             {
+                $idRoute = $this->route('route');
+                
                 if ($request->type == 'Terminal')
-                {
-
+                {   
                     return [
-                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "addTerminal" => 'required|unique:destination,destination_name,'. $idRoute . ',destination_id|max:70',
                         "bookingFee" => 'required|numeric',
                         "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
@@ -89,7 +90,7 @@ class RouteRequest extends FormRequest
                 {
                     
                     return [
-                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "addTerminal" => 'required|max:70|unique:destination,destination_name,'. $idRoute . ',destination_id',
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "numticket" => 'required|numeric|digits_between:1,1000',
@@ -104,5 +105,13 @@ class RouteRequest extends FormRequest
                 }
             }
         }
+    }
+
+    public function messages()
+    {
+        return [
+            'addTerminal.unique' => 'The terminal name has already been taken.'
+
+        ];
     }
 }

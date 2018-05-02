@@ -20,7 +20,7 @@
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
                             @foreach ($terminals as $terminal)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">12</span></a></li>
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">{{count($terminal->routeFromDestination)}}</span></a></li>
                             @endforeach
                             </ul>
                         </div>
@@ -108,70 +108,6 @@
                                     </table>
                                 </div>
                                 @endforeach
-                                <div class="tab-pane" id="#terminal2">
-                                    <h3 class="profile-username text-center"><strong>BAGUIO - SAN JOSE CITY</strong></h3> 
-                                    <div class="col-md-6"> 
-                                        <a href="" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
-                                    </div>
-                                    <table class="table table-bordered table-striped table-responsive datatablesRoute">
-
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Regular Fee</th>
-                                                <th>Discounted Fee</th>  
-                                                <th>Number of Tickets</th>
-                                                <th class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Asigan</td>
-                                                <td class="text-right">200</td>
-                                                <td class="text-right">500</td>
-                                                <td class="text-right">120</td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-user-plus"></i> EDIT</a>
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="HHE"><i class="fa fa-trash"></i> DELETE</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            
-                                            <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="#">
-                                                <div class="modal-dialog">
-                                                    <div class="col-md-offset-2 col-md-8">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-red">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                                <h4 class="modal-title"> Confirm</h4>
-                                                            </div>
-                                                            <div class="modal-body row" style="margin: 0% 1%;">
-                                                               <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                   <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                               </div>
-                                                               <div class="col-md-10">
-                                                                <p style="font-size: 110%;">Are you sure you want to delete ""</p>
-                                                               </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <form action="" method="POST">
-                                                                     <!-- {{ csrf_field() }} {{method_field('PATCH')}} -->
-                                                                    
-                                                                    <button type="button" class="btn btn-default btn-sm btn-flat" data-dismiss="modal">No</button>
-                                                                    <button type="submit" class="btn btn-danger btn-sm btn-flat" style="width:22%;">Delete</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </tbody>
-                                    </table>                  
-                                </div>
                             </div>
                         </div>
                     </div>

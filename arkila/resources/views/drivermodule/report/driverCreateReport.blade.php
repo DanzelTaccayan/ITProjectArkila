@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{route('drivermodule.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('drivermodule.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       @php $destination_name = null; @endphp
                       @foreach($terminals->routeFromDestination as $terminal)
@@ -23,7 +23,6 @@
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
-
                             </div>
                             <div class="col-sm-4">
                                 <label class="text-center">#Passengers</label>
@@ -31,10 +30,22 @@
                             <div class="col-sm-4">
                                 <label class="text-center">#Discounted</label>
                             </div>
-                          @php $counter = 0; @endphp
-                          @foreach($destinations as $destination)
+
+                          <!-- @php $counter = 0; @endphp
+                          @foreach($destinations as $destination) -->
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
+                                <label for="" class="col-sm-4"><!-- QUERY DITO YUNG MAIN TERMINAL--></label>
+                                <div class="col-sm-6">
+                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
+                                </div>
+                            </div>
+                            
+                            <div class='form-group'>
+                                <label for="" class="col-sm-4">Short Trip</label>
                                 <div class="col-sm-6">
                                     <input type="hidden" name="destination[]" value="{{$destination->destid}}">
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
@@ -44,12 +55,24 @@
                                     <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
                                 </div>
                             </div>
-                            @php $counter++; @endphp
-                          @endforeach
+                           <!--  @php $counter++; @endphp
+                          @endforeach -->
                         </div>
 
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
+                            
+                            <div class="form-group">
+                                <label for="driver" class="col-sm-4">Origin Terminal:</label>
+                                <div class="col-sm-8">
+                                <select name="driverAndOperator" id="driver" class="form-control select2">
+                                    @foreach($driverAndOperators as $driverAndOperator)
+                                    <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label for="departureDate" class="col-sm-4">Departure Date:</label>
                                 <div class="col-sm-8">
@@ -91,6 +114,32 @@
                             <!-- /.box-footer -->
                         </div>
                         <!-- /.col -->
+
+                                <!--               DISCOUNT MODAL-->
+                                <div class="modal fade" id="discountModal">
+                                    <div class="modal-dialog" style="margin-top:150px;">
+                                        <div class="col-md-offset-2 col-md-8">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-blue">
+                                                    Confirm
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <p>Are you sure you want to add these tickets?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                </div>
+                                                <!-- /.modal-footer -->
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+                                </form>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -98,31 +147,6 @@
         </div>
         <!-- /.tab-pane -->
 
-        <!--               DISCOUNT MODAL-->
-        <div class="modal fade" id="discountModal">
-            <div class="modal-dialog" style="margin-top:150px;">
-                <div class="col-md-offset-2 col-md-8">
-                    <div class="modal-content">
-                        <div class="modal-header bg-blue">
-                            Confirm
-                        </div>
-                        <div class="modal-body text-center">
-                            <p>Are you sure you want to add these tickets?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                        <!-- /.modal-footer -->
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-        </form>
     </div>
     <!-- /.col -->
 </div>
