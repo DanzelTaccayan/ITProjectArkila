@@ -335,11 +335,11 @@ ol.vertical{
                                             <label for="" class="col-sm-2 control-label">Position:</label>
                                              <div class="col-sm-3">
                                               <select name="changePosition" id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                @foreach($terminal
+                                                  @foreach($terminals->where('destination_id',$vanOnQueue->destination_id)->first()
                                                 ->vanQueue()
                                                 ->whereNotNull('queue_number')
                                                 ->orderBy('queue_number')->get() as $queueNumber)
-                                                      <option value="{{$queueNumber->queue_number}}">{{$queueNumber->queue_number}}</option>
+                                                      <option value="{{$queueNumber->queue_number}}" @if($queueNumber->queue_number === $vanOnQueue->queue_number) {{'selected'}} @endif>{{$queueNumber->queue_number}}</option>
                                                   @endforeach
                                               </select>
                                              </div>
@@ -470,7 +470,7 @@ ol.vertical{
             //Change Position
             $('button[name="changePosButton"]').on('click',function(){
                 var queueId = $(this).data('val');
-
+                var newQueueNum = $('#posOption'+queueId).val();
                 $.ajax(
                     {
                         method:'PATCH',
@@ -478,12 +478,12 @@ ol.vertical{
                         data:
                             {
                                 '_token': '{{csrf_token()}}',
-                                'new_queue_num' : $('#posOption'+queueId).val()
+                                'new_queue_num' : newQueueNum
                             },
-                        success: function()
+                        success: function(response)
                         {
-                            $("#positem{{$vanOnQueue->van_queue_id}}").hide();
-                            $("#item{{$vanOnQueue->van_queue_id}}").show();
+                            $("#positem"+queueId).hide();
+                            $("#item"+queueId).show();
 
 
                             new PNotify({
@@ -503,12 +503,19 @@ ol.vertical{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+                            if(newQueueNum == 1)
+                            {
+                                $('#unit'+response.beingReplacedId).before($('#unit'+queueId));
+                            }
+                            else
+                            {
+                                $('#unit'+response.beingReplacedId).after($('#unit'+queueId));
+                            }
 
-                            $('select[name="changePosition"]').filter(function(){return this.value=='1'});
 
-                            response.forEach(function(van) {
+                            response[0].forEach(function(van) {
                                 $('#posOption'+van.vanId).val(van.queueNumber);
-
+                                $('queue'+van.vanId).val(van.queueNumber);
                             });
 
                         }

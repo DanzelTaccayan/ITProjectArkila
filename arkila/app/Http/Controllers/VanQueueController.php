@@ -107,9 +107,10 @@ class VanQueueController extends Controller
         $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
 
         $vanCount = VanQueue::whereNotNull('queue_number')->count();
-        $responseArr = [];
+        $responseArr = [[],'beingReplacedId'=> $beingReplacedVal];
+
         $this->validate(request(),[
-            'value' => 'required|digits_between:1,'.$vanCount,
+            'new_queue_num' => 'required|digits_between:1,'.$vanCount,
         ]);
 
         for($i = 0,$n = 1; $i < count($queue) ; $i++,$n++)
@@ -140,7 +141,7 @@ class VanQueueController extends Controller
                     'queue_number' => $queueNum
                 ]);
 
-                array_push($responseArr,[
+                array_push($responseArr[0],[
                 'vanId' => $vanQueue->van_queue_id,
                 'queueNumber' => $vanQueue->queue_number
             ]);
@@ -166,7 +167,7 @@ class VanQueueController extends Controller
                     'queue_number' => $queueNum
                 ]);
 
-                array_push($responseArr,[
+                array_push($responseArr[0],[
                     'vanId' => $vanQueue->van_queue_id,
                     'queueNumber' => $vanQueue->queue_number
                 ]);
