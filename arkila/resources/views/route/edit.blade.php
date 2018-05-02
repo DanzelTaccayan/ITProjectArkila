@@ -1,7 +1,7 @@
 @extends('layouts.form')
-@section('title', 'Create New Terminal/Destination')
+@section('title', 'Edit Terminal/Destination')
 @section('back-link', route('route.index'))
-@section('form-action', route('route.store'))
+@section('form-action', route('route.update', $route->destination_id))
 @if($route->is_terminal == true)
 @section('form-title', 'EDIT TERMINAL')
 @elseif($route->is_terminal == false)
@@ -9,6 +9,7 @@
 @endif
 @section('form-body')
 
+{{ csrf_field() }} {{ method_field('PATCH') }}
   <div class="form-section">
       <div class="form-group">
           <label>Name: <span class="text-red">*</span> </label>
@@ -28,6 +29,7 @@
       </div>
   </div>
   @if($route->is_terminal == true)
+  <input type="hidden" name="type" value="Terminal">
   <div class="form-section">
     <div id="terminalForm">
       <div class="form-group">
@@ -44,6 +46,7 @@
       </div>
     </div>
     @elseif($route->is_terminal == false)
+    <input type="hidden" name="type" value="Route">
     <div class="form-section">
     <div id="terminalForm">
       <div class="form-group" id="origin">

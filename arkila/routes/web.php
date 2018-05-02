@@ -35,7 +35,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
     Route::resource('/home/announcements', 'AnnouncementsController');
     Route::resource('/home/route', 'RoutesController',[
-        'except' => ['create', 'update', 'show']
+        'except' => ['create', 'show']
     ]);
 
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');

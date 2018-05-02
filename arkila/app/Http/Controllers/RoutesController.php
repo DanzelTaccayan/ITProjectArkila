@@ -187,9 +187,58 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RouteRequest $request, $route)
     {
-        //
+        $routeAll = Destination::find($route);
+        $message = null;
+        $regularTicket = Ticket::where([
+            ['destination_id', $route],
+            ['type', 'Regular']
+            ])->get();
+            // dd($regularTicket->count());
+        $discountedTicket = Ticket::where([
+            ['destination_id', $route],
+            ['type', 'Discount']
+            ])->get();
+        $name = ucwords(strtolower($request->addTerminal));
+
+        if($request->type == 'Terminal')
+        {
+            $routeAll->update([
+                'destination_name' => $name,
+                'number_of_tickets' => $request->numticket,
+                'booking_fee' => $request->bookingFee,
+                'short_trip_fare' => $request->sTripFare,
+                'short_trip_fare_discount' => $request->sdTripFare,
+            ]);
+
+            foreach($discountedTicket as $tickets)
+            {
+                $tickets->update([
+                    'fare' => $request->discountedFare, 
+                ]);
+
+            }
+
+            foreach ($regularTicket as $tickets)
+            {
+                $tickets->delete();
+            }
+
+            for($i=1; $i <= $request->numticket; $i++ )
+            {
+                $ticketName = $name.'-'.$i;
+                Ticket::create([
+                    'ticket_number' => $ticketName,
+                    'destination_id' => $route,
+                    'is_sold' => false,
+                    'fare' => $request->regularFare,
+                    'type' => 'Regular'
+                ]);
+            }
+            $message = $name .' has been successfully edited.';
+        }
+        return redirect('/home/route')->with('success', $message);
     }
 
     /**
