@@ -101,13 +101,13 @@ class VanQueueController extends Controller
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
 
         $beingTransferredKey = $vanOnQueue->queue_number;
-        $beingReplacedKey = request('value');
+        $beingReplacedKey = request('new_queue_num');
 
         $beingTransferredVal = $vanOnQueue->van_queue_id;
-        $beingReplacedVal = VanQueue::where('queue_number',request('value'))->first()->van_queue_id;
+        $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
 
         $vanCount = VanQueue::whereNotNull('queue_number')->count();
-
+        $responseArr = [];
         $this->validate(request(),[
             'value' => 'required|digits_between:1,'.$vanCount,
         ]);
@@ -139,6 +139,11 @@ class VanQueueController extends Controller
                 $vanQueue->update([
                     'queue_number' => $queueNum
                 ]);
+
+                array_push($responseArr,[
+                'vanId' => $vanQueue->van_queue_id,
+                'queueNumber' => $vanQueue->queue_number
+            ]);
             }
 
         }
@@ -160,8 +165,15 @@ class VanQueueController extends Controller
                 $vanQueue->update([
                     'queue_number' => $queueNum
                 ]);
+
+                array_push($responseArr,[
+                    'vanId' => $vanQueue->van_queue_id,
+                    'queueNumber' => $vanQueue->queue_number
+                ]);
             }
         }
+
+        return response()->json($responseArr);
     }
 
     public function updateDestination(VanQueue $vanOnQueue)

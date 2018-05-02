@@ -27,40 +27,82 @@ class RouteRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        if ($request->type == 'Terminal')
+        switch($this->method())
         {
+            case 'POST':
+            {
+                if ($request->type == 'Terminal')
+                {
 
-            return [
-                "addTerminal" => 'required|unique:destination,destination_name|max:70',
-                "bookingFee" => 'required|numeric',
-                "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "numticket" => 'required|numeric|digits_between:1,1000',
-                "type" => [
-                    'required',
-                    Rule::in(['Terminal', 'Route'])
-                ],    
-            ];
-        }
-        else
-        {
-            
-            return [
-                "addTerminal" => 'required|unique:destination,destination_name|max:70',
-                "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                "numticket" => 'required|numeric|digits_between:1,1000',
-                "dest" => 'required',
-                "dest.*" => 'numeric',
-                "type" => [
-                    'required',
-                    Rule::in(['Terminal', 'Route'])
-                ],
-                
-            ];
-            
+                    return [
+                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "bookingFee" => 'required|numeric',
+                        "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'required|numeric|digits_between:1,1000',
+                        "type" => [
+                            'required',
+                            Rule::in(['Terminal', 'Route'])
+                        ],    
+                    ];
+                }
+                else
+                {
+                    
+                    return [
+                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'required|numeric|digits_between:1,1000',
+                        "dest" => 'required',
+                        "dest.*" => 'numeric',
+                        "type" => [
+                            'required',
+                            Rule::in(['Terminal', 'Route'])
+                        ],
+                        
+                    ];   
+                }
+            }
+            case 'PATCH':
+            {
+                if ($request->type == 'Terminal')
+                {
+
+                    return [
+                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "bookingFee" => 'required|numeric',
+                        "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'required|numeric|digits_between:1,1000',
+                        "type" => [
+                            'required',
+                            Rule::in(['Terminal', 'Route'])
+                        ],    
+                    ];
+                }
+                else
+                {
+                    
+                    return [
+                        "addTerminal" => 'required|unique:destination,destination_name|max:70',
+                        "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'required|numeric|digits_between:1,1000',
+                        "dest" => 'required',
+                        "dest.*" => 'numeric',
+                        "type" => [
+                            'required',
+                            Rule::in(['Terminal', 'Route'])
+                        ],
+                        
+                    ];   
+                }
+            }
         }
     }
 }

@@ -1,5 +1,17 @@
 @extends('layouts.form_lg') 
 @section('title', 'Driver Registration')
+@section('links')
+@parent
+<style>
+    th{
+        width:200px;
+        padding:20px;
+    }
+    .form-heading{
+        background: #ffb849;
+    }
+</style>
+@endsection
 @section('form-id', 'regForm')
 
 @if ( isset($operator) )
@@ -19,131 +31,115 @@
 
 
 @section('form-body')
-<div class="box box-warning" style="box-shadow: 0px 5px 10px gray;">
+<div class="margin-side-10">
+    <div class="box box-warning" style="box-shadow: 0px 5px 10px gray;">
         <div class="box-header with-border text-center">
             <h4>    
             <a href="@yield('backRef')" class="pull-left"><i class="fa  fa-chevron-left"></i></a>
             </h4>
             <h3 class="box-title">
-                Driver Registration
+                DRIVER REGISTRATION
             </h3>
         </div>
         <div class="box-body">
-
-                <!-- One "tab" for each step in the form: -->
-                <div class="form-section">
-                    <h4>Personal Information</h4>
-                   
-                    <div class="row">
-                        <div class="col-md-4">
-                        <div class=" form-group">
+            <div class="padding-side-15">
+                <h4 class="form-heading">Personal Information</h4>
+                <table class="table table-bordered table-striped form-border">
+                    <tbody>
                             @if(isset($operator))
-                                <label for="opName">Operator Name: </label>
-                                <span id="opName">{{$operator->full_name}}</span>
+                                <tr>
+                                    <th>
+                                        Operator
+                                    </th>
+                                    <td id="opName">
+                                        {{$operator->full_name}}
+                                    </td>
+                                </tr>
                             @elseif(isset($vanNd))
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="">Van Unit</label>
-                                        <span id="">{{ $vanNd->plate_number}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="">Operator of the Van Unit</label>
-                                        <span id="">{{ $vanNd->operator->first()->full_name}}</span>
-                                    </div>
-                                </div>
-
-                                @else
-                                <label>Choose Operator:</label>
-                                <select name="operator" id="" class="form-control select2">
-                                    <option value='' @if(!old('operator')) {{'selected'}} @endif>No Operator</option>
-                                    @foreach($operators as $operator)
-                                        <option value={{$operator->member_id}} @if($operator->member_id == old('operator')) {{'selected'}}@endif>{{$operator->full_name}}</option>
-                                    @endforeach
-                                </select>
+                                <tr>
+                                    <th>
+                                        Operator
+                                    </th>
+                                    <td>
+                                        {{ $vanNd->operator->first()->full_name}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Van Unit
+                                    </th>
+                                    <td>
+                                        {{ $vanNd->plate_number}}
+                                    </td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <th>
+                                        Operator
+                                    </th>
+                                    <td>
+                                        <select name="operator" id="" class="form-control select2">
+                                            <option value='' @if(!old('operator')) {{'selected'}} @endif>No Operator</option>
+                                            @foreach($operators as $operator)
+                                                <option value={{$operator->member_id}} @if($operator->member_id == old('operator')) {{'selected'}}@endif>{{$operator->full_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
                             @endif
-                        </div>
-                        </div>
-                        <div class="col-md-4 pull-right">
-                            <form action="">
-                                <div class="form-group">
-                                   <label>Add profile image</label>
-                                   <input type="file" name="profilePicture" accept="image/*">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Last Name: <span class="text-red">*</span></label>
+                        <tr>
+                            <th>
+                                Last Name <span class="text-red">*</span>
+                            </th>
+                            <td>
                                 <input value="{{old('lastName')}}" name="lastName" type="text" class="form-control" placeholder="Last Name" val-name data-parsley-trigger="keyup" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>First Name: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                First Name <span class="text-red">*</span>
+                            </th>
+                            <td>
                                 <input value="{{old('firstName')}}" name="firstName" type="text" class="form-control" placeholder="First Name" data-parsley-trigger="keyup" val-name required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Middle Name:</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                               Middle Name
+                            </th>
+                            <td>
                                 <input value="{{old('middleName')}}" name="middleName" type="text" class="form-control" placeholder="Middle Name" data-parsley-trigger="keyup" val-name>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Contact Number <span class="text-red">*</span></label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <span>+63</span>
-                                  </div>
-                                  <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" data-parsley-trigger="keyup" val-phone required>
-                                </div>
-                                <p id="errContactNumber"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                             <div class="form-group">
-                                <label>Address: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Contact Number <span class="text-red">*</span>
+                            </th>
+                            <td>
+                                <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" data-parsley-trigger="keyup" val-phone required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Address <span class="text-red">*</span>
+                            </th>
+                            <td>
                                 <input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" data-parsley-trigger="keyup" val-address required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Provincial Address: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Provincial Address <span class="text-red">*</span>
+                            </th>
+                            <td>
                                 <input value="{{old('provincialAddress')}}" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" data-parsley-trigger="keyup" val-address required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Birthdate: <span class="text-red">*</span></label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input type="text" name="birthDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('birthDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errLegal"  data-parsley-legal-age val-birthdate required>
-                                </div>
-                                <p id="errLegal"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Birthplace: <span class="text-red">*</span></label>
-                                <input value="{{old('birthPlace')}}" name="birthPlace" type="text" class="form-control" placeholder="Birthplace" data-parsley-trigger="keyup" val-birthplace required>
-                            </div>
-                        </div>
-                    
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Gender: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Gender: <span class="text-red">*</span>
+                            </th>
+                            <td>
                                 <div class="radio">
                                     <label for=""> Male</label>
                                     <label class="radio-inline">
@@ -154,222 +150,101 @@
                                         <input type="radio" name="gender" value="Female" class="flat-blue" @if(old('gender') == 'Female') {{'checked'}}@endif>
                                     </label>
                                 </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row">    
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Citizenship: <span class="text-red">*</span></label>
-                                <input value="{{old('citizenship')}}" name="citizenship" type="text" class="form-control" placeholder="Citizenship" data-parsley-trigger="keyup" val-citizenship required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Civil Status:</label>
-                                <select name="civilStatus" class="form-control">
-                                    <option @if(old('civilStatus') == 'Single') {{'selected'}} @endif>Single</option>
-                                    <option @if(old('civilStatus') == 'Married') {{'selected'}} @endif>Married</option>
-                                    <option @if(old('civilStatus') == 'Divorced') {{'selected'}} @endif>Divorced</option>
-                                    <option @if(old('civilStatus') == 'Widowed') {{'selected'}} @endif>Widowed</option>
-                                </select>
-                            </div>
-                        </div>
-                   
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>SSS No:</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                SSS No
+                            </th>
+                            <td>
                                 <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask data-parsley-trigger="keyup">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">    
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>License No: <span class="text-red">*</span></label>
-                                <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." data-parsley-trigger="keyup" val-license required data-inputmask='"mask": "A99-99-999999"' data-mask>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>License Expiry Date: <span class="text-red">*</span></label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required>
-                                </div>
-                                <p id= "errExpireDate"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-section">
-                    <h4>Family Information</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name of Spouse:</label>
-                                <input value="{{old('nameOfSpouse')}}" name="nameOfSpouse" type="text" class="form-control" placeholder="Name of Spouse" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Birthdate of Spouse:</label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input type="text" name="spouseBirthDate" placeholder="mm/dd/yyyy" class="form-control date-mask" value="{{old('spouseBirthDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errSpouseBirthdate" data-parsley-legal-age val-spouse-bdate >
-                                </div>
-                            </div>
-                            <p id="errSpouseBirthdate">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Father's Name:</label>
-                                <input value="{{old('fathersName')}}" name="fathersName" type="text" class="form-control" placeholder="Father's Name" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Occupation:</label>
-                                <input value="{{old('fatherOccupation')}}" name="fatherOccupation" type="text" class="form-control" placeholder="Occupation" data-parsley-trigger="keyup" val-occupation>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                             <div class="form-group">
-                                <label>Mother's Maiden Name:</label>
-                                <input value="{{old('mothersName')}}" name="mothersName" type="text" class="form-control" placeholder="Mother's Maiden Name" data-parsley-trigger="keyup" val-fullname>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Occupation:</label>
-                                <input value="{{old('motherOccupation')}}" name="motherOccupation" type="text" class="form-control" placeholder="Occupation" data-parsley-trigger="keyup" val-occupation>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Contact Person: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                License No: <span class="text-red">*</span>
+                            </th>
+                            <td>
+                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." data-parsley-trigger="keyup" val-license required data-inputmask='"mask": "A99-99-999999"' data-mask> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                License Expiry Date: <span class="text-red">*</span>
+                            </th>
+                            <td>
+                                <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Profile Picture</th>
+                            <td><input type="file" name="profilePicture" accept="image/*"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 class="form-heading">Contact Person</h4>
+
+                <table class="table table-bordered table-striped form-border">
+                    <tbody>
+                        <tr>
+                            <th>Name <span class="text-red">*</span></th>
+                            <td>
                                 <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname data-parsley-trigger="keyup" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Address: <span class="text-red">*</span></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Address <span class="text-red">*</span></th>
+                            <td>
                                 <input value="{{old('contactPersonAddress')}}" name="contactPersonAddress" type="text" class="form-control" placeholder="Address" data-parsley-trigger="keyup" val-address required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Contact Number: <span class="text-red">*</span></label>
-                                <div class="input-group">
-                                  <div class="input-group-addon">
-                                    <span>+63</span>
-                                  </div>
-                                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask  data-parsley-trigger="keyup" data-parsley-errors-container="#errContactPersonPhone" val-phone required>
-                                </div>
-                                <p id="errContactPersonPhone"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <Label>Dependents:</Label>
-                            <table class="table table-hover custab">
-                                <thead>
-                                    <th>Name</th>
-                                    <th>Birthdate</th>
-                                    <th>
-                                        <div class="pull-right">
-                                            <button type="button" class="btn btn-primary btn-sm btn-flat" onclick="addDependent()"><i class="fa fa-plus"></i> ADD DEPENDENT</button>
-                                        </div>
-                                    </th>
-                                </thead>
-                                <tbody id="childrens">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Contact Number <span class="text-red">*</span></th>
+                            <td>
+                                <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask  data-parsley-trigger="keyup" data-parsley-errors-container="#errContactPersonPhone" val-phone required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                                @if(old('children'))
-
-                                    @for($i = 0; $i < count(old('children')); $i++)
-                                        <tr>
-                                            <td>
-                                                <input value="{{old('children.'.$i)}}" name="children[]" type="text" placeholder="Name of Child" class="form-control">
-                                            </td>
-                                            <td>
-                                                <div class="input-group">
-                                                  <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                  </div>
-                                                  <input type="text" name="childrenBDay[]" class="form-control  pull-right date-mask" placeholder="mm/dd/yyyy" value="{{old('childrenBDay.'.$i)}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="pull-right">
-                                                    @if(count(old('children')) > 1)
-                                                        <button type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                                    @else
-                                                        <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                                    @endif
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                    @endfor
-                                @else
-                                    <tr>
-                                        <td>
-                                            <input name="children[]" type="text" placeholder="Name of Child" class="form-control" maxlength="120">
-                                        </td>
-                                        <td>
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" name="childrenBDay[]" class="form-control pull-right date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="pull-right">
-                                                <button style="display: none;" type="button" onclick="event.srcElement.parentElement.parentElement.parentElement.remove();rmv()" class='btn btn-danger'>Delete</button>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                @endif
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
+             
+      {{--   @if(isset($operator))
+            <label for="opName">Operator Name: </label>
+            <span id="opName">{{$operator->full_name}}</span>
+        @elseif(isset($vanNd))
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Van Unit</label>
+                    <span id="">{{ $vanNd->plate_number}}</span>
                 </div>
-
-                
-                <!-- Circles which indicates the steps of the form: -->
-                <div style="text-align:center;margin-top:40px;">
-                    <span class="step"></span>
-                    <span class="step"></span>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="">Operator of the Van Unit</label>
+                    <span id="">{{ $vanNd->operator->first()->full_name}}</span>
                 </div>
+            </div>
+        @else
+            <label>Choose Operator:</label>
+            <select name="operator" id="" class="form-control select2">
+                <option value='' @if(!old('operator')) {{'selected'}} @endif>No Operator</option>
+                @foreach($operators as $operator)
+                    <option value={{$operator->member_id}} @if($operator->member_id == old('operator')) {{'selected'}}@endif>{{$operator->full_name}}</option>
+                @endforeach
+            </select>
+        @endif --}}
         </div>
         <div class="box-footer">
             <div style="overflow:auto;">
-                    <div class="form-navigation" style="float:right;">
-                        <button type="button" id="prevBtn"  class="previous btn btn-default">Previous</button>
-                        <button type="button" id="nextBtn"  class="next btn btn-primary">Next</button>
-                        <input type="submit" class="btn btn-primary">
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-success" value="REGISTER">
                     </div>
                 </div>
         </div>
-</div> 
+    </div> 
+</div>
 @endsection
 @section('scripts')
 @parent

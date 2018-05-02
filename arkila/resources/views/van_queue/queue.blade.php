@@ -287,10 +287,10 @@ ol.vertical{
                             <div class="queue-body scrollbar scrollbar-info thin">  
                               <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization">
                                   @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
-                                    <li class="queue-item form-horizontal" data-vanId="{{ $vanOnQueue->van->van_id}}" data-remark="{{ $vanOnQueue->remarks }}">
+                                    <li id="unit{{$vanOnQueue->van_queue_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
-                                            <a href="" id="queue{{$vanOnQueue->van_queue_id}}" class="queue-editable">{{ $vanOnQueue->queue_number }}</a>
+                                            <a  id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</a>
                                         </div>
                                         <div class=item id="item{{$vanOnQueue->van_queue_id}}">
                                           <div  class="row">
@@ -334,14 +334,19 @@ ol.vertical{
                                           <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Position:</label>
                                              <div class="col-sm-3">
-                                              <select id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                <option value="">1</option>
+                                              <select name="changePosition" id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
+                                                @foreach($terminal
+                                                ->vanQueue()
+                                                ->whereNotNull('queue_number')
+                                                ->orderBy('queue_number')->get() as $queueNumber)
+                                                      <option value="{{$queueNumber->queue_number}}">{{$queueNumber->queue_number}}</option>
+                                                  @endforeach
                                               </select>
                                              </div>
                                            </div>
                                            <div class="pull-right"> 
                                               <button class="btn btn-default btn-sm itemBtn{{$vanOnQueue->van_queue_id}}">CANCEL</button>
-                                              <button name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
+                                              <button name="changePosButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
                                              </div>
                                              <div class="clearfix"> </div>
                                         </div>
@@ -456,9 +461,58 @@ ol.vertical{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+
                         }
                     });
 
+            });
+
+            //Change Position
+            $('button[name="changePosButton"]').on('click',function(){
+                var queueId = $(this).data('val');
+
+                $.ajax(
+                    {
+                        method:'PATCH',
+                        url: '/updateQueueNumber/'+queueId,
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'new_queue_num' : $('#posOption'+queueId).val()
+                            },
+                        success: function()
+                        {
+                            $("#positem{{$vanOnQueue->van_queue_id}}").hide();
+                            $("#item{{$vanOnQueue->van_queue_id}}").show();
+
+
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully update remark",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+
+                            $('select[name="changePosition"]').filter(function(){return this.value=='1'});
+
+                            response.forEach(function(van) {
+                                $('#posOption'+van.vanId).val(van.queueNumber);
+
+                            });
+
+                        }
+                    });
             });
 
             function specialUnitChecker()
@@ -547,10 +601,10 @@ ol.vertical{
                 '_token': '{{csrf_token()}}',
                 'vanQueue': queue
             },
-            success: function(trips){
-               console.log(trips);
-               for(i = 0; i < trips.length; i++){
-                    $('#queue'+trips[i].trip_id).editable('setValue',trips[i].queue_number);
+            success: function(queue){
+               console.log(queue);
+               for(i = 0; i < queue.length; i++){
+                    $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
                }
                specialUnitChecker();
             }

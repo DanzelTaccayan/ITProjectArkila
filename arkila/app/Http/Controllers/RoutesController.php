@@ -15,11 +15,14 @@ class RoutesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Destination $route)
     {
+        $routeId = $route->destination_id;
+        $fareReg = Ticket::where('type', 'Regular')->groupBy('destination_id')->get();
+        $fareDis = Ticket::where('type', 'Discount')->groupBy('destination_id')->get();
         $terminals = Destination::allTerminal()->get();
         $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
-        return view('route.index', compact('terminals', 'mainTerminal'));
+        return view('route.index', compact('terminals', 'mainTerminal', 'fareReg', 'fareDis'));
     }
 
     /**
@@ -67,6 +70,7 @@ class RoutesController extends Controller
                 'short_trip_fare_discount' => $request->sdTripFare,
                 'is_terminal' => true,
                 'is_main_terminal' => false,
+                'number_of_tickets' => $request->numticket,
             ]);
 
             foreach($discountedTickets as $discountedTicket)
@@ -104,6 +108,7 @@ class RoutesController extends Controller
                 'destination_name' => $name,
                 'is_terminal' => false,
                 'is_main_terminal' => false,
+                'number_of_tickets' => $request->numticket,
             ]);
 
             foreach($discountedTickets as $discountedTicket)
@@ -172,7 +177,7 @@ class RoutesController extends Controller
             ['type', 'Discount'],
             ['destination_id', $routeId],
             ])->first();
-        return view('route.edit', compact('route', 'fareReg', 'fareDis', 'terminals', '$mainTerminal'));
+        return view('route.edit', compact('route', 'fareReg', 'fareDis', 'terminals', 'mainTerminal'));
     }
 
     /**
@@ -193,8 +198,28 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Destination $route)
     {
-        //
+        $main = Destination::where('is_main_terminal', '1')->first();
+        $message = null;
+        if ($route->is_terminal == true)
+        {
+            foreach($route->routeFromDestination as $routes)
+            {
+                $routes->routeOrigin()->detach($main->destination_id);
+                $routes->delete();
+            }
+            $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+        }
+        else
+        {
+            $route->routeOrigin()->detach($main->destination_id);
+            $route->delete();
+            $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+
+        }
+
+        return back()->with('success', $message);
+
     }
 }
