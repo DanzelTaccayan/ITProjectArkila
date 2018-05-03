@@ -194,18 +194,14 @@ class VanQueueController extends Controller
 
             foreach( $queue as $vanOnQueueObj)
             {
-                if($vanOnQueue->van_queue_id == $vanOnQueueObj->van_queue_id || $vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
-                {
-                    continue;
-                }
-                else
+                if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
                 {
                     $vanOnQueueObj->update([
                         'queue_number' => ($vanOnQueueObj->queue_number)-1
                     ]);
+                    array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
                 }
-                $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
-                array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+
             }
 
             $vanOnQueue->update([
@@ -213,7 +209,7 @@ class VanQueueController extends Controller
                 'queue_number' => $queueNum
             ]);
 
-            array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+            $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
 
             return response()->json($vanQueueArr);
         }

@@ -562,8 +562,6 @@ ol.vertical{
                             stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                         });
 
-
-
                         response.oldDestiQueue.forEach(function(OldQueueId){
                             for(var i = 1; i <= response.oldDestiQueueCount; i++){
                                 var option = $('<option></option>').attr("value", i).text(i);
@@ -572,7 +570,7 @@ ol.vertical{
 
                             if($('#posOption'+OldQueueId).val() > response.oldDestiQueueNumber){
                                 var updateQueueNum = $('#posOption'+OldQueueId).val() - 1;
-                                $('queue'+OldQueueId).text(updateQueueNum);
+                                $('#queue'+OldQueueId).text(updateQueueNum);
                                 $('#posOption'+OldQueueId).val(updateQueueNum);
                             }
                         });
