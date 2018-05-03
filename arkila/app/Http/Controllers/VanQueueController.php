@@ -182,15 +182,19 @@ class VanQueueController extends Controller
         $this->validate(request(),[
             'destination' => 'required|exists:destination,destination_id'
         ]);
+        $vanQueueArr = [];
 
         if(request('destination') != $vanOnQueue->destination_id)
         {
             $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
             $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+            $vanQueueArr['newDestiQueueCount'] = $queueNum;
+            $vanQueueArr['oldDestiQueueNumber'] = $vanOnQueue->queue_number;
+            $vanQueueArr['oldDestiQueue'] = [];
 
             foreach( $queue as $vanOnQueueObj)
             {
-                if($vanOnQueueObj->van_queue_id	 == $vanOnQueueObj->van_queue_id || $vanOnQueueObj->queue_number < $vanOnQueueObj->queue_number )
+                if($vanOnQueue->van_queue_id == $vanOnQueueObj->van_queue_id || $vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
                 {
                     continue;
                 }
@@ -200,14 +204,20 @@ class VanQueueController extends Controller
                         'queue_number' => ($vanOnQueueObj->queue_number)-1
                     ]);
                 }
+                $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
+                array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
             }
 
             $vanOnQueue->update([
                 'destination_id' => request('destination'),
                 'queue_number' => $queueNum
             ]);
+
+            array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+
+            return response()->json($vanQueueArr);
         }
-        return 'success';
+        return 'Destination not Updated';
     }
 
     public function updateRemarks(VanQueue $vanOnQueue)

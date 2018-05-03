@@ -523,51 +523,100 @@ ol.vertical{
                     });
             });
 
-            function specialUnitChecker()
-            {
-                $.ajax(
-                {
-                    method:'POST',
-                    url: '/specialUnitChecker',
-                    data:
-                    {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(response)
-                    {
-                        if(response[0])
-                        {
-                            $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                        }
-                        else
-                        {
-                            if(response[1])
-                            {
-                                $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
-                            }
-                        }
-                    }
-                });
-            }
-
+            //Change Destination
             $('button[name="destBtn"]').on('click',function()
             {
+                var queueId = $(this).data('val');
+                var destId = $('#destOption'+queueId).val();
+
                 $.ajax(
                 {
                     method:'PATCH',
-                    url:'/home/trips/changeDestination/'+$(this).data('val'),
+                    url:'/home/vanqueue/changeDestination/'+queueId,
                     data:
                     {
                         '_token': '{{csrf_token()}}',
-                        'destination': $('#destOption'+$(this).data('val')).val()
+                        'destination': destId
                     },
                     success:
-                    function()
+                    function(response)
                     {
-                        location.reload();
+                        $("#destitem"+queueId).hide();
+                        $("#item"+queueId).show();
+
+                        new PNotify({
+                            title: "Success!",
+                            text: "Successfully update remark",
+                            animate: {
+                                animate: true,
+                                in_class: 'slideInDown',
+                                out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                        });
+
+
+
+                        response.oldDestiQueue.forEach(function(OldQueueId){
+                            for(var i = 1; i <= response.oldDestiQueueCount; i++){
+                                var option = $('<option></option>').attr("value", i).text(i);
+                                $('#posOption'+OldQueueId).append(option);
+                            }
+
+                            if($('#posOption'+OldQueueId).val() > response.oldDestiQueueNumber){
+                                var updateQueueNum = $('#posOption'+OldQueueId).val() - 1;
+                                $('queue'+OldQueueId).text(updateQueueNum);
+                                $('#posOption'+OldQueueId).val(updateQueueNum);
+                            }
+                        });
+
+                        $('#unit'+queueId).appendTo($('#queue-list'+destId));
+                        $('#posOption'+queueId).empty();
+
+                        for (var i = 1; i <= response.newDestiQueueCount; i++) {
+                            var option = $('<option></option>').attr("value", i).text(i);
+                            $('#posOption'+queueId).append(option);
+                        }
+
+                        $('#posOption'+queueId).val(response.newDestiQueueCount);
+                        $('#queue'+queueId).text(response.newDestiQueueCount);
                     }
                 });
             });
+
+            function specialUnitChecker()
+            {
+                $.ajax(
+                    {
+                        method:'POST',
+                        url: '/specialUnitChecker',
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}'
+                            },
+                        success: function(response)
+                        {
+                            if(response[0])
+                            {
+                                $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
+                            }
+                            else
+                            {
+                                if(response[1])
+                                {
+                                    $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
+                                }
+                            }
+                        }
+                    });
+            }
 
             $('#specialUnitList').load('/listSpecialUnits/'+$('#destinationTerminals li.active').data('val'));
 
