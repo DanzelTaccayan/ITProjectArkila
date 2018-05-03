@@ -513,9 +513,10 @@ ol.vertical{
                             }
 
 
-                            response[0].forEach(function(van) {
+                            response[0].forEach(function(van)
+                            {
                                 $('#posOption'+van.vanId).val(van.queueNumber);
-                                $('queue'+van.vanId).val(van.queueNumber);
+                                $('#queue'+van.vanId).text(van.queueNumber);
                             });
 
                         }
