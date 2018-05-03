@@ -190,6 +190,8 @@ class RoutesController extends Controller
     public function update(RouteRequest $request, $route)
     {
         $routeAll = Destination::find($route);
+        $terminals = Destination::allTerminal()->get();
+        $main = Destination::where('is_main_terminal', '1')->first();
         $message = null;
         $regularTicket = Ticket::where([
             ['destination_id', $route],
@@ -202,6 +204,30 @@ class RoutesController extends Controller
             ])->get();
         $name = ucwords(strtolower($request->addTerminal));
 
+        foreach($discountedTicket as $tickets)
+        {
+            $tickets->update([
+                'fare' => $request->discountedFare, 
+            ]);
+        }
+
+        foreach ($regularTicket as $tickets)
+        {
+            $tickets->delete();
+        }
+
+        for($i=1; $i <= $request->numticket; $i++ )
+        {
+            $ticketName = $name.'-'.$i;
+            Ticket::create([
+                'ticket_number' => $ticketName,
+                'destination_id' => $route,
+                'is_sold' => false,
+                'fare' => $request->regularFare,
+                'type' => 'Regular'
+            ]);
+        }
+
         if($request->type == 'Terminal')
         {
             $routeAll->update([
@@ -212,30 +238,24 @@ class RoutesController extends Controller
                 'short_trip_fare_discount' => $request->sdTripFare,
             ]);
 
-            foreach($discountedTicket as $tickets)
-            {
-                $tickets->update([
-                    'fare' => $request->discountedFare, 
-                ]);
+            $message = $name .' has been successfully edited.';
+        }
+        else
+        {
+            $routeAll->update([
+                'destination_name' => $name,
+                'number_of_tickets' => $request->numticket,
+            ]);
 
-            }
+            $routeAll->routeOrigin()->detach($main->destination_id);
 
-            foreach ($regularTicket as $tickets)
-            {
-                $tickets->delete();
-            }
-
-            for($i=1; $i <= $request->numticket; $i++ )
-            {
-                $ticketName = $name.'-'.$i;
-                Ticket::create([
-                    'ticket_number' => $ticketName,
-                    'destination_id' => $route,
-                    'is_sold' => false,
-                    'fare' => $request->regularFare,
-                    'type' => 'Regular'
-                ]);
-            }
+            foreach ($terminals as $count => $terminal) {
+                if (isset($request->dest[$count])) {
+                    $routeAll->routeOrigin()
+                    ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
+                } 
+            }   
+            
             $message = $name .' has been successfully edited.';
         }
         return redirect('/home/route')->with('success', $message);
