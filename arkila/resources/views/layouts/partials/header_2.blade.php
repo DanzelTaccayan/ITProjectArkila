@@ -115,7 +115,8 @@
                         <!-- The user image in the menu -->
                         <li class="user-header">
                           <img src="{{ URL::asset('img/bantrans-logo.png') }}" class="img-circle" alt="User Image">
-                            <p>Ban Trans - Admin</p>
+                            <p style="margin:0;">Admin</p>
+                            <small style="color: white;">Main Terminal</small>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
