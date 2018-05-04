@@ -19,17 +19,19 @@ use App\User;
 use App\Fee;
 class CreateReportController extends Controller
 {
-  public function chooseTerminal()
+  // public function chooseTerminal()
+  // {
+  //   $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
+  //   $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
+  //   return view('drivermodule.report.driverChooseDestination',compact('origins','mainTerminal'));
+
+  // }
+
+  public function createReport()
   {
     $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
-    return view('drivermodule.report.driverChooseDestination',compact('origins','mainTerminal'));
-
-  }
-
-  public function createReport(Destination $terminals)
-  {
-    $destinations = $terminals->routeFromDestination;
+    //$destinations = $terminals->routeFromDestination;
     $fees = Fee::all();
     $member = Member::where('user_id', Auth::id())->first();
     return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fad', 'member'));
