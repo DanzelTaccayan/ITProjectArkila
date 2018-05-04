@@ -373,7 +373,7 @@ class VanQueueController extends Controller
     public function listSpecialUnits(Destination $terminal)
     {
         $queue = $terminal->vanQueue()->where('has_privilege',1)->get();
-        return view('trips.partials.listSpecialUnits',compact('queue'));
+        return view('van_queue.partials.listSpecialUnits',compact('queue'));
     }
 
     public function updateVanQueue()
@@ -465,5 +465,40 @@ class VanQueueController extends Controller
                 'remarks' => NULL,
             ]);
         }
+    }
+
+    public function moveToSpecialUnit(VanQueue $vanOnQueue)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $arrayResponse = [
+                'destination' => $vanOnQueue->destination->destination_id,
+                'plateNumber' => $vanOnQueue->van->plate_number
+            ];
+            $queue = $vanOnQueue->destination->vanQueue()->whereNotNull('queue_number')->get();
+
+            foreach($queue as $onQueue) {
+                if($onQueue->queue_number > $vanOnQueue->queue_number ) {
+                    $onQueue->update([
+                        'queue_number' => $onQueue->queue_number-1
+                    ]);
+                }
+            }
+
+            $vanOnQueue->update([
+                'queue_number' => null,
+                'has_privilege' => 1
+            ]);
+
+            DB::commit();
+
+            return response()->json($arrayResponse);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
+
     }
 }

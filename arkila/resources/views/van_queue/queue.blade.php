@@ -306,7 +306,7 @@ ol.vertical{
                                                     <a id="remarkBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-asterisk"></i> Update Remark</a>
                                                     <a id="posBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-move"></i> Change Position</a>
                                                     <a id="destBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-map-marker"></i> Change Destination</a>
-                                                    <a class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</a>
+                                                    <a name="moveToSpecialUnitsList" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</a>
                                                     <a id="deleteBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-trash"></i> Remove</a>
                                                   </div>
                                               </div>
@@ -391,65 +391,68 @@ ol.vertical{
                             <h4><i class="fa fa-star"></i> SPECIAL UNITS</h4>
                             </div>
                             <div class="well scrollbar scrollbar-info  thin special-unit-body">
-                              <ol id='specialUnitList{{$terminal->destination_id}}' class="special-list">
-                                <li>
-                                    <span class="list-border">
-                                        <div id="item-sp1">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <!--plate number here-->
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <!--remark here -->
-                                                        <i class="badge badge-pill badge-default ">CC</i>
-                                                        <!--/ remark here -->
-                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%;">
-                                                            <i class="fa fa-gear"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu" role="menu">
-                                                            <a id="ondeckBtn1" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</a>
-                                                            <a id="deleteSpBtn1" class="btn btn-menu btn-sm btn-flat btn-block">Remove</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="ondeck-sp1" class="hidden">
-                                            <div class="row">
-                                                <div class="col-xs-12">  
-                                                  <p>Are you sure you want SAMP 123 to be on deck?</p>
-                                                </div>
-                                                <div class="col-xs-12">
-                                                    <div class="pull-right">
-                                                        <form action="" method="POST">
-                                                            {{method_field('PATCH')}}
-                                                            {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn1">NO</a>
-                                                            <button type="submit" class="btn btn-primary btn-xs">YES</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="delete-sp1" class="hidden">
-                                            <div class="row">
-                                                <div class="col-xs-12">  
-                                                  <p>Are you sure you want to <i class="text-red">delete</i> <strong>SAMP 123</strong>?</p>
-                                                </div>
-                                                <div class="col-xs-12">
-                                                    <div class="pull-right">
-                                                        <form method="POST" action="">
-                                                             {{method_field('DELETE')}}
-                                                             {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn1"> NO</a>
-                                                            <button class="btn btn-danger btn-xs">YES</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
+                              <ol id='specialUnitList{{$terminal->destination_name}}' class="special-list">
+                                  {{var_dump($terminal->destination_name)}}
+                                  {{--@foreach($terminal->vanQueue()->where('has_privilege',1)->get() as $specializedVanOnQueue)--}}
+                                      {{--<li>--}}
+                                    {{--<span class="list-border">--}}
+                                        {{--<div id="item-sp1">--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                    {{--<!--plate number here-->--}}
+                                                    {{--{{$specializedVanOnQueue->van->plate_number}}--}}
+                                                    {{--<div class="pull-right">--}}
+                                                        {{--<!--remark here -->--}}
+                                                        {{--<i class="badge badge-pill badge-default ">{{$specializedVanOnQueue->remarks}}</i>--}}
+                                                        {{--<!--/ remark here -->--}}
+                                                        {{--<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%;">--}}
+                                                            {{--<i class="fa fa-gear"></i>--}}
+                                                        {{--</button>--}}
+                                                        {{--<div class="dropdown-menu" role="menu">--}}
+                                                            {{--<a id="ondeckBtn1" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</a>--}}
+                                                            {{--<a id="deleteSpBtn1" class="btn btn-menu btn-sm btn-flat btn-block">Remove</a>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div id="ondeck-sp1" class="hidden">--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                  {{--<p>Are you sure you want {{$specializedVanOnQueue->van->plate_number}} to be on deck?</p>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                    {{--<div class="pull-right">--}}
+                                                        {{--<form action="" method="POST">--}}
+                                                            {{--{{method_field('PATCH')}}--}}
+                                                            {{--{{csrf_field()}}--}}
+                                                            {{--<a class="btn btn-default btn-xs itemSpBtn1">NO</a>--}}
+                                                            {{--<button type="submit" class="btn btn-primary btn-xs">YES</button>--}}
+                                                        {{--</form>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div id="delete-sp1" class="hidden">--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                  {{--<p>Are you sure you want to <i class="text-red">delete</i> <strong>{{$specializedVanOnQueue->van->plate_number}}</strong>?</p>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                    {{--<div class="pull-right">--}}
+                                                        {{--<form method="POST" action="">--}}
+                                                             {{--{{method_field('DELETE')}}--}}
+                                                            {{--{{csrf_field()}}--}}
+                                                            {{--<a class="btn btn-default btn-xs itemSpBtn1"> NO</a>--}}
+                                                            {{--<button class="btn btn-danger btn-xs">YES</button>--}}
+                                                        {{--</form>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</span>--}}
+                                      {{--</li>--}}
+                                  {{--@endforeach--}}
                               </ol>
                             </div>
                           </div>
@@ -651,6 +654,42 @@ ol.vertical{
                         $('#posOption'+queueId).val(response.newDestiQueueCount);
                         $('#queue'+queueId).text(response.newDestiQueueCount);
                     }
+                });
+            });
+
+            //Put to Special Unit
+            $('a[name="moveToSpecialUnitsList"]').on('click',function(){
+                var queueId = $(this).data('val');
+
+                $.ajax({
+                    method:'PATCH',
+                    url:'/moveToSpecialUnit/'+queueId,
+                    data:
+                        {
+                            '_token': '{{csrf_token()}}'
+                        },
+                    success:
+                        function(response) {
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully moved"+response.plateNumber+"to special units",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+                            $('#unit'+queueId).remove();
+                            $('#specialUnitList'+response.destination).load('/listSpecialUnits/'+response.destination);
+                        }
                 });
             });
 
