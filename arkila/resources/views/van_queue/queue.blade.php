@@ -479,15 +479,12 @@ ol.vertical{
   </script>
     <!-- List sortable -->
     <script>
-        $(function()
-        {
+        $(function() {
             //Update Remarks
-            $('button[name="updateRemarksButton"]').on('click',function()
-            {
+            $('button[name="updateRemarksButton"]').on('click',function() {
                 var queueId = $(this).data('val');
 
-                $.ajax(
-                    {
+                $.ajax( {
                         method:'PATCH',
                         url: '/home/vanqueue/'+queueId+'/updateRemarks',
                         data:
@@ -495,8 +492,7 @@ ol.vertical{
                                 '_token': '{{csrf_token()}}',
                                 'remark' : $('#remark'+queueId).val()
                             },
-                        success: function()
-                        {
+                        success: function() {
                             $("#remarkitem"+queueId).hide();
                             $("#item"+queueId).show();
                             $('#badge'+queueId).append($('#remark'+queueId).val());
@@ -580,13 +576,11 @@ ol.vertical{
             });
 
             //Change Destination
-            $('button[name="destBtn"]').on('click',function()
-            {
+            $('button[name="destBtn"]').on('click',function() {
                 var queueId = $(this).data('val');
                 var destId = $('#destOption'+queueId).val();
 
-                $.ajax(
-                {
+                $.ajax({
                     method:'PATCH',
                     url:'/home/vanqueue/changeDestination/'+queueId,
                     data:
@@ -595,8 +589,7 @@ ol.vertical{
                         'destination': destId
                     },
                     success:
-                    function(response)
-                    {
+                    function(response) {
                         $("#destitem"+queueId).hide();
                         $("#item"+queueId).show();
 
@@ -640,20 +633,9 @@ ol.vertical{
                             $(element).text(index+1);
                         });
 
-                        // //Change the queue number
-                        // response.changedOldDestiQueueNumber.forEach(function(OldQueueId){
-                        //     var oldNum = $('#posOption'+OldQueueId).val();
-                        //
-                        //     if(oldNum > response.oldDestiQueueNumber){
-                        //         var updateQueueNum = oldNum - 1;
-                        //         $('#queue'+OldQueueId).text(updateQueueNum);
-                        //         $('#posOption'+OldQueueId).val(updateQueueNum);
-                        //     }
-                        // });
-
 
                         //Change the settings of the old destination of the moved van
-                       $.each($('#queue-list'+destId).children().find($('select[name="changePosition"]')),function(index,element){
+                       $.each($('#queue-list'+destId).children().find($('select[name="changePosition"]')),function(index,element) {
                            var oldQueueNumVal = $(element).val();
                            $(element).empty();
                            for (var i = 1; i <= response.newDestiQueueCount; i++) {
@@ -672,26 +654,19 @@ ol.vertical{
                 });
             });
 
-            function specialUnitChecker()
-            {
-                $.ajax(
-                    {
+            function specialUnitChecker() {
+                $.ajax( {
                         method:'POST',
                         url: '/specialUnitChecker',
-                        data:
-                            {
+                        data: {
                                 '_token': '{{csrf_token()}}'
                             },
-                        success: function(response)
-                        {
-                            if(response[0])
-                            {
+                        success: function(response) {
+                            if(response[0]) {
                                 $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
                             }
-                            else
-                            {
-                                if(response[1])
-                                {
+                            else {
+                                if(response[1]) {
                                     $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
                                 }
                             }
@@ -706,7 +681,7 @@ ol.vertical{
                 var van = $('#van').val();
                 var driver = $('#driver').val();
 
-                if( destination != "" && van != "" && driver != ""){
+                if( destination != "" && van != "" && driver != "") {
                     $.ajax({
                         method:'POST',
                         url: '/home/vanqueue/'+destination+'/'+van+'/'+driver,
@@ -752,20 +727,17 @@ ol.vertical{
         }
       });
 
-        $('#destinationTerminals li').on('click',function(e){
+        $('#destinationTerminals li').on('click',function(e) {
             var terminal = $(e.currentTarget).data('val');
             $('#specialUnitList').load('/listSpecialUnits/'+terminal);
         });
-
-
 
         });
 </script>
 
     @foreach($terminals as $terminal)
     <script>
-          function search{{$terminal->destination_id}}()
-          {
+          function search{{$terminal->destination_id}}() {
                 // Declare variables
                 var input, filter, ol, li, p, i;
                 input = document.getElementById('queueSearch{{$terminal->destination_id}}');
@@ -774,15 +746,11 @@ ol.vertical{
                 li = ol.getElementsByClassName('queue-item');
 
                 // Loop through all list items, and hide those who don't match the search query
-                for (i = 0; i < li.length; i++)
-                {
+                for (i = 0; i < li.length; i++) {
                     p = li[i].getElementsByTagName('p')[0];
-                    if (p.innerHTML.toUpperCase().indexOf(filter) > -1)
-                    {
+                    if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
                         li[i].style.display = "";
-                    }
-                    else
-                    {
+                    } else {
                         li[i].style.display = "none";
                     }
                 }

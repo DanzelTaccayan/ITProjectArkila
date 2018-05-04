@@ -9,6 +9,7 @@ use App\Http\Requests\DriverRequest;
 use PDF;
 use Carbon\Carbon;
 use Image;
+use DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -47,155 +48,129 @@ class DriversController extends Controller
      */
     public function store(DriverRequest $request)
     {
-        $profilePictureName = 'avatar.jpg';
-        if($request->file('profilePicture')){
-            $dateNow = Carbon::now();
-            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
-                $request->file('profilePicture')->getClientOriginalExtension();
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture')) {
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
 
-            Image::make($request->file('profilePicture'))
-                ->resize(300, 300)
-                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
-        }
+                Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+            }
 
-        $createdDriver = Member::create([
-            'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'operator_id' => $request->operator,
-            'middle_name' => $request->middleName,
-            'contact_number' => $request->contactNumber,
-            'role' => 'Driver',
-            'address' => $request->address,
-            'provincial_address' => $request->provincialAddress,
-            'birth_date' => $request->birthDate,
-            'birth_place' => $request->birthPlace,
-            'age' => $request->birthDate,
-            'gender' => $request->gender,
-            'citizenship' => $request->citizenship,
-            'civil_status' => $request->civilStatus,
-            'spouse' => $request->nameOfSpouse,
-            'spouse_birthdate' => $request->spouseBirthDate,
-            'father_name' => $request->fathersName,
-            'father_occupation' => $request->fatherOccupation,
-            'mother_name' => $request->mothersName,
-            'mother_occupation' => $request->motherOccupation,
-            'person_in_case_of_emergency' => $request->contactPerson,
-            'emergency_address' => $request->contactPersonAddress,
-            'emergency_contactno' => $request->contactPersonContactNumber,
-            'SSS' => $request->sss,
-            'license_number' => $request->licenseNo,
-            'expiry_date' => $request->licenseExpiryDate,
-        ]);
-
-        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-        {
-            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-            $createdDriver->addChildren($children);
-            $createdDriver->update([
-                'number_of_children' => sizeof($children)
+            $createdDriver = Member::create([
+                'profile_picture' => $profilePictureName,
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'operator_id' => $request->operator,
+                'middle_name' => $request->middleName,
+                'contact_number' => $request->contactNumber,
+                'role' => 'Driver',
+                'address' => $request->address,
+                'provincial_address' => $request->provincialAddress,
+                'gender' => $request->gender,
+                'person_in_case_of_emergency' => $request->contactPerson,
+                'emergency_address' => $request->contactPersonAddress,
+                'emergency_contactno' => $request->contactPersonContactNumber,
+                'SSS' => $request->sss,
+                'license_number' => $request->licenseNo,
+                'expiry_date' => $request->licenseExpiryDate,
             ]);
+
+            //Add Account for the driver
+            $createdUserDriver = User::create([
+                'first_name' => $createdDriver->first_name,
+                'middle_name' => $createdDriver->middle_name,
+                'last_name' => $createdDriver->last_name,
+                'username' => $createdDriver->first_name[0].$createdDriver->last_name,
+                'password' => Hash::make('driver!@bantrans'),
+                'user_type' => 'Driver',
+                'status' => 'enable'
+            ]);
+
+            $createdDriver->update([
+                'user_id' => $createdUserDriver->id,
+            ]);
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
-        //Add Account for the driver
-        $createdUserDriver = User::create([
-            'first_name' => $createdDriver->first_name,
-            'middle_name' => $createdDriver->middle_name,
-            'last_name' => $createdDriver->last_name,
-            'username' => $createdDriver->first_name[0].$createdDriver->last_name,
-            'password' => Hash::make('driver!@bantrans'),
-            'user_type' => 'Driver',
-            'status' => 'enable'
-        ]);
-
-        $createdDriver->update([
-            'user_id' => $createdUserDriver->id,
-        ]);
 
         return redirect(route('drivers.index'))->with('success', 'Information created successfully');
-        //
     }
 
-
-    public function createFromOperator(Member $operator){
+    public function createFromOperator(Member $operator)
+    {
         return view('drivers.create',compact('operator'));
     }
 
-    public function storeFromOperator(Member $operator, DriverRequest $request){
-        $profilePictureName = 'avatar.jpg';
-        if($request->file('profilePicture')){
-            $dateNow = Carbon::now();
-            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
-                $request->file('profilePicture')->getClientOriginalExtension();
+    public function storeFromOperator(Member $operator, DriverRequest $request)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture')) {
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
 
-            Image::make($request->file('profilePicture'))
-                ->resize(300, 300)
-                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
-        }
+                Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+            }
 
-        $driver = $operator->drivers()->create([
-            'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
-            'contact_number' => $request->contactNumber,
-            'role' => 'Driver',
-            'address' => $request->address,
-            'provincial_address' => $request->provincialAddress,
-            'birth_date' => $request->birthDate,
-            'birth_place' => $request->birthPlace,
-            'age' => $request->birthDate,
-            'gender' => $request->gender,
-            'citizenship' => $request->citizenship,
-            'civil_status' => $request->civilStatus,
-            'spouse' => $request->nameOfSpouse,
-            'spouse_birthdate' => $request->spouseBirthDate,
-            'father_name' => $request->fathersName,
-            'father_occupation' => $request->fatherOccupation,
-            'mother_name' => $request->mothersName,
-            'mother_occupation' => $request->motherOccupation,
-            'person_in_case_of_emergency' => $request->contactPerson,
-            'emergency_address' => $request->contactPersonAddress,
-            'emergency_contactno' => $request->contactPersonContactNumber,
-            'SSS' => $request->sss,
-            'license_number' => $request->licenseNo,
-            'expiry_date' => $request->licenseExpiryDate,
-        ]);
-
-        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-        {
-            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-            $driver->addChildren($children);
-            $driver->update([
-                'number_of_children' => sizeof($children)
+            $driver = $operator->drivers()->create([
+                'profile_picture' => $profilePictureName,
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
+                'contact_number' => $request->contactNumber,
+                'address' => $request->address,
+                'provincial_address' => $request->provincialAddress,
+                'gender' => $request->gender,
+                'person_in_case_of_emergency' => $request->contactPerson,
+                'emergency_address' => $request->contactPersonAddress,
+                'emergency_contactno' => $request->contactPersonContactNumber,
+                'SSS' => $request->sss,
+                'license_number' => $request->licenseNo,
+                'expiry_date' => $request->licenseExpiryDate,
             ]);
+
+            //Add Account for the driver
+            $createdDriverUser = User::create([
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
+                'username' => $driver->first_name[0].$driver->last_name,
+                'password' => Hash::make('driver!@bantrans'),
+                'user_type' => 'Driver',
+                'status' => 'enable'
+            ]);
+
+            $driver->update([
+                'user_id' => $createdDriverUser->id,
+            ]);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
-
-        //Add Account for the driver
-        $createdDriverUser = User::create([
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
-            'username' => $driver->first_name[0].$driver->last_name,
-            'password' => Hash::make('driver!@bantrans'),
-            'user_type' => 'Driver',
-            'status' => 'enable'
-        ]);
-
-        $driver->update([
-            'user_id' => $createdDriverUser->id,
-        ]);
 
         return redirect(route('operators.showProfile',[$operator->member_id]));
     }
 
-    public function createFromVan(Van $vanNd){
-        if(session()->get('type') == 'createFromIndex'){
+    public function createFromVan(Van $vanNd)
+    {
+        if(session()->get('type') == 'createFromIndex') {
             session(['vanBack'=> route('vans.index')]);
-        }else{
+        } else {
             session(['vanBack'=> route('operators.showProfile',[session()->get('type')])]);
         }
         session()->forget('type');
@@ -203,88 +178,77 @@ class DriversController extends Controller
         return view('drivers.create',compact('vanNd'));
     }
 
-    public function storeFromVan(Van $vanNd,DriverRequest $request){
-        if(count($vanNd->driver)){
-            $vanNd->members()->detach($vanNd->driver->first()->member_id);
-        }
+    public function storeFromVan(Van $vanNd,DriverRequest $request)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            if(count($vanNd->driver)) {
+                $vanNd->members()->detach($vanNd->driver->first()->member_id);
+            }
 
-        $profilePictureName = 'avatar.jpg';
-        if($request->file('profilePicture')){
-            $dateNow = Carbon::now();
-            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
-                $request->file('profilePicture')->getClientOriginalExtension();
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture')) {
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
 
-            Image::make($request->file('profilePicture'))
-                ->resize(300, 300)
-                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
-        }
+                Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
+            }
 
-        $driver = Member::create([
-            'profile_picture' => $profilePictureName,
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
-            'contact_number' => $request->contactNumber,
-            'role' => 'Driver',
-            'operator_id' => $vanNd->operator()->first()->member_id,
-            'address' => $request->address,
-            'provincial_address' => $request->provincialAddress,
-            'birth_date' => $request->birthDate,
-            'birth_place' => $request->birthPlace,
-            'age' => $request->birthDate,
-            'gender' => $request->gender,
-            'citizenship' => $request->citizenship,
-            'civil_status' => $request->civilStatus,
-            'spouse' => $request->nameOfSpouse,
-            'spouse_birthdate' => $request->spouseBirthDate,
-            'father_name' => $request->fathersName,
-            'father_occupation' => $request->fatherOccupation,
-            'mother_name' => $request->mothersName,
-            'mother_occupation' => $request->motherOccupation,
-            'person_in_case_of_emergency' => $request->contactPerson,
-            'emergency_address' => $request->contactPersonAddress,
-            'emergency_contactno' => $request->contactPersonContactNumber,
-            'SSS' => $request->sss,
-            'license_number' => $request->licenseNo,
-            'expiry_date' => $request->licenseExpiryDate,
-        ]);
-
-        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-        {
-            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-            $driver->addChildren($children);
-            $driver->update([
-                'number_of_children' => sizeof($children)
+            $driver = Member::create([
+                'profile_picture' => $profilePictureName,
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
+                'contact_number' => $request->contactNumber,
+                'role' => 'Driver',
+                'operator_id' => $vanNd->operator()->first()->member_id,
+                'address' => $request->address,
+                'provincial_address' => $request->provincialAddress,
+                'gender' => $request->gender,
+                'person_in_case_of_emergency' => $request->contactPerson,
+                'emergency_address' => $request->contactPersonAddress,
+                'emergency_contactno' => $request->contactPersonContactNumber,
+                'SSS' => $request->sss,
+                'license_number' => $request->licenseNo,
+                'expiry_date' => $request->licenseExpiryDate,
             ]);
+
+            $vanNd->members()->attach($driver);
+
+            //Add Account for the driver
+            $createdDriver = User::create([
+                'last_name'=> $request->lastName,
+                'first_name' => $request->firstName,
+                'middle_name' => $request->middleName,
+                'username' => $driver->first_name[0].$driver->last_name,
+                'password' => Hash::make('driver!@bantrans'),
+                'user_type' => 'Driver',
+                'status' => 'enable',
+                'model_id' => $vanNd->vanModel->model_id,
+            ]);
+
+            $driver->update([
+                'user_id' => $createdDriver->id,
+            ]);
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-
-
-        $vanNd->members()->attach($driver);
-
-        //Add Account for the driver
-        $createdDriver = User::create([
-            'last_name'=> $request->lastName,
-            'first_name' => $request->firstName,
-            'middle_name' => $request->middleName,
-            'username' => $driver->first_name[0].$driver->last_name,
-            'password' => Hash::make('driver!@bantrans'),
-            'user_type' => 'Driver',
-            'status' => 'enable',
-            'model_id' => $vanNd->vanModel->model_id,
-        ]);
-        
-         $driver->update([
-            'user_id' => $createdDriver->id,
-        ]);
-        if(session()->get('vanBack') && session()->get('vanBack') == route('operators.showProfile',[$vanNd->operator->first()->member_id])){
+        if(session()->get('vanBack') && session()->get('vanBack') == route('operators.showProfile',[$vanNd->operator->first()->member_id])) {
             return redirect(route('operators.showProfile',[$vanNd->operator->first()->member_id]));
-        }else{
+        } else {
             return redirect(route('vans.index'));
         }
 
     }
+
     /**
      * Display the specified resource.
      *
@@ -294,7 +258,6 @@ class DriversController extends Controller
     public function show(Member $driver)
     {
         return view('drivers.show',compact('driver'));
-        //
     }
 
     /**
@@ -307,8 +270,6 @@ class DriversController extends Controller
     {
         $operators = Member::allOperators()->where('status','Active')->get();
         return view('drivers.edit', compact('driver', 'operators'));
-
-        //
     }
 
     /**
@@ -320,141 +281,89 @@ class DriversController extends Controller
      */
     public function update(DriverRequest $request, Member $driver)
     {
+        // Start transaction!
+        DB::beginTransaction();
+        try {
 
             if (request('operator') !== null && $request->operator != $driver->operator_id) {
-                if($driver->van()->first()){
+                if($driver->van()->first()) {
                     $driver->archivedVan()->attach($driver->van()->first()->plate_number);
                     $driver->van()->detach($driver->van()->first()->plate_number);
                 }
                 $driver->archivedOperator()->attach($driver->operator_id);
             }
-            $dateNow = Carbon::now()->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-        $profilePictureName = 'avatar.jpg';
-        if($request->file('profilePicture'))
-        {
-            if(File::exists(public_path('uploads/profilePictures/'.$driver->profile_picture)))
-            {
+            $profilePictureName = 'avatar.jpg';
+            if($request->file('profilePicture')) {
+                if(File::exists(public_path('uploads/profilePictures/'.$driver->profile_picture))) {
+                    File::delete(public_path('uploads/profilePictures/'.$driver->profile_picture));
+                }
 
-                File::delete(public_path('uploads/profilePictures/'.$driver->profile_picture));
+                $dateNow = Carbon::now();
+                $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
+                    $request->file('profilePicture')->getClientOriginalExtension();
+
+                Image::make($request->file('profilePicture'))
+                    ->resize(300, 300)
+                    ->save( public_path('uploads/profilePictures/'.$profilePictureName));
             }
-
-            $dateNow = Carbon::now();
-            $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
-                $request->file('profilePicture')->getClientOriginalExtension();
-
-            Image::make($request->file('profilePicture'))
-                ->resize(300, 300)
-                ->save( public_path('uploads/profilePictures/'.$profilePictureName));
-        }
 
             $driver->update([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
                 'operator_id' => $request->operator,
-                'middle_name' => $request->middleName,
                 'contact_number' => $request->contactNumber,
-                'role' => 'Driver',
                 'address' => $request->address,
                 'provincial_address' => $request->provincialAddress,
-                'birth_date' => $request->birthDate,
-                'birth_place' => $request->birthPlace,
-                'age' => $request->birthDate,
-                'gender' => $request->gender,
-                'citizenship' => $request->citizenship,
-                'civil_status' => $request->civilStatus,
-                'spouse' => $request->nameOfSpouse,
-                'spouse_birthdate' => $request->spouseBirthDate,
-                'father_name' => $request->fathersName,
-                'father_occupation' => $request->fatherOccupation,
-                'mother_name' => $request->mothersName,
-                'mother_occupation' => $request->motherOccupation,
                 'person_in_case_of_emergency' => $request->contactPerson,
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
                 'SSS' => $request->sss,
                 'license_number' => $request->licenseNo,
-                'expiry_date' => $request->licenseExpiryDate,
-                'updated_at' => $dateNow,
-
+                'expiry_date' => $request->licenseExpiryDate
             ]);
 
-        if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-            count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-        {
-            $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-            $driver->children()->delete();
-            $driver->addChildren($children);
-            $driver->update([
-                'number_of_children' => sizeof($children)
-            ]);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-
-        if(session()->get('opLink')){
+        if(session()->get('opLink')) {
             $routeOP = session()->get('opLink');
             session()->forget('opLink');
             return redirect($routeOP);
 
-        }
-        else{
+        } else {
             return redirect(route('drivers.index'));
         }
-
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Driver  $driver
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Member $driver)
-    {
-        $driver->delete();
-    	return back();
-
-    }
-
-    private function arrayChecker($array)
-    {
-        $result = [];
-
-        if (is_array($array) || is_object($array))
-        {
-            foreach($array as $arrayContent)
-            {
-                if(!is_null($arrayContent))
-                {
-                    array_push($result,$arrayContent);
-                }
-            }
-        }
-
-        return $result;
     }
 
     public function archiveDriver(Member $driver)
     {
-        if($driver->operator_id)
-        {
-            $driver->archivedOperator()->attach($driver->operator_id);
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            if($driver->operator_id) {
+                $driver->archivedOperator()->attach($driver->operator_id);
+                $driver->update([
+                    'operator_id' => null
+                ]);
+            }
+
+            if($driver->van()->first()) {
+                $driver->archivedVan()->attach($driver->van()->first()->plate_number);
+                $driver->van()->detach($driver->van()->first()->plate_number);
+            }
+
             $driver->update([
-               'operator_id' => null
+                'status' => 'Inactive',
             ]);
-        }
 
-        if($driver->van()->first())
-        {
-            $driver->archivedVan()->attach($driver->van()->first()->plate_number);
-            $driver->van()->detach($driver->van()->first()->plate_number);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
-        $driver->update([
-            'status' => 'Inactive',
-        ]);
 
         return back();
     }
@@ -472,17 +381,23 @@ class DriversController extends Controller
         $date = Carbon::now();
         $pdf = PDF::loadView('pdf.perDriver', compact('driver', 'date'));
         return $pdf->stream("$driver->last_name"."$driver->first_name-Bio-Data.pdf");
-
     }
 
     public function restoreArchivedDriver(Member $archivedDriver)
     {
-        $archivedDriver->update([
-            'status' => 'Active',
-            'date_archived' => null
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $archivedDriver->update([
+                'status' => 'Active',
+                'date_archived' => null
+            ]);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
 
         return back();
     }
-
 }
