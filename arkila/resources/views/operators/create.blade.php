@@ -1,19 +1,8 @@
 @extends('layouts.form_lg') 
 @section('title', 'Operator Registration')
-@section('links')
-@parent
-<style>
-    th{
-        width:200px;
-        padding:20px;
-    }
-    
-</style>
-@endsection
 @section('form-id','regForm')
 @section('form-action',route('operators.store'))
 @section('form-body')
-
   <div class="margin-side-10">  
     <div class="box box-primary with-shadow">
       <div class="box-header with-border text-center">
@@ -26,8 +15,8 @@
       </div>
       <div class="box-body">
         <div class="padding-side-15"> 
-          <h4 class="form-heading">Personal Information</h4>
-          <table class="table table-bordered table-striped form-border">
+          <h4 class="form-heading-blue">Personal Information</h4>
+          <table class="table table-bordered table-striped form-table">
                 <tbody>
                   <tr>
                     <th>Last Name <span class="text-red">*</span></th>
@@ -44,7 +33,7 @@
                   <tr>
                     <th>Contact Number <span class="text-red">*</span></th>
                     <td>  
-                      <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" val-phone required>
+                      <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" {{-- data-inputmask='"mask": "999-999-9999"' data-mask --}} required data-parsley-errors-container="#errContactNumber" val-phone required>
                     </td>
                   </tr>
                   <tr>
@@ -90,8 +79,8 @@
                   </tr>
                 </tbody>
           </table>
-          <h4 class="form-heading">Contact Person</h4>
-          <table class="table table-bordered table-striped form-border">
+          <h4 class="form-heading-blue">Contact Person</h4>
+          <table class="table table-bordered table-striped form-table">
             <tbody>
               <tr>
                 <th>Name <span class="text-red">*</span></th>

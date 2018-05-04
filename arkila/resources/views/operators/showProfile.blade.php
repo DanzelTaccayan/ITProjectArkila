@@ -3,8 +3,8 @@
 @section('links')
 @parent
 <style>
-    th{
-        width:80px;
+    .info-table th{
+        width:150px;
     }
     .profile-btn-group{
         padding-left:  25px;
@@ -26,8 +26,8 @@
                         <div class="profile-side">   
                             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
                             <div class="profile-btn-group"> 
-                            <a href="{{route('operators.edit',[$operator->member_id])}}" class="btn btn-block btn-primary btn-sm"><b>Update Information</b></a>
-                            <a href="{{route('archive.vanDriver',[$operator->member_id])}}" class="btn btn-block btn-default btn-sm"><b>Archive</b></a>
+                            <a href="{{route('operators.edit',[$operator->member_id])}}" class="btn btn-block btn-info btn-sm"><strong>Update Information</strong></a>
+                            <a href="{{route('archive.vanDriver',[$operator->member_id])}}" class="btn btn-block btn-default btn-sm"><strong>Archive</strong></a>
                             </div>
                             <hr>    
                             <div class="" style="border: 1px solid lightgray; margin: 5px;">
@@ -37,11 +37,14 @@
                                     <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill  pull-right">{{count($operator->drivers)}}</span></a></li>
                                 </ul>
                             </div>
+                            <div class="profile-btn-group">
+                                <a href="#" class="btn btn-block btn-primary btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
-                            <div class="tab-content">
+                            <div class="tab-content" style="height: 550px;">
                                 <h3 class="profile-username"><strong>{{trim(strtoupper($operator->full_name))}}</strong></h3> 
                                 <div class="active tab-pane" id="info">
                                     <div style="margin-bottom: 3%;">
@@ -49,7 +52,7 @@
                                         <h4>Personal Information</h4> 
                                     </div>
 
-                                    <table class="table table-bordered table-striped table-responsive">
+                                    <table class="table table-bordered table-striped table-responsive info-table">
                                         <tbody>
                                             <tr>
                                                 <th>Contact Number</th>
@@ -72,7 +75,7 @@
                                                 <td>{{$operator->SSS}}</td>
                                             </tr>
                                             <tr>
-                                                <th>License No</th>
+                                                <th>License No.</th>
                                                 <td>{{$operator->license_number}}</td>
                                             </tr>
                                             <tr>
@@ -109,7 +112,7 @@
                                                 <th>Plate Number</th>
                                                 <th>Driver</th>
                                                 <th>Model</th>
-                                                <th style="width:10px">Seating Capacity</th>
+                                                <th>Seating Capacity</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -118,7 +121,7 @@
                                             <tr>
                                                 <td>{{$van->plate_number}}</td>
                                                 <td>{{$van->driver()->first()->full_name ?? $van->driver()->first()}}</td>
-                                                <td>{{$van->vanmodel->description}}</td>
+                                                <td>{{-- {{$van->vanmodel->description}} --}}</td>
                                                 <td class="text-right" style="width: 10px;">{{$van->seating_capacity}}</td>
                                                 <td>
                                                     <div class="text-center">
