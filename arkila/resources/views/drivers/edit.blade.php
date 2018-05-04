@@ -48,37 +48,37 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('contactNumber') ?? $driver->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-trigger="keyup" data-parsley-errors-container="#errContactNumber" val-phone required>
+                                <input value="{{old('contactNumber') ?? $driver->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactNumber" val-phone required>
                             </td>
                         </tr>
                         <tr>
                             <th>Address <span class="text-red">*</span></th>
                             <td>
-                                <input id="addressO" value="{{old('address') ?? $driver->address }}" name="address" type="text" class="form-control" placeholder="Address" data-parsley-trigger="keyup" val-address required>
+                                <input id="addressO" value="{{old('address') ?? $driver->address }}" name="address" type="text" class="form-control" placeholder="Address" val-address required>
                             </td>
                         </tr>
                         <tr>
                             <th>Provincial Address <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('provincialAddress') ?? $driver->provincial_address }}" id="provincialAddress" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" data-parsley-trigger="keyup" val-address required>
+                                <input value="{{old('provincialAddress') ?? $driver->provincial_address }}" id="provincialAddress" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" val-address required>
                             </td>
                         </tr>
                         <tr>
                             <th>SSS No.</th>
                             <td>
-                                <input id="sssO" name="sss" value="{{  old('sss') ?? $driver->SSS }}" type="text" class="form-control" placeholder="SSS No."  data-parsley-trigger="keyup" val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                                <input id="sssO" name="sss" value="{{  old('sss') ?? $driver->SSS }}" type="text" class="form-control" placeholder="SSS No."  val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
                             </td>
                         </tr>
                         <tr>
                             <th>License No. <span class="text-red">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required data-inputmask='"mask": "A99-99-999999"' data-mask  data-parsley-trigger="keyup">
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required data-inputmask='"mask": "A99-99-999999"' data-mask >
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required  data-parsley-trigger="keyup">
+                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required >
                             </td>
                         </tr>
                     </tbody>
@@ -89,19 +89,19 @@
                         <tr>
                             <th>Name <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPerson') ?? $driver->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname required  data-parsley-trigger="keyup">
+                                <input value="{{ old('contactPerson') ?? $driver->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname required >
                             </td>
                         </tr>
                         <tr>
                             <th>Address <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonAddress') ?? $driver->emergency_address }}" id="addressO" name="contactPersonAddress" type="text" class="form-control" val-address required  data-parsley-trigger="keyup">
+                                <input value="{{ old('contactPersonAddress') ?? $driver->emergency_address }}" id="addressO" name="contactPersonAddress" type="text" class="form-control" val-address required >
                             </td>
                         </tr>
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $driver->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required  data-parsley-trigger="keyup">
+                                <input value="{{ old('contactPersonContactNumber') ?? $driver->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required >
                             </td>
                         </tr>
                     </tbody>
