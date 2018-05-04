@@ -41,6 +41,10 @@
                     <td><input value="{{old('address')}}" name="address" type="text" class="form-control" placeholder="Address" val-address  required></td>
                   </tr>
                   <tr>
+                    <th>Provinicial Address <span class="text-red">*</span></th>
+                    <td><input value="{{old('provincialAddress')}}" name="provincialAddress" type="text" class="form-control" placeholder="Provincial Address" val-address  required></td>
+                  </tr>
+                  <tr>
                     <th>Gender <span class="text-red">*</span></th>
                     <td>
                       <div class="radio">
