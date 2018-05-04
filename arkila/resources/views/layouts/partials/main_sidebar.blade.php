@@ -7,8 +7,8 @@
                 <img src={{ URL::asset('img/bantrans-logo.png') }} class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-              <p>Ban Trans - Admin</p>
-              <p>UV Express</p>
+              <p>Admin</p>
+              <small>Main Terminal</small>
             </div>
         </div>
         <!-- /.search form -->

@@ -4,80 +4,82 @@
 @section('content')
 @if(session()->get('opLink')) {{ session()->forget('opLink') }} 
 @endif
-<div class="box">
-    <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
-       <div class="table-responsive">
-        <div class="col-md-6">
-            <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>
-            <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
-        </div>
-        <table id="driverList" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Operator</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+<div class="padding-side-5">   
+    <div class="box">
+        <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
+            <div class="table-responsive">
+                 <div class="col-md-6">
+                    <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>
+                    <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
+                </div>
+                <table id="driverList" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Operator</th>
+                            <th>Name</th>
+                            <th>Contact Number</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
-                <tr>
-                    <th>{{$driver->member_id}}</th>
-                    <td>{{trim(strtoupper($driver->operator->full_name)) ?? null}}</td>
-                    <td>{{trim(strtoupper($driver->full_name))}}</td>
-                    <td>{{$driver->contact_number}}</td>
-                    <td>
-                        <div class="text-center">
-                            <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                            
-                            <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-outline-secondary btn-sm"><i class="fa fa-pencil-square-o"></i> EDIT</a>
-                            
-                            <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
-                        </div>
-                        <!-- /.text-->
-                    </td>
-                    <!-- Modal for Delete-->
-                    <div class="modal fade" id="{{'deleteWarning'.$driver->member_id}}">
-                        <div class="modal-dialog">
-                            <div class="col-md-offset-2 col-md-8">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title"> Confirm</h4>
-                                    </div>
-                                    <div class="modal-body row" style="margin: 0% 1%;">
-                                            <h1><i class="fa fa-exclamation-triangle pull-left text-yellow">  </i></h1>
-                                            <p>Are you sure you want to delete "{{trim(strtoupper($driver->full_name))}}"?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
-                                            {{csrf_field()}} {{method_field('PATCH')}}
-
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="submit" name="driverArc" value="Arch " class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </div>
+                        @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
+                        <tr>
+                            <th>{{$driver->member_id}}</th>
+                            <td>{{trim(strtoupper($driver->operator->full_name)) ?? null}}</td>
+                            <td>{{trim(strtoupper($driver->full_name))}}</td>
+                            <td>{{$driver->contact_number}}</td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                    
+                                    <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-outline-secondary btn-sm"><i class="fa fa-pencil-square-o"></i> EDIT</a>
+                                    
+                                    <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                 </div>
-                                <!-- /.modal-content -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
+                                <!-- /.text-->
+                            </td>
+                            <!-- Modal for Delete-->
+                            <div class="modal fade" id="{{'deleteWarning'.$driver->member_id}}">
+                                <div class="modal-dialog">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-red">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title"> Confirm</h4>
+                                            </div>
+                                            <div class="modal-body row" style="margin: 0% 1%;">
+                                                    <h1><i class="fa fa-exclamation-triangle pull-left text-yellow">  </i></h1>
+                                                    <p>Are you sure you want to delete "{{trim(strtoupper($driver->full_name))}}"?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
+                                                    {{csrf_field()}} {{method_field('PATCH')}}
 
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                    <button type="submit" name="driverArc" value="Arch " class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- /.modal -->
+
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.box-body -->
     </div>
-    <!-- /.box-body -->
-</div>
-<!-- /.box-->
+    <!-- /.box-->
 </div>
 
 @stop 
