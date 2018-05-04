@@ -189,7 +189,8 @@ class VanQueueController extends Controller
             $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
             $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
             $vanQueueArr['newDestiQueueCount'] = $queueNum;
-            $vanQueueArr['oldDestiQueueNumber'] = $vanOnQueue->queue_number;
+            $vanQueueArr['changedOldDestiQueueNumber'] = $vanOnQueue->queue_number;
+            $vanQueueArr['oldDestiId'] = $vanOnQueue->destination_id;
             $vanQueueArr['oldDestiQueue'] = [];
 
             foreach( $queue as $vanOnQueueObj)
@@ -456,19 +457,5 @@ class VanQueueController extends Controller
                 'remarks' => NULL,
             ]);
         }
-    }
-
-    public function listQueueNumbers(Destination $terminal)
-    {
-        $queueArr = [];
-        $queue = $terminal->vanQueue()->whereNotNull('queue_number')->get();
-
-        foreach($queue as $vanOnQueueObj){
-            array_push($queueArr,[
-                'value' =>  $vanOnQueueObj->queue_number,
-                'text' => $vanOnQueueObj->queue_number
-            ]);
-        }
-        return $queueArr;
     }
 }

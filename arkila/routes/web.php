@@ -176,7 +176,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/vanqueue', 'VanQueueController@updateVanQueue')->name('vanqueue.updateVanQueue');
      Route::patch('/putOnDeck/{vanOnQueue}','VanQueueController@putOnDeck')->name('vanqueue.putOnDeck');
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
-     Route::get('/listQueueNumbers/{terminal}','TripsController@listQueueNumbers')->name('vanqueue.listQueueNumbers');
 
      /* Transactions(Ticket) */
     Route::resource('/home/transactions', 'TransactionsController',[

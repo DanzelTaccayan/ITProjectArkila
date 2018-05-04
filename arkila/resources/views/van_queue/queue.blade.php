@@ -290,7 +290,7 @@ ol.vertical{
                                     <li id="unit{{$vanOnQueue->van_queue_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
-                                            <p  id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
+                                            <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
                                         </div>
                                         <div class=item id="item{{$vanOnQueue->van_queue_id}}">
                                           <div  class="row">
@@ -391,7 +391,7 @@ ol.vertical{
                             <h4><i class="fa fa-star"></i> SPECIAL UNITS</h4>
                             </div>
                             <div class="well scrollbar scrollbar-info  thin special-unit-body">
-                              <ol id='specialUnitList' class="special-list">
+                              <ol id='specialUnitList{{$terminal->destination_id}}' class="special-list">
                               </ol>
                             </div>
                           </div>
@@ -414,8 +414,6 @@ ol.vertical{
 
 @section('scripts')
   @parent
-
-  
   <script src="{{ URL::asset('/jquery/bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
   <script src="{{ URL::asset('/jquery/jquery-sortable.js') }}"></script>
   <script>
@@ -566,21 +564,34 @@ ol.vertical{
                         $('#posOption'+queueId).empty();
 
                         //Change the settings of the old destination of the moved van
-                        response.oldDestiQueue.forEach(function(OldQueueId){
-                            var oldNum = $('#posOption'+OldQueueId).val();
-                            $('#posOption'+OldQueueId).empty();
+                        $.each($('#queue-list'+response.oldDestiId).children().find($('select[name="changePosition"]')),function(index,element){
+                            var oldQueueNumVal = index+1;
 
-                            for(var i = 1; i <= response.oldDestiQueueCount; i++){
+                            $(element).empty();
+
+                            for (var i = 1; i <= response.changedOldDestiQueueNumber; i++) {
                                 var option = $('<option></option>').attr("value", i).text(i);
-                                $('#posOption'+OldQueueId).append(option);
+                                $(element).append(option);
                             }
 
-                            if(oldNum > response.oldDestiQueueNumber){
-                                var updateQueueNum = oldNum - 1;
-                                $('#queue'+OldQueueId).text(updateQueueNum);
-                                $('#posOption'+OldQueueId).val(updateQueueNum);
-                            }
+                            $(element).val(oldQueueNumVal);
                         });
+
+                        // change the queue numbers of the vans of the past destination
+                        $.each($('#queue-list'+response.oldDestiId).children().find($('p[name="queueIndicator"]')), function(index,element){
+                            $(element).text(index+1);
+                        });
+
+                        // //Change the queue number
+                        // response.changedOldDestiQueueNumber.forEach(function(OldQueueId){
+                        //     var oldNum = $('#posOption'+OldQueueId).val();
+                        //
+                        //     if(oldNum > response.oldDestiQueueNumber){
+                        //         var updateQueueNum = oldNum - 1;
+                        //         $('#queue'+OldQueueId).text(updateQueueNum);
+                        //         $('#posOption'+OldQueueId).val(updateQueueNum);
+                        //     }
+                        // });
 
 
                         //Change the settings of the old destination of the moved van
