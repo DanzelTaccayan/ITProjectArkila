@@ -27,7 +27,7 @@
                 </a>
             </li>
            <li class="{{ Request::is('home/choose-terminal') ? 'active' : '' }}">
-                <a href="{{ route('drivermodule.report.driverChooseDestination') }}">
+                <a href="{{ route('drivermodule.createReport') }}">
                     <i class="fa fa-plus"></i> <span>Create Report</span>
                 </a>
             </li>

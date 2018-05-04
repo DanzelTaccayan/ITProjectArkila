@@ -87,7 +87,7 @@ ol.vertical{
 .rectangle-list span:hover{
 }   
 
-.queuenum a{
+.queuenum p{
     counter-increment: li;
     position: absolute; 
     left: -2.5em;
@@ -290,7 +290,7 @@ ol.vertical{
                                     <li id="unit{{$vanOnQueue->van_queue_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
-                                            <a  id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</a>
+                                            <p  id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
                                         </div>
                                         <div class=item id="item{{$vanOnQueue->van_queue_id}}">
                                           <div  class="row">
