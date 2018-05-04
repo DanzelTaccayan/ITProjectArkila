@@ -702,8 +702,7 @@ input:checked+.slider:before {
   margin-right: 25%;
   margin-left: 25%;
 }
-
-.form-heading{
+.form-heading-blue{
   background: #1f94d9;
   padding: 10px;
   margin: 0;
@@ -711,6 +710,24 @@ input:checked+.slider:before {
   margin-right: 250px;
 }
 
-.form-border{
+.form-heading-orange{
+  background: #f39c12;
+  padding: 10px;
+  margin: 0;
+  color: white;
+  margin-right: 250px;
+}
+
+.form-table{
   border: 2px solid #dddddd;
+}
+.form-table th{
+    width:200px;
+    padding:20px;
+}
+.name-heading{
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+  margin-bottom: 20px;
 }

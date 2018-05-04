@@ -1,17 +1,5 @@
 @extends('layouts.form_lg') 
 @section('title', 'Driver Registration')
-@section('links')
-@parent
-<style>
-    th{
-        width:200px;
-        padding:20px;
-    }
-    .form-heading{
-        background: #ffb849;
-    }
-</style>
-@endsection
 @section('form-id', 'regForm')
 
 @if ( isset($operator) )
@@ -43,8 +31,8 @@
         </div>
         <div class="box-body">
             <div class="padding-side-15">
-                <h4 class="form-heading">Personal Information</h4>
-                <table class="table table-bordered table-striped form-border">
+                <h4 class="form-heading-orange">Personal Information</h4>
+                <table class="table table-bordered table-striped form-table">
                     <tbody>
                             @if(isset($operator))
                                 <tr>
@@ -183,9 +171,9 @@
                     </tbody>
                 </table>
 
-                <h4 class="form-heading">Contact Person</h4>
+                <h4 class="form-heading-orange">Contact Person</h4>
 
-                <table class="table table-bordered table-striped form-border">
+                <table class="table table-bordered table-striped form-table">
                     <tbody>
                         <tr>
                             <th>Name <span class="text-red">*</span></th>
