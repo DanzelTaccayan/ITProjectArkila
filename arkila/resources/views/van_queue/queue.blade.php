@@ -562,26 +562,40 @@ ol.vertical{
                             stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                         });
 
+                        $('#unit'+queueId).appendTo($('#queue-list'+destId));
+                        $('#posOption'+queueId).empty();
+
+                        //Change the settings of the old destination of the moved van
                         response.oldDestiQueue.forEach(function(OldQueueId){
+                            var oldNum = $('#posOption'+OldQueueId).val();
+                            $('#posOption'+OldQueueId).empty();
+
                             for(var i = 1; i <= response.oldDestiQueueCount; i++){
                                 var option = $('<option></option>').attr("value", i).text(i);
                                 $('#posOption'+OldQueueId).append(option);
                             }
 
-                            if($('#posOption'+OldQueueId).val() > response.oldDestiQueueNumber){
-                                var updateQueueNum = $('#posOption'+OldQueueId).val() - 1;
+                            if(oldNum > response.oldDestiQueueNumber){
+                                var updateQueueNum = oldNum - 1;
                                 $('#queue'+OldQueueId).text(updateQueueNum);
                                 $('#posOption'+OldQueueId).val(updateQueueNum);
                             }
                         });
 
-                        $('#unit'+queueId).appendTo($('#queue-list'+destId));
-                        $('#posOption'+queueId).empty();
 
-                        for (var i = 1; i <= response.newDestiQueueCount; i++) {
-                            var option = $('<option></option>').attr("value", i).text(i);
-                            $('#posOption'+queueId).append(option);
-                        }
+                        //Change the settings of the old destination of the moved van
+                       $.each($('#queue-list'+destId).children().find($('select[name="changePosition"]')),function(index,element){
+                           var oldQueueNumVal = $(element).val();
+                           $(element).empty();
+                           for (var i = 1; i <= response.newDestiQueueCount; i++) {
+                               var option = $('<option></option>').attr("value", i).text(i);
+                               $(element).append(option);
+                           }
+
+                           $(element).val(oldQueueNumVal);
+                       });
+
+
 
                         $('#posOption'+queueId).val(response.newDestiQueueCount);
                         $('#queue'+queueId).text(response.newDestiQueueCount);
