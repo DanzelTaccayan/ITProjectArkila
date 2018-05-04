@@ -107,9 +107,10 @@ class VanQueueController extends Controller
         $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
 
         $vanCount = VanQueue::whereNotNull('queue_number')->count();
-        $responseArr = [];
+        $responseArr = [[],'beingReplacedId'=> $beingReplacedVal];
+
         $this->validate(request(),[
-            'value' => 'required|digits_between:1,'.$vanCount,
+            'new_queue_num' => 'required|digits_between:1,'.$vanCount,
         ]);
 
         for($i = 0,$n = 1; $i < count($queue) ; $i++,$n++)
@@ -140,7 +141,7 @@ class VanQueueController extends Controller
                     'queue_number' => $queueNum
                 ]);
 
-                array_push($responseArr,[
+                array_push($responseArr[0],[
                 'vanId' => $vanQueue->van_queue_id,
                 'queueNumber' => $vanQueue->queue_number
             ]);
@@ -166,7 +167,7 @@ class VanQueueController extends Controller
                     'queue_number' => $queueNum
                 ]);
 
-                array_push($responseArr,[
+                array_push($responseArr[0],[
                     'vanId' => $vanQueue->van_queue_id,
                     'queueNumber' => $vanQueue->queue_number
                 ]);
@@ -181,32 +182,38 @@ class VanQueueController extends Controller
         $this->validate(request(),[
             'destination' => 'required|exists:destination,destination_id'
         ]);
+        $vanQueueArr = [];
 
         if(request('destination') != $vanOnQueue->destination_id)
         {
             $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
             $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+            $vanQueueArr['newDestiQueueCount'] = $queueNum;
+            $vanQueueArr['oldDestiQueueNumber'] = $vanOnQueue->queue_number;
+            $vanQueueArr['oldDestiQueue'] = [];
 
             foreach( $queue as $vanOnQueueObj)
             {
-                if($vanOnQueueObj->van_queue_id	 == $vanOnQueueObj->van_queue_id || $vanOnQueueObj->queue_number < $vanOnQueueObj->queue_number )
-                {
-                    continue;
-                }
-                else
+                if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
                 {
                     $vanOnQueueObj->update([
                         'queue_number' => ($vanOnQueueObj->queue_number)-1
                     ]);
+                    array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
                 }
+
             }
 
             $vanOnQueue->update([
                 'destination_id' => request('destination'),
                 'queue_number' => $queueNum
             ]);
+
+            $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
+
+            return response()->json($vanQueueArr);
         }
-        return 'success';
+        return 'Destination not Updated';
     }
 
     public function updateRemarks(VanQueue $vanOnQueue)

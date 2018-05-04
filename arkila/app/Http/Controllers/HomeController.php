@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Ticket;
 use App\Destination;
 use App\Feature;
-use App\Terminal;
 use App\User;
 use App\Van;
 use App\Member;
@@ -42,11 +41,11 @@ class HomeController extends Controller
 
     public function settings(){
         $fees = Fee::latest()->get();
-        $terminalsFee = Destination::all();
+        $terminals = Destination::allTerminal()->get();
         $tickets = Ticket::all();
         $features = Feature::all();
 
-        return view('settings.index', compact('fees','tickets','features','terminalsFee'));
+        return view('settings.index', compact('fees','tickets','features','terminals'));
     }
 
     public function usermanagement()

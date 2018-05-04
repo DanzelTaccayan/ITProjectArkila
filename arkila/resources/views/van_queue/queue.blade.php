@@ -302,13 +302,13 @@ ol.vertical{
                                                   <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%">
                                                     <i class="fa fa-gear"></i>
                                                   </button>
-                                                  <ul class="dropdown-menu" role="menu">
-                                                    <li><button id="remarkBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-asterisk"></i> Update Remark</button></li>
-                                                    <li><button id="posBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-move"></i> Change Position</button></li>
-                                                    <li><button id="destBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-map-marker"></i> Change Destination</button></li>
-                                                    <li><button class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</button></li>
-                                                    <li><button id="deleteBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-trash"></i> Remove</button></li>
-                                                  </ul>
+                                                  <div class="dropdown-menu" role="menu">
+                                                    <a id="remarkBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-asterisk"></i> Update Remark</a>
+                                                    <a id="posBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-move"></i> Change Position</a>
+                                                    <a id="destBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-map-marker"></i> Change Destination</a>
+                                                    <a class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</a>
+                                                    <a id="deleteBtn{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-trash"></i> Remove</a>
+                                                  </div>
                                               </div>
                                             </div>
                                           </div>
@@ -335,11 +335,11 @@ ol.vertical{
                                             <label for="" class="col-sm-2 control-label">Position:</label>
                                              <div class="col-sm-3">
                                               <select name="changePosition" id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                @foreach($terminal
+                                                  @foreach($terminals->where('destination_id',$vanOnQueue->destination_id)->first()
                                                 ->vanQueue()
                                                 ->whereNotNull('queue_number')
                                                 ->orderBy('queue_number')->get() as $queueNumber)
-                                                      <option value="{{$queueNumber->queue_number}}">{{$queueNumber->queue_number}}</option>
+                                                      <option value="{{$queueNumber->queue_number}}" @if($queueNumber->queue_number === $vanOnQueue->queue_number) {{'selected'}} @endif>{{$queueNumber->queue_number}}</option>
                                                   @endforeach
                                               </select>
                                              </div>
@@ -470,7 +470,7 @@ ol.vertical{
             //Change Position
             $('button[name="changePosButton"]').on('click',function(){
                 var queueId = $(this).data('val');
-
+                var newQueueNum = $('#posOption'+queueId).val();
                 $.ajax(
                     {
                         method:'PATCH',
@@ -478,12 +478,12 @@ ol.vertical{
                         data:
                             {
                                 '_token': '{{csrf_token()}}',
-                                'new_queue_num' : $('#posOption'+queueId).val()
+                                'new_queue_num' : newQueueNum
                             },
-                        success: function()
+                        success: function(response)
                         {
-                            $("#positem{{$vanOnQueue->van_queue_id}}").hide();
-                            $("#item{{$vanOnQueue->van_queue_id}}").show();
+                            $("#positem"+queueId).hide();
+                            $("#item"+queueId).show();
 
 
                             new PNotify({
@@ -503,63 +503,132 @@ ol.vertical{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+                            if(newQueueNum == 1)
+                            {
+                                $('#unit'+response.beingReplacedId).before($('#unit'+queueId));
+                            }
+                            else
+                            {
+                                $('#unit'+response.beingReplacedId).after($('#unit'+queueId));
+                            }
 
-                            $('select[name="changePosition"]').filter(function(){return this.value=='1'});
 
-                            response.forEach(function(van) {
+                            response[0].forEach(function(van)
+                            {
                                 $('#posOption'+van.vanId).val(van.queueNumber);
-
+                                $('#queue'+van.vanId).text(van.queueNumber);
                             });
 
                         }
                     });
             });
 
-            function specialUnitChecker()
-            {
-                $.ajax(
-                {
-                    method:'POST',
-                    url: '/specialUnitChecker',
-                    data:
-                    {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(response)
-                    {
-                        if(response[0])
-                        {
-                            $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                        }
-                        else
-                        {
-                            if(response[1])
-                            {
-                                $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
-                            }
-                        }
-                    }
-                });
-            }
-
+            //Change Destination
             $('button[name="destBtn"]').on('click',function()
             {
+                var queueId = $(this).data('val');
+                var destId = $('#destOption'+queueId).val();
+
                 $.ajax(
                 {
                     method:'PATCH',
-                    url:'/home/trips/changeDestination/'+$(this).data('val'),
+                    url:'/home/vanqueue/changeDestination/'+queueId,
                     data:
                     {
                         '_token': '{{csrf_token()}}',
-                        'destination': $('#destOption'+$(this).data('val')).val()
+                        'destination': destId
                     },
                     success:
-                    function()
+                    function(response)
                     {
-                        location.reload();
+                        $("#destitem"+queueId).hide();
+                        $("#item"+queueId).show();
+
+                        new PNotify({
+                            title: "Success!",
+                            text: "Successfully update remark",
+                            animate: {
+                                animate: true,
+                                in_class: 'slideInDown',
+                                out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                        });
+
+                        $('#unit'+queueId).appendTo($('#queue-list'+destId));
+                        $('#posOption'+queueId).empty();
+
+                        //Change the settings of the old destination of the moved van
+                        response.oldDestiQueue.forEach(function(OldQueueId){
+                            var oldNum = $('#posOption'+OldQueueId).val();
+                            $('#posOption'+OldQueueId).empty();
+
+                            for(var i = 1; i <= response.oldDestiQueueCount; i++){
+                                var option = $('<option></option>').attr("value", i).text(i);
+                                $('#posOption'+OldQueueId).append(option);
+                            }
+
+                            if(oldNum > response.oldDestiQueueNumber){
+                                var updateQueueNum = oldNum - 1;
+                                $('#queue'+OldQueueId).text(updateQueueNum);
+                                $('#posOption'+OldQueueId).val(updateQueueNum);
+                            }
+                        });
+
+
+                        //Change the settings of the old destination of the moved van
+                       $.each($('#queue-list'+destId).children().find($('select[name="changePosition"]')),function(index,element){
+                           var oldQueueNumVal = $(element).val();
+                           $(element).empty();
+                           for (var i = 1; i <= response.newDestiQueueCount; i++) {
+                               var option = $('<option></option>').attr("value", i).text(i);
+                               $(element).append(option);
+                           }
+
+                           $(element).val(oldQueueNumVal);
+                       });
+
+
+
+                        $('#posOption'+queueId).val(response.newDestiQueueCount);
+                        $('#queue'+queueId).text(response.newDestiQueueCount);
                     }
                 });
             });
+
+            function specialUnitChecker()
+            {
+                $.ajax(
+                    {
+                        method:'POST',
+                        url: '/specialUnitChecker',
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}'
+                            },
+                        success: function(response)
+                        {
+                            if(response[0])
+                            {
+                                $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
+                            }
+                            else
+                            {
+                                if(response[1])
+                                {
+                                    $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
+                                }
+                            }
+                        }
+                    });
+            }
 
             $('#specialUnitList').load('/listSpecialUnits/'+$('#destinationTerminals li.active').data('val'));
 

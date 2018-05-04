@@ -79,13 +79,13 @@
                                 </td>
                             </tr>
                             @endforeach
-                            @foreach($terminalsFee as $terminal)
+                            @foreach($terminals as $terminal)
                             <tr>
-                                <td>Booking Fee ({{$terminal->description}})</td>
+                                <td>Booking Fee ({{$terminal->destination_name}})</td>
                                 <td class="pull-right">{{$terminal->booking_fee}}</td>
                                 <td>
                                     <div class="text-center">
-                                        <a href="{{ route('terminal.edit', [$terminal->terminal_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
+                                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                     </div>
 
                                 </td>
