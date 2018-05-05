@@ -22,13 +22,11 @@ class VanQueueController extends Controller
         $mainTerminal = Destination::where('is_main_terminal',1)->first();
         $terminals = Destination::allTerminal()->get();
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
-        $drivers = Member::whereNotIn('member_id', function($query)
-        {
+        $drivers = Member::whereNotIn('member_id', function($query) {
             $query->select('driver_id')->from('van_queue');
         })->where('status','Active')->get();
 
-        $vans = Van::whereNotIn('van_id', function($query)
-        {
+        $vans = Van::whereNotIn('van_id', function($query) {
             $query->select('van_id')
                 ->from('van_queue')
                 ->where('has_privilege',1)
@@ -51,12 +49,10 @@ class VanQueueController extends Controller
     {
         // Start transaction!
         DB::beginTransaction();
-        try
-        {
+        try {
             if( is_null(VanQueue::where('destination_id',$destination->destination_id)
                 ->where('van_id',$van->van_id)
-                ->whereNotNull('queue_number')->first()) )
-            {
+                ->whereNotNull('queue_number')->first())) {
                 $queueNumber = VanQueue::where('destination_id',$destination->destination_id)
                         ->whereNotNull('queue_number')
                         ->count()+1;
@@ -71,16 +67,12 @@ class VanQueueController extends Controller
                 session()->flash('success', 'Van Succesfully Added to the queue');
                 DB::commit();
                 return 'success';
-            }
-            else
-            {
+            } else {
                 session()->flash('error', 'Van is already on the Queue');
                 return 'Van is already on the Queue';
             }
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             DB::rollback();
             dd($e);
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
@@ -97,81 +89,82 @@ class VanQueueController extends Controller
      */
     public function updateQueueNumber(VanQueue $vanOnQueue)
     {
-        $vansArr = [];
-        $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $vansArr = [];
+            $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
 
-        $beingTransferredKey = $vanOnQueue->queue_number;
-        $beingReplacedKey = request('new_queue_num');
+            $beingTransferredKey = $vanOnQueue->queue_number;
+            $beingReplacedKey = request('new_queue_num');
 
-        $beingTransferredVal = $vanOnQueue->van_queue_id;
-        $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
+            $beingTransferredVal = $vanOnQueue->van_queue_id;
+            $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
 
-        $vanCount = VanQueue::whereNotNull('queue_number')->count();
-        $responseArr = [[],'beingReplacedId'=> $beingReplacedVal];
+            $vanCount = VanQueue::whereNotNull('queue_number')->count();
+            $responseArr = [[],'beingReplacedId'=> $beingReplacedVal];
 
-        $this->validate(request(),[
-            'new_queue_num' => 'required|digits_between:1,'.$vanCount,
-        ]);
-
-        for($i = 0,$n = 1; $i < count($queue) ; $i++,$n++)
-        {
-            $vansArr[$n] =  $queue[$i]->van_queue_id;
-        }
-
-        $vansArr[$beingReplacedKey] = $beingTransferredVal;
-
-
-        if($beingTransferredKey > $beingReplacedKey)
-        {
-
-            $beingReplacedKey += 1;
-
-            for($i = $beingReplacedKey; $i<= $beingTransferredKey; $i++)
-            {
-                $beingTransferredVal =  $vansArr[$i];
-                $vansArr[$i] = $beingReplacedVal;
-                $beingReplacedVal = $beingTransferredVal;
-            }
-
-            foreach($vansArr as $queueNum => $vanQueueId)
-            {
-                $vanQueue = VanQueue::find($vanQueueId);
-
-                $vanQueue->update([
-                    'queue_number' => $queueNum
-                ]);
-
-                array_push($responseArr[0],[
-                'vanId' => $vanQueue->van_queue_id,
-                'queueNumber' => $vanQueue->queue_number
+            $this->validate(request(),[
+                'new_queue_num' => 'required|digits_between:1,'.$vanCount,
             ]);
+
+            for($i = 0,$n = 1; $i < count($queue) ; $i++,$n++) {
+                $vansArr[$n] =  $queue[$i]->van_queue_id;
             }
 
-        }
-        else
-        {
-            $beingReplacedKey -= 1;
+            $vansArr[$beingReplacedKey] = $beingTransferredVal;
 
-            for($i = $beingReplacedKey; $i>= $beingTransferredKey; $i--)
-            {
-                $beingTransferredVal = $vansArr[$i];
-                $vansArr[$i] = $beingReplacedVal;
-                $beingReplacedVal = $beingTransferredVal;
+
+            if($beingTransferredKey > $beingReplacedKey) {
+
+                $beingReplacedKey += 1;
+
+                for($i = $beingReplacedKey; $i<= $beingTransferredKey; $i++) {
+                    $beingTransferredVal =  $vansArr[$i];
+                    $vansArr[$i] = $beingReplacedVal;
+                    $beingReplacedVal = $beingTransferredVal;
+                }
+
+                foreach($vansArr as $queueNum => $vanQueueId) {
+                    $vanQueue = VanQueue::find($vanQueueId);
+
+                    $vanQueue->update([
+                        'queue_number' => $queueNum
+                    ]);
+
+                    array_push($responseArr[0],[
+                        'vanId' => $vanQueue->van_queue_id,
+                        'queueNumber' => $vanQueue->queue_number
+                    ]);
+                }
+
+            } else {
+                $beingReplacedKey -= 1;
+
+                for($i = $beingReplacedKey; $i>= $beingTransferredKey; $i--) {
+                    $beingTransferredVal = $vansArr[$i];
+                    $vansArr[$i] = $beingReplacedVal;
+                    $beingReplacedVal = $beingTransferredVal;
+                }
+
+                foreach($vansArr as $queueNum => $vanQueueId) {
+                    $vanQueue = VanQueue::find($vanQueueId);
+
+                    $vanQueue->update([
+                        'queue_number' => $queueNum
+                    ]);
+
+                    array_push($responseArr[0],[
+                        'vanId' => $vanQueue->van_queue_id,
+                        'queueNumber' => $vanQueue->queue_number
+                    ]);
+                }
             }
 
-            foreach($vansArr as $queueNum => $vanQueueId)
-            {
-                $vanQueue = VanQueue::find($vanQueueId);
-
-                $vanQueue->update([
-                    'queue_number' => $queueNum
-                ]);
-
-                array_push($responseArr[0],[
-                    'vanId' => $vanQueue->van_queue_id,
-                    'queueNumber' => $vanQueue->queue_number
-                ]);
-            }
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
         return response()->json($responseArr);
@@ -179,59 +172,79 @@ class VanQueueController extends Controller
 
     public function updateDestination(VanQueue $vanOnQueue)
     {
-        $this->validate(request(),[
-            'destination' => 'required|exists:destination,destination_id'
-        ]);
-        $vanQueueArr = [];
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $this->validate(request(),[
+                'destination' => 'required|exists:destination,destination_id'
+            ]);
+            $vanQueueArr = [];
 
-        if(request('destination') != $vanOnQueue->destination_id)
-        {
-            $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
-            $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
-            $vanQueueArr['newDestiQueueCount'] = $queueNum;
-            $vanQueueArr['oldDestiQueueNumber'] = $vanOnQueue->queue_number;
-            $vanQueueArr['oldDestiQueue'] = [];
-
-            foreach( $queue as $vanOnQueueObj)
+            if(request('destination') != $vanOnQueue->destination_id)
             {
-                if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
+                $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
+                $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+                $vanQueueArr['newDestiQueueCount'] = $queueNum;
+                $vanQueueArr['changedOldDestiQueueNumber'] = $vanOnQueue->queue_number;
+                $vanQueueArr['oldDestiId'] = $vanOnQueue->destination_id;
+                $vanQueueArr['oldDestiQueue'] = [];
+
+                foreach( $queue as $vanOnQueueObj)
                 {
-                    $vanOnQueueObj->update([
-                        'queue_number' => ($vanOnQueueObj->queue_number)-1
-                    ]);
-                    array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+                    if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
+                    {
+                        $vanOnQueueObj->update([
+                            'queue_number' => ($vanOnQueueObj->queue_number)-1
+                        ]);
+                        array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+                    }
+
                 }
 
+                $vanOnQueue->update([
+                    'destination_id' => request('destination'),
+                    'queue_number' => $queueNum
+                ]);
+
+                $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
+
+                return response()->json($vanQueueArr);
             }
 
-            $vanOnQueue->update([
-                'destination_id' => request('destination'),
-                'queue_number' => $queueNum
-            ]);
-
-            $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
-
-            return response()->json($vanQueueArr);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
+
         return 'Destination not Updated';
     }
 
     public function updateRemarks(VanQueue $vanOnQueue)
     {
+        // Start transaction!
+        DB::beginTransaction();
+        try {
 
-        $this->validate(request(),[
-            'value' => [Rule::in('OB','CC','ER', 'NULL')]
-        ]);
-
-
-        if(request('remark') === 'NULL'){
-            $vanOnQueue->update([
-                'remarks' => NULL
+            $this->validate(request(),[
+                'value' => [Rule::in('OB','CC','ER', 'NULL')]
             ]);
-        }else{
-            $vanOnQueue->update([
-                'remarks' => request('remark')
-            ]);
+
+
+            if(request('remark') === 'NULL') {
+                $vanOnQueue->update([
+                    'remarks' => NULL
+                ]);
+            } else {
+                $vanOnQueue->update([
+                    'remarks' => request('remark')
+                ]);
+            }
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
         return 'success';
@@ -247,15 +260,11 @@ class VanQueueController extends Controller
     {
         // Start transaction!
         DB::beginTransaction();
-        try
-        {
-            if($vanqueue->queue_number)
-            {
+        try {
+            if($vanqueue->queue_number) {
                 $queue = VanQueue::where('destination_id',$vanqueue->destination_id)->get();
-                foreach($queue as $vanOnQueueObject)
-                {
-                    if($vanOnQueueObject->queue_number > $vanqueue->queue_number)
-                    {
+                foreach($queue as $vanOnQueueObject) {
+                    if($vanOnQueueObject->queue_number > $vanqueue->queue_number) {
                         $vanOnQueueObject->update([
                             'queue_number' => $vanOnQueueObject->queue_number-1
                         ]);
@@ -265,9 +274,7 @@ class VanQueueController extends Controller
 
             $vanqueue->delete();
             DB::commit();
-        }
-        catch(\Exception $e)
-        {
+        } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
@@ -366,40 +373,43 @@ class VanQueueController extends Controller
     public function listSpecialUnits(Destination $terminal)
     {
         $queue = $terminal->vanQueue()->where('has_privilege',1)->get();
-        return view('trips.partials.listSpecialUnits',compact('queue'));
+        return view('van_queue.partials.listSpecialUnits',compact('queue'));
     }
 
     public function updateVanQueue()
     {
         $vans = request('vanQueue');
-
         $queueArr = [];
-        if(is_array($vans))
-        {
-            foreach($vans[0] as $key => $vanInfo)
-            {
-                if($van = Van::find($vanInfo['vanid']))
-                {
-                    $van->updateQueue($key);
+
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            if(is_array($vans)) {
+                foreach($vans[0] as $key => $vanInfo) {
+                    if($van = Van::find($vanInfo['vanid'])) {
+                        $van->updateQueue($key);
+                    }
                 }
+
+                $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
+
+                foreach($queue as $vanOnQueue) {
+                    array_push($queueArr,
+                        [
+                            'van_queue_id' => $vanOnQueue->van_queue_id,
+                            'van_id' => $vanOnQueue->van_id,
+                            'queue_number' => $vanOnQueue->queue_number
+                        ]);
+                }
+                DB::commit();
+                return response()->json($queueArr);
+            } else {
+                return "Operator Not Found";
             }
 
-            $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
-
-            foreach($queue as $vanOnQueue)
-            {
-                array_push($queueArr,
-                    [
-                        'van_queue_id' => $vanOnQueue->van_queue_id,
-                        'van_id' => $vanOnQueue->van_id,
-                        'queue_number' => $vanOnQueue->queue_number
-                    ]);
-            }
-            return response()->json($queueArr);
-        }
-        else
-        {
-            return "Operator Not Found";
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
     }
@@ -408,8 +418,7 @@ class VanQueueController extends Controller
     {
         $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
 
-        foreach($queue as $vanOnQueueObj)
-        {
+        foreach($queue as $vanOnQueueObj) {
             $newQueueNumber = ($vanOnQueueObj->queue_number)+1;
             $vanOnQueueObj->update([
                 'queue_number' => $newQueueNumber
@@ -458,17 +467,38 @@ class VanQueueController extends Controller
         }
     }
 
-    public function listQueueNumbers(Destination $terminal)
+    public function moveToSpecialUnit(VanQueue $vanOnQueue)
     {
-        $queueArr = [];
-        $queue = $terminal->vanQueue()->whereNotNull('queue_number')->get();
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $arrayResponse = [
+                'destination' => $vanOnQueue->destination->destination_id,
+                'plateNumber' => $vanOnQueue->van->plate_number
+            ];
+            $queue = $vanOnQueue->destination->vanQueue()->whereNotNull('queue_number')->get();
 
-        foreach($queue as $vanOnQueueObj){
-            array_push($queueArr,[
-                'value' =>  $vanOnQueueObj->queue_number,
-                'text' => $vanOnQueueObj->queue_number
+            foreach($queue as $onQueue) {
+                if($onQueue->queue_number > $vanOnQueue->queue_number ) {
+                    $onQueue->update([
+                        'queue_number' => $onQueue->queue_number-1
+                    ]);
+                }
+            }
+
+            $vanOnQueue->update([
+                'queue_number' => null,
+                'has_privilege' => 1
             ]);
+
+            DB::commit();
+
+            return response()->json($arrayResponse);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return $queueArr;
+
     }
 }

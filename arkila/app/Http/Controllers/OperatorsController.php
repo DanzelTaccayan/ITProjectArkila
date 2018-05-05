@@ -44,10 +44,9 @@ class OperatorsController extends Controller
     {
         // Start transaction!
         DB::beginTransaction();
-        try
-        {
+        try {
             $profilePictureName = 'avatar.jpg';
-            if($request->file('profilePicture')){
+            if($request->file('profilePicture')) {
                 $dateNow = Carbon::now();
                 $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
                     $request->file('profilePicture')->getClientOriginalExtension();
@@ -57,7 +56,7 @@ class OperatorsController extends Controller
                     ->save( public_path('uploads/profilePictures/'.$profilePictureName));
             }
 
-            $createdOperator = Member::create([
+            Member::create([
                 'profile_picture' => $profilePictureName,
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
@@ -66,45 +65,21 @@ class OperatorsController extends Controller
                 'role' => 'Operator',
                 'address' => $request->address,
                 'provincial_address' => $request->provincialAddress,
-                'birth_date' => $request->birthDate,
-                'birth_place' => $request->birthPlace,
-                'age' => $request->birthDate,
                 'gender' => $request->gender,
-                'citizenship' => $request->citizenship,
-                'civil_status' => $request->civilStatus,
-                'spouse' => $request->nameOfSpouse,
-                'spouse_birthdate' => $request->spouseBirthDate,
-                'father_name' => $request->fathersName,
-                'father_occupation' => $request->fatherOccupation,
-                'mother_name' => $request->mothersName,
-                'mother_occupation' => $request->motherOccupation,
                 'person_in_case_of_emergency' => $request->contactPerson,
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
                 'SSS' => $request->sss,
                 'license_number' => $request->licenseNo,
                 'expiry_date' => $request->licenseExpiryDate,
-
             ]);
 
-            if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-                count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-            {
-                $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-                $createdOperator->addChildren($children);
-                $createdOperator->update([
-                    'number_of_children' => sizeof($children)
-                ]);
-            }
-        }
-        catch(\Exception $e)
-        {
+            DB::commit();
+        } catch(\Exception $e) {
             DB::rollback();
             Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again');
-
         }
-        DB::commit();
 
         return redirect(route('operators.index'))->with('success', 'Information created successfully');
     }
@@ -115,7 +90,8 @@ class OperatorsController extends Controller
      * @param  Member  $operator
      * @return \Illuminate\Http\Response
      */
-    public function show(Member $operator){
+    public function show(Member $operator)
+    {
         return view('operators.show',compact('operator'));
     }
 
@@ -146,13 +122,10 @@ class OperatorsController extends Controller
     {
         // Start transaction!
         DB::beginTransaction();
-        try
-        {
+        try {
             $profilePictureName = 'avatar.jpg';
-            if($request->file('profilePicture'))
-            {
-                if(File::exists(public_path('uploads/profilePictures/'.$operator->profile_picture)))
-                {
+            if($request->file('profilePicture')) {
+                if(File::exists(public_path('uploads/profilePictures/'.$operator->profile_picture))) {
 
                     File::delete(public_path('uploads/profilePictures/'.$operator->profile_picture));
                 }
@@ -168,25 +141,9 @@ class OperatorsController extends Controller
 
             $operator -> update([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
                 'contact_number' => $request->contactNumber,
-                'role' => 'Operator',
                 'address' => $request->address,
                 'provincial_address' => $request->provincialAddress,
-                'birth_date' => $request->birthDate,
-                'birth_place' => $request->birthPlace,
-                'age' => $request->birthDate,
-                'gender' => $request->gender,
-                'citizenship' => $request->citizenship,
-                'civil_status' => $request->civilStatus,
-                'spouse' => $request->nameOfSpouse,
-                'spouse_birthdate' => $request->spouseBirthDate,
-                'father_name' => $request->fathersName,
-                'father_occupation' => $request->fatherOccupation,
-                'mother_name' => $request->mothersName,
-                'mother_occupation' => $request->motherOccupation,
                 'person_in_case_of_emergency' => $request->contactPerson,
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
@@ -195,44 +152,14 @@ class OperatorsController extends Controller
                 'expiry_date' => $request->licenseExpiryDate,
             ]);
 
-            if(count($cleansedChildrenArray = $this->arrayChecker($request->children)) > 0 &&
-                count($cleansedChildrenBDayArray = $this->arrayChecker($request->childrenBDay)) > 0)
-            {
-                $children = array_combine($cleansedChildrenArray,$cleansedChildrenBDayArray);
-                $operator->children()->delete();
-                $operator->addChildren($children);
-                $operator->update([
-                    'number_of_children' => sizeof($children)
-                ]);
-            }
-        }
-        catch(\Exception $e)
-        {
+            DB::commit();
+        } catch(\Exception $e) {
             DB::rollback();
             Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again');
         }
-        DB::commit();
 
         return redirect()->route('operators.show', compact('operator'))->with('success', 'Information updated successfully');
-    }
-
-    private function arrayChecker($array)
-    {
-        $result = [];
-
-        if (is_array($array) || is_object($array))
-        {
-            foreach($array as $arrayContent)
-            {
-                if(!is_null($arrayContent))
-                {
-                    array_push($result,$arrayContent);
-                }
-            }
-        }
-
-        return $result;
     }
 
     public function generatePDF()
@@ -252,15 +179,12 @@ class OperatorsController extends Controller
 
     public function archiveOperator(Member $archive)
     {
-
         // Start transaction!
         DB::beginTransaction();
-        try
-        {
+        try {
             //Count the drivers of the operator and archive them
-            if($archive->drivers()->count())
-            {
-                foreach($archive->drivers as $driver){
+            if($archive->drivers()->count()) {
+                foreach($archive->drivers as $driver) {
                     $driver->archivedOperator()->attach($archive->member_id);
                     $driver->update([
                         'operator_id' => null
@@ -269,15 +193,14 @@ class OperatorsController extends Controller
             }
 
             //Count the vans of the operator and archive them
-            if($archive->van()->count())
-            {
-                foreach($archive->van as $van){
+            if($archive->van()->count()) {
+                foreach($archive->van as $van) {
 
                     //archive operator and van
                     $van->archivedMember()->attach($archive->member_id);
                     $van->members()->detach($archive->member_id);
                     //archive the driver and van
-                    if($van->driver()->first()){
+                    if($van->driver()->first()) {
                         $van->archivedMember()->attach($van->driver()->first()->member_id);
                         $van->members()->detach($van->driver()->first()->member_id);
                     }
@@ -293,14 +216,11 @@ class OperatorsController extends Controller
                 'notification' => 'Disable',
                 'date_archived' => $date_archived
             ]);
-        }
-        catch(\Exception $e)
-        {
+            DB::commit();
+        } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again');
         }
-
-        DB::commit();
 
         return redirect(route('operators.index'));
     }
@@ -309,19 +229,18 @@ class OperatorsController extends Controller
     {
         // Start transaction!
         DB::beginTransaction();
-        try{
+        try {
             $archivedOperator->update([
                 'status' => 'Active',
                 'date_archived' => null
             ]);
-        }
-        catch(\Exception $e)
-        {
+
+            DB::commit();
+
+        } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again');
         }
-        DB::commit();
         return back();
     }
-
 }

@@ -17,11 +17,11 @@
       </div>
       <div class="form-group">
           <label>Regular Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
+          <input type="number" class="form-control" min="0" step="0.25" placeholder="Php 0.00" name="regularFare" value="{{old('regularFare')}}" required>
       </div>
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}">
+          <input type="number" class="form-control" min="0" step="0.25" placeholder="Php 0.00" name="discountedFare" value="{{old('discountedFare')}}">
       </div>
       <div class="form-group">
           <label>Number of Tickets: <span class="text-red">*</span> </label>
@@ -34,15 +34,15 @@
     <div id="terminalForm">
       <div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" placeholder="Php 0.00" name="bookingFee" value="{{old('bookingFee')}}" required>
       </div>
       <div class="form-group" id="shotTripReg">
           <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" placeholder="Php 0.00" name="sTripFare" value="{{old('sTripFare')}}" required>
       </div>
        <div class="form-group" id="shotTripDis">
           <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" placeholder="Php 0.00" name="sdTripFare" value="{{old('sdTripFare')}}" required>
       </div>
     </div>
     @elseif ($type == 'Route')

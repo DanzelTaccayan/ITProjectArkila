@@ -12,9 +12,4 @@ class Profile extends Model
         'id',
     ];
 
-    public function setContactNumberAttribute($value){
-        $contactArr = explode('-',$value);
-        $this->attributes['contact_number'] = '+63'.$contactArr[0].$contactArr[1].$contactArr[2];
-    }
-
 }

@@ -38,6 +38,12 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
+    Route::resource('/home/getting-started/setup', 'SetupController',[
+        'except' => ['create', 'show']
+    ]);
+
+    Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
+
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
     Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
     // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');
@@ -176,8 +182,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/vanqueue', 'VanQueueController@updateVanQueue')->name('vanqueue.updateVanQueue');
      Route::patch('/putOnDeck/{vanOnQueue}','VanQueueController@putOnDeck')->name('vanqueue.putOnDeck');
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
-     Route::get('/listQueueNumbers/{terminal}','TripsController@listQueueNumbers')->name('vanqueue.listQueueNumbers');
-
+     Route::patch('/moveToSpecialUnit/{vanOnQueue}','VanQueueController@moveToSpecialUnit')->name('vanqueue.moveToSpecialUnit');
      /* Transactions(Ticket) */
     Route::resource('/home/transactions', 'TransactionsController',[
         'except' => ['create','show','edit','update']
