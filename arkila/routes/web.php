@@ -240,7 +240,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
   /*Create Report*/
   //Route::get('/home/choose-terminal', 'DriverModuleControllers\CreateReportController@chooseTerminal')->name('drivermodule.report.driverChooseDestination');
   Route::get('/home/create-report', 'DriverModuleControllers\CreateReportController@createReport')->name('drivermodule.createReport');
-  Route::post('/home/create-report/{terminal}/store', 'DriverModuleControllers\CreateReportController@storeReport')->name('drivermodule.storeReport');
+  Route::post('/home/create-report/store', 'DriverModuleControllers\CreateReportController@storeReport')->name('drivermodule.storeReport');
   /*Trip Log*/
   Route::get('/home/view-trips', 'DriverModuleControllers\TripLogController@viewTripLog')->name('drivermodule.triplog.driverTripLog');
   Route::get('/home/view-trips/{trip}', 'DriverModuleControllers\TripLogController@viewSpecificTrip')->name('drivermodule.triplog.driverTripDetails');

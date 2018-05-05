@@ -2,23 +2,19 @@
  @section('title', 'Driver Report')
  @section('content-title', 'Driver Report')
  @section('content')
+ @include('message.error')
+ @include('message.success')
 @if($member->van->count() > 0)
 <div class="row">
     <div class="col-md-offset-1 col-md-10">
         <div id="terminal" class="tab-pane">
             <div class="box box-solid">
-                <div class="box-header with-border text-center">
-                    <h3 class="box-title">{{$terminals->description}}</h3>
-                </div>
-
+               
                 <div class="box-body">
-                    <form action="{{route('drivermodule.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('drivermodule.storeReport')}}" method="POST" id="createReport" class="form-horizontal create-rep" data-parsley-validate="">
                       {{csrf_field()}}
                       @php $destination_name = null; @endphp
-                      @foreach($terminals->routeFromDestination as $terminal)
-                        @php $destination_name = $terminal->pivot->terminal_origin; @endphp
-                        @break;
-                      @endforeach
+                      
                       <input type="hidden" name="destinationName" value="{{$destination_name}}">
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
@@ -31,32 +27,27 @@
                                 <label class="text-center">#Discounted</label>
                             </div>
 
-                          <!-- @php $counter = 0; @endphp
-                          @foreach($destinations as $destination) -->
+                          
                             <div class='form-group'>
-                                <label for="" class="col-sm-4"><!-- QUERY DITO YUNG MAIN TERMINAL--></label>
+                                <label for="" class="col-sm-4">Main Terminal</label>
                                 <div class="col-sm-6">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='numPassMain' id='numPassMain' min="0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
+                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' id='' min="0">
                                 </div>
                             </div>
                             
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">Short Trip</label>
                                 <div class="col-sm-6">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destid}}">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="hidden" name="discount[]" value="">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
+                                    <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
                                 </div>
                             </div>
-                           <!--  @php $counter++; @endphp
-                          @endforeach -->
+                          
                         </div>
 
                         <div class="col-md-6">
@@ -65,9 +56,9 @@
                             <div class="form-group">
                                 <label for="driver" class="col-sm-4">Origin Terminal:</label>
                                 <div class="col-sm-8">
-                                <select name="driverAndOperator" id="driver" class="form-control select2">
-                                    @foreach($driverAndOperators as $driverAndOperator)
-                                    <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
+                                <select name="origin" id="originTerminal" class="form-control select2">
+                                    @foreach($origins as $origin)
+                                    <option value="{{$origin->destination_id}}">{{$origin->destination_name}}</option>
                                     @endforeach
                                 </select>
                                 </div>
@@ -104,8 +95,6 @@
                                 <div class=" col-sm-6">
                                 <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
                                 <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
-                                <input type="hidden" id="totalFee" value="{{$terminals->booking_fee}}">
-                                <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                           </div>
                             <div class="box-footer text-center">
@@ -162,22 +151,19 @@
 @section('scripts')
 @parent
 
-
 <!--   For sum of tables-->
 <script type="text/javascript">
     function findTotal() {
-        var arr = document.getElementsByName('qty[]');
-        var tot = 0;
-        for (var i = 0; i < arr.length; i++) {
-            if (parseInt(arr[i].value))
-                tot += parseInt(arr[i].value);
-        }
+        var numMainPass = document.getElementById('numPassMain');
+        var numSTPass = document.getElementById('numPassST');
+        
+        var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);
 
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;
-        var bookingFee = document.getElementById('totalFee');
+
         //bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.value;
-        document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
+        //document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
 
     //document.getElementById('dest').value = document.getElementById('termId').value;
