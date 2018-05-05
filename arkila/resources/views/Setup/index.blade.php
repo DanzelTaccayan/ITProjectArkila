@@ -82,12 +82,20 @@
         <div class="form-section">
             <h3>Fees</h3>
             <div class="form-group">
-                <label>Description: <span class="text-red">*</span></label>
-                <input type="text" class="form-control" name="addFeesDesc" val-settings-desc required>
+                <label>Description:</label>
+                <input type="text" class="form-control" name="addFeesDescSop" value="SOP" val-settings-desc disabled>
             </div>
             <div class="form-group">
                 <label>Amount: <span class="text-red">*</span></label>
-                <input type="number" class="form-control" name="addFeeAmount" step="0.25" placeholder="Php 0.00" val-settings-amount required>
+                <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" val-settings-amount required>
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" val-settings-desc disabled>
+            </div>
+            <div class="form-group">
+                <label>Amount: <span class="text-red">*</span></label>
+                <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" val-settings-amount required>
             </div>
         </div>
     </div>

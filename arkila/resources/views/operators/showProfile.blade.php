@@ -121,7 +121,7 @@
                                             <tr>
                                                 <td>{{$van->plate_number}}</td>
                                                 <td>{{$van->driver()->first()->full_name ?? $van->driver()->first()}}</td>
-                                                <td>{{-- {{$van->vanmodel->description}} --}}</td>
+                                                <td>{{$van->model->description}}</td>
                                                 <td class="text-right" style="width: 10px;">{{$van->seating_capacity}}</td>
                                                 <td>
                                                     <div class="text-center">
@@ -263,41 +263,43 @@
 
     
 
-    @stop @section('scripts') @parent
+@stop 
+@section('scripts') 
+@parent
 
-    <!-- DataTables -->
-    <script src="{{ URL::asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <script>
-        $(function() {
-            $('#driver').DataTable({
-                'paging': true,
-                'lengthChange': false,
-                'searching': true,
-                'ordering': true,
-                'info': true,
-                'autoWidth': true,
-                'order': [[ 0, "desc" ]],
-                'aoColumnDefs': [{
-                    'bSortable': false,
-                    'aTargets': [-1] /* 1st one, start by the right */
-                }]
-            })
-            $('#van').DataTable({
-                'paging': true,
-                'lengthChange': false,
-                'searching': true,
-                'ordering': true,
-                'info': true,
-                'autoWidth': true,
-                'order': [[ 1, "desc" ]],
-                'aoColumnDefs': [{
-                    'bSortable': false,
-                    'aTargets': [-1] /* 1st one, start by the right */
-                }]
-            })
-        });
+<!-- DataTables -->
+<script src="{{ URL::asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<script>
+    $(function() {
+        $('#driver').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 0, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        })
+        $('#van').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 1, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        })
+    });
 
-    </script>
+</script>
 
-    @stop
+@stop
