@@ -38,6 +38,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
+    Route::resource('/home/getting-started/setup', 'SetupController',[
+        'except' => ['create', 'show']
+    ]);
+
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
     Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
     // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');

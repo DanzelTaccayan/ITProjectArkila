@@ -1,7 +1,6 @@
 @extends('layouts.form_lg')
 @section('title', 'Setting Up')
-@section('back-link', route('route.index'))
-@section('form-action', route('route.store'))
+@section('form-action', route('setup.store'))
 
 
 @section('form-body')
@@ -17,16 +16,16 @@
 
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
-                    <input type="text" class="form-control">    
+                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
                 </div>
 
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" class="form-control" name="address">
+                    <input type="text" class="form-control" name="address" value="{{old('address')}}">
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="text" class="form-control" name="email">
+                    <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
             </div>
 
@@ -37,11 +36,11 @@
             <h3>Main Terminal</h3> 
             <div class="form-group">
                 <label>Name: <span class="text-red">*</span> </label>
-                <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
+                <input type="text" class="form-control" name="addMainTerminal" value="{{old('addMainTerminal')}}" required>
             </div>
             <div class="form-group">
                 <label>Booking Fee: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
             </div>
         </div>
 
@@ -83,11 +82,11 @@
             <h3>Fees</h3>
             <div class="form-group">
                 <label>Description: <span class="text-red">*</span></label>
-                <input type="text" class="form-control" name="addFeesDesc" val-settings-desc required>
+                <input type="text" class="form-control" name="addFeeDesc"  value="{{old('addFeeDesc')}}" val-settings-desc required>
             </div>
             <div class="form-group">
                 <label>Amount: <span class="text-red">*</span></label>
-                <input type="number" class="form-control" name="addFeeAmount" step="0.25" placeholder="Php 0.00" val-settings-amount required>
+                <input type="number" class="form-control" name="addFeeAmount" step="0.25" placeholder="Php 0.00" value="{{old('addFeeAmount')}}" val-settings-amount required>
             </div>
         </div>
     </div>
