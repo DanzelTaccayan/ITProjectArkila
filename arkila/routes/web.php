@@ -42,6 +42,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
+    Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
+
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
     Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
     // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');
