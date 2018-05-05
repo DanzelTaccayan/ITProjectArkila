@@ -73,7 +73,7 @@
                                 <td class="pull-right">{{$fee->amount}}</td>
                                 <td>
                                     <div class="text-center">    
-                                        <a href="{{ route('fees.edit', [$fee->fad_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
+                                        <a href="{{ route('fees.edit', [$fee->fee_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                     </div>
 
                                 </td>
@@ -85,7 +85,7 @@
                                 <td class="pull-right">{{$terminal->booking_fee}}</td>
                                 <td>
                                     <div class="text-center">
-                                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
+                                        <a href="{{route('bookingfee.edit', $terminal->destination_id)}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                     </div>
 
                                 </td>
