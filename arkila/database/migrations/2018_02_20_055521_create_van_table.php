@@ -16,12 +16,11 @@ class CreateVanTable extends Migration
         Schema::create('van', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('van_id');
-            $table->string('plate_number')
-            ->unique();
+            $table->longText('plate_number');
             
             $table->integer('model_id')
             ->unsigned();
-            $table->smallInteger('seating_capacity');
+            $table->longText('seating_capacity');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->string('location');
 

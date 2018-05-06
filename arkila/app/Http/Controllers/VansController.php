@@ -85,7 +85,8 @@ class VansController extends Controller
             $van = Van::create([
                 'plate_number' => request('plateNumber'),
                 'model_id' => $vanModel->model_id,
-                'seating_capacity' => request('seatingCapacity')
+                'seating_capacity' => request('seatingCapacity'),
+                'location' => $this->mainTerminal->destination_name
             ]);
 
             $van->members()->attach(request('operator'));
