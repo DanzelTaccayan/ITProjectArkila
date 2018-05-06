@@ -82,7 +82,7 @@
             <h3>Fees</h3>
             <div class="form-group">
                 <label>Description:</label>
-                <input type="text" class="form-control" name="addFeesDescSop" value="SOP" val-settings-desc disabled>
+                <input type="text" class="form-control" name="addFeesDescSop" value="SOP" disabled>
             </div>
             <div class="form-group">
                 <label>Amount: <span class="text-red">*</span></label>
@@ -90,7 +90,7 @@
             </div>
             <div class="form-group">
                 <label>Description:</label>
-                <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" val-settings-desc disabled>
+                <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" disabled>
             </div>
             <div class="form-group">
                 <label>Amount: <span class="text-red">*</span></label>
