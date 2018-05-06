@@ -355,8 +355,8 @@ ol.vertical{
                                               <label for="" class="col-sm-3 control-label">Destination:</label>
                                                <div class="col-sm-8">
                                                   <select id="destOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                  @foreach($terminals as $terminal)
-                                                  <option @if($terminal->destination_id == $vanOnQueue->destination_id) {{'selected'}} @endif value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</option>
+                                                  @foreach($terminals as $term)
+                                                  <option @if($term->destination_id == $vanOnQueue->destination_id) {{'selected'}} @endif value="{{$term->destination_id}}">{{$term->destination_name}}</option>
                                                   @endforeach
                                                   </select>
                                                </div>
@@ -391,68 +391,67 @@ ol.vertical{
                             <h4><i class="fa fa-star"></i> SPECIAL UNITS</h4>
                             </div>
                             <div class="well scrollbar scrollbar-info  thin special-unit-body">
-                              <ol id='specialUnitList{{$terminal->destination_name}}' class="special-list">
-                                  {{var_dump($terminal->destination_name)}}
-                                  {{--@foreach($terminal->vanQueue()->where('has_privilege',1)->get() as $specializedVanOnQueue)--}}
-                                      {{--<li>--}}
-                                    {{--<span class="list-border">--}}
-                                        {{--<div id="item-sp1">--}}
-                                            {{--<div class="row">--}}
-                                                {{--<div class="col-xs-12">--}}
-                                                    {{--<!--plate number here-->--}}
-                                                    {{--{{$specializedVanOnQueue->van->plate_number}}--}}
-                                                    {{--<div class="pull-right">--}}
-                                                        {{--<!--remark here -->--}}
-                                                        {{--<i class="badge badge-pill badge-default ">{{$specializedVanOnQueue->remarks}}</i>--}}
-                                                        {{--<!--/ remark here -->--}}
-                                                        {{--<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%;">--}}
-                                                            {{--<i class="fa fa-gear"></i>--}}
-                                                        {{--</button>--}}
-                                                        {{--<div class="dropdown-menu" role="menu">--}}
-                                                            {{--<a id="ondeckBtn1" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</a>--}}
-                                                            {{--<a id="deleteSpBtn1" class="btn btn-menu btn-sm btn-flat btn-block">Remove</a>--}}
-                                                        {{--</div>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                        {{--<div id="ondeck-sp1" class="hidden">--}}
-                                            {{--<div class="row">--}}
-                                                {{--<div class="col-xs-12">--}}
-                                                  {{--<p>Are you sure you want {{$specializedVanOnQueue->van->plate_number}} to be on deck?</p>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="col-xs-12">--}}
-                                                    {{--<div class="pull-right">--}}
-                                                        {{--<form action="" method="POST">--}}
-                                                            {{--{{method_field('PATCH')}}--}}
-                                                            {{--{{csrf_field()}}--}}
-                                                            {{--<a class="btn btn-default btn-xs itemSpBtn1">NO</a>--}}
-                                                            {{--<button type="submit" class="btn btn-primary btn-xs">YES</button>--}}
-                                                        {{--</form>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                        {{--<div id="delete-sp1" class="hidden">--}}
-                                            {{--<div class="row">--}}
-                                                {{--<div class="col-xs-12">--}}
-                                                  {{--<p>Are you sure you want to <i class="text-red">delete</i> <strong>{{$specializedVanOnQueue->van->plate_number}}</strong>?</p>--}}
-                                                {{--</div>--}}
-                                                {{--<div class="col-xs-12">--}}
-                                                    {{--<div class="pull-right">--}}
-                                                        {{--<form method="POST" action="">--}}
-                                                             {{--{{method_field('DELETE')}}--}}
-                                                            {{--{{csrf_field()}}--}}
-                                                            {{--<a class="btn btn-default btn-xs itemSpBtn1"> NO</a>--}}
-                                                            {{--<button class="btn btn-danger btn-xs">YES</button>--}}
-                                                        {{--</form>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                    {{--</span>--}}
-                                      {{--</li>--}}
-                                  {{--@endforeach--}}
+                              <ol id='specialUnitList{{$terminal->destination_id}}' class="special-list">
+                                  @foreach($terminal->vanQueue()->where('has_privilege',1)->get() as $specializedVanOnQueue)
+                                      <li>
+                                    <span class="list-border">
+                                        <div id="item-sp1">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <!--plate number here-->
+                                                    {{$specializedVanOnQueue->van->plate_number}}
+                                                    <div class="pull-right">
+                                                        <!--remark here -->
+                                                        <i class="badge badge-pill badge-default ">{{$specializedVanOnQueue->remarks}}</i>
+                                                        <!--/ remark here -->
+                                                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%;">
+                                                            <i class="fa fa-gear"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu" role="menu">
+                                                            <a id="ondeckBtn1" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</a>
+                                                            <a id="deleteSpBtn1" class="btn btn-menu btn-sm btn-flat btn-block">Remove</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ondeck-sp1" class="hidden">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                  <p>Are you sure you want {{$specializedVanOnQueue->van->plate_number}} to be on deck?</p>
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <div class="pull-right">
+                                                        <form action="" method="POST">
+                                                            {{method_field('PATCH')}}
+                                                            {{csrf_field()}}
+                                                            <a class="btn btn-default btn-xs itemSpBtn1">NO</a>
+                                                            <button type="submit" class="btn btn-primary btn-xs">YES</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="delete-sp1" class="hidden">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                  <p>Are you sure you want to <i class="text-red">delete</i> <strong>{{$specializedVanOnQueue->van->plate_number}}</strong>?</p>
+                                                </div>
+                                                <div class="col-xs-12">
+                                                    <div class="pull-right">
+                                                        <form method="POST" action="">
+                                                             {{method_field('DELETE')}}
+                                                            {{csrf_field()}}
+                                                            <a class="btn btn-default btn-xs itemSpBtn1"> NO</a>
+                                                            <button class="btn btn-danger btn-xs">YES</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                      </li>
+                                  @endforeach
                               </ol>
                             </div>
                           </div>
@@ -687,7 +686,25 @@ ol.vertical{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+
                             $('#unit'+queueId).remove();
+
+                            $.each($('#queue-list'+response.destination).children().find($('p[name="queueIndicator"]')),function(index, element){
+                                $(element).text(index+1);
+                            });
+
+                            $.each($('#queue-list'+response.destination).children().find($('select[name="changePosition"]')),function(index, element){
+
+                                $(element).empty();
+                                for (var i = 1; i <= response.newQueueNumber; i++) {
+                                    var option = $('<option></option>').attr("value", i).text(i);
+                                    $(element).append(option);
+                                }
+
+                                $(element).val(index+1);
+                            });
+
+
                             $('#specialUnitList'+response.destination).load('/listSpecialUnits/'+response.destination);
                         }
                 });

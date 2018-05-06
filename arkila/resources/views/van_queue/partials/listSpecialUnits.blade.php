@@ -14,8 +14,8 @@
                                                             <i class="fa fa-gear"></i>
                                                         </button>
                                                         <div class="dropdown-menu" role="menu">
-                                                            <a id="ondeckBtn1" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</a>
-                                                            <a id="deleteSpBtn1" class="btn btn-menu btn-sm btn-flat btn-block">Remove</a>
+                                                            <button id="ondeckBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block">On Deck</button>
+                                                            <button id="deleteSpBtn" class="btn btn-menu btn-sm btn-flat btn-block">Remove</button>
                                                         </div>
                                                     </div>
                                                 </div>

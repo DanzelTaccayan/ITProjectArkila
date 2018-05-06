@@ -6,7 +6,7 @@
     @section('form-action',route('drivers.storeFromOperator',[$operator->member_id]))
     @section('backRef') {{ route('operators.showProfile',[$operator->member_id]) }} @endsection
 @elseif ( isset($vanNd) )
-    @section('form-action',route('drivers.storeFromVan',[$vanNd->plate_number]))
+    @section('form-action',route('drivers.storeFromVan',[$vanNd->van_id]))
     @if(session()->get('vanBack'))
         @section('backRef') {{ session()->get('vanBack') }} @endsection
     @else

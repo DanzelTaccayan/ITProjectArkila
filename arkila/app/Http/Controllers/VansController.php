@@ -85,8 +85,7 @@ class VansController extends Controller
             $van = Van::create([
                 'plate_number' => request('plateNumber'),
                 'model_id' => $vanModel->model_id,
-                'seating_capacity' => request('seatingCapacity'),
-                'location' => $this->mainTerminal->destination_name
+                'seating_capacity' => request('seatingCapacity')
             ]);
 
             $van->members()->attach(request('operator'));
@@ -123,6 +122,7 @@ class VansController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
+            \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
         return redirect(route('vans.index'));

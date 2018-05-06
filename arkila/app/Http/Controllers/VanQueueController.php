@@ -208,10 +208,11 @@ class VanQueueController extends Controller
 
                 $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
 
+                DB::commit();
                 return response()->json($vanQueueArr);
             }
 
-            DB::commit();
+
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
@@ -476,6 +477,12 @@ class VanQueueController extends Controller
                 'destination' => $vanOnQueue->destination->destination_id,
                 'plateNumber' => $vanOnQueue->van->plate_number
             ];
+
+            $vanOnQueue->update([
+                'queue_number' => null,
+                'has_privilege' => 1
+            ]);
+
             $queue = $vanOnQueue->destination->vanQueue()->whereNotNull('queue_number')->get();
 
             foreach($queue as $onQueue) {
@@ -485,11 +492,9 @@ class VanQueueController extends Controller
                     ]);
                 }
             }
+            $arrayResponse['newQueueNumber'] = count($queue);
 
-            $vanOnQueue->update([
-                'queue_number' => null,
-                'has_privilege' => 1
-            ]);
+
 
             DB::commit();
 
