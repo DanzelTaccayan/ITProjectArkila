@@ -7,6 +7,10 @@
     <!-- /.box-header -->
     <div class="box-body">
        <div class="table-responsive">
+        <div class="col-md-6">
+            <a href="{{route('operators.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-file-text-o"></i> OPERATOR LIST</a>
+            <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT ARCHIVE</button>
+        </div>
         <table class="table table-bordered table-striped archiveOpe">
             <thead>
                 <tr>
@@ -52,7 +56,7 @@
     $(function() {
         $('.archiveOpe').DataTable({
             'paging': true,
-            'lengthChange': true,
+            'lengthChange': false,
             'searching': true,
             'ordering': true,
             'info': true,
