@@ -1,26 +1,5 @@
 @extends('layouts.master') 
 @section('title', 'View Driver')
-@section('links')
-@parent  
-<style>
-    .info-table th{
-        width:150px;
-    }
-    .profile-btn-group{
-        padding-left:  25px;
-        padding-right: 25px;
-        margin-top: 10px;
-    }
-    .profile-van{
-        padding-left:  25px;
-        padding-right: 25px;
-    }
-
-    .profile-van p{
-        margin: 0;
-    }
-</style>
-@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -31,16 +10,16 @@
                         <div class="profile-side">
                             <img class="profile-user-img img-responsive img-circle" src="#" alt="Driver profile picture">
                             <div class="profile-btn-group">
-                                <a href="#" class="btn btn-block btn-info btn-sm"><strong>Update Information</strong></a>
+                                <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-block btn-info btn-sm"><strong>Update Information</strong></a>
                             </div>
                             <hr>
                             <div class="profile-van">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-navy"><i class="fa fa-automobile"></i></span>
                                     <div class="info-box-content">
-                                      <h4><strong>AAA 123</strong></h4>
-                                      <p>HI ACE</p>
-                                      <p style="color: gray;">16 seats</p>
+                                      <h4><strong>{{$driver->van()->first()->plate_number}}</strong></h4>
+                                      <p>{{$driver->van()->first()->model->description}}</p>
+                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity}} seats</p>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
@@ -95,7 +74,7 @@
                             </tr>
                         </table>
                         <h4>Contact Person</h4>
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped info-table">
                             <tr>
                                 <th>Contact Person</th>
                                 <td>{{$driver->person_in_case_of_emergency}}</td>
