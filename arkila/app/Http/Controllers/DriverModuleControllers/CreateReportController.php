@@ -38,49 +38,111 @@ class CreateReportController extends Controller
   }
   public function storeReport(CreateReportRequest $request)
   {
-    //dd(request('destination'));
+    //dd(request('destinationName'));
     $terminal = Destination::find($request->origin);
     $totalPassengers = $request->totalPassengers;
-    $totalBookingFee = $terminal->booking_fee;
+
     $totalPassenger = (float)$request->totalPassengers;
     $cf = Fee::where('description', 'Community Fee')->first();
-    $communityFund = number_format($cf->amount * $totalPassenger, 2, '.', '');
+    $totalbookingfee = number_format($terminal->booking_fee * $totalPassenger, 2, '.', '');
+    
     $sop = Fee::where('description', 'SOP')->first();
+    
     $driver_user = User::find(Auth::id());
     $van_id = $driver_user->member->van->first()->van_id;
     $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
+    
     $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
     $timeDepartedFormat = $timeDeparted->format('H:i:s');
     $dateDeparted = $request->dateDeparted;
+
+    $mainterminal = Destination::where('is_main_terminal', true)->first();
      if($totalPassengers >=  10){
-        Trip::create([
+        $trip =Trip::create([
          'driver_id' => $driver_id->member_id,
          'van_id' => $van_id,
-         'destination' => $request->destinationName,
+         'destination' => $mainterminal->destination_name,
          'origin' => $terminal->destination_name,
          'total_passengers' => $totalPassengers,
-         'total_booking_fee' => $totalBookingFee,
-         'community_fund' => $communityFund,
-         'SOP' => $sop,
+         'total_booking_fee' => $totalbookingfee,
+         'community_fund' => $cf->amount,
          'report_status' => 'Pending',
          'date_departed' => $request->dateDeparted,
          'time_departed' => $timeDepartedFormat,
        ]);
      }else if($totalPassengers <  10){
-          Trip::create([
+          $trip = Trip::create([
             'driver_id' => $driver_id->member_id,
             'van_id' => $van_id,
-            'destination' => $request->destinationName,
+            'destination' => $mainterminal->destination_name,
             'origin' => $terminal->destination_name,
             'total_passengers' => $totalPassengers,
-            'total_booking_fee' => $totalBookingFee,
-            'community_fund' => $communityFund,
+            'total_booking_fee' => $totalbookingfee,
             'report_status' => 'Pending',
             'date_departed' => $request->dateDeparted,
             'time_departed' => $timeDepartedFormat,
          ]);
      }
 
+     $numberofmainpassengers = $request->numPassMain;
+     $numberofmaindiscount = $request->numDisMain;
+     $numberofstpassengers = $request->numPassST;
+     $numberofstdiscount = $request->numDisST;
+     $shortTripFare = $terminal->short_trip_fare;
+     $shortTripDiscountFare = $terminal->short_trip_fare_discount;
+
+     if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) && 
+        ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+           for($i = 0; $i < $numberofmainpassengers; $i++){
+              if($numberofmaindiscount == 0){
+                $amountpaid = $shortTripFare;
+              }else{
+                $amountpaid = $shortTripFare;
+              }
+
+              Transaction::create([
+                "trip_id" => $trip->trip_id,
+                "destination" => $mainterminal->destination_name,
+                "origin" => $terminal->destination_name,
+                "amount_paid" => $amountpaid,
+                "status" => "Pending",
+              ]);
+
+              $numberofmaindiscount--;
+           }
+           for($i = 0; $i < $numberofstpassengers; $i++){
+              if($numberofstdiscount == 0){
+                $amountpaid = $shortTripFare;
+              }else{
+                $amountpaid = $shortTripDiscountFare;
+              }
+
+              Transaction::create([
+                "trip_id" => $trip->trip_id,
+                "destination" => $mainterminal->destination_name,
+                "origin" => $terminal->destination_name,
+                "amount_paid" => $amountpaid,
+                "status" => "Pending",
+              ]);
+
+              $numberofstdiscount--;
+           }
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) && 
+        ($numberofstpassengers !== null && $numberofstdiscount == null)){
+
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) && 
+        ($numberofstpassengers == null && $numberofstdiscount == null)){
+
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) && 
+        ($numberofstpassengers == null && $numberofstdiscount == null)){
+
+     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) && 
+        ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+
+     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) && 
+        ($numberofstpassengers !== null && $numberofstdiscount == null)){
+
+     }
     // $destinationIdArr = request('destination');
     // $destinationNameArr = null;
     // foreach($destinationIdArr  as $key => $value){
@@ -145,7 +207,7 @@ class CreateReportController extends Controller
 
 
 
-  return redirect('home/choose-terminal')->with('success', 'Report created successfully!');
+  return redirect('/home/create-report')->with('success', 'Report created successfully!');
 
 
   }

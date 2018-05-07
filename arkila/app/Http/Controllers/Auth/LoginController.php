@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
+use App\Destination;
 use Illuminate\Http\Request;
 use Auth;
 use Closure;
@@ -65,7 +66,13 @@ class LoginController extends Controller
           }
 
           if($user->isSuperAdmin() && $user->isEnable()){
-            return redirect('home/vanqueue');
+            $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+            if($mainterminal){
+              return redirect('getting-started/setup');
+            }else{
+              return redirect('home/vanqueue');  
+            }
+            
           }
 
           if($user->isAdmin() && $user->isEnable()){
