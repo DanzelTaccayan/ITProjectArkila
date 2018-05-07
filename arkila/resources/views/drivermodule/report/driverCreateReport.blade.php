@@ -11,37 +11,32 @@
                 <div class="box-body">
                     <form action="{{route('drivermodule.storeReport')}}" method="POST" id="createReport" class="form-horizontal create-rep" data-parsley-validate="">
                       {{csrf_field()}}
+
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
-                            <div class="col-sm-4">
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="text-center">#Passengers</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="text-center">#Discounted</label>
-                            </div>
+                            <table class="table table-bordered table-striped form-table">
+                            <thead>
+                                <th></th>
+                                <th>#Passengers</th>
+                                <th>#Discounted</th>
+                            </thead>
 
-                          
-                            <div class='form-group'>
-                                <label for="" class="col-sm-4">Main Terminal</label>
-                                <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0">
-                                </div>
-                            </div>
+                            <tbody>
+                              <tr>
+                                <th>Main Terminal</th>
+                                <td><input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0"></td>
+                                <td><input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0"></td>
+                              </tr>
+                              <tr>
+                                <th>Short Trip</th>
+                                <td><input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0"></td>
+                                <td><input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0"></td>
+                              </tr>
+                  
+                            </tbody>
+                        </table>
+
                             
-                            <div class='form-group'>
-                                <label for="" class="col-sm-4">Short Trip</label>
-                                <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
-                                </div>
-                            </div>
                           
                         </div>
 
