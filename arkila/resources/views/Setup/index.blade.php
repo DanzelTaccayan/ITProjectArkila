@@ -5,23 +5,28 @@
 
 @section('form-body')
 
-<div class="box">  
+<div class="box" style="margin: 8% 0%">  
     <div class="box-body">
 
         <!-- WELCOME -->
-        <div class="form-section" style="margin-bottom: 16%; padding: 4%">
+        <div class="form-section text-center" style="margin-bottom: 16%; padding: 4%">
             
             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
-            <h4 class="text-center">Ban Trans - UV Express</h4>
+            <h4>Ban Trans - UV Express</h4>
             <h2><strong>WELCOME!</strong></h2>
+            <p></p>
 
         </div>
 
         <!-- Company Profile-->
-        <div class="form-section" style="margin-bottom: 18%">
-            <h3>Company Information</h3>
+        <div class="form-section" style="margin-bottom: 10%">
+            <div class="box-header with-border text-center">
+                <h3 class="box-title">
+                Company Information
+                </h3>
+            </div>
 
-            <div class="form-group">
+            <div style="padding: 7% 10% 0% 10%">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
                     <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
@@ -36,15 +41,16 @@
                     <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
             </div>
-
         </div>
-
-        <!-- Main Terminals -->
         
-        <!-- Destination Terminals -->
-        <div class="form-section">
-            <h3>Terminal</h3>
-            <div class="well" style="margin: 3%">
+        <!--Terminals -->
+        <div class="form-section" style="padding-right: 5%">
+            <div class="box-header with-border text-center">
+                <h3 class="box-title">
+                Terminal
+                </h3>
+            </div>
+            <div class="box" style="margin: 3%; padding: 1%">
                 <h4><strong>Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -56,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="well" style="margin: 3%">
+            <div class="box" style="margin: 3%; padding: 1%">
                 <h4><strong>Destination Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -91,22 +97,29 @@
 
         <!-- Fees -->
         <div class="form-section" style="margin-bottom: 11%">
-            <h3>Fees</h3>
-            <div class="form-group">
-                <label>Description:</label>
-                <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
+            <div class="box-header with-border text-center">
+                <h3 class="box-title">
+                Fees
+                </h3>
             </div>
-            <div class="form-group">
-                <label>Amount: <span class="text-red">*</span></label>
-                <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-settings-amount required>
-            </div>
-            <div class="form-group">
-                <label>Description:</label>
-                <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" readonly>
-            </div>
-            <div class="form-group">
-                <label>Amount: <span class="text-red">*</span></label>
-                <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
+
+            <div style="padding: 7% 10% 0% 10%">
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Amount: <span class="text-red">*</span></label>
+                    <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-settings-amount required>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Amount: <span class="text-red">*</span></label>
+                    <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
+                </div>
             </div>
         </div>
 

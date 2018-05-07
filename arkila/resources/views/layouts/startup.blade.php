@@ -23,7 +23,7 @@
                 {{csrf_field()}}
                 @yield('method_field')
 
-                <section class="content">
+                <section class="content" style="padding: 0% 15%">
                 @yield('form-body')
 
                 <div class="modal fade" id="form-modal">
