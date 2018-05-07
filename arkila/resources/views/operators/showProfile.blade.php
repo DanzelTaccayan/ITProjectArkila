@@ -106,7 +106,7 @@
                                     <div class="col-md-6">
                                         <a href="{{route('vans.createFromOperator',$operator->member_id)}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD VAN</a>
                                     </div>
-                                    <table id="van" class="table table-bordered table-striped table-responsive">
+                                    <table id="van" class="table table-bordered table-striped table-responsive info-table">
                                         <thead>
                                             <tr>
                                                 <th>Plate Number</th>
@@ -177,7 +177,7 @@
                                     <div class="col-md-6">
                                         <a href="{{route('drivers.createFromOperator',[$operator->member_id])}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD DRIVER</a>
                                     </div>
-                                    <table id="driver" class="table table-bordered table-striped table-responsive">
+                                    <table id="driver" class="table table-bordered table-striped table-responsive info-table">
 
                                         <thead>
                                             <tr>

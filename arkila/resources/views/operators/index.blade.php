@@ -7,7 +7,9 @@
            <div class="table-responsive">
             <div class="col col-md-6">
                 <a href="/home/operators/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER OPERATOR</a>
+                <a href="{{route('archive.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
                 <button onclick="window.open('{{route('pdf.operators')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT OPERATOR LIST</button>
+
             </div>
             
             <!-- /.col -->
@@ -52,7 +54,7 @@
                                             <h1>
                                             <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
                                             </h1>
-                                            <p>Are you sure you want to delete "{{ $operator->full_name }}"</p>
+                                            <p>Are you sure you want to delete <strong>{{ $operator->full_name }}</strong>?</p>
                                     </div>
                                     <div class="modal-footer">
                                         @if($operators && $operator)
