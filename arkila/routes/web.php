@@ -38,7 +38,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
-    Route::resource('/home/getting-started/setup', 'SetupController',[
+    Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
     ]);
 
