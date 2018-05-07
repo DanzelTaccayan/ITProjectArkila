@@ -53,7 +53,7 @@ class SetupController extends Controller
             "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
             "numticket" => 'required|numeric|digits_between:1,1000',
             "addFeesDescSop" => 'required|max:100',
-            "addComFund" => 'required|max:100',
+            "addFeesDescCom" => 'required|max:100',
             "addSop" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
             "addComFund" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
         ]);
