@@ -61,8 +61,7 @@ class SetupController extends Controller
         $mainName = ucwords(strtolower($request->addMainTerminal));
         $destName = ucwords(strtolower($request->addTerminal));
         $address = ucwords(strtolower($request->address));
-        $feeDescriptionSop = ucwords(strtolower($request->addFeesDescSop));
-        $feeDescriptionFund = ucwords(strtolower($request->addComFund));
+        $feeDescriptionFund = ucwords(strtolower($request->addFeesDescCom));
 
 
 
@@ -119,7 +118,7 @@ class SetupController extends Controller
         }
 
         Fee::create([
-            'description' => $feeDescriptionSop,
+            'description' => $request->addFeesDescSop,
             'amount' => $request->addSop,
         ]);
 
