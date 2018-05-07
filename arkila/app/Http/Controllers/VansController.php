@@ -123,6 +123,7 @@ class VansController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
+            \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
         return redirect(route('vans.index'));

@@ -208,10 +208,11 @@ class VanQueueController extends Controller
 
                 $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
 
+                DB::commit();
                 return response()->json($vanQueueArr);
             }
 
-            DB::commit();
+
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
@@ -278,102 +279,89 @@ class VanQueueController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
         session()->flash('success', 'Van on Queue Successfully Removed');
         return back();
     }
 
     public function specialUnitChecker()
     {
-        $firstOnQueue = VanQueue::where('queue_number',1)->get();
-        $successfullyUpdated = [];
-        $pendingUpdate = [];
-        $responseArr = [];
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $firstOnQueue = VanQueue::where('queue_number',1)->get();
+            $successfullyUpdated = [];
+            $pendingUpdate = [];
+            $responseArr = [];
 
-        foreach($firstOnQueue as $first)
-        {
-            if($first->remarks == "ER" || $first->remarks == 'CC')
-            {
+            foreach($firstOnQueue as $first) {
+                if($first->remarks == "ER" || $first->remarks == 'CC') {
 
-                $first->update([
-                    'queue_number' => null,
-                    'has_privilege' => 1
-                ]);
-                array_push($successfullyUpdated,$first->van_queue_id);
-
-                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', $first->destination_id)->get();
-
-                foreach($queue as $vanOnQueue)
-                {
-                    $queueNumber = ($vanOnQueue->queue_number)-1;
-                    $vanOnQueue->update([
-                        'queue_number'=> $queueNumber
+                    $first->update([
+                        'queue_number' => null,
+                        'has_privilege' => 1
                     ]);
+                    array_push($successfullyUpdated,$first->van_queue_id);
+
+                    $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', $first->destination_id)->get();
+
+                    foreach($queue as $vanOnQueue) {
+                        $queueNumber = ($vanOnQueue->queue_number)-1;
+                        $vanOnQueue->update([
+                            'queue_number'=> $queueNumber
+                        ]);
+                    }
+
+                } elseif($first->remarks =='OB') {
+                    array_push($pendingUpdate,$first->van_queue_id);
                 }
-
-            }elseif($first->remarks =='OB')
-            {
-                array_push($pendingUpdate,$first->van_queue_id);
             }
-        }
-        $responseArr[0] = http_build_query($successfullyUpdated);
-        $responseArr[1] = http_build_query($pendingUpdate);
+            $responseArr[0] = http_build_query($successfullyUpdated);
+            $responseArr[1] = http_build_query($pendingUpdate);
+            DB::commit();
 
-        return response()->json($responseArr);
+            return response()->json($responseArr);
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
     }
 
     public function showConfirmationBox($encodedQueue)
     {
         $queue = [];
         parse_str($encodedQueue,$queue);
-        if(!is_array($queue))
-        {
+        if(!is_array($queue)) {
             abort(404);
-        }else
-        {
+        } else {
             $vansObjArr = [];
-            foreach($queue as $vanOnQueue)
-            {
-                if($vanObj = VanQueue::find($vanOnQueue))
-                {
+            foreach($queue as $vanOnQueue) {
+                if($vanObj = VanQueue::find($vanOnQueue)) {
                     array_push($vansObjArr,$vanObj);
-                }else
-                {
+                } else {
                     abort(404);
                 }
             }
         }
-        return view('van_queue.partials.confirmDialogBox',compact('vansObjArr'));
+        return view('van_queue.partials.confirmDialog-ER-CC',compact('vansObjArr'));
     }
 
     public function showConfirmationBoxOb($encodedQueue)
     {
         $queue = [];
         parse_str($encodedQueue,$queue);
-        if(!is_array($queue))
-        {
+        if(!is_array($queue)) {
             abort(404);
-        }else
-        {
+        } else {
             $vansObjArr = [];
-            foreach($queue as $vanOnQueue)
-            {
-                if($vanObj = VanQueue::find($vanOnQueue))
-                {
+            foreach($queue as $vanOnQueue) {
+                if($vanObj = VanQueue::find($vanOnQueue)) {
                     array_push($vansObjArr,$vanObj);
-                }else
-                {
+                } else {
                     abort(404);
                 }
             }
         }
-        return view('message.confirm',compact('vansObjArr'));
-    }
-
-    public function listSpecialUnits(Destination $terminal)
-    {
-        $queue = $terminal->vanQueue()->where('has_privilege',1)->get();
-        return view('van_queue.partials.listSpecialUnits',compact('queue'));
+        return view('van_queue.partials.confirmDialog-OB',compact('vansObjArr'));
     }
 
     public function updateVanQueue()
@@ -416,88 +404,100 @@ class VanQueueController extends Controller
 
     public function putOnDeck(VanQueue $vanOnQueue)
     {
-        $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
 
-        foreach($queue as $vanOnQueueObj) {
-            $newQueueNumber = ($vanOnQueueObj->queue_number)+1;
-            $vanOnQueueObj->update([
-                'queue_number' => $newQueueNumber
+            foreach($queue as $vanOnQueueObj) {
+                $newQueueNumber = ($vanOnQueueObj->queue_number)+1;
+                $vanOnQueueObj->update([
+                    'queue_number' => $newQueueNumber
+                ]);
+            }
+
+            $vanOnQueue->update([
+                'queue_number' => 1,
+                'remarks' => null,
+                'has_privilege' => 0
             ]);
-        }
 
-        $vanOnQueue->update([
-            'queue_number' => 1,
-            'remarks' => null,
-            'has_privilege' => 0
-        ]);
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
 
         return back();
     }
 
     public function changeRemarksOB(VanQueue $vanOnQueue)
     {
-        $this->validate(request(),[
-            'answer' => [Rule::in(['Yes', 'No'])]
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $this->validate(request(),[
+                'answer' => [Rule::in(['Yes', 'No'])]
+            ]);
 
-        if(request('answer') === 'Yes')
-        {
-            $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->get();
+            if(request('answer') === 'Yes') {
+                $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->get();
 
-            foreach($queue as $vanOnQueueObj)
-            {
-                if($vanOnQueueObj->queue_number > $vanOnQueue->queue_number)
-                {
-                    $vanOnQueueObj->update([
-                        'queue_number' => $vanOnQueueObj->queue_number-1
-                    ]);
+                foreach($queue as $vanOnQueueObj) {
+                    if($vanOnQueueObj->queue_number > $vanOnQueue->queue_number) {
+                        $vanOnQueueObj->update([
+                            'queue_number' => $vanOnQueueObj->queue_number-1
+                        ]);
+                    }
                 }
+
+                $vanOnQueue->update([
+                    'queue_number' => NULL,
+                    'has_privilege' => 1
+                ]);
+            } else {
+                $vanOnQueue->update([
+                    'remarks' => NULL,
+                ]);
             }
 
-            $vanOnQueue->update([
-                'queue_number' => NULL,
-                'has_privilege' => 1
-            ]);
-        }
-        else
-        {
-            $vanOnQueue->update([
-                'remarks' => NULL,
-            ]);
+            DB::commit();
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
     }
 
     public function moveToSpecialUnit(VanQueue $vanOnQueue)
     {
-        // Start transaction!
-        DB::beginTransaction();
-        try {
-            $arrayResponse = [
-                'destination' => $vanOnQueue->destination->destination_id,
-                'plateNumber' => $vanOnQueue->van->plate_number
-            ];
-            $queue = $vanOnQueue->destination->vanQueue()->whereNotNull('queue_number')->get();
+        if($vanOnQueue->has_privilege === 0){
+            // Start transaction!
+            DB::beginTransaction();
+            try {
+                $queue = $vanOnQueue->destination->vanQueue()->whereNotNull('queue_number')->get();
 
-            foreach($queue as $onQueue) {
-                if($onQueue->queue_number > $vanOnQueue->queue_number ) {
-                    $onQueue->update([
-                        'queue_number' => $onQueue->queue_number-1
-                    ]);
+                foreach($queue as $onQueue) {
+                    if($onQueue->queue_number > $vanOnQueue->queue_number ) {
+                        $onQueue->update([
+                            'queue_number' => $onQueue->queue_number-1
+                        ]);
+                    }
                 }
+
+                $vanOnQueue->update([
+                    'queue_number' => null,
+                    'has_privilege' => 1
+                ]);
+                DB::commit();
+
+                return 'Success';
+            } catch(\Exception $e) {
+                DB::rollback();
+                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
             }
-
-            $vanOnQueue->update([
-                'queue_number' => null,
-                'has_privilege' => 1
-            ]);
-
-            DB::commit();
-
-            return response()->json($arrayResponse);
-
-        } catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        } else {
+            abort(422,'Error, The Van is already on the special units List');
         }
 
     }

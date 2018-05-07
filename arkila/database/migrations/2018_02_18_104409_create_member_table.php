@@ -23,19 +23,19 @@ class CreateMemberTable extends Migration
             $table->integer('operator_id')
             ->nullable()
             ->unsigned();
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('middle_name')->nullable();
-            $table->string('contact_number');
-            $table->enum('role', ['Operator', 'Driver']);
-            $table->string('address');
-            $table->string('provincial_address');
-            $table->enum('gender', ['Male', 'Female']);
-            $table->string('person_in_case_of_emergency');
-            $table->string('emergency_address');
-            $table->string('emergency_contactno');
-            $table->string('SSS')->nullable();
-            $table->string('license_number')->nullable();
+            $table->longText('last_name');
+            $table->longText('first_name');
+            $table->longText('middle_name')->nullable();
+            $table->longText('contact_number');
+            $table->enum('role',['Operator','Driver']);
+            $table->longText('address');
+            $table->longText('provincial_address');
+            $table->longText('gender');
+            $table->longText('person_in_case_of_emergency');
+            $table->longText('emergency_address');
+            $table->longText('emergency_contactno');
+            $table->longText('SSS')->nullable();
+            $table->longText('license_number')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->enum('notification', ['Enable', 'Disable'])->default('Enable');
             $table->date('expiry_date')->nullable();

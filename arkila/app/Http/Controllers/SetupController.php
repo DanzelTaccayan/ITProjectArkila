@@ -52,14 +52,18 @@ class SetupController extends Controller
             "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
             "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
             "numticket" => 'required|numeric|digits_between:1,1000',
-            "addFeeDesc" => 'required|max:100',
-            "addFeeAmount" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
+            "addFeesDescSop" => 'required|max:100',
+            "addFeesDescCom" => 'required|max:100',
+            "addSop" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
+            "addComFund" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
         ]);
 
         $mainName = ucwords(strtolower($request->addMainTerminal));
         $destName = ucwords(strtolower($request->addTerminal));
         $address = ucwords(strtolower($request->address));
-        $feeDescription = ucwords(strtolower($request->addFeeDesc));
+        $feeDescriptionSop = ucwords(strtolower($request->addFeesDescSop));
+        $feeDescriptionFund = ucwords(strtolower($request->addComFund));
+
 
 
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
@@ -115,9 +119,15 @@ class SetupController extends Controller
         }
 
         Fee::create([
-            'description' => $feeDescription,
-            'amount' => $request->addFeeAmount,
+            'description' => $feeDescriptionSop,
+            'amount' => $request->addSop,
         ]);
+
+        Fee::create([
+            'description' => $feeDescriptionFund,
+            'amount' => $request->addComFund,
+        ]);
+
 
         return redirect('/home/route')->with('success', 'Your ready with the application.');
     }

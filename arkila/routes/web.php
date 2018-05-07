@@ -38,7 +38,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
-    Route::resource('/home/getting-started/setup', 'SetupController',[
+    Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
     ]);
 
@@ -178,7 +178,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/home/vanqueue/{vanOnQueue}/updateRemarks', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
      Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
      Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
-     Route::get('/listSpecialUnits/{terminal}','VanQueueController@listSpecialUnits')->name('vanqueue.listSpecialUnits');
      Route::patch('/vanqueue', 'VanQueueController@updateVanQueue')->name('vanqueue.updateVanQueue');
      Route::patch('/putOnDeck/{vanOnQueue}','VanQueueController@putOnDeck')->name('vanqueue.putOnDeck');
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
