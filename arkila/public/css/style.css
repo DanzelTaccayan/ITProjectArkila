@@ -759,3 +759,19 @@ input:checked+.slider:before {
 .terminal-body{
   height: 200px;
 }
+.info-table th{
+    width:150px;
+}
+.profile-btn-group{
+    padding-left:  25px;
+    padding-right: 25px;
+    margin-top: 10px;
+}
+.profile-van{
+    padding-left:  25px;
+    padding-right: 25px;
+}
+
+.profile-van p{
+    margin: 0;
+}
