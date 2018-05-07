@@ -2,8 +2,6 @@
  @section('title', 'Driver Report')
  @section('content-title', 'Driver Report')
  @section('content')
- @include('message.error')
- @include('message.success')
 @if($member->van->count() > 0)
 <div class="row">
     <div class="col-md-offset-1 col-md-10">
@@ -13,9 +11,6 @@
                 <div class="box-body">
                     <form action="{{route('drivermodule.storeReport')}}" method="POST" id="createReport" class="form-horizontal create-rep" data-parsley-validate="">
                       {{csrf_field()}}
-                      @php $destination_name = null; @endphp
-                      
-                      <input type="hidden" name="destinationName" value="{{$destination_name}}">
                          <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
