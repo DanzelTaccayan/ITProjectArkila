@@ -1,4 +1,4 @@
-@extends('layouts.form_lg')
+@extends('layouts.startup')
 @section('title', 'Setting Up')
 @section('form-action', route('setup.store'))
 
@@ -9,18 +9,16 @@
     <div class="box-body">
 
         <!-- WELCOME -->
-        <div class="form-section">
-            <h3>Welcome</h3>
-
-            <div class="form-group">
-                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
-                <h4 class="text-center">Ban Trans - UV Express</h4>
-            </div>
+        <div class="form-section" style="margin-bottom: 16%; padding: 4%">
+            
+            <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
+            <h4 class="text-center">Ban Trans - UV Express</h4>
+            <h2><strong>WELCOME!</strong></h2>
 
         </div>
 
         <!-- Company Profile-->
-        <div class="form-section">
+        <div class="form-section" style="margin-bottom: 18%">
             <h3>Company Information</h3>
 
             <div class="form-group">
@@ -47,7 +45,7 @@
         <div class="form-section">
             <h3>Terminal</h3>
             <div class="well" style="margin: 3%">
-                <h5>Main Terminal</h5> 
+                <h4><strong>Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
                     <input type="text" class="form-control" name="addMainTerminal" value="{{old('addMainTerminal')}}" required>
@@ -59,7 +57,7 @@
             </div>
 
             <div class="well" style="margin: 3%">
-                <h5>Destination Terminal</h5> 
+                <h4><strong>Destination Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
                     <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
@@ -92,7 +90,7 @@
         </div>
 
         <!-- Fees -->
-        <div class="form-section">
+        <div class="form-section" style="margin-bottom: 11%">
             <h3>Fees</h3>
             <div class="form-group">
                 <label>Description:</label>
