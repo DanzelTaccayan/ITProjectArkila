@@ -21,8 +21,8 @@ class TransactionsController extends Controller
     public function index()
     {
         $terminals = Destination::where('is_main_terminal','!=','1')->get();
-
-        return view('transaction.index',compact('terminals'));
+        $transactions = Transaction::all();
+        return view('transaction.index',compact('terminals','transactions'));
     }
 
     public function manageTickets()
