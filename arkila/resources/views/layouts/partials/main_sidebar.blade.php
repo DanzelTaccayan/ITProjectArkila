@@ -21,11 +21,24 @@
                     <span>Van Queue</span>
                 </a>
             </li>
-            <li class="{{ Request::is('home/transactions') ? 'active' : '' }}">
+            <li class="{{ Request::is('home/tansactions') ? 'active' : '' }}">
                 <a href="{{route('transactions.index')}}">
+                    <i class="fa fa-th"></i>
+                    <span>POS</span>
+                </a>
+            </li>
+            <li class="treeview{{--  {{ Request::is('home/transactions') ? 'active' : '' }} --}}">
+                <a href="">
                     <i class="fa fa-ticket"></i>
                     <span>Ticket Management</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li class="#"><a href="#"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
+                    <li class="#}"><a href="#"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
+                </ul>
             </li>
             <li class="{{ Request::is('home/route') ? 'active' : '' }}">
                 <a href="/home/route">
@@ -63,7 +76,7 @@
             <li class="treeview {{ Request::is('home/trip-log') ? 'active' : '' }} || {{ Request::is('home/driver-report') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bus"></i>
-                    <span>Trips</span>
+                    <span>Trips and Reports</span>
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>

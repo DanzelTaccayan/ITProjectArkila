@@ -33,8 +33,8 @@
                             <div class="" style="border: 1px solid lightgray; margin: 5px;">
                                 <ul class="nav nav-stacked">
                                     <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
-                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill pull-right">{{count($operator->van)}}</span></a></li>
-                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill  pull-right">{{count($operator->drivers)}}</span></a></li>
+                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-red pull-right">{{count($operator->van)}}</span></a></li>
+                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-blue pull-right">{{count($operator->drivers)}}</span></a></li>
                                 </ul>
                             </div>
                             <div class="profile-btn-group">
