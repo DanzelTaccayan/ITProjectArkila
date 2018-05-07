@@ -120,7 +120,42 @@
     
 
     @stop @section('scripts') @parent
+    <script>
+    $(function(){
+     var url = window.location.href;
+     var activeTab = document.location.hash;
 
+     if(!activeTab){
+            activeTab = @if($terminals->first()->destination_id ?? null)
+                "{{'#terminal'.$terminals->first()->destination_id}}";
+        @else
+                "{{''}}";
+        @endif
+    }
+     
+     $
+     $(".tab-pane").removeClass("active in"); 
+     $(".tab-menu").removeClass("active in"); 
+     $(activeTab).addClass("active");
+     $(activeTab + "-menu").addClass("active");
+
+     $('a[href="#'+ activeTab +'"]').tab('show')
+    });
+
+    $(function(){
+      var hash = window.location.hash;
+      hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+      $('.nav-stacked a').click(function (e) {
+      $(this).tab('show');
+      var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+      window.location.hash = this.hash;
+      $('html,body').scrollTop(scrollmem);
+      });
+    });
+</script>
+Chat Conversation End
+Type a message...
     <!-- DataTables -->
     <script src="{{ URL::asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>

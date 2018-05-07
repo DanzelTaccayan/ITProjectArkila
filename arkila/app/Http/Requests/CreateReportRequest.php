@@ -47,6 +47,12 @@ class CreateReportRequest extends FormRequest
           $rules['numDisST'] = "nullable|numeric|min:1|max:18";
         }
 
+        if($this->request->get('numPassMain') == null){
+          $rules['numPassMain'] = "nullable";
+        }else if($this->request->get('numPassST') == null){
+          $rules['numPassST'] = "nullable";
+        }
+
         return $rules;
     }
 
@@ -77,7 +83,12 @@ class CreateReportRequest extends FormRequest
       }else{
         $messages['numDisST.max'] = "The number of discounted passengers cannot be more than the number of passengers";
       }
-     
+
+      // if($this->request->get('numPassMain') == null){
+      //   $messages['numPassST.min'] = "";
+      // }else if($this->request->get('numPassST') == null){
+      //   $messages['numPassMain.min'] = "";
+      // }
 
       return $messages;
     }

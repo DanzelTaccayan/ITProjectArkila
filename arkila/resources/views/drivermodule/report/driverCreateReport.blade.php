@@ -26,17 +26,17 @@
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">Main Terminal</label>
                                 <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='numPassMain' id='numPassMain' min="0">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' id='' min="0">
+                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0">
                                 </div>
                             </div>
                             
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">Short Trip</label>
                                 <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
                                 </div>
                                 <div class="col-sm-4">
                                     <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
@@ -149,10 +149,27 @@
 <!--   For sum of tables-->
 <script type="text/javascript">
     function findTotal() {
-        var numMainPass = document.getElementById('numPassMain');
-        var numSTPass = document.getElementById('numPassST');
+        // var numMainPass = document.getElementById('numPassMain');
+        // var numSTPass = document.getElementById('numPassST');
         
-        var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);
+        // if(numMainPass == null){
+        //     var tot = parseInt(numSTPass.value);
+        //     console.log('null si main pass');
+        // }else if(numSTPass == null){
+        //     var tot = parseInt(numMainPass.value);
+        //     console.log('null si st pass');
+        // }else{
+        //     var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);    
+        // }
+        
+        var arr = document.getElementsByClassName('num-pass');
+        var tot = 0;
+
+        for(var i = 0; i < arr.length; i++){
+            if(parseInt(arr[i].value)){
+                tot += parseInt(arr[i].value);
+            }
+        }
 
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;

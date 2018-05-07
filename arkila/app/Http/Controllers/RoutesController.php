@@ -144,7 +144,7 @@ class RoutesController extends Controller
             $message = 'The route '. $name .' has been successfully created';
 
         }
-        return redirect('/home/route/')->with('success', $message);
+        return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->with('success', $message);
     }
 
     /**
@@ -258,7 +258,7 @@ class RoutesController extends Controller
             
             $message = $name .' has been successfully edited.';
         }
-        return redirect('/home/route')->with('success', $message);
+        return redirect('/home/route#terminal' .$routeAll->routeDestination()->first()->destination_id)->with('success', $message);
     }
 
     /**
