@@ -30,13 +30,13 @@
 
                     $.ajax({
                         method:'POST',
-                        url: '{{route("trips.changeRemarksOB",[$vansOnQueue->van_queue_id])}}',
+                        url: '{{route("vanqueue.changeRemarksOB",[$vansOnQueue->van_queue_id])}}',
                         data: {
                             '_token': '{{csrf_token()}}',
                             'answer':'No'
                         },
                         success: function(){
-                            $('#remark{{$vansOnQueue->van_queue_id}}').editable('setValue','NULL')
+                            $('#badge{{$vansOnQueue->van_queue_id}}').text('');
                         }
 
                     });

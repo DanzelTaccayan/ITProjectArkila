@@ -98,8 +98,8 @@
             'aoColumnDefs': [
                 { 'bSortable': false, 'aTargets': [-1]},
                 { "width": "5%", "targets": 0 },
-                { "width": "9%", "targets": 3 },
-                { "width": "10%", "targets": 4 }
+                { "width": "11%", "targets": 3 },
+                { "width": "13%", "targets": 4 }
             ]
         })
     })

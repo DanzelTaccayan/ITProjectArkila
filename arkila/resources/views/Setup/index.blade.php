@@ -1,80 +1,93 @@
 @extends('layouts.form_lg')
 @section('title', 'Setting Up')
-@section('back-link', route('route.index'))
-@section('form-action', route('route.store'))
+@section('form-action', route('setup.store'))
 
 
 @section('form-body')
 
 <div class="box">  
-    <div class="box-body" style="padding: 0% 10%">
-        <!-- Company Profile-->
+    <div class="box-body">
+
+        <!-- WELCOME -->
         <div class="form-section">
-            <h3>Company Profile</h3>
+            <h3>Welcome</h3>
 
             <div class="form-group">
-                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="profile picture">
+                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
+                <h4 class="text-center">Ban Trans - UV Express</h4>
+            </div>
 
+        </div>
+
+        <!-- Company Profile-->
+        <div class="form-section">
+            <h3>Company Information</h3>
+
+            <div class="form-group">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
-                    <input type="text" class="form-control">    
+                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
                 </div>
 
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" class="form-control" name="address">
+                    <input type="text" class="form-control" name="address" value="{{old('address')}}">
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="text" class="form-control" name="email">
+                    <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
             </div>
 
         </div>
 
         <!-- Main Terminals -->
-        <div class="form-section">
-            <h3>Main Terminal</h3> 
-            <div class="form-group">
-                <label>Name: <span class="text-red">*</span> </label>
-                <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
-            </div>
-            <div class="form-group">
-                <label>Booking Fee: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
-            </div>
-        </div>
-
+        
         <!-- Destination Terminals -->
         <div class="form-section">
-            <h3>Destination Terminal</h3> 
-            <div class="form-group">
-                <label>Name: <span class="text-red">*</span> </label>
-                <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
+            <h3>Terminal</h3>
+            <div class="well" style="margin: 3%">
+                <h5>Main Terminal</h5> 
+                <div class="form-group">
+                    <label>Name: <span class="text-red">*</span> </label>
+                    <input type="text" class="form-control" name="addMainTerminal" value="{{old('addMainTerminal')}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Booking Fee: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Booking Fee: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
-            </div>
-            <div class="form-group">
-                <label>Regular Fare: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
-            </div>
-            <div class="form-group">
-                <label>Discounted Fare: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}">
-            </div>
-            <div class="form-group">
-                <label>Number of Tickets: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
-            </div>
-            <div class="form-group" id="shotTripReg">
-                <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
-            </div>
-            <div class="form-group" id="shotTripDis">
-                <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-                <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
+
+            <div class="well" style="margin: 3%">
+                <h5>Destination Terminal</h5> 
+                <div class="form-group">
+                    <label>Name: <span class="text-red">*</span> </label>
+                    <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Booking Fee: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Regular Fare: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
+                </div>
+                <div class="form-group">
+                    <label>Discounted Fare: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}">
+                </div>
+                <div class="form-group">
+                    <label>Number of Tickets: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
+                </div>
+                <div class="form-group" id="shotTripReg">
+                    <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
+                </div>
+                <div class="form-group" id="shotTripDis">
+                    <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
+                </div>
             </div>
         </div>
 
@@ -82,15 +95,34 @@
         <div class="form-section">
             <h3>Fees</h3>
             <div class="form-group">
-                <label>Description: <span class="text-red">*</span></label>
-                <input type="text" class="form-control" name="addFeesDesc" val-settings-desc required>
+                <label>Description:</label>
+                <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
             </div>
             <div class="form-group">
                 <label>Amount: <span class="text-red">*</span></label>
-                <input type="number" class="form-control" name="addFeeAmount" step="0.25" placeholder="Php 0.00" val-settings-amount required>
+                <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-settings-amount required>
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" readonly>
+            </div>
+            <div class="form-group">
+                <label>Amount: <span class="text-red">*</span></label>
+                <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
             </div>
         </div>
+
+    <div style="text-align:center;margin-top:40px;">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
     </div>
+
+
+    </div>
+
     <div class="box-footer">
         <div style="overflow:auto;">
             <div class="form-navigation" style="float:right;">

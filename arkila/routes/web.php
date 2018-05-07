@@ -38,6 +38,12 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
 
+    Route::resource('/getting-started/setup', 'SetupController',[
+        'except' => ['create', 'show']
+    ]);
+
+    Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
+
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
     Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
     // Route::post('/home/terminal/store', 'RoutesController@storeTerminal')->name('terminalCreate.update');
@@ -172,7 +178,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/home/vanqueue/{vanOnQueue}/updateRemarks', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
      Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
      Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
-     Route::get('/listSpecialUnits/{terminal}','VanQueueController@listSpecialUnits')->name('vanqueue.listSpecialUnits');
      Route::patch('/vanqueue', 'VanQueueController@updateVanQueue')->name('vanqueue.updateVanQueue');
      Route::patch('/putOnDeck/{vanOnQueue}','VanQueueController@putOnDeck')->name('vanqueue.putOnDeck');
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
@@ -239,7 +244,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
   /*Create Report*/
   //Route::get('/home/choose-terminal', 'DriverModuleControllers\CreateReportController@chooseTerminal')->name('drivermodule.report.driverChooseDestination');
   Route::get('/home/create-report', 'DriverModuleControllers\CreateReportController@createReport')->name('drivermodule.createReport');
-  Route::post('/home/create-report/{terminal}/store', 'DriverModuleControllers\CreateReportController@storeReport')->name('drivermodule.storeReport');
+  Route::post('/home/create-report/store', 'DriverModuleControllers\CreateReportController@storeReport')->name('drivermodule.storeReport');
   /*Trip Log*/
   Route::get('/home/view-trips', 'DriverModuleControllers\TripLogController@viewTripLog')->name('drivermodule.triplog.driverTripLog');
   Route::get('/home/view-trips/{trip}', 'DriverModuleControllers\TripLogController@viewSpecificTrip')->name('drivermodule.triplog.driverTripDetails');

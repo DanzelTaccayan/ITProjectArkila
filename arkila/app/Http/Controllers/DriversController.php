@@ -227,8 +227,7 @@ class DriversController extends Controller
                 'username' => $driver->first_name[0].$driver->last_name,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
-                'status' => 'enable',
-                'model_id' => $vanNd->vanModel->model_id,
+                'status' => 'enable'
             ]);
 
             $driver->update([
@@ -237,6 +236,7 @@ class DriversController extends Controller
 
             DB::commit();
         } catch(\Exception $e) {
+            \Log::info($e);
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }

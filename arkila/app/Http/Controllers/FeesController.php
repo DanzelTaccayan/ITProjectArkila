@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\FeesAndDeduction;
+use App\Fee;
 use App\Rules\checkCurrency;
 use Illuminate\Http\Request;
+use App\Destination;
 
 class FeesController extends Controller
 {
@@ -32,10 +33,9 @@ class FeesController extends Controller
             "addFeeAmount" => ['required',new checkCurrency,'numeric','min:1','max:5000']
         ]);
 
-        FeesAndDeduction::create([
+        Fee::create([
             "description" => request('addFeesDesc'),
             "amount" => request('addFeeAmount'),
-            "type" => "Fee"
         ]);
 
         session()->flash('message', 'Fee created successfully');
@@ -48,7 +48,7 @@ class FeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(FeesAndDeduction $fee)
+    public function edit(Fee $fee)
     {
         
         return view('settings.editFee',compact('fee'));
@@ -61,7 +61,7 @@ class FeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FeesAndDeduction $fee)
+    public function update(Fee $fee)
     {
         $this->validate(request(),[
             "editFeeAmount" => ['required',new checkCurrency, 'numeric', 'min:1','max:5000'],
@@ -86,5 +86,10 @@ class FeesController extends Controller
         $fee->delete();
         session()->flash('message', 'Fee deleted successfully');
         return back();
+    }
+
+    public function editBooking(Destination $bookingfee)
+    {
+        return view('settings.editBookingFee', compact('bookingfee'));
     }
 }

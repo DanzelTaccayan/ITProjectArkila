@@ -3,14 +3,21 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\VanRental;
+use AustinHeap\Database\Encryption\Traits\HasEncryptedAttributes;
+
 class Van extends Model
 {
+    use HasEncryptedAttributes;
+
     protected $table = 'van';
 	protected $primaryKey = 'van_id';
     protected $guarded = [
     	'van_id',
-	];  
+	];
+    protected $encrypted = [
+        'plate_number','seating_capacity'
+    ];
+
 	//
 
     public function members()
