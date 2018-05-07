@@ -9,12 +9,12 @@
     <div class="box-body">
 
         <!-- WELCOME -->
-        <div class="form-section text-center" style="margin-bottom: 16%; padding: 4%">
+        <div class="form-section" style="margin-bottom: 0%; padding: 6% 4% 3% 4%">
             
             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
-            <h4>Ban Trans - UV Express</h4>
-            <h2><strong>WELCOME!</strong></h2>
-            <p></p>
+            <h2 class="text-center"><strong>Ban Trans - UV Express</strong></h2> 
+            <hr>
+            <p class="text-justify" style="font-size: 12pt"><strong>WELCOME! </strong>Lets get started by clickin on the next button, you are required to fill in necessary information about the company. As you move along you will be required to set the main terminal, destination terminal and fees by simply filling in necessary information. This web application is created for Ban Trans only.</p>
 
         </div>
 
