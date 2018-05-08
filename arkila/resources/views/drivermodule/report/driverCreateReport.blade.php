@@ -32,7 +32,6 @@
                                 <td><input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0"></td>
                                 <td><input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0"></td>
                               </tr>
-                  
                             </tbody>
                         </table>
 
