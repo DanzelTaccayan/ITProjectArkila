@@ -100,7 +100,8 @@ class RoutesController extends Controller
             $terminal->routeOrigin()
             ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
 
-            $message = 'The terminal '. $name .' has been successfully created';
+            return redirect('/home/route#terminal'.$terminal->destination_id)->with('success', 'The terminal '. $name .' has been successfully created');
+
         }
         else 
         {
@@ -141,10 +142,10 @@ class RoutesController extends Controller
                     ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
                 } 
             }   
-            $message = 'The route '. $name .' has been successfully created';
+            
+            return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->with('success', 'The route '. $name .' has been successfully created');
 
         }
-        return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->with('success', $message);
     }
 
     /**
@@ -270,6 +271,9 @@ class RoutesController extends Controller
     public function destroy(Destination $route)
     {
         $main = Destination::where('is_main_terminal', '1')->first();
+        $terminals = Destination::allTerminal()->get();
+        $isTerminal = $route->is_terminal;
+        $terminal = $route->routeDestination()->first()->destination_id;
         $message = null;
         if ($route->is_terminal == true)
         {
@@ -287,8 +291,14 @@ class RoutesController extends Controller
             $message = 'The route '. $route->destination_name .' has been successfully deleted!';
 
         }
-
-        return back()->with('success', $message);
+        if($isTerminal == true)
+        {
+            return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+        }
+        else
+        {
+            return redirect('/home/route#terminal' .$terminal)->with('success', $message);
+        }
 
     }
 }

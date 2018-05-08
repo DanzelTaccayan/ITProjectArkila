@@ -64,12 +64,12 @@ class VanQueueController extends Controller
                     'remarks' => NULL,
                     'queue_number' => $queueNumber
                 ]);
-                session()->flash('success', 'Van Succesfully Added to the queue');
+    
                 DB::commit();
-                return 'success';
+                return '#queue'. $destination->destination_id;
             } else {
                 session()->flash('error', 'Van is already on the Queue');
-                return 'Van is already on the Queue';
+                return 'Van is already on Queue';
             }
 
         } catch (\Exception $e) {
@@ -279,8 +279,8 @@ class VanQueueController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        session()->flash('success', 'Van on Queue Successfully Removed');
-        return back();
+        // session()->flash('success', 'Van on Queue Successfully Removed');
+        return redirect('/home/vanqueue#queue'. $vanqueue->destination_id)->with('success',  $vanqueue->van->plate_number .' has been successfully removed from the queue.');
     }
 
     public function specialUnitChecker()
@@ -428,7 +428,7 @@ class VanQueueController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        return back();
+        return redirect('/home/vanqueue#queue'. $vanOnQueue->destination_id)->with('success',  $vanOnQueue->van->plate_number .' has been moved on deck.');
     }
 
     public function changeRemarksOB(VanQueue $vanOnQueue)

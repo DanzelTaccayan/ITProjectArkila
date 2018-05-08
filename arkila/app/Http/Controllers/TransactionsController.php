@@ -10,6 +10,7 @@ use App\Ticket;
 use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
+use DB;
 
 class TransactionsController extends Controller
 {
@@ -20,9 +21,11 @@ class TransactionsController extends Controller
      */
     public function index()
     {
-        $terminals = Destination::where('is_main_terminal','!=','1')->get();
 
-        return view('transaction.index',compact('terminals'));
+        $terminals = Destination::where('is_main_terminal','!=','1')->get();
+        $transactions = Transaction::all();
+        $mainTerminal = Destination::where('is_main_terminal',1)->first();
+        return view('transaction.index',compact('terminals','transactions','mainTerminal'));
     }
 
     public function manageTickets()

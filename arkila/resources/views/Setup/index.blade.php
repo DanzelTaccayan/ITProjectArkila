@@ -50,7 +50,7 @@
                 Terminal
                 </h3>
             </div>
-            <div class="box" style="margin: 3%; padding: 1%">
+            <div class="box" style="margin: 3%; padding: 3% 5%">
                 <h4><strong>Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="box" style="margin: 3%; padding: 1%">
+            <div class="box" style="margin: 3%; padding: 3% 5%">
                 <h4><strong>Destination Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>

@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
             'middle_name' => 'admin',
             'first_name' => 'admin',
             'username' => 'admin',
-            'password' => '$2y$10$9cyV8.dgRdGfOwVSpnUtb.ft4QdFUm5w5dyaMeSzv3i6v799W4W3m',
+            'password' => '$2y$10$FdmN2gaCDcq00rV1FYX5.OZEFHcU80QsKJqHwUL3z3MeKheH1/9li',
             'user_type' => 'Super-Admin',
             'status' => 'enable',
         ]);
