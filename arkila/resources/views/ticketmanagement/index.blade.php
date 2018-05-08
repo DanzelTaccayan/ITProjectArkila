@@ -93,6 +93,54 @@
 @section('scripts') 
 @parent
 <script>
+  $(document).ready(function(){
+    $("#regEditQty").hide();
+    $("#regEditAction").hide();
+    $("#regEditBtn").click(function(){
+      $("#regEditQty").show();
+      $("#regEditAction").show();
+      $("#regViewQty").hide();
+      $("#regViewAction").hide();
+    })
+    $("#regViewBtn").click(function(){
+      $("#regViewQty").show();
+      $("#regViewAction").show();
+      $("#regEditQty").hide();
+      $("#regEditAction").hide();
+    })
+  });
+
+  $(document).ready(function(){
+    $("#discEditQty").hide();
+    $("#discEditAction").hide();
+    $("#discEditBtn").click(function(){
+      $("#discEditQty").show();
+      $("#discEditAction").show();
+      $("#discViewQty").hide();
+      $("#discViewAction").hide();
+    })
+    $("#discViewBtn").click(function(){
+      $("#discViewQty").show();
+      $("#discViewAction").show();
+      $("#discEditQty").hide();
+      $("#discEditAction").hide();
+    })
+  });
+
+  $(".discInput").keydown(function (e) {
+    var key = e.keyCode || e.charCode;
+    if (key == 8 || key == 46) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+  });
+
+  $(".discInput").keypress(function (evt) {
+    evt.preventDefault();
+  });
+</script>
+
+<script>
     $(function() {
         $('#regulatTickets').DataTable({
             'paging': true,
