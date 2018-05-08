@@ -287,7 +287,7 @@ ol.vertical{
                             <div class="queue-body scrollbar scrollbar-info thin">  
                               <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization">
                                   @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
-                                    <li id="unit{{$vanOnQueue->van_queue_id}}" class="queue-item form-horizontal">
+                                    <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
                                             <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
@@ -769,7 +769,7 @@ ol.vertical{
             },
             success: function(queue){
                console.log(queue);
-               for(i = 0; i < queue.length; i++){
+               for(i = 0; i < queue.length; i++) {
                     $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
                }
                specialUnitChecker();
