@@ -3,7 +3,7 @@
     @foreach($vansObjArr as $vansOnQueue)
     new PNotify({
         title: 'Confirmation',
-        text: '<strong>{{$vansOnQueue->plate_number}}</strong> bound for {{$vansOnQueue->destination->destination_name}} is on deck and has a remark of OB. Do you want to move this unit to the special units?',
+        text: '<strong>{{$vansOnQueue->van->plate_number}}</strong> bound for {{$vansOnQueue->destination->destination_name}} is on deck and has a remark of OB. Do you want to move this unit to the special units?',
         icon: 'glyphicon glyphicon-question-sign',
         hide: false,
         confirm: {
@@ -15,7 +15,7 @@
                     // Negate the OB
                     notice.update({
                         title: 'Confirmed',
-                        text: '<strong>{{$vansOnQueue->plate_number}}</srong> will remain on deck.',
+                        text: '<strong>{{$vansOnQueue->van->plate_number}}</srong> will remain on deck.',
                         icon: true,
                         type: 'info',
                         hide: true,
@@ -49,7 +49,7 @@
                 click: function(notice) {
                     notice.update({
                         title: 'Confirmed',
-                        text: '<strong>{{$vansOnQueue->plate_number}}</strong> will be moved to special units',
+                        text: '<strong>{{$vansOnQueue->van->plate_number}}</strong> will be moved to special units',
                         icon: true,
                         type: 'info',
                         hide: true,
