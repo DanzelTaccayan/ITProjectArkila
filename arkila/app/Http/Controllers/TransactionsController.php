@@ -448,27 +448,16 @@ class TransactionsController extends Controller
         try  {
             if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
                 $ticketType = request('ticketType');
-                SelectedTicket::create([
-                    'destination_id' => $destination->destination_id,
+                $ticket = $destination->tickets->where('type',$ticketType)->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+
+                $selectedTicket = SelectedTicket::create([
+                    'ticket_id' => $ticket->ticket_id,
                     'type' => $ticketType
                 ]);
 
-                $selectedTickets = count($destination->selectedTickets()->where('type',$ticketType)->get());
-                $responseArr = [];
-                $counter = 0;
+                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare];
 
-                foreach($destination->tickets()->orderBy('type')->get() as $ticket) {
 
-                    array_push($responseArr,[
-                       'ticketNumber' => $ticket->ticket_number,
-                        'fare' => $ticket->fare
-                    ]);
-                    $counter++;
-
-                    if($counter > $selectedTickets) {
-                        break;
-                    }
-                }
                 DB::commit();
                 return response()->json($responseArr);
             }

@@ -157,21 +157,7 @@
                                                             <div class="table-area scrollbar scrollbar-info thin">
                                                             <table class="table table-condensed table-striped">
                                                                 <tbody id="selectedList{{$terminal->destination_id}}">
-                                                                    @foreach($terminal->tickets()->where('type','Discount')->get() as $discountedTicket)
-                                                                        @foreach($selectedTickets->where(['destination_id',$terminal->destination_id],['type','Discount']) as $selectedDiscountedTicket)
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$discountedTicket->ticket_number}}</button>
-                                                                                </td>
-                                                                                <td class="pull-right">{{$discountedTicket->fare}}</td>
-                                                                                <td class="text-center text-red"><i class="fa fa-trash"></i></td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                        @break
-                                                                    @endforeach
-
-                                                                    @foreach($terminal->tickets()->where('type','Regular')->get() as $ticket)
-                                                                        @foreach($selectedTickets->where(['destination_id',$terminal->destination_id],['type','Discount']) as $selectedTicket)
+                                                                    @foreach(App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get() as $ticket)
                                                                             <tr>
                                                                                 <td>
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
@@ -179,8 +165,6 @@
                                                                                 <td class="pull-right">{{$ticket->fare}}</td>
                                                                                 <td class="text-center text-red"><i class="fa fa-trash"></i></td>
                                                                             </tr>
-                                                                        @endforeach
-                                                                        @break
                                                                     @endforeach
                                                                 </tbody>
                                                             </table>
@@ -191,17 +175,17 @@
                                                                 <tbody>
                                                                     <tr class="info">
                                                                         <td>Regular</td>
-                                                                        <td class="text-right">3 <i class="fa fa-ticket"></i></td>
+                                                                        <td id="totalRegTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right">1000.00</td>
                                                                     </tr>
                                                                     <tr class="info">
                                                                         <td>Discounted</td>
-                                                                        <td class="text-right">3 <i class="fa fa-ticket"></i></td>
+                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right">90.00</td>
                                                                     </tr>
                                                                     <tr class="success">
                                                                         <td><strong>Total</strong></td>
-                                                                        <td class="text-right">6 <i class="fa fa-ticket"></i></td>
+                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right"><strong>1090.00</strong></td>
                                                                     </tr>
                                                                 </tbody>
@@ -238,9 +222,9 @@
                                                                     @foreach($terminal->routeFromDestination as $destination)
                                                                         <tr>
                                                                             <td>
-                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-block">
+                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-block">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($regTicketNum = count($selectedTickets->where('destination',$destination->destination_id)->where('type','Regular')))
+                                                                                    @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
                                                                                         <span class="badge bg-yellow pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
@@ -250,7 +234,7 @@
                                                                             <td>
                                                                                 <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-block">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($discountedTicketNum = count($selectedTickets->where('destination',$destination->destination_id)->where('type','Discount')))
+                                                                                    @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
                                                                                         <span class="badge bg-yellow pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
@@ -622,7 +606,8 @@
 <script>
     $(function(){
         $('button[name="ticketButton"]').on('click',function(){
-            var destinationId = $(this).data('val');
+            var destinationId = $(this).data('route');
+            var terminalId = $(this).data('terminal');
             var ticketType = $(this).data('type');
             $.ajax({
                 method:'POST',
@@ -631,14 +616,12 @@
                     '_token': '{{csrf_token()}}',
                     'ticketType': ticketType
                 },
-                success: function(response){
-                    $('#selectedList'+destinationId).empty();
-                    response.forEach(function(element){
-                        var ticketNumber = '<tr><td><button type="button" class="btn btn-block btn-xs edit btn-primary">'+element.ticketNumber+'</button></td>';
-                        var fare = '<td class="pull-right">'+element.fare+'</td>';
-                        var deleteButt = '<td class="text-center text-red"><i class="fa fa-trash"></i></td></tr>';
-                        $('#selectedList'+destinationId).append(ticketNumber+fare+deleteButt);
-                    });
+                success: function(element){
+
+                    var ticketNumber = '<tr><td><button type="button" class="btn btn-block btn-xs edit btn-primary">'+element.ticketNumber+'</button></td>';
+                    var fare = '<td class="pull-right">'+element.fare+'</td>';
+                    var deleteButt = '<td class="text-center text-red"><i class="fa fa-trash"></i></td></tr>';
+                    $('#selectedList'+terminalId).append(ticketNumber+fare+deleteButt);
 
                 }
 

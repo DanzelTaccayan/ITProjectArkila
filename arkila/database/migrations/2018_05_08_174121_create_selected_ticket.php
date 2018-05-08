@@ -17,14 +17,14 @@ class CreateSelectedTicket extends Migration
             $table->engine = 'InnoDB';
             $table->increments('selected_ticket_id');
 
-            $table->integer('destination_id')
+            $table->integer('ticket_id')
                 ->unsigned();
 
             $table->enum('type',['Regular','Discount']);
 
 
-            $table->foreign('destination_id')
-                ->references('destination_id')->on('destination')
+            $table->foreign('ticket_id')
+                ->references('ticket_id')->on('ticket')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

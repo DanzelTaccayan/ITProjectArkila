@@ -59,7 +59,12 @@ class Destination extends Model
 
     public function selectedTickets()
     {
-        return $this->hasMany(SelectedTicket::class,'destination_id');
+        return $this->hasManyThrough(SelectedTicket::class,
+            Ticket::class,
+            'destination_id',
+            'ticket_id',
+            'destination_id',
+            'ticket_id');
     }
 
     public static function scopeAllTerminal($query)
