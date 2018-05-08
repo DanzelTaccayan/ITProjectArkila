@@ -125,9 +125,9 @@
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                    <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->terminal_id}}">
-                                        <div id="sellTickets{{$terminal->terminal_id}}">
+                                    @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+                                    <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                                        <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div class="col-md-5">
                                                     <div class="well">
@@ -358,52 +358,52 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="boardPageBtn{{$terminal->terminal_id}}" type="button" class="btn bg-navy btn-flat btn-block" style="height: 50px;">BOARD PASSENGERS</button>
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat btn-block" style="height: 50px;">BOARD PASSENGERS</button>
                                             </div>
                                         </div>
-                                        <div id="boardTickets{{$terminal->terminal_id}}">
+                                        <div id="boardTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div id="list-left1" class="dual-list list-left col-md-5">
                                                     <div class="box box-solid ticket-box">
-                                                        <div id="ondeck-header{{$terminal->terminal_id}}" class="box-header bg-blue">
+                                                        <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                                             <span class="col-md-6">
                                                                 <h6>On Deck:</h6>
-                                                                 <h4>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</h4>
+                                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
-                                                                <button type="button" id="changeDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" id="changeDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-user"></i>
                                                                 </button>
-                                                                <button type="button" id="deleteDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" id="deleteDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <div id="changedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                                        <div id="changedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                                             <span class="col-md-8">
                                                                 <h6>Driver:</h6>
                                                                  <h4>
-                                                                    <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
+                                                                    <a href="#" class="text-white" id="driverChange{{$terminal->destination_id}}"></a>
                                                                     <i class='fa fa-pencil'></i>
                                                                 </h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
-                                                                <button type="button" id="onDeckBtn1-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" id="onDeckBtn1-{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-chevron-left"></i>
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <div id="deletedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                                        <div id="deletedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                                             <span class="col-md-12">
                                                                  <p>
-                                                                     Are you sure you want to remove <strong>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</strong> on deck?
+                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</strong> on deck?
                                                                  </p>
                                                             </span>
                                                              <span class="pull-right">
-                                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->trips->where('queue_number',1)->first()->trip_id])}}">
+                                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
                                                                      {{method_field('DELETE')}}
                                                                      {{csrf_field()}}
-                                                                    <button type="button" id="onDeckBtn2-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary">
+                                                                    <button type="button" id="onDeckBtn2-{{$terminal->destination_id}}" class="btn btn-sm btn-primary">
                                                                         NO
                                                                     </button>
                                                                     <button type="submit" class="btn btn-sm btn-danger">
@@ -418,7 +418,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -431,8 +431,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="">
-                                                                <ul id="onBoardList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($terminal->transactions->where('status','OnBoard') as $transaction)
+                                                                <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                    @foreach($transactions->where('destination',$terminal->destination_name)->where('status','OnBoard') as $transaction)
                                                                         <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
@@ -443,11 +443,11 @@
                                                 </div>
 
                                                 <div class="list-arrows col-md-2 text-center">
-                                                    <button id="board{{$terminal->terminal_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
+                                                    <button id="board{{$terminal->destination_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
                                                         <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
                                                     </button>
                                                     <br>
-                                                    <button id="unboard{{$terminal->terminal_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
+                                                    <button id="unboard{{$terminal->destination_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
                                                          UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
                                                     </button>
                                                 </div>
@@ -464,7 +464,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -476,7 +476,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <ul id="pendingList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
                                                                     @foreach($terminal->transactions->where('status','Pending') as $transaction)
                                                                         <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                                     @endforeach
@@ -489,8 +489,8 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="sellPageBtn{{$terminal->terminal_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
-                                                <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->terminal_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
+                                                <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
+                                                <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
                                         </div>
                                     </div>
@@ -505,8 +505,8 @@
                             <div class="nav-terminal  scrollbar scrollbar-info thin">
                             <ul class="nav nav-stacked ">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                        <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->terminal_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
+                                    @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
+                                        <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
                                     @endif
                                 @endforeach
                             </ul>
@@ -526,8 +526,8 @@
                     <ul class="nav nav-tabs">
 
                         @foreach($terminals as $terminal)
-                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->terminal_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
+                            @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
                             @endif
                         @endforeach
 
@@ -535,50 +535,50 @@
 
                     <div class="tab-content">
                         @foreach($terminals as $terminal)
-                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->terminal_id}}">
-                            <div id="sellTicketss{{$terminal->terminal_id}}" class="row">
+                            @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
+                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                            <div id="sellTicketss{{$terminal->destination_id}}" class="row">
                                 <div id="list-left1" class="dual-list list-left col-md-5">
                                     <div class="box box-solid ticket-box">
-                                        <div id="ondeck-header{{$terminal->terminal_id}}" class="box-header bg-blue">
+                                        <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                             <span class="col-md-6">
                                                 <h6>On Deck:</h6>
-                                                 <h4>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</h4>
+                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</h4>
                                             </span>
                                              <span class="pull-right btn-group">
-                                                <button type="button" id="changeDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                <button type="button" id="changeDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                     <i class="fa fa-user"></i>
                                                 </button>
-                                                <button type="button" id="deleteDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                <button type="button" id="deleteDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </span>
                                         </div>
-                                        <div id="changedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                        <div id="changedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                             <span class="col-md-8">
                                                 <h6>Driver:</h6>
                                                  <h4>
-                                                    <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
+                                                    <a href="#" class="text-white" id="driverChange{{$terminal->destination_id}}"></a>
                                                     <i class='fa fa-pencil'></i>
                                                 </h4>
                                             </span>
                                              <span class="pull-right btn-group">
-                                                <button type="button" id="onDeckBtn1-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                <button type="button" id="onDeckBtn1-{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                     <i class="fa fa-chevron-left"></i>
                                                 </button>
                                             </span>
                                         </div>
-                                        <div id="deletedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                        <div id="deletedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                             <span class="col-md-12">
                                                  <p>
-                                                     Are you sure you want to remove <strong>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</strong> on deck?
+                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</strong> on deck?
                                                  </p>
                                             </span>
                                              <span class="pull-right">
-                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->trips->where('queue_number',1)->first()->trip_id])}}">
+                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
                                                      {{method_field('DELETE')}}
                                                      {{csrf_field()}}
-                                                    <button type="button" id="onDeckBtn2-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary">
+                                                    <button type="button" id="onDeckBtn2-{{$terminal->destination_id}}" class="btn btn-sm btn-primary">
                                                         NO
                                                     </button>
                                                     <button type="submit" class="btn btn-sm btn-danger">
@@ -593,7 +593,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -606,7 +606,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="">
-                                                <ul id="onBoardList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
                                                     @foreach($terminal->transactions->where('status','OnBoard') as $transaction)
                                                         <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                     @endforeach
@@ -614,18 +614,18 @@
                                                 </div>
                                             </div>
                                             <div class="text-center ">
-                                                <button name="depart" value="{{$terminal->terminal_id}}" href="" class="btn btn-primary btn-flat">Depart <i class="fa fa-automobile"></i></button>
+                                                <button name="depart" value="{{$terminal->destination_id}}" href="" class="btn btn-primary btn-flat">Depart <i class="fa fa-automobile"></i></button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="list-arrows col-md-2 text-center">
-                                    <button id="board{{$terminal->terminal_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
+                                    <button id="board{{$terminal->destination_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
                                         <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
                                     </button>
                                     <br>
-                                    <button id="unboard{{$terminal->terminal_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
+                                    <button id="unboard{{$terminal->destination_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
                                          UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
                                     </button>
                                 </div>
@@ -642,7 +642,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -654,7 +654,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <ul id="pendingList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
                                                     @foreach($terminal->transactions->where('status','Pending') as $transaction)
                                                         <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                     @endforeach
@@ -693,8 +693,8 @@
      var activeTab = document.location.hash;
     if(!activeTab){
 
-            activeTab = @if($terminals->first()->terminal_id ?? null)
-                "{{'#terminal'.$terminals->first()->terminal_id}}";
+            activeTab = @if($terminals->first()->destination_id ?? null)
+                "{{'#terminal'.$terminals->first()->destination_id}}";
         @else
                 {{''}}
         @endif
@@ -1026,38 +1026,38 @@
 @foreach($terminals as $terminal)
 <script>
      $(function(){
-        $("#changedriver-header{{$terminal->terminal_id}}").hide();
-        $("#deletedriver-header{{$terminal->terminal_id}}").hide();
-        $("#changeDriverBtn{{$terminal->terminal_id}}").click(function(){
-            $("#ondeck-header{{$terminal->terminal_id}}").hide();
-            $("#changedriver-header{{$terminal->terminal_id}}").show()
-            $("#changedriver-header{{$terminal->terminal_id}}").removeClass("hidden");
+        $("#changedriver-header{{$terminal->destination_id}}").hide();
+        $("#deletedriver-header{{$terminal->destination_id}}").hide();
+        $("#changeDriverBtn{{$terminal->destination_id}}").click(function(){
+            $("#ondeck-header{{$terminal->destination_id}}").hide();
+            $("#changedriver-header{{$terminal->destination_id}}").show()
+            $("#changedriver-header{{$terminal->destination_id}}").removeClass("hidden");
         })
-        $("#deleteDriverBtn{{$terminal->terminal_id}}").click(function(){
-            $("#ondeck-header{{$terminal->terminal_id}}").hide();
-            $("#deletedriver-header{{$terminal->terminal_id}}").show()
-            $("#deletedriver-header{{$terminal->terminal_id}}").removeClass("hidden");
+        $("#deleteDriverBtn{{$terminal->destination_id}}").click(function(){
+            $("#ondeck-header{{$terminal->destination_id}}").hide();
+            $("#deletedriver-header{{$terminal->destination_id}}").show()
+            $("#deletedriver-header{{$terminal->destination_id}}").removeClass("hidden");
         })
-        $("#onDeckBtn1-{{$terminal->terminal_id}}").click(function(){
-            $("#changedriver-header{{$terminal->terminal_id}}").hide();
-            $("#ondeck-header{{$terminal->terminal_id}}").show();
+        $("#onDeckBtn1-{{$terminal->destination_id}}").click(function(){
+            $("#changedriver-header{{$terminal->destination_id}}").hide();
+            $("#ondeck-header{{$terminal->destination_id}}").show();
         })
-        $("#onDeckBtn2-{{$terminal->terminal_id}}").click(function(){
-            $("#deletedriver-header{{$terminal->terminal_id}}").hide();
-            $("#ondeck-header{{$terminal->terminal_id}}").show();
+        $("#onDeckBtn2-{{$terminal->destination_id}}").click(function(){
+            $("#deletedriver-header{{$terminal->destination_id}}").hide();
+            $("#ondeck-header{{$terminal->destination_id}}").show();
         })
       });
 </script>
 <script>
     $(function(){
-        $("#boardTickets{{$terminal->terminal_id}}").hide();
-        $("#boardPageBtn{{$terminal->terminal_id}}").click(function(){
-            $("#sellTickets{{$terminal->terminal_id}}").hide();
-            $("#boardTickets{{$terminal->terminal_id}}").show();
+        $("#boardTickets{{$terminal->destination_id}}").hide();
+        $("#boardPageBtn{{$terminal->destination_id}}").click(function(){
+            $("#sellTickets{{$terminal->destination_id}}").hide();
+            $("#boardTickets{{$terminal->destination_id}}").show();
         })
-        $("#sellPageBtn{{$terminal->terminal_id}}").click(function(){
-            $("#sellTickets{{$terminal->terminal_id}}").show();
-            $("#boardTickets{{$terminal->terminal_id}}").hide();
+        $("#sellPageBtn{{$terminal->destination_id}}").click(function(){
+            $("#sellTickets{{$terminal->destination_id}}").show();
+            $("#boardTickets{{$terminal->destination_id}}").hide();
         })
     });
 </script>
@@ -1105,15 +1105,15 @@
 <script>
     $(function() {
         @foreach($terminals as $terminal)
-        @if($trip = $terminal->trips->where('queue_number',1)->first())
-            $('#driverChange{{$terminal->terminal_id}}').editable({
+        @if($trip = $terminal->vanQueue->where('queue_number',1)->first())
+            $('#driverChange{{$terminal->destination_id}}').editable({
                 type: 'select',
                 title: 'Change Driver',
-                value: "{{$terminal->trips->where('queue_number',1)->first()->driver_id}}",
+                value: "{{$terminal->vanQueue->where('queue_number',1)->first()->driver_id}}",
                 source: "{{route('transactions.listSourceDrivers')}}",
                 sourceCache: true,
-                pk: '{{$terminal->trips->where('queue_number',1)->first()->trip_id}}',
-                url: '{{route('transactions.changeDriver',[$trip->trip_id])}}',
+                pk: '{{$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id}}',
+                url: '{{route('transactions.changeDriver',[$trip->van_queue_id])}}',
                 validate: function(value){
                     if($.trim(value) == ""){
                         return "This field is required";
