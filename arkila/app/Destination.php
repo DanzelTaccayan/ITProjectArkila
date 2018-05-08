@@ -59,6 +59,7 @@ class Destination extends Model
 
     public static function scopeAllTerminal($query)
     {
+
         return $query->where([
             ['is_terminal','1'],
             ['is_main_terminal', '0'],
