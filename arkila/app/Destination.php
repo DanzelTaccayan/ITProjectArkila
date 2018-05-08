@@ -57,6 +57,11 @@ class Destination extends Model
         return $this->hasMany(VanQueue::class, 'destination_id');
     }
 
+    public function selectedTickets()
+    {
+        return $this->hasMany(SelectedTicket::class,'destination_id');
+    }
+
     public static function scopeAllTerminal($query)
     {
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Destination;
 use App\Ledger;
+use App\SelectedTicket;
 use App\Trip;
 use App\Transaction;
 use App\Ticket;
@@ -24,8 +25,8 @@ class TransactionsController extends Controller
 
         $terminals = Destination::where('is_main_terminal','!=','1')->get();
         $transactions = Transaction::all();
-        $mainTerminal = Destination::where('is_main_terminal',1)->first();
-        return view('transaction.index',compact('terminals','transactions','mainTerminal'));
+        $selectedTickets = SelectedTicket::all();
+        return view('transaction.index',compact('terminals','transactions','selectedTickets'));
     }
 
     public function manageTickets()
@@ -438,5 +439,42 @@ class TransactionsController extends Controller
         ]);
 
         return 'success';
+    }
+
+    public function selectTicket(Destination $destination)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
+                $ticketType = request('ticketType');
+                SelectedTicket::create([
+                    'destination_id' => $destination->destination_id,
+                    'type' => $ticketType
+                ]);
+
+                $selectedTickets = count($destination->selectedTickets()->where('type',$ticketType)->get());
+                $responseArr = [];
+                $counter = 0;
+
+                foreach($destination->tickets()->orderBy('type')->get() as $ticket) {
+
+                    array_push($responseArr,[
+                       'ticketNumber' => $ticket->ticket_number,
+                        'fare' => $ticket->fare
+                    ]);
+                    $counter++;
+
+                    if($counter > $selectedTickets) {
+                        break;
+                    }
+                }
+                DB::commit();
+                return response()->json($responseArr);
+            }
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
     }
 }
