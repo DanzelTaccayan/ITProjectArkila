@@ -2,8 +2,11 @@
 @section('title', 'List of Drivers') 
 @section('content-header', 'List of Drivers') 
 @section('content')
-<div class="row">
-        <div class="col-md-8">
+<div class="">
+        <div class="padding-side-15">
+        <div>
+            <h2 class="text-white">DESTINATION TICKETS MANAGEMENT</h2>
+        </div>
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">

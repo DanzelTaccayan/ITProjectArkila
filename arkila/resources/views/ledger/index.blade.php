@@ -6,10 +6,15 @@
 @stop
 @section('content')
 <div class="padding-side-5">
+    <div>
+        <h2 class="text-white">DAILY LEDGER</h2>
+    </div>
     <div class="box">
         <div class="box-body">
-
-            <h2 class="text-center">{{ $date->formatLocalized('%A %d %B %Y') }}</h2>
+            <div class="time-header">
+                <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 50px;"><i class="fa fa-calendar"></i> {{ $date->formatLocalized('%A %d %B %Y') }}</h3>
+            </div>
+            
             <div class="table-responsive">
                 <div class="col col-md-6">
                     <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>

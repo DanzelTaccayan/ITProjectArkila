@@ -1,71 +1,11 @@
 @extends('layouts.master')
 @section('title', 'Reservations')
-@section('links')
-@parent
-  <link rel="stylesheet" href="public\css\myOwnStyle.css">
-  @stop
-
 @section('content')
 <div class="row">
-    <div class="col-md-3">
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Ticket</h3>
-                </div>
-                <form action="">
-                    <div class="box-body">
-                        <label for="">Reservation</label>
-                        <select name="reservation_code" id="reservationSell" class="form-control">
-                        <option value="">Select Reservation</option>
-                                @foreach ($reservations->where('type', 'Online')->where('status', 'Accepted') as $reservation)
-                            @if($reservation->destination->terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                <option value="{{$reservation->id}}">#{{$reservation->id}} by {{$reservation->name}}</option>
-                            @endif
-                        @endforeach
-                        </select>
-                        <label for="">Terminal</label>
-                        <select name="terminal" id="terminalSell" class="form-control">
-                        <option value="">Select Terminal</option>
-                            @php $counter = 0; @endphp
-                            @foreach($terminals as $terminal)
-                                @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                    <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                        <label for="">Destination</label>
-                        <select name="destination" id="destinationSell" class="form-control">
-                        <option value="">Select Destination</option>
-                        @foreach ($destinations as $destination)
-                        <option value="{{$destination->destination_id}}">{{$destination->description}}</option>
-                        @endforeach
-                        </select>
-                        <label for="">Discount</label>
-                        <div class="input-group">
-                                                <span class="input-group-addon">
-                                                  <input id="checkDiscount" type="checkbox">
-                                                </span>
-                            <select name="discount" id="discount" class="form-control">
-                            @foreach ($discounts as $discount)
-                            <option value="">Select Discount</option>
-                            <option value="">{{$discount->description}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                        <label for="">Ticket</label>
-                        <select name="tickets" id="ticket" class="form-control select2" multiple="multiple" data-placeholder="Select Ticket" disabled>
-                        </select>
-                    </div>
-
-                    <div class="box-footer">
-                        <div id="sellButtContainer" class="pull-right">
-                            <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="padding-side-5">
+            <div>
+                <h2 class="text-white">LINE RESERVATIONS</h2>
             </div>
-        </div>
-        <div class="col-md-9">
             <div class="box">
                 <div class="box-body">
 
@@ -96,7 +36,7 @@
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody>{{-- 
 
                                         @foreach ($reservations as $reservation) 
                                         @if ($reservation->status == 'Paid' | $reservation->status == 'Departed' | $reservation->status == 'Cancelled' )
@@ -199,7 +139,7 @@
                                             </td>
                                         </tr>
                                         @endif 
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -221,7 +161,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($reservations->where('type', 'Online') as $reservation)
+                                   {{--  @foreach ($reservations->where('type', 'Online') as $reservation)
                                     <tr>
                                         <td>{{ $reservation->id }}</td>
                                         <td>{{ $reservation->name }}</td>
@@ -263,7 +203,7 @@
                                                             </div>
                                                             <!-- /.col -->
                                                         </div>
-                                                        <!-- /.modal-dialog -->
+                                                        /.modal-dialog
                                                     </div>
                                                     <!-- /.modal -->
 
@@ -309,7 +249,7 @@
                                  
 
                                     
-                                @endforeach
+                                @endforeach --}}
                                 </tbody>
                             </table>
                         </div>

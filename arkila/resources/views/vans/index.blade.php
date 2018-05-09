@@ -3,10 +3,13 @@
 @if(session()->get('opLink')) {{ session()->forget('opLink') }} @endif
 
 @section('content')
-<div class="padding-side-5">   
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">LIST OF VAN UNITS</h2>
+    </div>   
     <div class="box">
         <!-- /.box-header -->
-        <div class="box-body">
+        <div class="box-body with-shadow">
             <div class="table-responsive">
             	<div class="col-md-6">
                     @if(count(\App\Member::allOperators()->where('status','Active')->get()) > 0)
