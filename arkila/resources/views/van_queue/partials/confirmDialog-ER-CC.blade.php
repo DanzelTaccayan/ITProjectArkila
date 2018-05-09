@@ -2,11 +2,29 @@
 <script>
     @foreach($vansObjArr as $vansOnQueue)
     new PNotify({
-        title: 'Confirmation',
-        text: '<strong>{{$vansOnQueue->plate_number}}</strong> bound for {{$vansOnQueue->destination->destination_name}} has now been moved to the special units list',
-        type: 'notice',
-        hide: false
+        title: '{{$vansOnQueue->van->plate_number}}',
+        text: 'The van unit has a remark of {{$vansOnQueue->remarks}} and cannot depart, therefore it will be move to the <strong>Special Units</strong>',
+        icon: 'glyphicon glyphicon-exclamation-sign',
+        hide: false,
+        confirm: {
+            confirm: true,
+            buttons: [{
+                text: 'Ok',
+                addClass: 'btn-primary',
+                click: function(notice) {
+                    notice.remove();
+                    location.reload();
+                }
+            },
+                null]
+        },
+        buttons: {
+            closer: false,
+            sticker: false
+        },
+        history: {
+            history: false
+        }
     });
     @endforeach
-    location.reload();
 </script>

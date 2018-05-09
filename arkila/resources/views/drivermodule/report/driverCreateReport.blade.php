@@ -60,7 +60,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input value="{{old('dateDeparted')}}" id="" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask required data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
+                                        <input type="text" value="{{$dateNow}}" id="date" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" placeholder="mm/dd/yyyy" data-mask required data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
+
                                     </div>
                                     <p id="errDateDeparted"></p>
                                 </div>
@@ -73,7 +74,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input value="{{old('timeDeparted')}}" id="timepicker" name="timeDeparted" class="form-control" required data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
+                                        <input type="text" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" required data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                     </div>
@@ -92,32 +93,7 @@
                             <!-- /.box-footer -->
                         </div>
                         <!-- /.col -->
-
-                                <!--               DISCOUNT MODAL-->
-                                <div class="modal fade" id="discountModal">
-                                    <div class="modal-dialog" style="margin-top:150px;">
-                                        <div class="col-md-offset-2 col-md-8">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-blue">
-                                                    Confirm
-                                                </div>
-                                                <div class="modal-body text-center">
-                                                    <p>Are you sure you want to add these tickets?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-primary">Confirm</button>
-                                                </div>
-                                                <!-- /.modal-footer -->
-                                            </div>
-                                            <!-- /.modal-content -->
-                                        </div>
-                                        <!-- /.col -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                                <!-- /.modal -->
-                                </form>
+                        </form>
                 </div>
                 <!-- /.box-body -->
             </div>

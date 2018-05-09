@@ -133,8 +133,13 @@
                                                     <div class="well">
                                                         <div>
                                                             <label for="">Customer</label>
-                                                            <select name="terminal" id="terminal" class="form-control select2">
+                                                            <select class="form-control select2">
                                                                 <option value="">Walk-in Customer</option>
+                                                                <option value=""> Reserved Cust 1</option>
+                                                                <option value=""> Reserved Cust 2</option>
+                                                                <option value=""> Reserved Cust 3</option>
+                                                                <option value=""> Reserved Cust 4</option>
+                                                                <option value=""> Reserved Cust 5</option>
                                                              </select>
                                                         </div>
                                                         <div class="" style="margin-top: 3%">
@@ -151,21 +156,16 @@
                                                             </div>
                                                             <div class="table-area scrollbar scrollbar-info thin">
                                                             <table class="table table-condensed table-striped">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <button type="button" class="btn btn-block btn-xs edit btn-primary">ASINGAN 1</button>
-                                                                        </td>
-                                                                        <td class="pull-right">195.00</td>
-                                                                        <td class="text-center text-red"><i class="fa fa-trash"></i></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <button type="button" class="btn btn-block btn-xs edit btn-warning">ASINGAN A</button>
-                                                                        </td>
-                                                                        <td class="pull-right">195.00</td>
-                                                                        <td class="text-center text-red"><i class="fa fa-trash"></i></td>
-                                                                    </tr>
+                                                                <tbody id="selectedList{{$terminal->destination_id}}">
+                                                                    @foreach(App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get() as $ticket)
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
+                                                                                </td>
+                                                                                <td class="pull-right">{{$ticket->fare}}</td>
+                                                                                <td class="text-center text-red"><i class="fa fa-trash"></i></td>
+                                                                            </tr>
+                                                                    @endforeach
                                                                 </tbody>
                                                             </table>
                                                             </div>
@@ -175,17 +175,17 @@
                                                                 <tbody>
                                                                     <tr class="info">
                                                                         <td>Regular</td>
-                                                                        <td class="text-right">3 <i class="fa fa-ticket"></i></td>
+                                                                        <td id="totalRegTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right">1000.00</td>
                                                                     </tr>
                                                                     <tr class="info">
                                                                         <td>Discounted</td>
-                                                                        <td class="text-right">3 <i class="fa fa-ticket"></i></td>
+                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right">90.00</td>
                                                                     </tr>
                                                                     <tr class="success">
                                                                         <td><strong>Total</strong></td>
-                                                                        <td class="text-right">6 <i class="fa fa-ticket"></i></td>
+                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
                                                                         <td class="text-right"><strong>1090.00</strong></td>
                                                                     </tr>
                                                                 </tbody>
@@ -219,134 +219,30 @@
                                                             <div class="table-dest scrollbar scrollbar-info thin" style="margin-bottom: 0;">
                                                                 <table class="table table-striped" style="margin-bottom: 0;">
                                                                     <tbody>
+                                                                    @foreach($terminal->routeFromDestination as $destination)
                                                                         <tr>
-                                                                            <td> 
-                                                                                <a class="btn btn-primary btn-flat btn-block">ASINGAN <span class="badge bg-yellow pull-right">10</span></a>
+                                                                            <td>
+                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-block">
+                                                                                    {{$destination->destination_name}}
+                                                                                    @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
+                                                                                        <span class="badge bg-yellow pull-right">
+                                                                                            {{$regTicketNum}}
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </button>
                                                                             </td>
                                                                             <td>
-                                                                                <a class="btn btn-warning btn-flat btn-block">ASINGAN</a>
+                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-block">
+                                                                                    {{$destination->destination_name}}
+                                                                                    @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
+                                                                                        <span class="badge bg-yellow pull-right">
+                                                                                            {{$discountedTicketNum}}
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </button>
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">BINALONAN</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">BINALONAN</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">CABANATUAN</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">CABANATUAN</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">MUNOZ</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">MUNOZ</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">POZORRUBIO</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">POZORRUBIO</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">SAN JOSE</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">SAN JOSE</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td> 
-                                                                                <button class="btn btn-primary btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-warning btn-flat btn-block">TALAVERA</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        {{-- <tr>
-                                                                            <th>BINALOONAN</th>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary btn-sm">REGULAR</button>
-                                                                                <button class="btn btn-warning btn-sm">DISCOUNTED</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>CABANATUAN</th>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary btn-sm">REGULAR</button>
-                                                                                <button class="btn btn-warning btn-sm">DISCOUNTED</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>MUNOZ</th>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary btn-sm">REGULAR</button>
-                                                                                <button class="btn btn-warning btn-sm">DISCOUNTED</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>SAN JOSE</th>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary btn-sm">REGULAR</button>
-                                                                                <button class="btn btn-warning btn-sm">DISCOUNTED</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>TALAVERA</th>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary btn-sm">REGULAR</button>
-                                                                                <button class="btn btn-warning btn-sm">DISCOUNTED</button>
-                                                                            </td>
-                                                                        </tr> --}}
+                                                                    @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -477,7 +373,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($terminal->transactions->where('status','Pending') as $transaction)
+                                                                    @foreach($transactions->where('destination',$terminal->destination_name)->where('status','Pending') as $transaction)
                                                                         <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
@@ -505,8 +401,8 @@
                             <div class="nav-terminal  scrollbar scrollbar-info thin">
                             <ul class="nav nav-stacked ">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
-                                        <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
+                                    @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+                                        <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
                                     @endif
                                 @endforeach
                             </ul>
@@ -682,14 +578,8 @@
 {{ Html::script('/jquery/bootstrap3-editable/js/bootstrap-editable.min.js') }}
 
 <script>
-	$(function () {
-	 $('.select2').select2();
-	})
-</script>
-<script>
-
-
     $(function(){
+        $('.select2').select2();
      var activeTab = document.location.hash;
     if(!activeTab){
 
@@ -710,217 +600,66 @@
 
     });
 
+</script>
 
-
+{{--Selecting Tickets--}}
+<script>
     $(function(){
-        checkTerminals();
-        listDestinations();
-        checkDiscountBox();
-      var hash = window.location.hash;
-      hash && $('ul.nav a[href="' + hash + '"]').tab('show');
-
-      $('.nav-tabs a').click(function (e) {
-      $(this).tab('show');
-      var scrollmem = $('body').scrollTop() || $('html').scrollTop();
-      window.location.hash = this.hash;
-      $('html,body').scrollTop(scrollmem);
-      });
-
-
-    $('#checkDiscount').on('click',function(){
-        checkDiscountBox();
-    });
-
-    $('#terminal').on('change',function(){
-        listDestinations();
-    });
-
-    $('#destination').on('change',function(){
-        checkDiscountBox();
-    });
-
-    $('button[name="depart"]').on('click', function(e){
-        var terminalId = $(e.currentTarget).val();
-
-        if($('#onBoardList'+terminalId).children().length > 0){
-            var transactions = [];
-               $('#onBoardList'+terminalId+' li').each(function(){
-                    transactions.push($(this).data('val'));
-                    console.log(transactions);
-               });
-
-                $.ajax({
-                    method:'PATCH',
-                    url: '/home/transactions/'+terminalId,
-                    data: {
-                        '_token': '{{csrf_token()}}',
-                        'transactions' : transactions
-                    },
-                    success: function(){
-                        location.reload();
-                    }
-
-                });
-        }
-    });
-
-    $(document.body).on('click','#sellButt',function(){
-        var terminal = $('#terminal').val();
-        var destination = $('#destination').val();
-        var discount = $('#discount').val();
-        var ticket= $('#ticket').val();
-
-        $.ajax({
-            method:'POST',
-            url: '{{route("transactions.store")}}',
-            data: {
-                '_token': '{{csrf_token()}}',
-                'terminal': terminal,
-                'destination': destination,
-                'discount': discount,
-                'ticket': ticket
-            },
-            success: function(){
-                location.reload();
-            }
-
-        });
-
-    });
-    function checkTerminals(){
-        if(!$('#terminal').val()){
-            $('#terminal').prop('disabled',true);
-            $('#terminal').append('<option value="">No Available Terminal</option>');
-        }
-    }
-
-    function checkDiscountBox(){
-            if($('#checkDiscount').is(':checked')){
-                $('#discount').prop('disabled',false);
-                listDiscountedTickets();
-            }else{
-                $('#discount').prop('disabled',true);
-                $('#discount').append('<option value="" selected>Check the checkbox to enable discount</option>');
-                if($('#discount').val() != null){
-                    listTickets();
-                }
-            }
-        }
-
-
-        function listDestinations() {
-            $('#destination').empty();
-            if ($('#terminal').val()) {
-                $.ajax({
-                    method: 'GET',
-                    url: '/listDestinations/' + $('#terminal').val(),
-                    data: {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function (destinations) {
-                        if (destinations.length === 0) {
-                            $('#destination').empty();
-                            $('#destination').prop('disabled', true);
-                            $('#destination').append('<option value="">No Available Destination</option>');
-                        }
-                        else {
-                            destinations.forEach(function (destination) {
-                                $('#destination').append('<option value=' + destination.id + '> ' + destination.description + '</option>');
-                            });
-                            listTickets();
-                        }
-
-                    }
-                });
-            }else{
-                $('#destination').prop('disabled', true);
-                $('#destination').append('<option value="">No Available Destination</option>');
-            }
-        }
-
-        function listTickets() {
-            $('#ticket').empty();
+        $('button[name="ticketButton"]').on('click',function(){
+            var destinationId = $(this).data('route');
+            var terminalId = $(this).data('terminal');
+            var ticketType = $(this).data('type');
             $.ajax({
-                method: 'GET',
-                url: '/listTickets/' + $('#destination').val(),
-                success: function (tickets) {
-
-                    if (tickets.length === 0) {
-                        $('#ticket').prop('disabled', true);
-                    }
-                    else {
-                        $('#ticket').prop('disabled', false);
-                        tickets.forEach(function (ticket) {
-                            $('#ticket').append('<option value=' + ticket.id + '> ' + ticket.ticket_number + '</option>');
-                        });
-                        checkSellButton();
-                    }
-
-                }
-            });
-
-        }
-
-        function listDiscountedTickets() {
-            $('#ticket').empty();
-            $.ajax({
-                method: 'GET',
-                url: '/listDiscountedTickets/' + $('#destination').val(),
+                method:'POST',
+                url: '/selectTicket/'+destinationId,
                 data: {
-                    '_token': '{{csrf_token()}}'
+                    '_token': '{{csrf_token()}}',
+                    'ticketType': ticketType
                 },
-                success: function (tickets) {
+                success: function(element){
 
-                    if (tickets.length === 0) {
-                        $('#ticket').prop('disabled', true);
-                    }
-                    else {
-                        $('#ticket').prop('disabled', false);
-                        tickets.forEach(function (ticket) {
-                            $('#ticket').append('<option value=' + ticket.id + '> ' + ticket.ticket_number + '</option>');
-                        });
-                        checkSellButton();
-                    }
+                    var ticketNumber = '<tr><td><button type="button" class="btn btn-block btn-xs edit btn-primary">'+element.ticketNumber+'</button></td>';
+                    var fare = '<td class="pull-right">'+element.fare+'</td>';
+                    var deleteButt = '<td class="text-center text-red"><i class="fa fa-trash"></i></td></tr>';
+                    $('#selectedList'+terminalId).append(ticketNumber+fare+deleteButt);
 
                 }
+
             });
-
-        }
-
-        function checkSellButton(){
-            var terminal = $('#terminal').val();
-            var destination = $('#destination').val();
-            var ticket = $('#ticket').val();
-
-            if(terminal && destination && ticket ){
-                $('#sellButtContainer').empty();
-                $('#sellButtContainer').append('<button id="sellButt" type="button" class="btn btn-info btn-flat">Sell</button>');
-            }
-
-        }
-
-
-        $.ajax({
-            method:'POST',
-            url: '{{route("transactions.store")}}',
-            data: {
-                '_token': '{{csrf_token()}}',
-                'terminal': terminal,
-                'destination': destination,
-                'discount': discount,
-                'ticket': ticket
-            },
-            success: function(){
-                location.reload();
-            }
-
         });
-
     });
 </script>
 
+{{--Boarding and Unboarding and Departure--}}
 <script type="text/javascript">
         $(function () {
+            //Put Ticket into Pending
+
+            $('button[name="depart"]').on('click', function(e){
+                var terminalId = $(e.currentTarget).val();
+
+                if($('#onBoardList'+terminalId).children().length > 0){
+                    var transactions = [];
+                    $('#onBoardList'+terminalId+' li').each(function(){
+                        transactions.push($(this).data('val'));
+                        console.log(transactions);
+                    });
+
+                    $.ajax({
+                        method:'PATCH',
+                        url: '/home/transactions/'+terminalId,
+                        data: {
+                            '_token': '{{csrf_token()}}',
+                            'transactions' : transactions
+                        },
+                        success: function(){
+                            location.reload();
+                        }
+
+                    });
+                }
+            });
+
             $('body').on('click', '.list-group .list-group-item', function () {
                 $(this).toggleClass('active');
             });
@@ -1023,6 +762,8 @@
         });
 </script>
 
+
+//hide and showing
 @foreach($terminals as $terminal)
 <script>
      $(function(){

@@ -12,12 +12,22 @@ class Ticket extends Model
         'ticket_id',
     ];
 
-    public function destination() {
+    public function destination()
+    {
         return $this->belongsTo(Destination::Class,'destination_id');
     }
 
-    public function transaction() {
+    public function transaction()
+    {
         return $this->hasOne(Transaction::Class, 'transaction_id');
     }
 
+    public function selectedTickets()
+    {
+        return $this->hasMany(SelectedTicket::class,'destination_id');
+    }
+
+    public function scopeShowAllSelectedTickets($query, $destinations){
+        return $query->whereIn('destination_id',$destinations)->whereIn('ticket_id',SelectedTicket::all()->pluck('ticket_id'));
+    }
 }

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Destination;
 use App\Ledger;
+use App\SelectedTicket;
 use App\Trip;
 use App\Transaction;
 use App\Ticket;
 use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
+use DB;
 
 class TransactionsController extends Controller
 {
@@ -20,9 +22,11 @@ class TransactionsController extends Controller
      */
     public function index()
     {
+
         $terminals = Destination::where('is_main_terminal','!=','1')->get();
         $transactions = Transaction::all();
-        return view('transaction.index',compact('terminals','transactions'));
+        $selectedTickets = SelectedTicket::all();
+        return view('transaction.index',compact('terminals','transactions','selectedTickets'));
     }
 
     public function manageTickets()
@@ -435,5 +439,31 @@ class TransactionsController extends Controller
         ]);
 
         return 'success';
+    }
+
+    public function selectTicket(Destination $destination)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
+                $ticketType = request('ticketType');
+                $ticket = $destination->tickets->where('type',$ticketType)->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+
+                $selectedTicket = SelectedTicket::create([
+                    'ticket_id' => $ticket->ticket_id,
+                    'type' => $ticketType
+                ]);
+
+                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare];
+
+
+                DB::commit();
+                return response()->json($responseArr);
+            }
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again');
+        }
     }
 }
