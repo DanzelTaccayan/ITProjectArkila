@@ -20,7 +20,7 @@ class TripsController extends Controller
 
     public function tripLog()
     {
-        $trips = Trip::departed()->accepted()->get();
+        $trips = Trip::where('report_status', 'Accepted')->get();
         $user = User::where('user_type','Super-admin')->first();
         $superAdmin = $user->terminal;
         return view('trips.tripLog', compact('trips', 'superAdmin'));

@@ -19,7 +19,7 @@
                           <option>Choose Terminal</option>
                           @foreach($terminals as $terminal)
                           
-                            <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
+                            <option value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</option>
                           @endforeach
                         </select>
                       </div>
