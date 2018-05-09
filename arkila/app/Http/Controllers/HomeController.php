@@ -41,7 +41,7 @@ class HomeController extends Controller
 
     public function settings(){
         $fees = Fee::latest()->get();
-        $terminals = Destination::allTerminal()->get();
+        $terminals = Destination::withMainTerminal()->get();
         $tickets = Ticket::all();
         $features = Feature::all();
 
