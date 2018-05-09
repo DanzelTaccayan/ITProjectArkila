@@ -37,6 +37,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/route', 'RoutesController',[
         'except' => ['create', 'show']
     ]);
+    Route::resource('/home/ticket-management', 'TicketManagementController');
 
     Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
