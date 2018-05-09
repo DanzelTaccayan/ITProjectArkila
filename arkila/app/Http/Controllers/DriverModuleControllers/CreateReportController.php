@@ -33,7 +33,7 @@ class CreateReportController extends Controller
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
     //$destinations = $terminals->routeFromDestination;
     $fees = Fee::all();
-    $dateNow = Carbon::now()->format('Y/m/d');
+    $dateNow = Carbon::now()->format('m/d/Y');
     $timeNow = Carbon::now()->format('g:i A');
 
     $member = Member::where('user_id', Auth::id())->first();

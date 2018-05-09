@@ -1,7 +1,7 @@
- @extends('layouts.driver')
- @section('title', 'Driver Report')
- @section('content-title', 'Driver Report')
- @section('content')
+@extends('layouts.driver')
+@section('title', 'Driver Report')
+@section('content-title', 'Driver Report')
+@section('content')
 @if($member->van->count() > 0)
 <div class="row">
     <div class="col-md-offset-1 col-md-10">
@@ -24,13 +24,17 @@
                             <tbody>
                               <tr>
                                 <th>Main Terminal</th>
-                                <td><input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0"></td>
-                                <td><input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0"></td>
+                                <td>
+                                    <input value="0" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
+                                </td>
+                                <td>
+                                    <input value="0" class='form-control pull-right'  type='number' name='numDisMain' min="0">
+                                </td>
                               </tr>
                               <tr>
                                 <th>Short Trip</th>
-                                <td><input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0"></td>
-                                <td><input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0"></td>
+                                <td><input value="0" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0"></td>
+                                <td><input value="0" class='form-control pull-right'  type='number' name='numDisST' id='' min="0"></td>
                               </tr>
                             </tbody>
                         </table>
@@ -60,7 +64,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" value="{{$dateNow}}" id="date" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" placeholder="mm/dd/yyyy" data-mask required data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
+                                        <input type="text" value="{{$dateNow}}" id="date" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" placeholder="mm/dd/yyyy" data-mask data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
 
                                     </div>
                                     <p id="errDateDeparted"></p>
@@ -74,7 +78,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="text" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" required data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
+                                        <input type="text" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                     </div>
@@ -206,7 +210,8 @@
 </script>
 
 <script>
-     $('[data-mask]').inputmask()
+    $('[data-mask]').inputmask()
+    $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
 </script>
 
 
