@@ -199,8 +199,6 @@
                                                     
                                                         <div class="text-center">
                                                             <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                                            
-                                                            <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-outline-secondary btn-sm"><i class="fa fa-pencil-square-o"></i> EDIT</a>
                                                            
                                                             <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$operator->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
                                                         </div>                                                

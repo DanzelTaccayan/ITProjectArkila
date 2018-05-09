@@ -76,6 +76,11 @@ class Destination extends Model
         ]);
     }
 
+    public static function scopeWithMainTerminal($query)
+    {
+        return $query->where('is_terminal', '1');
+    }
+
     public static function scopeAllRoute($query)
     {
         return $query->where('is_terminal','0');

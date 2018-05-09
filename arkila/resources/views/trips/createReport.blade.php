@@ -10,13 +10,13 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{route('trips.admin.storeReport', [$terminals->terminal_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('trips.admin.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
                         <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
-                                
+
                             </div>
                             <div class="col-sm-4">
                                 <label class="text-center">#Passengers</label>
@@ -24,44 +24,61 @@
                             <div class="col-sm-4">
                                 <label class="text-center">#Discounted</label>
                             </div>
-
-
+                            @if($terminals->is_terminal == true && $terminals->is_main_terminal == false)
                             <!-- TO MAIN TERMINAL -->
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">Short Trip</label>
+                                <label for="" class="col-sm-4">Main Terminal</label>
                                 <div class="col-sm-6">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destid}}">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="hidden" name="discount[]" value="">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='dis[]' id='' min="0">
+                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0">
                                 </div>
                             </div>
 
+                            <div class='form-group'>
+                                <label for="" class="col-sm-4">Short Trip</label>
+                                <div class="col-sm-6">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
+                                </div>
+                            </div>
 
-
-
-                          @php $counter = 0; @endphp
-                          @foreach($destinations as $destination)
+                            @elseif($terminals->is_terminal == true && $terminals->is_main_terminal == true)
+                            @php $counter = 0; @endphp
+                            @foreach($destinations as $destination)
                             <!-- FROM MAIN TERMINAL -->
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->description}}</label>
+                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
                                 <div class="col-sm-4">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destid}}">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
+                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="hidden" name="discount[]" value="">
-                                    <input value="{{old('qty.'.$counter)}}" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='disqty[]' id='' min="0">
                                 </div>
                             </div>
                             @php $counter++; @endphp
                           @endforeach
+                          @endif
                         </div>
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
-
+                            @if($terminals->is_terminal == true && $terminals->is_main_terminal == true)
+                            <div class="form-group">
+                                <label for="driver" class="col-sm-4">Origin Terminal:</label>
+                                <div class="col-sm-8">
+                                <select name="origin" id="originTerminal" class="form-control select2">
+                                    @foreach($origins as $origin)
+                                    <option value="{{$origin->destination_id}}">{{$origin->destination_name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>
+                            @endif
                             <div class="form-group">
                                 <label for="driver" class="col-sm-4">Driver:</label>
                                 <div class="col-sm-8">
@@ -72,18 +89,6 @@
                                 </select>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label for="van" class="col-sm-4">Plate Number:</label>
-                                <div class="col-sm-8">
-                                <select name="plateNumber" id="driver" class="form-control select2">
-                                    @foreach($plate_numbers as $plate_number)
-                                    <option value="{{$plate_number->plate_number}}">{{$plate_number->plate_number}}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <label for="departureDate" class="col-sm-4">Departure Date:</label>
                                 <div class="col-sm-8">
@@ -115,15 +120,8 @@
                                 <div class=" col-sm-6">
                                 <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
                                 <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
-                                <input type="hidden" id="totalFee" value="{{$terminals->booking_fee}}">
-                                <input id="totalFees"  type="hidden" name='totalBookingFee' value="">
                                 </div>
                             </div>
-
-                            @php $totalfare = 0; @endphp
-                            @foreach($destinations as $key => $values)
-                                @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
-                            @endforeach
 
                             <div class="box-footer text-center">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>

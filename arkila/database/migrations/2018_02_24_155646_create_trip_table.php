@@ -18,10 +18,11 @@ class CreateTripTable extends Migration
             $table->increments('trip_id');
             $table->integer('driver_id')
             ->unsigned();
-            
+
             $table->integer('van_id')
-            ->unsigned();
-            
+            ->unsigned()
+            ->nullable();
+
             $table->string('destination');
             $table->string('origin');
             $table->smallInteger('total_passengers')->nullable();

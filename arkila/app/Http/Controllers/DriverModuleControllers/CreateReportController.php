@@ -33,8 +33,11 @@ class CreateReportController extends Controller
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
     //$destinations = $terminals->routeFromDestination;
     $fees = Fee::all();
+    $dateNow = Carbon::now()->format('m/d/Y');
+    $timeNow = Carbon::now()->format('g:i A');
+
     $member = Member::where('user_id', Auth::id())->first();
-    return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fad', 'member', 'origins'));
+    return view('drivermodule.report.driverCreateReport', compact('dateNow', 'timeNow','terminals', 'destinations', 'fad', 'member', 'origins'));
   }
   public function storeReport(CreateReportRequest $request)
   {
@@ -43,15 +46,15 @@ class CreateReportController extends Controller
     $totalPassengers = $request->totalPassengers;
 
     $totalPassenger = (float)$request->totalPassengers;
-    $cf = Fee::where('description', 'Community Fee')->first();
+    $cf = Fee::where('description', 'Community Fund')->first();
     $totalbookingfee = number_format($terminal->booking_fee * $totalPassenger, 2, '.', '');
-    
+
     $sop = Fee::where('description', 'SOP')->first();
-    
+
     $driver_user = User::find(Auth::id());
     $van_id = $driver_user->member->van->first()->van_id;
     $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
-    
+
     $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
     $timeDepartedFormat = $timeDeparted->format('H:i:s');
     $dateDeparted = $request->dateDeparted;
@@ -66,23 +69,23 @@ class CreateReportController extends Controller
          'origin' => $terminal->destination_name,
          'total_passengers' => $totalPassengers,
          'total_booking_fee' => $totalbookingfee,
-         'community_fund' => $cf->amount,
+         'community_fund' => $cf->amount*$totalPassengers,
          'report_status' => 'Pending',
          'date_departed' => $request->dateDeparted,
          'time_departed' => $timeDepartedFormat,
        ]);
      }else if($totalPassengers <  10){
-          $trip = Trip::create([
-            'driver_id' => $driver_id->member_id,
-            'van_id' => $van_id,
-            'destination' => $mainterminal->destination_name,
-            'origin' => $terminal->destination_name,
-            'total_passengers' => $totalPassengers,
-            'total_booking_fee' => $totalbookingfee,
-            'report_status' => 'Pending',
-            'date_departed' => $request->dateDeparted,
-            'time_departed' => $timeDepartedFormat,
-         ]);
+        $trip = Trip::create([
+          'driver_id' => $driver_id->member_id,
+          'van_id' => $van_id,
+          'destination' => $mainterminal->destination_name,
+          'origin' => $terminal->destination_name,
+          'total_passengers' => $totalPassengers,
+          'total_booking_fee' => $totalbookingfee,
+          'report_status' => 'Pending',
+          'date_departed' => $request->dateDeparted,
+          'time_departed' => $timeDepartedFormat,
+        ]);
      }
 
      $numberofmainpassengers = $request->numPassMain;
@@ -92,7 +95,7 @@ class CreateReportController extends Controller
      $shortTripFare = $terminal->short_trip_fare;
      $shortTripDiscountFare = $terminal->short_trip_fare_discount;
 
-     if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) && 
+     if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
         ($numberofstpassengers !== null && $numberofstdiscount !== null)){
 
            for($i = 0; $i < $numberofmainpassengers; $i++){
@@ -133,7 +136,7 @@ class CreateReportController extends Controller
               $numberofstdiscount--;
            }
 
-     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) && 
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) &&
         ($numberofstpassengers !== null && $numberofstdiscount == null)){
 
         $amountpaid = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;;
@@ -147,7 +150,7 @@ class CreateReportController extends Controller
             "status" => "Pending",
           ]);
         }
-           
+
         for($i = 0; $i < $numberofstpassengers; $i++){
           Transaction::create([
             "trip_id" => $trip->trip_id,
@@ -158,7 +161,7 @@ class CreateReportController extends Controller
           ]);
         }
 
-     }else if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) && 
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
         ($numberofstpassengers == null && $numberofstdiscount == null)){
 
         for($i = 0; $i < $numberofmainpassengers; $i++){
@@ -178,10 +181,10 @@ class CreateReportController extends Controller
             "status" => "Pending",
           ]);
 
-          $numberofmaindiscount--;      
+          $numberofmaindiscount--;
         }
 
-     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) && 
+     }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) &&
         ($numberofstpassengers == null && $numberofstdiscount == null)){
         $amountpaid = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;;
 
@@ -195,7 +198,7 @@ class CreateReportController extends Controller
           ]);
         }
 
-     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) && 
+     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) &&
         ($numberofstpassengers !== null && $numberofstdiscount !== null)){
 
         for($i = 0; $i < $numberofstpassengers; $i++){
@@ -216,7 +219,7 @@ class CreateReportController extends Controller
               $numberofstdiscount--;
            }
 
-     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) && 
+     }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) &&
         ($numberofstpassengers !== null && $numberofstdiscount == null)){
 
         for($i = 0; $i < $numberofstpassengers; $i++){

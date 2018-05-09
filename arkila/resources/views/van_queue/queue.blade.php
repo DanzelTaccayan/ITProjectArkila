@@ -418,15 +418,15 @@ ol.vertical{
                                         <div id="ondeck-sp{{$specializedVanOnQueue->van_queue_id}}" class="ondeck-sp hidden">
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                  <p>Are you sure you want {{$specializedVanOnQueue->van->plate_number}} to be on deck?</p>
+                                                  <p>Are you sure you want <strong>{{$specializedVanOnQueue->van->plate_number}}</strong> to be on deck?</p>
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <div class="pull-right">
                                                         <form action="{{route('vanqueue.putOnDeck',[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                             {{method_field('PATCH')}}
                                                             {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}">NO</a>
-                                                            <button type="submit" class="btn btn-primary btn-xs">YES</button>
+                                                            <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}">NO</a>
+                                                            <button type="submit" class="btn btn-primary btn-sm">YES</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -442,8 +442,8 @@ ol.vertical{
                                                         <form action="{{route("vanqueue.destroy",[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                              {{method_field('DELETE')}}
                                                             {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}"> NO</a>
-                                                            <button class="btn btn-danger btn-xs">YES</button>
+                                                            <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}"> NO</a>
+                                                            <button class="btn btn-danger btn-sm">YES</button>
                                                         </form>
                                                     </div>
                                                 </div>
