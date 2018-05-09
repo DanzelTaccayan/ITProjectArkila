@@ -176,7 +176,7 @@
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
                                                                                 </td>
                                                                                 <td class="pull-right">{{$ticket->fare}}</td>
-                                                                                <td class="text-center text-red"><i class="fa fa-trash"></i></td>
+                                                                                <td class="text-center"><a href="  " class="text-red"><i class="fa fa-trash"></i></a></td>
                                                                             </tr>
                                                                     @endforeach
                                                                 </tbody>
