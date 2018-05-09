@@ -37,7 +37,7 @@
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px">
                             <button id="regViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>
-                            <button name="regSaveBtn" data-val="{{$route->destination_id}}" class="btn btn-primary btn-sm">SAVE</button>
+                            <button id="regSaveBtn{{$route->destination_id}}" name="regSaveBtn" data-val="{{$route->destination_id}}" class="btn btn-primary btn-sm">SAVE</button>
                           </div>
                         </td>
                     </tr>
@@ -188,9 +188,16 @@
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+
+                              $("#regViewQty" + quantityId).show();
+                              $("#regViewAction" + quantityId).show();
+                              $("#regEditQty" + quantityId).hide();
                         console.log(response);
                         }
+
                     });
+
+               
 
             });
 
