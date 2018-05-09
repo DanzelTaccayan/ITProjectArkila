@@ -22,30 +22,26 @@
                     </tr>
                   </thead>
                   <tbody>
+                  @foreach ($routes as $route)
                     <tr>
-                      <td style="width: 390px">Destination Reg 1</td>
-                        <td id="regViewQty" class="text-right" style="width: 100px ">100</td>
-                        <td id="regViewAction" style="width:200px">
+                      <td class="text-center" style="width: 390px">{{$route->destination_name}}</td>
+                        <td id="regViewQty{{$route->destination_id}}" class="text-right" style="width: 100px ">{{$route->number_of_tickets}}</td>
+                        <td id="regViewAction{{$route->destination_id}}" style="width:200px">
                           <div class="text-center">
-                            <button id="regEditBtn" class="btn btn-primary btn-sm">ADD/REMOVE</button>
+                            <button id="regEditBtn{{$route->destination_id}}" class="btn btn-primary btn-sm">ADD/REMOVE</button>
                           </div>
                         </td>
-                        <td id="regEditQty" style="width: 100px; background: #feeedb;" colspan="2">
+                        <td id="regEditQty{{$route->destination_id}}" class="hidden" style="width: 100px; background: #feeedb;" colspan="2">
                           <div class="col-md-6">
-                            <input type="number" class="form-control" min="0" step="1">
+                            <input type="number" id="regEditInput{{$route->destination_id}}" class="form-control" min="0" step="1" value="{{$route->number_of_tickets}}">
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px">
-                            <button id="regViewBtn" class="btn btn-default btn-sm">CANCEL</button>
-                            <button class="btn btn-primary btn-sm">SAVE</button>
+                            <button id="regViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>
+                            <button name="regSaveBtn" data-val="{{$route->destination_id}}" class="btn btn-primary btn-sm">SAVE</button>
                           </div>
-                        </td><!-- 
-                        <td id="regEditAction" style="width:200px">
-                          <div class="text-center">
-                            <button class="btn btn-primary btn-sm">SAVE</button>
-                            <button id="regViewBtn" class="btn btn-default btn-sm">CANCEL</button>
-                          </div>
-                        </td> -->
+                        </td>
                     </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -61,24 +57,26 @@
                     </tr>
                   </thead>
                   <tbody>
+                  @foreach ($routes as $route)
                     <tr>
-                      <td style="width: 390px">Destination Disc 1</td>
-                        <td id="discViewQty" class="text-right" style="width: 100px ">24</td>
-                        <td id="discViewAction" style="width:200px">
+                      <td style="width: 390px">{{$route->destination_name}}</td>
+                        <td id="discViewQty{{$route->destination_id}}" class="text-right" style="width: 100px ">{{$route->tickets->where('type', 'Discount')->count()}}</td>
+                        <td id="discViewAction{{$route->destination_id}}" style="width:200px">
                           <div class="text-center">
-                            <button id="discEditBtn" class="btn btn-primary btn-sm">ADD/REMOVE</button>
+                            <button id="discEditBtn{{$route->destination_id}}" class="btn btn-primary btn-sm">ADD/REMOVE</button>
                           </div>
                         </td>
-                        <td id="discEditQty" colspan="2" style="width: 100px; background: #feeedb;">
+                        <td id="discEditQty{{$route->destination_id}}" class="hidden" colspan="2" style="width: 100px; background: #feeedb;">
                           <div class="col-md-6">
-                            <input type="number" class="form-control discInput" min="0" step="24">
+                            <input type="number" class="form-control discInput" min="0" step="26" value="{{$route->tickets->where('type', 'Discount')->count()}}">
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px;">
-                            <button id="discViewBtn" class="btn btn-default btn-sm">CANCEL</button>
+                            <button id="discViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>
                             <button class="btn btn-primary btn-sm">SAVE</button>
                           </div>
                         </td>
                     </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
@@ -93,40 +91,38 @@
 @section('scripts') 
 @parent
 <script>
+@foreach ($routes as $route)
   $(document).ready(function(){
-    $("#regEditQty").hide();
-    $("#regEditAction").hide();
-    $("#regEditBtn").click(function(){
-      $("#regEditQty").show();
-      $("#regEditAction").show();
-      $("#regViewQty").hide();
-      $("#regViewAction").hide();
+    $("#regEditQty{{$route->destination_id}}").hide();
+    $("#regEditBtn{{$route->destination_id}}").click(function(){
+      $("#regEditQty{{$route->destination_id}}").show();
+      $("#regViewQty{{$route->destination_id}}").hide();
+      $("#regViewAction{{$route->destination_id}}").hide();
+      $("#regEditQty{{$route->destination_id}}").removeClass("hidden");
     })
-    $("#regViewBtn").click(function(){
-      $("#regViewQty").show();
-      $("#regViewAction").show();
-      $("#regEditQty").hide();
-      $("#regEditAction").hide();
+    $("#regViewBtn{{$route->destination_id}}").click(function(){
+      $("#regViewQty{{$route->destination_id}}").show();
+      $("#regViewAction{{$route->destination_id}}").show();
+      $("#regEditQty{{$route->destination_id}}").hide();
     })
   });
 
   $(document).ready(function(){
-    $("#discEditQty").hide();
-    $("#discEditAction").hide();
-    $("#discEditBtn").click(function(){
-      $("#discEditQty").show();
-      $("#discEditAction").show();
-      $("#discViewQty").hide();
-      $("#discViewAction").hide();
+    $("#discEditQty{{$route->destination_id}}").hide();
+    $("#discEditBtn{{$route->destination_id}}").click(function(){
+      $("#discEditQty{{$route->destination_id}}").show();
+      $("#discViewQty{{$route->destination_id}}").hide();
+      $("#discViewAction{{$route->destination_id}}").hide();
+      $("#discEditQty{{$route->destination_id}}").removeClass("hidden");
+
     })
-    $("#discViewBtn").click(function(){
-      $("#discViewQty").show();
-      $("#discViewAction").show();
-      $("#discEditQty").hide();
-      $("#discEditAction").hide();
+    $("#discViewBtn{{$route->destination_id}}").click(function(){
+      $("#discViewQty{{$route->destination_id}}").show();
+      $("#discViewAction{{$route->destination_id}}").show();
+      $("#discEditQty{{$route->destination_id}}").hide();
     })
   });
-
+@endforeach
   $(".discInput").keydown(function (e) {
     var key = e.keyCode || e.charCode;
     if (key == 8 || key == 46) {
@@ -162,6 +158,42 @@
             'order': [[ 0, "desc" ]]
         });
     })
+
+                $('button[name="regSaveBtn"]').on('click',function() {
+                var quantityId = $(this).data('val');
+
+                $.ajax( {
+                        method:'PATCH',
+                        url: '/home/ticket-management/'+quantityId,
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'numberOfTicket' : $('#regEditInput'+quantityId).val()
+                            },
+                        success: function(response) {
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully update ticket",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+                        console.log(response);
+                        }
+                    });
+
+            });
+
 </script>
 
 @stop
