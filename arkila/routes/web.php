@@ -199,7 +199,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/transactions/manageTickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
     Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
-
+    Route::post('/selectTicket/{destination}','TransactionsController@selectTicket')->name('transactions.selectTicket');
     /********Archive ********/
     Route::patch('/home/vans/{van}/archiveVan', 'VansController@archiveVan')->name('vans.archiveVan');
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');

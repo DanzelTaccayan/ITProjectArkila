@@ -52,14 +52,7 @@
                 <!-- The user image in the navbar-->
                 <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">Alexander Pierce</span>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                  <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="img-circle" alt="User Image">
-
-                  @php $fullname = null; @endphp
+                @php $fullname = null; @endphp
                 @if(Auth::user()->middle_name !== null)
                     @php
                         $fullname = Auth::user()->first_name . " " . Auth::user()->middle_name . " " .     Auth::user()->last_name;
@@ -69,7 +62,14 @@
                         $fullname = Auth::user()->first_name . " " . Auth::user()->last_name;
                     @endphp
                 @endif
-                <p>{{$fullname}}</p>
+                <span class="hidden-xs">{{$fullname}}</span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <!-- The user image in the menu -->
+                <li class="user-header">
+                  <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="img-circle" alt="User Image">
+                  <p>{{$fullname}}</p>
+                  <p>Driver</p>
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">

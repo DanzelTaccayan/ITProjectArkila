@@ -1,4 +1,7 @@
- @extends('layouts.driver') @section('title', 'Driver Announcements') @section('content-title', 'Driver Announcements') @section('content')
+@extends('layouts.driver') 
+@section('title', 'Driver Announcements') 
+@section('content-title', 'Driver Announcements') 
+@section('content')
 <div class="box box-warning">
     <div class="box-header with-border bg-light">
         <h4>Title:</h4>

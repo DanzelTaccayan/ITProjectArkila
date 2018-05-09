@@ -57,6 +57,16 @@ class Destination extends Model
         return $this->hasMany(VanQueue::class, 'destination_id');
     }
 
+    public function selectedTickets()
+    {
+        return $this->hasManyThrough(SelectedTicket::class,
+            Ticket::class,
+            'destination_id',
+            'ticket_id',
+            'destination_id',
+            'ticket_id');
+    }
+
     public static function scopeAllTerminal($query)
     {
 
@@ -64,6 +74,11 @@ class Destination extends Model
             ['is_terminal','1'],
             ['is_main_terminal', '0'],
         ]);
+    }
+
+    public static function scopeWithMainTerminal($query)
+    {
+        return $query->where('is_terminal', '1');
     }
 
     public static function scopeAllRoute($query)
