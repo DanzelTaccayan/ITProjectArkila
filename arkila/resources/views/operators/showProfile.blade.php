@@ -106,7 +106,7 @@
                                     <div class="col-md-6">
                                         <a href="{{route('vans.createFromOperator',$operator->member_id)}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD VAN</a>
                                     </div>
-                                    <table id="van" class="table table-bordered table-striped table-responsive">
+                                    <table id="van" class="table table-bordered table-striped table-responsive info-table">
                                         <thead>
                                             <tr>
                                                 <th>Plate Number</th>
@@ -177,7 +177,7 @@
                                     <div class="col-md-6">
                                         <a href="{{route('drivers.createFromOperator',[$operator->member_id])}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD DRIVER</a>
                                     </div>
-                                    <table id="driver" class="table table-bordered table-striped table-responsive">
+                                    <table id="driver" class="table table-bordered table-striped table-responsive info-table">
 
                                         <thead>
                                             <tr>
@@ -199,8 +199,6 @@
                                                     
                                                         <div class="text-center">
                                                             <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                                            
-                                                            <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-outline-secondary btn-sm"><i class="fa fa-pencil-square-o"></i> EDIT</a>
                                                            
                                                             <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$operator->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
                                                         </div>                                                

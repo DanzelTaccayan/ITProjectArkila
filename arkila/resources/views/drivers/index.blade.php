@@ -34,8 +34,6 @@
                                 <div class="text-center">
                                     <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                     
-                                    <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-outline-secondary btn-sm"><i class="fa fa-pencil-square-o"></i> EDIT</a>
-                                    
                                     <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                 </div>
                                 <!-- /.text-->
@@ -52,7 +50,7 @@
                                             </div>
                                             <div class="modal-body row" style="margin: 0% 1%;">
                                                     <h1><i class="fa fa-exclamation-triangle pull-left text-yellow">  </i></h1>
-                                                    <p>Are you sure you want to delete "{{trim(strtoupper($driver->full_name))}}"?</p>
+                                                    <p>Are you sure you want to delete <strong>{{trim(strtoupper($driver->full_name))}}</strong>?</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">

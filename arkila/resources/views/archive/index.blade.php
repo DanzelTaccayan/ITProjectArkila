@@ -2,44 +2,49 @@
 @section('title', 'Operator Archive')
 @section('content')
     {{session(['opLink'=> Request::url()])}} 
-    
-<div class="box">
-    <!-- /.box-header -->
-    <div class="box-body">
-       <div class="table-responsive">
-        <table class="table table-bordered table-striped archiveOpe">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    <th>Address</th>
-                    <th>Date Archived</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
+ <div class="padding-side-5"> 
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body">
+           <div class="table-responsive">
+            <div class="col-md-6">
+                <a href="{{route('operators.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-file-text-o"></i> OPERATOR LIST</a>
+                <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT ARCHIVE</button>
+            </div>
+            <table class="table table-bordered table-striped archiveOpe">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Date Archived</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @foreach ($operators as $operator)
-                <tr>
-                    <td>{{ $operator->full_name }}</td>
-                    <td>{{ $operator->contact_number }}</td>
-                    <td>{{ $operator->address }}</td>
-                    <td>{{ $operator->date_archived }}</td>
-                    <td>
-                        <div class="text-center">
-                            <a href="{{ route('archive.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                        </div>
-                        <!-- /.text -->
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                <tbody>
+                    @foreach ($operators as $operator)
+                    <tr>
+                        <td>{{ $operator->full_name }}</td>
+                        <td>{{ $operator->contact_number }}</td>
+                        <td>{{ $operator->address }}</td>
+                        <td>{{ $operator->date_archived }}</td>
+                        <td>
+                            <div class="text-center">
+                                <a href="{{ route('archive.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                            </div>
+                            <!-- /.text -->
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            </div>
+            <!-- /.box-body -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.box -->
     </div>
-    <!-- /.box -->
-</div>
+</div>  
  
 @stop 
 @section('scripts') 
@@ -52,7 +57,7 @@
     $(function() {
         $('.archiveOpe').DataTable({
             'paging': true,
-            'lengthChange': true,
+            'lengthChange': false,
             'searching': true,
             'ordering': true,
             'info': true,

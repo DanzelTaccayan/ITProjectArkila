@@ -33,8 +33,11 @@ class CreateReportController extends Controller
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
     //$destinations = $terminals->routeFromDestination;
     $fees = Fee::all();
+    $dateNow = Carbon::now()->format('m/d/Y');
+    $timeNow = Carbon::now()->format('g:i A');
+
     $member = Member::where('user_id', Auth::id())->first();
-    return view('drivermodule.report.driverCreateReport', compact('terminals', 'destinations', 'fad', 'member', 'origins'));
+    return view('drivermodule.report.driverCreateReport', compact('dateNow', 'timeNow','terminals', 'destinations', 'fad', 'member', 'origins'));
   }
   public function storeReport(CreateReportRequest $request)
   {

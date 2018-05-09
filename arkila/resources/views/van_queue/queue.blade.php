@@ -260,7 +260,7 @@ ol.vertical{
                       <div class="well terminal-body scrollbar scrollbar-info thin">
                         <ul id="destinationTerminals" class="nav nav-stacked">
                           @foreach ($terminals as $terminal)
-                          <li class=" @if($terminals->first() == $terminal){{'active'}} @else {{''}}@endif" data-val="{{$terminal->destination_id}}"><a href="#{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
+                          <li class=" @if($terminals->first() == $terminal){{'active'}} @else {{''}}@endif" data-val="{{$terminal->destination_id}}"><a href="#queue{{$terminal->destination_id}}" id="#queue{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
                           @endforeach
                         </ul>
                       </div>
@@ -272,7 +272,7 @@ ol.vertical{
                 <div class="tab-content">
                 <!-- Cabanatuan Queue Tab -->
                 @foreach($terminals as $terminal)
-                  <div data-val='{{$terminal->destination_id}}' class="tab-pane @if($terminals->first() == $terminal) {{'active'}} @else {{''}} @endif" id="{{$terminal->destination_id}}">
+                  <div data-val='{{$terminal->destination_id}}' class="tab-pane @if($terminals->first() == $terminal) {{'active'}} @else {{''}} @endif" id="queue{{$terminal->destination_id}}">
                     <div class="box box-solid">
                       <div class="box-body">
                         <div class="row">
@@ -287,7 +287,7 @@ ol.vertical{
                             <div class="queue-body scrollbar scrollbar-info thin">  
                               <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization">
                                   @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
-                                    <li id="unit{{$vanOnQueue->van_queue_id}}" class="queue-item form-horizontal">
+                                    <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                         <div class="queuenum">
                                             <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
@@ -418,15 +418,15 @@ ol.vertical{
                                         <div id="ondeck-sp{{$specializedVanOnQueue->van_queue_id}}" class="ondeck-sp hidden">
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                  <p>Are you sure you want {{$specializedVanOnQueue->van->plate_number}} to be on deck?</p>
+                                                  <p>Are you sure you want <strong>{{$specializedVanOnQueue->van->plate_number}}</strong> to be on deck?</p>
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <div class="pull-right">
                                                         <form action="{{route('vanqueue.putOnDeck',[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                             {{method_field('PATCH')}}
                                                             {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}">NO</a>
-                                                            <button type="submit" class="btn btn-primary btn-xs">YES</button>
+                                                            <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}">NO</a>
+                                                            <button type="submit" class="btn btn-primary btn-sm">YES</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -442,8 +442,8 @@ ol.vertical{
                                                         <form action="{{route("vanqueue.destroy",[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                              {{method_field('DELETE')}}
                                                             {{csrf_field()}}
-                                                            <a class="btn btn-default btn-xs itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}"> NO</a>
-                                                            <button class="btn btn-danger btn-xs">YES</button>
+                                                            <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}"> NO</a>
+                                                            <button class="btn btn-danger btn-sm">YES</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -481,6 +481,42 @@ ol.vertical{
   </script>
     <!-- List sortable -->
     <script>
+    $(function(){
+     var url = window.location.href;
+     var activeTab = document.location.hash;
+
+     if(!activeTab){
+            activeTab = @if($terminals->first()->destination_id ?? null)
+                "{{'#queue'.$terminals->first()->destination_id}}";
+        @else
+                "{{''}}";
+        @endif
+    }
+     
+     $
+     $(".tab-pane").removeClass("active in"); 
+     $(".tab-menu").removeClass("active in"); 
+     $(activeTab).addClass("active");
+     $(activeTab + "-menu").addClass("active");
+
+     $('a[href="#queue'+ activeTab +'"]').tab('show')
+    });
+
+    $(function(){
+      var hash = window.location.hash;
+      hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+      $('.nav-stacked a').click(function (e) {
+      $(this).tab('show');
+      var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+      window.location.hash = this.hash;
+      $('html,body').scrollTop(scrollmem);
+      });
+    });
+</script>
+
+    <script>
+    
         $(function() {
             specialUnitChecker();
 
@@ -702,8 +738,11 @@ ol.vertical{
                         data: {
                             '_token': '{{csrf_token()}}'
                         },
-                        success: function(){
-                            location.reload();
+                        success: function(response){
+                            if(response != "Van is already on Queue"){
+                                window.location.hash = response;
+                                location.reload();
+                            }
                         }
                     });
 
@@ -730,7 +769,7 @@ ol.vertical{
             },
             success: function(queue){
                console.log(queue);
-               for(i = 0; i < queue.length; i++){
+               for(i = 0; i < queue.length; i++) {
                     $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
                }
                specialUnitChecker();
