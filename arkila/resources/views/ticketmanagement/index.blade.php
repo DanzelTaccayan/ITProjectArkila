@@ -189,6 +189,8 @@
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
 
+                              $("#regViewQty" + quantityId).html(response)
+
                               $("#regViewQty" + quantityId).show();
                               $("#regViewAction" + quantityId).show();
                               $("#regEditQty" + quantityId).hide();
