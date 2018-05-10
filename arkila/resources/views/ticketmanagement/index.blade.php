@@ -2,8 +2,11 @@
 @section('title', 'List of Drivers') 
 @section('content-header', 'List of Drivers') 
 @section('content')
-<div class="row">
-        <div class="col-md-8">
+<div class="">
+        <div class="padding-side-15">
+        <div>
+            <h2 class="text-white">DESTINATION TICKETS MANAGEMENT</h2>
+        </div>
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
@@ -13,7 +16,7 @@
             <div class="tab-content">
               <div class="tab-pane active" id="regular">
                 <h4 class="text-center">REGULAR TICKETS</h4>
-                <table class="table table-bordered table-striped">
+                <table id="regularTickets" class="table table-bordered table-striped ticketTable">
                   <thead>
                     <tr>
                       <th class="text-center">Destination</th>
@@ -37,7 +40,7 @@
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px">
                             <button id="regViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>
-                            <button name="regSaveBtn" data-val="{{$route->destination_id}}" class="btn btn-primary btn-sm">SAVE</button>
+                            <button id="regSaveBtn{{$route->destination_id}}" name="regSaveBtn" data-val="{{$route->destination_id}}" data-dest="{{$route->destination_name}}" class="btn btn-primary btn-sm">SAVE</button>
                           </div>
                         </td>
                     </tr>
@@ -48,7 +51,7 @@
               <!-- /.tab-pane -->
               <div class="tab-pane" id="discounted">
                 <h4 class="text-center">DISCOUNT TICKETS</h4>
-                <table class="table table-bordered table-striped">
+                <table id="discountTickets" class="table table-bordered table-striped ticketTable">
                   <thead>
                     <tr>
                       <th class="text-center">Destination</th>
@@ -137,30 +140,9 @@
 </script>
 
 <script>
-    $(function() {
-        $('#regulatTickets').DataTable({
-            'paging': true,
-            'lengthChange': false,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false,
-            'order': [[ 0, "desc" ]]
-        });
-
-        $('#discountTickets').DataTable({
-            'paging': true,
-            'lengthChange': false,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false,
-            'order': [[ 0, "desc" ]]
-        });
-    })
-
-                $('button[name="regSaveBtn"]').on('click',function() {
+              $('button[name="regSaveBtn"]').on('click',function() {
                 var quantityId = $(this).data('val');
+                var destName = $(this).data('dest');
 
                 $.ajax( {
                         method:'PATCH',
@@ -173,7 +155,7 @@
                         success: function(response) {
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update ticket",
+                                text: "Successfully updated <b>"+ destName +"</b> regular ticket's quantity to <b>" + response + "</b>",
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -188,12 +170,30 @@
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
+
+                              $("#regViewQty" + quantityId).html(response)
+
+                              $("#regViewQty" + quantityId).show();
+                              $("#regViewAction" + quantityId).show();
+                              $("#regEditQty" + quantityId).hide();
                         console.log(response);
                         }
+
                     });
 
-            });
+               
 
+            });
+  $(function() {
+        $('.ticketTable').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true
+        });
+    })
 </script>
 
 @stop

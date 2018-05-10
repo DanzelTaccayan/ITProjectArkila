@@ -113,6 +113,19 @@
     border-radius: 5px
 }
 
+.ticket-dest-table tbody tr td {
+    padding:5px;
+    width: 50%;
+}
+.ticket-dest-table tbody tr .btn-dest{
+    width: 85%;
+}
+
+.ticket-dest-table tbody tr .btn-dest .badge{
+    margin-top: 4px;
+}
+
+
     </style>
     @stop
 @section('content')
@@ -129,7 +142,7 @@
                                     <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <div class="well">
                                                         <div>
                                                             <label for="">Customer</label>
@@ -163,7 +176,7 @@
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
                                                                                 </td>
                                                                                 <td class="pull-right">{{$ticket->fare}}</td>
-                                                                                <td class="text-center text-red"><i class="fa fa-trash"></i></td>
+                                                                                <td class="text-center"><a href="  " class="text-red"><i class="fa fa-trash"></i></a></td>
                                                                             </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -197,7 +210,7 @@
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-7">
+                                                <div class="col-md-8">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
@@ -217,12 +230,12 @@
                                                                 </table>
                                                             </div>
                                                             <div class="table-dest scrollbar scrollbar-info thin" style="margin-bottom: 0;">
-                                                                <table class="table table-striped" style="margin-bottom: 0;">
+                                                                <table class="table table-striped ticket-dest-table" style="margin-bottom: 0;">
                                                                     <tbody>
                                                                     @foreach($terminal->routeFromDestination as $destination)
                                                                         <tr>
                                                                             <td>
-                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-block">
+                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
                                                                                         <span class="badge bg-yellow pull-right">
@@ -230,9 +243,10 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
+                                                                                <button class="btn btn-flat" disabled><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                             <td>
-                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-block">
+                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
                                                                                         <span class="badge bg-yellow pull-right">
@@ -240,6 +254,7 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
+                                                                                <button class="btn btn-danger btn-flat"><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach

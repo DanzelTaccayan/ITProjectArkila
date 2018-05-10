@@ -4,9 +4,12 @@
 @section('content')
 @if(session()->get('opLink')) {{ session()->forget('opLink') }} 
 @endif
-<div class="padding-side-5">   
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">LIST OF DRIVERS</h2>
+    </div>
     <div class="box">
-        <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
+        <div class="box-body with-shadow">
             <div class="table-responsive">
                  <div class="col-md-6">
                     <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>

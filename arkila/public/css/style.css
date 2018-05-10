@@ -775,3 +775,7 @@ input:checked+.slider:before {
 .profile-van p{
     margin: 0;
 }
+
+.text-white{
+  color: white;
+}
