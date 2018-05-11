@@ -31,19 +31,19 @@
                                   <tr>
                                     <th>Main Terminal</th>
                                     <td>
-                                        <input value="" class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassMain' value="0" min="0">
+                                        <input class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassMain' value="0" min="0">
                                     </td>
                                     <td>
-                                        <input value="" class='form-control pull-right'  type='number' name='numDisMain' value="0" min="0">
+                                        <input class='form-control pull-right'  type='number' name='numDisMain' value="0" min="0">
                                     </td>
                                   </tr>
                                   <tr>
                                     <th>Short Trip</th>
                                     <td>
-                                        <input value="" class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassST' id='numPassST' value="0" min="0">
+                                        <input class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassST' id='numPassST' value="0" min="0">
                                     </td>
                                     <td>
-                                        <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' value="0" min="0">
+                                        <input class='form-control pull-right'  type='number' name='numDisST' id='' value="0" min="0">
                                     </td>
                                   </tr>
                                 </tbody>
@@ -65,11 +65,11 @@
                                     <th>{{$destination->first()->destination_name}}</th>
                                     <td>
                                         <input type="hidden" name="destination[]" value="{{$destination->first()->destination_id}}">
-                                        <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
+                                        <input class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' value="0" min="0">
                                     </td>
                                     <td>
                                         <input type="hidden" name="discount[]" value="">
-                                        <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='disqty[]' id='' min="0">
+                                        <input class='form-control pull-right' onblur='findTotal()' type='number' name='disqty[]' id='' value="0" min="0">
                                     </td>
                                 </tr>
                             @php $counter++; @endphp
