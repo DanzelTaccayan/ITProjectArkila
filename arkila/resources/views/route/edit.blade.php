@@ -24,8 +24,12 @@
           <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{$fareDis->fare}}">
       </div>
       <div class="form-group">
-          <label>Number of Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="numticket" value="{{$route->number_of_tickets}}" required="">
+          <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
+          <input type="number" class="form-control" min="1" step="0.25" name="numticket" value="{{$route->number_of_tickets}}" required>
+      </div>
+      <div class="form-group">
+          <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
+          <input type="number" class="form-control" min="1" step="0.25" name="numticketDis" value="{{$route->number_of_tickets}}">
       </div>
   </div>
   @if($route->is_terminal == true)
