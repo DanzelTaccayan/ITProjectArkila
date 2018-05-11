@@ -176,7 +176,7 @@
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
                                                                                 </td>
                                                                                 <td class="pull-right">{{$ticket->fare}}</td>
-                                                                                <td class="text-center"><a href="  " class="text-red"><i class="fa fa-trash"></i></a></td>
+                                                                                <td class="text-center"><button name="deleteSpecificSelectedTicket" data-val="{{$ticket->selectedTicket->selected_ticket_id}}" class="text-red"><i class="fa fa-trash"></i></button></td>
                                                                             </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -189,17 +189,17 @@
                                                                     <tr class="info">
                                                                         <td>Regular</td>
                                                                         <td id="totalRegTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right">1000.00</td>
+                                                                        <td class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="info">
                                                                         <td>Discounted</td>
                                                                         <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right">90.00</td>
+                                                                        <td class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="success">
                                                                         <td><strong>Total</strong></td>
                                                                         <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right"><strong>1090.00</strong></td>
+                                                                        <td class="text-right"><strong>₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->pluck('fare')->sum()}}</strong></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -243,10 +243,10 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button class="btn btn-flat" disabled><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" class="btn btn-flat" disabled><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                             <td>
-                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
+                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
                                                                                         <span class="badge bg-yellow pull-right">
@@ -254,7 +254,7 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button class="btn btn-danger btn-flat"><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" class="btn btn-danger btn-flat"><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -620,6 +620,7 @@
 {{--Selecting Tickets--}}
 <script>
     $(function(){
+        //Select Tickets
         $('button[name="ticketButton"]').on('click',function(){
             var destinationId = $(this).data('route');
             var terminalId = $(this).data('terminal');
@@ -637,6 +638,45 @@
                     var fare = '<td class="pull-right">'+element.fare+'</td>';
                     var deleteButt = '<td class="text-center text-red"><i class="fa fa-trash"></i></td></tr>';
                     $('#selectedList'+terminalId).append(ticketNumber+fare+deleteButt);
+
+                }
+
+            });
+        });
+
+        //Delete a Specific Selected Ticket
+        $('button[name="deleteSpecificSelectedTicket"]').on('click',function(){
+            var element = $(this);
+            var selectedTicketId = $(this).data('val');
+
+            $.ajax({
+                method:'DELETE',
+                url: '/selectTicket/'+selectedTicketId,
+                data: {
+                    '_token': '{{csrf_token()}}'
+                },
+                success: function(){
+                    element.closest('tr').remove();
+                }
+
+            });
+        });
+
+        //Delete the Last Ticket of a Destination
+        $('button[name="deleteLastSelectedTicket"]').on('click',function(){
+            var destinationId = $(this).data('route');
+            var terminalId = $(this).data('terminal');
+            var ticketType = $(this).data('type');
+
+            $.ajax({
+                method:'DELETE',
+                url: '/selectedLastTicket/'+destinationId,
+                data: {
+                    '_token': '{{csrf_token()}}',
+                    'ticketType': ticketType
+                },
+                success: function(lastSelected){
+                    $('#selectedList'+terminalId).find('[data-val="' + lastSelected + '"]').closest('tr').remove();
 
                 }
 
@@ -778,7 +818,7 @@
 </script>
 
 
-//hide and showing
+{{--hide and showing--}}
 @foreach($terminals as $terminal)
 <script>
      $(function(){
@@ -788,20 +828,20 @@
             $("#ondeck-header{{$terminal->destination_id}}").hide();
             $("#changedriver-header{{$terminal->destination_id}}").show()
             $("#changedriver-header{{$terminal->destination_id}}").removeClass("hidden");
-        })
+        });
         $("#deleteDriverBtn{{$terminal->destination_id}}").click(function(){
             $("#ondeck-header{{$terminal->destination_id}}").hide();
             $("#deletedriver-header{{$terminal->destination_id}}").show()
             $("#deletedriver-header{{$terminal->destination_id}}").removeClass("hidden");
-        })
+        });
         $("#onDeckBtn1-{{$terminal->destination_id}}").click(function(){
             $("#changedriver-header{{$terminal->destination_id}}").hide();
             $("#ondeck-header{{$terminal->destination_id}}").show();
-        })
+        });
         $("#onDeckBtn2-{{$terminal->destination_id}}").click(function(){
             $("#deletedriver-header{{$terminal->destination_id}}").hide();
             $("#ondeck-header{{$terminal->destination_id}}").show();
-        })
+        });
       });
 </script>
 <script>
@@ -810,11 +850,11 @@
         $("#boardPageBtn{{$terminal->destination_id}}").click(function(){
             $("#sellTickets{{$terminal->destination_id}}").hide();
             $("#boardTickets{{$terminal->destination_id}}").show();
-        })
+        });
         $("#sellPageBtn{{$terminal->destination_id}}").click(function(){
             $("#sellTickets{{$terminal->destination_id}}").show();
             $("#boardTickets{{$terminal->destination_id}}").hide();
-        })
+        });
     });
 </script>
 @endforeach
