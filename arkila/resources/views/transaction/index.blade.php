@@ -220,7 +220,7 @@
                                                             <div class="form-group">
                                                                 <div class="input-group">
                                                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                                                <input type="text" class="form-control" placeholder="Search Destination">
+                                                                <input type="text" class="form-control" placeholder="Search Destination" id="myInput" onkeyup="myFunction()">
                                                                 </div>
                                                             </div>
                                                             <div class="fixed-table-header">
@@ -234,7 +234,7 @@
                                                                 </table>
                                                             </div>
                                                             <div class="table-dest scrollbar scrollbar-info thin" style="margin-bottom: 0;">
-                                                                <table class="table table-striped ticket-dest-table" style="margin-bottom: 0;">
+                                                                <table id="destination-table" class="table table-striped ticket-dest-table" style="margin-bottom: 0;">
                                                                     <tbody>
                                                                     @foreach($terminal->routeFromDestination as $destination)
                                                                         <tr>
@@ -273,8 +273,9 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button>
-                                                <div class="pull-right">    
+                                                
+                                                <div class="pull-right">   
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
                                                 <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 </div>
                                                 <div class="clearfix">  </div>
@@ -942,5 +943,26 @@
         @endif
         @endforeach
     });
+</script>
+
+<script>
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    table = document.getElementById("destination-table");
+    tr = table.getElementsByTagName('tr');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        btn = tr[i].getElementsByTagName("button")[0];
+        if (btn.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
 </script>
 @endsection
