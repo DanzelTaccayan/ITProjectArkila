@@ -160,9 +160,8 @@
                                                                 <table class="table table-condensed table-striped"  style="margin-bottom: 0; margin-right:  2px;">
                                                                     <thead >
                                                                         <tr class="success">
-                                                                            <th class="text-center">Ticket Number</th>
-                                                                            <th class="text-center">Fare</th>
-                                                                            <th class="text-center"><i class="fa fa-trash"></i></th>
+                                                                            <th class="text-center" style="width: 150px;">Ticket Number</th>
+                                                                            <th>Fare</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -175,8 +174,12 @@
                                                                                 <td>
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
                                                                                 </td>
-                                                                                <td class="pull-right">{{$ticket->fare}}</td>
-                                                                                <td class="text-center"><button name="deleteSpecificSelectedTicket" data-val="{{$ticket->selectedTicket->selected_ticket_id}}" class="text-red"><i class="fa fa-trash"></i></button></td>
+                                                                                <td class="text-right">
+                                                                                    {{$ticket->fare}}
+                                                                                </td>
+                                                                                <td class="text-right">
+                                                                                    <button name="deleteSpecificSelectedTicket" class="btn btn-xs" data-val="{{$ticket->selectedTicket->selected_ticket_id}}" class="text-red"><i class="fa fa-trash"></i></button>
+                                                                                </td>
                                                                             </tr>
                                                                     @endforeach
                                                                 </tbody>
