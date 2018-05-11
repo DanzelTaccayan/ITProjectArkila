@@ -31,10 +31,11 @@ class CreateReportRequest extends FormRequest
           "dateDeparted" => "required|date_format:m/d/Y",
           "timeDeparted" => [new checkTime, "required"],
           "totalPassengers" => "numeric|min:1|max:18|required",
-          "numPassMain" => "numeric|min:1|max:18|required_without_all:numPassST", 
+          "numPassMain" => "numeric|min:1|max:18|required_without_all:numPassST",
           "numPassST" => "numeric|min:1|max:18|required_without_all:numPassMain",
           "origin" => "required|exists:destination,destination_id"
         ];
+
         if($this->request->get('numDisMain') > $this->request->get('numPassMain')){
           $rules['numDisMain'] = "nullable|numeric|min:1|max:numPassMain";
         }else{

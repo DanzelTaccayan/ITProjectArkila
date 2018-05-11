@@ -59,7 +59,7 @@
                     <li class="{{ Request::is('home/reservations') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} ">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Personnel</span>
@@ -68,7 +68,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/operators') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
+                    <li class="{{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
                     <li class="{{ Request::is('home/drivers') ? 'active' : '' }}"><a href="{{route('drivers.index')}}"><i class="fa fa-circle-o"></i>Drivers</a></li>
                     <li class="{{ Request::is('home/vans') ? 'active' : '' }}"><a href="{{route('vans.index')}}"><i class="fa fa-circle-o"></i>Vans</a></li>
                 </ul>
@@ -110,12 +110,6 @@
                     <i class="fa fa-male"></i> <span>User Management</span>
                 </a>
             </li>
-            <li class="{{ Request::is('home/archive') ? 'active' : '' }}">
-                <a href="{{route('archive.index')}}">
-                    <i class="fa fa-archive"></i> <span>Operator History</span>
-                </a>
-            </li>
-
             <li>
                 <a href="{{route('logout')}}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">

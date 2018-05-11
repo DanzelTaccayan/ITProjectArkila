@@ -70,7 +70,7 @@
                                         <h3>  
                                            <i class="fa fa-exclamation-triangle pull-left text-yellow"></i>
                                         </h3>
-                                        <p>Are you sure you want to delete "{{ $van->model }}" with plate number of "{{$van->plate_number}}"</p>
+                                        <p>Are you sure you want to delete "{{$van->model->description}}" with plate number of "{{$van->plate_number}}"</p>
                                     </div>
                                     <div class="modal-footer">
                                         <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">

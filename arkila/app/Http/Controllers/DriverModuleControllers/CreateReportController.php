@@ -61,32 +61,18 @@ class CreateReportController extends Controller
 
     $mainterminal = Destination::where('is_main_terminal', true)->first();
 
-     if($totalPassengers >=  10){
-        $trip =Trip::create([
-         'driver_id' => $driver_id->member_id,
-         'van_id' => $van_id,
-         'destination' => $mainterminal->destination_name,
-         'origin' => $terminal->destination_name,
-         'total_passengers' => $totalPassengers,
-         'total_booking_fee' => $totalbookingfee,
-         'community_fund' => $cf->amount*$totalPassengers,
-         'report_status' => 'Pending',
-         'date_departed' => $request->dateDeparted,
-         'time_departed' => $timeDepartedFormat,
-       ]);
-     }else if($totalPassengers <  10){
-        $trip = Trip::create([
-          'driver_id' => $driver_id->member_id,
-          'van_id' => $van_id,
-          'destination' => $mainterminal->destination_name,
-          'origin' => $terminal->destination_name,
-          'total_passengers' => $totalPassengers,
-          'total_booking_fee' => $totalbookingfee,
-          'report_status' => 'Pending',
-          'date_departed' => $request->dateDeparted,
-          'time_departed' => $timeDepartedFormat,
-        ]);
-     }
+    $trip =Trip::create([
+     'driver_id' => $driver_id->member_id,
+     'van_id' => $van_id,
+     'destination' => $mainterminal->destination_name,
+     'origin' => $terminal->destination_name,
+     'total_passengers' => $totalPassengers,
+     'total_booking_fee' => $totalbookingfee,
+     'community_fund' => $cf->amount*$totalPassengers,
+     'report_status' => 'Pending',
+     'date_departed' => $request->dateDeparted,
+     'time_departed' => $timeDepartedFormat,
+   ]);
 
      $numberofmainpassengers = $request->numPassMain;
      $numberofmaindiscount = $request->numDisMain;

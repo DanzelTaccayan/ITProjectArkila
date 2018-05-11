@@ -12,7 +12,7 @@
                 <div class="box-body">
                     <form action="{{route('trips.admin.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
-                      <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
+                      <input type="hidden" name="orgId" value="{{$terminals->destination_id}}">
                         <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
                             <div class="col-sm-4">
@@ -29,7 +29,7 @@
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">Main Terminal</label>
                                 <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassMain' min="0">
                                 </div>
                                 <div class="col-sm-4">
                                     <input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0">
@@ -39,7 +39,7 @@
                             <div class='form-group'>
                                 <label for="" class="col-sm-4">Short Trip</label>
                                 <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
+                                    <input value="" class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassST' id='numPassST' min="0">
                                 </div>
                                 <div class="col-sm-4">
                                     <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
@@ -51,9 +51,9 @@
                             @foreach($destinations as $destination)
                             <!-- FROM MAIN TERMINAL -->
                             <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
+                                <label for="" class="col-sm-4">{{$destination->first()->destination_name}}</label>
                                 <div class="col-sm-4">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
+                                    <input type="hidden" name="destination[]" value="{{$destination->first()->destination_id}}">
                                     <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
                                 </div>
                                 <div class="col-sm-4">
@@ -69,7 +69,7 @@
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
                             @if($terminals->is_terminal == true && $terminals->is_main_terminal == true)
                             <div class="form-group">
-                                <label for="driver" class="col-sm-4">Origin Terminal:</label>
+                                <label for="driver" class="col-sm-4">Destination Terminal:</label>
                                 <div class="col-sm-8">
                                 <select name="origin" id="originTerminal" class="form-control select2">
                                     @foreach($origins as $origin)
@@ -190,6 +190,22 @@
         document.getElementById('totalBookingFee').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
 
+    function findUpTotal() {
+        var arr = document.getElementsByClassName('num-pass');
+        var tot = 0;
+
+        for(var i = 0; i < arr.length; i++){
+            if(parseInt(arr[i].value)){
+                tot += parseInt(arr[i].value);
+            }
+        }
+
+        document.getElementById('totalPassenger').textContent = tot;
+        document.getElementById('totalPassengers').value = tot;
+
+        //bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.value;
+        //document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
+    }
     //document.getElementById('dest').value = document.getElementById('termId').value;
 </script>
 
