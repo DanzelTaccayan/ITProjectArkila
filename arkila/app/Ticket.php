@@ -22,9 +22,9 @@ class Ticket extends Model
         return $this->hasOne(Transaction::Class, 'transaction_id');
     }
 
-    public function selectedTickets()
+    public function selectedTicket()
     {
-        return $this->hasMany(SelectedTicket::class,'destination_id');
+        return $this->hasOne(SelectedTicket::class,'ticket_id');
     }
 
     public function scopeShowAllSelectedTickets($query, $destinations){

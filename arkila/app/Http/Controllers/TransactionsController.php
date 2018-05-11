@@ -441,6 +441,7 @@ class TransactionsController extends Controller
         return 'success';
     }
 
+    //Selected Ticket
     public function selectTicket(Destination $destination)
     {
         // Start transaction!
@@ -463,7 +464,45 @@ class TransactionsController extends Controller
             }
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again');
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+        }
+    }
+
+    public function deleteSelectedTicket(SelectedTicket $selectedTicket)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $selectedTicket->delete();
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+        }
+
+    }
+
+    public function deleteLastSelectedTicket(Destination $destination)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if(request('ticketType') === 'Regular' || request('ticketType') === 'Discount') {
+                $ticketType = request('ticketType');
+                $lastTicket =$destination->selectedtickets()
+                    ->orderBy('selected_ticket_id','desc')
+                    ->where('selected_ticket.type', $ticketType)
+                    ->first();
+
+                $lastTicket->delete();
+
+                DB::commit();
+                return $lastTicket->selected_ticket_id;
+            }
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
     }
 }
