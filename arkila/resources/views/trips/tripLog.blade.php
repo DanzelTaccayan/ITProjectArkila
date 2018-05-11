@@ -7,6 +7,14 @@
 
 @stop
 @section('content')
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">TRIP LOG</h2>
+    </div>
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body" style="box-shadow: 0px 5px 10px gray;">
+            <div class="table-responsive">
 
 <div class="box">
     <!-- /.box-header -->
@@ -48,10 +56,9 @@
             </tbody>
         </table>
         </div>
+        <!-- /.box-body -->
     </div>
-    <!-- /.box-body -->
 </div>
-
 @endsection
 
 @section('scripts')
