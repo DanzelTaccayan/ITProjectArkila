@@ -100,6 +100,7 @@
 .table-dest{
     position: relative;
     height: 415px;
+    background: #f8f8f6;
 }
 
 .nav-terminal{
@@ -272,7 +273,11 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat btn-block" style="height: 50px;">BOARD PASSENGERS</button>
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button>
+                                                <div class="pull-right">    
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                </div>
+                                                <div class="clearfix">  </div>
                                             </div>
                                         </div>
                                         <div id="boardTickets{{$terminal->destination_id}}">
