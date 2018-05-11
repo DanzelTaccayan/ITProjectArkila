@@ -104,7 +104,7 @@
                                 Contact Number <span class="text-red">*</span>
                             </th>
                             <td>
-                                <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask required data-parsley-errors-container="#errContactNumber" val-phone required>
+                                <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                         <tr>
@@ -145,7 +145,7 @@
                                 SSS No
                             </th>
                             <td>
-                                <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                                <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss>
                             </td>
                         </tr>
                         <tr>
@@ -153,7 +153,7 @@
                                 License No: <span class="text-red">*</span>
                             </th>
                             <td>
-                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required data-inputmask='"mask": "A99-99-999999"' data-mask> 
+                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required> 
                             </td>
                         </tr>
                         <tr>
@@ -190,7 +190,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask  data-parsley-errors-container="#errContactPersonPhone" val-phone required>
+                                <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                     </tbody>
