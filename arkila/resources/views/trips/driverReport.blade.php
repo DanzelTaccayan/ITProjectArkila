@@ -8,7 +8,6 @@
 @stop
 @section('content')
 
-<<<<<<< HEAD
 
 <div class="box">
     <!-- /.box-header -->
@@ -46,11 +45,6 @@
                 @endforeach
             </tbody>
         </table>
-=======
-<div class="padding-side-5">
-    <div>
-        <h2 class="text-white">DRIVER REPORT</h2>
->>>>>>> 2c1cc88a854d82a9e07f12163658b50f7eb01bd1
     </div>
     <div class="box">
         <!-- /.box-header -->
