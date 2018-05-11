@@ -7,7 +7,7 @@
     <div class="col-md-offset-1 col-md-10">
         <div id="terminal" class="tab-pane">
             <div class="box box-solid">
-               
+
                 <div class="box-body">
                     <form action="{{route('drivermodule.storeReport')}}" method="POST" id="createReport" class="form-horizontal create-rep" data-parsley-validate="">
                       {{csrf_field()}}
@@ -39,13 +39,13 @@
                             </tbody>
                         </table>
 
-                            
-                          
+
+
                         </div>
 
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
-                            
+
                             <div class="form-group">
                                 <label for="driver" class="col-sm-4">Origin Terminal:</label>
                                 <div class="col-sm-8">
@@ -92,7 +92,7 @@
                                 </div>
                           </div>
                             <div class="box-footer text-center">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
+                                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
                             <!-- /.box-footer -->
                         </div>
@@ -125,7 +125,7 @@
     function findTotal() {
         // var numMainPass = document.getElementById('numPassMain');
         // var numSTPass = document.getElementById('numPassST');
-        
+
         // if(numMainPass == null){
         //     var tot = parseInt(numSTPass.value);
         //     console.log('null si main pass');
@@ -133,9 +133,9 @@
         //     var tot = parseInt(numMainPass.value);
         //     console.log('null si st pass');
         // }else{
-        //     var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);    
+        //     var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);
         // }
-        
+
         var arr = document.getElementsByClassName('num-pass');
         var tot = 0;
 

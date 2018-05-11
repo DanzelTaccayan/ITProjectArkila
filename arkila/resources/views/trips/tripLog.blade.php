@@ -3,7 +3,7 @@
 @section('links')
 @parent
 <!-- additional CSS -->
-<link rel="stylesheet" href="tripModal.css"> 
+<link rel="stylesheet" href="tripModal.css">
 
 @stop
 @section('content')
@@ -16,7 +16,7 @@
         <div class="col col-md-6">
             <a href="{{route('trips.admin.chooseDestination')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE REPORT</a>
         </div>
-            
+
         <table class="table table-bordered table-striped tripLog">
             <thead>
                 <tr>
@@ -33,10 +33,10 @@
                 @foreach($trips as $trip)
                 <tr>
                     <td>{{$trip->trip_id}}</td>
-                    <td>{{$trip->plate_number}}</td>
+                    <td>{{$trip->van->plate_number ?? 'Substitute Driver'}}</td>
                     <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
-                    <td>{{$superAdmin->description}}</td>
-                    <td>{{$trip->terminal->description}}</td>
+                    <td>{{$trip->origin}}</td>
+                    <td>{{$trip->destination}}</td>
                     <td>{{$trip->time_departed}} of {{$trip->date_departed}}</td>
                     <td>
                         <div class="text-center">
@@ -54,7 +54,7 @@
 
 @endsection
 
-@section('scripts') 
+@section('scripts')
 @parent
 
 <!-- DataTables -->

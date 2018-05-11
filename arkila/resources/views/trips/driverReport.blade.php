@@ -3,7 +3,7 @@
 @section('links')
 @parent
 <!-- additional CSS -->
-<link rel="stylesheet" href="tripModal.css"> 
+<link rel="stylesheet" href="tripModal.css">
 
 @stop
 @section('content')
@@ -30,10 +30,10 @@
                 @foreach($trips as $trip)
                 <tr>
                     <td>{{$trip->trip_id}}</td>
-                    <td>{{$trip->plate_number}}</td>
+                    <td>{{$trip->van->plate_number}}</td>
                     <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
-                    <td>{{$superAdmin->description}}</td>
-                    <td>{{$trip->terminal->description}}</td>
+                    <td>{{$trip->origin}}</td>
+                    <td>{{$trip->destination}}</td>
                     <td>{{$trip->time_departed}} of {{$trip->date_departed}}</td>
                     <th>{{$trip->report_status}}</th>
                     <td>
