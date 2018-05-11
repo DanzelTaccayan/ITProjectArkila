@@ -8,45 +8,49 @@
 @stop
 @section('content')
 
-
-<div class="box">
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div class="table-responsive">
-        <table id="driversTrips" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Trip ID</th>
-                    <th>Van</th>
-                    <th>Driver</th>
-                    <th>Departed at</th>
-                    <th>Destination</th>
-                    <th>Daparture date</th>
-                    <th>Status</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($trips as $trip)
-                <tr>
-                    <td>{{$trip->trip_id}}</td>
-                    <td>{{$trip->plate_number}}</td>
-                    <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
-                    <td>{{$superAdmin->description}}</td>
-                    <td>{{$trip->terminal->description}}</td>
-                    <td>{{$trip->time_departed}} of {{$trip->date_departed}}</td>
-                    <th>{{$trip->report_status}}</th>
-                    <td>
-                        <div class="text-center">
-                           <a href="{{route('trips.viewReport', [$trip->trip_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">DRIVER REPORT</h2>
     </div>
-    <!-- /.box-body -->
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="table-responsive">
+            <table id="driversTrips" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Trip ID</th>
+                        <th>Van</th>
+                        <th>Driver</th>
+                        <th>Departed at</th>
+                        <th>Destination</th>
+                        <th>Daparture date</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($trips as $trip)
+                    <tr>
+                        <td>{{$trip->trip_id}}</td>
+                        <td>{{$trip->plate_number}}</td>
+                        <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
+                        <td>{{$superAdmin->description}}</td>
+                        <td>{{$trip->terminal->description}}</td>
+                        <td>{{$trip->time_departed}} of {{$trip->date_departed}}</td>
+                        <th>{{$trip->report_status}}</th>
+                        <td>
+                            <div class="text-center">
+                               <a href="{{route('trips.viewReport', [$trip->trip_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+        </div>
     </div>
 </div>
 
