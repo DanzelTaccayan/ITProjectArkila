@@ -74,7 +74,7 @@
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}
                             <li class="header box-body">
-                                <h4>Enter Announcement:</h4>
+                                <h4>Quick Announcement:</h4>
                                 <select class="form-control" name="viewer">
                                     <option value="Public">Public</option>
                                     <option value="Driver Only">Driver Only</option>
@@ -98,8 +98,8 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="footer box-body text-center">
-                                <a href="{{route('announcements.index')}}">View all announcements</a>
+                            <li class="footer box-body text-center" style="border-top: 1px solid lightgray;">
+                                <a href="{{route('announcements.index')}}"><i class="fa fa-eye"></i> View previous announcements</a>
                             </li>
                         </form>
                     </ul>
