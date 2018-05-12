@@ -71,11 +71,11 @@
                         </td>
                         <td id="discEditQty{{$route->destination_id}}" class="hidden" colspan="2" style="width: 100px; background: #feeedb;">
                           <div class="col-md-6">
-                            <input type="number" class="form-control discInput" min="0" step="26" value="{{$route->tickets->where('type', 'Discount')->count()}}">
+                            <input type="number" id="disEditInput{{$route->destination_id}}" class="form-control discInput" min="0" step="26" value="{{$route->tickets->where('type', 'Discount')->count()}}">
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px;">
                             <button id="discViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>
-                            <button class="btn btn-primary btn-sm">SAVE</button>
+                            <button id="disSaveBtn{{$route->destination_id}}" name="disSaveBtn" data-val="{{$route->destination_id}}" class="btn btn-primary btn-sm">SAVE</button>
                           </div>
                         </td>
                     </tr>
@@ -184,6 +184,50 @@
                
 
             });
+            $('button[name="disSaveBtn"]').on('click',function() {
+                var quantityDisId = $(this).data('val');
+
+                $.ajax( {
+                        method:'PATCH',
+                        url: '/home/ticket-management/'+quantityDisId+'/updateDiscount',
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'numberOfTicket' : parseInt($('#disEditInput'+quantityDisId).val())
+                            },
+                        success: function(response) {
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully update ticket",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+
+                              $("#regViewQty" + quantityId).html(response)
+
+                              $("#regViewQty" + quantityId).show();
+                              $("#regViewAction" + quantityId).show();
+                              $("#regEditQty" + quantityId).hide();
+                        console.log(response);
+                        }
+
+                    });
+
+               
+
+            });
+
   $(function() {
         $('.ticketTable').DataTable({
             'paging': true,
