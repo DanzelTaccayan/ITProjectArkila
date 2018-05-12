@@ -38,6 +38,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
     Route::resource('/home/ticket-management', 'TicketManagementController');
+    Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
 
     Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
