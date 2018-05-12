@@ -450,13 +450,16 @@ class TransactionsController extends Controller
             if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
                 $ticketType = request('ticketType');
                 $ticket = $destination->tickets->where('type',$ticketType)->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+                if(is_null($ticket)) {
+                    return \Response::json(['error' => 'There are no more tickets left, please add anotehr to select a ticket'], 422);
+                }
 
                 $selectedTicket = SelectedTicket::create([
                     'ticket_id' => $ticket->ticket_id,
                     'type' => $ticketType
                 ]);
 
-                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare];
+                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare,'selectedId' => $selectedTicket->selected_ticket_id];
 
 
                 DB::commit();
@@ -473,8 +476,16 @@ class TransactionsController extends Controller
         // Start transaction!
         DB::beginTransaction();
         try  {
+            $responseArr = ['destinationId' =>$selectedTicket->ticket->destination->destination_id,
+                'terminalId'=> $selectedTicket->ticket->destination->routeDestination->first()->destination_id ,
+                'ticketType'=> $selectedTicket->type,
+                'fare' => $selectedTicket->ticket->fare
+            ];
+
             $selectedTicket->delete();
             DB::commit();
+
+            return response()->json($responseArr);
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
@@ -502,7 +513,7 @@ class TransactionsController extends Controller
 
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administrator');
         }
     }
 }
