@@ -9,21 +9,10 @@
                     <div class="col-md-3">
                         <div class="profile-side">
                             <img class="profile-user-img img-responsive img-circle" src="#" alt="Driver profile picture">
-                            <div class="profile-btn-group">
-                                <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-block btn-info btn-sm"><strong>Update Information</strong></a>
+                             <div class="profile-btn-group">
+                                <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
                             </div>
                             <hr>
-                            <div class="profile-van">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-navy"><i class="fa fa-automobile"></i></span>
-                                    <div class="info-box-content">
-                                      <h4><strong>{{$driver->van()->first()->plate_number}}</strong></h4>
-                                      <p>{{$driver->van()->first()->model->description}}</p>
-                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity}} seats</p>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                </div>
-                            </div>
                             <div class="profile-btn-group">
                                <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous())
                                 {{session()->get('opLink')}}
@@ -33,7 +22,18 @@
                                     @else
                                         {{route(URL::previous())}}
                                     @endif
-                                @endif" class="btn btn-primary btn-sm btn-block"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
+                                @endif" class="btn btn-default btn-sm btn-block"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
+                            </div>
+                            <div class="profile-van" style="margin-top: 10px;">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
+                                    <div class="info-box-content">
+                                      <h4><strong>{{$driver->van()->first()->plate_number}}</strong></h4>
+                                      <p>{{$driver->van()->first()->model->description}}</p>
+                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity}} seats</p>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
                             </div>
                         </div>
                     </div>

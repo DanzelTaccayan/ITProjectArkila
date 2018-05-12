@@ -29,7 +29,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input  value="{{old('contactNumber') ?? $operator->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactNumber" val-phone required>
+                                <input  value="{{old('contactNumber') ?? $operator->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                         <tr>
@@ -47,13 +47,13 @@
                         <tr>
                             <th>SSS No</th>
                             <td>
-                                <input id="sssO" name="sss" value="{{  old('sss') ?? $operator->SSS }}" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                                <input id="sssO" name="sss" value="{{  old('sss') ?? $operator->SSS }}" type="text" class="form-control" placeholder="SSS No." val-sss>
                             </td>
                         </tr>
                         <tr>
                             <th>License No</th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." val-license data-inputmask='"mask": "A99-99-999999"' data-mask>
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." val-license>
                             </td>
                         </tr>
                         <tr>
@@ -84,7 +84,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $operator->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required>
+                                <input value="{{ old('contactPersonContactNumber') ?? $operator->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                     </tbody>

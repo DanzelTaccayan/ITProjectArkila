@@ -41,7 +41,8 @@
                                                 <th>Name</th>
                                                 <th>Regular Fee</th>
                                                 <th>Discounted Fee</th>  
-                                                <th>Number of Tickets</th>
+                                                <th>Regular Tickets</th>
+                                                <th>Discounted Tickets</th>
                                                 <th class="text-center">Actions</th>
 
                                             </tr>
@@ -56,6 +57,7 @@
                                                 @foreach($fareDis->where('destination_id', $routes->destination_id) as $discounted)
                                                 <td class="text-right">{{$discounted->fare}}</td>
                                                 @endforeach
+                                                <td class="text-right">{{$routes->number_of_tickets}}</td>
                                                 <td class="text-right">{{$routes->number_of_tickets}}</td>
                                                 <td>
                                                     <div class="text-center">

@@ -20,26 +20,24 @@ class TripsController extends Controller
 
     public function tripLog()
     {
-        $trips = Trip::where('report_status', 'Accepted')->get();
-        $user = User::where('user_type','Super-admin')->first();
-        $superAdmin = $user->terminal;
-        return view('trips.tripLog', compact('trips', 'superAdmin'));
+        $trips = Trip::where('report_status', 'Accepted')->with('van')->get();
+        return view('trips.tripLog', compact('trips'));
     }
 
     public function driverReport()
     {
-        $trips = Trip::departed()->pending()->get();
-        $user = User::where('user_type','Super-admin')->first();
-        $superAdmin = $user->terminal;
-        return view('trips.driverReport', compact('trips', 'superAdmin'));
+        $trips = Trip::pending()->with('van')->get();
+        return view('trips.driverReport', compact('trips'));
     }
 
     public function viewReport(Trip $trip)
     {
-        $destinations = Transaction::join('destination', 'destination.destination_id', '=', 'transaction.destination_id')->join('trip', 'trip.trip_id', '=', 'transaction.trip_id')->where('transaction.trip_id', $trip->trip_id)->selectRaw('transaction.trip_id as tripid, destination.description as destdesc, destination.amount as amount, COUNT(destination.description) as counts')->groupBy(['transaction.trip_id','destination.description'])->get();
-        $user = User::where('user_type','Super-admin')->first();
-        $superAdmin = $user->terminal;
-        return view('trips.viewReport', compact('destinations', 'trip', 'superAdmin'));
+      $transaction = Transaction::where('trip_id', $trip->trip_id)->groupBy('amount_paid')->get();
+      $passAndDisCount = 0;
+      foreach($transaction as $trans){
+        echo $trans->transaction_id . ' ' . $trans->amount_paid .'<br/>';
+      }
+      //return view('trips.viewReport', compact('transaction', 'trip'));
     }
 
     public function acceptReport(Trip $trip)
@@ -73,8 +71,8 @@ class TripsController extends Controller
         foreach($tickets as $ticket){
             if($ticket->type === "Discount"){
 
-            }    
-        }                            
+            }
+        }
         $user = User::where('user_type','Super-admin')->first();
         $superAdmin = $user->terminal;
         return view('trips.viewTrip', compact('destinations', 'trip', 'superAdmin'));

@@ -12,64 +12,78 @@
                 <div class="box-body">
                     <form action="{{route('trips.admin.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
-                      <input type="hidden" name="termId" value="{{$terminals->terminal_id}}">
+                      <input type="hidden" name="orgId" value="{{$terminals->destination_id}}">
                         <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
-                            <div class="col-sm-4">
+                            
 
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="text-center">#Passengers</label>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="text-center">#Discounted</label>
-                            </div>
                             @if($terminals->is_terminal == true && $terminals->is_main_terminal == false)
+                            
                             <!-- TO MAIN TERMINAL -->
-                            <div class='form-group'>
-                                <label for="" class="col-sm-4">Main Terminal</label>
-                                <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input value="" class='form-control pull-right'  type='number' name='numDisMain' min="0">
-                                </div>
-                            </div>
+                            <table class="table table-bordered table-striped form-table">
+                                <thead>
+                                    <th></th>
+                                    <th>#Passengers</th>
+                                    <th>#Discounted</th>
+                                </thead>
 
-                            <div class='form-group'>
-                                <label for="" class="col-sm-4">Short Trip</label>
-                                <div class="col-sm-6">
-                                    <input value="" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input value="" class='form-control pull-right'  type='number' name='numDisST' id='' min="0">
-                                </div>
-                            </div>
+                                <tbody>
+                                  <tr>
+                                    <th>Main Terminal</th>
+                                    <td>
+                                        <input class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassMain' value="0" min="0">
+                                    </td>
+                                    <td>
+                                        <input class='form-control pull-right'  type='number' name='numDisMain' value="0" min="0">
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Short Trip</th>
+                                    <td>
+                                        <input class='form-control pull-right num-pass' onblur='findUpTotal()' type='number' name='numPassST' id='numPassST' value="0" min="0">
+                                    </td>
+                                    <td>
+                                        <input class='form-control pull-right'  type='number' name='numDisST' id='' value="0" min="0">
+                                    </td>
+                                  </tr>
+                                </tbody>
+                            </table>
 
                             @elseif($terminals->is_terminal == true && $terminals->is_main_terminal == true)
                             @php $counter = 0; @endphp
+
+                            <table class="table table-bordered table-striped form-table">
+                                <thead>
+                                    <th></th>
+                                    <th>#Passengers</th>
+                                    <th>#Discounted</th>
+                                </thead>
+                                <tbody>
                             @foreach($destinations as $destination)
-                            <!-- FROM MAIN TERMINAL -->
-                            <div class='form-group'>
-                                <label for="" class="col-sm-4">{{$destination->destination_name}}</label>
-                                <div class="col-sm-4">
-                                    <input type="hidden" name="destination[]" value="{{$destination->destination_id}}">
-                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' min="0">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="hidden" name="discount[]" value="">
-                                    <input value="" class='form-control pull-right' onblur='findTotal()' type='number' name='disqty[]' id='' min="0">
-                                </div>
-                            </div>
+                                <!-- FROM MAIN TERMINAL -->
+                                <tr>
+                                    <th>{{$destination->first()->destination_name}}</th>
+                                    <td>
+                                        <input type="hidden" name="destination[]" value="{{$destination->first()->destination_id}}">
+                                        <input class='form-control pull-right' onblur='findTotal()' type='number' name='qty[]' id='' value="0" min="0">
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="discount[]" value="">
+                                        <input class='form-control pull-right' onblur='findTotal()' type='number' name='disqty[]' id='' value="0" min="0">
+                                    </td>
+                                </tr>
                             @php $counter++; @endphp
-                          @endforeach
-                          @endif
+                            @endforeach
+                                </tbody>
+                            </table>
+
+                        @endif
                         </div>
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
                             @if($terminals->is_terminal == true && $terminals->is_main_terminal == true)
                             <div class="form-group">
-                                <label for="driver" class="col-sm-4">Origin Terminal:</label>
+                                <label for="driver" class="col-sm-4">Destination Terminal:</label>
                                 <div class="col-sm-8">
                                 <select name="origin" id="originTerminal" class="form-control select2">
                                     @foreach($origins as $origin)
@@ -135,31 +149,6 @@
             <!-- /.box -->
         </div>
         <!-- /.tab-pane -->
-
-        <!--               DISCOUNT MODAL-->
-        <div class="modal fade" id="discountModal">
-            <div class="modal-dialog" style="margin-top:150px;">
-                <div class="col-md-offset-2 col-md-8">
-                    <div class="modal-content">
-                        <div class="modal-header bg-blue">
-                            Confirm
-                        </div>
-                        <div class="modal-body text-center">
-                            <p>Are you sure you want to add these tickets?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                        <!-- /.modal-footer -->
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
         </form>
     </div>
     <!-- /.col -->
@@ -190,6 +179,22 @@
         document.getElementById('totalBookingFee').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
 
+    function findUpTotal() {
+        var arr = document.getElementsByClassName('num-pass');
+        var tot = 0;
+
+        for(var i = 0; i < arr.length; i++){
+            if(parseInt(arr[i].value)){
+                tot += parseInt(arr[i].value);
+            }
+        }
+
+        document.getElementById('totalPassenger').textContent = tot;
+        document.getElementById('totalPassengers').value = tot;
+
+        //bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.value;
+        //document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
+    }
     //document.getElementById('dest').value = document.getElementById('termId').value;
 </script>
 

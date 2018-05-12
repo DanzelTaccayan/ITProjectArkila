@@ -92,54 +92,9 @@
     </style>
 @stop
 @section('content')
-    <div class="row">
-        <div class="col-md-3">
+        <div class="padding-side-5">
             <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Ticket</h3>
-                </div>
-                <form action="">
-                    <div class="box-body">
-
-                        <label for="">Terminal</label>
-                        <select name="terminal" id="terminal" class="form-control select2">
-                            @php $counter = 0; @endphp
-                            @foreach($terminals as $terminal)
-                                @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                    <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                        <label for="">Destination</label>
-                        <select name="destination" id="destination" class="form-control select2">
-                        </select>
-                        <label for="">Discount</label>
-                        <div class="input-group">
-                                                <span class="input-group-addon">
-                                                  <input id="checkDiscount" type="checkbox">
-                                                </span>
-                            <select name="discount" id="discount" class="form-control">
-                            </select>
-                        </div>
-                        <label for="">Ticket</label>
-                        <select name="tickets" id="ticket" class="form-control select2" multiple="multiple" data-placeholder="Select Ticket" disabled>
-                        </select>
-                    </div>
-
-                    <div class="box-footer">
-                        <div id="sellButtContainer" class="pull-right">
-                            <button type="button" class="btn btn-success btn-sm" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>SELL</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <a href="{{route('transactions.index')}}" class="btn btn-primary btn-flat btn-block">Board Tickets</a>
-        </div>
-
-        <div class="col-md-9">
-            <div class="box box-solid">
-                <div class="box-body">
+                <div class="box-body with-shadow">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
 

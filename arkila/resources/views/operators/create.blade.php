@@ -62,13 +62,13 @@
                   <tr>
                     <th>SSS No</th>
                     <td>
-                      <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss data-inputmask='"mask": "99-9999999-9"' data-mask>
+                      <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss {{-- data-inputmask='"mask": "99-9999999-9"' data-mask --}}>
                     </td>
                   </tr>
                   <tr>
                     <th>License No</th>
                     <td>
-                      <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license data-inputmask='"mask": "A99-99-999999"' data-mask>
+                      <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license {{-- data-inputmask='"mask": "A99-99-999999"' data-mask --}}>
                     </td>
                   </tr>
                   <tr>
@@ -101,8 +101,7 @@
               <tr>
                 <th>Contact Number <span class="text-red">*</span></th>
                 <td>
-                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" data-inputmask='"mask": "999-999-9999"' data-mask data-parsley-errors-container="#errContactPersonPhone" val-phone required>
-                  <p id="errContactPersonPhone"></p>
+                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" {{-- data-inputmask='"mask": "999-999-9999" --}}' val-phone required>
                 </td>
               </tr>
             </tbody>

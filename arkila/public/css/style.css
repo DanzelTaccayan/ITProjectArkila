@@ -754,7 +754,7 @@ input:checked+.slider:before {
 }
 .special-unit-body{
   height: 510px;
-  background: bisque;
+  background: #fcfac2;
 }
 .terminal-body{
   height: 200px;
@@ -774,4 +774,8 @@ input:checked+.slider:before {
 
 .profile-van p{
     margin: 0;
+}
+
+.text-white{
+  color: white;
 }

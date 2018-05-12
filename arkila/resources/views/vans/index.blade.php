@@ -3,10 +3,13 @@
 @if(session()->get('opLink')) {{ session()->forget('opLink') }} @endif
 
 @section('content')
-<div class="padding-side-5">   
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">LIST OF VAN UNITS</h2>
+    </div>   
     <div class="box">
         <!-- /.box-header -->
-        <div class="box-body">
+        <div class="box-body with-shadow">
             <div class="table-responsive">
             	<div class="col-md-6">
                     @if(count(\App\Member::allOperators()->where('status','Active')->get()) > 0)
@@ -67,7 +70,7 @@
                                         <h3>  
                                            <i class="fa fa-exclamation-triangle pull-left text-yellow"></i>
                                         </h3>
-                                        <p>Are you sure you want to delete "{{ $van->model }}" with plate number of "{{$van->plate_number}}"</p>
+                                        <p>Are you sure you want to delete "{{$van->model->description}}" with plate number of "{{$van->plate_number}}"</p>
                                     </div>
                                     <div class="modal-footer">
                                         <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">

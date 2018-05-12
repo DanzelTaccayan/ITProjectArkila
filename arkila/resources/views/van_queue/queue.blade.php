@@ -23,24 +23,24 @@
   z-index: 2000;
 }
 
-ol.vertical{
+ol.arrow-drag{
   margin: 0 0 9px 0;
   min-height: 10px;
 }
-  ol.vertical li{
+  ol.arrow-drag li{
     display: block;
     color: $linkColor;
     background: $grayLighter;
   }
 
 
-  ol.vertical li.placeholder{
+  ol.arrow-drag li.placeholder{
     position: relative;
     margin: 0;
     padding: 0;
     border: none;
   }
-  ol.vertical li.placeholder:before{
+  ol.arrow-drag li.placeholder:before{
       position: absolute;
       content: "";
       width: 0;
@@ -285,7 +285,7 @@ ol.vertical{
                               <input type="text" id="queueSearch{{$terminal->destination_id}}" class="form-control" placeholder="Search in queue" onkeyup="search{{$terminal->destination_id}}()">
                             </div>
                             <div class="queue-body scrollbar scrollbar-info thin">  
-                              <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization">
+                              <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization arrow-drag">
                                   @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
                                     <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                       <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">

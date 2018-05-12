@@ -2,6 +2,9 @@
 @section('title', 'List of Rentals')\
 @section('content')
 <div class="padding-side-5">
+    <div>
+        <h2 class="text-white">RENTALS</h2>
+    </div>
     <div class="box">
         <div class="box-body with-shadow">
             <div class="col-xl-6">
