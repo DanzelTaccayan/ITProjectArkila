@@ -29,10 +29,10 @@
 
 <body class="hold-transition skin-blue layout-top-nav">
     <div id="app" class="wrapper">
-        @include('layouts.partials.header_5')
+        @include('layouts.partials.header_3')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper bg-image-driver">
+        <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
