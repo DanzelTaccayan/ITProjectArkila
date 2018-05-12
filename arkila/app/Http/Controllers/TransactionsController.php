@@ -499,16 +499,22 @@ class TransactionsController extends Controller
         DB::beginTransaction();
         try  {
             if(request('ticketType') === 'Regular' || request('ticketType') === 'Discount') {
+
                 $ticketType = request('ticketType');
                 $lastTicket =$destination->selectedtickets()
                     ->orderBy('selected_ticket_id','desc')
                     ->where('selected_ticket.type', $ticketType)
                     ->first();
 
+                $response_arr = [
+                    'lastSelected' => $lastTicket->selected_ticket_id,
+                    'fare'=> $lastTicket->ticket->fare
+                ];
+
                 $lastTicket->delete();
 
                 DB::commit();
-                return $lastTicket->selected_ticket_id;
+                return response()->json($response_arr);
             }
 
         } catch(\Exception $e) {

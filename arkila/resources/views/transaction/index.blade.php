@@ -139,7 +139,7 @@
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+
                                     <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
@@ -281,7 +281,8 @@
                                                 <div class="clearfix">  </div>
                                             </div>
                                         </div>
-                                        <div id="boardTickets{{$terminal->destination_id}}">
+                                        @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+                                            <div id="boardTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div id="list-left1" class="dual-list list-left col-md-5">
                                                     <div class="box box-solid ticket-box">
@@ -413,8 +414,9 @@
                                                 <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
-                                    @endif
+
                                 @endforeach
                             </div>
                         </div>
@@ -734,9 +736,9 @@
                     '_token': '{{csrf_token()}}',
                     'ticketType': ticketType
                 },
-                success: function(lastSelected){
-                    $('#selectedList'+terminalId).find('[data-val="' + lastSelected + '"]').closest('tr').remove();
-
+                success: function(response){
+                    $('#selectedList'+terminalId).find('[data-val="' + response.lastSelected + '"]').closest('tr').remove();
+                    updateDataOfDeletedTicket(destinationId,terminalId,ticketType,response.fare);
                 }
 
             });
