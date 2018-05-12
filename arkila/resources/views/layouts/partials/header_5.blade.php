@@ -18,23 +18,30 @@
             </li>
             <li class="{{ Request::is('home/view-rentals') ? 'active' : '' }}">
                 <a href="{{ route('drivermodule.rentals.rental') }}">
-                    <i class="fa fa-home"></i> <span>Rentals</span>
+                    <i class="fa fa-book"></i> <span>Rentals</span>
                 </a>
             </li>
            <li class="{{ Request::is('home/view-trips') ? 'active' : '' }}">
                 <a href="{{ route('drivermodule.triplog.driverTripLog') }}">
-                    <i class="fa fa-book"></i> <span>Trip Log</span>
+                    <i class="fa fa-list"></i> <span>Trip Log</span>
                 </a>
             </li>
            <li class="{{ Request::is('home/choose-terminal') ? 'active' : '' }}">
                 <a href="{{ route('drivermodule.createReport') }}">
-                    <i class="fa fa-plus"></i> <span>Create Report</span>
+                    <i class="fa fa-file-text"></i> <span>Create Report</span>
                 </a>
             </li>
            <li class="{{ Request::is('home/driver/help') ? 'active' : '' }}">
                 <a href="{{ route('drivermodule.help.driverHelp') }}">
-                    <i class="fa fa-question"></i> <span>Help</span>
+                    <i class="fa fa-question-circle"></i> <span>Help</span>
                 </a>
+            </li>
+            <li>
+                <a href="{{route('logout')}}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out"></i><span>Sign out</span>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  {{csrf_field()}}
+                </form>
             </li>
           </ul>
         </div>
@@ -48,7 +55,7 @@
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <a href="{{ route('drivermodule.profile.driverProfile') }}">
                 <!-- The user image in the navbar-->
                 <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
@@ -64,28 +71,6 @@
                 @endif
                 <span class="hidden-xs">{{$fullname}}</span>
               </a>
-              <ul class="dropdown-menu" role="menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                  <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="img-circle" alt="User Image">
-                  <p>{{$fullname}}</p>
-                  <p>Driver</p>
-                </li>
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="{{ route('drivermodule.profile.driverProfile') }}" class="btn btn-default btn-flat">Profile
-                   </a>
-                  </div>
-                  <div class="pull-right">
-                     <a href="{{route('logout')}}" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Sign out
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                      {{csrf_field()}}
-                    </form>
-                  </div>
-                </li>
-              </ul>
             </li>
           </ul>
         </div>
