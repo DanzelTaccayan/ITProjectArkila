@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Ledger;
-use App\Rules\checkName;
+use App\Destination;
 use App\Rules\checkCurrency;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +24,8 @@ class LedgersController extends Controller
     {
         $date = Carbon::now();
         $ledgers = Ledger::all();
-        return view('ledger.index', compact('ledgers', 'date'));
+        $mainTerminal = Destination::where('is_main_terminal', 1)->get()->first();
+        return view('ledger.index', compact('ledgers', 'date', 'mainTerminal'));
     }
 
     /**
@@ -57,7 +58,7 @@ class LedgersController extends Controller
             ]);            
         } elseif ($request->or == null) {
             $this->validate(request(), [
-                'payor' => ['bail', new checkName, 'max:25'],
+                'payor' => ['bail', 'max:25'],
                 'particulars' => 'bail|required|max:30',
                 'amount' => ['bail',new checkCurrency,'numeric', 'required', 'min:0'],
                 'type' => [
@@ -79,7 +80,7 @@ class LedgersController extends Controller
             ]);
         } else {
             $this->validate(request(), [
-                'payor' => ['bail', new checkName, 'max:25'],
+                'payor' => ['bail', 'max:25'],
                 'particulars' => 'bail|required|max:30',
                 'or' =>  'bail|unique:ledger,or_number|max:15',
                 'amount' => ['bail',new checkCurrency,'numeric', 'required', 'min:0'],
