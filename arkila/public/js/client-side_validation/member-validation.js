@@ -2,8 +2,7 @@
   // Validate name.
     $('[val-name]').parsley({
       maxlength: 30,
-      pattern: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z ]$/,
-      minlength: 2
+      pattern: /[a-zA-Z ]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z ]$/
     });	
 
     $('[name="firstName"]').attr('data-parsley-required-message','Please enter a first name.');

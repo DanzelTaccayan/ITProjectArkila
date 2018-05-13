@@ -100,6 +100,7 @@
 .table-dest{
     position: relative;
     height: 415px;
+    background: #f8f8f6;
 }
 
 .nav-terminal{
@@ -138,7 +139,7 @@
                         <div class="nav-tabs-custom">
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+
                                     <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
@@ -160,9 +161,8 @@
                                                                 <table class="table table-condensed table-striped"  style="margin-bottom: 0; margin-right:  2px;">
                                                                     <thead >
                                                                         <tr class="success">
-                                                                            <th class="text-center">Ticket Number</th>
-                                                                            <th class="text-center">Fare</th>
-                                                                            <th class="text-center"><i class="fa fa-trash"></i></th>
+                                                                            <th class="text-center" style="width: 150px;">Ticket Number</th>
+                                                                            <th>Fare</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -175,8 +175,12 @@
                                                                                 <td>
                                                                                     <button type="button" class="btn btn-block btn-xs edit btn-primary">{{$ticket->ticket_number}}</button>
                                                                                 </td>
-                                                                                <td class="pull-right">{{$ticket->fare}}</td>
-                                                                                <td class="text-center"><a href="  " class="text-red"><i class="fa fa-trash"></i></a></td>
+                                                                                <td class="text-right">
+                                                                                    {{$ticket->fare}}
+                                                                                </td>
+                                                                                <td class="text-right">
+                                                                                    <button name="deleteSpecificSelectedTicket" class="btn btn-xs" data-val="{{$ticket->selectedTicket->selected_ticket_id}}" class="text-red"><i class="fa fa-trash"></i></button>
+                                                                                </td>
                                                                             </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -188,18 +192,18 @@
                                                                 <tbody>
                                                                     <tr class="info">
                                                                         <td>Regular</td>
-                                                                        <td id="totalRegTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right">1000.00</td>
+                                                                        <td id="totalRegularTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="regularTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="info">
                                                                         <td>Discounted</td>
-                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right">90.00</td>
+                                                                        <td id="totalDiscountedTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="discountedTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="success">
                                                                         <td><strong>Total</strong></td>
-                                                                        <td class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td class="text-right"><strong>1090.00</strong></td>
+                                                                        <td id="totalTickets{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="totalPayment{{$terminal->destination_id}}" class="text-right"><strong>₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->pluck('fare')->sum()}}</strong></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -216,7 +220,7 @@
                                                             <div class="form-group">
                                                                 <div class="input-group">
                                                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                                                <input type="text" class="form-control" placeholder="Search Destination">
+                                                                <input type="text" class="form-control" placeholder="Search Destination" id="myInput" onkeyup="myFunction()">
                                                                 </div>
                                                             </div>
                                                             <div class="fixed-table-header">
@@ -230,31 +234,31 @@
                                                                 </table>
                                                             </div>
                                                             <div class="table-dest scrollbar scrollbar-info thin" style="margin-bottom: 0;">
-                                                                <table class="table table-striped ticket-dest-table" style="margin-bottom: 0;">
+                                                                <table id="destination-table" class="table table-striped ticket-dest-table" style="margin-bottom: 0;">
                                                                     <tbody>
                                                                     @foreach($terminal->routeFromDestination as $destination)
                                                                         <tr>
-                                                                            <td>
+                                                                            <td id="row{{$destination->destination_id}}">
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
-                                                                                        <span class="badge bg-yellow pull-right">
+                                                                                        <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button class="btn btn-flat" disabled><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->selectedTickets->where('type','Regular')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                             <td>
-                                                                                <button name="ticketButton" data-val="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
+                                                                                <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
-                                                                                        <span class="badge bg-yellow pull-right">
+                                                                                        <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button class="btn btn-danger btn-flat"><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->selectedTickets->where('type','Discount')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -269,10 +273,16 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat btn-block" style="height: 50px;">BOARD PASSENGERS</button>
+                                                
+                                                <div class="pull-right">   
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
+                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                </div>
+                                                <div class="clearfix">  </div>
                                             </div>
                                         </div>
-                                        <div id="boardTickets{{$terminal->destination_id}}">
+                                        @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+                                            <div id="boardTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div id="list-left1" class="dual-list list-left col-md-5">
                                                     <div class="box box-solid ticket-box">
@@ -404,8 +414,9 @@
                                                 <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
-                                    @endif
+
                                 @endforeach
                             </div>
                         </div>
@@ -617,13 +628,15 @@
 
 </script>
 
-{{--Selecting Tickets--}}
+{{--Selecting and Unselecting Tickets--}}
 <script>
     $(function(){
+        //Select Tickets
         $('button[name="ticketButton"]').on('click',function(){
             var destinationId = $(this).data('route');
             var terminalId = $(this).data('terminal');
             var ticketType = $(this).data('type');
+            var buttonElement = $(this);
             $.ajax({
                 method:'POST',
                 url: '/selectTicket/'+destinationId,
@@ -635,14 +648,166 @@
 
                     var ticketNumber = '<tr><td><button type="button" class="btn btn-block btn-xs edit btn-primary">'+element.ticketNumber+'</button></td>';
                     var fare = '<td class="pull-right">'+element.fare+'</td>';
-                    var deleteButt = '<td class="text-center text-red"><i class="fa fa-trash"></i></td></tr>';
+                    var deleteButt = '<td class="text-right"><button name="deleteSpecificSelectedTicket" class="btn btn-xs" data-val="'+element.selectedId+'"><i class="fa fa-trash"></i></button></td></tr>';
                     $('#selectedList'+terminalId).append(ticketNumber+fare+deleteButt);
+
+                    //Update the necessary information
+                    if(ticketType == 'Regular') {
+                        //Change The number of clicks (Regular)
+                        if($('#regularTicketPerDest'+destinationId).text()) {
+                            $('#regularTicketPerDest'+destinationId).text(parseFloat($('#regularTicketPerDest'+destinationId).text())+1);
+
+                        } else {
+                            buttonElement.append('<span id="regularTicketPerDest'+destinationId+'" class="badge bg-yellow pull-right">1</span>');
+                            buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
+                        }
+
+                        //Change the total payment (Regular)
+                        var total = parseFloat($('#regularTotalPayment'+terminalId).text().substring(2))+parseFloat(element.fare);
+                        $('#regularTotalPayment'+terminalId).text("₱ "+total.toFixed(2));
+
+                        //Change the total number of regular tickets
+                        $('#totalRegularTicket'+terminalId).text(parseFloat($('#totalRegularTicket'+terminalId).text())+1);
+                        $('#totalRegularTicket'+terminalId).append(' <i class="fa fa-ticket"></i>');
+
+                    } else {
+                        //Change The number of clicks (Discounted)
+                        if($('#discountTicketPerDest'+destinationId).text()) {
+                            $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())+1);
+
+                        } else {
+                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-yellow pull-right">1</span>');
+                            buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
+                        }
+
+                        //Change the total payment (Discount)
+                        var total = parseFloat($('#discountedTotalPayment'+terminalId).text().substring(2))+parseFloat(element.fare);
+                        $('#discountedTotalPayment'+terminalId).text("₱ "+total.toFixed(2));
+
+                        //Change the number of discount tickets
+                        $('#totalDiscountedTicket'+terminalId).text(parseFloat($('#totalDiscountedTicket'+terminalId).text())+1);
+                        $('#totalDiscountedTicket'+terminalId).append(' <i class="fa fa-ticket"></i>');
+                    }
+
+                    //Change the total number of overall tickets
+                    $('#totalTickets'+terminalId).text(parseFloat($('#totalTickets'+terminalId).text())+1);
+                    $('#totalTickets'+terminalId).append(' <i class="fa fa-ticket"></i>');
+
+                    //Change the overall payment
+                    var overall = parseFloat($('#totalPayment'+terminalId).text().substring(2))+parseFloat(element.fare);
+                    $('#totalPayment'+terminalId).empty();
+                    $('#totalPayment'+terminalId).append('<strong></strong>');
+                    $('#totalPayment'+terminalId).children('strong').text("₱ "+overall.toFixed(2));
 
                 }
 
             });
         });
+
+        //Delete a Specific Selected Ticket
+        $(document).on('click','button[name="deleteSpecificSelectedTicket"]',function(){
+            var element = $(this);
+            var selectedTicketId = $(this).data('val');
+
+            $.ajax({
+                method:'DELETE',
+                url: '/selectTicket/'+selectedTicketId,
+                data: {
+                    '_token': '{{csrf_token()}}'
+                },
+                success: function(response){
+                    element.closest('tr').remove();
+                    updateDataOfDeletedTicket(response.destinationId,response.terminalId,response.ticketType,response.fare);
+                }
+
+            });
+        });
+
+        //Delete the Last Ticket of a Destination
+        $('button[name="deleteLastSelectedTicket"]').on('click',function(){
+            var destinationId = $(this).data('route');
+            var terminalId = $(this).data('terminal');
+            var ticketType = $(this).data('type');
+
+            $.ajax({
+                method:'DELETE',
+                url: '/selectedLastTicket/'+destinationId,
+                data: {
+                    '_token': '{{csrf_token()}}',
+                    'ticketType': ticketType
+                },
+                success: function(response){
+                    $('#selectedList'+terminalId).find('[data-val="' + response.lastSelected + '"]').closest('tr').remove();
+                    updateDataOfDeletedTicket(destinationId,terminalId,ticketType,response.fare);
+                }
+
+            });
+        });
+
+        function updateDataOfDeletedTicket(destinationId,terminalId,ticketType,fare) {
+            var error = true;
+            //Update the necessary information
+            if(ticketType == 'Regular') {
+                //Change The number of clicks (Regular)
+                if(parseFloat($('#regularTicketPerDest'+destinationId).text()) > 0) {
+                    if(parseFloat($('#regularTicketPerDest'+destinationId).text()) === 1) {
+                        $('#regularTicketPerDest'+destinationId).parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
+                        $('#regularTicketPerDest'+destinationId).remove();
+                    } else {
+                        $('#regularTicketPerDest'+destinationId).text(parseFloat($('#regularTicketPerDest'+destinationId).text())-1);
+                    }
+
+
+                    //Change the total payment (Regular)
+                    var total = parseFloat($('#regularTotalPayment'+terminalId).text().substring(2))-parseFloat(fare);
+                    $('#regularTotalPayment'+terminalId).text("₱ "+total.toFixed(2));
+
+                    //Change the total number of regular tickets
+                    $('#totalRegularTicket'+terminalId).text(parseFloat($('#totalRegularTicket'+terminalId).text())-1);
+                    $('#totalRegularTicket'+terminalId).append(' <i class="fa fa-ticket"></i>');
+                }
+
+                error = false;
+            } else {
+                //Change The number of clicks (Discounted)
+                if(parseFloat($('#discountTicketPerDest'+destinationId).text()) > 0) {
+
+                    if(parseFloat($('#discountTicketPerDest'+destinationId).text()) === 1) {
+                        $('#discountTicketPerDest'+destinationId).parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
+                        $('#discountTicketPerDest'+destinationId).remove();
+                    } else {
+                        $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())-1);
+                    }
+
+
+                    //Change the total payment (Discount)
+                    var total = parseFloat($('#discountedTotalPayment'+terminalId).text().substring(2))-parseFloat(fare);
+                    $('#discountedTotalPayment'+terminalId).text("₱ "+total.toFixed(2));
+
+                    //Change the number of discount tickets
+                    $('#totalDiscountedTicket'+terminalId).text(parseFloat($('#totalDiscountedTicket'+terminalId).text())-1);
+                    $('#totalDiscountedTicket'+terminalId).append(' <i class="fa fa-ticket"></i>');
+
+                    error = false;
+                }
+            }
+
+            if(error === false) {
+                //Change the total number of overall tickets
+                $('#totalTickets'+terminalId).text(parseFloat($('#totalTickets'+terminalId).text())-1);
+                $('#totalTickets'+terminalId).append(' <i class="fa fa-ticket"></i>');
+
+                //Change the overall payment
+                var overall = parseFloat($('#totalPayment'+terminalId).text().substring(2))-parseFloat(fare);
+                $('#totalPayment'+terminalId).empty();
+                $('#totalPayment'+terminalId).append('<strong></strong>');
+                $('#totalPayment'+terminalId).children('strong').text("₱ "+overall.toFixed(2));
+            }
+
+        }
     });
+
+    //Remove a ticket by Destination
 </script>
 
 {{--Boarding and Unboarding and Departure--}}
@@ -778,7 +943,7 @@
 </script>
 
 
-//hide and showing
+{{--hide and showing--}}
 @foreach($terminals as $terminal)
 <script>
      $(function(){
@@ -788,20 +953,20 @@
             $("#ondeck-header{{$terminal->destination_id}}").hide();
             $("#changedriver-header{{$terminal->destination_id}}").show()
             $("#changedriver-header{{$terminal->destination_id}}").removeClass("hidden");
-        })
+        });
         $("#deleteDriverBtn{{$terminal->destination_id}}").click(function(){
             $("#ondeck-header{{$terminal->destination_id}}").hide();
             $("#deletedriver-header{{$terminal->destination_id}}").show()
             $("#deletedriver-header{{$terminal->destination_id}}").removeClass("hidden");
-        })
+        });
         $("#onDeckBtn1-{{$terminal->destination_id}}").click(function(){
             $("#changedriver-header{{$terminal->destination_id}}").hide();
             $("#ondeck-header{{$terminal->destination_id}}").show();
-        })
+        });
         $("#onDeckBtn2-{{$terminal->destination_id}}").click(function(){
             $("#deletedriver-header{{$terminal->destination_id}}").hide();
             $("#ondeck-header{{$terminal->destination_id}}").show();
-        })
+        });
       });
 </script>
 <script>
@@ -810,11 +975,11 @@
         $("#boardPageBtn{{$terminal->destination_id}}").click(function(){
             $("#sellTickets{{$terminal->destination_id}}").hide();
             $("#boardTickets{{$terminal->destination_id}}").show();
-        })
+        });
         $("#sellPageBtn{{$terminal->destination_id}}").click(function(){
             $("#sellTickets{{$terminal->destination_id}}").show();
             $("#boardTickets{{$terminal->destination_id}}").hide();
-        })
+        });
     });
 </script>
 @endforeach
@@ -894,5 +1059,26 @@
         @endif
         @endforeach
     });
+</script>
+
+<script>
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    table = document.getElementById("destination-table");
+    tr = table.getElementsByTagName('tr');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        btn = tr[i].getElementsByTagName("button")[0];
+        if (btn.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+}
 </script>
 @endsection

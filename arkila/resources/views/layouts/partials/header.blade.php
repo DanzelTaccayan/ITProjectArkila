@@ -10,9 +10,8 @@
     <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
-
+            <span class="sr-only">Toggle navigation</span>
+        </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Notifications: style can be found in dropdown.less -->
@@ -78,7 +77,7 @@
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}
                             <li class="header box-body">
-                                <h4>Enter Announcement:</h4>
+                                <h4>Quick Announcement:</h4>
                                 <select class="form-control" name="viewer">
                                     <option value="Public">Public</option>
                                     <option value="Driver Only">Driver Only</option>
@@ -98,12 +97,12 @@
                                 </div>
                                 <div class="btn-group btn-group-justified">
                                     <div class="btn-group">
-                                        <button class="btn btn-warning">ANNOUNCE</button>
-                                    </div> 
+                                        <button class="btn btn-warning btn-group-justified">ANNOUNCE</button>
+                                    </div>
                                 </div>
                             </li>
-                            <li class="footer box-body text-center">
-                                <a href="{{route('announcements.index')}}">View all announcements</a>
+                            <li class="footer box-body text-center" style="border-top: 1px solid lightgray;">
+                                <a href="{{route('announcements.index')}}"><i class="fa fa-eye"></i> View previous announcements</a>
                             </li>
                         </form>
                     </ul>
@@ -119,13 +118,13 @@
                         <!-- The user image in the menu -->
                         <li class="user-header">
                           <img src="{{ URL::asset('img/bantrans-logo.png') }}" class="img-circle" alt="User Image">
-                            <p style="margin: 0;">Admin</p>
+                            <p style="margin:0;">Admin</p>
                             <small style="color: white;">Main Terminal</small>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                           <div class="pull-left">
-                            <a href="{{route('profile.index')}}" class="btn btn-default btn-flat">Profile
+                            <a href="{{route('accountSettings')}}" class="btn btn-default btn-flat">Profile
                            </a>
                           </div>
                           <div class="pull-right">
@@ -136,6 +135,7 @@
                           </div>
                         </li>
                     </ul>
+                    
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>

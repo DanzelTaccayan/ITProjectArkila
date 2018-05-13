@@ -99,7 +99,7 @@
 
                             <tr>
                                 <td></td>
-                                <td>Booking Fee(Baguio)</td>
+                                <td>Booking Fee({{$mainTerminal->destination_name}})</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
                                 <td></td>

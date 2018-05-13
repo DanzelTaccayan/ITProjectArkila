@@ -441,6 +441,7 @@ class TransactionsController extends Controller
         return 'success';
     }
 
+    //Selected Ticket
     public function selectTicket(Destination $destination)
     {
         // Start transaction!
@@ -449,13 +450,16 @@ class TransactionsController extends Controller
             if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
                 $ticketType = request('ticketType');
                 $ticket = $destination->tickets->where('type',$ticketType)->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+                if(is_null($ticket)) {
+                    return \Response::json(['error' => 'There are no more tickets left, please add anotehr to select a ticket'], 422);
+                }
 
                 $selectedTicket = SelectedTicket::create([
                     'ticket_id' => $ticket->ticket_id,
                     'type' => $ticketType
                 ]);
 
-                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare];
+                $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare,'selectedId' => $selectedTicket->selected_ticket_id];
 
 
                 DB::commit();
@@ -463,7 +467,59 @@ class TransactionsController extends Controller
             }
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again');
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+        }
+    }
+
+    public function deleteSelectedTicket(SelectedTicket $selectedTicket)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $responseArr = ['destinationId' =>$selectedTicket->ticket->destination->destination_id,
+                'terminalId'=> $selectedTicket->ticket->destination->routeDestination->first()->destination_id ,
+                'ticketType'=> $selectedTicket->type,
+                'fare' => $selectedTicket->ticket->fare
+            ];
+
+            $selectedTicket->delete();
+            DB::commit();
+
+            return response()->json($responseArr);
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+        }
+
+    }
+
+    public function deleteLastSelectedTicket(Destination $destination)
+    {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if(request('ticketType') === 'Regular' || request('ticketType') === 'Discount') {
+
+                $ticketType = request('ticketType');
+                $lastTicket =$destination->selectedtickets()
+                    ->orderBy('selected_ticket_id','desc')
+                    ->where('selected_ticket.type', $ticketType)
+                    ->first();
+
+                $response_arr = [
+                    'lastSelected' => $lastTicket->selected_ticket_id,
+                    'fare'=> $lastTicket->ticket->fare
+                ];
+
+                $lastTicket->delete();
+
+                DB::commit();
+                return response()->json($response_arr);
+            }
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administrator');
         }
     }
 }

@@ -38,6 +38,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['create', 'show']
     ]);
     Route::resource('/home/ticket-management', 'TicketManagementController');
+    Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
 
     Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
@@ -199,7 +200,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/transactions/manageTickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
     Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
+    //Selected Tickets
     Route::post('/selectTicket/{destination}','TransactionsController@selectTicket')->name('transactions.selectTicket');
+    Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');
+    Route::delete('/selectedLastTicket/{destination}','TransactionsController@deleteLastSelectedTicket')->name('transactions.selectedTicket');
     /********Archive ********/
     Route::patch('/home/vans/{van}/archiveVan', 'VansController@archiveVan')->name('vans.archiveVan');
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
