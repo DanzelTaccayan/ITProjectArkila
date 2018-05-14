@@ -44,6 +44,7 @@
     {{ Html::script('adminlte/plugins/iCheck/icheck.min.js') }}
     {{ Html::script('js/client-side_validation/parsley.min.js') }}
     {{ Html::script('js/client-side_validation/member-validation.js') }}
+    {{ Html::script('js/client-side_validation/driver-validation.js') }}
     {{ Html::script('js/client-side_validation/van-validation.js') }}
     {{ Html::script('js/client-side_validation/settings-validation.js') }}
     {{ Html::script('js/client-side_validation/booking-form-validation.js') }}
@@ -54,9 +55,7 @@
     <!-- Awesome Functions-->
     {{ Html::script('js/awesome-functions-min.js') }}
     <script>    
-    $(function () {
         $('.select2').select2();
-    })
     </script>
 
     <!-- Van Queue Sidebar -->
