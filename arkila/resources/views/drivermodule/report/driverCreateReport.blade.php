@@ -89,7 +89,7 @@
                               </tr>
                             </tbody>
                         </table>
-                        <div class='form-group'>
+                        <div class="form-group" style="margin-top: 5%">
                             <label for="" class="col-sm-4">Total Passengers:</label>
                             <div class=" col-sm-6">
                             <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
