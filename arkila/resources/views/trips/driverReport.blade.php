@@ -12,6 +12,7 @@
     <div>
         <h2 class="text-white">DRIVER REPORT</h2>
     </div>
+
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">
@@ -50,6 +51,7 @@
             </table>
         </div>
     </div>
+
 </div>
 @endsection
 
