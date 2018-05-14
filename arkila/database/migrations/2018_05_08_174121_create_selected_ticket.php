@@ -20,8 +20,6 @@ class CreateSelectedTicket extends Migration
             $table->integer('ticket_id')
                 ->unsigned();
 
-            $table->enum('type',['Regular','Discount']);
-
 
             $table->foreign('ticket_id')
                 ->references('ticket_id')->on('ticket')

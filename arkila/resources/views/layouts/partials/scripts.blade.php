@@ -101,27 +101,7 @@
                 listDestinationsSideBar();
             });
 
-            $(document.body).on('click','#sellButtSideBar',function(){
-                var terminalSideBar = $('#terminalTicketSideBar').val();
-                var destination = $('#destinationTicketSideBar').val();
-                var ticket= $('#ticketSellSideBar').val();
 
-                $.ajax({
-                    method:'POST',
-                    url: '{{route("transactions.store")}}',
-                    data: {
-                        '_token': '{{csrf_token()}}',
-                        'terminal': terminalSideBar,
-                        'destination': destination,
-                        'ticket': ticket
-                    },
-                    success: function(){
-                        location.reload();
-                    }
-
-                });
-
-            });
 
             function checkTerminalsSideBar(){
                 if(!$('#terminalTicketSideBar').val()){
