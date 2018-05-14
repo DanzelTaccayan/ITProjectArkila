@@ -209,7 +209,10 @@
                                                             </table>
                                                         </div>
                                                         <div class="pull-right">
-                                                            <button type="button" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
+                                                            <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
+                                                                {{csrf_field()}}
+                                                                <button type="submit" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
+                                                            </form>
                                                         </div>
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -241,24 +244,24 @@
                                                                             <td id="row{{$destination->destination_id}}">
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
+                                                                                    @if($regTicketNum =  $destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
                                                                                         <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->selectedTickets->where('type','Regular')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                             <td>
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
+                                                                                    @if($discountedTicketNum = $destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
                                                                                         <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->selectedTickets->where('type','Discount')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach

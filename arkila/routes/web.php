@@ -186,8 +186,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/moveToSpecialUnit/{vanOnQueue}','VanQueueController@moveToSpecialUnit')->name('vanqueue.moveToSpecialUnit');
      /* Transactions(Ticket) */
     Route::resource('/home/transactions', 'TransactionsController',[
-        'except' => ['create','show','edit','update']
+        'except' => ['create','show','edit','update','store']
     ]);
+    Route::post('/home/transactions/{destination}', 'TransactionsController@store')->name('transactions.store');
     Route::patch('/home/transactions/{terminal}', 'TransactionsController@update')->name('transactions.update');
     Route::get('/listDestinations/{terminal}','TransactionsController@listDestinations')->name('transactions.listDestinations');
     Route::get('/listTickets/{destination}','TransactionsController@listTickets')->name('transactions.listTickets');

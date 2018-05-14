@@ -17,6 +17,9 @@ use Illuminate\Validation\Rule;
 class TripsController extends Controller
 {
 
+    public function store(Destination $terminal) {
+
+    }
 
     public function tripLog()
     {
@@ -34,7 +37,7 @@ class TripsController extends Controller
     {
       $transaction = Transaction::where('trip_id', $trip->trip_id)->groupBy('amount_paid')->get();
       $passAndDisCount = 0;
-      foreach($transaction as $trans){
+      foreach($transaction as $trans) {
         echo $trans->transaction_id . ' ' . $trans->amount_paid .'<br/>';
       }
       //return view('trips.viewReport', compact('transaction', 'trip'));
