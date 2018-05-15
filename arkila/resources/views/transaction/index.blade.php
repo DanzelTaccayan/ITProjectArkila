@@ -342,7 +342,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -367,11 +367,11 @@
                                                 </div>
 
                                                 <div class="list-arrows col-md-2 text-center">
-                                                    <button id="board{{$terminal->destination_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-left1">
                                                         <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
                                                     </button>
                                                     <br>
-                                                    <button id="unboard{{$terminal->destination_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="unboard" class="btn btn-outline-warning btn-sm btn-flat move-right1">
                                                          UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
                                                     </button>
                                                 </div>
@@ -388,7 +388,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -401,7 +401,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($transactions->where('destination',$terminal->destination_name)->where('status','Pending') as $transaction)
+                                                                    @foreach($transactions->whereIn('destination',$terminal->routeFromDestination->pluck('destination_name'))->where('status','Pending') as $transaction)
                                                                         <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
@@ -518,7 +518,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a name ="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -567,7 +567,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -813,7 +813,7 @@
     //Remove a ticket by Destination
 </script>
 
-{{--Boarding and Unboarding and Departure--}}
+{{--Boarding, Unboarding, and Departure--}}
 <script type="text/javascript">
         $(function () {
             //Put Ticket into Pending
@@ -847,10 +847,11 @@
                 $(this).toggleClass('active');
             });
 
-            @foreach($terminals as $terminal)
-            $('#board{{$terminal->terminal_id}}').on('click', function () {
 
-                var actives = $('#pendingList{{$terminal->terminal_id}}').children('.active');
+            $('button[name="board"]').on('click', function () {
+                var terminalId = $(this).data('terminal');
+
+                var actives = $('#pendingList'+terminalId).children('.active');
                 if (actives.length > 0) {
                     var transactions = [];
 
@@ -870,10 +871,10 @@
                         }
                     });
 
-                    actives.clone().appendTo('#onBoardList{{$terminal->terminal_id}}').removeClass('active');
+                    actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
                     actives.remove();
 
-                    var checkBox = $('.checkBox{{$terminal->terminal_id}}');
+                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
 
                     if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
                         checkBox.removeClass('selected');
@@ -883,8 +884,9 @@
                 }
             });
 
-            $('#unboard{{$terminal->terminal_id}}').on('click',function() {
-                var actives = $('#onBoardList{{$terminal->terminal_id}}').children('.active');
+            $('button[name="unboard"]').on('click',function() {
+                var terminalId = $(this).data('terminal');
+                var actives = $('#onBoardList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
                     var transactions = [];
@@ -905,10 +907,10 @@
                     });
 
 
-                    actives.clone().appendTo('#pendingList{{$terminal->terminal_id}}').removeClass('active');
+                    actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
                     actives.remove();
 
-                    var checkBox = $('.checkBox{{$terminal->terminal_id}}');
+                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
 
                     if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
                         checkBox.removeClass('selected');
@@ -918,8 +920,8 @@
             });
 
 
-            $('.checkBox{{$terminal->terminal_id}}').on('click',function(e) {
-                var checkBox = $(e.currentTarget);
+            $('.checkBox').on('click',function() {
+                var checkBox = $(this);
                 if (!checkBox.hasClass('selected')) {
                     checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
                     checkBox.children('i').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
@@ -928,7 +930,7 @@
                     checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 }
             });
-            @endforeach
+
 
             $('[name="SearchDualList"]').keyup(function (e) {
                 var code = e.keyCode || e.which;

@@ -8,6 +8,7 @@ use App\SelectedTicket;
 use App\Trip;
 use App\Transaction;
 use App\Ticket;
+use App\VanQueue;
 use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
@@ -197,17 +198,20 @@ class TransactionsController extends Controller
 
     public function updatePendingTransactions()
     {
-        if(request('transactions'))
-        {
+        //UpdatePending
+        if(request('transactions')) {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
-            $seatingCapacity = Transaction::find(request('transactions')[0])->destination->terminal->trips->where('queue_number',1)->first()->van->seating_capacity+8;
 
-            if($seatingCapacity >= count(request('transactions')))
-            {
-                foreach(request('transactions') as $transactionId)
-                {
+            $seatingCapacity = VanQueue::where('destination_id',Destination::where('destination_name',Transaction::find(request('transactions')[0])->destination)->first()->destination_id)
+            ->where('queue_number',1)
+            ->first()
+            ->van
+            ->seating_capacity;
+
+            if($seatingCapacity >= count(request('transactions'))) {
+                foreach(request('transactions') as $transactionId) {
                     $transaction = Transaction::find($transactionId);
                     $transaction->update([
                         'status' => 'OnBoard',
@@ -217,14 +221,11 @@ class TransactionsController extends Controller
 
                 return 'success';
             }
-            else
-            {
+            else {
                 return 'The tickets boarded is greater than the seating capacity of the van on deck';
             }
 
-        }
-        else
-        {
+        } else {
             return 'error no transaction given';
         }
 
@@ -233,14 +234,12 @@ class TransactionsController extends Controller
 
     public function updateOnBoardTransactions()
     {
-        if(request('transactions'))
-        {
+        if(request('transactions')) {
             $this->validate(request(),[
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
 
-            foreach(request('transactions') as $transactionId)
-            {
+            foreach(request('transactions') as $transactionId) {
                 $transaction = Transaction::find($transactionId);
                 $transaction->update([
                     'status' => 'Pending',
@@ -249,9 +248,7 @@ class TransactionsController extends Controller
             }
 
             return 'success';
-        }
-        else
-        {
+        } else {
             return 'error no transaction given';
         }
 
