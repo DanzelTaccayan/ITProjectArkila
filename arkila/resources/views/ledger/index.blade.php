@@ -12,7 +12,7 @@
     <div class="box">
         <div class="box-body">
             <div class="time-header">
-                <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 50px;"><i class="fa fa-calendar"></i> {{ $date->formatLocalized('%A %d %B %Y') }}</h3>
+                <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 30px;"><i class="fa fa-calendar"></i> {{ $date->formatLocalized('%A %d %B %Y') }}</h3>
             </div>
             
             <div class="table-responsive">
@@ -104,7 +104,7 @@
                                 <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
-                                <td></td>
+                                <td class="text-center">No Action</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -113,7 +113,7 @@
                                 <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
-                                <td></td>
+                                <td class="text-center">No Action</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -122,7 +122,7 @@
                                 <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
-                                <td></td>
+                                <td class="text-center">No Action</td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -155,10 +155,7 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': false,
-                'aoColumnDefs': [{
-                    'bSortable': false,
-                    'aTargets': [-1] /* 1st one, start by the right */
-                }]
+                'order': [[ 6, "desc" ]]
             })
         })
     </script>

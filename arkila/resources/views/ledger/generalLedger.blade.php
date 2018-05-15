@@ -8,151 +8,162 @@
 @stop
 @section('content')
 
-
-<div class="box">
-<div class="box-body">
-
-   <h2 style="margin-left:37%">General Ledger</h2>
-   @if ($start !== null && $end !==null)
-   <h4 style="margin-left:31%">Showing results from {{ $start }} to {{ $end }}.</h4>
-   @endif
-
-   <div class="table-responsive">
-    <div style="margin-left:28%">
-      <form method="POST" action="{{route('ledger.filter')}}">
-      {{csrf_field()}}
-        From: <input type="date" name="start">
-        To: <input type="date" name="end">
-        <button type="submit" class="btn btn-default btn-sm" name"search">SEARCH</button>
-      </form>
+<div class="padding-side-5">
+    
+    <div>
+        <h2 class="text-white">GENERAL LEDGER</h2>
     </div>
 
-        <table class="table table-bordered table-striped generalLedgerTable">
-            <thead>
-                <tr>
-                    <th>Payee/Payor</th>
-                    <th>Particulars</th>
-                    <th>OR#</th>
-                    <th>IN</th>
-                    <th>OUT</th>
-                    <th>Balance</th>
-                    <th>Date</th>
-                    <th class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($bookings as $booking)
-                <tr>
-                    <td></td>
-                    <td>{{$booking->description}}</td>
-                    <td></td>
-                    <td class="text-right">{{ $booking->total_amount }}</td>
-                    <td></td>
-                    <td class="text-right">{{ $booking->total_amount }}</td>
-                    <td>{{$booking->created_at->formatLocalized('%B %d, %Y')}}</td>
-                    <td></td>
-                </tr>
-                @endforeach
-                @foreach ($sops as $sop)
-                <tr>
-                    <td></td>
-                    <td>{{$sop->description}}</td>
-                    <td></td>
-                    <td class="text-right">{{ $sop->total_amount }}</td>
-                    <td></td>
-                    <td class="text-right">{{ $sop->total_amount }}</td>
-                    <td>{{$sop->created_at->formatLocalized('%B %d, %Y')}}</td>
-                    <td></td>
-                </tr>
-                @endforeach
-                @foreach ($expired as $expire)
-                <tr>
-                    <td></td>
-                    <td>{{$expire->description}}</td>
-                    <td></td>
-                    <td class="text-right">{{ $expire->total_amount }}</td>
-                    <td></td>
-                    <td class="text-right">{{ $expire->total_amount }}</td>
-                    <td>{{$expire->created_at->formatLocalized('%B %d, %Y')}}</td>
-                    <td></td>
-                </tr>
-                @endforeach
+    <div class="box">
+        <div class="box-body">
 
-            @foreach ($ledgers->sortByDesc('ledger_id') as $ledger)
-                @if ($ledger->description !== 'Booking Fee' && $ledger->description !== 'SOP' && $ledger->description !== 'Expired Ticket')
+           @if ($start !== null && $end !==null)
+           <div class="time-header">
+                <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 50px;"><i class="fa fa-calendar"></i> Showing results from {{ $start }} to {{ $end }}</h3>
+            </div>
+           @endif
 
-                <tr>
-                    <td>{{$ledger->payee}}</td>
-                    <td>{{$ledger->description}}</td>
-                    <td>{{$ledger->or_number}}</td>
-                    @if ($ledger->type == 'Revenue')
+           <div class="table-responsive">
 
-                    <td class="text-right">{{$ledger->amount}}</td>
-                    <td></td>
-                    <td class="text-right">{{$ledger->amount}}</td>
+                <div class="time-header">
+                    <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 50px;"><i class="fa fa-calendar"></i>Showing results from hehe to huhu</h3>
+                </div>
 
-                    @else
-                    <td></td>
-                    <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
-                    <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
-                    @endif
+                <div class="col col-md-6">
+                    <form method="POST" action="{{route('ledger.filter')}}">
+                        {{csrf_field()}}
+                        From: <input type="date" name="start">
+                        To: <input type="date" name="end">
+                        <button type="submit" class="btn btn-default btn-sm" name"search">SEARCH</button>
+                    </form>
+                </div>
 
-                    <td>{{$ledger->created_at->formatLocalized('%B %d, %Y')}}</td>
+                <table class="table table-bordered table-striped generalLedgerTable">
+                    <thead>
+                        <tr>
+                            <th>Payee/Payor</th>
+                            <th>Particulars</th>
+                            <th>OR#</th>
+                            <th>IN</th>
+                            <th>OUT</th>
+                            <th>Balance</th>
+                            <th>Date</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($bookings as $booking)
+                        <tr>
+                            <td></td>
+                            <td>{{$booking->description}}</td>
+                            <td></td>
+                            <td class="text-right">{{ $booking->total_amount }}</td>
+                            <td></td>
+                            <td class="text-right">{{ $booking->total_amount }}</td>
+                            <td>{{$booking->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td class="text-center"> No Action</td>
+                        </tr>
+                        @endforeach
+                        @foreach ($sops as $sop)
+                        <tr>
+                            <td></td>
+                            <td>{{$sop->description}}</td>
+                            <td></td>
+                            <td class="text-right">{{ $sop->total_amount }}</td>
+                            <td></td>
+                            <td class="text-right">{{ $sop->total_amount }}</td>
+                            <td>{{$sop->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td class="text-center"> No Action</td>
+                        </tr>
+                        @endforeach
+                        @foreach ($expired as $expire)
+                        <tr>
+                            <td></td>
+                            <td>{{$expire->description}}</td>
+                            <td></td>
+                            <td class="text-right">{{ $expire->total_amount }}</td>
+                            <td></td>
+                            <td class="text-right">{{ $expire->total_amount }}</td>
+                            <td>{{$expire->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td class="text-center"> No Action</td>
+                        </tr>
+                        @endforeach
 
-                    <td class="center-block">
-                        <div class="text-center">
-                            <a href="{{route('ledger.edit', $ledger->ledger_id)}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i>EDIT</a>
-                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteLedger'. $ledger->ledger_id}}"><i class="fa fa-trash"></i> DELETE</button>
-                        </div>
-                    </td>
-                </tr>
+                    @foreach ($ledgers->sortByDesc('ledger_id') as $ledger)
+                        @if ($ledger->description !== 'Booking Fee' && $ledger->description !== 'SOP' && $ledger->description !== 'Expired Ticket')
 
-                    <!-- Modal for Delete-->
-                    <div class="modal fade" id="{{'deleteLedger'. $ledger->ledger_id}}">
-                        <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title"> Confirm</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                            <h1>
-                                            <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
-                                            </h1>
-                                            <p>Are you sure you want to delete "{{$ledger->description}}"?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                         <form action="{{route('ledger.destroy', $ledger->ledger_id)}}" method="POST">
-                                            {{csrf_field()}} {{method_field('DELETE')}}
+                        <tr>
+                            <td>{{$ledger->payee}}</td>
+                            <td>{{$ledger->description}}</td>
+                            <td>{{$ledger->or_number}}</td>
+                            @if ($ledger->type == 'Revenue')
 
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button> <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </div>
+                            <td class="text-right">{{$ledger->amount}}</td>
+                            <td></td>
+                            <td class="text-right">{{$ledger->amount}}</td>
+
+                            @else
+                            <td></td>
+                            <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
+                            <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
+                            @endif
+
+                            <td>{{$ledger->created_at->formatLocalized('%B %d, %Y')}}</td>
+
+                            <td class="center-block">
+                                <div class="text-center">
+                                    <a href="{{route('ledger.edit', $ledger->ledger_id)}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i>EDIT</a>
+                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteLedger'. $ledger->ledger_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                 </div>
-                                <!-- /.modal-content -->
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                @endif
-                @endforeach
-            </tbody>
-            <tfoot>
-            <tr>
-                <th></th>
-                <th></th>
-                <th>TOTAL:</th>
-                <th style="text-align:right"></th>
-                <th style="text-align:right"></th>
-                <th colspan="2" style="text-align:left"></th>
-                <th></th>
-            </tr>
-            </tfoot>
-        </table>
+                            </td>
+                        </tr>
+
+                            <!-- Modal for Delete-->
+                            <div class="modal fade" id="{{'deleteLedger'. $ledger->ledger_id}}">
+                                <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-red">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                                <h4 class="modal-title"> Confirm</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                    <h1>
+                                                    <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
+                                                    </h1>
+                                                    <p>Are you sure you want to delete "{{$ledger->description}}"?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                 <form action="{{route('ledger.destroy', $ledger->ledger_id)}}" method="POST">
+                                                    {{csrf_field()}} {{method_field('DELETE')}}
+
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button> <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    <!-- /.col -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        @endif
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>TOTAL:</th>
+                        <th style="text-align:right"></th>
+                        <th style="text-align:right"></th>
+                        <th colspan="2" style="text-align:left"></th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-</div>
-
 @stop
 
 @section('scripts')
@@ -198,7 +209,7 @@
             'paging': false,
             'lengthChange': true,
             'searching': true,
-            'ordering': false,
+            'ordering': true,
             'info': true,
             'autoWidth': true,
             'order': [[ 6, "asc" ]],

@@ -20,7 +20,7 @@
                         <div class="" style="border: 1px solid lightgray; margin: 5px;">
                             <ul class="nav nav-stacked">
                             @foreach ($terminals as $terminal)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$mainTerminal->destination_name}} - {{$terminal->destination_name}}<span class="badge badge-pill pull-right">{{count($terminal->routeFromDestination)}}</span></a></li>
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{strtoupper($mainTerminal->destination_name)}} - {{strtoupper($terminal->destination_name)}}<span class="badge badge-pill pull-right">{{count($terminal->routeFromDestination)}}</span></a></li>
                             @endforeach
                             </ul>
                         </div>
@@ -31,7 +31,11 @@
                             @foreach ($terminals as $terminal)
                                 
                                 <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
-                                    <h3 class="profile-username text-center"><strong>{{$mainTerminal->first()->destination_name}} - {{$terminal->destination_name}}</strong></h3> 
+                                    
+                                    <div class="time-header">
+                                        <h3 class="text-center" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 20px;"></i> {{strtoupper($mainTerminal->first()->destination_name)}} - {{strtoupper($terminal->destination_name)}}</h3>
+                                    </div>
+
                                     <div class="col-md-6">
                                         <a href="{{route('route.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
                                     </div>
