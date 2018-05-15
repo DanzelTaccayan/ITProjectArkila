@@ -185,11 +185,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');
      Route::patch('/moveToSpecialUnit/{vanOnQueue}','VanQueueController@moveToSpecialUnit')->name('vanqueue.moveToSpecialUnit');
      /* Transactions(Ticket) */
-    Route::resource('/home/transactions', 'TransactionsController',[
-        'except' => ['create','show','edit','update','store']
-    ]);
+    Route::get('/home/transactions', 'TransactionsController@index')->name('transactions.index');
+    Route::delete('/home/transactions/{transaction}', 'TransactionsController@destroy')->name('transactions.destroy');
     Route::post('/home/transactions/{destination}', 'TransactionsController@store')->name('transactions.store');
-    Route::patch('/home/transactions/{terminal}', 'TransactionsController@update')->name('transactions.update');
+    Route::patch('/home/transactions/{destination}', 'TransactionsController@depart')->name('transactions.update');
     Route::get('/listDestinations/{terminal}','TransactionsController@listDestinations')->name('transactions.listDestinations');
     Route::get('/listTickets/{destination}','TransactionsController@listTickets')->name('transactions.listTickets');
     Route::get('/listDiscountedTickets/{destination}','TransactionsController@listDiscountedTickets')->name('transactions.listDiscountedTickets');
@@ -198,7 +197,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/listSourceDrivers','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');
     Route::patch('/changeDriver/{trip}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::patch('/home/transactions/changeDestination/{transaction}','TransactionsController@changeDestination')->name('transactions.changeDestination');
-    Route::get('/home/transactions/manageTickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
+    Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
     Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
     //Selected Tickets
