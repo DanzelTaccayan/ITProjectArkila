@@ -1,64 +1,55 @@
 @extends('layouts.driver')
 @section('title', 'Driver Profile')
 @section('content-title', 'Driver Home') @section('content')
-<div class="col-md-6">
-    <!-- Profile Image -->
-    <div class="box box-primary">
-        <div class="box-body box-profile">
-            <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" alt="User profile picture">
-            <h3 class="profile-username text-center">{{ $profile->first_name.' '.$profile->middle_name.' '.$profile->last_name }}</h3>
-            <p class="text-muted text-center"></p>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <div class="text-center">
-                <div class="text-center form-group">
-                <button type="button" class="btn btn-primary text-center" data-toggle="modal" data-target="#driverChangePassword" style="width:280px;">Change Password</button>
+<div class="row">
+    <div class="col-md-5">
+        <div class="box box-solid">
+            <div class="box-body box-profile">
+                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" alt="User profile picture">
+                <h3 class="profile-username text-center" style="margin-bottom: 0">
+                    {{ $profile->first_name.' '.$profile->middle_name.' '.$profile->last_name }}
+                </h3>
+                <div class="text-center">
+                    <p>Msantos</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-center form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverChangePassword" style="width:280px;">Account Settings</button>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="padding-side-5">
+                    <div class="text-center">
+                        <h4>PERSONAL INFO</h4>
+                    </div>
+                    <p class="text-muted text-center"></p>
+                        <label for="">Contact Number:</label>
+                        <p class="info-container">{{$profile->contact_number}}</p>
+                        <label for="">Address:</label>
+                        <p class="info-container">{{$profile->address}}</p>
+                        <label for="">Trips Completed:</label>
+                        <p class="info-container">{{$counter}}</p>
+                    <hr>
+                    <div class="profile-van" style="margin-top: 10px;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
+                            <div class="info-box-content">
+                              <h4><strong>AAA</strong></h4>
+                              <p>HIACE</p>
+                              <p style="color: gray;">12 seats</p>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            </div>
-          
-                       
-            
-            <!-- /.text -->
         </div>
-        <!-- /.box-footer -->
     </div>
     <!-- /.box -->
 </div>
-<!-- /.col -->
-
-<div class="col-md-6">
-    <div class="box">
-        <div class="box-header text-center">
-            <h3 class="box-title">Personal Info</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="">Contact Number:</label>
-                    <p class="info-container">{{$profile->contact_number}}</p>
-                </div>
-                <!-- /.form -->
-                <div class="col-md-8">
-                    <label for="">Address:</label>
-                    <p class="info-container">{{$profile->address}}</p>
-                </div>
-                <div class="col-md-4">
-                    <label for="">Trips Completed:</label>
-                    <p class="info-container">{{$counter}}</p>
-                </div>
-            <!-- /.form -->
-            </div>
-        </div>
-        <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
-</div>
-<!-- /.col -->
-
 <!-- CHANGE PASSWORD MODAL-->
-<div class="modal fade" id="driverChangePassword">
+<div class="modal" id="driverChangePassword">
     <div class="modal-dialog" style="margin-top:150px;">
         <div class="col-md-offset-2 col-md-8">
             <div class="modal-content">
@@ -69,8 +60,7 @@
                 </div>
                 <!-- /.modal-header -->
                 <div class="modal-body">
-                    
-                <form action="{{route('drivermodule.changePassword',[$driverId])}}" method="POST">
+                <form action="{{route('drivermodule.changePassword',[$driverId])}}" method="POST" data-parsley-validate="" class="parsley-form">
                     {{csrf_field()}} {{method_field('PATCH')}}
                     <div class="form-group" class="control-label">
                         <div class="row">
@@ -79,19 +69,20 @@
                                 <label for="">Current password:</label>
                             </div>
                             <div class="col-md-8"> 
-                                <input value="" id="current_password" name="current_password" type="password" class="info-container" style="width: 100%;">
+                                <input value="" id="current_password" name="current_password" type="password" class="form-control" style="width: 100%;" val-cpassword required>
                                 <div id="pass_response" class="response"></div>
                             </div>
                         </div>
                     </div>
                     <!-- /.form-group -->
+                    <hr>
                     <div class="form-group" class="control-label">
                        <div class="row">
                            <div class="col-md-4">
                                <label for="">New Password:</label>
                            </div>
                            <div class="col-md-8">
-                               <input value="" id="" name="password" type="password" class="info-container" style="width: 100%;" required>
+                               <input value="" id="newPassword" name="password" type="password" class="form-control" style="width: 100%;" required val-npassword required>
                            </div>
                        </div>
                     </div>
@@ -102,12 +93,11 @@
                                <label for="">Confirm New Password:</label>
                            </div>
                            <div class="col-md-8">
-                               <input value="" id="" name="password_confirmation" type="password" class="info-container" style="width: 100%;" required>
+                               <input value="" id="confirmPassword" name="password_confirmation" type="password" class="form-control" style="width: 100%;">
                            </div>
                        </div>  
                     </div>
                     <!-- /.form-group -->
-                </div>
                 <!-- /.modal-body -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-group-justified text-center">Save Changes</button>
@@ -115,12 +105,13 @@
                 <!-- /.modal-footer -->
                 </form>
                 <!-- /.form -->
-            </div>
+                </div>
             <!-- /.modal-content -->
-        </div>
+            </div>
         <!-- /.col -->
-    </div>
+        </div>
     <!-- /.modal-dialog -->
+    </div>
 </div>
 <!-- /.modal -->
 @endsection @section('scripts') @parent

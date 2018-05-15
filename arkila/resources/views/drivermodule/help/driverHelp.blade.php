@@ -4,9 +4,9 @@
 @section('content')
 <div class="row">
     <div class="col-md-offset-2 col-md-8">
-        <div class="box box-primary">
+        <div class="box box-solid">
             <div class="box-header  with-border">
-                <h5><strong>1. View Announcements and Van Queue</strong></h5>
+                <h5 class="text-center"><strong>View Announcements and Van Queue</strong></h5>
             </div>
             <div class="box-body">
                 <ul>
@@ -24,9 +24,9 @@
             <!-- box-body-->
         </div>
         <!-- box-->
-        <div class="box box-primary">
+        <div class="box box-solid">
             <div class="box-header  with-border">
-                <h5><strong>2. View Trip Log</strong></h5>
+                <h5 class="text-center"><strong>View Trip Log</strong></h5>
             </div>
             <div class="box-body">
                 <ul>
@@ -41,9 +41,9 @@
             <!-- box-body-->
         </div>
         <!-- box-->
-        <div class="box box-primary">
+        <div class="box box-solid">
             <div class="box-header  with-border">
-                <h5><strong>3. Create Report</strong></h5>
+                <h5 class="text-center"><strong>Create Report</strong></h5>
             </div>
             <div class="box-body">
                 <ul>
@@ -67,9 +67,9 @@
             <!-- box-body-->
         </div>
         <!-- box-->
-        <div class="box box-primary">
+        <div class="box box-solid">
             <div class="box-header with-border">
-                <h5><strong>4. Profile</strong></h5>
+                <h5 class="text-center"><strong>Profile</strong></h5>
             </div>
             <div class="box-body">
                 <ul>

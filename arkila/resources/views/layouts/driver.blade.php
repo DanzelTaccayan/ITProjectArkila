@@ -23,7 +23,7 @@
     @endif
 
     @section('links')
-    @include('layouts.partials.stylesheets')
+        @include('layouts.partials.stylesheets')
     @show
 </head>
 
@@ -50,13 +50,16 @@
         @include('layouts.partials.footer')
     </div>
     <!-- ./wrapper -->
+    
+    
 
     @section('scripts')
-    @parent
-    @include('layouts.partials.scripts')
-    <script type="text/javascript" src="/js/app.js"></script>
-    @include('message.error')
-    @include('message.success')
+        
+        @include('layouts.partials.scripts')
+        @include('message.error')
+        @include('message.success')
+        <script type="text/javascript" src="/js/app.js"></script>
+        
     @show
 </body>
 

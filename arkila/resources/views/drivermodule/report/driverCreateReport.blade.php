@@ -89,12 +89,10 @@
                               </tr>
                             </tbody>
                         </table>
-                        <div class="form-group" style="margin-top: 5%">
-                            <label for="" class="col-sm-4">Total Passengers:</label>
-                            <div class=" col-sm-6">
-                            <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
+                        <div class="pull-right" style="margin-top: 10px;">
+                            <p><strong>Total Passengers:</strong></p>
+                            <p id="totalPassenger" class="info-container text-right">{{old('totalPassengers')}}</p>
                             <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
-                            </div>
                         </div>
                     </div>
                     <div class="box-footer text-center">
