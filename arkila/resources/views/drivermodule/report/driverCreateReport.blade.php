@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="box-footer text-center">
-                        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#dicountModal">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>       

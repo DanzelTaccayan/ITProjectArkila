@@ -110,10 +110,10 @@
                                     <table id="van" class="table table-bordered table-striped table-responsive info-table">
                                         <thead>
                                             <tr>
-                                                <th>Plate Number</th>
+                                                <th style="width: 20%;">Plate Number</th>
                                                 <th>Driver</th>
                                                 <th>Model</th>
-                                                <th>Seating Capacity</th>
+                                                <th style="width: 5%;">Seating Capacity</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>

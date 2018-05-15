@@ -250,7 +250,7 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                             <td>
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
@@ -261,7 +261,7 @@
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -278,10 +278,35 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
+                                                <button type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
                                                 <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
                                                 </div>
+
                                                 <div class="clearfix">  </div>
+
+                                                <div class="modal" id="novan-modal">
+                                                  <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
+                                                        <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-success">GO TO VAN QUEUE</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                  </div>
+                                                  <!-- /.modal-dialog -->
+                                                </div>
                                             </div>
                                         </div>
                                         @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
@@ -415,7 +440,32 @@
                                                 <hr>
                                                 <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
                                                 <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
+                                                <button type="button" class="btn bg-navy btn-flat pull-right" style="height: 50px;" data-toggle="modal" data-target="#ob-modal"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
+
+                                            <div class="modal" id="ob-modal">
+                                                  <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                                        <p class="text-center">THE VAN UNIT HAS <strong class="text-red">LESS THAN 10</strong> PASSENGERS, UPON DEPARTURE THE VAN UNIT WILL BE MARKED AS <strong class="text-green">OB</strong> AND WILL BE LISTED IN THE QUEUE IMMEDIATELY. <strong>DO YOU STILL WANT TO DEPART?</strong></p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn bg-navy">DEPART</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                  </div>
+                                                  <!-- /.modal-dialog -->
+                                                </div>
                                         </div>
                                         @endif
                                     </div>
