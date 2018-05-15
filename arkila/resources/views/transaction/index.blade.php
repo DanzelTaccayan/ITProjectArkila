@@ -278,7 +278,7 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
+                                                <button type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
                                                 <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
                                                 </div>
@@ -452,12 +452,12 @@
                                                         <h4 class="modal-title"></h4>
                                                       </div>
                                                       <div class="modal-body">
-                                                        <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
-                                                        <p class="text-center"><strong>THE VAN UNIT HAS <span class="text-blue">LESS THAN 10</span> PASSENGERS. DO YOU STILL WANT TO DEPART?</strong></p>
+                                                        <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                                        <p class="text-center">THE VAN UNIT HAS <strong class="text-red">LESS THAN 10</strong> PASSENGERS, UPON DEPARTURE THE VAN UNIT WILL BE MARKED AS <strong class="text-green">OB</strong> AND WILL BE LISTED IN THE QUEUE IMMEDIATELY. <strong>DO YOU STILL WANT TO DEPART?</strong></p>
                                                       </div>
                                                       <div class="modal-footer">
                                                         <div class="text-center">
-                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                                                             <button type="button" class="btn bg-navy">DEPART</button>
                                                         </div>
                                                       </div>
