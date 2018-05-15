@@ -24,12 +24,7 @@
            @endif
 
            <div class="table-responsive">
-
-                <div class="time-header">
-                    <h3 class="text-right" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 50px;"><i class="fa fa-calendar"></i>Showing results from hehe to huhu</h3>
-                </div>
-
-                <div class="col col-md-6">
+                <div class="text-center">
                     <form method="POST" action="{{route('ledger.filter')}}">
                         {{csrf_field()}}
                         From: <input type="date" name="start">
@@ -185,25 +180,20 @@
             dom: 'Bfrtip',
             buttons: [
                 {
-                    extend: 'pdfHtml5',
-                    text: 'PRINT',
-                    title: 'Ban Trans General Ledger',
                     extend: 'print',
+                    text: 'PRINT GENERAL LEDGER',
+                    className: 'btn btn-success btn-flat btn-sm',
+                    title: 'Ban Trans General Ledger',
                     autoPrint: false,
+                    ordering: false,
                     footer: true,
                     download: 'open',
+                    init: function(api, node, config) {
+                       $(node).removeClass('dt-button')
+                    },
                     exportOptions : {
                         columns: ':not(:last-child)',
-                    },
-                    customize: function ( win ) {
-                        $(win.document.body)
-                            .css( 'font-size', '10pt' );
-
-                        $(win.document.body).find( 'table' )
-                            .addClass( 'compact' )
-                            .css( 'font-size', 'inherit' );
                     }
-
                 }
             ],
             'paging': false,
