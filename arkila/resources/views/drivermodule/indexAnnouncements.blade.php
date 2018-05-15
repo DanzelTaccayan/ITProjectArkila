@@ -1,9 +1,11 @@
+<hr>
+<h2 class="text-center">ANNOUNCEMENTS</h2>
 <div id="home-slider" class="carousel slide box-trip" data-ride="carousel">
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
         <div class="item  active">
-            <div class="box">
-                <div class="box-header with-border text-center">
+            <div class="box box-solid">
+                <div class="box-header with-border text-center bg-aqua" style="height:80px;">
                     <h4 class="title-limit">{{$announcements->first()->title}}</h4>
                 </div>
                 <div class="box-body text-center" style="height:200px;">
@@ -18,8 +20,8 @@
         </div>
         @foreach($announcements as $announcement) @if($announcement == $announcements->first()) @continue @else
         <div class="item">
-            <div class="box">
-                <div class="box-header with-border text-center">
+            <div class="box box-solid">
+                <div class="box-header with-border text-center bg-aqua" style="height:80px;">
                     <h4 class="title-limit-5">{{$announcement->title}}</h4>
                 </div>
                 <div class="box-body text-center" style="height:200px;">

@@ -10,7 +10,6 @@
     <meta name="robots" content="all,follow">
     
 @section('links')
-@parent
  @include('layouts.partials.customer_stylesheets')
  @show
 
@@ -29,7 +28,6 @@
 
     <!-- ./wrapper -->
     @section('scripts')
-    @parent
 	    @include('layouts.partials.customer_scripts')
 		@include('message.error')
 		@include('message.success')
