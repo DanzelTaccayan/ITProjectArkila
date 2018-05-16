@@ -731,7 +731,7 @@
                             $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())+1);
 
                         } else {
-                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-yellow pull-right">1</span>');
+                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-blue pull-right">1</span>');
                             buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
                         }
 
