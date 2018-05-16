@@ -18,6 +18,9 @@ use Illuminate\Validation\Rule;
 class TripsController extends Controller
 {
 
+    public function store(Destination $terminal) {
+
+    }
 
     public function tripLog()
     {
@@ -71,7 +74,6 @@ class TripsController extends Controller
             }
           }
         }
-
       }
       $numPassCountArr['mainTerminalRegular'] = $mainRegCount;
       $numPassCountArr['mainTerminalDiscount'] = $mainDisCount;

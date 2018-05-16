@@ -44,6 +44,7 @@
     {{ Html::script('adminlte/plugins/iCheck/icheck.min.js') }}
     {{ Html::script('js/client-side_validation/parsley.min.js') }}
     {{ Html::script('js/client-side_validation/member-validation.js') }}
+    {{ Html::script('js/client-side_validation/driver-validation.js') }}
     {{ Html::script('js/client-side_validation/van-validation.js') }}
     {{ Html::script('js/client-side_validation/settings-validation.js') }}
     {{ Html::script('js/client-side_validation/booking-form-validation.js') }}
@@ -54,9 +55,7 @@
     <!-- Awesome Functions-->
     {{ Html::script('js/awesome-functions-min.js') }}
     <script>    
-    $(function () {
         $('.select2').select2();
-    })
     </script>
 
     <!-- Van Queue Sidebar -->
@@ -102,27 +101,7 @@
                 listDestinationsSideBar();
             });
 
-            $(document.body).on('click','#sellButtSideBar',function(){
-                var terminalSideBar = $('#terminalTicketSideBar').val();
-                var destination = $('#destinationTicketSideBar').val();
-                var ticket= $('#ticketSellSideBar').val();
 
-                $.ajax({
-                    method:'POST',
-                    url: '{{route("transactions.store")}}',
-                    data: {
-                        '_token': '{{csrf_token()}}',
-                        'terminal': terminalSideBar,
-                        'destination': destination,
-                        'ticket': ticket
-                    },
-                    success: function(){
-                        location.reload();
-                    }
-
-                });
-
-            });
 
             function checkTerminalsSideBar(){
                 if(!$('#terminalTicketSideBar').val()){

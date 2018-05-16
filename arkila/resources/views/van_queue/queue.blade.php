@@ -166,7 +166,11 @@ ol.arrow-drag{
 }
 .queue-body{
   margin-top:10px;
+  margin-bottom:  10px;
   height: 450px;
+}
+.queue-body-color{
+  height:450px;
   background: aliceblue;
 }
 .special-unit-body{
@@ -284,105 +288,107 @@ ol.arrow-drag{
                               <span class="input-group-addon"><i class="fa fa-search"></i></span>
                               <input type="text" id="queueSearch{{$terminal->destination_id}}" class="form-control" placeholder="Search in queue" onkeyup="search{{$terminal->destination_id}}()">
                             </div>
-                            <div class="queue-body scrollbar scrollbar-info thin">  
-                              <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization arrow-drag">
-                                  @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
-                                    <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
-                                      <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
-                                        <div class="queuenum">
-                                            <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
-                                        </div>
-                                        <div class=item id="item{{$vanOnQueue->van_queue_id}}">
-                                          <div  class="row">
-                                            <div class="col-md-12">
-                                              <p class="hidden">{{ $vanOnQueue->van->plate_number }}</p>
-                                              {{ $vanOnQueue->van->plate_number }}
-                                              <div class="pull-right">
-                                                  <i id="badge{{$vanOnQueue->van_queue_id}}" class="badge badge-pill badge-default">{{ $vanOnQueue->remarks }}</i>
-                                                  <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%">
-                                                    <i class="fa fa-gear"></i>
-                                                  </button>
-                                                  <div class="dropdown-menu" role="menu">
-                                                    <a name="remarkBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-asterisk"></i> Update Remark</a>
-                                                    <a name="posBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-move"></i> Change Position</a>
-                                                    <a name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-map-marker"></i> Change Destination</a>
-                                                    <a name="moveToSpecialUnitsList" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</a>
-                                                    <a name="deleteBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-trash"></i> Remove</a>
-                                                  </div>
+                            <div class="queue-body"> 
+                              <div class="queue-body-color scrollbar scrollbar-info thin">
+                                <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization arrow-drag">
+                                    @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
+                                      <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
+                                        <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
+                                          <div class="queuenum">
+                                              <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
+                                          </div>
+                                          <div class=item id="item{{$vanOnQueue->van_queue_id}}">
+                                            <div  class="row">
+                                              <div class="col-md-12">
+                                                <p class="hidden">{{ $vanOnQueue->van->plate_number }}</p>
+                                                {{ $vanOnQueue->van->plate_number }}
+                                                <div class="pull-right">
+                                                    <i id="badge{{$vanOnQueue->van_queue_id}}" class="badge badge-pill badge-default">{{ $vanOnQueue->remarks }}</i>
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" style="border-radius: 100%">
+                                                      <i class="fa fa-gear"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                      <a name="remarkBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-asterisk"></i> Update Remark</a>
+                                                      <a name="posBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-move"></i> Change Position</a>
+                                                      <a name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-map-marker"></i> Change Destination</a>
+                                                      <a name="moveToSpecialUnitsList" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-star"></i> Move to Special Units</a>
+                                                      <a name="deleteBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-menu btn-sm btn-flat btn-block"><i class="glyphicon glyphicon-trash"></i> Remove</a>
+                                                    </div>
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
-                                        <div id="remarkitem{{$vanOnQueue->van_queue_id}}" class="hidden remarkitem">
-                                          <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Remark:</label>
-                                             <div class="col-sm-3">
-                                              <select name="remark" id="remark{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                <option value="CC">CC</option>
-                                                <option value="ER">ER</option>
-                                                <option value="OB">OB</option>
-                                              </select>
-                                             </div>
-                                           </div>
-                                           <div class="pull-right"> 
-                                              <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
-                                              <button name="updateRemarksButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">UPDATE</button>
-                                             </div>
-                                             <div class="clearfix"> </div>
-                                        </div>
-                                        <div id="positem{{$vanOnQueue->van_queue_id}}" class="hidden positem">
-                                          <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Position:</label>
-                                             <div class="col-sm-3">
-                                              <select name="changePosition" id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                  @foreach($terminals->where('destination_id',$vanOnQueue->destination_id)->first()
-                                                ->vanQueue()
-                                                ->whereNotNull('queue_number')
-                                                ->orderBy('queue_number')->get() as $queueNumber)
-                                                      <option value="{{$queueNumber->queue_number}}" @if($queueNumber->queue_number === $vanOnQueue->queue_number) {{'selected'}} @endif>{{$queueNumber->queue_number}}</option>
-                                                  @endforeach
-                                              </select>
-                                             </div>
-                                           </div>
-                                           <div class="pull-right"> 
-                                              <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
-                                              <button name="changePosButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
-                                             </div>
-                                             <div class="clearfix"> </div>
-                                        </div>
-                                        <div id="destitem{{$vanOnQueue->van_queue_id}}" class="destitem hidden">
+                                          <div id="remarkitem{{$vanOnQueue->van_queue_id}}" class="hidden remarkitem">
                                             <div class="form-group">
-                                              <label for="" class="col-sm-3 control-label">Destination:</label>
-                                               <div class="col-sm-8">
-                                                  <select id="destOption{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                  @foreach($terminals as $term)
-                                                  <option @if($term->destination_id == $vanOnQueue->destination_id) {{'selected'}} @endif value="{{$term->destination_id}}">{{$term->destination_name}}</option>
-                                                  @endforeach
-                                                  </select>
+                                              <label for="" class="col-sm-2 control-label">Remark:</label>
+                                               <div class="col-sm-3">
+                                                <select name="remark" id="remark{{$vanOnQueue->van_queue_id}}" class="form-control">
+                                                  <option value="CC">CC</option>
+                                                  <option value="ER">ER</option>
+                                                  <option value="OB">OB</option>
+                                                </select>
                                                </div>
                                              </div>
-                                            <div class="pull-right">
-                                              <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
-                                              <button name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
-                                            </div>
-                                            <div class="clearfix">  </div>
-                                        </div>
-                                        <div id="deleteitem{{$vanOnQueue->van_queue_id}}" class="deleteitem hidden">
-                                                <p><strong>{{ $vanOnQueue->van->plate_number }}</strong> will be deleted. Do you want to continue?</p>
-                                            <div class="pull-right">
-                                                <form method="POST" action="{{route('vanqueue.destroy',[$vanOnQueue->van_queue_id])}}">
-                                                    {{method_field('DELETE')}}
-                                                    {{csrf_field()}}
-                                                  <a data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn"> CANCEL</a>
-                                                  <button type="submit" name="deleteBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm"> YES</button>
-                                                </form>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                      </span>
-                                    </li>
-                                  @endforeach
-                              </ol>
+                                             <div class="pull-right"> 
+                                                <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
+                                                <button name="updateRemarksButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">UPDATE</button>
+                                               </div>
+                                               <div class="clearfix"> </div>
+                                          </div>
+                                          <div id="positem{{$vanOnQueue->van_queue_id}}" class="hidden positem">
+                                            <div class="form-group">
+                                              <label for="" class="col-sm-2 control-label">Position:</label>
+                                               <div class="col-sm-3">
+                                                <select name="changePosition" id="posOption{{$vanOnQueue->van_queue_id}}" class="form-control">
+                                                    @foreach($terminals->where('destination_id',$vanOnQueue->destination_id)->first()
+                                                  ->vanQueue()
+                                                  ->whereNotNull('queue_number')
+                                                  ->orderBy('queue_number')->get() as $queueNumber)
+                                                        <option value="{{$queueNumber->queue_number}}" @if($queueNumber->queue_number === $vanOnQueue->queue_number) {{'selected'}} @endif>{{$queueNumber->queue_number}}</option>
+                                                    @endforeach
+                                                </select>
+                                               </div>
+                                             </div>
+                                             <div class="pull-right"> 
+                                                <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
+                                                <button name="changePosButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
+                                               </div>
+                                               <div class="clearfix"> </div>
+                                          </div>
+                                          <div id="destitem{{$vanOnQueue->van_queue_id}}" class="destitem hidden">
+                                              <div class="form-group">
+                                                <label for="" class="col-sm-3 control-label">Destination:</label>
+                                                 <div class="col-sm-8">
+                                                    <select id="destOption{{$vanOnQueue->van_queue_id}}" class="form-control">
+                                                    @foreach($terminals as $term)
+                                                    <option @if($term->destination_id == $vanOnQueue->destination_id) {{'selected'}} @endif value="{{$term->destination_id}}">{{$term->destination_name}}</option>
+                                                    @endforeach
+                                                    </select>
+                                                 </div>
+                                               </div>
+                                              <div class="pull-right">
+                                                <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
+                                                <button name="destBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
+                                              </div>
+                                              <div class="clearfix">  </div>
+                                          </div>
+                                          <div id="deleteitem{{$vanOnQueue->van_queue_id}}" class="deleteitem hidden">
+                                                  <p><strong>{{ $vanOnQueue->van->plate_number }}</strong> will be deleted. Do you want to continue?</p>
+                                              <div class="pull-right">
+                                                  <form method="POST" action="{{route('vanqueue.destroy',[$vanOnQueue->van_queue_id])}}">
+                                                      {{method_field('DELETE')}}
+                                                      {{csrf_field()}}
+                                                    <a data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn"> CANCEL</a>
+                                                    <button type="submit" name="deleteBtn" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm"> YES</button>
+                                                  </form>
+                                              </div>
+                                              <div class="clearfix"></div>
+                                          </div>
+                                        </span>
+                                      </li>
+                                    @endforeach
+                                </ol>
+                              </div>
                             </div>
                           </div>
                           <div class="col-md-5">

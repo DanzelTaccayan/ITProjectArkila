@@ -209,7 +209,10 @@
                                                             </table>
                                                         </div>
                                                         <div class="pull-right">
-                                                            <button type="button" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
+                                                            <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
+                                                                {{csrf_field()}}
+                                                                <button type="submit" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
+                                                            </form>
                                                         </div>
                                                         <div class="clearfix"></div>
                                                     </div>
@@ -241,24 +244,24 @@
                                                                             <td id="row{{$destination->destination_id}}">
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($regTicketNum =  $destination->selectedTickets->where('type','Regular')->count())
+                                                                                    @if($regTicketNum =  $destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
                                                                                         <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->selectedTickets->where('type','Regular')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                             <td>
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($discountedTicketNum = $destination->selectedTickets->where('type','Discount')->count())
+                                                                                    @if($discountedTicketNum = $destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
                                                                                         <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->selectedTickets->where('type','Discount')->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-trash"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -275,10 +278,35 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
+                                                <button type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
                                                 <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
                                                 </div>
+
                                                 <div class="clearfix">  </div>
+
+                                                <div class="modal" id="novan-modal">
+                                                  <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
+                                                        <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-success">GO TO VAN QUEUE</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                  </div>
+                                                  <!-- /.modal-dialog -->
+                                                </div>
                                             </div>
                                         </div>
                                         @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
@@ -339,7 +367,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -364,11 +392,11 @@
                                                 </div>
 
                                                 <div class="list-arrows col-md-2 text-center">
-                                                    <button id="board{{$terminal->destination_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-left1">
                                                         <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
                                                     </button>
                                                     <br>
-                                                    <button id="unboard{{$terminal->destination_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="unboard" class="btn btn-outline-warning btn-sm btn-flat move-right1">
                                                          UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
                                                     </button>
                                                 </div>
@@ -385,7 +413,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-10">
@@ -398,7 +426,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($transactions->where('destination',$terminal->destination_name)->where('status','Pending') as $transaction)
+                                                                    @foreach($transactions->whereIn('destination',$terminal->routeFromDestination->pluck('destination_name'))->where('status','Pending') as $transaction)
                                                                         <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
@@ -412,7 +440,32 @@
                                                 <hr>
                                                 <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
                                                 <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
+                                                <button type="button" class="btn bg-navy btn-flat pull-right" style="height: 50px;" data-toggle="modal" data-target="#ob-modal"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
+
+                                            <div class="modal" id="ob-modal">
+                                                  <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                                        <p class="text-center">THE VAN UNIT HAS <strong class="text-red">LESS THAN 10</strong> PASSENGERS, UPON DEPARTURE THE VAN UNIT WILL BE MARKED AS <strong class="text-green">OB</strong> AND WILL BE LISTED IN THE QUEUE IMMEDIATELY. <strong>DO YOU STILL WANT TO DEPART?</strong></p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn bg-navy">DEPART</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                  </div>
+                                                  <!-- /.modal-dialog -->
+                                                </div>
                                         </div>
                                         @endif
                                     </div>
@@ -515,7 +568,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a name ="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -564,7 +617,7 @@
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <div class="btn-group">
-                                                            <a class="checkBox{{$terminal->destination_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-10">
@@ -810,7 +863,7 @@
     //Remove a ticket by Destination
 </script>
 
-{{--Boarding and Unboarding and Departure--}}
+{{--Boarding, Unboarding, and Departure--}}
 <script type="text/javascript">
         $(function () {
             //Put Ticket into Pending
@@ -844,10 +897,11 @@
                 $(this).toggleClass('active');
             });
 
-            @foreach($terminals as $terminal)
-            $('#board{{$terminal->terminal_id}}').on('click', function () {
 
-                var actives = $('#pendingList{{$terminal->terminal_id}}').children('.active');
+            $('button[name="board"]').on('click', function () {
+                var terminalId = $(this).data('terminal');
+
+                var actives = $('#pendingList'+terminalId).children('.active');
                 if (actives.length > 0) {
                     var transactions = [];
 
@@ -867,10 +921,10 @@
                         }
                     });
 
-                    actives.clone().appendTo('#onBoardList{{$terminal->terminal_id}}').removeClass('active');
+                    actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
                     actives.remove();
 
-                    var checkBox = $('.checkBox{{$terminal->terminal_id}}');
+                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
 
                     if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
                         checkBox.removeClass('selected');
@@ -880,8 +934,9 @@
                 }
             });
 
-            $('#unboard{{$terminal->terminal_id}}').on('click',function() {
-                var actives = $('#onBoardList{{$terminal->terminal_id}}').children('.active');
+            $('button[name="unboard"]').on('click',function() {
+                var terminalId = $(this).data('terminal');
+                var actives = $('#onBoardList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
                     var transactions = [];
@@ -902,10 +957,10 @@
                     });
 
 
-                    actives.clone().appendTo('#pendingList{{$terminal->terminal_id}}').removeClass('active');
+                    actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
                     actives.remove();
 
-                    var checkBox = $('.checkBox{{$terminal->terminal_id}}');
+                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
 
                     if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
                         checkBox.removeClass('selected');
@@ -915,8 +970,8 @@
             });
 
 
-            $('.checkBox{{$terminal->terminal_id}}').on('click',function(e) {
-                var checkBox = $(e.currentTarget);
+            $('.checkBox').on('click',function() {
+                var checkBox = $(this);
                 if (!checkBox.hasClass('selected')) {
                     checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
                     checkBox.children('i').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
@@ -925,7 +980,7 @@
                     checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 }
             });
-            @endforeach
+
 
             $('[name="SearchDualList"]').keyup(function (e) {
                 var code = e.keyCode || e.which;
