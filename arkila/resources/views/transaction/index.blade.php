@@ -278,9 +278,12 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <button type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
-                                                <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
+                                                <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</a>
+                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number')->first() ?? null)
+                                                    <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                @else
+                                                    <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
+                                                @endif
                                                 </div>
 
                                                 <div class="clearfix">  </div>
@@ -299,7 +302,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                         <div class="text-center">
-                                                            <button type="button" class="btn btn-success">GO TO VAN QUEUE</button>
+                                                            <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -439,8 +442,7 @@
                                             <div>
                                                 <hr>
                                                 <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
-                                                <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
-                                                <button type="button" class="btn bg-navy btn-flat pull-right" style="height: 50px;" data-toggle="modal" data-target="#ob-modal"><i class="fa fa-automobile"></i> DEPART</button>
+                                                <button name="depart" class="btn bg-navy btn-flat pull-right"  data-val="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
 
                                             <div class="modal" id="ob-modal">
@@ -458,7 +460,7 @@
                                                       <div class="modal-footer">
                                                         <div class="text-center">
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button type="button" class="btn bg-navy">DEPART</button>
+                                                            <button name="departOb" data-val="{{$terminal->destination_id}}" type="submit" class="btn bg-navy">DEPART</button>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -866,37 +868,61 @@
 {{--Boarding, Unboarding, and Departure--}}
 <script type="text/javascript">
         $(function () {
-            //Put Ticket into Pending
-
-            $('button[name="depart"]').on('click', function(e){
-                var terminalId = $(e.currentTarget).val();
+            //Depart the ticket
+            $('button[name="depart"]').on('click', function(){
+                var terminalId = $(this).data('val');
 
                 if($('#onBoardList'+terminalId).children().length > 0){
                     var transactions = [];
                     $('#onBoardList'+terminalId+' li').each(function(){
                         transactions.push($(this).data('val'));
-                        console.log(transactions);
                     });
+                    if(transactions.length >= 10) {
+                        $.ajax({
+                            method:'PATCH',
+                            url: '/home/transactions/'+terminalId,
+                            data: {
+                                '_token': '{{csrf_token()}}',
+                                'transactions' : transactions
+                            },
+                            success: function(){
+                                location.reload();
+                            }
 
-                    $.ajax({
-                        method:'PATCH',
-                        url: '/home/transactions/'+terminalId,
-                        data: {
-                            '_token': '{{csrf_token()}}',
-                            'transactions' : transactions
-                        },
-                        success: function(){
-                            location.reload();
-                        }
+                        });
+                    } else {
+                        $('#ob-modal').modal('show');
+                    }
 
-                    });
                 }
+            });
+
+            //Depart the ticket/s and add the van to the queue and mark it as OB
+            $('button[name="departOb"]').on('click',function(){
+               var terminalId  = $(this).data('val');
+               var transactions = [];
+
+                $('#onBoardList'+terminalId+' li').each(function(){
+                    transactions.push($(this).data('val'));
+                });
+
+                $.ajax({
+                    method:'PATCH',
+                    url: '/home/transactions/'+terminalId,
+                    data: {
+                        '_token': '{{csrf_token()}}',
+                        'transactions' : transactions
+                    },
+                    success: function(){
+                        location.reload();
+                    }
+
+                });
             });
 
             $('body').on('click', '.list-group .list-group-item', function () {
                 $(this).toggleClass('active');
             });
-
 
             $('button[name="board"]').on('click', function () {
                 var terminalId = $(this).data('terminal');
@@ -969,7 +995,6 @@
                 }
             });
 
-
             $('.checkBox').on('click',function() {
                 var checkBox = $(this);
                 if (!checkBox.hasClass('selected')) {
@@ -980,7 +1005,6 @@
                     checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 }
             });
-
 
             $('[name="SearchDualList"]').keyup(function (e) {
                 var code = e.keyCode || e.which;
