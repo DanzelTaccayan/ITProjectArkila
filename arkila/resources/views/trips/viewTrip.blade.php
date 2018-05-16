@@ -1,4 +1,4 @@
-@extends('layouts.master') 
+@extends('layouts.master')
 @section('title', 'Trip Details')
 @section('links')
 @section('content')
@@ -29,28 +29,42 @@
                                             <th>#Passenger</th>
                                             <th>#Discounted</th>
                                         </tr>
+                                        @php
+                                          $totalArr = null;
+                                        @endphp
+                                        @foreach($tempArr as $key => $values)
                                         <tr>
-                                        @php $totalPassengers = 0; @endphp
-                                        @foreach($destinations as $key => $values)
-                                            @if($trip->trip_id == $values->tripid)
-                                            @php $innerRoutesArr[$key] = $values; @endphp
-                                            <td >{{$values->destdesc}}</td>
-                                            <td class="text-right">{{$values->counts}}</td>
-                                            <td class="text-right">1</th>
+                                            <td>{{$key}}</td>
+                                            @foreach($values as $innerKeys => $innerValues)
+                                            <td class="text-right">{{$innerValues}}</td>
+                                            @endforeach
                                         </tr>
-                                        @php $totalPassengers = $totalPassengers + $values->counts; @endphp
-                                            @endif
                                         @endforeach
                                     </tbody>
+
+                                    @php $totalcount = array(); @endphp
+                                    @foreach($tempArr as $key => $values)
+                                      @foreach($values as $innerKeys => $innerValues)
+
+                                      @if(!array_key_exists($innerKeys, $totalcount))
+                                        @php $totalcount[$innerKeys] = 0; @endphp
+                                      @endif
+
+                                      @php $totalcount[$innerKeys] += $innerValues; @endphp
+
+                                      @endforeach
+                                    @endforeach
+
                                     <tfoot>
                                         <tr>
                                             <th class="text-right">Total</th>
-                                            <th class="text-right">{{$totalPassengers}}</th>
-                                            <th class="text-right">3</th> 
+                                            @foreach($totalcount as $key => $values)
+                                            <th class="text-right">{{$values}}</th>
+                                            @endforeach
                                         </tr>
 
                                     </tfoot>
-                                </table> 
+                                </table>
                             </div>
                         </div>
 
@@ -63,19 +77,19 @@
                         </div>
                          <div>
                             <label>Driver:</label>
-                            <name>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</name>
+                            <name>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}</name>
                         </div>
                         <div>
                             <label>Van:</label>
-                            <name>{{$trip->plate_number}}</name>
-                        </div> 
+                            <name>{{$trip->van->plate_number}}</name>
+                        </div>
                         <div>
                             <label>Origin:</label>
-                            <name>{{$superAdmin->description}}</name>
+                            <name>{{$trip->origin}}</name>
                         </div>
                         <div>
                             <label>Destination:</label>
-                            <name>{{$trip->terminal->description}}</name>
+                            <name>{{$trip->destination}}</name>
                         </div>
                         <div>
                             <label>Date:</label>
@@ -84,35 +98,21 @@
                         <div>
                             <label>Time:</label>
                             <name>{{$trip->time_departed}}</name>
-                        </div> 
-                        
+                        </div>
+
                         <div class="box" style="margin: 3% 0%">
                             <div class="box-header text-center">
                                 <h4>Shares</h4>
                             </div>
                             <div class="box-body" id="inner-dest">
-                                <div class="form-group inner-routes">
-                                    @php $bantrans = 0; @endphp
-                                    @if($trip->SOP == null)
-                                        @php $bantrans = $trip->total_booking_fee + $trip->community_fund  @endphp
-                                    @else
-                                        @php $bantrans = $trip->total_booking_fee + $trip->SOP + $trip->community_fund  @endphp
-                                    @endif
-                                    
-                                    @php $totalfare = 0; @endphp
-                                    @foreach($destinations as $key => $values)
-                                        @php $totalfare = $totalfare + ($values->amount * $values->counts); @endphp
-                                    @endforeach
-                                   
-                                </div>
-                                
+
                                 <label for="">Driver:</label>
-                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{$totalfare - $bantrans}}" disabled>
-                                
+                                <input id="" class="form-control pull-right" type="number" id="total" style="width:30%;" value="{{number_format((float)$driverShare, 2, '.', '')}}" disabled>
+
                             </div>
                         </div>
-                        
-                        <button onclick="window.open('{{route('pdf.perTrip', $trip->trip_id)}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT</button>
+
+
 
                     </div>
                     </div>
