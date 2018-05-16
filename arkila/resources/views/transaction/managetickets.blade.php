@@ -93,6 +93,9 @@
 @stop
 @section('content')
         <div class="padding-side-5">
+            <div>
+                <h2 class="text-white">LIST OF UNUSED TICKETS</h2>
+            </div>
             <div class="box box-solid">
                 <div class="box-body with-shadow">
                     <div class="nav-tabs-custom">
@@ -125,7 +128,8 @@
                                                     <th>Ticket No.</th>
                                                     <th>Destination</th>
                                                     <th>Date Purchased</th>
-                                                    <th>Actions</th>
+                                                    <th id="actionHead">Actions</th>
+                                                    <th id="destHead" class="hidden">Actions</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -135,14 +139,25 @@
                                                         <td>{{ $transaction->ticket->ticket_number }}</td>
                                                         <td>{{ $transaction->destination}}</td>
                                                         <td>{{ $transaction->created_at }}</td>
-                                                        <td>
+                                                        <td id="actionBody{{$transaction->transaction_id}}">
                                                             <div class="text-center">
-                                                                <button value="{{$transaction->transaction_id}}" name="refund" class="btn btn-primary btn-sm"><i class="fa fa-money"></i> Refund</button>
-                                                                <button data-toggle="modal" data-target="#changeDestination{{$transaction->ticket->ticket_id}}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Change Destination</button>
-                                                                <button value="{{$transaction->transaction_id}}" name="deleteTransaction" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-money"></i> Refund</button>
+                                                                <button type="button" id="{{-- destBtn{{$transaction->transaction_id}} --}}" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#change-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-edit"></i> Change Destination</button>
+                                                                <button value="{{$transaction->transaction_id}}" name="deleteTransaction" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-trash"></i> Delete</button>
                                                             </div>
+                                                        </td>
+                                                        <td id="destBody{{$transaction->transaction_id}}" class="hidden">
+                                                            <select name="" id="" class="form-control">
+                                                                <option value="">dest 1</option>
+                                                                <option value="">dest 2</option>
+                                                                <option value="">dest 3</option>
+                                                            </select>
+                                                            <div class="pull-right">
+                                                                <button class="btn btn-default btn-sm btn-flat btn-cancel">CANCEL</button>
+                                                                <button class="btn btn-info btn-sm btn-flat">CHANGE</button>
+                                                            </div>
+                                                        </td>
 
-                                                         </td>
 
                                                     </tr>
                                         @endforeach
@@ -161,7 +176,7 @@
 
         @if($terminal ?? null)
             @foreach(App\Transaction::where('destination',$terminal->destination_name)->where('status','Pending') as $transaction)
-                <div class="modal fade" id="changeDestination{{$transaction->ticket->ticket_id}}">
+                <div class="modal fade" id="change-modal{{$transaction->ticket->ticket_id}}">
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -183,7 +198,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
                                     <button value="{{$transaction->transaction_id}}" name="changeDestinationButton" type="submit" class="btn btn-primary">Change Destination</button>
                                 </div>
                         </div>
@@ -192,6 +207,54 @@
                     <!-- /.modal-dialog -->
                 </div>
                 <!-- /.modal -->
+
+                <div class="modal" id="refund-modal{{$transaction->ticket->ticket_id}}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                <p class="text-center">WOULD YOU LIKE TO <strong>REFUND</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="button" class="btn btn-primary">REFUND</button>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- /.modal-content -->
+                    </div>
+                  <!-- /.modal-dialog -->
+                </div>
+
+                <div class="modal" id="delete-modal{{$transaction->ticket->ticket_id}}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                <p class="text-center">WOULD YOU LIKE TO <strong>DELETE</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="button" class="btn btn-danger">DELETE</button>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- /.modal-content -->
+                    </div>
+                  <!-- /.modal-dialog -->
+                </div>
             @endforeach
         @endif
     </div>
@@ -368,5 +431,23 @@
                 "order": [[ 1, "desc" ]]
             })
         })
+    </script>
+    <script>
+
+        $(document).ready(function(){
+            @foreach(App\Transaction::where('destination',$terminal->destination_name)->where('status','Pending')->get() as $transaction)
+
+            $('#destBtn{{$transaction->transaction_id}}').click(function(){
+                $("#actionBody{{$transaction->transaction_id}}").hide();
+                $("#destBody{{$transaction->transaction_id}}").show();
+                $("#destBody{{$transaction->transaction_id}}").removeClass("hidden");
+            })
+
+            $('.btn-cancel').click(function(){
+                $("#actionBody{{$transaction->transaction_id}}").show();
+                $("#destBody{{$transaction->transaction_id}}").hide();
+            })
+            @endforeach
+        });
     </script>
 @endsection
