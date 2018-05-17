@@ -278,9 +278,12 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <button type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</button> 
-                                                <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
-                                                <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
+                                                <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</a>
+                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number')->first() ?? null)
+                                                    <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                @else
+                                                    <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
+                                                @endif
                                                 </div>
 
                                                 <div class="clearfix">  </div>
@@ -299,7 +302,7 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                         <div class="text-center">
-                                                            <button type="button" class="btn btn-success">GO TO VAN QUEUE</button>
+                                                            <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -439,8 +442,7 @@
                                             <div>
                                                 <hr>
                                                 <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
-                                                <button class="btn bg-navy btn-flat pull-right"  value="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
-                                                <button type="button" class="btn bg-navy btn-flat pull-right" style="height: 50px;" data-toggle="modal" data-target="#ob-modal"><i class="fa fa-automobile"></i> DEPART</button>
+                                                <button name="depart" class="btn bg-navy btn-flat pull-right"  data-val="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
 
                                             <div class="modal" id="ob-modal">
@@ -458,7 +460,7 @@
                                                       <div class="modal-footer">
                                                         <div class="text-center">
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button type="button" class="btn bg-navy">DEPART</button>
+                                                            <button name="departOb" data-val="{{$terminal->destination_id}}" type="submit" class="btn bg-navy">DEPART</button>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -493,162 +495,7 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-7">
-        <div class="box box-solid">
-            <div class="box-body">
-                <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
 
-                        @foreach($terminals as $terminal)
-                            @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
-                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
-                            @endif
-                        @endforeach
-
-                    </ul>
-
-                    <div class="tab-content">
-                        @foreach($terminals as $terminal)
-                            @if($terminal->vanQueue->where('queue_number',1)->first()->plate_number ?? null)
-                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
-                            <div id="sellTicketss{{$terminal->destination_id}}" class="row">
-                                <div id="list-left1" class="dual-list list-left col-md-5">
-                                    <div class="box box-solid ticket-box">
-                                        <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
-                                            <span class="col-md-6">
-                                                <h6>On Deck:</h6>
-                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</h4>
-                                            </span>
-                                             <span class="pull-right btn-group">
-                                                <button type="button" id="changeDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                    <i class="fa fa-user"></i>
-                                                </button>
-                                                <button type="button" id="deleteDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                        <div id="changedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
-                                            <span class="col-md-8">
-                                                <h6>Driver:</h6>
-                                                 <h4>
-                                                    <a href="#" class="text-white" id="driverChange{{$terminal->destination_id}}"></a>
-                                                    <i class='fa fa-pencil'></i>
-                                                </h4>
-                                            </span>
-                                             <span class="pull-right btn-group">
-                                                <button type="button" id="onDeckBtn1-{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                    <i class="fa fa-chevron-left"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                        <div id="deletedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
-                                            <span class="col-md-12">
-                                                 <p>
-                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</strong> on deck?
-                                                 </p>
-                                            </span>
-                                             <span class="pull-right">
-                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
-                                                     {{method_field('DELETE')}}
-                                                     {{csrf_field()}}
-                                                    <button type="button" id="onDeckBtn2-{{$terminal->destination_id}}" class="btn btn-sm btn-primary">
-                                                        NO
-                                                    </button>
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        YES
-                                                    </button>
-                                                 </form>
-                                            </span>
-                                        </div>
-
-                                        <div class="box-body well">
-                                            <div class="text-right">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="btn-group">
-                                                            <a name ="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <i class=" glyphicon glyphicon-search"></i>
-                                                            </span>
-                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                    @foreach($terminal->transactions->where('status','OnBoard') as $transaction)
-                                                        <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
-                                                    @endforeach
-                                                </ul>
-                                                </div>
-                                            </div>
-                                            <div class="text-center ">
-                                                <button name="depart" value="{{$terminal->destination_id}}" href="" class="btn btn-primary btn-flat">Depart <i class="fa fa-automobile"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="list-arrows col-md-2 text-center">
-                                    <button id="board{{$terminal->destination_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
-                                        <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
-                                    </button>
-                                    <br>
-                                    <button id="unboard{{$terminal->destination_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
-                                         UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
-                                    </button>
-                                </div>
-
-                                <div id="list-right1" class="dual-list list-right col-md-5">
-                                    <div class="box box-solid ticket-box">
-                                        <div class="box-header bg-yellow bg-gray">
-                                            <span class="">
-                                                <h6>Sold Tickets for</h6>
-                                                 <h4>{{$terminal->description}}</h4>
-                                            </span>
-                                        </div>
-                                        <div class="box-body well">
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <div class="btn-group">
-                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-10">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <i class="glyphicon glyphicon-search"></i>
-                                                            </span>
-                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                    @foreach($terminal->transactions->where('status','Pending') as $transaction)
-                                                        <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
-                                                    @endforeach
-                                                </ul>
-                                                
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                            @endif
-                            @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 @endsection
@@ -729,7 +576,7 @@
                             $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())+1);
 
                         } else {
-                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-yellow pull-right">1</span>');
+                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-blue pull-right">1</span>');
                             buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
                         }
 
@@ -866,37 +713,61 @@
 {{--Boarding, Unboarding, and Departure--}}
 <script type="text/javascript">
         $(function () {
-            //Put Ticket into Pending
-
-            $('button[name="depart"]').on('click', function(e){
-                var terminalId = $(e.currentTarget).val();
+            //Depart the ticket
+            $('button[name="depart"]').on('click', function(){
+                var terminalId = $(this).data('val');
 
                 if($('#onBoardList'+terminalId).children().length > 0){
                     var transactions = [];
                     $('#onBoardList'+terminalId+' li').each(function(){
                         transactions.push($(this).data('val'));
-                        console.log(transactions);
                     });
+                    if(transactions.length >= 10) {
+                        $.ajax({
+                            method:'PATCH',
+                            url: '/home/transactions/'+terminalId,
+                            data: {
+                                '_token': '{{csrf_token()}}',
+                                'transactions' : transactions
+                            },
+                            success: function(){
+                                location.reload();
+                            }
 
-                    $.ajax({
-                        method:'PATCH',
-                        url: '/home/transactions/'+terminalId,
-                        data: {
-                            '_token': '{{csrf_token()}}',
-                            'transactions' : transactions
-                        },
-                        success: function(){
-                            location.reload();
-                        }
+                        });
+                    } else {
+                        $('#ob-modal').modal('show');
+                    }
 
-                    });
                 }
+            });
+
+            //Depart the ticket/s and add the van to the queue and mark it as OB
+            $('button[name="departOb"]').on('click',function(){
+               var terminalId  = $(this).data('val');
+               var transactions = [];
+
+                $('#onBoardList'+terminalId+' li').each(function(){
+                    transactions.push($(this).data('val'));
+                });
+
+                $.ajax({
+                    method:'PATCH',
+                    url: '/home/transactions/'+terminalId,
+                    data: {
+                        '_token': '{{csrf_token()}}',
+                        'transactions' : transactions
+                    },
+                    success: function(){
+                        location.reload();
+                    }
+
+                });
             });
 
             $('body').on('click', '.list-group .list-group-item', function () {
                 $(this).toggleClass('active');
             });
-
 
             $('button[name="board"]').on('click', function () {
                 var terminalId = $(this).data('terminal');
@@ -969,7 +840,6 @@
                 }
             });
 
-
             $('.checkBox').on('click',function() {
                 var checkBox = $(this);
                 if (!checkBox.hasClass('selected')) {
@@ -980,7 +850,6 @@
                     checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 }
             });
-
 
             $('[name="SearchDualList"]').keyup(function (e) {
                 var code = e.keyCode || e.which;
