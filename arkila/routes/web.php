@@ -165,8 +165,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['index','create','show','edit','update']
     ]);
     Route::get('/home/terminal', 'AdminCreateDriverReportController@chooseTerminal')->name('trips.admin.chooseDestination');
-    Route::get('/home/terminal/{terminals}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
-    Route::post('/home/terminal/{terminals}/create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
+    Route::get('/home/terminal/{terminals}/{destination}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
+    Route::post('/home/terminal/{terminals}/{destination}create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
 
     /* Van Queue */
      //Only working routes are: index and destroy
