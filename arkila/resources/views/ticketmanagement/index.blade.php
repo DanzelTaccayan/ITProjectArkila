@@ -153,9 +153,10 @@
                                 'numberOfTicket' : $('#regEditInput'+quantityId).val()
                             },
                         success: function(response) {
-                            new PNotify({
+                          if(response.success){
+                              new PNotify({
                                 title: "Success!",
-                                text: "Successfully updated <b>"+ destName +"</b> regular ticket's quantity to <b>" + response + "</b>",
+                                text: response.success,
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -169,15 +170,33 @@
                                 width: "",
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                            });
-
+                              });
+                            }else if(response.error){
+                              new PNotify({
+                                title: "Error!",
+                                text: response.error,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "error",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                              });
+                            }
                               $("#regViewQty" + quantityId).html(response)
 
                               $("#regViewQty" + quantityId).show();
                               $("#regViewAction" + quantityId).show();
                               $("#regEditQty" + quantityId).hide();
                         console.log(response);
-                        }
+                        },
 
                     });
 
@@ -196,9 +215,10 @@
                                 'numberOfTicket' : parseInt($('#disEditInput'+quantityDisId).val())
                             },
                         success: function(response) {
-                            new PNotify({
+                            if(response.success){
+                              new PNotify({
                                 title: "Success!",
-                                text: "Successfully update ticket",
+                                text: response.success,
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -212,16 +232,34 @@
                                 width: "",
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                            });
+                              });
+                            }else if(response.error){
+                              new PNotify({
+                                title: "Error!",
+                                text: response.error,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "error",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                              });
+                            }
+                              $("#discViewQty" + quantityDisId).html(response)
 
-                              $("#regViewQty" + quantityId).html(response)
-
-                              $("#regViewQty" + quantityId).show();
-                              $("#regViewAction" + quantityId).show();
-                              $("#regEditQty" + quantityId).hide();
+                              $("#discViewQty" + quantityDisId).show();
+                              $("#discViewAction" + quantityDisId).show();
+                              $("#discEditQty" + quantityDisId).hide();
                         console.log(response);
                         }
-
+                        
                     });
 
                
