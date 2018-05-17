@@ -28,18 +28,17 @@
                             <table class="table table-bordered table-striped dataTable">
                                 <thead>
                                     <tr>
-
                                         <th>Name</th>
                                         <th>Username</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- driver -->
                                     @foreach($userDrivers as $userDriver)
                                     <tr>
-                                        <td>{{$userDriver->first_name . " " . $userDriver->middle_name . " " . $userDriver->last_name}}</td>
+                                        <td>{{$userDriver->first_name}} {{$userDriver->last_name}}</td>
                                         <td>{{$userDriver->username}}</td>
-
                                         <td class="center-block">
                                             <div class="text-center">
                                                 <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
@@ -67,9 +66,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- customer -->
                                     @foreach($userCustomers as $userCustomer)
                                     <tr>
-                                        <td>{{$userCustomer->first_name . " " . $userCustomer->middle_name . " " . $userCustomer->last_name}}</td>
+                                        <td>{{$userCustomer->first_name}} {{$userCustomer->last_name}}</td>
                                         <td>{{$userCustomer->username}}</td>
                                         <td>{{$userCustomer->email}}</td>
                                         <td class="center-block">
@@ -77,8 +77,8 @@
                                                 <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
                                             </div>
                                         </td>
-                                        @endforeach
                                     </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                             </div>
