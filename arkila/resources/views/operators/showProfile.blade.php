@@ -27,7 +27,6 @@
                             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
                             <div class="profile-btn-group"> 
                                 <a href="{{route('operators.edit',[$operator->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
-                                <a href="{{route('archive.vanDriver',[$operator->member_id])}}" class="btn btn-block btn-info btn-sm"><strong>Archive</strong></a>
                             </div>
                             <hr> 
                             <div class="profile-btn-group">
@@ -36,8 +35,10 @@
                             <div style="margin: 15px;">
                                 <ul class="nav nav-stacked" style="border: 1px solid lightgray;">
                                     <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
-                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-red pull-right">{{count($operator->van)}}</span></a></li>
+                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">{{count($operator->van)}}</span></a></li>
                                     <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">{{count($operator->drivers)}}</span></a></li>
+                                    <li><a href="#archivedVans" data-toggle="tab">Archived Vans<span class="badge badge-pill bg-red pull-right">0</span></a></li>
+                                    <li><a href="#archivedDrivers" data-toggle="tab">Archived Drivers<span class="badge badge-pill bg-red pull-right">0</span></a></li>
                                 </ul>
                             </div>
                             
@@ -247,6 +248,58 @@
                                     </table>                  
                                         <!-- /.tab-pane -->
                                 </div>
+                                <div class="tab-pane" id="archivedVans">
+                                    <table id="archiveVan" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Plate Number</th>
+                                            <th>Model</th>
+                                            <th>Seating Capacity</th>
+                                            <th>Date Archived</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>huhu123</td>
+                                                <td>hello ace</td>
+                                                <td class="text-right">12</td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <a data-val='#' class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>VIEW</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="archivedDrivers">
+                                    <table id="archiveDriver" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Contact Number</th>
+                                            <th>Date Archived</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>ikaw</td>
+                                                <td>dyan</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>VIEW</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <!-- /.tab-pane -->
                             </div>
                                 <!-- /.tab-content -->          
@@ -287,6 +340,32 @@
         $('#van').DataTable({
             'paging': true,
             'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 1, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        })
+        $('#archiveVan').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 1, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        })
+        $('#archiveDriver').DataTable({
+            'paging': true,
+            'lengthChange': true,
             'searching': true,
             'ordering': true,
             'info': true,
