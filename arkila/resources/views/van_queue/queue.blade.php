@@ -107,16 +107,6 @@ ol.arrow-drag{
   transition: all .3s ease-out;
 
 }
-.queuenum a:afters{
-  position: absolute; 
-    content: '';
-    border: .5em solid transparent;
-    left: -1em;
-    top: 50%;
-    margin-top: -.5em;
-    transition: all .3s ease-out;
-
-}
 .queue-item:hover{
     left: -.5em;    
     border-left-color: #fa8072;    
