@@ -15,8 +15,8 @@
                 <div class="form-group">
                       {{csrf_field()}}
                       <div class="list-group">
-                        <select id="selectDestination" class="form-control" name="chooseTerminal">
-                          <option>Choose Route</option>
+                        <select id="selectDestination" class="form-control text-uppercase" name="chooseTerminal">
+                          <option class="text-uppercase">Choose Route</option>
                           @foreach($terminals as $terminal)
                             @php $findTerminalDown = $terminal->terminalOrigin()->groupBy('terminal_origin')->get(); @endphp
                             @foreach($findTerminalDown as $fKeys => $fValues)
