@@ -25,11 +25,11 @@
       </div>
       <div class="form-group">
           <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="1" step="0.25" name="numticket" value="{{old('numticket')}}" required>
+          <input type="number" class="form-control" min="0" step="1" name="numticket" value="{{old('numticket')}}" required>
       </div>
       <div class="form-group">
           <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="1" step="0.25" name="numticketDis" value="{{old('numticketDis')}}">
+          <input type="number" class="form-control" min="0" step="26" name="numticketDis" value="{{old('numticketDis')}}">
       </div>
   </div>
   @if ($type == 'Terminal')
@@ -129,6 +129,18 @@
           navigateTo(0); // Start at the beginning
         });
     </script>
+    <script>
+      $('[name="numticketDis"]').keydown(function (e) {
+        var key = e.keyCode || e.charCode;
+        if (key == 8 || key == 46) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+      });
+
+      $('[name="numticketDis"]').keypress(function (evt) {
+        evt.preventDefault();
+      });
     </script>
 
 @endsection

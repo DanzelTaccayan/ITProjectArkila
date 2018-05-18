@@ -142,7 +142,9 @@
                                                         <td id="actionBody{{$transaction->transaction_id}}">
                                                             <div class="text-center">
                                                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-money"></i> Refund</button>
+
                                                                 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#change-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-edit"></i> Change Destination</button>
+
                                                                 <button value="{{$transaction->transaction_id}}" name="deleteTransaction" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-trash"></i> Delete</button>
                                                             </div>
                                                         </td>
@@ -251,8 +253,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="confirmBoxModal"></div>
 
     @endsection
 

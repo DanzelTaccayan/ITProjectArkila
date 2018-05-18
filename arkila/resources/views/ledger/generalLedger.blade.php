@@ -177,25 +177,7 @@
 
     $(document).ready(function() {
         $('.generalLedgerTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'print',
-                    text: 'PRINT GENERAL LEDGER',
-                    className: 'btn btn-success btn-flat btn-sm',
-                    title: 'Ban Trans General Ledger',
-                    autoPrint: false,
-                    ordering: false,
-                    footer: true,
-                    download: 'open',
-                    init: function(api, node, config) {
-                       $(node).removeClass('dt-button')
-                    },
-                    exportOptions : {
-                        columns: ':not(:last-child)',
-                    }
-                }
-            ],
+
             'paging': false,
             'lengthChange': true,
             'searching': true,
@@ -207,8 +189,26 @@
                 'bSortable': false,
                 'aTargets': [-1] /* 1st one, start by the right */
             }],
-
-
+            
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    text: 'PRINT GENERAL LEDGER',
+                    className: 'btn btn-success btn-flat btn-sm',
+                    title: 'Ban Trans General Ledger',
+                    autoPrint: false,
+                    footer: true,
+                    download: 'open',
+                    init: function(api, node, config) {
+                       $(node).removeClass('dt-button')
+                    },
+                    exportOptions : {
+                        columns: ':not(:last-child)',
+                    }
+                }
+            ],
+            
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
 

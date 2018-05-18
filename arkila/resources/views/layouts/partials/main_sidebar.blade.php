@@ -27,7 +27,13 @@
                     <span>POS</span>
                 </a>
             </li>
-            <li class="treeview{{--  {{ Request::is('home/transactions') ? 'active' : '' }} --}}">
+            <li class="{{ Request::is('home/route') ? 'active' : '' }}">
+                <a href="/home/route">
+                    <i class="fa fa-road"></i>
+                    <span>Routes</span>
+                </a>
+            </li>
+            <li class="treeview {{--  {{ Request::is('home/transactions') ? 'active' : '' }} --}}">
                 <a href="">
                     <i class="fa fa-ticket"></i>
                     <span>Ticket Management</span>
@@ -39,12 +45,6 @@
                     <li class="#"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
                     <li class="#}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
-            </li>
-            <li class="{{ Request::is('home/route') ? 'active' : '' }}">
-                <a href="/home/route">
-                    <i class="fa fa-road"></i>
-                    <span>Routes</span>
-                </a>
             </li>
             <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
                 <a href="#">
@@ -99,11 +99,18 @@
                     <li class="{{ Request::is('home/general-ledger') ? 'active' : '' }}"><a href="{{route('ledger.generalLedger')}}"><i class="fa fa-circle-o"></i> General Ledger</a></li>
                 </ul>
             </li>
-            <li class="header">SETTING</li>
-            <li class="{{ Request::is('home/settings') ? 'active' : '' }}">
-                <a href="{{route('settings.index')}}">
-                    <i class="fa fa-gear"></i> <span>Settings</span>
+            <li class="treeview {{ Request::is('home/settings') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-gear"></i>
+                    <span>Settings</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::is('home/settings') ? 'active' : '' }}"><a href="{{route('settings.index')}}"><i class="fa fa-circle-o"></i> Fees and Features</a></li>
+                    <li class=""><a href="#"><i class="fa fa-circle-o"></i> Company Profile</a></li>
+                </ul>
             </li>
             <li class="{{ Request::is('home/user-management') ? 'active' : '' }}">
                 <a href="{{route('usermanagement.dashboard')}}">

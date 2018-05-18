@@ -7,15 +7,17 @@
 
 @stop
 @section('content')
-<div class="box">
-
-
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">USER MANAGEMENT</h2>
+    </div>
+    <div class="box">
         <div class="col-xl-6">
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab_2" data-toggle="tab">Driver</a></li>
-                    <li><a href="#tab_3" data-toggle="tab">Customer</a></li>
+                    <li class="active"><a href="#tab_2" data-toggle="tab">DRIVER</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">CUSTOMER</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -37,11 +39,11 @@
                                     <!-- driver -->
                                     @foreach($userDrivers as $userDriver)
                                     <tr>
-                                        <td>{{$userDriver->first_name}} {{$userDriver->last_name}}</td>
+                                        <td>{{strtoupper($userDriver->first_name)}} {{strtoupper($userDriver->last_name)}}</td>
                                         <td>{{$userDriver->username}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -69,12 +71,12 @@
                                     <!-- customer -->
                                     @foreach($userCustomers as $userCustomer)
                                     <tr>
-                                        <td>{{$userCustomer->first_name}} {{$userCustomer->last_name}}</td>
+                                        <td>{{strtoupper($userCustomer->first_name)}} {{strtoupper($userCustomer->last_name)}}</td>
                                         <td>{{$userCustomer->username}}</td>
                                         <td>{{$userCustomer->email}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-default"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -91,8 +93,7 @@
             </div>
             <!-- /.tab-pane -->
         </div>
-        <!-- /.tab-content -->
-
+    </div>
 </div>
 @endsection
 

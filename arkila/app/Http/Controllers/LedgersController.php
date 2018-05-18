@@ -220,6 +220,7 @@ class LedgersController extends Controller
         $date = Carbon::now();
         $ledgers = Ledger::all()->where('description', '!=' , 'Booking Fee')->where('description', '!=' , 'SOP');
         $pdf = PDF::loadView('pdf.daily', compact('ledgers', 'date'));
+        $pdf->setPaper('letter', 'landscape');
         return $pdf->stream('ledger.pdf');
     }
 }
