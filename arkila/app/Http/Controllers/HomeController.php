@@ -48,24 +48,6 @@ class HomeController extends Controller
         return view('usermanagement.index', compact('userDrivers', 'userCustomers'));
     }
 
-    public function archive() {
-        $operators = Member::allOperators()->where('status','Inactive')->get();
-
-        return view('archive.index', compact('operators'));
-
-    }
-
-    public function showProfile(Member $archive)
-    {
-
-        return view('archive.operatorArchive',compact('archive'));
-    }
-
-    public function vanDriver(Member $operator) {
-
-        return view('archive.vanDriver', compact('operator'));
-
-    }
     public function changeFeatures(Feature $feature) {
         if($feature->status === 'enable'){
           $feature->status = 'disable';
