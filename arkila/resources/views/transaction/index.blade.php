@@ -348,11 +348,11 @@
                                                         <div name="deletedriver-header" data-terminal="{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                                             <span class="col-md-12">
                                                                  <p>
-                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</strong> on deck?
+                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->van->plate_number}}</strong> on deck?
                                                                  </p>
                                                             </span>
                                                              <span class="pull-right">
-                                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
+                                                                 <form method="POST" action="{{route('vanqueue.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
                                                                      {{method_field('DELETE')}}
                                                                      {{csrf_field()}}
                                                                     <button type="button" data-terminal="{{$terminal->destination_id}}" name="onDeckBtn2" class="btn btn-sm btn-primary">
@@ -872,35 +872,36 @@
      $(function(){
         $('div[name="changedriver-header"]').hide();
         $('div[name="deletedriver-header"]').hide();
+
         $('button[name="changeDriverBtn"]').click(function(){
-            let terminalId = $(this).data('terminal');
+            var terminalId = $(this).data('terminal');
 
             $('#ondeck-header'+terminalId).hide();
-            // $('div[name="changedriver-header" data-terminal="'+terminalId+'"]').show();
-            $('div[name="changedriver-header" data-terminal="'+terminalId+'"]').removeClass("hidden");
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').show();
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').removeClass("hidden");
 
         });
 
         $('button[name="deleteDriverBtn"]').click(function(){
-            let terminalId = $(this).data('terminal');
+            var terminalId = $(this).data('terminal');
 
             $("#ondeck-header"+terminalId).hide();
-            // $('div[name="deletedriver-header" data-terminal="'+terminalId+'"]').show();
-            $('div[name="deletedriver-header" data-terminal="'+terminalId+'"]').removeClass("hidden");
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').show();
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').removeClass("hidden");
         });
 
         $('button[name="onDeckBtn1"]').click(function(){
-            let terminalId = $(this).data('terminal');
+            var terminalId = $(this).data('terminal');
 
             $("#ondeck-header"+terminalId).show();
-            $('div[name="changedriver-header" data-terminal="'+terminalId+'"]').hide();
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').hide();
         });
 
         $('button[name="onDeckBtn2"]').click(function(){
-            let terminalId = $(this).data('terminal');
+            var terminalId = $(this).data('terminal');
 
             $("#ondeck-header"+terminalId).show();
-            $('div[name="deletedriver-header" data-terminal="'+terminalId+'"]').hide();
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').hide();
         });
 
       });
@@ -911,14 +912,14 @@
         $('div[name="boardTickets"]').hide();
 
         $('button[name="boardPageBtn"]').click(function(){
-            let terminalId = $(this).data('terminal');
+            var terminalId = $(this).data('terminal');
 
             $("#sellTickets"+terminalId).hide();
             $("#boardTickets"+terminalId).show();
         });
 
-        $('button[name="#sellPageBtn"]').click(function(){
-            let terminalId = $(this).data('terminal');
+        $('button[name="sellPageBtn"]').click(function(){
+            var terminalId = $(this).data('terminal');
 
             $("#sellTickets"+terminalId).show();
             $("#boardTickets"+terminalId).hide();
@@ -968,16 +969,15 @@
 </script>
 <script>
     $(function() {
-        @foreach($terminals as $terminal)
-        @if($trip = $terminal->vanQueue->where('queue_number',1)->first())
-            $('#driverChange{{$terminal->destination_id}}').editable({
+        $('a[name="driverChange"]').each(function(){
+            $(this).editable({
                 type: 'select',
                 title: 'Change Driver',
-                value: "{{$terminal->vanQueue->where('queue_number',1)->first()->driver_id}}",
+                value: $(this).data('driver'),
                 source: "{{route('transactions.listSourceDrivers')}}",
                 sourceCache: true,
-                pk: '{{$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id}}',
-                url: '{{route('transactions.changeDriver',[$trip->van_queue_id])}}',
+                pk: $(this).data('van'),
+                url: '/changeDriver/'+$(this).data('van'),
                 validate: function(value){
                     if($.trim(value) == ""){
                         return "This field is required";
@@ -999,8 +999,8 @@
                     console.log(response);
                 }
             });
-        @endif
-        @endforeach
+        });
+
     });
 </script>
 
