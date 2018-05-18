@@ -33,7 +33,6 @@ class VanQueueController extends Controller
                 ->orWhereNotNull('queue_number');
         })
             ->where('status','Active')
-            ->where('location',$mainTerminal->destination_name)
             ->get();
 
         return view('van_queue.queue', compact('terminals','queue','vans','destinations','drivers'));
