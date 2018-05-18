@@ -831,7 +831,7 @@ input:checked+.slider:before {
     *list-style: decimal; /* Keep using default numbering for IE6/7 */
     font: 15px 'trebuchet MS', 'lucida sans';
     padding: 0;
-    margin-bottom: 4em;
+    margin-bottom: 0;
     text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
 
@@ -841,13 +841,15 @@ input:checked+.slider:before {
 
 .sidequeue-body{
   margin-top:10px;
-  margin-bottom:  10px;
-  height: 450px;
+  margin-bottom: 5px;
+  height: 420px;
 }
+
 .sidequeue-body-color{
-  height:450px;
-  background: aliceblue;
+  height: 410px;
+  margin: 0;
 }
+
 
 .sidequeue-list{
   padding-left: 10px;

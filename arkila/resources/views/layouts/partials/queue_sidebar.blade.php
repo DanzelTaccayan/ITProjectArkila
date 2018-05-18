@@ -67,6 +67,132 @@
                                         </div>
                                     </span>
                                 </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">4</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">5</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">6</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">7</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">8</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">9</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
+                                <li id="unit" data-vanid="" class="form-horizontal">
+                                    <span id="trip" class="list-border">
+                                        <div class="sidequeuenum">
+                                            <p name="queueIndicator" id="queue">10</p>
+                                        </div>
+                                        <div class=item id="item">
+                                            <div  class="row">
+                                                <div class="col-md-12">
+                                                    <p class="hidden"></p>
+                                                    SAMP 123
+                                                    <div class="pull-right">
+                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </li>
                             </ol>
                         </div>
                     </div>
