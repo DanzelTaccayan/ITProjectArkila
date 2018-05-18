@@ -62,5 +62,9 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminAuthenticated::class,
         'driver' => \App\Http\Middleware\DriverAuthenticated::class,
         'customer' => \App\Http\Middleware\CustomerAuthenticated::class,
+        'online-rental' => \App\Http\Middleware\OnlineRental::class,
+        'walkin-rental' => \App\Http\Middleware\WalkInRental::class,
+        'online-reservation' => \App\Http\Middleware\OnlineReservation::class,
+        'walkin-reservation' => \App\Http\Middleware\WalkInReservation::class,
     ];
 }

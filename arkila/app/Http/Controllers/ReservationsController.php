@@ -12,6 +12,10 @@ use Carbon\Carbon;
 
 class ReservationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('walkin-reservation', ['only' => ['create', 'store', 'update', 'destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,11 +25,11 @@ class ReservationsController extends Controller
     {
         //
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
-    
+
         $reservations = Reservation::all();
         $destinations = Destination::all();
         $discounts = Fee::where('type', 'Discount')->get();
-        
+
         return view('reservations.index', compact('discounts','reservations', 'destinations', 'terminals'));
     }
 
@@ -37,7 +41,7 @@ class ReservationsController extends Controller
     public function create()
     {
         $destinations = Destination::all();
-        
+
         return view('reservations.create', compact('destinations'));
     }
 
@@ -62,7 +66,7 @@ class ReservationsController extends Controller
         } else {
             return back()->withInput()->withErrors('Invalid Destination!');
         }
-        
+
         $name = ucwords(strtolower($request->name));
 
         $timeRequest = new Carbon(request('time'));
@@ -99,7 +103,7 @@ class ReservationsController extends Controller
               Rule::in(['Accepted', 'Declined'])
             ],
           ]);
-    
+
         $reservation->update([
 
             'status' => request('click'),

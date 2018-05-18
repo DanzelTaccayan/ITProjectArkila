@@ -15,7 +15,7 @@ use App\Fee;
 
 class HomeController extends Controller
 {
-   
+
     /**
      * Show the application dashboard.
      *
@@ -67,11 +67,11 @@ class HomeController extends Controller
 
     }
     public function changeFeatures(Feature $feature) {
-        if($feature->status === 'enable'){
+        if($feature->status == 'enable'){
           $feature->status = 'disable';
           session()->flash('success', $feature->description . 'has been successfully disabled');
           //$message = ['success' => $feature->description . 'has been successfully disabled'];
-        }elseif($feature->status === 'disable'){
+        }elseif($feature->status == 'disable'){
           $feature->status = 'enable';
           //$message = ['success' => $feature->description . 'has been successfully enabled'];
           session()->flash('success', $feature->description . 'has been successfully enabled');
