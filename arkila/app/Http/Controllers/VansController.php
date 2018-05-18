@@ -399,58 +399,6 @@ class VansController extends Controller
         }
     }
 
-    public function archiveVan(Van $van)
-    {
-        // Start transaction!
-        DB::beginTransaction();
-        try
-        {
-
-            //update queue_list if the van is on queue
-            if($vanOnQueue = $van->trips()->whereNotNull('queue_number')->first())
-            {
-                foreach(Trip::whereNotNull('queue_number')->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip)
-                {
-                    $trip->update([
-                        'queue_number' =>  $trip->queue_number -1
-                    ]);
-                }
-                $vanOnQueue->delete();
-            }
-
-            //Archive its operator
-            if($van->operator()->first())
-            {
-                $van->archivedMember()->attach($van->operator()->first()->member_id);
-                $van->members()->detach($van->operator()->first()->member_id);
-            }
-
-            //Archive its driver
-            if($van->driver()->first())
-            {
-                $van->archivedMember()->attach($van->driver()->first()->member_id);
-                $van->members()->detach($van->driver()->first()->member_id);
-            }
-
-            //Archive the relationship of the driver and operator, if they exists
-            if($van->driver()->first() && $van->operator()->first())
-            {
-                $van->operator()->first()->archivedDriver()->attach($van->driver()->first()->member_id);
-            }
-
-            $van->update([
-                'status' => 'Inactive',
-            ]);
-
-            DB::commit();
-        }
-        catch(\Exception $e)
-        {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
-        }
-        return back();
-    }
 
     public function generatePDF()
     {

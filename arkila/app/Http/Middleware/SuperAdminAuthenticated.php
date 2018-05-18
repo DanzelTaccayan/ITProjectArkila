@@ -18,7 +18,7 @@ class SuperAdminAuthenticated
     {
         if(Auth::check()){
           $customermodule = Feature::where('description','Customer Module')->first();
-          if(Auth::user()->isSuperAdmin() ||$customermodule->status == 'enable'){
+          if(Auth::user()->isSuperAdmin() || $customermodule->status == 'enable'){
             if(Auth::user()->isCustomer() && Auth::user()->isEnable()){
               return redirect(route('customermodule.user.index'));
             }

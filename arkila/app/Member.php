@@ -41,6 +41,11 @@ class Member extends Model
       return $this->hasMany(Trip::class, 'driver_id', 'member_id');
     }
 
+    public function vanQueue()
+    {
+        return $this->hasOne(VanQueue::class,'driver_id','member_id');
+    }
+
     public function user()
     {
       return $this->belongsTo(User::class, 'user_id', 'id');

@@ -11,16 +11,19 @@ use App\Http\Requests\CustomerReservationRequest;
 
 class MakeReservationController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('online-reservation');
+    }
     public function createReservation()
-
     {
     	$destinations = Destination::all();
     	return view('customermodule.user.reservation.customerReservation', compact('destinations'));
     }
 
     public function storeReservation(CustomerReservationRequest $request)
-    {	
-    	$fullName = null;	
+    {
+    	$fullName = null;
     	if(Auth::user()->middle_name == null){
     		$fullName = Auth::user()->first_name . " " . Auth::user()->last_name;
     	}else{
@@ -30,7 +33,7 @@ class MakeReservationController extends Controller
     	$seat = $request->numberOfSeats;
         $destinationReq = $request->destination;
         $findDest = Destination::all();
-        
+
         foreach ($findDest->where('destination_id', $destinationReq) as $find) {
             $findAmount = $find->amount;
         }
@@ -65,7 +68,7 @@ class MakeReservationController extends Controller
     			"comments" => $request->message,
     		]);
     	}
-    	
+
     	return redirect(route('customermodule.user.transactions.customerTransactions'))->with('success', 'Successfully made a Reservation');
     }
 }

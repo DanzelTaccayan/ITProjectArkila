@@ -55,8 +55,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/operators', 'OperatorsController',[
         'except' => ['destroy']
     ]);
-    Route::delete('/home/operators/{archivedOperator}','OperatorsController@destroy')->name('operators.destroy');
-
     Route::get('/home/operators/profile/{operator}','OperatorsController@showProfile')->name('operators.showProfile');
 
     /************ Drivers ******************************/
@@ -140,16 +138,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['show', 'edit']
     ]);
-
-    Route::get('/home/archive', 'HomeController@archive')->name('archive.index');
-    Route::get('/home/operatorVanDriver/{operator}', 'HomeController@vanDriver')->name('archive.vanDriver');
-    Route::get('/home/archive/profile/{archive}','HomeController@showProfile')->name('archive.showProfile');
-    Route::patch('/home/operators/{driver}/archiveDriver', 'DriversController@archiveDriver')->name('drivers.archiveDriver');
-    Route::post('/home/operators/{archive}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
-    Route::patch('/home/archive/operator/{archivedOperator}/restore','OperatorsController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
-    Route::patch('/home/archive/driver/{archivedDriver}/restore','DriversController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
-
-
+    
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
     ]);
@@ -201,7 +190,14 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');
     Route::delete('/selectedLastTicket/{destination}','TransactionsController@deleteLastSelectedTicket')->name('transactions.selectedTicket');
     /********Archive ********/
-    Route::patch('/home/vans/{van}/archiveVan', 'VansController@archiveVan')->name('vans.archiveVan');
+    Route::get('/home/archive', 'ArchiveController@index')->name('archive.index');
+    Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
+    Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
+    Route::patch('/home/archive/{operator}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
+    Route::patch('/home/archive/operator/{archivedOperator}/restore','OperatorsController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
+    Route::patch('/home/archive/driver/{archivedDriver}/restore','DriversController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
+
+    /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
     Route::get('/operators/generatePDF', 'OperatorsController@generatePDF')->name('pdf.operators');
     Route::get('/drivers/generatePerDriver/{driver}', 'DriversController@generatePerDriver')->name('pdf.perDriver');
@@ -278,11 +274,11 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
     /**Services**/
     /*Rental*/
-    Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental');
-    Route::post('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental');
+    Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
+    Route::post('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
-    Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation');
-    Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation');
+    Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');
+    Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
     /*Transactions*/
     Route::get('/home/view-transactions', 'CustomerModuleControllers\ViewTransactionsController@viewTransactions')->name('customermodule.user.transactions.customerTransactions');
     Route::patch('/home/view-transactions/delete-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@destroyRental')->name('customermodule.deleteRental');
