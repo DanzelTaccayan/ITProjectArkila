@@ -13,6 +13,10 @@ use Illuminate\Validation\Rule;
 
 class RentalsController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('walkin-rental', ['only' => ['create', 'store', 'update', 'destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

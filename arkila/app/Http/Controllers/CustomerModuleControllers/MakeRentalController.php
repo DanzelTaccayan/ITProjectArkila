@@ -15,6 +15,11 @@ use App\Http\Controllers\Controller;
 
 class MakeRentalController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('online-rental');
+    }
+
     public function createRental()
     {
     	$vanmodels = VanModel::all();

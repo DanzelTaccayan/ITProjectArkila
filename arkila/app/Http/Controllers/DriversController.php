@@ -337,37 +337,6 @@ class DriversController extends Controller
             return redirect(route('drivers.index'));
         }
     }
-
-    public function archiveDriver(Member $driver)
-    {
-        // Start transaction!
-        DB::beginTransaction();
-        try {
-            if($driver->operator_id) {
-                $driver->archivedOperator()->attach($driver->operator_id);
-                $driver->update([
-                    'operator_id' => null
-                ]);
-            }
-
-            if($driver->van()->first()) {
-                $driver->archivedVan()->attach($driver->van()->first()->plate_number);
-                $driver->van()->detach($driver->van()->first()->plate_number);
-            }
-
-            $driver->update([
-                'status' => 'Inactive',
-            ]);
-
-            DB::commit();
-        } catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
-        }
-
-        return back();
-    }
-
     public function generatePDF()
     {
         $date = Carbon::now();
@@ -381,23 +350,5 @@ class DriversController extends Controller
         $date = Carbon::now();
         $pdf = PDF::loadView('pdf.perDriver', compact('driver', 'date'));
         return $pdf->stream("$driver->last_name"."$driver->first_name-Bio-Data.pdf");
-    }
-
-    public function restoreArchivedDriver(Member $archivedDriver)
-    {
-        // Start transaction!
-        DB::beginTransaction();
-        try {
-            $archivedDriver->update([
-                'status' => 'Active',
-                'date_archived' => null
-            ]);
-            DB::commit();
-        } catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
-        }
-
-        return back();
     }
 }
