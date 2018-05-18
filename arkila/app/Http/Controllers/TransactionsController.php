@@ -324,20 +324,6 @@ class TransactionsController extends Controller
         return 'success';
     }
 
-    public function changeDestination(Transaction $transaction)
-    {
-        $this->validate(request(),[
-            'changeDestination' => 'required|exists:destination,destination_id'
-        ]);
-        $newTicket = Ticket::where('destination_id',request('destination'))->where('is_sold',0)->first();
-
-        $transaction->update([
-            'destination'=> $newTicket->destination->destination_name,
-            'ticket_id' => $newTicket->ticket_id
-        ]);
-        return 'success';
-    }
-
     /**
      * Remove the specified resource from storage.
      *

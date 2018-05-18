@@ -272,7 +272,7 @@
                         'destination': $('#changeDestination'+transactionId).val(),
                     },
                     success: function(response){
-                        $('#changeDestination'+transactionId).val(response.destinationId);
+                        $('#changeDestination'+transactionId).val(response);
                     }
 
                 });
