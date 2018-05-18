@@ -41,7 +41,6 @@ class RouteRequest extends FormRequest
                         "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                        "numticket" => 'required|numeric|digits_between:1,1000',
                         "type" => [
                             'required',
                             Rule::in(['Terminal', 'Route'])
@@ -55,7 +54,6 @@ class RouteRequest extends FormRequest
                         "addTerminal" => 'required|unique:destination,destination_name|max:70',
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                        "numticket" => 'required|numeric|digits_between:1,1000',
                         "dest" => 'required',
                         "dest.*" => 'numeric',
                         "type" => [
@@ -79,7 +77,6 @@ class RouteRequest extends FormRequest
                         "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                        "numticket" => 'required|numeric|digits_between:1,1000',
                         "type" => [
                             'required',
                             Rule::in(['Terminal', 'Route'])
@@ -93,7 +90,6 @@ class RouteRequest extends FormRequest
                         "addTerminal" => 'required|max:70|unique:destination,destination_name,'. $idRoute . ',destination_id',
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
-                        "numticket" => 'required|numeric|digits_between:1,1000',
                         "dest" => 'required',
                         "dest.*" => 'numeric',
                         "type" => [

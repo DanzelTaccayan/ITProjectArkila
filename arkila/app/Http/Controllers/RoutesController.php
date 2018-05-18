@@ -60,6 +60,8 @@ class RoutesController extends Controller
         $main = Destination::where('is_main_terminal', '1')->first();
         $message = null;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        $disTicketCount = 0;
+        $counter = 0;
 
         if ($request->type == 'Terminal')
         {    
@@ -73,9 +75,24 @@ class RoutesController extends Controller
                 'number_of_tickets' => $request->numticket,
             ]);
 
-            foreach($discountedTickets as $discountedTicket)
+            for($c=1; $c <= $request->numticketDis; $c++)
             {
-                $ticketNumber = $name.'-'.$discountedTicket;
+                if($disTicketCount >= 26)
+                {
+                    $disTicketCount = 0;
+                    $counter++;
+                }
+    
+                if($c <= 26)
+                {
+                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
+                }
+                else
+                {
+                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;                
+                }
+    
+                $disTicketCount++;
                 Ticket::create([
                     'ticket_number' => $ticketNumber,
                     'destination_id' => $terminal->destination_id,
@@ -84,7 +101,7 @@ class RoutesController extends Controller
                     'type' => 'Discount'
                 ]);
             }
-
+    
             for($i=1; $i <= $request->numticket; $i++ )
             {
                 $ticketName = $name.'-'.$i;
@@ -112,9 +129,36 @@ class RoutesController extends Controller
                 'number_of_tickets' => $request->numticket,
             ]);
 
-            foreach($discountedTickets as $discountedTicket)
+            // foreach($discountedTickets as $discountedTicket)
+            // {
+            //     $ticketNumber = $name.'-'.$discountedTicket;
+            //     Ticket::create([
+            //         'ticket_number' => $ticketNumber,
+            //         'destination_id' => $route->destination_id,
+            //         'is_sold' => false,
+            //         'fare' => $request->discountedFare,
+            //         'type' => 'Discount'
+            //     ]);
+            // }
+
+            for($c=1; $c <= $request->numticketDis; $c++)
             {
-                $ticketNumber = $name.'-'.$discountedTicket;
+                if($disTicketCount >= 26)
+                {
+                    $disTicketCount = 0;
+                    $counter++;
+                }
+    
+                if($c <= 26)
+                {
+                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
+                }
+                else
+                {
+                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;                
+                }
+    
+                $disTicketCount++;
                 Ticket::create([
                     'ticket_number' => $ticketNumber,
                     'destination_id' => $route->destination_id,
@@ -123,6 +167,7 @@ class RoutesController extends Controller
                     'type' => 'Discount'
                 ]);
             }
+
 
             for($i=1; $i <= $request->numticket; $i++ )
             {
@@ -204,30 +249,6 @@ class RoutesController extends Controller
             ['type', 'Discount']
             ])->get();
         $name = ucwords(strtolower($request->addTerminal));
-
-        foreach($discountedTicket as $tickets)
-        {
-            $tickets->update([
-                'fare' => $request->discountedFare, 
-            ]);
-        }
-
-        foreach ($regularTicket as $tickets)
-        {
-            $tickets->delete();
-        }
-
-        for($i=1; $i <= $request->numticket; $i++ )
-        {
-            $ticketName = $name.'-'.$i;
-            Ticket::create([
-                'ticket_number' => $ticketName,
-                'destination_id' => $route,
-                'is_sold' => false,
-                'fare' => $request->regularFare,
-                'type' => 'Regular'
-            ]);
-        }
 
         if($request->type == 'Terminal')
         {
