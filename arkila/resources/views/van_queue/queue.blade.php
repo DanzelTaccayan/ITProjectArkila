@@ -398,7 +398,7 @@ ol.arrow-drag{
                             </div>
                             <div class="well scrollbar scrollbar-info  thin special-unit-body">
                               <ol id='specialUnitList{{$terminal->destination_id}}' class="special-list">
-                                  @foreach($terminal->vanQueue()->where('has_privilege',1)->get() as $specializedVanOnQueue)
+                                  @foreach($terminal->vanQueue()->where('has_privilege',1)->whereNull('queue_number')->get() as $specializedVanOnQueue)
                                       <li>
                                     <span class="list-border">
                                         <div id="item-sp{{$specializedVanOnQueue->van_queue_id}}">
