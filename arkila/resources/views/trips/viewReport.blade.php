@@ -14,17 +14,18 @@
 .msgreen {
     background: mediumseagreen;
 }
+.smaroon {
+    background: #800000;
+}
 </style>
 @endsection
 @section('content')
+<div class="padding-side-5">
+    <div>
+        <h2 class="text-white">VIEW DRIVER REPORT</h2>
+    </div>
 
 <div class="box" style="box-shadow: 0px 5px 10px gray;">
-    <div class="box-header with-border text-center">
-        <a href="{{route('trips.driverReport')}}" class="pull-left btn btn-default"><i class="fa  fa-chevron-left"></i></a>
-        <h3 class="box-title">
-            Driver Report Details
-        </h3>
-    </div>
     <div class="box-body">
         
             
@@ -93,7 +94,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="text-center"><h4 class="report-header msgreen">SHARES</h4></div>
+                    <div class="text-center"><h4 class="report-header smaroon">SHARES</h4></div>
                 <table class="table table-bordered table-striped table-responsive">
                         <tbody>
                             <tr>
@@ -133,9 +134,7 @@
                     </div>
                     </div>
                 </div>
-
-            
-       
     </div>
 </div>
+
 @endsection
