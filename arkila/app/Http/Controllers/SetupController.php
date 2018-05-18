@@ -52,6 +52,7 @@ class SetupController extends Controller
             "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
             "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
             "numticket" => 'required|numeric|digits_between:1,1000',
+            "numticketDis" => 'required|numeric|digits_between:1,1000',
             "addFeesDescSop" => 'required|max:100',
             "addFeesDescCom" => 'required|max:100',
             "addSop" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
@@ -66,6 +67,8 @@ class SetupController extends Controller
 
 
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        $disTicketCount = 0;
+        $counter = 0;
 
         Profile::create([
             'contact_number' => $request->contactNumber,
@@ -93,9 +96,28 @@ class SetupController extends Controller
         $destTerminal->routeOrigin()
         ->attach($mainTerminal->destination_id, ['terminal_destination' => $destTerminal->destination_id]);
 
-        foreach($discountedTickets as $discountedTicket)
+        // foreach($discountedTickets as $discountedTicket)
+        // {
+
+        // }
+        for($c=1; $c <= $request->numticketDis; $c++)
         {
-            $ticketNumber = $destName.'-'.$discountedTicket;
+            if($disTicketCount >= 26)
+            {
+                $disTicketCount = 0;
+                $counter++;
+            }
+
+            if($c <= 26)
+            {
+                $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount];
+            }
+            else
+            {
+                $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount].$counter;                
+            }
+
+            $disTicketCount++;
             Ticket::create([
                 'ticket_number' => $ticketNumber,
                 'destination_id' => $destTerminal->destination_id,
