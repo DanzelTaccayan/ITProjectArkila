@@ -11,6 +11,6 @@ class CustomerUserHomeController extends Controller
     public function index()
     {
     	$announcements = Announcement::latest()->where('viewer', '=', 'Public')->orWhere('viewer', '=', 'Customer Only')->get();
-    	return view('customermodule.user.index', compact('announcements'));
+    	return view('customermodule.index', compact('announcements'));
     }
 }
