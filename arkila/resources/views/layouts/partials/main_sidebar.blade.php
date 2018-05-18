@@ -42,7 +42,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="#"><a href="#"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
+                    <li class="#"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
                     <li class="#}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
             </li>

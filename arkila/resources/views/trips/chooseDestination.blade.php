@@ -18,8 +18,22 @@
                         <select id="selectDestination" class="form-control" name="chooseTerminal">
                           <option>Choose Terminal</option>
                           @foreach($terminals as $terminal)
-                          
-                            <option value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</option>
+                            @php $findTerminalDown = $terminal->terminalOrigin()->groupBy('terminal_origin')->get(); @endphp
+                            @foreach($findTerminalDown as $fKeys => $fValues)
+                              @php
+                                $origin = \App\Destination::where('destination_id', $fValues->pivot->terminal_origin)->first();
+                                $destination = \App\Destination::where('destination_id', $fValues->pivot->terminal_destination)->first();
+                              @endphp
+                            <option value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} to {{$destination->destination_name}}</option>
+                            @endforeach
+                            @php $findTerminalUp = $terminal->terminalOrigin()->groupBy('terminal_destination')->get(); @endphp
+                            @foreach($findTerminalUp as $fKeys => $fValues)
+                              @php
+                                $origin = \App\Destination::where('destination_id', $fValues->pivot->terminal_destination)->first();
+                                $destination = \App\Destination::where('destination_id', $fValues->pivot->terminal_origin)->first();
+                              @endphp
+                              <option value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} to {{$destination->destination_name}}</option>
+                              @endforeach
                           @endforeach
                         </select>
                       </div>
@@ -51,9 +65,19 @@
 
 <script type="text/javascript">
   $('#selectDestination').on('change', function(){
-    var terminalId = $(this).val();
+    var originDestinationId = $(this).val();
+    originDestinationId = originDestinationId.split(/(\s+)/);
+    // console.log(originDestinationId);
+    // idArray = [];
+    // for(var i = 0; i < originDestinationId.length; i++){
+    //   idArray.push(originDestinationId[i]);
+    //   if(i != originDestinationId.length-1){
+    //     idArray.push(" ");
+    //   }
+    // }
+    // console.log(idArray);
     $('#createReport').click(function(){
-      window.location.href = '/home/terminal/'+terminalId+'/create-report';
+      window.location.href = '/home/terminal/'+originDestinationId[0]+'/'+originDestinationId[2]+'/create-report';
       return false;
     });
   });

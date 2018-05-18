@@ -12,6 +12,7 @@ use App\VanQueue;
 use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
+use App\Fee;
 use DB;
 
 class TransactionsController extends Controller
@@ -32,7 +33,7 @@ class TransactionsController extends Controller
 
     public function manageTickets()
     {
-        $terminals = Destination::where('is_main_terminal','!=','1')->where('is_terminal',1)->get();
+        $terminals = Destination::where('is_main_terminal','!=',1)->where('is_terminal',1)->get();
 
         return view('transaction.managetickets',compact('terminals'));
     }
@@ -84,7 +85,6 @@ class TransactionsController extends Controller
 
 
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -150,7 +150,14 @@ class TransactionsController extends Controller
 
                 }
 
-                //Confirm first to make a van queue
+                VanQueue::create([
+                    'destination_id' => $trip->destination_id,
+                    'driver_id' => $trip->driver_id,
+                    'van_id' => $trip->van_id,
+                    'remarks' => 'OB',
+                    'queue_number' => $queueNumber
+                ]);
+
 
             }
 
@@ -192,25 +199,35 @@ class TransactionsController extends Controller
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
 
-            $seatingCapacity = VanQueue::where('destination_id',Destination::where('destination_name',Transaction::find(request('transactions')[0])->destination)->first()->destination_id)
-            ->where('queue_number',1)
-            ->first()
-            ->van
-            ->seating_capacity;
+            // Start transaction!
+            DB::beginTransaction();
+            try  {
+                $seatingCapacity = VanQueue::where('destination_id',Destination::where('destination_name',Transaction::find(request('transactions')[0])->destination)->first()->destination_id)
+                    ->where('queue_number',1)
+                    ->first()
+                    ->van
+                    ->seating_capacity;
 
-            if($seatingCapacity >= count(request('transactions'))) {
-                foreach(request('transactions') as $transactionId) {
-                    $transaction = Transaction::find($transactionId);
-                    $transaction->update([
-                        'status' => 'OnBoard',
-                        'trip_id' => null
-                    ]);
+                if($seatingCapacity >= count(request('transactions'))) {
+                    foreach(request('transactions') as $transactionId) {
+                        $transaction = Transaction::find($transactionId);
+                        $transaction->update([
+                            'status' => 'OnBoard',
+                            'trip_id' => null
+                        ]);
+                    }
+
+                    DB::commit();
+                    return 'success';
+                }
+                else {
+                    return 'The tickets boarded is greater than the seating capacity of the van on deck';
                 }
 
-                return 'success';
-            }
-            else {
-                return 'The tickets boarded is greater than the seating capacity of the van on deck';
+            } catch(\Exception $e) {
+                DB::rollback();
+                \Log::info($e);
+                return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
             }
 
         } else {
@@ -219,7 +236,6 @@ class TransactionsController extends Controller
 
     }
 
-
     public function updateOnBoardTransactions()
     {
         if(request('transactions')) {
@@ -227,19 +243,74 @@ class TransactionsController extends Controller
                 'transactions.*' => 'required|exists:transaction,transaction_id'
             ]);
 
-            foreach(request('transactions') as $transactionId) {
-                $transaction = Transaction::find($transactionId);
-                $transaction->update([
-                    'status' => 'Pending',
-                    'trip_id' => null
-                ]);
-            }
+            // Start transaction!
+            DB::beginTransaction();
+            try  {
+                foreach(request('transactions') as $transactionId) {
+                    $transaction = Transaction::find($transactionId);
+                    $transaction->update([
+                        'status' => 'Pending',
+                        'trip_id' => null
+                    ]);
+                }
 
-            return 'success';
+                DB::commit();
+                return 'success';
+            } catch(\Exception $e) {
+                DB::rollback();
+                \Log::info($e);
+                return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+            }
         } else {
             return 'error no transaction given';
         }
+    }
 
+    public function manage()
+    {
+        return view('transaction.managetickets');
+    }
+
+    public function listSourceDrivers()
+    {
+        $drivers = [];
+
+        foreach(Member::where('status','Active')->whereNotNull('license_number')->get() as $member){
+            array_push($drivers,[
+                'value' => $member->member_id,
+                    'text' => $member->full_name
+                ]
+            );
+        }
+
+        return response()->json($drivers);
+
+    }
+
+    public function changeDriver(VanQueue $vanOnQueue)
+    {
+        $this->validate(request(),[
+           'value' => 'exists:member,member_id'
+        ]);
+
+        $vanOnQueue->update([
+           'driver_id' => request('value')
+        ]);
+
+        return 'success';
+    }
+
+    public function refund(Transaction $transaction)
+    {
+        $transaction->update([
+            'status' => 'Refunded'
+        ]);
+
+        $transaction->ticket->update([
+            'isAvailable' => 1
+        ]);
+
+        return 'success';
     }
 
     public function changeDestination(Transaction $transaction)
@@ -253,6 +324,7 @@ class TransactionsController extends Controller
         ]);
         return 'success';
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -272,11 +344,11 @@ class TransactionsController extends Controller
         //put transaction into ledger
         if($transaction->ticket->type === 'Discount')
         {
-                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
+            $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
         }
         else
         {
-                $discount = 0;
+            $discount = 0;
         }
         $computedAmount = $transaction->destination->amount - $discount;
         Ledger::create([
@@ -286,7 +358,7 @@ class TransactionsController extends Controller
         ]);
 
         $transaction->ticket->update([
-           'isAvailable' => 1
+            'isAvailable' => 1
         ]);
 
         return 'success';
@@ -336,111 +408,6 @@ class TransactionsController extends Controller
         return 'success';
     }
 
-    public function listDestinations(Destination $terminal)
-    {
-        $destinationArr = [];
-
-        foreach($terminal->destinations as $destination)
-        {
-            array_push($destinationArr,[
-                'id'=> $destination->destination_id,
-                'description' => $destination->description
-            ]);
-        }
-
-        return response()->json($destinationArr);
-    }
-
-    public function listDiscountedTickets(Destination $destination)
-    {
-        $ticketsArr = [];
-        $tickets = $destination
-            ->tickets()
-            ->where('isAvailable', 1)
-            ->where('type','Discount')
-            ->orderBy('ticket_id','asc')
-            ->get();
-
-        foreach($tickets as $ticket){
-            array_push($ticketsArr,[
-                'id' => $ticket->ticket_id,
-                'ticket_number' => $ticket->ticket_number
-            ]);
-        }
-
-        return response()->json($ticketsArr);
-    }
-
-    public function listTickets(Destination $destination)
-    {
-        $ticketsArr = [];
-        $tickets = $destination
-            ->tickets()
-            ->where('isAvailable', 1)
-            ->where('type','Regular')
-            ->orderBy('ticket_id','asc')
-            ->get();
-
-        foreach($tickets as $ticket){
-            array_push($ticketsArr,[
-                'id' => $ticket->ticket_id,
-                'ticket_number' => $ticket->ticket_number
-            ]);
-        }
-
-        return response()->json($ticketsArr);
-    }
-
-    public function manage()
-    {
-        return view('transaction.managetickets');
-    }
-    public function listSourceDrivers()
-    {
-        $drivers = [];
-
-        foreach(Member::where('status','Active')->whereNotNull('license_number')->get() as $member){
-            array_push($drivers,[
-                'value' => $member->member_id,
-                    'text' => $member->full_name
-                ]
-            );
-        }
-
-        return response()->json($drivers);
-
-    }
-
-    public function changeDriver(Trip $trip)
-    {
-        $this->validate(request(),[
-           'value' => 'exists:member,member_id'
-        ]);
-
-        $trip->update([
-           'driver_id' => request('value')
-        ]);
-
-        return 'success';
-    }
-
-    public function getTicketManagementPartial(Destination $terminal)
-    {
-        return view('transaction.managetickets',compact('terminal'));
-    }
-
-    public function refund(Transaction $transaction)
-    {
-        $transaction->update([
-            'status' => 'Refunded'
-        ]);
-
-        $transaction->ticket->update([
-            'isAvailable' => 1
-        ]);
-
-        return 'success';
-    }
 
     //Selected Ticket
     public function selectTicket(Destination $destination)

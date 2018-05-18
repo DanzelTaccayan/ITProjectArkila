@@ -15,16 +15,7 @@ use App\Fee;
 
 class HomeController extends Controller
 {
-   // /**
-   //  * Create a new controller instance.
-   //  *
-   //  * @return void
-   //  */
-   // public function __construct()
-   // {
-   //     $this->middleware('auth:admin');
-   // }
-
+   
     /**
      * Show the application dashboard.
      *
@@ -50,10 +41,11 @@ class HomeController extends Controller
 
     public function usermanagement()
     {
-        $userAdmins = User::join('terminal', 'users.terminal_id', '=', 'terminal.terminal_id')->orderBy('users.created_at', 'desc')->admin()->select('users.id as userid','users.first_name', 'users.middle_name', 'users.last_name', 'users.username', 'terminal.terminal_id', 'terminal.description')->get();
-        $userDrivers = User::driver()->where('users.terminal_id','=', null)->get();
-        $userCustomers = User::customer()->where('users.terminal_id','=', null)->get();
-        return view('usermanagement.index', compact('userAdmins', 'userDrivers', 'userCustomers'));
+        // $userAdmins = User::join('terminal', 'users.terminal_id', '=', 'terminal.terminal_id')->orderBy('users.created_at', 'desc')->admin()->select('users.id as userid','users.first_name', 'users.middle_name', 'users.last_name', 'users.username', 'terminal.terminal_id', 'terminal.description')->get();
+        $userDrivers = User::driver()->get();
+        $userCustomers = User::customer()->get();
+
+        return view('usermanagement.index', compact('userDrivers', 'userCustomers'));
     }
 
     public function archive() {
@@ -75,12 +67,12 @@ class HomeController extends Controller
 
     }
     public function changeFeatures(Feature $feature) {
-        if($feature->Status === 'enable'){
-          $feature->Status = 'disable';
+        if($feature->status === 'enable'){
+          $feature->status = 'disable';
           session()->flash('success', $feature->description . 'has been successfully disabled');
           //$message = ['success' => $feature->description . 'has been successfully disabled'];
-        }elseif($feature->Status === 'disable'){
-          $feature->Status = 'enable';
+        }elseif($feature->status === 'disable'){
+          $feature->status = 'enable';
           //$message = ['success' => $feature->description . 'has been successfully enabled'];
           session()->flash('success', $feature->description . 'has been successfully enabled');
         }

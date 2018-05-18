@@ -25,28 +25,38 @@ class AdminCreateDriverReportController extends Controller
   public function chooseTerminal()
   {
     $terminals = Destination::where('is_terminal', true)->get();
-    $superAdmin = User::where('user_type', 'Super-Admin')->first();
-    $superAdminTerminal = Destination::where('is_main_terminal', true)->first();
 
+
+    //dd($originDestinationArr);
+
+    // foreach($terminals as $t){
+    //   $f = $t->terminalDestination()->groupBy('terminal_destination')->get();
+    //   //$b = $f->where();
+    //   foreach($f as $fs){
+    //     //echo $fs . '<br/>';
+    //   }
+    // }
 
     return view('trips.chooseDestination',compact('terminals', 'superAdminTerminal'));
   }
 
-  public function createReport(Destination $terminals)
+  public function createReport(Destination $terminals, Destination $destination)
   {
+    //dd($destination);
     $superAdminTerminal = Destination::where('is_main_terminal', true)->first();
     if($terminals->destination_id == $superAdminTerminal->destination_id){
-  		$destinations = $terminals->routeFromOrigin->groupBy('destination_id');
+  		$destinations = $destination->routeFromDestination->groupBy('destination_id');
  	  }
     $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
     $driverAndOperators = Member::where('role', 'Operator')->orWhere('role', 'Driver')->get();
     $plate_numbers = Van::all();
     $member = Member::where('user_id', Auth::id())->first();
 
-    return view('trips.createReport', compact('origins','terminals', 'destinations', 'fad', 'member', 'driverAndOperators', 'plate_numbers'));
+
+    return view('trips.createReport', compact('origins','terminals', 'destinations', 'destination', 'member', 'driverAndOperators', 'plate_numbers'));
   }
 
-  public function storeReport(Destination $terminals, AdminCreateDriverReportRequest $request)
+  public function storeReport(Destination $terminals, Destination $destination, AdminCreateDriverReportRequest $request)
   {
         //dd($request->timeDeparted);
    	$totalPassengers = $request->totalPassengers;
@@ -62,24 +72,24 @@ class AdminCreateDriverReportController extends Controller
 
 
     $mainterminal = Destination::where('is_main_terminal', true)->first()->destination_name;
-    $memdriver = Member::find($driver_id);
-    $getvanid = $memdriver->van->first()->van_id ?? null;
-    $vanid = $getvanid !== null ? $memdriver->van->first()->van_id : null;
+    // $memdriver = Member::find($driver_id);
+    // $getvanid = $memdriver->van->first()->van_id ?? null;
+    $vanid = $request->van_platenumber;
 
     $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
     $timeDepartedFormat = $timeDeparted->format('H:i:s');
     $dateDeparted = $request->dateDeparted;
 
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
-    $destination = $terminals->destination_id == $mainTerminal ? $request->origin : $mainTerminal;
-    $destinationname = Destination::find($destination);
+    //$destination = $terminals->destination_id == $mainTerminal ? $request->origin : $mainTerminal;
+    //$destinationname = Destination::find($destination);
 
     if($terminals->destination_id == $mainTerminal){
       if($totalPassengers >=  10){
         $trip = Trip::create([
            'driver_id' => $driver_id,
            'van_id' => $vanid,
-           'destination' => $destinationname->destination_name,
+           'destination' => $destination->destination_name,
            'origin' => $terminals->destination_name,
            'total_passengers' => $totalPassengers,
            'total_booking_fee' => $totalBookingFee,
@@ -101,7 +111,7 @@ class AdminCreateDriverReportController extends Controller
         $trip = Trip::create([
            'driver_id' => $driver_id,
            'van_id' => $vanid,
-           'destination' => $destinationname->destination_name,
+           'destination' => $destination->destination_name,
            'origin' => $terminals->destination_name,
            'total_passengers' => $totalPassengers,
            'total_booking_fee' => $totalBookingFee,
@@ -182,7 +192,7 @@ class AdminCreateDriverReportController extends Controller
          $trip =Trip::create([
           'driver_id' => $driver_id,
           'van_id' => $vanid,
-          'destination' => $mainterminal,
+          'destination' => $destination->destination_name,
           'origin' => $terminals->destination_name,
           'total_passengers' => $totalPassengers,
           'total_booking_fee' => $totalBookingFee,
@@ -195,7 +205,7 @@ class AdminCreateDriverReportController extends Controller
          $trip = Trip::create([
            'driver_id' => $driver_id,
            'van_id' => $vanid,
-           'destination' => $mainterminal,
+           'destination' => $destination->destination_name,
            'origin' => $terminals->destination_name,
            'total_passengers' => $totalPassengers,
            'total_booking_fee' => $totalBookingFee,

@@ -43,7 +43,7 @@ class AdminCreateDriverReportRequest extends FormRequest
 
         if($this->request->get('orgId') == $mainTerminal){
 
-          $rules["origin"] = "required|exists:destination,destination_id";
+          // $rules["origin"] = "required|exists:destination,destination_id";
 
           $totalPass = $this->request->get('totalPassengers');
           $qtyCounter = 0;

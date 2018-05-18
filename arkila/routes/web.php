@@ -165,8 +165,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['index','create','show','edit','update']
     ]);
     Route::get('/home/terminal', 'AdminCreateDriverReportController@chooseTerminal')->name('trips.admin.chooseDestination');
-    Route::get('/home/terminal/{terminals}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
-    Route::post('/home/terminal/{terminals}/create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
+    Route::get('/home/terminal/{terminals}/{destination}/create-report', 'AdminCreateDriverReportController@createReport')->name('trips.admin.createReport');
+    Route::post('/home/terminal/{terminals}/{destination}create-report/store', 'AdminCreateDriverReportController@storeReport')->name('trips.admin.storeReport');
 
     /* Van Queue */
      //Only working routes are: index and destroy
@@ -188,14 +188,11 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/transactions', 'TransactionsController@index')->name('transactions.index');
     Route::delete('/home/transactions/{transaction}', 'TransactionsController@destroy')->name('transactions.destroy');
     Route::post('/home/transactions/{destination}', 'TransactionsController@store')->name('transactions.store');
-    Route::patch('/home/transactions/{destination}', 'TransactionsController@depart')->name('transactions.update');
-    Route::get('/listDestinations/{terminal}','TransactionsController@listDestinations')->name('transactions.listDestinations');
-    Route::get('/listTickets/{destination}','TransactionsController@listTickets')->name('transactions.listTickets');
-    Route::get('/listDiscountedTickets/{destination}','TransactionsController@listDiscountedTickets')->name('transactions.listDiscountedTickets');
+    Route::patch('/home/transactions/{destination}', 'TransactionsController@depart')->name('transactions.depart');
     Route::patch('/updatePendingTransactions', 'TransactionsController@updatePendingTransactions')->name('transactions.updatePendingTransactions');
     Route::patch('/updateOnBoardTransactions', 'TransactionsController@updateOnBoardTransactions')->name('transactions.updateOnBoardTransactions');
     Route::get('/listSourceDrivers','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');
-    Route::patch('/changeDriver/{trip}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
+    Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::patch('/home/transactions/changeDestination/{transaction}','TransactionsController@changeDestination')->name('transactions.changeDestination');
     Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');

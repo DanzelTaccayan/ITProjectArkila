@@ -10,15 +10,15 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{route('trips.admin.storeReport', [$terminals->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                    <form action="{{route('trips.admin.storeReport', [$terminals->destination_id, $destination->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                       {{csrf_field()}}
                       <input type="hidden" name="orgId" value="{{$terminals->destination_id}}">
                         <div class="col-md-6">
                             <div class="text-center"><h4>ROUTES</h4></div>
-                            
+
 
                             @if($terminals->is_terminal == true && $terminals->is_main_terminal == false)
-                            
+
                             <!-- TO MAIN TERMINAL -->
                             <table class="table table-bordered table-striped form-table">
                                 <thead>
@@ -81,24 +81,23 @@
                         </div>
                         <div class="col-md-6">
                             <div class="text-center"><h4>DEPARTURE DETAILS</h4></div>
-                            @if($terminals->is_terminal == true && $terminals->is_main_terminal == true)
-                            <div class="form-group">
-                                <label for="driver" class="col-sm-4">Destination Terminal:</label>
-                                <div class="col-sm-8">
-                                <select name="origin" id="originTerminal" class="form-control select2">
-                                    @foreach($origins as $origin)
-                                    <option value="{{$origin->destination_id}}">{{$origin->destination_name}}</option>
-                                    @endforeach
-                                </select>
-                                </div>
-                            </div>
-                            @endif
+
                             <div class="form-group">
                                 <label for="driver" class="col-sm-4">Driver:</label>
                                 <div class="col-sm-8">
                                 <select name="driverAndOperator" id="driver" class="form-control select2">
                                     @foreach($driverAndOperators as $driverAndOperator)
                                     <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="driver" class="col-sm-4">Van:</label>
+                                <div class="col-sm-8">
+                                <select name="van_platenumber" id="originTerminal" class="form-control select2">
+                                    @foreach($plate_numbers as $plate_number)
+                                    <option value="{{$plate_number->van_id}}">{{$plate_number->plate_number}}</option>
                                     @endforeach
                                 </select>
                                 </div>
@@ -138,7 +137,7 @@
                             </div>
 
                             <div class="box-footer text-center">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
+                                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#discountModal">Submit</button>
                             </div>
                             <!-- /.box-footer -->
                         </div>
