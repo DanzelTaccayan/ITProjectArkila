@@ -280,7 +280,7 @@
                                                 <div class="pull-right">   
                                                 <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</a>
                                                 @if($terminal->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number')->first() ?? null)
-                                                    <button id="boardPageBtn{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
+                                                    <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 @else
                                                     <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
                                                 @endif
@@ -313,7 +313,7 @@
                                             </div>
                                         </div>
                                         @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
-                                            <div id="boardTickets{{$terminal->destination_id}}">
+                                            <div id="boardTickets{{$terminal->destination_id}}" name="boardTickets">
                                             <div class="row">
                                                 <div id="list-left1" class="dual-list list-left col-md-5">
                                                     <div class="box box-solid ticket-box">
@@ -323,39 +323,39 @@
                                                                  <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
-                                                                <button type="button" id="changeDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" name="changeDriverBtn" data-terminal="{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-user"></i>
                                                                 </button>
-                                                                <button type="button" id="deleteDriverBtn{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" name="deleteDriverBtn" data-terminal="{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <div id="changedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
+                                                        <div data-terminal="{{$terminal->destination_id}}" name="changedriver-header" class="box-header bg-blue hidden">
                                                             <span class="col-md-8">
                                                                 <h6>Driver:</h6>
                                                                  <h4>
-                                                                    <a href="#" class="text-white" id="driverChange{{$terminal->destination_id}}"></a>
+                                                                    <a href="#" class="text-white" name="driverChange" data-terminal="{{$terminal->destination_id}}" data-driver="{{$terminal->vanQueue()->orderBy('queue_number')->whereNotNull('queue_number')->first()->driver_id}}" data-van="{{$terminal->vanQueue()->orderBy('queue_number')->whereNotNull('queue_number')->first()->van_queue_id}}"></a>
                                                                     <i class='fa fa-pencil'></i>
                                                                 </h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
-                                                                <button type="button" id="onDeckBtn1-{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                                <button type="button" data-terminal="{{$terminal->destination_id}}" name="onDeckBtn1" class="btn btn-sm btn-primary" style="border-radius: 100%">
                                                                     <i class="fa fa-chevron-left"></i>
                                                                 </button>
                                                             </span>
                                                         </div>
-                                                        <div id="deletedriver-header{{$terminal->destination_id}}" class="box-header bg-blue hidden">
+                                                        <div name="deletedriver-header" data-terminal="{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                                             <span class="col-md-12">
                                                                  <p>
-                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</strong> on deck?
+                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->van->plate_number}}</strong> on deck?
                                                                  </p>
                                                             </span>
                                                              <span class="pull-right">
-                                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
+                                                                 <form method="POST" action="{{route('vanqueue.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
                                                                      {{method_field('DELETE')}}
                                                                      {{csrf_field()}}
-                                                                    <button type="button" id="onDeckBtn2-{{$terminal->destination_id}}" class="btn btn-sm btn-primary">
+                                                                    <button type="button" data-terminal="{{$terminal->destination_id}}" name="onDeckBtn2" class="btn btn-sm btn-primary">
                                                                         NO
                                                                     </button>
                                                                     <button type="submit" class="btn btn-sm btn-danger">
@@ -441,7 +441,7 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                <button id="sellPageBtn{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
+                                                <button name="sellPageBtn" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-flat" style="height: 50px;"><i class="fa fa-angle-double-left"></i> BACK</button>
                                                 <button name="depart" class="btn bg-navy btn-flat pull-right"  data-val="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
 
@@ -868,45 +868,65 @@
 
 
 {{--hide and showing--}}
-@foreach($terminals as $terminal)
 <script>
      $(function(){
-        $("#changedriver-header{{$terminal->destination_id}}").hide();
-        $("#deletedriver-header{{$terminal->destination_id}}").hide();
-        $("#changeDriverBtn{{$terminal->destination_id}}").click(function(){
-            $("#ondeck-header{{$terminal->destination_id}}").hide();
-            $("#changedriver-header{{$terminal->destination_id}}").show()
-            $("#changedriver-header{{$terminal->destination_id}}").removeClass("hidden");
+        $('div[name="changedriver-header"]').hide();
+        $('div[name="deletedriver-header"]').hide();
+
+        $('button[name="changeDriverBtn"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $('#ondeck-header'+terminalId).hide();
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').show();
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').removeClass("hidden");
+
         });
-        $("#deleteDriverBtn{{$terminal->destination_id}}").click(function(){
-            $("#ondeck-header{{$terminal->destination_id}}").hide();
-            $("#deletedriver-header{{$terminal->destination_id}}").show()
-            $("#deletedriver-header{{$terminal->destination_id}}").removeClass("hidden");
+
+        $('button[name="deleteDriverBtn"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $("#ondeck-header"+terminalId).hide();
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').show();
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').removeClass("hidden");
         });
-        $("#onDeckBtn1-{{$terminal->destination_id}}").click(function(){
-            $("#changedriver-header{{$terminal->destination_id}}").hide();
-            $("#ondeck-header{{$terminal->destination_id}}").show();
+
+        $('button[name="onDeckBtn1"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $("#ondeck-header"+terminalId).show();
+            $('div[name="changedriver-header"][data-terminal="'+terminalId+'"]').hide();
         });
-        $("#onDeckBtn2-{{$terminal->destination_id}}").click(function(){
-            $("#deletedriver-header{{$terminal->destination_id}}").hide();
-            $("#ondeck-header{{$terminal->destination_id}}").show();
+
+        $('button[name="onDeckBtn2"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $("#ondeck-header"+terminalId).show();
+            $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').hide();
         });
+
       });
 </script>
+
 <script>
     $(function(){
-        $("#boardTickets{{$terminal->destination_id}}").hide();
-        $("#boardPageBtn{{$terminal->destination_id}}").click(function(){
-            $("#sellTickets{{$terminal->destination_id}}").hide();
-            $("#boardTickets{{$terminal->destination_id}}").show();
+        $('div[name="boardTickets"]').hide();
+
+        $('button[name="boardPageBtn"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $("#sellTickets"+terminalId).hide();
+            $("#boardTickets"+terminalId).show();
         });
-        $("#sellPageBtn{{$terminal->destination_id}}").click(function(){
-            $("#sellTickets{{$terminal->destination_id}}").show();
-            $("#boardTickets{{$terminal->destination_id}}").hide();
+
+        $('button[name="sellPageBtn"]').click(function(){
+            var terminalId = $(this).data('terminal');
+
+            $("#sellTickets"+terminalId).show();
+            $("#boardTickets"+terminalId).hide();
         });
     });
 </script>
-@endforeach
+
 
 
 
@@ -949,16 +969,15 @@
 </script>
 <script>
     $(function() {
-        @foreach($terminals as $terminal)
-        @if($trip = $terminal->vanQueue->where('queue_number',1)->first())
-            $('#driverChange{{$terminal->destination_id}}').editable({
+        $('a[name="driverChange"]').each(function(){
+            $(this).editable({
                 type: 'select',
                 title: 'Change Driver',
-                value: "{{$terminal->vanQueue->where('queue_number',1)->first()->driver_id}}",
+                value: $(this).data('driver'),
                 source: "{{route('transactions.listSourceDrivers')}}",
                 sourceCache: true,
-                pk: '{{$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id}}',
-                url: '{{route('transactions.changeDriver',[$trip->van_queue_id])}}',
+                pk: $(this).data('van'),
+                url: '/changeDriver/'+$(this).data('van'),
                 validate: function(value){
                     if($.trim(value) == ""){
                         return "This field is required";
@@ -980,8 +999,8 @@
                     console.log(response);
                 }
             });
-        @endif
-        @endforeach
+        });
+
     });
 </script>
 

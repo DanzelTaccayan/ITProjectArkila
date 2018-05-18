@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\profile;
+use App\Profile;
 
 class CompanyProfileSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class CompanyProfileSeeder extends Seeder
      */
     public function run()
     {
-        profile::create([
+        Profile::create([
             'email' => 'banTrans@gmail.com',
             'contact_number' => '635-232-3332',
             'address' => '21 kisa huhu baguio'

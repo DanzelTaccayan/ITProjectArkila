@@ -287,13 +287,13 @@ class TransactionsController extends Controller
 
     }
 
-    public function changeDriver(Trip $trip)
+    public function changeDriver(VanQueue $vanOnQueue)
     {
         $this->validate(request(),[
            'value' => 'exists:member,member_id'
         ]);
 
-        $trip->update([
+        $vanOnQueue->update([
            'driver_id' => request('value')
         ]);
 

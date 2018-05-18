@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\Destination;
 use App\Ticket;
@@ -69,7 +70,7 @@ class TicketManagementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Destination $ticket_management)
+    public function update(Destination $ticket_management, Request $request)
     {
         $soldTickets = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
@@ -79,122 +80,148 @@ class TicketManagementController extends Controller
         $regularTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Regular'],
-            ])->get();
+            ])->orderBy('ticket_id', 'desc')->get();
         $fare = $regularTicket->first()->fare;
         $name = $ticket_management->destination_name;
-        
-        if ($soldTickets == 0)
-        {
-            $ticket_management->update([
-            'number_of_tickets' => request('numberOfTicket'),
-            ]);
+        $ticketOrig = $ticket_management->number_of_tickets;
+        $ticketRequest = $request->numberOfTicket;
+        // dd($ticketRequest);
+        $validate = Validator::make($request->all(), [
+            "numberOfTicket" => "required|min:1",
+        ]);
 
-            for($i=1; $i <= request('numberOfTicket'); $i++ )
+        if($validate->fails()){
+            return response()->json(["error" => "Cannot enter zero value"]);
+        }else{
+            //$f = 'HI';
+           
+            list($name, $lastNumberOfTicket) = explode('-', $regularTicket->first()->ticket_number);
+            $startCount = $lastNumberOfTicket + 1;
+            
+            if ($soldTickets == 0)
             {
-              $ticketName = $name.'-'.$i;
-                Ticket::create([
-                'ticket_number' => $ticketName,
-                'destination_id' => $ticket_management->destination_id,
-                'is_sold' => false,
-                'fare' => $fare,
-                'type' => 'Regular',
+
+                $ticket_management->update([
+                'number_of_tickets' => $ticketRequest,
                 ]);
-            }       
 
-            foreach($regularTicket as $ticket)
-            {               
-                $ticket->delete();
+                if ($ticketOrig > $ticketRequest)
+                {
+                    $numTicket = $ticketOrig - $ticketRequest;
+
+                    foreach($regularTicket as $count => $ticket)
+                    {
+                        if ($count+1 <= $numTicket)
+                        {
+                            $ticket->delete();
+                        }
+                    }
+                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $ticketRequest ]);
+                }
+                elseif($ticketOrig < $ticketRequest)
+                {
+                    $numTicket = $ticketRequest - $ticketOrig;
+                    $end = $numTicket + $ticketOrig;
+
+                    for($i=$startCount; $i <= $end; $i++ )
+                    {
+                    $ticketName = $name.'-'.$i;
+                        Ticket::create([
+                        'ticket_number' => $ticketName,
+                        'destination_id' => $ticket_management->destination_id,
+                        'is_sold' => false,
+                        'fare' => $fare,
+                        'type' => 'Regular',
+                        ]);
+                    }       
+                }
+
+                return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $ticketRequest ]);
             }
-
-            return $ticket_management->number_of_tickets;
-        }
-        else
-        {
-            session()->flash('error', 'Cannot edit the ticket number, all tickets must be return first.');
-            return 'Cannot edit the ticket number, all tickets must be return first.';
-        }
+            else
+            {
+                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.']);
+            }
+         }            
     }
 
     public function updateDiscount(Destination $ticket_management)
     {
         $soldTickets = Ticket::where([
-            ['destination_id', $ticket_management->destination_id],
+            ['destination_id', '7'],
             ['type', 'Discount'],
             ['is_sold', true],
             ])->count();
         $discountTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Discount'],
-            ])->get();
-        if ($discountTicket->count() > 0)
-        {
-            $fare = $discountTicket->first()->fare;
-        }
+            ])->orderBy('ticket_id', 'desc')->get();
+        $fare = $discountTicket->first()->fare;
         $name = $ticket_management->destination_name;
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         $countLetters = count($discountedTickets);
         $requestNumTicket = request('numberOfTicket');
+        $lastChar = substr($discountTicket->first()->ticket_number, -1);
+        $c = 0;
+        $toBeAdded = $requestNumTicket - $discountTicket->count();
+
+
         if ($soldTickets == 0)
         {
-            if($requestNumTicket == 0)
+            if ($requestNumTicket < $discountTicket->count())
             {
-                foreach($discountTicket as $ticket)
-                {               
-                    $ticket->delete();
-                }
-      
-            }
-            elseif($requestNumTicket == 26 && $discountTicket->count() == 0)
-            {
-                foreach($discountedTickets as $discountedTicket)
+                $numTicket = $discountTicket->count() - $requestNumTicket;
+
+                foreach($discountTicket as $count => $ticket)
                 {
-                    $ticketNumber = $name.'-'.$discountedTicket;
-                    Ticket::create([
-                        'ticket_number' => $ticketNumber,
-                        'destination_id' => $ticket_management->destination_id,
-                        'is_sold' => false,
-                        'fare' => '100',
-                        'type' => 'Discount'
-                    ]);
+                    if ($count+1 <= $numTicket)
+                    {
+                        $ticket->delete();
+                    }
                 }
-          
+                return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket ]);
             }
-            elseif ($requestNumTicket > 26)
+            else                      
             {
-                $counter = 1;
-                $c = 0;
-                $toBeAdded = $requestNumTicket - $discountTicket->count();
+                if (is_numeric($lastChar))
+                {
+                    $counter = $lastChar+1;
+                }
+                else
+                {
+                    $counter = 0;
+                }    
 
                 for($i=1; $i <= $toBeAdded; $i++ )
                 {
-                    if($i % 27 == 0)
-                    {
-                        $counter++;
-                    }
-                    
-                    if($c > 26)
+                    // if($i-1 % 26 == 0)
+                    // {
+                    //     $counter++;
+                    // }
+
+                    if($c >= 26)
                     {
                         $c = 0;
+                        $counter++;
                     }
 
-                        $ticketName = $name.'-'.$discountedTickets[$c].$counter;
-                        $c++;
-                            Ticket::create([
-                            'ticket_number' => $ticketName,
-                            'destination_id' => $ticket_management->destination_id,
-                            'is_sold' => false,
-                            'fare' => $fare,
-                            'type' => 'Discount',
-                            ]);
+                    $ticketName = $name.'-'.$discountedTickets[$c].$counter;
+                    $c++;
+                    Ticket::create([
+                        'ticket_number' => $ticketName,
+                        'destination_id' => $ticket_management->destination_id,
+                        'is_sold' => false,
+                        'fare' => $fare,
+                        'type' => 'Discount',
+                    ]);
                 }                 
             }
-
-            // return $ticket_management->number_of_tickets;
+            return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket ]);
         }
         else
         {
-            session()->flash('error', 'Cannot edit the ticket number, all tickets must be return first.');
-            return 'Cannot edit the ticket number, all tickets must be return first.';
+            // session()->flash('error', 'Cannot edit the ticket number, all tickets must be return first.');
+            return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.']);
         } 
     }
 
