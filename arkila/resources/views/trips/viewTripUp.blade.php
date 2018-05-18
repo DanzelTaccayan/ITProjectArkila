@@ -96,7 +96,7 @@
                 <table class="table table-bordered table-striped table-responsive">
                         <tbody>
                             <tr>
-                                <td>Total</td>
+                                <td>Total Fare collected</td>
                                 <td class="text-right"></td>   
                             </tr>
                             <tr>
