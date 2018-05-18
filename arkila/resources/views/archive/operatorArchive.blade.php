@@ -19,22 +19,22 @@
             <div class="box-body box-profile">
                 <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="Operator profile picture">
 
-                <h3 class="profile-username text-center">{{ $archive->full_name }}</h3>
+                <h3 class="profile-username text-center">{{ $archivedOperator->full_name }}</h3>
                 <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                        <b>Contact Number</b> <p class="pull-right">{{ $archive->contact_number }}</p>
+                        <b>Contact Number</b> <p class="pull-right">{{ $archivedOperator->contact_number }}</p>
                     </li>
                     <li class="list-group-item">
-                        <b>Number of Vans</b> <p class="pull-right">{{ count($archive->archivedVan) }}  </p>
+                        <b>Number of Vans</b> <p class="pull-right">{{ count($archivedOperator->archivedVan) }}  </p>
                     </li>
                     <li class="list-group-item">
-                        <b>Number of Drivers</b> <p class="pull-right">{{ count($archive->archivedDriver) }}</p>
+                        <b>Number of Drivers</b> <p class="pull-right">{{ count($archivedOperator->archivedDriver) }}</p>
                     </li>
                     <li class="list-group-item">
-                        <b>Date Archived</b> <p class="pull-right">{{ \Carbon\Carbon::parse($archive->created_at)->toDayDateTimeString() }}</p>
+                        <b>Date Archived</b> <p class="pull-right">{{ \Carbon\Carbon::parse($archivedOperator->created_at)->toDayDateTimeString() }}</p>
                     </li>
                 </ul>
-                <a href="{{route('operators.show',[$archive->member_id])}}" class="btn btn-primary btn-block btn-sm"><b>View All Information</b></a>
+                <a href="{{route('operators.show',[$archivedOperator->member_id])}}" class="btn btn-primary btn-block btn-sm"><b>View All Information</b></a>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($archive->archivedVan as $vans)
+                        @foreach ($archivedOperator->archivedVan as $vans)
                             <tr>
                                 <td>{{ $vans->plate_number }}</td>
                                 <td>{{$vans->vanmodel->description}}</td>
@@ -80,12 +80,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($archive->archivedDriver as $driver)
+                        @foreach ($archivedOperator->archivedDriver as $driver)
                             <tr>
                                 <td>{{ $driver->first_name }}</td>
                                 <td>{{ $driver->age }}</td>
                                 <td>{{ $driver->contact_number }}</td>
-                                <td>{{ $archive->archivedVan()->first()->plate_number ?? null }}</td>
+                                <td>{{ $archivedOperator->archivedVan()->first()->plate_number ?? null }}</td>
                                 <td>
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>View</a>
