@@ -4,44 +4,46 @@
     @parent
     {{ Html::style('/jquery/bootstrap3-editable/css/bootstrap-editable.css') }}
 <style>
-        .list-arrows button{
-             width: 95px;
-        }
+.list-arrows button{
+     width: 95px;
+}
 
-        .well{
-            margin-bottom: 0px;
-        }
+.well{
+    margin-bottom: 5px;
+}
 
-        .ticket-box{
-        }
-            .dual-list .list-group {
-            margin-top: 8px;
-        }
+.ticket-box{
+}
+    .dual-list .list-group {
+    margin-top: 8px;
+}
 
-        .list-left li, .list-right li {
-            cursor: pointer;
-        }
+.list-left li, .list-right li {
+    cursor: pointer;
+}
 
-        .list-arrows {
-            padding-top: 100px;
-        }
+.list-arrows {
+    padding-top: 20%;
+}
 
-            .list-arrows button {
-                margin-bottom: 20px;
-            }
+.list-arrows button {
+    margin-bottom: 20px;
+    height: 40px;
+}
 
-        .with-shadow{
-            box-shadow:0px 0px 15px 0px rgba(0, 0, 0, 0.96);
-        }
-        .scrollbar {
-            padding:0px;
-            height: 100%;
-            float: left;
-            width: 100%;
-            background: #fff;
-            overflow-y: scroll;
-            margin-bottom: 15px;
-        }
+
+.with-shadow{
+    box-shadow:0px 0px 15px 0px rgba(0, 0, 0, 0.96);
+}
+.scrollbar {
+    padding:0px;
+    height: 100%;
+    float: left;
+    width: 100%;
+    background: #fff;
+    overflow-y: scroll;
+    margin-bottom: 15px;
+}
 
 .ticket-overflow {
     min-height: 320px;
@@ -78,6 +80,11 @@
 .list-group-item:first-child {
   border-top-left-radius: 0px ;
   border-top-right-radius: 0px ;
+}
+.list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 .select2-container--open
 .select2-dropdown--below{
@@ -219,6 +226,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
+                                                        <button class="btn bg-maroon btn-flat">SOLD TICKETS</button>
                                                         <div class="pull-right">
                                                             <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
                                                                 {{csrf_field()}}
@@ -352,7 +360,52 @@
                                         @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
                                             <div id="boardTickets{{$terminal->destination_id}}" name="boardTickets">
                                             <div class="row">
-                                                <div id="list-left1" class="dual-list list-left col-md-5">
+                                                <div class="dual-list list-left col-md-5">
+                                                    <div class="box box-solid ticket-box">
+                                                        <div class="box-header bg-maroon bg-gray">
+                                                            <span class="">
+                                                                <h6>Sold Tickets for</h6>
+                                                                 <h4>{{$terminal->description}}</h4>
+                                                            </span>
+                                                        </div>
+                                                        <div class="box-body well">
+                                                            <div class="text-right">    
+                                                                <div class="row">
+                                                                    <div class="col-md-2">
+                                                                        <div class="btn-group">
+                                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-10">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">
+                                                                                <i class="glyphicon glyphicon-search"></i>
+                                                                            </span>
+                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <ul id="pendingList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                    @foreach($terminal->transactions->where('status','Pending') as $transaction)
+                                                                        <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div> 
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="list-arrows col-md-2 text-center">
+                                                    <button id="board{{$terminal->terminal_id}}" class="btn btn-primary btn-sm btn-flat move-left">
+                                                        BOARD <i class="glyphicon glyphicon-chevron-right"></i>
+                                                    </button>
+                                                    <br>
+                                                    <button id="unboard{{$terminal->terminal_id}}" class="btn bg-maroon btn-sm btn-flat move-right">
+                                                        <i class="glyphicon glyphicon-chevron-left"></i> UNBOARD
+                                                    </button>
+                                                </div>
+                                                <div class="dual-list list-right col-md-5">
                                                     <div class="box box-solid ticket-box">
                                                         <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                                             <span class="col-md-6">
@@ -403,7 +456,7 @@
                                                         </div>
 
                                                         <div class="box-body well">
-                                                            <div class="text-right">
+                                                            <div class="">
                                                                 <div class="row">
                                                                     <div class="col-md-2">
                                                                         <div class="btn-group">
@@ -430,7 +483,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="list-arrows col-md-2 text-center">
                                                     <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-left1">
                                                         <i class="glyphicon glyphicon-chevron-left"></i>  BOARD

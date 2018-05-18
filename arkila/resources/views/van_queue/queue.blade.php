@@ -203,9 +203,6 @@ ol.arrow-drag{
       </div>
     </div>
 </div>
-      
-
-
 <div class="box box-solid">
   <div class="box-body" style="background: #ebbea86e;">  
     <div class="row">
@@ -278,7 +275,7 @@ ol.arrow-drag{
                       <div class="well terminal-body scrollbar scrollbar-info thin">
                         <ul id="destinationTerminals" class="nav nav-stacked">
                           @foreach ($terminals as $terminal)
-                          <li class=" @if($terminals->first() == $terminal){{'active'}} @else {{''}}@endif" data-val="{{$terminal->destination_id}}"><a href="#queue{{$terminal->destination_id}}" id="#queue{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
+                            <li class=" @if($terminals->first() == $terminal){{'active'}} @else {{''}}@endif" data-val="{{$terminal->destination_id}}"><a href="#queue{{$terminal->destination_id}}" id="#queue{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
                           @endforeach
                         </ul>
                       </div>
@@ -487,7 +484,6 @@ ol.arrow-drag{
     </div>
   </div>
 </div>
-    <div id="confirmBoxModal"></div>
 
 
 @endsection
