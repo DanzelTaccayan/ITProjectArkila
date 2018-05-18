@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-
+use App\Feature;
 class CustomerAuthenticated
 {
     /**
@@ -17,21 +17,28 @@ class CustomerAuthenticated
     public function handle($request, Closure $next)
     {
         if(Auth::check()){
-          if(Auth::user()->isDriver() && Auth::user()->isEnable()){
-            return redirect(route('drivermodule.index'));
+          $drivermodule = Feature::where('description','Driver Module')->first();
+          if(Auth::user()->isSuperAdmin() || $drivermodule->status == 'enable'){
+            if(Auth::user()->isDriver() && Auth::user()->isEnable()){
+              return redirect(route('drivermodule.index'));
+            }
+          }else{
+            abort(403);
           }
 
           if(Auth::user()->isSuperAdmin() && Auth::user()->isEnable()){
             return redirect('home/vanqueue');
           }
 
-          if(Auth::user()->isAdmin() && Auth::user()->isEnable()){
-            return redirect('home/settings');
+          $customermodule = Feature::where('description','Customer Module')->first();
+          if(Auth::user()->isSuperAdmin() || $customermodule->status == 'enable'){
+            if(Auth::user()->isCustomer() && Auth::user()->isEnable()){
+              return $next($request);
+            }
+          }else{
+            abort(403);
           }
 
-          if(Auth::user()->isCustomer() && Auth::user()->isEnable()){
-            return $next($request);
-          }
         }
 
         abort(404);
