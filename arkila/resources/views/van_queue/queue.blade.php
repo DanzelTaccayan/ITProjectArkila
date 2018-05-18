@@ -192,21 +192,21 @@ ol.arrow-drag{
 @section('content-header','Van Queue')
 
 @section('content')
-<div class="padding-side-10">
-    <div class="box box-solid" style="height: 300px; padding: 50px;">
-      <div class="box-body">
-          <div class="text-center">
-            <h1><i class="fa fa-warning text-red"></i>NO TERMINAL DESTINATION FOUND</h1>
-            <h4>CREATE A TERMINAL DESTINATION FIRST BEFORE YOU CAN SELL TICKETS</h4>
-            <button class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</button>
+
+@if($terminals->count() === 0)
+        <div class="padding-side-10">
+            <div class="box box-solid" style="height: 300px; padding: 50px;">
+              <div class="box-body">
+                  <div class="text-center">
+                    <h1><i class="fa fa-warning text-red"></i>NO TERMINAL DESTINATION FOUND</h1>
+                    <h4>CREATE A TERMINAL DESTINATION FIRST BEFORE YOU CAN SELL TICKETS</h4>
+                    <a href="/home/route" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
+                </div>
+              </div>
+            </div>
         </div>
-      </div>
-    </div>
-</div>
-      
-
-
-<div class="box box-solid">
+@else
+    <div class="box box-solid">
   <div class="box-body" style="background: #ebbea86e;">  
     <div class="row">
       <div class="col-md-12">
@@ -487,8 +487,7 @@ ol.arrow-drag{
     </div>
   </div>
 </div>
-    <div id="confirmBoxModal"></div>
-
+@endif
 
 @endsection
 

@@ -159,7 +159,7 @@ class TransactionsController extends Controller
                         'driver_id' => $trip->driver_id,
                         'van_id' => $trip->van_id,
                         'remarks' => 'OB',
-                        'has_privilege' => 1,
+                        'has_privilege' => 0,
                         'queue_number' => $queueNumber
                     ]);
 
