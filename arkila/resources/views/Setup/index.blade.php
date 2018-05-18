@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group">
                     <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="0.25" name="numticketDis" value="{{old('numticket')}}">
+                    <input type="number" class="form-control" min="1" step="0.25" name="numticketDis" value="{{old('numticketDis')}}">
                 </div>
                 <div class="form-group" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>

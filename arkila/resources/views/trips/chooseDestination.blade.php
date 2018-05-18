@@ -8,15 +8,15 @@
         <div class="box">
           @include('message.success')
             <div class="box-header text-center">
-                <h3>Choose Origin:</h3>
+                <h3>Choose Route:</h3>
             </div>
             <form>
             <div class="box-body">
                 <div class="form-group">
                       {{csrf_field()}}
                       <div class="list-group">
-                        <select id="selectDestination" class="form-control" name="chooseTerminal">
-                          <option>Choose Terminal</option>
+                        <select id="selectDestination" class="form-control text-uppercase" name="chooseTerminal">
+                          <option class="text-uppercase">Choose Route</option>
                           @foreach($terminals as $terminal)
                             @php $findTerminalDown = $terminal->terminalOrigin()->groupBy('terminal_origin')->get(); @endphp
                             @foreach($findTerminalDown as $fKeys => $fValues)
@@ -24,7 +24,7 @@
                                 $origin = \App\Destination::where('destination_id', $fValues->pivot->terminal_origin)->first();
                                 $destination = \App\Destination::where('destination_id', $fValues->pivot->terminal_destination)->first();
                               @endphp
-                            <option value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} to {{$destination->destination_name}}</option>
+                            <option class="text-uppercase" value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} - {{$destination->destination_name}}</option>
                             @endforeach
                             @php $findTerminalUp = $terminal->terminalOrigin()->groupBy('terminal_destination')->get(); @endphp
                             @foreach($findTerminalUp as $fKeys => $fValues)
@@ -32,7 +32,7 @@
                                 $origin = \App\Destination::where('destination_id', $fValues->pivot->terminal_destination)->first();
                                 $destination = \App\Destination::where('destination_id', $fValues->pivot->terminal_origin)->first();
                               @endphp
-                              <option value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} to {{$destination->destination_name}}</option>
+                              <option  class="text-uppercase" value="{{$origin->destination_id}} {{$destination->destination_id}}">{{$origin->destination_name}} - {{$destination->destination_name}}</option>
                               @endforeach
                           @endforeach
                         </select>

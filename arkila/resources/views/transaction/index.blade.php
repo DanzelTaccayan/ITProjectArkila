@@ -278,36 +278,62 @@
                                                 <hr>
                                                 
                                                 <div class="pull-right">   
-                                                <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</a>
+                                                <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px; padding-top: 13px;">SOLD TICKETS</a>
                                                 @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->orderBy('queue_number')->first() ?? null)
                                                     <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 @else
                                                     <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
+
+                                                    <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckOB-modal">BOARD PASSENGERS</button>
                                                 @endif
                                                 </div>
 
-                                                <div class="clearfix">  </div>
+                                                <div class="clearfix"></div>
 
                                                 <div class="modal" id="novan-modal">
-                                                  <div class="modal-dialog" style="margin-top: 10%;">
-                                                    <div class="modal-content">
-                                                      <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                          <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                        <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
-                                                        <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
+                                                    <div class="modal-dialog" style="margin-top: 10%;">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+                                                                <h4 class="modal-title"></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
+                                                                <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <div class="text-center">
+                                                                    <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                      </div>
-                                                    </div>
                                                     <!-- /.modal-content -->
-                                                  </div>
+                                                    </div>
+                                                  <!-- /.modal-dialog -->
+                                                </div>
+
+                                                <div class="modal" id="ondeckOB-modal">
+                                                    <div class="modal-dialog" style="margin-top: 10%;">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+                                                                <h4 class="modal-title"></h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                                                <p class="text-center"><strong class="text-blue" style="font-size: 20px">AAA-123</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">OB</strong>. WILL IT REMAIN ON DECK?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <div class="text-center">
+                                                                    <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-default"><i class="text-yellow fa fa-star"></i> MOVE TO SPECIAL UNITS</a>
+                                                                    <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-primary  ">REMAIN ON DECK</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <!-- /.modal-content -->
+                                                    </div>
                                                   <!-- /.modal-dialog -->
                                                 </div>
                                             </div>

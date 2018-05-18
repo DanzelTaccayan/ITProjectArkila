@@ -62,7 +62,7 @@
                                                 <td class="text-right">{{$discounted->fare}}</td>
                                                 @endforeach
                                                 <td class="text-right">{{$routes->number_of_tickets}}</td>
-                                                <td class="text-right">{{$routes->number_of_tickets}}</td>
+                                                <td class="text-right">{{$routes->tickets->where('type', 'Discount')->count()}}</td>
                                                 <td>
                                                     <div class="text-center">
                                                         <a href="{{route('route.edit', [$routes->destination_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
