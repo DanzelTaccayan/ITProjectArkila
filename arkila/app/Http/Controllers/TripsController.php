@@ -110,11 +110,13 @@ class TripsController extends Controller
 
           $transaction = Transaction::where('trip_id',$trip->trip_id)
             ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid')
-            ->groupBy('amount_paid')->get();
+            ->groupBy('amount_paid', 'destination')
+            ->orderBy('amount_paid', 'ampd','DESC')
+            ->get();
           $destinationCount = Transaction::where('trip_id',$trip->trip_id)
             ->selectRaw('COUNT(destination) as descount, origin, destination, amount_paid')
             ->groupBy('destination')->get();
-
+          //dd($transaction);
           $numPassCountArr = null;
           $tempArr = null;
           $finalArr = null;
@@ -122,6 +124,9 @@ class TripsController extends Controller
 
             $tempArr[$desValues->destination] = array();
           }
+          // foreach($transaction as $tr){
+          //   echo $tr->ampd . ' ' . $tr->origin . ' ' . $tr->destination . ' ' . $tr->amount_paid . '<br/>';
+          // }
           //dd($tempArr);
           foreach($transaction  as $transkeys => $transvalues){
             //echo $transvalues->ampd . ' ' . $transvalues->origin . ' ' . $transvalues->destination . ' ' . $transvalues->amount_paid . '<br/>';
@@ -137,7 +142,7 @@ class TripsController extends Controller
               );
             }
           }
-
+          //dd($numPassCountArr);
           foreach($tempArr as $tempArrKeys => $tempArrValues){
             foreach($numPassCountArr as $numPassKeys => $numPassInnerValues){
               foreach($numPassInnerValues as $keys => $values){
@@ -150,13 +155,14 @@ class TripsController extends Controller
           }
 
           $driverShare = 0;
+          $totalFare = 0;
           foreach($transaction  as $transkeys => $transvalues){
-            $driverShare += $transvalues->ampd * $transvalues->amount_paid;
+            $totalFare += $transvalues->ampd * $transvalues->amount_paid;
           }
 
-          $driverShare = $driverShare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
-
-          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare'));
+          $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
+          $officeShare = $totalFare - $driverShare;
+          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare'));
 
         }else{
 
@@ -175,7 +181,7 @@ class TripsController extends Controller
           $originArray = null;
 
           $driverShare = 0;
-
+          $totalFare = 0;
           foreach($transaction as $trans){
             //echo $trans . "<br/>";
             $test1 = Ticket::where('ticket_number', 'like', '%' . $trans->origin . '%')
@@ -204,7 +210,7 @@ class TripsController extends Controller
               }
             }
 
-            $driverShare += $trans->ampd * $trans->amount_paid;
+            $totalFare += $trans->ampd * $trans->amount_paid;
           }
 
           $numPassCountArr['mainTerminalRegular'] = $mainRegCount;
@@ -212,9 +218,9 @@ class TripsController extends Controller
           $numPassCountArr['shortTripRegular'] = $stRegCount;
           $numPassCountArr['shortTripDiscount'] = $stDisCount;
 
-          $driverShare = $driverShare - ($trip->total_booking_fee + $trip->community_fund);
-
-          return view('trips.viewTripUp', compact('numPassCountArr', 'trip', 'driverShare'));
+          $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund);
+          $officeShare = $totalFare - $driverShare;
+          return view('trips.viewTripUp', compact('numPassCountArr', 'trip', 'driverShare', 'totalFare', 'officeShare'));
         }
 
     }
