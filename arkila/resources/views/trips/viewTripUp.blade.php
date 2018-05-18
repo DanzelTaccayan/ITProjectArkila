@@ -32,24 +32,24 @@
                     <table class="table table-bordered table-striped table-responsive">
                         <thead>
                             <th></th>
-                            <th>#Passenger</th>
-                            <th>#Discounted</th>
+                            <th class="text-center">Regular</th>
+                            <th class="text-center">Discounted</th>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>Main Terminal</th>
+                                <th class="text-center">Main Terminal</th>
                                 <td class="text-right">{{$numPassCountArr['mainTerminalRegular']}}</td>
                                 <td class="text-right">{{$numPassCountArr['mainTerminalDiscount']}}</td>
                             </tr>
                             <tr>
-                                <th>Short Trip</th>
+                                <th class="text-center">Short Trip</th>
                                 <td class="text-right">{{$numPassCountArr['shortTripRegular']}}</td>
                                 <td class="text-right">{{$numPassCountArr['shortTripDiscount']}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-right">Total</th>
+                                <th class="text-right">Total Passenger</th>
                                 <th class="text-right">{{$numPassCountArr['mainTerminalRegular'] + $numPassCountArr['shortTripRegular']}}</th>
                                 <th class="text-right">{{$numPassCountArr['mainTerminalDiscount'] + $numPassCountArr['shortTripDiscount']}}</th>
                             </tr>
@@ -93,7 +93,7 @@
                     </table>
 
                 <div class="text-center"><h4 class="report-header msgreen">SHARES</h4></div>
-                <table class="table table-bordered table-striped table-responsive">
+                <table class="table table-bordered table-striped">
                         <tbody>
                             <tr>
                                 <td>Total Fare collected</td>

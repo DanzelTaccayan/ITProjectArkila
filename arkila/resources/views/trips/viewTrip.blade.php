@@ -33,13 +33,13 @@
                     <table class="table table-bordered table-striped table-responsive">
                         <tbody>
                             <tr>
-                                <th>Route</th>
-                                <th>#Passenger</th>
-                                <th>#Discounted</th>
+                                <th class="text-center">Route</th>
+                                <th class="text-center">Regular</th>
+                                <th class="text-center">Discounted</th>
                             </tr>
                             @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
                             <tr>
-                                <td>{{$key}}</td>
+                                <td class="text-center">{{$key}}</td>
                                 @foreach($values as $innerKeys => $innerValues)
                                 <td class="text-right">{{$innerValues}}</td>
                                 @endforeach
@@ -61,7 +61,7 @@
 
                         <tfoot>
                             <tr>
-                                <th class="text-right">Total</th>
+                                <th class="text-right">Total Passenger</th>
                                 @foreach($totalcount as $key => $values)
                                 <th class="text-right">{{$values}}</th>
                                 @endforeach
