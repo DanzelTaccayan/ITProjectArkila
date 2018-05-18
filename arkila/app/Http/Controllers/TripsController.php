@@ -154,6 +154,17 @@ class TripsController extends Controller
             }
           }
 
+          $totalPassenger = 0;
+
+
+          foreach($tempArr as $places => $innerValues){
+            foreach($innerValues as $keys => $values){
+              $totalPassenger += $values;
+            }
+          }
+
+          $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
+
           $driverShare = 0;
           $totalFare = 0;
           foreach($transaction  as $transkeys => $transvalues){
@@ -162,7 +173,8 @@ class TripsController extends Controller
 
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
           $officeShare = $totalFare - $driverShare;
-          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare'));
+
+          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
         }else{
 
@@ -175,9 +187,7 @@ class TripsController extends Controller
           $stRegCount = 0;
           $stDisCount = 0;
 
-          $numPassCountArr = array_fill_keys(
-            array('mainTerminalRegular', 'mainTerminalDiscount', 'shortTripRegular', 'shortTripDiscount'), ''
-          );
+          $numPassCountArr = array();
           $originArray = null;
 
           $driverShare = 0;
@@ -213,14 +223,27 @@ class TripsController extends Controller
             $totalFare += $trans->ampd * $trans->amount_paid;
           }
 
-          $numPassCountArr['mainTerminalRegular'] = $mainRegCount;
-          $numPassCountArr['mainTerminalDiscount'] = $mainDisCount;
-          $numPassCountArr['shortTripRegular'] = $stRegCount;
-          $numPassCountArr['shortTripDiscount'] = $stDisCount;
+          $numPassCountArr[0] = $mainRegCount;
+          $numPassCountArr[1] = $mainDisCount;
+          $numPassCountArr[2] = $stRegCount;
+          $numPassCountArr[3] = $stDisCount;
 
+          $totalPassenger = array_sum($numPassCountArr);
+          $totalDiscountedPassenger = 0;
+
+
+
+          foreach($numPassCountArr as $keys => $value){
+            if($keys % 2 != 0){
+              $totalDiscountedPassenger += $value;
+            }else{
+              continue;
+            }
+          }
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund);
           $officeShare = $totalFare - $driverShare;
-          return view('trips.viewTripUp', compact('numPassCountArr', 'trip', 'driverShare', 'totalFare', 'officeShare'));
+
+          return view('trips.viewTripUp', compact('numPassCountArr','trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger', 'totalDiscountedPassenger'));
         }
 
     }

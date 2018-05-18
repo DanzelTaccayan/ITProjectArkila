@@ -57,9 +57,8 @@
                         <tfoot>
                             <tr>
                                 <th class="text-right">Total Passenger</th>
-                                @foreach($totalcount as $key => $values)
-                                <th class="text-right">{{$values}}</th>
-                                @endforeach
+                                <th class="text-right">{{$totalPassenger}}</th>
+                                <th class="text-right">{{$totalDiscountedPassenger}}</th>
                             </tr>
 
                         </tfoot>

@@ -43,20 +43,20 @@
                         <tbody>
                             <tr>
                                 <th class="text-center">Main Terminal</th>
-                                <td class="text-right">{{$numPassCountArr['mainTerminalRegular']}}</td>
-                                <td class="text-right">{{$numPassCountArr['mainTerminalDiscount']}}</td>
+                                <td class="text-right">{{$numPassCountArr[0]}}</td>
+                                <td class="text-right">{{$numPassCountArr[1]}}</td>
                             </tr>
                             <tr>
                                 <th class="text-center">Short Trip</th>
-                                <td class="text-right">{{$numPassCountArr['shortTripRegular']}}</td>
-                                <td class="text-right">{{$numPassCountArr['shortTripDiscount']}}</td>
+                                <td class="text-right">{{$numPassCountArr[2]}}</td>
+                                <td class="text-right">{{$numPassCountArr[3]}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th class="text-right">Total Passenger</th>
-                                <th class="text-right">{{$numPassCountArr['mainTerminalRegular'] + $numPassCountArr['shortTripRegular']}}</th>
-                                <th class="text-right">{{$numPassCountArr['mainTerminalDiscount'] + $numPassCountArr['shortTripDiscount']}}</th>
+                                <th class="text-right">{{$totalPassenger}}</th>
+                                <th class="text-right">{{$totalDiscountedPassenger}}</th>
                             </tr>
                         </tfoot>
                     </table>
