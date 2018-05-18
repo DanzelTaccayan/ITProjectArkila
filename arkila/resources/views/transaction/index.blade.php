@@ -279,7 +279,7 @@
                                                 
                                                 <div class="pull-right">   
                                                 <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px;">SOLD TICKETS</a>
-                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number')->first() ?? null)
+                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->orderBy('queue_number')->first() ?? null)
                                                     <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 @else
                                                     <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>

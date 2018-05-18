@@ -43,66 +43,9 @@
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
     
-    <!-- Van Queue Sidebar -->
-
-    <script>    
-    $(function () {
-        $('.select2').select2();
-    })
-    </script>
-    <script>
-        $('#addQueueSideBarButt').on('click', function() {
-            var destination = $('#destinationInputSideBar').val();
-            var van = $('#vanInputSideBar').val();
-            var driver = $('#driverInputSideBar').val();
-
-            if( destination != "" && van != "" && driver != ""){
-                $.ajax({
-                    method:'POST',
-                    url: '/home/trips/'+destination+'/'+van+'/'+driver,
-                    data: {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(){
-                        location.reload();
-                    }
-
-                });
-
-            }
-        });
-    </script>
-
-
 
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button);
         
     </script>
-    <!-- Special Unit Checker -->
-  <script>
-      $(function(){
-          function specialUnitChecker(){
-              $.ajax({
-                  method:'POST',
-                  url: '{{route("vanqueue.specialUnitChecker")}}',
-                  data: {
-                      '_token': '{{csrf_token()}}'
-                  },
-                  success: function(response){
-                      if(response[0]) {
-                          $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                      }else{
-                          if(response[1]){
-                              $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
-                          }
-                      }
-                  }
-
-              });
-          }
-
-          specialUnitChecker();
-      });
-  </script>
