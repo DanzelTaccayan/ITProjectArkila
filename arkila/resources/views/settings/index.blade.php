@@ -21,7 +21,7 @@
                             {{$feature->description}}
                             <span class="label pull-right">
                                 <label class="switch">
-                                    <input type="checkbox" class="features" data-featureid="{{$feature->id}}" @if($feature->Status == 'enable') {{'checked'}} @endif>
+                                    <input type="checkbox" class="features" data-featureid="{{$feature->id}}" @if($feature->status == 'enable') {{'checked'}} @endif>
                                     <span class="slider round"></span>
                                 </label>
                             </span>
@@ -31,7 +31,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">Database</h3>
@@ -49,11 +49,11 @@
                 </form>
             </div>
         </div>
-        
+
     </div>
     <div class="col-md-8">
         <div class="box">
-            <div class="box-body">          
+            <div class="box-body">
                <div class="table-responsive">
                     <div class="col col-md-6">
                        <h4><strong>FEES</strong></h4>
@@ -72,7 +72,7 @@
                                 <td>{{$fee->description}}</td>
                                 <td class="pull-right">{{$fee->amount}}</td>
                                 <td>
-                                    <div class="text-center">    
+                                    <div class="text-center">
                                         <a href="{{ route('fees.edit', [$fee->fee_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                     </div>
 
@@ -93,7 +93,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>           
+                </div>
             </div>
         </div>
     </div>
@@ -160,7 +160,7 @@
                     'aTargets': [-1] /* 1st one, start by the right */
                 }]
             }),
-            
+
              $('.destination').DataTable({
                 'paging': true,
                 'lengthChange': false,
