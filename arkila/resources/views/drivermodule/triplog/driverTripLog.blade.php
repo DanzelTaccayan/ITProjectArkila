@@ -1,5 +1,5 @@
-@extends('layouts.driver') 
-@section('title', 'Driver Profile') 
+@extends('layouts.driver')
+@section('title', 'Driver Profile')
 @section('content-title', 'Driver Profile')
 @section('content')
 <div class="desktop">
@@ -34,12 +34,12 @@
                         <td>{{$tripNo}}</td>
                         <td>{{$tripMade->date_departed}}</td>
                         <td>{{$tripMade->time_departed}}</td>
-                        <td>{{$tripMade->terminal->description}}</td>
-                        <td>{{$superAdmin->description}}</td>
+                        <td>{{$tripMade->origin}}</td>
+                        <td>{{$tripMade->destination}}</td>
                         <td>{{$tripMade->report_status}}</td>
                         <td>
                             <div class="text-center">
-                                <a href="{{route('drivermodule.triplog.driverTripDetails', [$tripMade->trip_id])}}" type="button" 
+                                <a href="{{route('drivermodule.triplog.driverTripDetails', [$tripMade->trip_id])}}" type="button"
                                 class="btn btn-primary btn-sm"
                                 id="view-trip{{$tripMade->trip_id}}">
                                 <i class="fa fa-eye"></i>

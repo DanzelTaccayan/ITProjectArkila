@@ -25,6 +25,7 @@
     <div>
         <h2 class="text-white">VIEW TRIP</h2>
     </div>
+
     <div class="box" style="box-shadow: 0px 5px 10px gray;">
         <div class="row">
             <div class="col-md-6" style="padding: 2% 4%">
@@ -32,35 +33,31 @@
                 <div class="text-center">
                     <h4 class="report-header sblue">PASSENGER COUNT</h4>
                 </div>
-
                 <div class="box-body" id="inner-dest">
-
                     <table class="table table-bordered table-striped table-responsive">
+                        <thead>
+                            <th></th>
+                            <th class="text-center">Regular</th>
+                            <th class="text-center">Discounted</th>
+                        </thead>
                         <tbody>
                             <tr>
-                                <th class="text-center">Route</th>
-                                <th class="text-center">Regular</th>
-                                <th class="text-center">Discounted</th>
+                                <th class="text-center">Main Terminal</th>
+                                <td class="text-right">{{$numPassCountArr[0]}}</td>
+                                <td class="text-right">{{$numPassCountArr[1]}}</td>
                             </tr>
-                            @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
                             <tr>
-                                <td class="text-center">{{$key}}</td>
-                                @foreach($values as $innerKeys => $innerValues)
-                                <td class="text-right">{{$innerValues}}</td>
-                                @endforeach
+                                <th class="text-center">Short Trip</th>
+                                <td class="text-right">{{$numPassCountArr[2]}}</td>
+                                <td class="text-right">{{$numPassCountArr[3]}}</td>
                             </tr>
-                            @endforeach
                         </tbody>
-
-                        @php $totalcount = array(); @endphp @foreach($tempArr as $key => $values) @foreach($values as $innerKeys => $innerValues) @if(!array_key_exists($innerKeys, $totalcount)) @php $totalcount[$innerKeys] = 0; @endphp @endif @php $totalcount[$innerKeys] += $innerValues; @endphp @endforeach @endforeach
-
                         <tfoot>
                             <tr>
                                 <th class="text-right">Total Passenger</th>
                                 <th class="text-right">{{$totalPassenger}}</th>
                                 <th class="text-right">{{$totalDiscountedPassenger}}</th>
                             </tr>
-
                         </tfoot>
                     </table>
                 </div>
@@ -71,6 +68,7 @@
                 <div class="text-center">
                     <h4 class="report-header msgreen">DEPARTURE DETAILS</h4>
                 </div>
+
                 <table class="table">
                     <tbody>
                         <tr>
@@ -103,7 +101,7 @@
                 <div class="text-center">
                     <h4 class="report-header smaroon">SHARES</h4>
                 </div>
-                <table class="table table-bordered table-striped table-responsive">
+                <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
                             <td>Total Fare collected</td>
@@ -124,45 +122,7 @@
 
             </div>
 
-            <div class="col-md-6" style="padding: 2% 4%">
 
-                <div class="text-center">
-                    <h4 class="report-header sblue">PASSENGER COUNT</h4>
-                </div>
-
-                <div class="box-body" id="inner-dest">
-
-                    <table class="table table-bordered table-striped table-responsive">
-                        <tbody>
-                            <tr>
-                                <th class="text-center">Route</th>
-                                <th class="text-center">Regular</th>
-                                <th class="text-center">Discounted</th>
-                            </tr>
-                            @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
-                            <tr>
-                                <td class="text-center">{{$key}}</td>
-                                @foreach($values as $innerKeys => $innerValues)
-                                <td class="text-right">{{$innerValues}}</td>
-                                @endforeach
-                            </tr>
-                            @endforeach
-                        </tbody>
-
-                        @php $totalcount = array(); @endphp @foreach($tempArr as $key => $values) @foreach($values as $innerKeys => $innerValues) @if(!array_key_exists($innerKeys, $totalcount)) @php $totalcount[$innerKeys] = 0; @endphp @endif @php $totalcount[$innerKeys] += $innerValues; @endphp @endforeach @endforeach
-
-                        <tfoot>
-                            <tr>
-                                <th class="text-center">Total Passenger</th>
-                                @foreach($totalcount as $key => $values)
-                                <th class="text-right">{{$values}}</th>
-                                @endforeach
-                            </tr>
-
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 </div>
