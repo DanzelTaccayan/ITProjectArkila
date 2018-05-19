@@ -28,6 +28,7 @@
                                             <th>Reservation #</th>
                                             <th>Destination</th>
                                             <th>Reservation Date</th>
+                                            <th>Departure Time</th>
                                             <th>Number of Slots</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
@@ -39,6 +40,7 @@
                                             <td>{{ $reservation->id }}</td>
                                             <td>{{ $reservation->destination->destination_name }}</td>
                                             <td>{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                            <td>{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
                                             <td>{{ $reservation->number_of_slots }}</td>
                                             <td>
                                             <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-block btn-primary btn-sm"> <i class="fa fa-plus"></i> <b>View</b></a>

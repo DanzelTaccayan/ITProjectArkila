@@ -16,4 +16,5 @@ class ReservationDate extends Model
     public function destination(){
     	return $this->hasOne(Destination::Class, 'destination_id', 'destination_terminal');
     }
+
 }

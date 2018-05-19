@@ -8,23 +8,27 @@
   <div class="row">
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="info-box">
-          <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
-          <div class="info-box-content">
-            <h4 style="margin: 0;"><strong>{{auth()->user()->member->van->first()->plate_number}}</strong></h4>
-            <p style="margin: 0;">{{auth()->user()->member->van->first()->model->description}}</p>
-            <p style="color: gray;">{{auth()->user()->member->van->first()->seating_capacity}} seats</p>
+        <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
+        <div class="info-box-content">
+            @if (auth()->user()->member->van->count() == 1)
+            <h4 style="margin: 0;"><strong>{{auth()->user()->member->van->first()->plate_number ?? 'None'}}</strong></h4>
+            <p style="margin: 0;">{{auth()->user()->member->van->first()->model->description  ?? 'None'}}</p>
+            <p style="color: gray;">{{auth()->user()->member->van->first()->seating_capacity  ?? 'None'}} seats</p>
+            @else
+            <h4 style="margin: 0;"><strong>No Van</strong></h4>
+            @endif
           </div>
           <!-- /.info-box-content -->
       </div>
     </div>
+    @if (auth()->user()->member->van->count() == 1)
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="info-box">
         <span class="info-box-icon bg-maroon"><i class="fa fa-list-ol"></i></span>
 
         <div class="info-box-content">
-          
           <span class="info-box-text">ON QUEUE:</span>
-          @if(auth()->user()->member->van->first()->vanQueue->first()->queue_number !== null)
+          @if($queueNumber !== null)
           <span class="info-box-number" style="font-size:25px; margin-top:10px;">#{{auth()->user()->member->van->first()->vanQueue->first()->queue_number}}</span>
           @else
           <span class="info-box-number" style=" margin-top:10px;">NOT LISTED</span>
@@ -33,7 +37,9 @@
         <!-- /.info-box-content -->
       </div>
       <!-- /.info-box -->
+      @endif
     </div>
+    @if($queueNumber !== null)
     @if(auth()->user()->member->van->first()->vanQueue->first()->driver_id !== auth()->user()->member->member_id)
     <div class="col-md-4 col-sm-6 col-xs-12">
       <div class="info-box">
@@ -48,6 +54,7 @@
       </div>
       <!-- /.info-box -->
     </div>
+  @endif
   @endif
   </div>
 
