@@ -800,3 +800,100 @@ input:checked+.slider:before {
 .text-white{
   color: white;
 }
+.step-btn {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+}
+
+.step-btn:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.next {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.round {
+    border-radius: 50%;
+}
+
+.sidequeue-ol {
+     /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 0;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+.sidequeue-ol .sidequeue-ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+.sidequeue-body{
+  margin-top:10px;
+  margin-bottom: 5px;
+  height: 420px;
+}
+
+.sidequeue-body-color{
+  height: 410px;
+  margin: 0;
+}
+
+
+.sidequeue-list{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.sidequeue-list span{
+  position: relative;
+  display: block;
+  padding: .4em .4em .4em .8em;
+  *padding: .4em;
+  margin: .5em 0 .5em 2.5em;
+  text-decoration: none;
+  transition: all .3s ease-out; 
+  background: white;  
+  color: black;
+}
+.sidequeuenum p{
+    counter-increment: li;
+    position: absolute; 
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    background-color: #fa8072;
+}
+
+.sidequeuenum a:hover{
+  background: #eb6b5c;
+  transition: all .3s ease-out;
+
+}
+.queue-item:hover{
+    left: -.5em;    
+    border-left-color: #fa8072;    
+    cursor: move;
+
+}
+.list-border{
+    border: 1px solid #8f8685;
+    border-left-width: 4px;
+    background: #feb0a721;
+}

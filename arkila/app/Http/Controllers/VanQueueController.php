@@ -19,7 +19,6 @@ class VanQueueController extends Controller
      */
     public function index()
     {
-        $mainTerminal = Destination::where('is_main_terminal',1)->first();
         $terminals = Destination::allTerminal()->get();
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
         $drivers = Member::whereNotIn('member_id', function($query) {
@@ -242,6 +241,9 @@ class VanQueueController extends Controller
             }
 
             DB::commit();
+            if(request('fromOb')) {
+                session()->flash('success', $vanOnQueue->van->plate_number.' will remain on deck and its remark has been removed.');
+            }
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
@@ -489,7 +491,9 @@ class VanQueueController extends Controller
                     'has_privilege' => 1
                 ]);
                 DB::commit();
-
+                if(request('fromOb')){
+                    session()->flash('success','Successfully moved '.$vanOnQueue->van->plate_number.' into the special unit list.');
+                }
                 return 'Success';
             } catch(\Exception $e) {
                 DB::rollback();
