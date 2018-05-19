@@ -640,6 +640,20 @@ input:checked+.slider:before {
    -webkit-box-orient: vertical;
    text-align:justify ;
 }
+.text-limit-2 {
+  overflow: hidden;
+  display: -webkit-box;
+   -webkit-line-clamp: 2; /* Limit to 2 lines */
+   -webkit-box-orient: vertical;
+   text-align:justify ;
+}
+.text-limit-3 {
+  overflow: hidden;
+  display: -webkit-box;
+   -webkit-line-clamp: 3; /* Limit to 3 lines */
+   -webkit-box-orient: vertical;
+   text-align:justify ;
+}
 .text-limit-4 {
   overflow: hidden;
   display: -webkit-box;

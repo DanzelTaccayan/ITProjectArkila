@@ -18,6 +18,7 @@ class DriverHomeController extends Controller
 
     public function index()
     {
-      return view('drivermodule.index');
+      $announcements = Announcement::latest()->where('viewer', '=', 'Public')->orWhere('viewer', '=', 'Driver Only')->get();
+      return view('drivermodule.index', compact('announcements'));
     }
 }

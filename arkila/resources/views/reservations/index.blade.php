@@ -25,234 +25,29 @@
                                 <table class="table table-bordered table-striped listReservation">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Contact Number</th>
+                                            <th>Reservation #</th>
                                             <th>Destination</th>
-                                            <th>Preferred Date</th>
-                                            <th>Time</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
+                                            <th>Reservation Date</th>
+                                            <th>Number of Slots</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>{{-- 
+                                    <tbody> 
 
                                         @foreach ($reservations as $reservation) 
-                                        @if ($reservation->status == 'Paid' | $reservation->status == 'Departed' | $reservation->status == 'Cancelled' )
                                         <tr>
                                             <td>{{ $reservation->id }}</td>
-                                            <td>{{ $reservation->name }}</td>
-                                            <td>{{ $reservation->contact_number }}</td>
-                                            <td>{{ $reservation->destination->description }}</td>
-                                            <td>{{ $reservation->departure_date }}</td>
-                                            <td>{{ $reservation->departure_time }}</td>
-                                            <td>{{ $reservation->amount }}</td>
-                                            <td>{{ $reservation->status }}</td>
-                                            <td class="center-block">
-                                                <div class="text-center">
-                                                    
-                                                        
-                                                    @if ($reservation->status == 'Paid')
-                                                    
-                                                        <button class="btn btn-outline-danger btn-sm" type="submit" name="butt" data-toggle="modal" data-target="#{{'cancel'.$reservation->id}}" value="Cancelled"><i class="fa fa-close"></i> Cancel</button>
-                                                    
-                                                    
-                                                         <!-- Modal for Cancelation-->
-                                                         <div class="modal fade" id="{{'cancel'.$reservation->id}}">
-                                                            <div class="modal-dialog">
-                                                                <div class="col-md-offset-2 col-md-8">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header bg-red">
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span></button>
-                                                                            <h4 class="modal-title"> Confirm</h4>
-                                                                        </div>
-                                                                        <div class="modal-body row" style="margin: 0% 1%;">
-                                                                            <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                                <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                                            </div>
-                                                                            <div class="col-md-10">
-                                                                                <p style="font-size: 110%;">Are you sure you want to cancel reservation #{{ $reservation->id }}?</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                           <form method="POST" action="{{ route('reservations.update', $reservation->id) }}">
-                                                                                {{ csrf_field() }} {{ method_field('PATCH') }} 
-
-                                                                                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Discard</button>
-                                                                                <button type="submit" name="butt" value="Cancelled" class="btn btn-danger" style="width:22%;">Cancel</button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /.modal-content -->
-                                                                </div>
-                                                                <!-- /.col -->
-                                                            </div>
-                                                            <!-- /.modal-dialog -->
-                                                        </div>
-                                                        <!-- /.modal -->
-
-                                                    @else
-                                                   
-                                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{'deletion'.$reservation->id}}"><i class="fa fa-close"></i> Delete</button>
-                                                    
-                                                    
-                                                    <!-- Modal for Deletion-->
-                                                     <div class="modal fade" id="{{'deletion'.$reservation->id}}">
-                                                        <div class="modal-dialog">
-                                                            <div class="col-md-offset-2 col-md-8">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header bg-red">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span></button>
-                                                                        <h4 class="modal-title"> Confirm</h4>
-                                                                    </div>
-                                                                    <div class="modal-body row" style="margin: 0% 1%;">
-                                                                        <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                            <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                                        </div>
-                                                                        <div class="col-md-10">
-                                                                            <p style="font-size: 110%;">Are you sure you want to delete reservation #{{ $reservation->id }}?</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <form method="POST" action="{{ route('reservations.destroy', [$reservation->id]) }}" class="delete">
-                                                                            {{csrf_field()}} {{method_field('DELETE')}}
-
-                                                                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                                                                            <button type="submit" class="btn btn-danger btn-sm" style="width:22%;">Delete</button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- /.modal-content -->
-                                                            </div>
-                                                            <!-- /.col -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                    <!-- /.modal -->
-                                                    
-                                                    @endif
-
-                                                </div>
+                                            <td>{{ $reservation->destination->destination_name }}</td>
+                                            <td>{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                            <td>{{ $reservation->number_of_slots }}</td>
+                                            <td>
+                                            <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-block btn-primary btn-sm"> <i class="fa fa-plus"></i> <b>View</b></a>
                                             </td>
                                         </tr>
-                                        @endif 
-                                        @endforeach --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
-
-                        <div class="tab-pane" id="tab_2">
-
-                            <table class="table table-bordered table-striped listReservation">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Contact Number</th>
-                                        <th>Destination</th>
-                                        <th>Preferred Date</th>
-                                        <th>Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   {{--  @foreach ($reservations->where('type', 'Online') as $reservation)
-                                    <tr>
-                                        <td>{{ $reservation->id }}</td>
-                                        <td>{{ $reservation->name }}</td>
-                                        <td>{{ $reservation->contact_number }}</td>
-                                        <td>{{ $reservation->destination->description }}</td>
-                                        <td>{{ $reservation->departure_date }}</td>
-                                        <td>{{ $reservation->departure_time }}</td>
-                                        <td>{{ $reservation->amount }}</td>
-                                        <td>{{ $reservation->status }}</td>
-                                        <td class="text-center">
-
-
-                                            @if ($reservation->status == 'Pending')
-                                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'paid'.$reservation->id}}"><i class="fa fa-automobile"></i>Accept</button>
-                                                
-                                                <!-- Modal for Paid-->
-                                                <div class="modal fade" id="{{'paid'.$reservation->id}}">
-                                                    <div class="modal-dialog">
-                                                        <div class="col-md-offset-2 col-md-8">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header bg-primary">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span></button>
-                                                                    <h4 class="modal-title"> Confirm</h4>
-                                                                </div>
-                                                                <div class="modal-body row">     
-                                                                    <p style="font-size: 110%;">Are you sure you want to accept reservation #{{$reservation->id}}?</p>
-                                                                    
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <form action="{{ route('reservations.update', $reservation->id) }}" method="POST" class="form-action">
-                                                                        {{ csrf_field() }} {{ method_field('PATCH') }}
-
-                                                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Discard</button>
-                                                                        <button type="submit" name="click" value="Accepted" class="btn btn-primary btn-sm" style="width:22%;">Accept</button>
-                                                                    </form>
-                                                                </div>
-                                                                <!-- /.modal-content -->
-                                                            </div>
-                                                            <!-- /.col -->
-                                                        </div>
-                                                        /.modal-dialog
-                                                    </div>
-                                                    <!-- /.modal -->
-
-                                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'cancel'.$reservation->id}}"><i class="fa fa-automobile"></i> Decline</button>
-
-                                                     <!-- Modal for Cancelation-->
-                                                    <div class="modal fade" id="{{'cancel'.$reservation->id}}">
-                                                        <div class="modal-dialog">
-                                                            <div class="col-md-offset-2 col-md-8">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header bg-red">
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span></button>
-                                                                        <h4 class="modal-title"> Confirm</h4>
-                                                                    </div>
-                                                                    <div class="col-md-10">
-                                                                        <p style="font-size: 110%;">Are you sure you want to decline Reservation #{{$reservation->id}}?</p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <form action="{{ route('reservations.update', $reservation->id) }}" method="POST" class="form-action">
-                                                                            {{ csrf_field() }} {{ method_field('PATCH') }}
-
-                                                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Discard</button>
-                                                                        <button type="submit" name="click" value="Declined" class="btn btn-danger btn-sm" style="width:22%;">Decline</button>
-                                                                    </form>
-                                                                </div>
-                                                                <!-- /.modal-content -->
-                                                            </div>
-                                                            <!-- /.col -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                    <!-- /.modal -->
-                                               
-                                            @elseif ($reservation->status == 'Accepted')
-                                            <button type="submit" class="btn btn-primary btn-sm" style="width:100%;">Sell</button>
-                                            @else
-                                            <span>No Action</span>
-                                            @endif
-                                           
-                                        </td>
-                                    </tr>
-                                 
-
-                                    
-                                @endforeach --}}
-                                </tbody>
-                            </table>
-                        </div>
                             <!-- /.box-body -->
                         </div>
                     </div>

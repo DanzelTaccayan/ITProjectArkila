@@ -10,14 +10,13 @@
                     {{ $profile->first_name.' '.$profile->middle_name.' '.$profile->last_name }}
                 </h3>
                 <div class="text-center">
-                    <p>Msantos</p>
+                    <p>{{$profile->user->username}}</p> 
                 </div>
                 <div class="text-center">
                     <div class="text-center form-group">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverChangePassword" style="width:280px;">Account Settings</button>
                     </div>
                 </div>
-
                 <hr>
                 <div class="padding-side-5">
                     <div class="text-center">

@@ -10,7 +10,7 @@ class CustomerUserHomeController extends Controller
 {
     public function index()
     {
-    	$announcements = Announcement::latest()->where('viewer', '=', 'Public')->orWhere('viewer', '=', 'Customer Only')->get();
+        $announcements = Announcement::where('viewer', 'Public')->orWhere('viewer', 'Customer Only')->get();
     	return view('customermodule.index', compact('announcements'));
     }
 }

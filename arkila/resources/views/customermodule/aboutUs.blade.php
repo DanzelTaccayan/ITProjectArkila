@@ -1,4 +1,4 @@
-@extends('layouts.customer_non_user')
+@extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('links')
 @parent
 <style> 
@@ -11,7 +11,6 @@
 <section id="">
             <section class="bar">
                <div class="container">
-                
                         <div class="heading text-center">
                             <h2>About Us</h2>
                         </div>
@@ -68,29 +67,37 @@
 
                         </ul>
                     </div><!-- col-->
+                    @if($profile->count() !== 0)
                     <div class="col-md-4">
                         <div class="heading">
                             <h2>Contact Us</h2>
                         </div>
                         <ul class="ul-icons list-unstyled">
+                        @if($profile->first()->contact_number !== null)
                             <li>
                                 <div class="icon-filled bg-green">
                                     <i class="fa fa-phone"></i>
                                 </div>
-                                09000000000
+                                {{$profile->first()->contact_number}}
                             </li>
+                        @endif
+                        @if($profile->first()->email !== null)
                             <li>
                                 <div class="icon-filled bg-green">
                                     <i class="fa fa-envelope"></i>
                                 </div>
-                                bantrans@gmail.com
+                                {{$profile->first()->email}}
                             </li>
+                        @endif
+                        @if($profile->first()->address !== null)
                             <li>
                                 <div class="icon-filled bg-green"><i class="fa fa-map-marker"></i></div>
-                                Shanum St. Burnham
+                                {{$profile->first()->address}}
                             </li>
+                        @endif
                         </ul>
                     </div><!-- col-->
+                    @endif
                 </div>
                 <!-- row-->
                 </div><!-- container-->

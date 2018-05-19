@@ -136,7 +136,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/testing', 'TestingController');
 
     Route::resource('/home/reservations', 'ReservationsController', [
-        'except' => ['show', 'edit']
+        'except' => ['edit']
     ]);
     
     Route::resource('/home/rental', 'RentalsController',[
@@ -262,7 +262,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
 /*********************************Customer Module******************************/
 /******************************************************************************/
 
-Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.non-user.about.customerAbout');
+Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
 Route::group(['middleware' => ['auth', 'customer']], function(){

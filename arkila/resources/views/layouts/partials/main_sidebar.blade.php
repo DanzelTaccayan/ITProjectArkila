@@ -24,7 +24,7 @@
             <li class="{{ Request::is('home/tansactions') ? 'active' : '' }}">
                 <a href="{{route('transactions.index')}}">
                     <i class="fa fa-th"></i>
-                    <span>POS</span>
+                    <span>Sell and Depart</span>
                 </a>
             </li>
             <li class="{{ Request::is('home/route') ? 'active' : '' }}">
@@ -62,7 +62,7 @@
             <li class="treeview {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} ">
                 <a href="#">
                     <i class="fa fa-users"></i>
-                    <span>Personnel</span>
+                    <span>Units and Personnel</span>
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>
