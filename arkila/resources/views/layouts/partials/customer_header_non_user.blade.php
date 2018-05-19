@@ -41,7 +41,7 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown menu-large">
-                            <a href="{{route('customermodule.non-user.about.customerAbout')}}">About</a>
+                            <a href="{{route('customermodule.aboutUsNonUser')}}">About</a>
                         </li>
                         <li class="nav-item dropdown menu-large">
                             <a href="{{route('login')}}">Sign In</a>
