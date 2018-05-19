@@ -89,12 +89,20 @@
         #driverChange{
             color: white;
         }
+        .d-inline{
+            display: inline-block!important;
+        }
     </style>
 @stop
 @section('content')
         <div class="padding-side-5">
-            <div>
-                <h2 class="text-white">LIST OF UNUSED TICKETS</h2>
+            <div>   
+                <div class="d-inline">
+                    <h2 class="text-white">LIST OF UNUSED TICKETS</h2>
+                </div>
+                <div class="d-inline">    
+                    <a href=" " class="btn bg-maroon btn-flat">POS</a>
+                </div>
             </div>
             <div class="box box-solid">
                 <div class="box-body with-shadow">
@@ -118,7 +126,8 @@
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i>
                                                     </button>
-                                                    <button name="multiDelete" type="button" class="btn btn-default btn-sm btn-flat"><i class="fa fa-trash"></i></button>
+                                                    <button name="" type="button" class="btn btn-default btn-sm btn-flat" data-toggle="modal" data-target="#multirefund-modal"><i  class="fa fa-money"></i></button>
+                                                    <button name="multiDelete" type="button" class="btn btn-default btn-sm btn-flat" data-toggle="modal" data-target="#multidelete-modal"><i  class="fa fa-trash"></i></button>
                                                 </div>
                                             </div>
                                             <table id="sold-tickets{{$terminal->destination_id}}" class="table table-bordered sold-tickets">
@@ -141,11 +150,11 @@
                                                         <td>{{ $transaction->created_at }}</td>
                                                         <td id="actionBody{{$transaction->transaction_id}}">
                                                             <div class="text-center">
-                                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-money"></i> Refund</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#change-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-edit"></i> Change Destination</button>
+                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button value="{{$transaction->transaction_id}}" name="deleteTransaction" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-trash"></i> Delete</button>
+                                                                <button value="{{$transaction->transaction_id}}" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                                             </div>
                                                         </td>
                                                         <td id="destBody{{$transaction->transaction_id}}" class="hidden">
@@ -162,87 +171,136 @@
 
 
                                                     </tr>
-
-                                                    <!-- modals -->
-                                                    <div class="modal fade" id="change-modal{{$transaction->ticket->ticket_id}}">
-                                                        <div class="modal-dialog modal-sm">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span></button>
-                                                                    <h4 class="modal-title">{{$transaction->ticket->ticket_number}}</h4>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="form-group">
-                                                                        <label for="">Destination</label>
-                                                                        <select id="changeDestination{{$transaction->transaction_id}}" class="form-control select2">
-                                                                            @foreach( $destinations->where('destination_name',$transaction->destination) as $destination)
-                                                                                <option @if($transaction->destination == $destination->destination_name){{'selected'}}@endif value="{{$destination->destination_id}}">{{$destination->destination_name}}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                                                                    <button data-transaction="{{$transaction->transaction_id}}" name="changeDestinationButton" type="submit" class="btn btn-primary">Change Destination</button>
-                                                                </div>
-                                                            </div>
-                                                            <!-- /.modal-content -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                    <!-- /.modal -->
-
-                                                    <div class="modal" id="refund-modal{{$transaction->ticket->ticket_id}}">
-                                                        <div class="modal-dialog" style="margin-top: 10%;">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">×</span></button>
-                                                                    <h4 class="modal-title"></h4>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
-                                                                    <p class="text-center">WOULD YOU LIKE TO <strong>REFUND</strong></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <div class="text-center">
-                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                                        <button type="button" class="btn btn-primary">REFUND</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- /.modal-content -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-
-                                                    <div class="modal" id="delete-modal{{$transaction->ticket->ticket_id}}">
-                                                        <div class="modal-dialog" style="margin-top: 10%;">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">×</span></button>
-                                                                    <h4 class="modal-title"></h4>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
-                                                                    <p class="text-center">WOULD YOU LIKE TO <strong>DELETE</strong></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <div class="text-center">
-                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                                        <button type="button" class="btn btn-danger">DELETE</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- /.modal-content -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
                                         @endforeach
                                         </tbody>
                                         </table>
+                                        @foreach(App\Transaction::where('destination',$terminal->destination_name)->where('status','Pending')->get() as $transaction)
+                                        <div class="modal" id="refund-modal{{$transaction->ticket->ticket_id}}">
+                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
+                                                        <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE</strong></p>
+                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong> WILL BE REFUNDED?</p>
+                                                        <h3 class="text-center ">VALUE: <strong class="text-green">₱ 200</strong></h3>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-primary">YES</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal" id="lost-modal{{$transaction->ticket->ticket_id}}">
+                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST?</h1>
+                                                        <p class="text-center">LOST OR UNRETURNED TICKETS WILL STILL BE <strong class="text-green">RECORDED AS SALE</strong></p>
+                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong> IS LOST OR UNRETURNED?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-primary">YES</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal" id="delete-modal{{$transaction->ticket->ticket_id}}">
+                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE?</h1>
+                                                        <p class="text-center">DELETED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong>?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-primary">YES</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                                
+                                        @endforeach
+
+
+                                        <div class="modal" id="multirefund-modal">
+                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
+                                                        <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE.</strong></p>
+                                                        <p class="text-center">ARE YOU SURE THE <strong class="text-maroon"> (5) SELECTED TICKETS </strong> WILL BE REFUNDED?</p>
+                                                        <h3 class="text-center ">TOTAL VALUE: <strong class="text-green">₱ 1000</strong></h3>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-primary">YES</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal" id="multidelete-modal">
+                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span></button>
+                                                        <h4 class="modal-title"></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE?</h1>
+                                                        <p class="text-center">DELETED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE THE <strong class="text-maroon">(5) SELECTED TICKETS</strong>?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                            <button type="button" class="btn btn-primary">YES</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
                                         </div>
                                     </div>
                                 @endif
@@ -395,7 +453,7 @@
                 'searching': true,
                 'ordering': true,
                 'info': true,
-                'autoWidth': true,
+                'autoWidth': false,
                 "order": [[ 1, "desc" ]]
             })
         })
