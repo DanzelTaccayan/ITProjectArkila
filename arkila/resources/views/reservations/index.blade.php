@@ -44,7 +44,7 @@
                                             <td class="text-right">{{ $reservation->number_of_slots }}</td>
                                             <td>
                                                 <div class="text-center"> 
-                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> <b>VIEW</b></a>
+                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
                                                 </div>
                                             </td>
                                         </tr>

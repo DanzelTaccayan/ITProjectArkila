@@ -119,7 +119,7 @@
                                     <div class="modal-footer">
                                             <div class="text-center">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Close</button>
-                                                <a href="{{route('announcements.edit', [$announcement->announcement_id])}}" class="btn btn-primary btn-create btn-sm"><i class="fa fa-pencil"></i> EDIT</a>
+                                                <a href="{{route('announcements.edit', [$announcement->announcement_id])}}" class="btn btn-primary btn-create btn-sm"><i class="fa fa-edit"></i> EDIT</a>
                                             </div>
                                     </div>
                                 </div>
