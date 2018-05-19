@@ -9,7 +9,6 @@ class ViewAnnouncementsController extends Controller
 {
     public function showAnnouncement()
     {
-      $announcements = Announcement::latest()->where('viewer', '=', 'Public')->orWhere('viewer', '=', 'Driver Only')->get();
       return view('drivermodule.indexAnnouncements', compact('announcements'));
     }
 }

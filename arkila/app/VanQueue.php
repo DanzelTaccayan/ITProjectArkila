@@ -19,4 +19,8 @@ class VanQueue extends Model
     public function van(){
         return $this->belongsTo(Van::class,'van_id');
     }
+    public function driver(){
+        return $this->belongsTo(Member::class,'driver_id', 'member_id');
+    }
+
 }
