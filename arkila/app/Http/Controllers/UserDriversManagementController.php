@@ -11,6 +11,10 @@ use App\User;
 
 class UserDriversManagementController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('user-status', ['only' => 'changeDriverStatus']);
+    }
 
     public function show(User $driver_user)
     {
@@ -32,11 +36,11 @@ class UserDriversManagementController extends Controller
         $id = Input::get('id');
 
         // dd($id);
-        $user = User::findOrFail($id);
-        if($user->status === "enable"){
+        $user = User::find($id);
+        if($user->status == "enable"){
             $user->status = "disable";
             session()->flash('message', 'User successfully enabled!');
-        }elseif($user->status === "disable"){
+        }elseif($user->status == "disable"){
             $user->status = "enable";
 
             session()->flash('message', 'User successfully disabled!');

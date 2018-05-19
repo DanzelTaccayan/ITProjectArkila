@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'walkin-rental' => \App\Http\Middleware\WalkInRental::class,
         'online-reservation' => \App\Http\Middleware\OnlineReservation::class,
         'walkin-reservation' => \App\Http\Middleware\WalkInReservation::class,
+        'user-status' => \App\Http\Middleware\ChangeUserStatus::class,
     ];
 }

@@ -22,7 +22,12 @@ class SuperAdminAuthenticated
             if(Auth::user()->isCustomer() && Auth::user()->isEnable()){
               return redirect(route('customermodule.user.index'));
             }
+            // else{
+            //   Auth::logout();
+            //   abort(401);
+            // }
           }else{
+            Auth::logout();
             abort(403);
           }
 
@@ -31,7 +36,12 @@ class SuperAdminAuthenticated
             if(Auth::user()->isDriver() && Auth::user()->isEnable()){
               return redirect(route('drivermodule.index'));
             }
+            // else{
+            //   Auth::logout();
+            //   abort(401);
+            // }
           }else{
+            Auth::logout();
             abort(403);
           }
 
@@ -41,6 +51,6 @@ class SuperAdminAuthenticated
           }
         }
 
-        abort(404);
+        abort(401);
     }
 }

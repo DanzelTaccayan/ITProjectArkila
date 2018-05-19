@@ -22,7 +22,12 @@ class CustomerAuthenticated
             if(Auth::user()->isDriver() && Auth::user()->isEnable()){
               return redirect(route('drivermodule.index'));
             }
+            // else{
+            //   Auth::logout();
+            //   abort(401);
+            // }
           }else{
+            Auth::logout();
             abort(403);
           }
 
@@ -35,12 +40,17 @@ class CustomerAuthenticated
             if(Auth::user()->isCustomer() && Auth::user()->isEnable()){
               return $next($request);
             }
+            // else{
+            //   Auth::logout();
+            //   abort(401);
+            // }
           }else{
+            Auth::logout();
             abort(403);
           }
 
         }
 
-        abort(404);
+        abort(401);
     }
 }
