@@ -16,6 +16,11 @@ class Destination extends Model
         return $this->hasMany(Ticket::class, 'destination_id');
     }
 
+    public function reservationDates()
+    {
+        return $this->belongsTo(ReservationDate::class, 'id');
+    }
+    
     public function routeOrigin()
     {
         return $this->belongsToMany(Destination::class,'route_terminal','route','terminal_origin')
@@ -85,6 +90,8 @@ class Destination extends Model
     {
         return $query->where('is_terminal','0');
     }
+
+
 
     // public function route(){
     //     return $this->belongsToMany(Destination::class,'route_terminal','destination_id','route');

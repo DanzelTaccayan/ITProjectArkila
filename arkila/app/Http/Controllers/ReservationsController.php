@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
+use App\ReservationDate;
 use App\Destination;
 use App\Fee;
 use Illuminate\Validation\Rule;
@@ -14,7 +15,7 @@ class ReservationsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('walkin-reservation', ['only' => ['create', 'store', 'update', 'destroy']]);
+        $this->middleware('walkin-reservation', ['only' => ['show','create', 'store', 'update', 'destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -26,11 +27,21 @@ class ReservationsController extends Controller
         //
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
 
-        $reservations = Reservation::all();
+        $reservations = ReservationDate::all();
         $destinations = Destination::all();
-        $discounts = Fee::where('type', 'Discount')->get();
+        $discounts = Fee::all();
 
         return view('reservations.index', compact('discounts','reservations', 'destinations', 'terminals'));
+    }
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(ReservationDate $reservation)
+    {
+        return view('reservations.show');
     }
 
     /**
