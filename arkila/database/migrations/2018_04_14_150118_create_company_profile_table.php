@@ -16,9 +16,12 @@ class CreateCompanyProfileTable extends Migration
         Schema::create('company_profile', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('email');
-            $table->string('contact_number');
-            $table->string('address');
+            $table->string('email')
+            ->nullable()->default(null);
+            $table->string('contact_number')
+            ->nullable()->default(null);
+            $table->string('address')
+            ->nullable()->default(null);
             $table->timestamps();
         });
     }
