@@ -25,7 +25,7 @@ class checkContactNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match('/^[\d\(\)+-]+$/');
+        return preg_match('/^[\d\(\)+-]+$/',$value);
     }
 
     /**
