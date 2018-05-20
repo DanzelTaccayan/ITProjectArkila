@@ -31,56 +31,38 @@ class ReservationRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-
-        $dateNow = Carbon::now();
-        $thisDate = $dateNow->setTimezone('Asia/Manila');
+        // $dateNow = Carbon::now();
+        // $thisDate = $dateNow->setTimezone('Asia/Manila');
         
-        $dateFormattedNow = $thisDate->format('m/d/Y');
-        $timeFormattedNow = $thisDate->format('h:i A');
+        // $dateFormattedNow = $thisDate->format('m/d/Y');
+        // $timeFormattedNow = $thisDate->format('h:i A');
 
-        $dateCarbon = new Carbon(request('date'));
-        $dateFormatted = $dateCarbon->format('m/d/Y');
+        // $dateCarbon = new Carbon(request('date'));
+        // $dateFormatted = $dateCarbon->format('m/d/Y');
         
-        if ($dateFormatted !== $dateFormattedNow) {
             return [
-                "name" => ['bail',new checkName, 'required', 'max:30'],
-                "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
-                "dest" => "bail|required",
+                "date" => "bail|required|date_format:m/d/Y|after:today",
+                "destination" => "bail|required",
                 "time" => ['bail',new checkTime, 'required'],
-                "seat" => "bail|required|numeric|digits_between:1,4|min:0|max:15",
-                "contactNumber" => ['bail',new checkContactNum],
-                "amount" => ['bail',new checkCurrency,'numeric','min:0'],
+                "slot" => "bail|required|numeric|min:1|max:30",
                 ];
-        } else {
-            return [
-                "name" => ['bail',new checkName, 'required', 'max:50'],
-                "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
-                "dest" => "bail|required",
-                "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
-                "seat" => "bail|required|numeric|digits_between:1,4|min:1|max:15",
-                "contactNumber" => ['bail',new checkContactNum],
-                "amount" => ['bail',new checkCurrency,'numeric','min:0'],
-            ];
-        }
     }
 
     public function messages() 
     {
         $dateNow = Carbon::now();
-        $thisDate = $dateNow->setTimezone('Asia/Manila')->format('h:i A');
+        $thisDate = $dateNow->setTimezone('Asia/Manila')->formatLocalized('%B %d,  %Y');
 
 
         return [
-            "name.required" => "Please enter the customers name",
-            "name.max" => "Name must be less than or equal to 50 characters",
             "date.required" => "Please enter the preffered departure date",
             "date.date_format" => "Please enter a valid date format (mm/dd/yyyy)",
+            "date.after" => "Please enter a date after ". $thisDate,
             "time.required" => "Please enter the preffered departure time",
-            "time.after" => "The time must be a time after ". $thisDate ."",
-            "dest.required" => "The destination field is required",
-            "seat.required" => "Please enter the number of seat for the reservation",
-            "seat.numeric" => "The seat must be a number",
-            "seat.digits_between" => "Please enter a number of seat between 1-15",
+            "destination.required" => "The destination field is required",
+            "slot.required" => "Please enter the number of seat for the reservation",
+            "slot.numeric" => "The seat must be a number",
+            "slot.min" => "Please enter a number of slots greater than 0",
 
         ];
     }

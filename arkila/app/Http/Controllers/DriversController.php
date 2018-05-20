@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Member;
 use App\Van;
 use App\User;
-use App\Http\Requests\DriverRequest;
+use App\Http\Requests\MemberRequest;
 use PDF;
 use Carbon\Carbon;
 use Image;
@@ -46,7 +46,7 @@ class DriversController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DriverRequest $request)
+    public function store(MemberRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -98,6 +98,7 @@ class DriversController extends Controller
 
             DB::commit();
         } catch(\Exception $e) {
+            \Log::info($e);
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
@@ -110,7 +111,7 @@ class DriversController extends Controller
         return view('drivers.create',compact('operator'));
     }
 
-    public function storeFromOperator(Member $operator, DriverRequest $request)
+    public function storeFromOperator(Member $operator, MemberRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -178,7 +179,7 @@ class DriversController extends Controller
         return view('drivers.create',compact('vanNd'));
     }
 
-    public function storeFromVan(Van $vanNd,DriverRequest $request)
+    public function storeFromVan(Van $vanNd,MemberRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -279,7 +280,7 @@ class DriversController extends Controller
      * @param  \App\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function update(DriverRequest $request, Member $driver)
+    public function update(MemberRequest $request, Member $driver)
     {
         // Start transaction!
         DB::beginTransaction();

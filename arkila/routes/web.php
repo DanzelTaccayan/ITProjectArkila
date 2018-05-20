@@ -143,7 +143,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['show','edit']
     ]);
 
-    Route::resource('/home/admin/profile', 'ProfileController',[
+    Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
     ]);
 
@@ -193,9 +193,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive', 'ArchiveController@index')->name('archive.index');
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
-    Route::patch('/home/archive/{operator}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
-    Route::patch('/home/archive/operator/{archivedOperator}/restore','OperatorsController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
-    Route::patch('/home/archive/driver/{archivedDriver}/restore','DriversController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
+    Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
+    Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
+    Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
+    Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
 
     /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');

@@ -6,6 +6,7 @@ use App\Destination;
 use App\Rules\checkDriver;
 use App\Rules\checkPlateNumber;
 use App\Rules\checkOperator;
+use App\Rules\checkSpecialCharacters;
 use App\Rules\checkVanModel;
 use App\Trip;
 use App\Van;
@@ -62,9 +63,9 @@ class VansController extends Controller
         $this->validate(request(), [
             "operator" => ['required','numeric','exists:member,member_id',new checkOperator],
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
-            "plateNumber" => [new checkPlateNumber,'unique:van,plate_number','required','between:6,9'],
-            "vanModel" =>  ['required','max:30',new checkVanModel],
-            "seatingCapacity" => 'required|between:10,15|numeric'
+            "plateNumber" => [new checkSpecialCharacters,'unique:van,plate_number','required','max:15'],
+            "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
+            "seatingCapacity" => 'required|numeric'
         ]);
 
         // Start transaction!
@@ -138,10 +139,10 @@ class VansController extends Controller
     public function storeFromOperator(Member $operator)
     {
         $this->validate(request(), [
-            "driver" => ['nullable','numeric','exists:member,member_id','unique:member_van,member_id',new checkDriver],
-            "plateNumber" => [new checkPlateNumber,'unique:van,plate_number','required','between:6,9'],
-            "vanModel" =>  ['required','max:30',new checkVanModel],
-            "seatingCapacity" => 'required|between:10,15|numeric'
+            "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
+            "plateNumber" => [new checkSpecialCharacters,'unique:van,plate_number','required','max:15'],
+            "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
+            "seatingCapacity" => 'required|numeric'
         ]);
 
         // Start transaction!

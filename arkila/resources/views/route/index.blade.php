@@ -1,5 +1,5 @@
 @extends('layouts.master') 
-@section('title', 'Routes and Terminals') 
+@section('title', 'Terminals and Routes') 
 @section('links')
 @parent
 

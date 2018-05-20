@@ -4,7 +4,7 @@
 <div class="row">
         <div class="padding-side-5">
             <div>
-                <h2 class="text-white">LINE RESERVATIONS</h2>
+                <h2 class="text-white">RESERVATION DATE</h2>
             </div>
             <div class="box">
                 <div class="box-body">
@@ -19,29 +19,33 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
                                 <div class="col-md-6">
-                                    <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
+                                    <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
                                 </div>
 
                                 <table class="table table-bordered table-striped listReservation">
                                     <thead>
                                         <tr>
-                                            <th>Reservation #</th>
-                                            <th>Destination</th>
-                                            <th>Reservation Date</th>
-                                            <th>Number of Slots</th>
+                                            <th class="text-center">Reservation #</th>
+                                            <th class="text-center">Destination</th>
+                                            <th class="text-center">Reservation Date</th>
+                                            <th class="text-center">Departure Time</th>
+                                            <th class="text-center">Number of Slots</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody> 
 
-                                        @foreach ($reservations as $reservation) 
+                                        @foreach ($reservations->sortByDesc('id') as $reservation) 
                                         <tr>
                                             <td>{{ $reservation->id }}</td>
                                             <td>{{ $reservation->destination->destination_name }}</td>
-                                            <td>{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
-                                            <td>{{ $reservation->number_of_slots }}</td>
+                                            <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                            <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
+                                            <td class="text-right">{{ $reservation->number_of_slots }}</td>
                                             <td>
-                                            <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-block btn-primary btn-sm"> <i class="fa fa-plus"></i> <b>View</b></a>
+                                                <div class="text-center"> 
+                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
+                                                </div>
                                             </td>
                                         </tr>
                                         @endforeach
