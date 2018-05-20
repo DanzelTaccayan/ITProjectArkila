@@ -61,7 +61,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header bg-yellow">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title"> {{ $announcement->title }}</h4>
+                                        <h4 class="modal-title"> <strong>{{ $announcement->title }}</strong></h4>
                                     </div>
                                     <div class="modal-body ">
                                         <div class="scrollbar scrollbar-info thin">
