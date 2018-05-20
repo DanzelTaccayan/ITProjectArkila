@@ -10,57 +10,9 @@
         <div class="box-body" style="min-height: 300px;">
             <div class="row">
                 <div class="col-md-12">
-                {{-- <div class="box box-warning box-solid with-shadow">   
-                    <div class="box-header with-border text-center">
-                        <h3 class="box-title">
-                            Create Announcement
-                        </h3>
-
-                        <div class="box-tools">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <form method="post" action="{{ route('announcements.index') }}">
-                        {{ csrf_field() }}
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Title: <span class="text-red">*</span></label>
-                                        <input type="text" name="title" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group pull-right">
-                                        <label>Viewer: <span class="text-red">*</span></label>
-                                        <select name="viewer" class="form-control">
-                                            <option value="Public">Public</option>
-                                            <option value="Driver Only">Driver Only</option>
-                                            <option value="Customer Only">Customer Only</option>
-                                            <option value="Only Me">Only Me</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Content: <span class="text-red">*</span></label>
-                                <textarea name="announce" width="30%" class="form-control" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="box-footer">
-                            <div style="overflow:auto;">
-                                <div style="float:right;">
-                                    <button type="submit" class="btn btn-primary btn-sm">POST</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div> --}}
                 @if ($announcements->count() > 0)
                 <div>
-                    <button class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</button>
+                    <a type="button" href="create" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
                 </div>
                 <div style="margin-top: 2%">
                     <ul class="list-group">
@@ -164,7 +116,7 @@
                     <h1 class="text-center text-gray"><i class="fa fa-bullhorn"></i></h1>
                     <h2 class="text-center">No Announcement as of the moment.</h3>
                     <div class="text-center">
-                        <button class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</button>
+                        <a type="button" href="create" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
                     </div>
                 </div>
                 </div>
