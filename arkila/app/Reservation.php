@@ -17,6 +17,9 @@ class Reservation extends Model
     public function destination(){
     	return $this->belongsTo(Destination::Class, 'destination_id');
     }
+    public function date(){
+    	return $this->belongsTo(ReservationDate::Class, 'destination_id', 'id');
+    }
 
     public function user(){
         return $this->belongsTo(User::Class, 'user_id', 'id');

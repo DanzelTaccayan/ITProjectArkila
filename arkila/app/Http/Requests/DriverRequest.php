@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\checkContactNumber;
 use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 
 class DriverRequest extends FormRequest
 {
@@ -16,7 +16,7 @@ class DriverRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**

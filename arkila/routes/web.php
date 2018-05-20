@@ -29,7 +29,11 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 /***********************Super-Admin Module************************************/
 /*****************************************************************************/
  Route::group(['middleware' => ['auth', 'super-admin']], function(){
-    Route::get('/home/superadmin-dashboard', 'HomeController@index')->name('home');
+    Route::resource('/getting-started/setup', 'SetupController',[
+        'except' => ['create', 'show']
+    ]);
+    Route::group(['middleware' => ['getting-started']], function(){
+        Route::get('/home/superadmin-dashboard', 'HomeController@index')->name('home');
     Route::post('/home/restoreDatabase','RestoreDatabaseController@restoreDatabase')->name('home.restoreDatabase');
     Route::resource('/home/ledger', 'DailyLedgerController');
 
@@ -40,9 +44,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/ticket-management', 'TicketManagementController');
     Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
 
-    Route::resource('/getting-started/setup', 'SetupController',[
-        'except' => ['create', 'show']
-    ]);
+    
 
     Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
 
@@ -138,7 +140,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['edit']
     ]);
-    
+
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
     ]);
@@ -219,6 +221,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/account-settings', 'SuperAdminChangePasswordController@viewAccountSettings')->name('accountSettings');
     Route::post('/checkCurrentPassAdmin', 'SuperAdminChangePasswordController@checkCurrentPassword')->name('checkPass');
     Route::patch('/home/account-settings/{superAdminid}/change-password', 'SuperAdminChangePasswordController@updatePassword')->name('superadminmodule.changePassword');
+    });
  });
 /*****************************************************************************/
 /*****************************************************************************/
@@ -278,6 +281,9 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
     Route::post('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
+    Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
+    Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
+    Route::get('/home/reservation/create', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
     Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');
     Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
     /*Transactions*/
