@@ -98,6 +98,10 @@ class User extends Authenticatable
       return $this->user_type === 'Customer';
     }
 
+    public function getFullNameAttribute()
+    {
+        return "{$this->last_name}, {$this->first_name} {$this->middle_name}";
+    }
 
 
     // public function sendPasswordResetNotification($token)

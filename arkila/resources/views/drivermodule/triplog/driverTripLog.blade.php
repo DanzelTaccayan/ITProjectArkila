@@ -1,6 +1,5 @@
 @extends('layouts.driver')
 @section('title', 'Driver Profile')
-@section('content-title', 'Driver Profile')
 @section('content')
 <div class="desktop">
     <div class="box">

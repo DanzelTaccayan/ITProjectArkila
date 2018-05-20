@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group">
                     <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="0.25" name="numticketDis" value="{{old('numticketDis')}}">
+                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}">
                 </div>
                 <div class="form-group" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
@@ -195,6 +195,19 @@
           navigateTo(0); // Start at the beginning
         });
     </script>
+    <script>
+   $(".disTicket").keydown(function (e) {
+        var key = e.keyCode || e.charCode;
+        if (key == 8 || key == 46) {
+            e.preventDefault();
+            e.stopPropagation();
+    }
+   });
+
+    $(".disTicket").keypress(function (evt) {
+        evt.preventDefault();
+    });
+
     </script>
 
 @endsection

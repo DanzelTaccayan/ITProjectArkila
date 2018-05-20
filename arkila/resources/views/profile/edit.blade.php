@@ -7,7 +7,7 @@
 @section('form-body')
 
     <div class="form-group">
-        <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="profile picture">
+        <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
 
        
         <div class="form-group">

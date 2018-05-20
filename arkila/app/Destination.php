@@ -18,7 +18,7 @@ class Destination extends Model
 
     public function reservationDates()
     {
-        return $this->belongsTo(ReservationDate::class, 'id');
+        return $this->belongsTo(ReservationDate::class, 'destination_terminal', 'destination_id');
     }
     
     public function routeOrigin()
@@ -96,7 +96,7 @@ class Destination extends Model
 
     public static function scopeAllRoute($query)
     {
-        return $query->where('is_terminal','0');
+        return $query->where('is_main_terminal','0');
     }
 
 

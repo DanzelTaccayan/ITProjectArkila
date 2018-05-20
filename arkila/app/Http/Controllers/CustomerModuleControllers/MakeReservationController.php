@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\CustomerModuleControllers;
 
 use App\Destination;
-use App\Reservation;
+use App\ReservationDate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerReservationRequest;
+use Session;
 
 class MakeReservationController extends Controller
 {
@@ -17,9 +18,30 @@ class MakeReservationController extends Controller
     }
     public function createReservation()
     {
-    	$destinations = Destination::all();
-    	return view('customermodule.user.reservation.customerReservation', compact('destinations'));
-    }
+		$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+    	return view('customermodule.user.reservation.selectDestination', compact('destinations'));
+	}
+	
+	public function showDetails(Request $request)
+	{
+		$wow = $request->destination;
+		Session::put('key', $wow);
+
+		return redirect('/home/reservation/show-reservations');
+	}
+	public function reservationCreate()
+	{
+		return view('customermodule.user.reservation.createReservation');
+	}
+
+	public function showDate()
+	{
+		$hi = Session::get('key');
+		$gago = Destination::where('destination_id', $hi)->get();
+		$reservations = ReservationDate::all();
+
+		return view('customermodule.user.reservation.selectReservationDate', compact('gago', 'reservations'));
+	}
 
     public function storeReservation(CustomerReservationRequest $request)
     {
