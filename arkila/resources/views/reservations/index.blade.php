@@ -35,7 +35,7 @@
                                     </thead>
                                     <tbody> 
 
-                                        @foreach ($reservations as $reservation) 
+                                        @foreach ($reservations->sortByDesc('id') as $reservation) 
                                         <tr>
                                             <td>{{ $reservation->id }}</td>
                                             <td>{{ $reservation->destination->destination_name }}</td>
