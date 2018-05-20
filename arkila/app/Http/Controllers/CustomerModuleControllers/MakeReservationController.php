@@ -27,7 +27,11 @@ class MakeReservationController extends Controller
 		$wow = $request->destination;
 		Session::put('key', $wow);
 
-		return redirect('/home/reservation');
+		return redirect('/home/reservation/show-reservations');
+	}
+	public function reservationCreate()
+	{
+		return view('customermodule.user.reservation.createReservation');
 	}
 
 	public function showDate()
