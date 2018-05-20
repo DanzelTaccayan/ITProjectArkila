@@ -56,7 +56,7 @@ class LoginController extends Controller
     {
         if($user->status === 'disable'){
           Auth::logout();
-          return back()->with('error', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+          return back()->with('error', 'You need to confirm your account. We have sent you an activation link, please check your email.');
         }else if($user->status === 'enable'){
           $customermodule = Feature::where('description','Customer Module')->first();
           if($customermodule->status == 'enable'){
@@ -90,6 +90,6 @@ class LoginController extends Controller
 
         }
 
-        abort(404);
+        abort(401);
     }
 }

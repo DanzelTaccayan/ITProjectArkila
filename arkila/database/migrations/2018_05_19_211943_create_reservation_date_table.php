@@ -18,7 +18,9 @@ class CreateReservationDateTable extends Migration
             $table->integer('destination_terminal')
             ->unsigned();
             $table->date('reservation_date');
+            $table->time('departure_time');
             $table->integer('number_of_slots');
+
             $table->timestamps();
 
             $table->foreign('destination_terminal')

@@ -19,6 +19,15 @@ class DriverHomeController extends Controller
     public function index()
     {
       $announcements = Announcement::latest()->where('viewer', '=', 'Public')->orWhere('viewer', '=', 'Driver Only')->get();
-      return view('drivermodule.index', compact('announcements'));
+      if(auth()->user()->member->van->count() == 1)
+      {
+        $queueNumber = auth()->user()->member->van->first()->vanQueue->first()->queue_number ?? null;
+      }
+      else
+      {
+        $queueNumber = null;
+      }
+      
+      return view('drivermodule.index', compact('announcements', 'queueNumber'));
     }
 }

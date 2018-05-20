@@ -136,7 +136,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/testing', 'TestingController');
 
     Route::resource('/home/reservations', 'ReservationsController', [
-        'except' => ['show', 'edit']
+        'except' => ['edit']
     ]);
     
     Route::resource('/home/rental', 'RentalsController',[
