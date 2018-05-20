@@ -2,12 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\checkAddress;
-use App\Rules\checkAge;
-use App\Rules\checkContactNum;
-use App\Rules\checkName;
-use App\Rules\checkSSS;
-use App\Rules\checkLicense;
+use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -39,12 +34,12 @@ class OperatorRequest extends FormRequest
         }
         return [
             'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
-            'lastName' => ['bail','required','max:25',new checkName],
-            'firstName' => ['bail','required','max:25',new checkName],
-            'middleName' => ['bail','nullable','max:25',new checkName],
+            'lastName' => ['bail','required','max:25',new checkSpecialCharacters],
+            'firstName' => ['bail','required','max:25',new checkSpecialCharacters],
+            'middleName' => ['bail','nullable','max:25',new checkSpecialCharacters],
             'contactNumber' => 'bail|numeric|required',
-            'address' => ['bail','required','max:70',new checkName],
-            'provincialAddress' => ['bail','required','max:70',new checkName],
+            'address' => ['bail','required','max:70',new checkSpecialCharacters],
+            'provincialAddress' => ['bail','required','max:70',new checkSpecialCharacters],
             'gender' => [
                 'bail',
                 'required',
