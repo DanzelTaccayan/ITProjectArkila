@@ -17,4 +17,7 @@ class ReservationDate extends Model
     	return $this->hasOne(Destination::Class, 'destination_id', 'destination_terminal');
     }
 
+    public function request(){
+    	return $this->hasMany(Reservation::Class, 'id', 'id');
+    }
 }

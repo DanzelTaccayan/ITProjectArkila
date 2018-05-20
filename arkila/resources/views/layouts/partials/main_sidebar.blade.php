@@ -8,7 +8,7 @@
             </div>
             <div class="pull-left info">
               <p>Admin</p>
-              <small>{{ \App\Destination::mainTerminal()->get()->first()->destination_name }}</small>
+              <small>{{ \App\Destination::mainTerminal()->get()->first()->destination_name ?? 'None' }}</small>
             </div>
         </div>
         <!-- /.search form -->
