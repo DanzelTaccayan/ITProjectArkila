@@ -194,7 +194,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
     Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
-    Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
+    Route::patch('/home/archive/{operator}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
     Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
     Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
 
