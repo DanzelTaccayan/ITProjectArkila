@@ -30,8 +30,8 @@
                         @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
                         <tr>
                             <th>{{$driver->member_id}}</th>
-                            <td>{{trim(strtoupper($driver->operator->full_name)) ?? null}}</td>
-                            <td>{{trim(strtoupper($driver->full_name))}}</td>
+                            <td>{{trim(strtoupper($driver->operator->full_name ?? null)) }}</td>
+                            <td>{{trim(strtoupper($driver->full_name ?? null))}}</td>
                             <td>{{$driver->contact_number}}</td>
                             <td>
                                 <div class="text-center">

@@ -6,8 +6,7 @@ use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-
-class DriverRequest extends FormRequest
+class MemberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +25,6 @@ class DriverRequest extends FormRequest
      */
     public function rules()
     {
-        if($this->method() === "POST") {
-            $sss = ['sss' => 'nullable, bail, unique:member, SSS'];
-
-        } else {
-            $sss =  ['sss' => 'nullable, bail, unique:member,SSS,'.$this->route('driver')->member_id.',member_id'];
-        }
         return [
             'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
             'lastName' => ['bail','required','max:25',new checkSpecialCharacters],
@@ -50,8 +43,7 @@ class DriverRequest extends FormRequest
             'contactPersonContactNumber' => 'bail|required|numeric',
             'licenseNo' => ['bail','required_with:licenseExpiryDate','nullable'],
             'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date|after:today',
-            'sss' => 'nullable| bail| unique:member,SSS,'.$this->route('driver')->member_id.', member_id'
+            'sss' => 'nullable'
         ];
     }
 }
-

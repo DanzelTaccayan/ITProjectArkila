@@ -28,9 +28,9 @@
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
                                     <div class="info-box-content">
-                                      <h4><strong>{{$driver->van()->first()->plate_number}}</strong></h4>
-                                      <p>{{$driver->van()->first()->model->description}}</p>
-                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity}} seats</p>
+                                      <h4><strong>{{$driver->van()->first()->plate_number ?? null}}</strong></h4>
+                                      <p>{{$driver->van()->first()->model->description ?? null}}</p>
+                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity ?? null}} seats</p>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
