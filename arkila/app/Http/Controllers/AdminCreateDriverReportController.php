@@ -33,7 +33,7 @@ class AdminCreateDriverReportController extends Controller
     //   $f = $t->terminalDestination()->groupBy('terminal_destination')->get();
     //   //$b = $f->where();
     //   foreach($f as $fs){
-    //     //echo $fs . '<br/>';
+    //     echo $fs . '<br/>';
     //   }
     // }
 
