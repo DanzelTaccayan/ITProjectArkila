@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class checkSSS implements Rule
+class checkSpecialCharacters implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,7 +25,7 @@ class checkSSS implements Rule
      */
     public function passes($attribute, $value)
     {
-        return (preg_match('/\d{2}-\d{7}-\d{1}$/',$value));
+        return preg_match('/^[A-Za-z\-\d .()]*$/',$value);
     }
 
     /**
@@ -35,6 +35,6 @@ class checkSSS implements Rule
      */
     public function message()
     {
-        return 'The entered SSS number must be in a valid format.';
+        return 'The :attribute field can only contain letters and numbers';
     }
 }
