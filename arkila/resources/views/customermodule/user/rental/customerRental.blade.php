@@ -10,20 +10,10 @@
                     <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
-                            <label for="">Van Model: </label>
-                            <select id="vanType" name="van_model" class="form-control">
-                                <option selected value="">All Van Model</option>
-                                @foreach($vanmodels as $vanmodel)
-                                    <option value="{{$vanmodel->model_id}}">{{$vanmodel->description}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
                             <label for="">Destination: <span class="text-red">*</span></label>
                             <input id="rentalDestination" class="form-control" type="text" name="rentalDestination" val-rent-dest required>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -80,17 +70,17 @@
 @section('scripts')
 @parent
 <script>
-    
+
         $(function() {
             $('.datepicker').datepicker({
                 autoclose: true
             });
-            
+
         $('#timepicker').timepicker({
             template: false
         });
         })
-        
+
     // $('.summary-modal').click(function(){
     //         $('#vehicleType').text($('#vanType option:selected').text());
     //         $('#dest').text($('#rentalDestination').val());
@@ -105,7 +95,7 @@
         if (sel.selectedIndex == -1){
             return null;
         }
-        
+
         return sel.options[sel.selectedIndex].text;
     }
     function showSummary(){

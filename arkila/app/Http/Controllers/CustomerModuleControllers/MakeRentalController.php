@@ -22,44 +22,27 @@ class MakeRentalController extends Controller
 
     public function createRental()
     {
-    	$vanmodels = VanModel::all();
-    	return view('customermodule.user.rental.customerRental', compact('vanmodels'));
+    	return view('customermodule.user.rental.customerRental');
     }
 
     public function storeRental(CustomerRentalRequest $request)
     {
-    	// dd($request->van_model == null ? true : false);
-    	if($request->message == null){
-    		$rent = VanRental::create([
-    			"user_id" => Auth::id(),
-	    		"customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
-	    		"departure_date" => $request->date,
-	    		"departure_time" => $request->time,
-	    		"model_id" => $request->van_model,
-	    		"number_of_days" => $request->numberOfDays,
-	    		"destination" => $request->rentalDestination,
-	    		"contact_number" => $request->contactNumber,
-	    		"status" => 'Pending',
-	    		"rent_type" => 'Online',
-    		]);
-    	}else{
-    		$rent = VanRental::create([
-    			"user_id" => Auth::id(),
-	    		"first_name" => Auth::user()->first_name,
-	    		"last_name" => Auth::user()->last_name,
-	    		"middle_name" => Auth::user()->middle_name,
-	    		"departure_date" => $request->date,
-	    		"departure_time" => $request->time,
-	    		"model_id" => $request->van_model,
-	    		"number_of_days" => $request->numberOfDays,
-	    		"destination" => $request->rentalDestination,
-	    		"contact_number" => $request->contactNumber,
-	    		"status" => 'Pending',
-	    		"rent_type" => 'Online',
-	    		"comments" => $request->message
-    		]);
-    	}
 
+      $carbonDate = new Carbon($request->date);
+      $departedDate = $carbonDate->format('Y-m-d');
+      $rent = VanRental::create([
+        "user_id" => Auth::id(),
+        "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
+        "departure_date" => $departedDate,
+        "departure_time" => $request->time,
+        "number_of_days" => $request->numberOfDays,
+        "destination" => $request->rentalDestination,
+        "contact_number" => $request->contactNumber,
+        "status" => 'Pending',
+        "rent_type" => 'Online',
+        "comments" => $request->message !== null ? $request->message : null,
+      ]);
+      //dd($rent->departure_date);
       // $user = User::find(Auth::id());
       // $user->notify(new CustomerRent($user, $rent));
     	return 	redirect(route('customermodule.user.transactions.customerTransactions'))->with('success', 'Successfully made a rental');
