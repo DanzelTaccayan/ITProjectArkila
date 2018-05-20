@@ -12,7 +12,7 @@
                 <div class="col-md-12">
                 @if ($announcements->count() > 0)
                 <div>
-                    <a type="button" href="create" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
+                    <a type="button" href="{{route('announcements.create')}}" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
                 </div>
                 <div style="margin-top: 2%">
                     <ul class="list-group">
@@ -116,7 +116,7 @@
                     <h1 class="text-center text-gray"><i class="fa fa-bullhorn"></i></h1>
                     <h2 class="text-center">No Announcement as of the moment.</h3>
                     <div class="text-center">
-                        <a type="button" href="create" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
+                        <a type="button" href="{{route('announcements.create')}}" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> CREATE ANNOUNCEMENT</a>
                     </div>
                 </div>
                 </div>

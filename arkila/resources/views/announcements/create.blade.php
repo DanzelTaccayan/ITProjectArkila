@@ -1,7 +1,7 @@
 @extends('layouts.form_lg')
 @section('title', 'Create Announcement')
 @section('back-link', route('announcements.index'))
-@section('form-action', route('announcements.store)
+@section('form-action', route('announcements.store'))
 @section('method_field', method_field('PATCH'))
 @section('form-id','regForm')
 @section('form-title', 'Create Announcement')
