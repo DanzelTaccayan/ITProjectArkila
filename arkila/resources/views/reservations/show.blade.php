@@ -13,17 +13,22 @@
 					<table class="table table-striped table-bordered">
 						<tbody>
 							<tr>
+								<th>Departure Time</th>
+								<td>{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
+							</tr>
+
+							<tr>
 								<th>Destination Terminal</th>
-								<td></td>
+								<td>{{$reservation->destination->destination_name}}</td>
 							</tr>
 							<tr>
 								<th>Number of Slots left</th>
-								<td></td>
+								<td>{{$reservation->number_of_slots}}</td>
 							</tr>
 						</tbody>
 					</table>
 					<div>
-						<button class="btn btn-default btn-block btn-sm">BACK</button>
+						<a href="{{route('reservations.index')}}" class="btn btn-default btn-block btn-sm">BACK</a>
 					</div>
 				</div>
 				<div class="col-md-9">
@@ -39,27 +44,19 @@
 							</tr>
 						</thead>
 						<tbody>
+							@foreach($requests as $request)
 							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								@if($request->where('type', 'Online'))
+								<td>{{$request->user->full_name}}</td>
+								@else
+								<td>{{$request->user->name}}</td>	
+								@endif							
+								<td>{{$request->destination_name}}</td>
+								<td>{{$request->type}}</td>
+								<td>{{$request->status}}</td>
+								<td><button>View</button></td>
 							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+							@endforeach
 						</tbody>
 					</table>
 				</div>

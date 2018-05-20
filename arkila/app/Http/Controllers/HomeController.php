@@ -51,16 +51,16 @@ class HomeController extends Controller
     public function changeFeatures(Feature $feature) {
         if($feature->status == 'enable'){
           $feature->status = 'disable';
-          session()->flash('success', $feature->description . 'has been successfully disabled');
+          $message = ['success' => $feature->description . ' has been successfully disabled'];
           //$message = ['success' => $feature->description . 'has been successfully disabled'];
         }elseif($feature->status == 'disable'){
           $feature->status = 'enable';
           //$message = ['success' => $feature->description . 'has been successfully enabled'];
-          session()->flash('success', $feature->description . 'has been successfully enabled');
+          $message = ['success' => $feature->description . ' has been successfully enabled'];  
         }
 
         $feature->save();
-        return response()->json(true);
+        return response()->json($message);
 
     }
 

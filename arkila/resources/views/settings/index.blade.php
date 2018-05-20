@@ -139,13 +139,30 @@
                       'id': id
                     },
                     success: function(data){
-                      //empty
+                      new PNotify({
+                        title: "Success!",
+                        text: data.success,
+                        animate: {
+                        animate: true,
+                        in_class: 'slideInDown',
+                        out_class: 'fadeOut'
+                        },
+                        animate_speed: 'fast',
+                        nonblock: {
+                            nonblock: true
+                        },
+                        cornerclass: "",
+                        width: "",
+                        type: "success",
+                        stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                    });
                     },
                 });
             });
         });
 
     </script>
+
     <script>
         $(function() {
             $('.dataTable').DataTable({

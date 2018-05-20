@@ -135,7 +135,7 @@ class LedgersController extends Controller
     public function update(Ledger $ledger)
     {
         $this->validate(request(), [
-            'payor' => ['bail', new checkName, 'max:25'],
+            'payor' => ['bail', 'max:25'],
             'particulars' => 'bail|required|max:30',
             'or' =>  'bail|max:15|unique:ledger,or_number,'.$ledger->ledger_id.',ledger_id',
             'amount' => ['bail',new checkCurrency,'numeric', 'required', 'min:0'],
