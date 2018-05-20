@@ -13,7 +13,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        return view('ticketmanagement.queue');
+        return view('archive.operatorArchive');
     }
 
     /**
