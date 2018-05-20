@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\CustomerModuleControllers;
 
-use App\Rental;
+use App\VanRental;
 use App\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ class ViewTransactionsController extends Controller
 {
     public function viewTransactions()
     {
-    	$rentals = Rental::orderBy('rental.created_at', 'desc')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+    	$rentals = VanRental::where('user_id', Auth::id())->orderBy('van_rental.created_at', 'desc')->get();
     	$reservations = Reservation::orderBy('reservation.created_at', 'desc')->where('user_id', Auth::id())->get();
 
     	return view('customermodule.user.transactions.customerTransactions', compact('rentals', 'reservations'));

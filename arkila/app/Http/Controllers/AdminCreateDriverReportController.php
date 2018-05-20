@@ -364,6 +364,6 @@ class AdminCreateDriverReportController extends Controller
          }
       }
     }
-  return redirect('home/terminal')->with('success', 'Gwapo ey!');
+  return redirect('home/terminal')->with('success', 'Successfully created a report!');
   }
 }
