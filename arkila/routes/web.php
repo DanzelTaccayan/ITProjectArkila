@@ -29,7 +29,11 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 /***********************Super-Admin Module************************************/
 /*****************************************************************************/
  Route::group(['middleware' => ['auth', 'super-admin']], function(){
-    Route::get('/home/superadmin-dashboard', 'HomeController@index')->name('home');
+    Route::resource('/getting-started/setup', 'SetupController',[
+        'except' => ['create', 'show']
+    ]);
+    Route::group(['middleware' => ['getting-started']], function(){
+        Route::get('/home/superadmin-dashboard', 'HomeController@index')->name('home');
     Route::post('/home/restoreDatabase','RestoreDatabaseController@restoreDatabase')->name('home.restoreDatabase');
     Route::resource('/home/ledger', 'DailyLedgerController');
 
@@ -40,9 +44,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/ticket-management', 'TicketManagementController');
     Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
 
-    Route::resource('/getting-started/setup', 'SetupController',[
-        'except' => ['create', 'show']
-    ]);
+    
 
     Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
 
@@ -138,12 +140,12 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['edit']
     ]);
-    
+
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
     ]);
 
-    Route::resource('/home/admin/profile', 'ProfileController',[
+    Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
     ]);
 
@@ -193,9 +195,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive', 'ArchiveController@index')->name('archive.index');
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
-    Route::patch('/home/archive/{operator}/archiveOperators', 'OperatorsController@archiveOperator')->name('operators.archiveOperator');
-    Route::patch('/home/archive/operator/{archivedOperator}/restore','OperatorsController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
-    Route::patch('/home/archive/driver/{archivedDriver}/restore','DriversController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
+    Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
+    Route::patch('/home/archive/{operator}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
+    Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
+    Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
 
     /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
@@ -218,6 +221,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/account-settings', 'SuperAdminChangePasswordController@viewAccountSettings')->name('accountSettings');
     Route::post('/checkCurrentPassAdmin', 'SuperAdminChangePasswordController@checkCurrentPassword')->name('checkPass');
     Route::patch('/home/account-settings/{superAdminid}/change-password', 'SuperAdminChangePasswordController@updatePassword')->name('superadminmodule.changePassword');
+    });
  });
 /*****************************************************************************/
 /*****************************************************************************/

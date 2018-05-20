@@ -119,7 +119,7 @@
                         <li class="user-header">
                           <img src="{{ URL::asset('img/bantrans-logo.png') }}" class="img-circle" alt="User Image">
                             <p style="margin:0;">Admin</p>
-                            <small style="color: white;">Main Terminal</small>
+                            <small style="color: white;">{{ \App\Destination::mainTerminal()->get()->first()->destination_name }}</small>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">

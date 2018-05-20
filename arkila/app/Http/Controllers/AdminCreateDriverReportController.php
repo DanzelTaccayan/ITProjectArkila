@@ -33,7 +33,7 @@ class AdminCreateDriverReportController extends Controller
     //   $f = $t->terminalDestination()->groupBy('terminal_destination')->get();
     //   //$b = $f->where();
     //   foreach($f as $fs){
-    //     //echo $fs . '<br/>';
+    //     echo $fs . '<br/>';
     //   }
     // }
 
@@ -364,6 +364,6 @@ class AdminCreateDriverReportController extends Controller
          }
       }
     }
-  return redirect('home/terminal')->with('success', 'Gwapo ey!');
+  return redirect('home/terminal')->with('success', 'Successfully created a report!');
   }
 }

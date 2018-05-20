@@ -58,9 +58,8 @@ class AnnouncementsController extends Controller
             'created_at' => $dateNow,
             'updated_at' => $dateNow,
         ]);
-        session()->flash('message', 'Announcement posted successfully');
 
-        return redirect('/home/announcements/');
+        return redirect('/home/announcements/')->with('success', 'Announcement posted successfully');
 
     }
 

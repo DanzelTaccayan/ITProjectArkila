@@ -28,10 +28,9 @@ class ReservationsController extends Controller
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
 
         $reservations = ReservationDate::all();
-        $destinations = Destination::all();
         $discounts = Fee::all();
 
-        return view('reservations.index', compact('discounts','reservations', 'destinations', 'terminals'));
+        return view('reservations.index', compact('discounts','reservations', 'destinations'));
     }
         /**
      * Display the specified resource.
@@ -51,8 +50,7 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        $destinations = Destination::all();
-
+        $destinations = Destination::allTerminal()->get();
         return view('reservations.create', compact('destinations'));
     }
 
@@ -64,38 +62,34 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $seat = $request->seat;
-        $destinationReq = $request->dest;
-        $findDest = Destination::all();
+        // $seat = $request->seat;
+        // $destinationReq = $request->dest;
+        // $findDest = Destination::all();
 
-        if ($findDest->where('description', $destinationReq)->count() > 0) {
-            foreach ($findDest->where('description', $destinationReq) as $find) {
-                $findThis = $find->destination_id;
-                $findAmount = $find->amount;
-            }
-            $total = $findAmount*$seat;
-        } else {
-            return back()->withInput()->withErrors('Invalid Destination!');
-        }
+        // if ($findDest->where('description', $destinationReq)->count() > 0) {
+        //     foreach ($findDest->where('description', $destinationReq) as $find) {
+        //         $findThis = $find->destination_id;
+        //         $findAmount = $find->amount;
+        //     }
+        //     $total = $findAmount*$seat;
+        // } else {
+        //     return back()->withInput()->withErrors('Invalid Destination!');
+        // }
 
-        $name = ucwords(strtolower($request->name));
+        // $timeRequest = new Carbon(request('time'));
+        // $timeFormatted = $timeRequest->format('h:i A');
+        $dateCarbon = new Carbon(request('date'));
+        $date = $dateCarbon->format('Y-m-d');
+        $timeCarbon = new Carbon(request('time'));
+        $time = $timeCarbon->format('H:i:s');
 
-        $timeRequest = new Carbon(request('time'));
-        $timeFormatted = $timeRequest->format('h:i A');
-
-        Reservation::create([
-            'name' => $name,
-            'departure_date' => $request->date,
-            'departure_time' => $timeFormatted,
-            'destination_id' => $findThis,
-            'number_of_seats' => $request->seat,
-            'contact_number' => $request->contactNumber,
-            'amount' => $total,
-            'type' => 'Walk-in',
-            'status' => 'Paid',
-
+        ReservationDate::create([
+            'reservation_date' => $date,
+            'departure_time' => $time,
+            'destination_terminal' => $request->destination,
+            'number_of_slots' => $request->slot,
         ]);
-        return redirect('/home/reservations/')->with('success', 'Reservation by '. $name .' was created successfully');
+        return redirect('/home/reservations/')->with('success', 'You have created a reservation date successfully');
     }
 
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Profile;
+use App\Destination;
+use App\Fee;
 use App\Rules\checkContactNum;
 use App\Rules\checkAddress;
 
@@ -18,8 +20,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profiles = Profile::all();
-        return view('profile.index', compact('profiles'));
+        $profile = Profile::all()->first();
+        $main = Destination::mainTerminal()->get()->first();
+        $fees = Fee::all();
+        return view('profile.index', compact('profile', 'main', 'fees'));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OperatorRequest;
 use App\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -9,7 +10,6 @@ use PDF;
 use DB;
 use Carbon\Carbon;
 use Image;
-use App\Http\Requests\OperatorRequest;
 
 class OperatorsController extends Controller
 {

@@ -27,6 +27,8 @@ class CreateVanRentalTable extends Migration
 
             $table->date('departure_date');
             $table->time('departure_time');
+            $table->integer('number_of_days')
+            ->unsigned();
             $table->string('destination');
             $table->string('contact_number');
             $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
@@ -36,8 +38,8 @@ class CreateVanRentalTable extends Migration
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->text('comments')
             ->nullable();
-            $table->timestamps();    
-            
+            $table->timestamps();
+
             $table->foreign('van_id')
             ->references('van_id')->on('van')
             ->onDelete('restrict')

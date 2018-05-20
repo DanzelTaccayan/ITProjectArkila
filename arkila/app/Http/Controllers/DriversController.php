@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DriverRequest;
 use App\Member;
 use App\Van;
 use App\User;
-use App\Http\Requests\DriverRequest;
 use PDF;
 use Carbon\Carbon;
 use Image;
@@ -98,6 +98,7 @@ class DriversController extends Controller
 
             DB::commit();
         } catch(\Exception $e) {
+            \Log::info($e);
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }

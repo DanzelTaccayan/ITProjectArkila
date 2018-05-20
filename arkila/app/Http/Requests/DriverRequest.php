@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\checkContactNumber;
 use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
 
 class DriverRequest extends FormRequest
 {
@@ -26,18 +26,12 @@ class DriverRequest extends FormRequest
      */
     public function rules()
     {
-        if($this->method() === "POST") {
-            $sss = ['sss' => 'nullable, bail, unique:member, SSS'];
-
-        } else {
-            $sss =  ['sss' => 'nullable, bail, unique:member,SSS,'.$this->route('driver')->member_id.',member_id'];
-        }
         return [
             'profilePicture' => 'bail|nullable|mimes:jpeg,jpg,png|max:3000',
             'lastName' => ['bail','required','max:25',new checkSpecialCharacters],
             'firstName' => ['bail','required','max:25',new checkSpecialCharacters],
             'middleName' => ['bail','nullable','max:25',new checkSpecialCharacters],
-            'contactNumber' => 'bail|numeric|required',
+            'contactNumber' => ['bail','required', new checkContactNumber],
             'address' => ['bail','required','max:70',new checkSpecialCharacters],
             'provincialAddress' => ['bail','required','max:70',new checkSpecialCharacters],
             'gender' => [
@@ -47,11 +41,10 @@ class DriverRequest extends FormRequest
             ],
             'contactPerson' => ['bail','required', 'max:75',new checkSpecialCharacters],
             'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
-            'contactPersonContactNumber' => 'bail|required|numeric',
-            'licenseNo' => ['bail','required_with:licenseExpiryDate','nullable'],
-            'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date|after:today',
-            'sss' => 'nullable| bail| unique:member,SSS,'.$this->route('driver')->member_id.', member_id'
+            'contactPersonContactNumber' => ['bail','required', new checkContactNumber],
+            'licenseNo' => 'bail|required',
+            'licenseExpiryDate' => 'bail|required',
+            'sss' => 'nullable'
         ];
     }
 }
-
