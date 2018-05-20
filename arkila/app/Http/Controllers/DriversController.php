@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DriverRequest;
 use App\Member;
 use App\Van;
 use App\User;
-use App\Http\Requests\MemberRequest;
 use PDF;
 use Carbon\Carbon;
 use Image;
@@ -46,7 +46,7 @@ class DriversController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MemberRequest $request)
+    public function store(DriverRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -111,7 +111,7 @@ class DriversController extends Controller
         return view('drivers.create',compact('operator'));
     }
 
-    public function storeFromOperator(Member $operator, MemberRequest $request)
+    public function storeFromOperator(Member $operator, DriverRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -179,7 +179,7 @@ class DriversController extends Controller
         return view('drivers.create',compact('vanNd'));
     }
 
-    public function storeFromVan(Van $vanNd,MemberRequest $request)
+    public function storeFromVan(Van $vanNd,DriverRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -280,7 +280,7 @@ class DriversController extends Controller
      * @param  \App\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function update(MemberRequest $request, Member $driver)
+    public function update(DriverRequest $request, Member $driver)
     {
         // Start transaction!
         DB::beginTransaction();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MemberRequest;
+use App\Http\Requests\OperatorRequest;
 use App\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -37,10 +37,10 @@ class OperatorsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  MemberRequest  $request
+     * @param  OperatorRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MemberRequest $request)
+    public function store(OperatorRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
@@ -114,11 +114,11 @@ class OperatorsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  MemberRequest  $request
+     * @param  OperatorRequest  $request
      * @param  Member  $operator
      * @return \Illuminate\Http\Response
      */
-    public function update(Member $operator, MemberRequest $request)
+    public function update(Member $operator, OperatorRequest $request)
     {
         // Start transaction!
         DB::beginTransaction();
