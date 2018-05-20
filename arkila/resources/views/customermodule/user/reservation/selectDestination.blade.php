@@ -7,7 +7,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6 mx-auto" id="boxContainer">
-                    <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST" data-parsley-validate="">
+                    <form class="contact100-form" action="{{route('customermodule.showDetails')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
                             @if($destinations->count() == 0)

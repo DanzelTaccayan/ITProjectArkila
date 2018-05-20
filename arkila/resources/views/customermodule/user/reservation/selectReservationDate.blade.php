@@ -10,12 +10,15 @@
                     <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
-                            <select id="destination" name="destination" class="form-control">
-                                <option selected value="">Select Destination</option>
-                                @foreach($destinations as $destination)
-                                    <option value="{{$destination->destination_id}}">{{$destination->description}}</option>
+                                @foreach($gago->first()->routeDestination as $chabal)
+                                    <p>{{$chabal->destination_name}}</p>
                                 @endforeach
-                           </select>
+
+                                @foreach($gago->first()->routeDestination as $chabal)
+                                @foreach($reservations->where('destination_terminal', $chabal->destination_id) as $reserve)
+                                    <p>{{$reserve->reservation_date}}</p>
+                                @endforeach
+                                @endforeach
                             
                         </div>
                         <div class="container-contact100-form-btn">
