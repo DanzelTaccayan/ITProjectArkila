@@ -7,9 +7,9 @@
             </div>
             <div class="row">
                 <div class="col-md-6 mx-auto" id="boxContainer">
-                    <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
+
                                 @foreach($gago->first()->routeDestination as $chabal)
                                     <p>{{$chabal->destination_name}}</p>
                                 @endforeach
@@ -19,12 +19,10 @@
                                     <p>{{$reserve->reservation_date}}</p>
                                 @endforeach
                                 @endforeach
-                            
                         </div>
                         <div class="container-contact100-form-btn">
-                            <button type="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>
+                            <a href="{{route('customermodule.createReservation')}}" class="contact100-form-btn"><strong>create</strong></a>
                         </div><!-- container-contact100-form-btn-->
-                    </form>
                     <!-- contact100-form-->
                 </div>
                 <!-- col-->
