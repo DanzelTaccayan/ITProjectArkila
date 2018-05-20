@@ -154,14 +154,14 @@ class TripsController extends Controller
             }
           }
 
-          $totalPassenger = 0;
+          $totalPassenger = array_sum(array_column($tempArr, 0));
 
 
-          foreach($tempArr as $places => $innerValues){
-            foreach($innerValues as $keys => $values){
-              $totalPassenger += $values;
-            }
-          }
+          // foreach($tempArr as $places => $innerValues){
+          //   foreach($innerValues as $keys => $values){
+          //     $totalPassenger += $values;
+          //   }
+          // }
 
           $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
 
@@ -228,10 +228,16 @@ class TripsController extends Controller
           $numPassCountArr[2] = $stRegCount;
           $numPassCountArr[3] = $stDisCount;
 
-          $totalPassenger = array_sum($numPassCountArr);
+          $totalPassenger = 0;
           $totalDiscountedPassenger = 0;
 
-
+          foreach($numPassCountArr as $keys => $value){
+            if($keys % 2 == 0){
+              $totalPassenger += $value;
+            }else{
+              continue;
+            }
+          }
 
           foreach($numPassCountArr as $keys => $value){
             if($keys % 2 != 0){
