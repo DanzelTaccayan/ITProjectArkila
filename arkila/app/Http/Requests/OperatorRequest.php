@@ -7,7 +7,8 @@ use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MemberRequest extends FormRequest
+
+class OperatorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

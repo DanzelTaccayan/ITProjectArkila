@@ -7,7 +7,7 @@ use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MemberRequest extends FormRequest
+class DriverRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -42,8 +42,8 @@ class MemberRequest extends FormRequest
             'contactPerson' => ['bail','required', 'max:75',new checkSpecialCharacters],
             'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
             'contactPersonContactNumber' => ['bail','required', new checkContactNumber],
-            'licenseNo' => ['bail','required_with:licenseExpiryDate','nullable'],
-            'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date|after:today',
+            'licenseNo' => 'bail|required',
+            'licenseExpiryDate' => 'bail|required',
             'sss' => 'nullable'
         ];
     }

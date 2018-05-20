@@ -93,7 +93,7 @@
                                 <button class="btn btn-success btn-sm" data-toggle="modal" data-target="">See More</button>
                             </div>
                             <div class="testimonial-info d-flex">
-                                <h5>{{$announcement->created_at->formatLocalized('%A %B %d %Y')}}</h5>
+                                <h5>{{$announcement->created_at->formatLocalized('%B %d %Y')}}</h5>
                             </div>
                             <!-- estimonial-info-->
                         </div>
