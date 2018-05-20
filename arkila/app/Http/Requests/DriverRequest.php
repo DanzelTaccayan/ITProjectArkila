@@ -6,6 +6,7 @@ use App\Rules\checkContactNumber;
 use App\Rules\checkSpecialCharacters;
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class DriverRequest extends FormRequest
 {
     /**
