@@ -42,7 +42,7 @@
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
                             <div class="tab-content" style="height: 550px;">
-                                <h3 class="profile-username"><strong>USERNAME</strong></h3> 
+                                <h3 class="profile-username"><strong>NAME</strong></h3> 
                                 <div class="active tab-pane" id="info">
                                     <div style="margin-bottom: 3%;">
                                         <button onclick="window.open('')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>

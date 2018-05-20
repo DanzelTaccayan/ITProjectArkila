@@ -20,7 +20,7 @@ th {
             <div class="row">
 
                 <div class="col-md-3">
-                    <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/jl.JPG') }}" alt="profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
                     <h3 class="text-center">{{$main->destination_name}}</h3>
                     <p class="text-center" style="margin-bottom: 20px">Main Terminal</p>
                 </div>
