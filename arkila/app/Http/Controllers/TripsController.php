@@ -154,15 +154,8 @@ class TripsController extends Controller
             }
           }
 
+          //dd($numPassCountArr);
           $totalPassenger = array_sum(array_column($tempArr, 0));
-
-
-          // foreach($tempArr as $places => $innerValues){
-          //   foreach($innerValues as $keys => $values){
-          //     $totalPassenger += $values;
-          //   }
-          // }
-
           $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
 
           $driverShare = 0;
