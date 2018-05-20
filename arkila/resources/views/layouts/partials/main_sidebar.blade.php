@@ -8,7 +8,7 @@
             </div>
             <div class="pull-left info">
               <p>Admin</p>
-              <small>Main Terminal</small>
+              <small>{{ \App\Destination::mainTerminal()->get()->first()->destination_name }}</small>
             </div>
         </div>
         <!-- /.search form -->
@@ -30,7 +30,7 @@
             <li class="{{ Request::is('home/route') ? 'active' : '' }}">
                 <a href="/home/route">
                     <i class="fa fa-road"></i>
-                    <span>Routes</span>
+                    <span>Terminals and Routes</span>
                 </a>
             </li>
             <li class="treeview {{--  {{ Request::is('home/transactions') ? 'active' : '' }} --}}">
@@ -109,7 +109,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::is('home/settings') ? 'active' : '' }}"><a href="{{route('settings.index')}}"><i class="fa fa-circle-o"></i> Fees and Features</a></li>
-                    <li class=""><a href="#"><i class="fa fa-circle-o"></i> Company Profile</a></li>
+                    <li class=""><a href="{{route('company-profile.index')}}"><i class="fa fa-circle-o"></i> Company Profile</a></li>
                 </ul>
             </li>
             <li class="{{ Request::is('home/user-management') ? 'active' : '' }}">

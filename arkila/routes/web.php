@@ -143,7 +143,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['show','edit']
     ]);
 
-    Route::resource('/home/admin/profile', 'ProfileController',[
+    Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
     ]);
 
