@@ -10,13 +10,16 @@
                     <form class="contact100-form" action="{{route('customermodule.storeReservation')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
+                            @if($destinations->count() == 0)
+                            <p>No Destinations</p>
+                            @else
                             <select id="destination" name="destination" class="form-control">
                                 <option selected value="">Select Destination</option>
                                 @foreach($destinations as $destination)
-                                    <option value="{{$destination->destination_id}}">{{$destination->description}}</option>
+                                    <option value="{{$destination->destination_id}}">{{$destination->destination_name}}</option>
                                 @endforeach
                            </select>
-                            
+                            @endif                            
                         </div>
                         <div class="container-contact100-form-btn">
                             <button type="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>

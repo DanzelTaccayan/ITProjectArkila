@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\CustomerModuleControllers;
 
 use App\Destination;
-use App\Reservation;
+use App\ReservationDate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,8 +17,8 @@ class MakeReservationController extends Controller
     }
     public function createReservation()
     {
-    	$destinations = Destination::all();
-    	return view('customermodule.user.reservation.customerReservation', compact('destinations'));
+		$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+    	return view('customermodule.user.reservation.selectDestination', compact('destinations'));
     }
 
     public function storeReservation(CustomerReservationRequest $request)

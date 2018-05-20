@@ -40,7 +40,8 @@ class ReservationsController extends Controller
      */
     public function show(ReservationDate $reservation)
     {
-        return view('reservations.show');
+        $requests = Reservation::where('date_id', $reservation->id)->get();
+        return view('reservations.show', compact('reservation', 'requests'));
     }
 
     /**
