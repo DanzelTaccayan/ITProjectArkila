@@ -28,9 +28,13 @@
                             <td class="text-right">{{$reserve->departure_time}}</td>
                             <td class="text-right">{{$reserve->number_of_slots}}</td>
                             <td>
+                                @if($reserve->number_of_slots > 0)
                                 <div class="text-center">
-                                    <a href="{{route('customermodule.createReservation')}}" class="btn btn-success btn-sm">RESERVE</a>
+                                    <a href="{{route('customermodule.createReservation', $reserve->id)}}" class="btn btn-success btn-sm">RESERVE</a>
                                 </div>
+                                @else
+                                <p>Fully Booked</p>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

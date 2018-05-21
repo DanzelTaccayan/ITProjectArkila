@@ -286,9 +286,10 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     /*Reservation*/
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
-    Route::get('/home/reservation/create', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
+    Route::get('/home/reservation/create/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
+    Route::post('/home/reservation/create-request/{reservation}', 'CustomerModuleControllers\MakeReservationController@storeRequest')->name('customermodule.storeReservation')->middleware('online-reservation');
     Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');
-    Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
+    // Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
     /*Transactions*/
     Route::get('/home/view-transactions', 'CustomerModuleControllers\ViewTransactionsController@viewTransactions')->name('customermodule.user.transactions.customerTransactions');
     Route::patch('/home/view-transactions/delete-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@destroyRental')->name('customermodule.deleteRental');
