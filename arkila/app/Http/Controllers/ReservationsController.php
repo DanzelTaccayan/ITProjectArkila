@@ -131,17 +131,23 @@ class ReservationsController extends Controller
         return back()->with('message', 'Successfully Deleted');
     }
 
-    public function find(Request $request){
-        $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
-        ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
-        ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
-        ->where('reservation.id', '=', $request->id)->get();
+    // public function find(Request $request){
+    //     $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
+    //     ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
+    //     ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
+    //     ->where('reservation.id', '=', $request->id)->get();
 
-        return response()->json($data);
+    //     return response()->json($data);
+    // }
+
+    public function walkInReservation($id)
+    {  
+        $destinations = Destination::allTerminal()->get();
+        return view('reservations.createWalkIn', compact('destinations', 'id'));
     }
 
-    public function walkInReservation()
+    public function storeWalkIn(Request $request, Destination $destination)
     {
-        return view('reservations.createWalkIn');
+        dd('yes');
     }
 }
