@@ -29,34 +29,34 @@
                     <!-- contact100-form-->
                 </div>
                 <div class="col-md-6 mx-auto" id="boxContainer">
-                    <form class="contact100-form" action="" method="POST" data-parsley-validate="">
+                    <form class="contact100-form" action="{{route('customermodule.storeReservation', $reservation->id)}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
                         <div class="form-group">
                         	<table class="table table-striped table-bordered">
                         		<tbody>
                         			<tr>
                         				<th>Route</th>
-                        				<td>Baguio - Cabantauan</td>
+                        				<td>{{$main->destination_name}} - {{$reservation->destination->destination_name}}</td>
                         			</tr>
                         			<tr>
                         				<th>Date</th>
-                        				<td>20 MAY 2017</td>
+                        				<td>{{$reservation->reservation_date->formatLocalized('%d %B %Y')}}</td>
                         			</tr>
                         			<tr>
                         				<th>Day</th>
-                        				<td>Sunday</td>
+                        				<td>{{$reservation->reservation_date->formatLocalized('%A')}}</td>
                         			</tr>
                         			<tr>
                         				<th>Estimated Departure</th>
-                        				<td>2:00 PM</td>
+                        				<td>{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
                         			</tr>
                         			<tr>
                         				<th>Drop-off point</th>
-                        				<td>ASINGAN</td>
+                        				<td>{{$dropOff->destination_name}}</td>
                         			</tr>
                         			<tr>
                         				<th>Ticket Price</th>
-                        				<td>200.00</td>
+                        				<td>P{{$reservation->destination->tickets->first()->fare}}</td>
                         			</tr>
                         		</tbody>
                         	</table>
@@ -66,15 +66,15 @@
                         		<tbody>
                         			<tr>
                         				<th>Name</th>
-                        				<td>LAST NAME, FIRST NAME</td>
+                        				<td>{{auth()->user()->full_name}}</td>
                         			</tr>
                         			<tr>
                         				<th>Contact Number *</th>
-                        				<td><input type="text" class="form-control"></td>
+                        				<td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control"></td>
                         			</tr>
                         			<tr>
                         				<th>Ticket Qty *</th>
-                        				<td><input type="number" class="form-control"></td>
+                        				<td><input type="number" name="quantity" value="{{old('quantity')}}" class="form-control"></td>
                         			</tr>
                         		</tbody>
                         	</table>

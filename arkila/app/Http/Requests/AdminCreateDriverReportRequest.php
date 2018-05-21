@@ -87,11 +87,36 @@ class AdminCreateDriverReportRequest extends FormRequest
             $rules['numDisST'] = "nullable|numeric|min:1|max:18";
           }
 
-          if($this->request->get('numPassMain') == null){
+          if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+            && (($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
             $rules['numPassMain'] = "nullable";
-          }else if($this->request->get('numPassST') == null){
+            $rules['numDisMain'] = "nullable";
+          }else if((($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))
+            && (($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') !== null || $this->request->get('numDisMain') != 0))){
             $rules['numPassST'] = "nullable";
+            $rules['numDisST'] = "nullable";
           }
+
+          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0))
+            && (($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
+            $rules['numDisMain'] = "nullable";
+            $rules['numDisST'] = "nullable";
+          }
+
+          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
+            $rules['numDisMain'] = "nullable";
+            $rules['numPassST'] = "nullable";
+            $rules['numDisST'] = "nullable";
+          }else if((($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))
+          && (($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))){
+            $rules['numDisST'] = "nullable";
+            $rules['numPassMain'] = "nullable";
+            $rules['numDisMain'] = "nullable";
+          }
+
+          
+
         }
 
         return $rules;
