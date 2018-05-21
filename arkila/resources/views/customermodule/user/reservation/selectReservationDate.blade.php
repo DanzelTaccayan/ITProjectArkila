@@ -20,12 +20,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($gago->first()->routeDestination as $chabal)
+                    @foreach($destination->first()->routeDestination as $chabal)
                         @foreach($reservations->where('destination_terminal', $chabal->destination_id) as $reserve)
                         <tr>
                             <th># 1735</th>
-                            <td>{{$reserve->reservation_date}}</td>
-                            <td class="text-right">{{$reserve->departure_time}}</td>
+                            <td>{{$reserve->reservation_date->formatLocalized('%d %B %Y')}}</td>
+                            <td class="text-right">{{ date('g:i A', strtotime($reserve->departure_time)) }}</td>
                             <td class="text-right">{{$reserve->number_of_slots}}</td>
                             <td>
                                 @if($reserve->number_of_slots > 0)
@@ -51,16 +51,16 @@
               <h2 class="h3 panel-title">SELECT DESTINATION</h2>
             </div>
             <div class="panel-body">
-                <form action="" class="contact100-form">
+                <form action="{{route('customermodule.showDate')}}" class="contact100-form">
                     <div class="form-group">
-                        <select name="" id="" class="form-control">
-                            <option value="">AFSFW</option>
-                            <option value=""></option>
-                            <option value=""></option>
+                        <select name="destination" id="" class="form-control">
+                            @foreach($destinations as $route)
+                            <option value="{{$route->destination_id}}" @if($route->destination_id == $getDestination) {{'selected'}} @endif>{{$route->destination_name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="container-contact100-form-btn">
-                        <button type="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>
+                        <button type="submit" value="Update" name="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>
                     </div>
                 </form>
             </div>

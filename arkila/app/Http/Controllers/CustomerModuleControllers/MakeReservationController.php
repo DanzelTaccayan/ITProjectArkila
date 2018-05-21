@@ -25,10 +25,16 @@ class MakeReservationController extends Controller
 	
 	public function showDetails(Request $request)
 	{
-		$wow = $request->destination;
-		Session::put('key', $wow);
-
-		return redirect('/home/reservation/show-reservations');
+		$destination = $request->destination;
+		if($destination == null)
+		{
+			return back();
+		}
+		else
+		{
+			Session::put('key', $destination);	
+			return redirect('/home/reservation/show-reservations');
+		}
 	}
 	public function reservationCreate(ReservationDate $reservation)
 	{
@@ -39,13 +45,28 @@ class MakeReservationController extends Controller
 		return view('customermodule.user.reservation.createReservation', compact('reservation', 'main', 'dropOff'));
 	}
 
-	public function showDate()
+	public function showDate(Request $request)
 	{
-		$hi = Session::get('key');
-		$gago = Destination::where('destination_id', $hi)->get();
-		$reservations = ReservationDate::all();
+		if($request->submit == 'Update')
+		{
+			$destination = $request->destination;
+			$getDestination = Session::put('key', $destination);
+			$destination = Destination::where('destination_id', $getDestination)->get();
+			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+			$reservations = ReservationDate::all();
+	
+			return redirect('/home/reservation/show-reservations');
 
-		return view('customermodule.user.reservation.selectReservationDate', compact('gago', 'reservations'));
+		}
+		else
+		{
+			$getDestination = Session::get('key');
+			$destination = Destination::where('destination_id', $getDestination)->get();
+			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+			$reservations = ReservationDate::all();
+	
+			return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination'));
+		}
 	}
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
@@ -59,7 +80,7 @@ class MakeReservationController extends Controller
 
 			$this->validate(request(), [
 				'contactNumber' => 'bail|numeric|required',
-				'quantity' => 'bail|numeric|required',
+				'quantity' => 'bail|numeric|required|min:1|max:2',
 			]);
 			Reservation::create([
 				'user_id' => auth()->user()->id,
