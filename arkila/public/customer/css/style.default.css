@@ -548,10 +548,6 @@ table img {
   height: 50px;
 }
 
-table input[type="number"] {
-  max-width: 50px;
-}
-
 .nav-tabs {
   border-bottom: none;
 }

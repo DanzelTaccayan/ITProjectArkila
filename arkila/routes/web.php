@@ -186,7 +186,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
-    Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
+    Route::patch('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
+    Route::patch('/home/transactions/lost/{transaction}','TransactionsController@lost')->name('transactions.lost');
+    Route::patch('/home/transactions/multipleLost','TransactionsController@multipleLost')->name('transactions.multipleLost');
+    Route::delete('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
     //Selected Tickets
     Route::post('/selectTicket/{destination}','TransactionsController@selectTicket')->name('transactions.selectTicket');
     Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');
@@ -283,9 +286,10 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     /*Reservation*/
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
-    Route::get('/home/reservation/create', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
+    Route::get('/home/reservation/create/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
+    Route::post('/home/reservation/create-request/{reservation}', 'CustomerModuleControllers\MakeReservationController@storeRequest')->name('customermodule.storeReservation')->middleware('online-reservation');
     Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');
-    Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
+    // Route::post('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@storeReservation')->name('customermodule.storeReservation')->middleware('online-reservation');
     /*Transactions*/
     Route::get('/home/view-transactions', 'CustomerModuleControllers\ViewTransactionsController@viewTransactions')->name('customermodule.user.transactions.customerTransactions');
     Route::patch('/home/view-transactions/delete-rental/{rental}', 'CustomerModuleControllers\ViewTransactionsController@destroyRental')->name('customermodule.deleteRental');
