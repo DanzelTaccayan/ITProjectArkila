@@ -1,7 +1,7 @@
 @extends('layouts.form_lg') 
 @section('title', 'Line Reservation') 
 @section('form-id', 'regForm') 
-@section('form-action', route('reservations.store')) 
+@section('form-action', route('reservation.walk-in-store', $id)) 
 @section('form-method', 'POST') 
 @section('form-body') {{csrf_field()}}
 <div class="margin-side-10">
