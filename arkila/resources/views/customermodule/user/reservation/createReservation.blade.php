@@ -34,6 +34,11 @@
                         <div class="form-group">
                         	<table class="table table-striped table-bordered">
                         		<tbody>
+                                    <tr>
+                        				<th>Remaining Slots</th>
+                        				<td>{{$reservation->number_of_slots}}</td>
+                        			</tr>
+
                         			<tr>
                         				<th>Route</th>
                         				<td>{{$main->destination_name}} - {{$reservation->destination->destination_name}}</td>
@@ -80,8 +85,8 @@
                         	</table>
                         </div>
                         <div class="container-contact100-form-btn">
-                        	<button class="contact100-form-btn"><strong>BACK</strong></button>
-                            <button type="submit" class="contact100-form-btn"><strong>RESERVE</strong></button>
+                        	<a href="{{route('customermodule.showDate')}}" class="btn btn-primary"><strong>BACK</strong></a>
+                            <button type="submit" class="btn btn-success"><strong>RESERVE</strong></button>
                         </div><!-- container-contact100-form-btn-->
                     </form>
                     <!-- contact100-form-->

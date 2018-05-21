@@ -27,7 +27,7 @@ class CreateReservationTable extends Migration
             $table->string('name');
             $table->string('contact_number');
             $table->integer('ticket_quantity');
-            $table->enum('status', ['Pending', 'Paid'])
+            $table->enum('status', ['Unpaid', 'Paid'])
             ->default('Pending');
             $table->enum('type', ['Walk-in', 'Online']);
 
