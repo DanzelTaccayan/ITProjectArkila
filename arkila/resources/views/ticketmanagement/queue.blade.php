@@ -31,19 +31,19 @@
     }
 
     .box-body {
-        height: 605px;
+        height: 480px;
     }
 
 </style>
 
 @endsection
 @section('content')
-     
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
 
-        <div class="dual-list list-right">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="20000">
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+        
             <div class="box box-solid ticket-box">
                 <div class="box-header bg-blue bg-gray">
                     <img src="{{ URL::asset('img/bantrans-logo.png') }}" style="width: 75px; height:75px; float: right; margin-right: 2%; margin-top: 1% " alt="User Image">
@@ -54,36 +54,97 @@
                 </div>
                 <div class="box-body well">
                     <ul class="list-group">
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
-                        <li data-val='#' class="list-group-item col-md-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center">CABANTUAN-A</h4></li>
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
+                        
+                        
 
                     </ul>
 
                 </div>
             </div>
-        </div>
-
-    <div class="carousel-item">
-        
     </div>
-    <div class="carousel-item">
-    
+
+    <div class="item">
+      
+            <div class="box box-solid ticket-box">
+                <div class="box-header bg-blue bg-gray">
+                    <img src="{{ URL::asset('img/bantrans-logo.png') }}" style="width: 75px; height:75px; float: right; margin-right: 2%; margin-top: 1% " alt="User Image">
+                    <span >
+                        <h2>SAN JOSE CITY</h2>
+                        <h4>ON DECK: <strong>BBB-3213</strong></h4>
+                    </span>
+                </div>
+                <div class="box-body well">
+                    <ul class="list-group">
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+
+                        
+                        
+                        
+                        
+
+                    </ul>
+
+                </div>
+            </div>
     </div>
   </div>
 </div>
 
+
+
 @endsection
 @section('scripts') 
 @parent
-<script>
-    $('.carousel').carousel({
-      interval: 2000
-    });
-</script>
+
 @endsection

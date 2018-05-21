@@ -186,7 +186,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
-    Route::patch('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
+    Route::patch('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
+    Route::patch('/home/transactions/lost/{transaction}','TransactionsController@lost')->name('transactions.lost');
+    Route::patch('/home/transactions/multipleLost','TransactionsController@multipleLost')->name('transactions.multipleLost');
+    Route::delete('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
     //Selected Tickets
     Route::post('/selectTicket/{destination}','TransactionsController@selectTicket')->name('transactions.selectTicket');
     Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');

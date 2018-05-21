@@ -311,6 +311,7 @@ class TransactionsController extends Controller
         return 'success';
     }
 
+    //Refund
     public function refund(Transaction $transaction)
     {
         $transaction->update([
@@ -318,47 +319,66 @@ class TransactionsController extends Controller
         ]);
 
         $transaction->ticket->update([
-            'isAvailable' => 1
+            'is_sold' => 0
         ]);
 
         return 'success';
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transaction $transaction)
+    public function multipleRefund()
     {
+        $transactionObjArr = [];
         $this->validate(request(),[
-            'delete' => 'exists|ticket,ticket_id'
+            'refund.*' => 'exists:transaction,transaction_id'
         ]);
 
+
+        foreach(request('refund') as $transactionId)
+        {
+            array_push($transactionObjArr, Transaction::find($transactionId));
+        }
+
+        foreach($transactionObjArr as $transaction)
+        {
+            $transaction->update([
+                'status' => 'Refunded'
+            ]);
+
+            $transaction->ticket->update([
+                'is_sold' => 0
+            ]);
+        }
+        return 'success';
+
+    }
+
+    //Lost
+    public function lost(Transaction $transaction){
         $transaction->update([
-            'status' => 'Deleted'
+            'status' => 'Lost'
         ]);
 
-        //put transaction into ledger
-        if($transaction->ticket->type === 'Discount')
-        {
-            $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
-        }
-        else
-        {
-            $discount = 0;
-        }
-        $computedAmount = $transaction->destination->amount - $discount;
         Ledger::create([
-            'description' => 'Expired Ticket',
-            'amount' => $computedAmount,
+            'description' => 'Lost Ticket',
+            'amount' => $transaction->amount_paid,
             'type' => 'Revenue'
         ]);
 
         $transaction->ticket->update([
-            'isAvailable' => 1
+            'is_sold' => 0
         ]);
+
+    }
+
+    //Delete
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->ticket->update([
+            'is_sold' => 1
+        ]);
+
+        $transaction->delete();
 
         return 'success';
     }
@@ -378,31 +398,10 @@ class TransactionsController extends Controller
 
         foreach($transactionObjArr as $transaction)
         {
-
-            $transaction->update([
-                'status' => 'Deleted'
-            ]);
-
-            //put transaction into ledger
-            if($transaction->ticket->type === 'Discount')
-            {
-                $discount = (FeesAndDeduction::find(2)->amount/100)*$transaction->destination->amount;
-            }else
-            {
-                $discount = 0;
-            }
-
-            $computedAmount = ($transaction->destination->amount) - $discount;
-            Ledger::create([
-                'description' => 'Expired Ticket',
-                'amount' => $computedAmount,
-                'type' => 'Revenue'
-            ]);
-
             $transaction->ticket->update([
-                'isAvailable' => 1
+                'is_sold' => 1
             ]);
-
+            $transaction->delete();
         }
         return 'success';
     }
