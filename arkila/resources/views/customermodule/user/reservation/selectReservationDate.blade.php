@@ -1,79 +1,70 @@
 @extends('layouts.customer_user')
 @section('content')
-<section class="mainSection">
-        <div class="container">
-            <div class="heading text-center">
-                <h2>Reserve a Trip</h2>
+<div id="content">
+    <div class="container" style="height:600px;">
+      <div class="row bar mb-0">
+        <div id="customer-orders" class="col-md-8">
+          <div class="heading text-center">
+                <h2>RESERVATION DATES</h2>
+           </div>
+          <div class="box mt-0 mb-lg-0" style="box-shadow: 0px 5px 10px grey; background-color: white;">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th class="text-center">Order</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Time</th>
+                    <th class="text-center">Remaining Slots</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    @foreach($gago->first()->routeDestination as $chabal)
+                        @foreach($reservations->where('destination_terminal', $chabal->destination_id) as $reserve)
+                        <tr>
+                            <th># 1735</th>
+                            <td>{{$reserve->reservation_date}}</td>
+                            <td class="text-right">{{$reserve->departure_time}}</td>
+                            <td class="text-right">{{$reserve->number_of_slots}}</td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="{{route('customermodule.createReservation')}}" class="btn btn-success btn-sm">RESERVE</a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endforeach          
+                </tbody>
+              </table>
             </div>
-            <div class="row">
-                <div class="col-md-6 mx-auto" id="boxContainer">
-                        {{csrf_field()}}
-                        <div class="form-group">
-
-                                @foreach($gago->first()->routeDestination as $chabal)
-                                    <p>{{$chabal->destination_name}}</p>
-                                @endforeach
-
-                                @foreach($gago->first()->routeDestination as $chabal)
-                                @foreach($reservations->where('destination_terminal', $chabal->destination_id) as $reserve)
-                                    <p>{{$reserve->reservation_date}}</p>
-                                @endforeach
-                                @endforeach
-                        </div>
-                        <div class="container-contact100-form-btn">
-                            <a href="{{route('customermodule.createReservation')}}" class="contact100-form-btn"><strong>create</strong></a>
-                        </div><!-- container-contact100-form-btn-->
-                    <!-- contact100-form-->
-                </div>
-                <!-- col-->
-            </div>
-            <!-- row-->
+          </div>
         </div>
-        <!-- container-->
-    </section>
-    <!-- main section-->
-
-@stop 
+        <div class="col-md-4 mt-4 mt-md-0">
+          <!-- CUSTOMER MENU -->
+          <div class="panel panel-default sidebar-menu">
+            <div class="panel-heading text-center" style="margin-top: 10px;">
+              <h2 class="h3 panel-title">SELECT DESTINATION</h2>
+            </div>
+            <div class="panel-body">
+                <form action="" class="contact100-form">
+                    <div class="form-group">
+                        <select name="" id="" class="form-control">
+                            <option value="">AFSFW</option>
+                            <option value=""></option>
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="container-contact100-form-btn">
+                        <button type="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+@endsection
 @section('scripts')
-@parent
-<script>
-    
-        $(function() {
-            $('.datepicker').datepicker({
-                autoclose: true
-            });
-            
-        $('#timepicker').timepicker({
-            showInputs: false,
-            template: false
-        });
-        })
-        $('[data-mask]').inputmask()
-            $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
-            
-    function getDestination(elementId){
-        var sel = document.getElementById(elementId);
-        if (sel.selectedIndex == -1){
-            return null;
-        }
-        
-        return sel.options[sel.selectedIndex].text;
-    }
-
-    function showSummary(){
-        document.getElementById('summaryDest').textContent = getDestination('destination');
-        document.getElementById('summaryContact').textContent = document.getElementById('contactNumber').value;
-        document.getElementById('summarySeats').textContent = document.getElementById('seats').value;
-        document.getElementById('summaryDate').textContent = document.getElementById('date').value;
-        document.getElementById('summaryTime').textContent = document.getElementById('timepicker').value;
-        document.getElementById('summaryComments').textContent = document.getElementById('message').value;
-       
-    }
-</script>
-<script>
-    $(function(){
-        $('[data-mask]').inputmask();
-        $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true});
-    });
-</script>
 @endsection
