@@ -52,15 +52,7 @@
                             @endforeach
                         </tbody>
 
-                        @php $totalcount = array(); @endphp
-                        @foreach($tempArr as $key => $values)
-                          @foreach($values as $innerKeys => $innerValues)
-                          @if(!array_key_exists($innerKeys, $totalcount))
-                            @php $totalcount[$innerKeys] = 0; @endphp
-                          @endif
-                          @php $totalcount[$innerKeys] += $innerValues; @endphp
-                          @endforeach
-                        @endforeach
+                        
 
                         <tfoot>
                             <tr>

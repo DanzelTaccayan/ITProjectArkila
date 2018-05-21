@@ -158,6 +158,15 @@ class TripsController extends Controller
           $totalPassenger = array_sum(array_column($tempArr, 0));
           $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
 
+          if($totalDiscountedPassenger == 0){
+            foreach($tempArr as $key => $innerArray){
+              // foreach($innerArray as $innerArrayKeys => $innerArrayValues){
+
+              // }
+              array_push($tempArr[$key], 0);
+            }
+          }
+
           $driverShare = 0;
           $totalFare = 0;
           foreach($transaction  as $transkeys => $transvalues){
@@ -166,7 +175,7 @@ class TripsController extends Controller
 
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
           $officeShare = $totalFare - $driverShare;
-
+          //dd($tempArr);
           return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
         }else{
