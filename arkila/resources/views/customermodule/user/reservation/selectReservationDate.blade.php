@@ -20,8 +20,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($destination->first()->routeDestination as $chabal)
-                        @foreach($reservations->where('destination_terminal', $chabal->destination_id) as $reserve)
+                    @foreach($destination->first()->routeDestination as $route)
+                    @if($reservations->where('destination_terminal', $route->destination_id)->count() == 0)
+                    <tr>
+                    <td class="text-center" colspan="5">NO RESERVATION</td>    
+                    </tr
+                    @else
+                        @foreach($reservations->where('destination_terminal', $route->destination_id) as $reserve)
+                        
                         <tr>
                             <th># 1735</th>
                             <td>{{$reserve->reservation_date->formatLocalized('%d %B %Y')}}</td>
@@ -38,6 +44,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endif
                     @endforeach          
                 </tbody>
               </table>

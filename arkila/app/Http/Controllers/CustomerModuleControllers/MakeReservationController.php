@@ -96,7 +96,7 @@ class MakeReservationController extends Controller
 				'number_of_slots' => $newSlot,
 			]);
 
-		    return redirect('/home/reservation/show-reservations')->with('success', 'Successfully created a reservation.');
+		    return redirect(route('customermodule.success'))->with('success', 'Successfully created a reservation.');
 
 	
 		}
@@ -106,54 +106,9 @@ class MakeReservationController extends Controller
 		}
 	}
 
-    // public function storeReservation(CustomerReservationRequest $request)
-    // {
-    // 	$fullName = null;
-    // 	if(Auth::user()->middle_name == null){
-    // 		$fullName = Auth::user()->first_name . " " . Auth::user()->last_name;
-    // 	}else{
-    // 		$fullName = Auth::user()->first_name . " " . Auth::user()->middle_name . " " . Auth::user()->last_name;
-    // 	}
+	public function reservationSuccess()
+	{
+		return view('customermodule.user.reservation.success');
+	}
 
-    // 	$seat = $request->numberOfSeats;
-    //     $destinationReq = $request->destination;
-    //     $findDest = Destination::all();
-
-    //     foreach ($findDest->where('destination_id', $destinationReq) as $find) {
-    //         $findAmount = $find->amount;
-    //     }
-    //     $total = $findAmount*$seat;
-
-    // 	if($request->message == null){
-    // 		Reservation::create([
-    // 			"user_id" => Auth::id(),
-    // 			"destination_id" => $request->destination,
-    // 			"name" => $fullName,
-    // 			"departure_date" => $request->date,
-    // 			"departure_time" => $request->time,
-    // 			"number_of_seats" => $request->numberOfSeats,
-    // 			"contact_number" => $request->contactNumber,
-    // 			"status" => "Pending",
-    // 			"amount" => $total,
-    // 			"type" => "Online",
-    // 			"comments" => $request->message,
-    // 		]);
-    // 	}else{
-    // 		Reservation::create([
-    // 			"user_id" => Auth::id(),
-    // 			"destination_id" => $request->destination,
-    // 			"name" => $fullName,
-    // 			"departure_date" => $request->date,
-    // 			"departure_time" => $request->time,
-    // 			"number_of_seats" => $request->numberOfSeats,
-    // 			"contact_number" => $request->contactNumber,
-    // 			"status" => "Pending",
-    // 			"amount" => $total,
-    // 			"type" => "Online",
-    // 			"comments" => $request->message,
-    // 		]);
-    // 	}
-
-    // 	return redirect(route('customermodule.user.transactions.customerTransactions'))->with('success', 'Successfully made a Reservation');
-    // }
 }
