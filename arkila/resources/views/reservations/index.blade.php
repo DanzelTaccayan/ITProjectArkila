@@ -43,6 +43,9 @@
                                             <td>
                                                 <div class="text-center"> 
                                                     <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
+                                                    <button class="btn btn-success btn-sm">OPEN</button>
+                                                    <button class="btn btn-danger btn-sm">CLOSE</button>
+                                                    <button class="btn btn-outline-danger btn-sm">DELETE</button>
                                                 </div>
                                             </td>
                                         </tr>
