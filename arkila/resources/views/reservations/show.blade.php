@@ -5,11 +5,11 @@
 	 <div>
         <h2 class="text-white">SUNDAY <strong class="text-yellow">2018 MAY 10</strong></h2>
     </div>
-	<div class="box box-solid">
+	<div class="box box-solid" style="height: 500px;">
 		<div class="box-body">
 			<div class="row">
 				<div class="col-md-3">
-					<h3 class="text-center">RESERVATION DETAILS</h3>	
+					<h3 class="text-center">RESERVATION DETAILS</h3>
 					<table class="table table-striped table-bordered">
 						<tbody>
 							<tr>
@@ -33,7 +33,10 @@
 				</div>
 				<div class="col-md-9">
 					<h3 class="text-center">RESERVED CUSTOMERS</h3>
-					<table class="table table-striped table-bordered">
+					<div class="col-md-6">
+                        <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
+                    </div>	
+					<table class="table table-striped table-bordered listReserved">
 						<thead>
 							<tr>
 								<th class="text-center">Name</th>
@@ -64,4 +67,25 @@
 		</div>
 	</div>
 </div>
+@endsection
+@section('scripts')
+@parent
+<script>
+    $(function() {
+        $('.listReserved').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            'order': [[ 0, "desc" ]],
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        })
+
+    })
+</script>
 @endsection

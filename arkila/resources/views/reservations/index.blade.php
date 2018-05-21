@@ -8,7 +8,6 @@
             </div>
             <div class="box">
                 <div class="box-body">
-
                         <!-- Custom Tabs -->
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
@@ -21,7 +20,6 @@
                                 <div class="col-md-6">
                                     <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
                                 </div>
-
                                 <table class="table table-bordered table-striped listReservation">
                                     <thead>
                                         <tr>
