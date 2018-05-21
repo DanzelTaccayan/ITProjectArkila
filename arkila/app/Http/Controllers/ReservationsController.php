@@ -139,4 +139,9 @@ class ReservationsController extends Controller
 
         return response()->json($data);
     }
+
+    public function walkInReservation()
+    {
+        return view('reservations.createWalkIn');
+    }
 }

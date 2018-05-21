@@ -34,7 +34,7 @@
 				<div class="col-md-9">
 					<h3 class="text-center">RESERVED CUSTOMERS</h3>
 					<div class="col-md-6">
-                        <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
+                        <a href="{{route('reservation.walk-in', $reservation->id)}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
                     </div>	
 					<table class="table table-striped table-bordered listReserved">
 						<thead>

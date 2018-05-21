@@ -141,6 +141,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['edit']
     ]);
 
+    Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
+
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
     ]);
