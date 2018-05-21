@@ -3,17 +3,11 @@
 <section class="mainSection">
         <div id="content">
             <div class="container">
-                <div class="heading text-center">
-                    <h2>MY TRANSACTIONS</h2>
-                </div>
-                <div class="col-md-9 mx-auto boxContainer">
-                    <div class="box border-bottom-0">
-                        <ul class="nav nav-pills nav-fill">
-                            <li class="nav-item"><a class="nav-link active" href="#rentals" data-toggle="tab">Rentals</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#reservations" data-toggle="tab">Reservations</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="active tab-pane table-responsive" id="rentals">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class=" boxContainer">
+                            <div id="reservation">
+                                <h4 class="text-center">NO RESERVATION.</h4>
                                 <ul class="list-group">
                                     @foreach($rentals as $rental)
                                     <li class="list-group-item">
@@ -65,49 +59,23 @@
                                     @endforeach
                                 </ul>
                             </div>
-                            <!-- tab-pane-->
-                            <div class="tab-pane table-responsive" id="reservations">
-                                <table id="reservation" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Destination</th>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Time</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($reservations as $reservation)
-                                        <tr>
-                                            <td>{{$reservation->destination->description}}</td>
-                                            <td>{{$reservation->departure_date}}</td>
-                                            <td>{{$reservation->departure_time}}</td>
-                                            <td>{{$reservation->status}}</td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <button id="viewReservationModal{{$reservation->id}}" type="button" class="btn btn-primary"
-                                                    data-toggle="modal"
-                                                    data-target="#viewReservation{{$reservation->id}}"
-                                                    data-reservedestination="{{$reservation->destination->description}}"
-                                                    data-reservecontact="{{$reservation->contact_number}}"
-                                                    data-reserveseats="{{$reservation->number_of_seats}}"
-                                                    data-reservedate="{{$reservation->departure_date}}"
-                                                    data-reservetime="{{$reservation->departure_time}}"
-                                                    data-reservecomment="{{$reservation->comments}}">View</button>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteWarning{{$reservation->id}}">Cancel</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- tab-pane-->
                         </div>
-                        <!-- tab-content-->
+                        <!-- box-->
                     </div>
-                    <!-- box-->
+                    <div class="col-md-3 mt-4 mt-md-0">
+                      <!-- CUSTOMER MENU -->
+                      <div class="panel panel-default sidebar-menu">
+                        <div class="panel-heading">
+                          <h3 class="h4 panel-title">MY TRANSACTIONS</h3>
+                        </div>
+                        <div class="panel-body">
+                          <ul class="nav nav-pills flex-column text-sm">
+                            <li class="nav-item"><a href="customer-orders.html" class="nav-link active"><i class="fa fa-list"></i>My Rentals</a></li>
+                            <li class="nav-item"><a href="customer-wishlist.html" class="nav-link"><i class="fa fa-heart"></i> My Reservations</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                 </div>
                 <!-- boxContainer-->
             </div>
