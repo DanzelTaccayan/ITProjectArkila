@@ -43,7 +43,12 @@ class ReservationsController extends Controller
     public function show(ReservationDate $reservation)
     {
         Session::put('id',$reservation->id);
-        $requests = Reservation::where('date_id', $reservation->id)->get();
+        $requests = Reservation::where('date_id', $reservation->id)
+        ->where(function($q){
+            $q->where('status', 'PAID')
+            ->orWhere('status', 'UNPAID');
+        })->get();
+        
         return view('reservations.show', compact('reservation', 'requests'));
     }
 
@@ -150,6 +155,19 @@ class ReservationsController extends Controller
             $name = ucwords(strtolower($request->name));
             $codes = Reservation::all();
             $newCode = bin2hex(openssl_random_pseudo_bytes(8));
+            $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
+
+            foreach ($codes as $code)
+            {
+                $allRefundCodes = $code->refund_code;
+    
+                do
+                {
+                    $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
+    
+                } while ($refundCode == $allRefundCodes);
+            }
+
             foreach ($codes as $code)
             {
                 $allCodes = $code->rsrv_code;
@@ -169,6 +187,7 @@ class ReservationsController extends Controller
                 'date_id' => $dateId,
                 'destination_name' => $destination->destination_name,
                 'rsrv_code' => $newCode,
+                'refund_code' => $refundCode,
                 'fare' => $toBePaid,
                 'name' => $name,
                 'contact_number' => $request->contactNumber,
@@ -189,5 +208,35 @@ class ReservationsController extends Controller
         {
             return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
         }
+    }
+
+    public function refund(Request $request, Reservation $reservation)
+    {
+        $this->validate(request(), [
+            'refundCode' => 'required',
+        ]);
+
+        if($request->refundCode == $reservation->refund_code)
+        {
+            $reservation->update([
+                'status' => 'Refunded',
+                'refund_code' => null, 
+            ]);
+
+            return redirect()->back()->with('success', 'The reservation had been successfully refunded.');
+        }
+        else
+        {
+            return redirect()->back()->with('error_code', 5);
+       }
+    }
+
+    public function payment(Request $request, Reservation $reservation)
+    {
+            $reservation->update([
+                'status' => 'PAID',
+            ]);
+
+            return redirect()->back()->with('success', 'The reservation has been paid.');
     }
 }

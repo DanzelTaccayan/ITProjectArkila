@@ -143,6 +143,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
     Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
     Route::post('/home/reservations/walk-in/store', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
+    Route::patch('/home/reservations/refund/{reservation}', 'ReservationsController@refund')->name('reservation.refund');
+    Route::patch('/home/reservations/payment/{reservation}', 'ReservationsController@payment')->name('reservation.payment');
 
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']

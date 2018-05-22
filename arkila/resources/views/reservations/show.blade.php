@@ -48,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($requests->sortByDesc('id') as $request)
+							@foreach($requests->sortByDesc('created_at') as $request)
 							<tr>
 
 								<td>{{$request->rsrv_code}}</td>							
@@ -159,8 +159,11 @@
 				           </div>
 			              <div class="modal-footer">
 			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-			                <button type="button" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
-			              </div>
+							<form action="{{route('reservation.payment', $request->id)}}" method="POST">
+			                {{ csrf_field() }} {{ method_field('PATCH') }}
+							<button type="submit" name="payment" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
+							</form>
+						  </div>
 			            </div>
 			            <!-- /.modal-content -->
 			          </div>
@@ -174,31 +177,32 @@
 			                  <span aria-hidden="true">×</span></button>
 			                <h4 class="modal-title">REFUND</h4>
 			              </div>
-			              <form action="post" class="form-horizontal">
+			              <form action="{{route('reservation.refund', $request->id)}}" method="POST" class="form-horizontal">
+						  {{ csrf_field() }} {{ method_field('PATCH') }}
 				              <div class="modal-body">
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Reservation Code</label>
 			               			<div class="col-md-6">
-			               				<p class="info-container">1234567890qwerty</p>
+			               				<p class="info-container">{{$request->rsrv_code}}</p>
 			               			</div>
 				               	</div>
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Paid Amount</label>
 			               			<div class="col-md-6">
-			               				<p class="info-container"><strong>200</strong></p>
+			               				<p class="info-container"><strong>{{$request->fare}}</strong></p>
 			               			</div>
 				               	</div>
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Enter Refund Code</label>
 			               			<div class="col-md-6">
-			               				<input type="text" class="form-control">
+			               				<input type="text" name="refundCode" class="form-control" required>
 			               			</div>
 				               	</div>
 
 				              </div>
 				              <div class="modal-footer">
 				                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-				                <button type="button" class="btn btn-primary">REFUND</button>
+				                <button type="submit" value="Refund" class="btn btn-primary">REFUND</button>
 				              </div>
 			              </form>
 			            </div>
@@ -218,6 +222,7 @@
 <script>
     $(function() {
         $('.listReserved').DataTable({
+			'pageLength': 5,
             'paging': true,
             'lengthChange': false,
             'searching': true,
@@ -225,7 +230,7 @@
             'info': true,
             'autoWidth': true,
             'aoColumnDefs': [{
-                'bSortable': false,
+                'bSortable': true,
                 'aTargets': [-1] /* 1st one, start by the right */
             }]
         })

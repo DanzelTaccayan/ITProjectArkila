@@ -24,13 +24,15 @@ class CreateReservationTable extends Migration
             ->nullable();
 
             $table->string('rsrv_code');
+            $table->string('refund_code')
+            ->nullable();
             $table->string('destination_name');
             $table->string('name');
             $table->string('contact_number');
             $table->integer('ticket_quantity');
             $table->decimal('fare', 11, 2);
             $table->date('expiry_date');
-            $table->enum('status', ['UNPAID', 'PAID', 'EXPIRED', 'CANCELLED'])
+            $table->enum('status', ['UNPAID', 'PAID', 'EXPIRED', 'CANCELLED', 'REFUNDED'])
             ->default('Unpaid');
             $table->date('date_paid')
             ->nullable();
