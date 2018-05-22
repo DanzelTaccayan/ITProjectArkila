@@ -57,7 +57,12 @@
 								<td>{{$request->destination->destination_name}}</td>
 								<td>{{$request->type}}</td>
 								<td>{{$request->status}}</td>
-								<td><button>View</button></td>
+								<td>
+									<div class="text-center">
+										<button class="btn btn-primary">View</button>
+										<button class="btn btn-default">Cancel</button>
+									</div>
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

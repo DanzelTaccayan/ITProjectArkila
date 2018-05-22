@@ -11,36 +11,50 @@
             <a href="{{ route('reservations.index') }}"><i class="pull-left fa fa-chevron-left"></i></a>
             </h4>
             <h4 class="box-title">
-            CREATE RESERVATION DATE
+            CREATE RESERVATION
             </h4>
         </div>
         <div class="box-body">
             <div class="padding-side-15"> 
                 <table class="table table-bordered table-striped form-table">
                     <tbody>
-                        <tr>
-                            <th>Destination</th>
-                            <td>
-                                <select name="destination" id="" class="form-control select2">
-                                    <option value="">Select Destination</option>
-                                    @foreach($destinations->routeFromDestination as $destination)
-                                    <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
+                      <tr>
+                          <th>Route</th>
+                          <td>
+                              Baguio - Cabanatuan
+                          </td>
+                      </tr>
+                      <tr>
+                          <th>Date</th>
+                          <td>01-01-29</td>
+                      </tr>
+                      <tr>
+                          <th>Estimated Departure Time</th>
+                          <td>1:00 pm</td>
+                      </tr>
+                      <tr>
+                          <th>Destination Terminal</th>
+                          <td>
+                              <select name="destination" id="" class="form-control select2">
+                                  <option value="">Select Destination</option>
+                                  @foreach($destinations as $destination)
+                                  <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
+                                  @endforeach
+                              </select>
+                          </td>
                         </tr>
-                        <tr>
-                            <th>Date</th>
-                            <td><input type="text" name="date" value="{{old('date')}}" class="form-control" data-inputmask=" 'alias': 'mm/dd/yyyy'" data-mask  placeholder="mm/dd/yyy"></td>
-                        </tr>
-                        <tr>
-                            <th>Time</th>
-                            <td><input type="text" name="time" value="{{old('time')}}" id="timepicker" class="form-control" placeholder="00:00"></td>
-                        </tr>
-                        <tr>
-                            <th>Number of Slot</th>
-                            <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
-                        </tr>
+                      <tr>
+                          <th>Customer Name</th>
+                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                      </tr>
+                      <tr>
+                          <th>Contact Number</th>
+                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                      </tr>
+                      <tr>
+                          <th>Ticket Qty</th>
+                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                      </tr>
                     </tbody>
                 </table>
             </div>
