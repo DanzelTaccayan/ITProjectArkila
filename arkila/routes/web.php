@@ -224,6 +224,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/account-settings', 'SuperAdminChangePasswordController@viewAccountSettings')->name('accountSettings');
     Route::post('/checkCurrentPassAdmin', 'SuperAdminChangePasswordController@checkCurrentPassword')->name('checkPass');
     Route::patch('/home/account-settings/{superAdminid}/change-password', 'SuperAdminChangePasswordController@updatePassword')->name('superadminmodule.changePassword');
+    /*View Live Queue*/
+    Route::get('/live-queue', 'ViewLiveVanQueueController@index')->name('ticketmanagement.queue');
+    Route::get('/getVanQueue', 'ViewLiveVanQueueController@getVanQueue')->name('ticketmanagement.getVanQueue');    
     });
  });
 /*****************************************************************************/

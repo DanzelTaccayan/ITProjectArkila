@@ -67,22 +67,22 @@
                     <div class="text-center">
                         <h4 class="report-header smaroon">SHARES</h4>
                     </div>
-                    <table class="table table-bordered table-striped table-responsive">
-                        <tbody>
-                            <tr>
-                                <td>Total Fare collected</td>
-                                <td class="text-right"></td>
-                            </tr>
-                            <tr>
-                                <td>Office</td>
-                                <td class="text-right"></td>
-                            </tr>
-                            <tr>
-                                <th>Driver</th>
-                                <th class="text-right"></th>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>Total Fare collected</td>
+                            <td class="text-right">{{number_format((float)$totalFare, 2, '.', '')}}</td>
+                        </tr>
+                        <tr>
+                            <td>Office</td>
+                            <td class="text-right">{{number_format((float)$officeShare, 2, '.', '')}}</td>
+                        </tr>
+                        <tr>
+                            <th>Driver</th>
+                            <th class="text-right">{{number_format((float)$driverShare, 2, '.', '')}}</th>
+                        </tr>
+                    </tbody>
+                </table>
 
                     <div class="text-center" style="margin: 5%;">
                         <div class="row">
@@ -115,24 +115,24 @@
                                 <th class="text-center">Discounted</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th class="text-center">Main Terminal</th>
-                                    <td class="text-right">{{$numPassCountArr['mainTerminalRegular']}}</td>
-                                    <td class="text-right">{{$numPassCountArr['mainTerminalDiscount']}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Short Trip</th>
-                                    <td class="text-right">{{$numPassCountArr['shortTripRegular']}}</td>
-                                    <td class="text-right">{{$numPassCountArr['shortTripDiscount']}}</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-right">Total Passenger</th>
-                                    <th class="text-right">{{$numPassCountArr['mainTerminalRegular'] + $numPassCountArr['shortTripRegular']}}</th>
-                                    <th class="text-right">{{$numPassCountArr['mainTerminalDiscount'] + $numPassCountArr['shortTripDiscount']}}</th>
-                                </tr>
-                            </tfoot>
+                            <tr>
+                                <th class="text-center">Main Terminal</th>
+                                <td class="text-right">{{$numPassCountArr[0]}}</td>
+                                <td class="text-right">{{$numPassCountArr[1]}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Short Trip</th>
+                                <td class="text-right">{{$numPassCountArr[2]}}</td>
+                                <td class="text-right">{{$numPassCountArr[3]}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-right">Total Passenger</th>
+                                <th class="text-right">{{$totalPassenger}}</th>
+                                <th class="text-right">{{$totalDiscountedPassenger}}</th>
+                            </tr>
+                        </tfoot>
                         </table>
                     </div>
                 </div>

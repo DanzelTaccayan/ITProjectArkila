@@ -11,12 +11,12 @@
 
     $('[name="fathersName"]').attr('data-parsley-required-message','Please  enter a father\'s name.');
   // Validate contact number.
-    $('[val-phone]').parsley({
-      pattern: /\d{3}-\d{3}-\d{4}$/
-    });
+    // $('[val-phone]').parsley({
+    //   pattern: /\d{3}-\d{3}-\d{4}$/
+    // });
 
-    $('[val-phone]').attr('data-parsley-pattern-message','Please enter a valid phone number.');
-    $('[val-phone]').attr('data-parsley-required-message','Please enter a phone number.');
+    // $('[val-phone]').attr('data-parsley-pattern-message','Please enter a valid phone number.');
+    // $('[val-phone]').attr('data-parsley-required-message','Please enter a phone number.');
 
   // Validate address.
     $('[val-address]').parsley({

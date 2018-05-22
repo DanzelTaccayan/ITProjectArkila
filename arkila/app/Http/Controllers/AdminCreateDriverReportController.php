@@ -116,7 +116,6 @@ class AdminCreateDriverReportController extends Controller
            'total_passengers' => $totalPassengers,
            'total_booking_fee' => $totalBookingFee,
            'community_fund' => $cf*$totalPassengers,
-           'SOP' => $sop,
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
            'report_status' => 'Accepted',

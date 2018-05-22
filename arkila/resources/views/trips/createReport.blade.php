@@ -157,6 +157,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-4">Total Passengers:</label>
                             <div class=" col-sm-6">
+                                <input id="totalPassengers" type="hidden" name="totalPassengers" value="">
                                 <p id="totalPassenger" class="info-container">{{old('totalPassengers')}}</p>
                             </div>
                         </div>
