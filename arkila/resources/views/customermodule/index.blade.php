@@ -132,19 +132,6 @@
           </div>
         </div>
       </section>
-    <section style="background: url('{{ URL::asset('img/fixed-background-2.jpg') }}') center top no-repeat; background-size: cover;" class="bar text-center bg-fixed relative-positioned">
-        <div class="dark-mask"></div>
-        <div class="container">
-            <div class="col-md-8 mx-auto"> 
-                <div class="heading text-center" style="color:white;">
-                    <h2><i class="fa fa-bullhorn"></i> Announcements</h2>
-                </div>
-                <div id="announcements" class="container">
-                </div>
-            </div>                  
-        </div>    
-    </section>
-    <!-- section-->   
 
 @endsection
 @section('scripts')
