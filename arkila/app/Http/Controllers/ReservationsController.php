@@ -10,6 +10,7 @@ use App\Destination;
 use App\Fee;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Session;
 
 class ReservationsController extends Controller
 {
@@ -40,6 +41,7 @@ class ReservationsController extends Controller
      */
     public function show(ReservationDate $reservation)
     {
+        Session::put('id',$reservation->id);
         $requests = Reservation::where('date_id', $reservation->id)->get();
         return view('reservations.show', compact('reservation', 'requests'));
     }
@@ -146,8 +148,24 @@ class ReservationsController extends Controller
         return view('reservations.createWalkIn', compact('destinations', 'id'));
     }
 
-    public function storeWalkIn(Request $request, Destination $destination)
+    public function storeWalkIn(Request $request, $destination)
     {
-        dd('yes');
+        dd('Hello :)');
+
+        $dateId = Session::get('id');
+        $this->validate(request(), [
+            'name' => 'required|max:100',
+            'contactNumber' => 'bail|numeric|required',
+            'quantity' => 'bail|numeric|required|min:1|max:2',
+        ]);
+
+        Reservation::create([
+            'date_id' => $dateId,
+            'destination_id' => $destination,
+            'name' => $request->name,
+            'contact_number' => $request->contactNumber,
+            'ticket_quantity' => $ticketQuantity,
+            'type' => 'Walk-in',
+        ]);
     }
 }

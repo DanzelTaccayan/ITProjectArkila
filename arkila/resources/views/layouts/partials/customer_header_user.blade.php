@@ -56,7 +56,7 @@
                                         <div class="col-md-4">
                                             <ul class="list-unstyled">
                                                 <li class="nav-item">
-                                                    <a href="{{route('customermodule.user.transactions.customerTransactions')}}" class="nav-link">My Transactions</a>
+                                                    <a href="{{route('customermodule.rentalTransaction')}}" class="nav-link">My Transactions</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="{{route('customermodule.user.changepassword.index')}}" class="nav-link">Change Password</a>
