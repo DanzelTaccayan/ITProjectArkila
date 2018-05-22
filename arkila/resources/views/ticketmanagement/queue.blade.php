@@ -42,70 +42,14 @@
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="20000">
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
-    <div class="item active">
-        
+     @foreach($terminals as $terminal)
+    <div class="item @if($terminals->first() == $terminal){{'active'}} @endif" id={{$terminal->destination_id}}> 
             <div class="box box-solid ticket-box">
                 <div class="box-header bg-blue bg-gray">
                     <img src="{{ URL::asset('img/bantrans-logo.png') }}" style="width: 75px; height:75px; float: right; margin-right: 2%; margin-top: 1% " alt="User Image">
                     <span >
-                        <h2>CABANATUAN CITY</h2>
-                        <h4>ON DECK: <strong>AAA-111</strong></h4>
-                    </span>
-                </div>
-                <div class="box-body well">
-                    <ul class="list-group">
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>CABANTUAN-A</strong></h4></li>
-                        
-                        
-
-                    </ul>
-
-                </div>
-            </div>
-    </div>
-
-    <div class="item">
-      
-            <div class="box box-solid ticket-box">
-                <div class="box-header bg-blue bg-gray">
-                    <img src="{{ URL::asset('img/bantrans-logo.png') }}" style="width: 75px; height:75px; float: right; margin-right: 2%; margin-top: 1% " alt="User Image">
-                    <span >
-                        <h2>SAN JOSE CITY</h2>
-                        <h4>ON DECK: <strong>BBB-3213</strong></h4>
+                        <h2>{{$terminal->destination_name}}</h2>
+                        <h4 id="plno{{$terminal->destination_id}}"></h4>
                     </span>
                 </div>
                 <div class="box-body well">
@@ -138,6 +82,7 @@
                 </div>
             </div>
     </div>
+    @endforeach
   </div>
 </div>
 
@@ -146,5 +91,31 @@
 @endsection
 @section('scripts') 
 @parent
-
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: 'GET',
+                url: '/getVanQueue',
+                success: function(response){
+                    $.each(response.vanqueue, function(i,item){
+                            //var itemid = $('.item').attr('id');
+                            //console.log(item[i].destination_i);
+                            
+                            //console.log(item);
+                            console.log(item);
+                        $('.item').each(function(i,obj){
+                            if(obj.id == item.destination_id){
+                                $('#plno'+item.destination_id).append('ON DECK: <strong>'+item.van['plate_number']+'</strong>');
+                            }    
+                            //console.log(obj.id);
+                            
+                        });
+                    });
+                    
+                    //console.log(response.vanqueue);
+                    //console.log(response.tickets);
+                }    
+            });
+        });
+    </script>  
 @endsection

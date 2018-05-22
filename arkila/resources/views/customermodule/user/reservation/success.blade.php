@@ -16,7 +16,7 @@
                     			</tr>
                     			<tr>
                     				<th>Destination</th>
-                    				<td>{{$transaction->destination->destination_name}}</td>
+                    				<td>{{$transaction->destination_name}}</td>
                     			</tr>
                     			<tr>
                     				<th>Expiry Date</th>
@@ -32,7 +32,7 @@
                     			</tr>
                     			<tr>
                     				<th>Total Amount to Pay</th>
-                    				<td>{{$toBePaid}}</td>
+                    				<td>{{$transaction->fare}}</td>
                     			</tr>
                     		</tbody>
                     	</table>

@@ -24,7 +24,7 @@ class CreateReservationTable extends Migration
             ->nullable();
 
             $table->string('rsrv_code');
-            $table->integer('destination_name');
+            $table->string('destination_name');
             $table->string('name');
             $table->string('contact_number');
             $table->integer('ticket_quantity');

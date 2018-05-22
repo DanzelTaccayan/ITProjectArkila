@@ -79,12 +79,15 @@ class MakeReservationController extends Controller
 		{
 			$newSlot = $reservation->number_of_slots - $request->quantity;
 			$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
+			$ticket = Ticket::where('destination_id', $destination->destination_id)->get()->first();
+			$toBePaid = $ticket->fare * $quantity;
+	
 
 			$codes = Reservation::all();
+			$newCode = bin2hex(openssl_random_pseudo_bytes(8));
 			foreach ($codes as $code)
 			{
 				$allCodes = $code->rsrv_code;
-				$newCode = 'cFhf67Fs90fD';
 
 				do
 				{
@@ -104,6 +107,7 @@ class MakeReservationController extends Controller
 				'name' => auth()->user()->full_name,
 				'contact_number' => $request->contactNumber,
 				'ticket_quantity' => $quantity,
+				'fare' => $toBePaid,
 				'expiry_date' => $expiry,
 				'type' => 'Online',
 			]);
@@ -124,9 +128,7 @@ class MakeReservationController extends Controller
 
 	public function reservationSuccess(Reservation $transaction)
 	{
-		$ticket = Ticket::where('destination_id', $transaction->destination_id)->get()->first();
-		$toBePaid = $ticket->fare * $transaction->ticket_quantity;
-		return view('customermodule.user.reservation.success', compact('transaction', 'toBePaid'));
+		return view('customermodule.user.reservation.success', compact('transaction'));
 	}
 
 	public function reservationTransaction()
