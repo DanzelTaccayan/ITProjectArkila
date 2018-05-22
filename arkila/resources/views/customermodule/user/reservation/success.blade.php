@@ -12,29 +12,29 @@
                     		<tbody>
                     			<tr>
                     				<th>Destination</th>
-                    				<td>Asingan</td>
+                    				<td>{{$transaction->destination->destination_name}}</td>
                     			</tr>
                     			<tr>
                     				<th>Expiry Date</th>
-                    				<td>10/10/20</td>
+                    				<td>{{$transaction->expiry_date}}</td>
                     			</tr>
                     			<tr>
                     				<th>Status</th>
-                    				<td>UNPAID</td>
+                    				<td>{{$transaction->status}}</td>
                     			</tr>
                     			<tr>
                     				<th>Ticket Qty</th>
-                    				<td></td>
+                    				<td>{{$transaction->ticket_quantity}}</td>
                     			</tr>
                     			<tr>
                     				<th>Total Amount to Pay</th>
-                    				<td>1000</td>
+                    				<td>{{$toBePaid}}</td>
                     			</tr>
                     		</tbody>
                     	</table>
                     	<p><strong>NOTE:</strong> Pay the total amount at the company office before the expiry date.</p>
                     	<div class="mx-auto">
-                    		<button class="btn btn-primary btn-lg">OK</button>
+                    		<a href="{{route('customermodule.reservationTransaction')}}" class="btn btn-primary btn-lg">OK</a>
                     	</div>
                     </div>
                 </div>

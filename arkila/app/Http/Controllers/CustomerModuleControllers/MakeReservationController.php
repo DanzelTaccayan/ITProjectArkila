@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerReservationRequest;
 use Session;
+use Carbon\Carbon;
+use App\Ticket;
 
 class MakeReservationController extends Controller
 {
@@ -71,6 +73,7 @@ class MakeReservationController extends Controller
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
 	{
+		$expiry = Carbon::now()->addDays(2);
 		$slot = $reservation->number_of_slots;
 		$quantity = $request->quantity;
 		if($quantity <= $slot)
@@ -82,13 +85,14 @@ class MakeReservationController extends Controller
 				'contactNumber' => 'bail|numeric|required',
 				'quantity' => 'bail|numeric|required|min:1|max:2',
 			]);
-			Reservation::create([
+			$transaction = Reservation::create([
 				'user_id' => auth()->user()->id,
 				'date_id' => $reservation->id,
-				'destination_name' => $destination->destination_name,
+				'destination_id' => $destination->destination_id,
 				'name' => auth()->user()->full_name,
 				'contact_number' => $request->contactNumber,
 				'ticket_quantity' => $quantity,
+				'expiry_date' => $expiry,
 				'type' => 'Online',
 			]);
 
@@ -96,7 +100,7 @@ class MakeReservationController extends Controller
 				'number_of_slots' => $newSlot,
 			]);
 
-		    return redirect(route('customermodule.success'))->with('success', 'Successfully created a reservation.');
+		    return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
 
 	
 		}
@@ -106,9 +110,19 @@ class MakeReservationController extends Controller
 		}
 	}
 
-	public function reservationSuccess()
+	public function reservationSuccess(Reservation $transaction)
 	{
-		return view('customermodule.user.reservation.success');
+		$ticket = Ticket::where('destination_id', $transaction->destination_id)->get()->first();
+		$toBePaid = $ticket->fare * $transaction->ticket_quantity;
+		return view('customermodule.user.reservation.success', compact('transaction', 'toBePaid'));
+	}
+
+	public function reservationTransaction()
+	{
+		dd(uniqid('RSRV'));
+		$reservations = Reservation::all();
+		$requests = Reservation::where('user_id', auth()->user()->id)->count();
+		return view('customermodule.user.transactions.customerReservation', compact('reservations', 'requests'));
 	}
 
 }
