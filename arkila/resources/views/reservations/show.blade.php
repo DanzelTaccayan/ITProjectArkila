@@ -55,6 +55,7 @@
 								<td>
 									<div class="text-center">
 										<button class="btn btn-primary" data-toggle="modal" data-target="#reserved-info">View</button>
+										<button class="btn btn-info" data-toggle="modal" data-target="#reserved-pay">Payment</button>
 										<button class="btn btn-info" data-toggle="modal" data-target="#reserved-refund">Refund</button>
 									</div>
 								</td>
@@ -120,6 +121,43 @@
 			              <div class="modal-footer">
 			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
 			                <button type="button" class="btn btn-primary">Save changes</button>
+			              </div>
+			            </div>
+			            <!-- /.modal-content -->
+			          </div>
+			          <!-- /.modal-dialog -->
+			        </div>
+			        <div class="modal" id="reserved-pay">
+			          <div class="modal-dialog">
+			            <div class="modal-content">
+			              <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			                  <span aria-hidden="true">×</span></button>
+			                <h4 class="modal-title">Payment Details</h4>
+			              </div>
+			              <div class="modal-body">
+			              	<div class="padding-side-5">	
+				                <table class="table table-striped table-bordered">
+				                	<tbody>
+				                		<tr>
+				                			<th>Reservation Code</th>
+				                			<td>1234567890qwerty</td>
+				                		</tr>
+				                		<tr>
+				                			<th>Destination</th>
+				                			<td>{{-- {{$request->user->destination_name}} --}}</td>
+				                		</tr>
+				                			<th>Ticket Qty</th>
+				                			<td>{{-- {{$request->user->rsrv_code}} --}}</td>
+				                		</tr>
+				                	</tbody>
+				                </table>
+				                <h3 class="text-center">FEE: <strong class="text-green">200</strong></h3>
+				            </div>
+				           </div>
+			              <div class="modal-footer">
+			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+			                <button type="button" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
 			              </div>
 			            </div>
 			            <!-- /.modal-content -->
