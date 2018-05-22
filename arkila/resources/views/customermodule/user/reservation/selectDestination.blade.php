@@ -9,9 +9,9 @@
                 <div class="col-md-6 mx-auto" id="boxContainer">
                     <form class="contact100-form" action="{{route('customermodule.showDetails')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
+                        @if($destinations->count() == 0)
                         <div class="form-group">
-                            @if($destinations->count() == 0)
-                            <p>No Destinations</p>
+                            <h3 class="text-center">No Destinations Available.</h3>
                             @else
                             <select id="destination" name="destination" class="form-control">
                                 <option selected value="">Select Destination</option>
@@ -19,11 +19,11 @@
                                     <option value="{{$destination->destination_id}}">{{$destination->destination_name}}</option>
                                 @endforeach
                            </select>
-                            @endif                            
                         </div>
                         <div class="container-contact100-form-btn">
                             <button type="submit" class="contact100-form-btn"><strong>SHOW RESERVATIONS</strong></button>
                         </div><!-- container-contact100-form-btn-->
+                        @endif                            
                     </form>
                     <!-- contact100-form-->
                 </div>

@@ -16,10 +16,6 @@
             {{csrf_field()}}
             {{method_field("PATCH")}}
         <div class="box-body">
-            <div class="form-group">
-                <label>Edit profile image</label>
-                <input type="file" name="profilePicture" accept="image/*">
-            </div>
             <div class="padding-side-15">
                 <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$operator->profile_picture) }}" alt="Operator profile picture">
                 <h4 class="name-heading">{{trim(strtoupper($operator->full_name))}}</h4>
@@ -61,6 +57,12 @@
                             <td>
                                 <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
                           </td>
+                        </tr>
+                        <tr>
+                            <th>Profile Picture</th>
+                            <td>
+                                <input type="file" name="profilePicture" accept="image/*">
+                            </td>
                         </tr>
 
                     </tbody>

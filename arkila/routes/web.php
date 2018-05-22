@@ -141,6 +141,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['edit']
     ]);
 
+    Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
+    Route::post('/home/reservations/walk-in/store/{destination}', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
+
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
     ]);
@@ -289,6 +292,11 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     /*Reservation*/
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
+
+    Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
+    Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');
+    Route::get('/home/transactions/rental/', 'CustomerModuleControllers\MakeReservationController@rentalTransaction')->name('customermodule.rentalTransaction')->middleware('online-reservation');
+
     Route::get('/home/reservation/create/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
     Route::post('/home/reservation/create-request/{reservation}', 'CustomerModuleControllers\MakeReservationController@storeRequest')->name('customermodule.storeReservation')->middleware('online-reservation');
     Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');

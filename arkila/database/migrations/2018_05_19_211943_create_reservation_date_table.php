@@ -21,6 +21,8 @@ class CreateReservationDateTable extends Migration
             $table->date('reservation_date');
             $table->time('departure_time');
             $table->integer('number_of_slots');
+            $table->enum('status', ['CLOSED', 'OPEN'])
+            ->default('CLOSED');
 
             $table->timestamps();
 

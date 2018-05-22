@@ -3,25 +3,23 @@
 @section('content')
 <div class="row">
         <div class="padding-side-5">
+            <div class="box box-solid" style="height: 300px; padding: 50px;">
+                <div class="box-body">
+                    <div class="text-center">
+                    <h1><i class="fa fa-warning text-red"></i> NO TERMINAL/DESTINATION FOUND</h1>
+                    <h4>CREATE A TERMINAL/DESTINATION FIRST BEFORE YOU CAN CREATE A RESERVATION DATE</h4>
+                    <button class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</button>
+                    </div>
+                </div>
+            </div>
             <div>
                 <h2 class="text-white">RESERVATION DATE</h2>
             </div>
             <div class="box">
                 <div class="box-body">
-
-                        <!-- Custom Tabs -->
-                    <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab">List of Reservations</a>
-                            <li><a href="#tab_2" data-toggle="tab">Online Reservation</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
                                 <div class="col-md-6">
                                     <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
                                 </div>
-
                                 <table class="table table-bordered table-striped listReservation">
                                     <thead>
                                         <tr>
@@ -30,6 +28,7 @@
                                             <th class="text-center">Reservation Date</th>
                                             <th class="text-center">Departure Time</th>
                                             <th class="text-center">Number of Slots</th>
+                                            <th class="text-center">Status</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -42,21 +41,56 @@
                                             <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
                                             <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
                                             <td class="text-right">{{ $reservation->number_of_slots }}</td>
+                                            <td class="text-right" id="status{{$reservation->id}}">{{ $reservation->status }}</td>
                                             <td>
                                                 <div class="text-center"> 
-                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
+                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>            
+                                                    <button id="openBtn{{$reservation->id}}" name="openBtn" data-val="{{$reservation->id}}" value="OPEN" class="btn btn-success btn-sm">OPEN</button>
+                                                    <button id="closeBtn{{$reservation->id}}" name="closeBtn" data-val="{{$reservation->id}}" value="CLOSED" class="btn btn-danger btn-sm">CLOSE</button>               
+                                                    <button id="deleteBtn{{$reservation->id}}" name="deleteBtn" class="btn btn-outline-danger btn-sm">DELETE</button>
+                                                   
                                                 </div>
                                             </td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            
                             <!-- /.box-body -->
-                        </div>
-                    </div>
-                        <!-- /.tab-pane -->
-                    <!-- /.tab-content -->
+                        
+                    
+                    <table class="table table-bordered table-striped listReservation">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Reservation #</th>
+                                <th class="text-center">Destination</th>
+                                <th class="text-center">Reservation Date</th>
+                                <th class="text-center">Departure Time</th>
+                                <th class="text-center">Number of Slots</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+
+                            @foreach ($reservations->sortByDesc('id') as $reservation) 
+                            <tr>
+                                <td>{{ $reservation->id }}</td>
+                                <td>{{ $reservation->destination->destination_name }}</td>
+                                <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
+                                <td class="text-right">{{ $reservation->number_of_slots }}</td>
+                                <td>
+                                    <div class="text-center"> 
+                                        <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
+                                        <button class="btn btn-success btn-sm">OPEN</button>
+                                        <button class="btn btn-danger btn-sm">CLOSE</button>
+                                        <button class="btn btn-outline-danger btn-sm">DELETE</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 </div>
@@ -167,41 +201,146 @@
         })
     })
 
-    $(document).ready(function(){
+            $('button[name="openBtn"]').on('click',function() {
+                var openBtnId = $(this).data('val');
 
-        $(document).on('change', '#reservationSell', function(){
+                $.ajax( {
+                        method:'PATCH',
+                        url: '/home/reservations/'+openBtnId,
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'statusBtn' : $('#openBtn'+openBtnId).val()
+                            },
+                        success: function(response) {
+                            if(response.success){
+                              new PNotify({
+                                title: "Success!",
+                                text: response.success,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                              });
+                            }else if(response.error){
+                                $.notify({
+                                  // options
+                                  icon: 'fa fa-warning',
+                                  message: response.error
+                                },{
+                                  // settings
+                                  type: 'danger',
+                                  delay: '999900',
+                                  placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                  },
+                                  icon_type: 'class',
+                                  animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                  }
+                                });
+                            }
+                        console.log(response);
+                        $("#status" + openBtnId).html(response.status)
+                        $("#openBtn" + openBtnId).hide();
+                        $("#closeBtn" + openBtnId).show();
 
-            var resId = $(this).val();
 
-            var parent = $(this).parent();
+                        }
+                        
+                    });
+                });
 
-            var destination = "";
-            var terminal = "";
+            $('button[name="closeBtn"]').on('click',function() {
+                var openBtnId = $(this).data('val');
 
-            $.ajax({
-                type: 'get',
-                url: '{!!URL::to('findDestinationTerminal')!!}',
-                data: {'id':resId},
-                success:function(data){
-                    console.log('success');
-                    console.log(data);
-                    for(var i=0; i<data.length; i++) {
-                        destination = '<option value="'+ data[i].destination_id +'">'+ data[i].description +'</option>';
-                        terminal = '<option value="'+ data[i].terminal_id +'">'+ data[i].terminal +'</option>';
-                    }
-                    
-                    parent.find('#destinationSell').html(" ");
-                    parent.find('#destinationSell').append(destination);
-                    parent.find('#terminalSell').html(" ");
-                    parent.find('#terminalSell').append(terminal);
+                $.ajax( {
+                        method:'PATCH',
+                        url: '/home/reservations/'+openBtnId,
+                        data:
+                            {
+                                '_token': '{{csrf_token()}}',
+                                'statusBtn' : $('#closeBtn'+openBtnId).val()
+                            },
+                        success: function(response) {
+                            if(response.success){
+                              new PNotify({
+                                title: "Success!",
+                                text: response.success,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                              });
+                            }else if(response.error){
+                                $.notify({
+                                  // options
+                                  icon: 'fa fa-warning',
+                                  message: response.error
+                                },{
+                                  // settings
+                                  type: 'danger',
+                                  delay: '999900',
+                                  placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                  },
+                                  icon_type: 'class',
+                                  animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                  }
+                                });
+                            }   
+                        console.log(response);
+                        $("#status" + openBtnId).html(response.status)
+                        $("#openBtn" + openBtnId).show();
+                        $("#closeBtn" + openBtnId).hide();
 
-                },
-                error:function(){
-
-                }
-            });
-        });
-    });
+                        }
+                        
+                    });
+                });
 </script>
+<script>
+    @foreach($reservations as $reservation)
 
+@if($reservation->request->count() > 0 && $reservation->status == 'CLOSED')
+$("#openBtn"+{{$reservation->id}}).show();
+$("#closeBtn"+{{$reservation->id}}).hide();
+$("#deleteBtn"+{{$reservation->id}}).hide();
+
+@elseif($reservation->status == 'OPEN')
+$("#openBtn"+{{$reservation->id}}).hide();
+$("#closeBtn"+{{$reservation->id}}).show();
+$("#deleteBtn"+{{$reservation->id}}).hide();
+@else
+$("#openBtn"+{{$reservation->id}}).show();
+$("#closeBtn"+{{$reservation->id}}).hide();
+$("#deleteBtn"+{{$reservation->id}}).show();
+
+@endif
+@endforeach
+
+</script>
 @endsection

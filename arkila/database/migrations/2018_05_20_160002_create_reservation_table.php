@@ -23,12 +23,17 @@ class CreateReservationTable extends Migration
             ->unsigned()
             ->nullable();
 
+            $table->string('rsrv_code');
             $table->string('destination_name');
             $table->string('name');
             $table->string('contact_number');
             $table->integer('ticket_quantity');
-            $table->enum('status', ['Pending', 'Paid'])
-            ->default('Pending');
+            $table->decimal('fare', 11, 2);
+            $table->date('expiry_date');
+            $table->enum('status', ['UNPAID', 'PAID', 'EXPIRED', 'CANCELLED'])
+            ->default('Unpaid');
+            $table->date('date_paid')
+            ->nullable();
             $table->enum('type', ['Walk-in', 'Online']);
 
             $table->timestamps();
@@ -42,6 +47,7 @@ class CreateReservationTable extends Migration
             ->references('id')->on('reservation_date')
             ->onDelete('restrict')
             ->onUpdate('cascade');
+
         });
     }
 

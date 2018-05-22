@@ -1,7 +1,7 @@
 @extends('layouts.form_lg') 
 @section('title', 'Line Reservation') 
 @section('form-id', 'regForm') 
-@section('form-action', route('reservations.store')) 
+@section('form-action', route('reservation.walk-in-store', $id)) 
 @section('form-method', 'POST') 
 @section('form-body') {{csrf_field()}}
 <div class="margin-side-10">
@@ -11,36 +11,50 @@
             <a href="{{ route('reservations.index') }}"><i class="pull-left fa fa-chevron-left"></i></a>
             </h4>
             <h4 class="box-title">
-            CREATE RESERVATION DATE
+            CREATE RESERVATION
             </h4>
         </div>
         <div class="box-body">
             <div class="padding-side-15"> 
                 <table class="table table-bordered table-striped form-table">
                     <tbody>
-                        <tr>
-                            <th>Destination Terminal</th>
-                            <td>
-                                <select name="destination" id="" class="form-control select2">
-                                    <option value="">Select Terminal</option>
-                                    @foreach($destinations as $destination)
-                                    <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
+                      <tr>
+                          <th>Route</th>
+                          <td>
+                              {{$main->destination_name}} - {{$destinations->destination_name}}
+                          </td>
+                      </tr>
+                      <tr>
+                          <th>Date</th>
+                          <td>{{ $date->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                      </tr>
+                      <tr>
+                          <th>Estimated Departure Time</th>
+                          <td>{{ date('g:i A', strtotime($date->departure_time)) }}</td>
+                      </tr>
+                      <tr>
+                          <th>Destination Terminal</th>
+                          <td>
+                              <select name="destination" id="" class="form-control select2">
+                                  <option value="">Select Destination</option>
+                                  @foreach($destinations->routeFromDestination as $destination)
+                                  <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
+                                  @endforeach
+                              </select>
+                          </td>
                         </tr>
-                        <tr>
-                            <th>Date</th>
-                            <td><input type="text" name="date" value="{{old('date')}}" class="form-control" data-inputmask=" 'alias': 'mm/dd/yyyy'" data-mask  placeholder="mm/dd/yyy"></td>
-                        </tr>
-                        <tr>
-                            <th>Time</th>
-                            <td><input type="text" name="time" value="{{old('time')}}" id="timepicker" class="form-control" placeholder="00:00"></td>
-                        </tr>
-                        <tr>
-                            <th>Number of Slot</th>
-                            <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
-                        </tr>
+                      <tr>
+                          <th>Customer Name</th>
+                          <td><input type="text" name="name" value="{{old('name')}}" class="form-control" placeholder=""></td>
+                      </tr>
+                      <tr>
+                          <th>Contact Number</th>
+                          <td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control" placeholder=""></td>
+                      </tr>
+                      <tr>
+                          <th>Ticket Qty</th>
+                          <td><input type="text" name="quantity" value="{{old('quantity')}}" class="form-control" placeholder=""></td>
+                      </tr>
                     </tbody>
                 </table>
             </div>

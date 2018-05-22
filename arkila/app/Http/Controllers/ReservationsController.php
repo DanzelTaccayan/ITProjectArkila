@@ -10,6 +10,8 @@ use App\Destination;
 use App\Fee;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Session;
+use Validator;
 
 class ReservationsController extends Controller
 {
@@ -26,7 +28,6 @@ class ReservationsController extends Controller
     {
         //
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
-
         $reservations = ReservationDate::all();
         $discounts = Fee::all();
 
@@ -40,6 +41,7 @@ class ReservationsController extends Controller
      */
     public function show(ReservationDate $reservation)
     {
+        Session::put('id',$reservation->id);
         $requests = Reservation::where('date_id', $reservation->id)->get();
         return view('reservations.show', compact('reservation', 'requests'));
     }
@@ -63,22 +65,6 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        // $seat = $request->seat;
-        // $destinationReq = $request->dest;
-        // $findDest = Destination::all();
-
-        // if ($findDest->where('description', $destinationReq)->count() > 0) {
-        //     foreach ($findDest->where('description', $destinationReq) as $find) {
-        //         $findThis = $find->destination_id;
-        //         $findAmount = $find->amount;
-        //     }
-        //     $total = $findAmount*$seat;
-        // } else {
-        //     return back()->withInput()->withErrors('Invalid Destination!');
-        // }
-
-        // $timeRequest = new Carbon(request('time'));
-        // $timeFormatted = $timeRequest->format('h:i A');
         $dateCarbon = new Carbon(request('date'));
         $date = $dateCarbon->format('Y-m-d');
         $timeCarbon = new Carbon(request('time'));
@@ -101,21 +87,26 @@ class ReservationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Reservation $reservation)
+    public function update(Request $request, ReservationDate $reservation)
     {
-        $this->validate(request(),[
-            "click" => [
-              'required',
-              Rule::in(['Accepted', 'Declined'])
-            ],
+        $validate = Validator::make($request->all(), [
+            "statusBtn" => [
+                'required',
+                Rule::in(['OPEN', 'CLOSED'])
+              ],
           ]);
 
-        $reservation->update([
-
-            'status' => request('click'),
-        ]);
-        session()->flash('message', 'Reservation marked '. request('click'));
-        return redirect()->back();
+        if($validate->fails())
+        {
+            return response()->json(["error" => "Please make sure that your input is valid, you can only open or close an specific reservation date."]);
+        }
+        else
+        {                  
+            $reservation->update([
+                'status' => $request->statusBtn,
+                ]);
+                return response()->json(['success' => 'Reservation marked as '. request('statusBtn'), 'status' => $request->statusBtn]);
+        }
     }
 
     /**
@@ -131,12 +122,42 @@ class ReservationsController extends Controller
         return back()->with('message', 'Successfully Deleted');
     }
 
-    public function find(Request $request){
-        $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
-        ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
-        ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
-        ->where('reservation.id', '=', $request->id)->get();
+    // public function find(Request $request){
+    //     $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
+    //     ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
+    //     ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
+    //     ->where('reservation.id', '=', $request->id)->get();
 
-        return response()->json($data);
+    //     return response()->json($data);
+    // }
+
+    public function walkInReservation($id)
+    {  
+        $dateId = Session::get('id');
+        $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
+        $main = Destination::mainTerminal()->get()->first();
+        $date = ReservationDate::where('id', $dateId)->get()->first();
+        return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));
+    }
+
+    public function storeWalkIn(Request $request, $destId)
+    {
+        dd($request->all());
+        $destination = Destination::where('destination_id', $destId)->get()->first();
+        $dateId = Session::get('id');
+        $this->validate(request(), [
+            'name' => 'required|max:100',
+            'contactNumber' => 'bail|numeric|required',
+            'quantity' => 'bail|numeric|required|min:1|max:2',
+        ]);
+
+        Reservation::create([
+            'date_id' => $dateId,
+            'destination_name' => $destination->destination_name,
+            'name' => $request->name,
+            'contact_number' => $request->contactNumber,
+            'ticket_quantity' => $ticketQuantity,
+            'type' => 'Walk-in',
+        ]);
     }
 }

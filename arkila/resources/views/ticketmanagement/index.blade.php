@@ -172,31 +172,32 @@
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                               });
+                              
+                              
                             }else if(response.error){
-                              new PNotify({
-                                title: "Error!",
-                                text: response.error,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "error",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                              });
+                              $.notify({
+                                  // options
+                                  icon: 'fa fa-warning',
+                                  message: response.error
+                                },{
+                                  // settings
+                                  type: 'danger',
+                                  delay: '999900',
+                                  placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                  },
+                                  icon_type: 'class',
+                                  animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                  }
+                                });
                             }
-                              $("#regViewQty" + quantityId).html(response)
-
                               $("#regViewQty" + quantityId).show();
                               $("#regViewAction" + quantityId).show();
                               $("#regEditQty" + quantityId).hide();
-                        console.log(response);
+                              $("#regViewQty" + quantityId).html(response.ticketqty)
                         },
 
                     });
@@ -235,25 +236,26 @@
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                               });
                             }else if(response.error){
-                              new PNotify({
-                                title: "Error!",
-                                text: response.error,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "error",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                              });
+                              $.notify({
+                                  // options
+                                  icon: 'fa fa-warning',
+                                  message: response.error
+                                },{
+                                  // settings
+                                  type: 'danger',
+                                  delay: '999900',
+                                  placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                  },
+                                  icon_type: 'class',
+                                  animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                  }
+                                });
                             }
-                              $("#discViewQty" + quantityDisId).html(response)
+                              $("#discViewQty" + quantityDisId).html(response.ticketqty)
 
                               $("#discViewQty" + quantityDisId).show();
                               $("#discViewAction" + quantityDisId).show();

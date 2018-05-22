@@ -21,6 +21,10 @@ class Reservation extends Model
     	return $this->belongsTo(ReservationDate::Class, 'destination_id', 'id');
     }
 
+    public function reservationDate(){
+    	return $this->hasOne(ReservationDate::Class, 'id', 'date_id');        
+    }
+
     public function user(){
         return $this->belongsTo(User::Class, 'user_id', 'id');
     }

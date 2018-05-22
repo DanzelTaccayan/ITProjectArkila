@@ -6,7 +6,18 @@
 @endsection
 @section('content')
 
-
+<div class="padding-side-5">
+    <div class="padding-side-10">
+        <div class="box box-solid" style="height: 300px; padding: 50px;">
+          <div class="box-body">
+              <div class="text-center">
+                <h1>NO TERMINAL/DESTINATION FOUND.</h1>
+                <a href="/home/route" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <!-- /.col -->
     <div class="col-md-12">
