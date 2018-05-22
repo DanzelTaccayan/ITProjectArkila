@@ -27,7 +27,6 @@
                     </tr
                     @else
                         @foreach($reservations->where('destination_terminal', $route->destination_id) as $reserve)
-                        
                         <tr>
                             <th># 1735</th>
                             <td>{{$reserve->reservation_date->formatLocalized('%d %B %Y')}}</td>
@@ -38,6 +37,8 @@
                                 <div class="text-center">
                                     <a href="{{route('customermodule.createReservation', $reserve->id)}}" class="btn btn-success btn-sm">RESERVE</a>
                                 </div>
+                                @elseif($reserve->status == 'CLOSED')
+                                <p>Closed</p>
                                 @else
                                 <p>Fully Booked</p>
                                 @endif

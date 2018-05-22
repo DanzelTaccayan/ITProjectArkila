@@ -3,7 +3,7 @@
 @section('content')
 <div class="">
 	 <div>
-        <h2 class="text-white">SUNDAY <strong class="text-yellow">2018 MAY 10</strong></h2>
+        <h2 class="text-white">{{ $reservation->reservation_date->formatLocalized('%A') }} <strong class="text-yellow">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</strong></h2>
     </div>
 	<div class="box box-solid" style="height: 500px;">
 		<div class="box-body">

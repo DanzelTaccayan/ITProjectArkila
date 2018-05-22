@@ -21,23 +21,23 @@
                       <tr>
                           <th>Route</th>
                           <td>
-                              Baguio - Cabanatuan
+                              {{$main->destination_name}} - {{$destinations->destination_name}}
                           </td>
                       </tr>
                       <tr>
                           <th>Date</th>
-                          <td>01-01-29</td>
+                          <td>{{ $date->reservation_date->formatLocalized('%d %B %Y') }}</td>
                       </tr>
                       <tr>
                           <th>Estimated Departure Time</th>
-                          <td>1:00 pm</td>
+                          <td>{{ date('g:i A', strtotime($date->departure_time)) }}</td>
                       </tr>
                       <tr>
                           <th>Destination Terminal</th>
                           <td>
                               <select name="destination" id="" class="form-control select2">
                                   <option value="">Select Destination</option>
-                                  @foreach($destinations as $destination)
+                                  @foreach($destinations->routeFromDestination as $destination)
                                   <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
                                   @endforeach
                               </select>
@@ -45,15 +45,15 @@
                         </tr>
                       <tr>
                           <th>Customer Name</th>
-                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                          <td><input type="text" name="name" value="{{old('name')}}" class="form-control" placeholder=""></td>
                       </tr>
                       <tr>
                           <th>Contact Number</th>
-                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                          <td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control" placeholder=""></td>
                       </tr>
                       <tr>
                           <th>Ticket Qty</th>
-                          <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                          <td><input type="text" name="quantity" value="{{old('quantity')}}" class="form-control" placeholder=""></td>
                       </tr>
                     </tbody>
                 </table>

@@ -65,22 +65,6 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        // $seat = $request->seat;
-        // $destinationReq = $request->dest;
-        // $findDest = Destination::all();
-
-        // if ($findDest->where('description', $destinationReq)->count() > 0) {
-        //     foreach ($findDest->where('description', $destinationReq) as $find) {
-        //         $findThis = $find->destination_id;
-        //         $findAmount = $find->amount;
-        //     }
-        //     $total = $findAmount*$seat;
-        // } else {
-        //     return back()->withInput()->withErrors('Invalid Destination!');
-        // }
-
-        // $timeRequest = new Carbon(request('time'));
-        // $timeFormatted = $timeRequest->format('h:i A');
         $dateCarbon = new Carbon(request('date'));
         $date = $dateCarbon->format('Y-m-d');
         $timeCarbon = new Carbon(request('time'));
@@ -106,10 +90,14 @@ class ReservationsController extends Controller
     public function update(Reservation $reservation)
     {
         $this->validate(request(),[
-            "click" => [
+            "open" => [
               'required',
-              Rule::in(['Accepted', 'Declined'])
+              Rule::in(['OPEN', 'CLOSED'])
             ],
+            "close" => [
+                'required',
+                Rule::in(['OPEN', 'CLOSED'])
+              ],
           ]);
 
         $reservation->update([
@@ -144,14 +132,17 @@ class ReservationsController extends Controller
 
     public function walkInReservation($id)
     {  
+        $dateId = Session::get('id');
         $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
-        return view('reservations.createWalkIn', compact('destinations', 'id'));
+        $main = Destination::mainTerminal()->get()->first();
+        $date = ReservationDate::where('id', $dateId)->get()->first();
+        return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));
     }
 
-    public function storeWalkIn(Request $request, $destination)
+    public function storeWalkIn(Request $request, $destId)
     {
-        dd('Hello :)');
-
+        dd($request->all());
+        $destination = Destination::where('destination_id', $destId)->get()->first();
         $dateId = Session::get('id');
         $this->validate(request(), [
             'name' => 'required|max:100',
@@ -161,7 +152,7 @@ class ReservationsController extends Controller
 
         Reservation::create([
             'date_id' => $dateId,
-            'destination_id' => $destination,
+            'destination_name' => $destination->destination_name,
             'name' => $request->name,
             'contact_number' => $request->contactNumber,
             'ticket_quantity' => $ticketQuantity,

@@ -52,8 +52,8 @@
                         </div>
                         <div class="panel-body">
                           <ul class="nav nav-pills flex-column text-sm">
-                            <li class="nav-item"><a href="customer-orders.html" class="nav-link active"><i class="fa fa-list"></i>My Rentals</a></li>
-                            <li class="nav-item"><a href="customer-wishlist.html" class="nav-link"><i class="fa fa-heart"></i> My Reservations</a></li>
+                            <li class="nav-item"><a href="{{route('customermodule.rentalTransaction')}}" class="nav-link"><i class="fa fa-list"></i>My Rentals</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-heart"></i> My Reservations</a></li>
                           </ul>
                         </div>
                       </div>

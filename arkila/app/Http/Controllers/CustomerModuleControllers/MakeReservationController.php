@@ -40,7 +40,6 @@ class MakeReservationController extends Controller
 	}
 	public function reservationCreate(ReservationDate $reservation)
 	{
-
 		$main = Destination::mainTerminal()->get()->first();
 		$requested = Session::get('key');
 		$dropOff = Destination::where('destination_id', $requested)->get()->first();
@@ -100,7 +99,7 @@ class MakeReservationController extends Controller
 			$transaction = Reservation::create([
 				'user_id' => auth()->user()->id,
 				'date_id' => $reservation->id,
-				'destination_id' => $destination->destination_id,
+				'destination_name' => $destination->destination_name,
 				'rsrv_code' => $newCode,
 				'name' => auth()->user()->full_name,
 				'contact_number' => $request->contactNumber,
