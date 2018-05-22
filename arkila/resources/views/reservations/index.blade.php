@@ -2,6 +2,7 @@
 @section('title', 'Reservations')
 @section('content')
 <div class="row">
+    @if($main->count() == 0 && $destinations->count() == 0)
         <div class="padding-side-5">
             <div class="box box-solid" style="height: 300px; padding: 50px;">
                 <div class="box-body">
@@ -12,6 +13,7 @@
                     </div>
                 </div>
             </div>
+            @else
             <div>
                 <h2 class="text-white">RESERVATION DATE</h2>
             </div>
@@ -57,42 +59,9 @@
                                 </table>
                             
                             <!-- /.box-body -->
-                        
-                    
-                    <table class="table table-bordered table-striped listReservation">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Reservation #</th>
-                                <th class="text-center">Destination</th>
-                                <th class="text-center">Reservation Date</th>
-                                <th class="text-center">Departure Time</th>
-                                <th class="text-center">Number of Slots</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody> 
-
-                            @foreach ($reservations->sortByDesc('id') as $reservation) 
-                            <tr>
-                                <td>{{ $reservation->id }}</td>
-                                <td>{{ $reservation->destination->destination_name }}</td>
-                                <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
-                                <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
-                                <td class="text-right">{{ $reservation->number_of_slots }}</td>
-                                <td>
-                                    <div class="text-center"> 
-                                        <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
-                                        <button class="btn btn-success btn-sm">OPEN</button>
-                                        <button class="btn btn-danger btn-sm">CLOSE</button>
-                                        <button class="btn btn-outline-danger btn-sm">DELETE</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
             </div>
+            @endif
 </div>
 </div>
 

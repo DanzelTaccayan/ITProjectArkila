@@ -7,7 +7,7 @@ use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\ReservationDate;
 use App\Destination;
-use App\Fee;
+use App\Ticket;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Session;
@@ -28,10 +28,11 @@ class ReservationsController extends Controller
     {
         //
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
+        $destinations = Destination::allTerminal()->get();
+        $main = Destination::mainTerminal()->get()->first();
         $reservations = ReservationDate::all();
-        $discounts = Fee::all();
 
-        return view('reservations.index', compact('discounts','reservations', 'destinations'));
+        return view('reservations.index', compact('discounts','reservations','main', 'destinations'));
     }
         /**
      * Display the specified resource.
@@ -105,7 +106,7 @@ class ReservationsController extends Controller
             $reservation->update([
                 'status' => $request->statusBtn,
                 ]);
-                return response()->json(['success' => 'Reservation marked as '. request('statusBtn'), 'status' => $request->statusBtn]);
+            return response()->json(['success' => 'Reservation marked as '. request('statusBtn'), 'status' => $request->statusBtn]);
         }
     }
 
@@ -122,14 +123,6 @@ class ReservationsController extends Controller
         return back()->with('message', 'Successfully Deleted');
     }
 
-    // public function find(Request $request){
-    //     $data = Reservation::select('reservation.destination_id', 'destination.description', 'terminal.description as terminal', 'terminal.terminal_id')
-    //     ->join('destination', 'reservation.destination_id', '=', 'destination.destination_id')
-    //     ->join('terminal', 'terminal.terminal_id', '=', 'destination.terminal_id')
-    //     ->where('reservation.id', '=', $request->id)->get();
-
-    //     return response()->json($data);
-    // }
 
     public function walkInReservation($id)
     {  
@@ -140,24 +133,61 @@ class ReservationsController extends Controller
         return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));
     }
 
-    public function storeWalkIn(Request $request, $destId)
+    public function storeWalkIn(Request $request)
     {
-        dd($request->all());
-        $destination = Destination::where('destination_id', $destId)->get()->first();
         $dateId = Session::get('id');
-        $this->validate(request(), [
-            'name' => 'required|max:100',
-            'contactNumber' => 'bail|numeric|required',
-            'quantity' => 'bail|numeric|required|min:1|max:2',
-        ]);
+        $dates = ReservationDate::where('id', $dateId)->get()->first();
+        $quantity = $request->quantity;
+        
+        if($quantity <= $dates->number_of_slots)
+        {
+            $this->validate(request(), [
+                'destination' => 'required|numeric',
+                'name' => 'required|max:100',
+                'contactNumber' => 'bail|numeric|required',
+                'quantity' => 'bail|numeric|required|min:1|max:2',
+            ]);
+            $name = ucwords(strtolower($request->name));
+            $codes = Reservation::all();
+            $newCode = bin2hex(openssl_random_pseudo_bytes(8));
+            foreach ($codes as $code)
+            {
+                $allCodes = $code->rsrv_code;
+    
+                do
+                {
+                    $newCode =  bin2hex(openssl_random_pseudo_bytes(8));
+    
+                } while ($newCode == $allCodes);
+            }
+            $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
+            $toBePaid = $ticket->fare * $quantity;
+    
+            $destination = Destination::where('destination_id', $request->destination)->get()->first();
+    
+            Reservation::create([
+                'date_id' => $dateId,
+                'destination_name' => $destination->destination_name,
+                'rsrv_code' => $newCode,
+                'fare' => $toBePaid,
+                'name' => $name,
+                'contact_number' => $request->contactNumber,
+                'ticket_quantity' => $quantity,
+                'type' => 'Walk-in',
+                'status' => 'Paid',
+            ]);
 
-        Reservation::create([
-            'date_id' => $dateId,
-            'destination_name' => $destination->destination_name,
-            'name' => $request->name,
-            'contact_number' => $request->contactNumber,
-            'ticket_quantity' => $ticketQuantity,
-            'type' => 'Walk-in',
-        ]);
+            $newNumTicket = $dates->number_of_slots - $quantity;
+
+            $dates->update([
+                'number_of_slots' => $newNumTicket,
+            ]);
+
+            return redirect('/home/reservations/'. $dateId)->with('success', 'Succesfully created reservation for '. $name);
+        }
+        else
+        {
+            return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
+        }
     }
 }

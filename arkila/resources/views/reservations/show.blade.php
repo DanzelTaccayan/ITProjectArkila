@@ -33,9 +33,11 @@
 				</div>
 				<div class="col-md-9">
 					<h3 class="text-center">RESERVED CUSTOMERS</h3>
+					@if($reservation->status == 'OPEN')
 					<div class="col-md-6">
                         <a href="{{route('reservation.walk-in', $reservation->destination_terminal)}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
-                    </div>	
+                    </div>
+					@endif
 					<table class="table table-striped table-bordered listReserved">
 						<thead>
 							<tr>
@@ -46,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($requests as $request)
+							@foreach($requests->sortByDesc('id') as $request)
 							<tr>
 
 								<td>{{$request->rsrv_code}}</td>							
@@ -54,15 +56,16 @@
 								<td>{{$request->status}}</td>
 								<td>
 									<div class="text-center">
-										<button class="btn btn-primary" data-toggle="modal" data-target="#reserved-info">View</button>
-										<button class="btn btn-info" data-toggle="modal" data-target="#reserved-refund">Refund</button>
+										<button class="btn btn-primary" data-toggle="modal" data-target="#{{'reserved-info' . $request->id}}">View</button>
+										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-refund' . $request->id}}">Refund</button>
 									</div>
 								</td>
 							</tr>
 							@endforeach
 						</tbody>
 					</table>
-					<div class="modal" id="reserved-info">
+					@foreach($requests as $request)
+					<div class="modal" id="{{'reserved-info' . $request->id}}">
 			          <div class="modal-dialog">
 			            <div class="modal-content">
 			              <div class="modal-header">
@@ -75,36 +78,32 @@
 			                	<tbody>
 			                		<tr>
 			                			<th>Reservation Code</th>
-			                			<td>1234567890qwerty</td>
+			                			<td>{{$request->rsrv_code}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Customer Name</th>
-			                			{{-- @if($request->where('type', 'Online'))
-										<td>{{$request->user->full_name}}</td>
-										@else
-										<td>{{$request->user->name}}</td>	
-										@endif --}}
+										<td>{{$request->name}}</td>
 										<td></td>	
 			                		</tr>
 			                		<tr>
 			                			<th>Destination</th>
-			                			<td>{{-- {{$request->user->destination_name}} --}}</td>
+			                			<td>{{$request->destination_name}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Reservation Type</th>
-			                			<td>{{-- {{$request->user->type}} --}}</td>
+			                			<td>{{$request->type}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Ticket Qty</th>
-			                			<td>{{-- {{$request->user->rsrv_code}} --}}</td>
+			                			<td>{{$request->ticket_quantity}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Total Fee</th>
-			                			<td>100</td>
+			                			<td>{{$request->fare}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Status</th>
-			                			<td>UNPAID</td>
+			                			<td>{{$request->status}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Date Paid</th>
@@ -112,7 +111,7 @@
 			                		</tr>
 			                		<tr>
 			                			<th>Date Reserved</th>
-			                			<td>10 May 2018</td>
+			                			<td>{{$request->created_at}}</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
@@ -126,7 +125,7 @@
 			          </div>
 			          <!-- /.modal-dialog -->
 			        </div>
-			        <div class="modal" id="reserved-refund">
+			        <div class="modal" id="{{'reserved-refund' . $request->id}}">
 			          <div class="modal-dialog">
 			            <div class="modal-content">
 			              <div class="modal-header">
@@ -166,6 +165,7 @@
 			          </div>
 			          <!-- /.modal-dialog -->
 			        </div>
+					@endforeach
 				</div>
 			</div>
 		</div>
@@ -183,7 +183,6 @@
             'ordering': true,
             'info': true,
             'autoWidth': true,
-            'order': [[ 0, "desc" ]],
             'aoColumnDefs': [{
                 'bSortable': false,
                 'aTargets': [-1] /* 1st one, start by the right */
