@@ -33,12 +33,12 @@
                             <td class="text-right">{{ date('g:i A', strtotime($reserve->departure_time)) }}</td>
                             <td class="text-right">{{$reserve->number_of_slots}}</td>
                             <td>
-                                @if($reserve->number_of_slots > 0)
+                                @if($reserve->status == 'CLOSED')
+                                <p>CLOSED</p>
+                                @elseif($reserve->number_of_slots > 0)
                                 <div class="text-center">
                                     <a href="{{route('customermodule.createReservation', $reserve->id)}}" class="btn btn-success btn-sm">RESERVE</a>
                                 </div>
-                                @elseif($reserve->status == 'CLOSED')
-                                <p>Closed</p>
                                 @else
                                 <p>Fully Booked</p>
                                 @endif

@@ -11,6 +11,7 @@ use App\Fee;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Session;
+use Validator;
 
 class ReservationsController extends Controller
 {
@@ -27,7 +28,6 @@ class ReservationsController extends Controller
     {
         //
         // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
-
         $reservations = ReservationDate::all();
         $discounts = Fee::all();
 
@@ -87,25 +87,26 @@ class ReservationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Reservation $reservation)
+    public function update(Request $request, ReservationDate $reservation)
     {
-        $this->validate(request(),[
-            "open" => [
-              'required',
-              Rule::in(['OPEN', 'CLOSED'])
-            ],
-            "close" => [
+        $validate = Validator::make($request->all(), [
+            "statusBtn" => [
                 'required',
                 Rule::in(['OPEN', 'CLOSED'])
               ],
           ]);
 
-        $reservation->update([
-
-            'status' => request('click'),
-        ]);
-        session()->flash('message', 'Reservation marked '. request('click'));
-        return redirect()->back();
+        if($validate->fails())
+        {
+            return response()->json(["error" => "Please make sure that your input is valid, you can only open or close an specific reservation date."]);
+        }
+        else
+        {                  
+            $reservation->update([
+                'status' => $request->statusBtn,
+                ]);
+                return response()->json(['success' => 'Reservation marked as '. request('statusBtn'), 'status' => $request->statusBtn]);
+        }
     }
 
     /**

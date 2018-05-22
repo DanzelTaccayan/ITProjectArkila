@@ -103,7 +103,7 @@ class TicketManagementController extends Controller
             {
                 if($ticketOrig == $ticketRequest)
                 {
-                    return response()->json(['success' => "The number of tickets of ". $ticket_management->destination_name ." remained at ". $ticketRequest ]);
+                    return response()->json(['success' => "The number of tickets of ". $ticket_management->destination_name ." remained at ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
                 }
                 else
                 {
@@ -123,7 +123,7 @@ class TicketManagementController extends Controller
                                 $ticket->delete();
                             }
                         }
-                        return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest ]);
+                        return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
                     }
                     elseif($ticketOrig < $ticketRequest)
                     {
@@ -143,7 +143,8 @@ class TicketManagementController extends Controller
                         }       
                     }
     
-                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest ]);
+                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest ]);
+        
                 }
             }
             else
@@ -187,7 +188,7 @@ class TicketManagementController extends Controller
             {
                 if($requestNumTicket == $discountTicket->count())
                 {
-                    return response()->json(['success' => "The route ". $ticket_management->destination_name ." number of tickets remained at a number of ". $requestNumTicket." tickets." ]);             
+                    return response()->json(['success' => "The route ". $ticket_management->destination_name ." number of tickets remained at a number of ". $requestNumTicket." tickets.", 'ticketqty' => $requestNumTicket]);             
                 }
                 elseif ($requestNumTicket < $discountTicket->count())
                 {
@@ -200,7 +201,7 @@ class TicketManagementController extends Controller
                             $ticket->delete();
                         }
                     }
-                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket ]);
+                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket, 'ticketqty' => $requestNumTicket ]);
                 }
                 else                      
                 {
@@ -237,7 +238,7 @@ class TicketManagementController extends Controller
                         ]);
                     }                 
                 }
-                return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket ]);
+                return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket, 'ticketqty' => $requestNumTicket ]);
             }
             else
             {
