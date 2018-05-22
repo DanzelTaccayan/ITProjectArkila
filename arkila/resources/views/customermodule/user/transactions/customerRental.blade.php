@@ -16,7 +16,7 @@
                                         <div class="row">
                                         <div class="col-md-6">
                                         
-                                        <h4 style="margin-bottom: 1px;">{{$reservation->destination->destination_name}}</h4>
+                                        <h4 style="margin-bottom: 1px;">{{$reservation->destination_name}}</h4>
                                         <p style="color: gray;">{{$reservation->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($reservation->created_at)) }}</p>
 
                                         <small>
