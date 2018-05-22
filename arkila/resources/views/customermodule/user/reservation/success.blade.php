@@ -10,6 +10,10 @@
                     <div class="contact100-form">
                     	<table class="table table-striped table-bordered">
                     		<tbody>
+								<tr>
+                    				<th>Reservation Code</th>
+                    				<td><strong>{{$transaction->rsrv_code}}</strong></td>
+                    			</tr>
                     			<tr>
                     				<th>Destination</th>
                     				<td>{{$transaction->destination->destination_name}}</td>

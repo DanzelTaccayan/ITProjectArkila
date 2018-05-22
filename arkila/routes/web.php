@@ -292,6 +292,7 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
     Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');
+    Route::get('/home/transactions/rental/', 'CustomerModuleControllers\MakeReservationController@rentalTransaction')->name('customermodule.rentalTransaction')->middleware('online-reservation');
 
     Route::get('/home/reservation/create/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
     Route::post('/home/reservation/create-request/{reservation}', 'CustomerModuleControllers\MakeReservationController@storeRequest')->name('customermodule.storeReservation')->middleware('online-reservation');

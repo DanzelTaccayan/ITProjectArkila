@@ -81,6 +81,18 @@ class MakeReservationController extends Controller
 			$newSlot = $reservation->number_of_slots - $request->quantity;
 			$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
 
+			$codes = Reservation::all();
+			foreach ($codes as $code)
+			{
+				$allCodes = $code->rsrv_code;
+				$newCode = 'cFhf67Fs90fD';
+
+				do
+				{
+					$newCode =  bin2hex(openssl_random_pseudo_bytes(8));
+
+				} while ($newCode == $allCodes);
+			}
 			$this->validate(request(), [
 				'contactNumber' => 'bail|numeric|required',
 				'quantity' => 'bail|numeric|required|min:1|max:2',
@@ -89,6 +101,7 @@ class MakeReservationController extends Controller
 				'user_id' => auth()->user()->id,
 				'date_id' => $reservation->id,
 				'destination_id' => $destination->destination_id,
+				'rsrv_code' => $newCode,
 				'name' => auth()->user()->full_name,
 				'contact_number' => $request->contactNumber,
 				'ticket_quantity' => $quantity,
@@ -119,10 +132,16 @@ class MakeReservationController extends Controller
 
 	public function reservationTransaction()
 	{
-		dd(uniqid('RSRV'));
 		$reservations = Reservation::all();
 		$requests = Reservation::where('user_id', auth()->user()->id)->count();
 		return view('customermodule.user.transactions.customerReservation', compact('reservations', 'requests'));
 	}
 
+	public function rentalTransaction()
+	{
+		$reservations = Reservation::all();
+		$requests = Reservation::where('user_id', auth()->user()->id)->count();
+
+		return view('customermodule.user.transactions.customerRental', compact('reservations', 'requests'));
+	}
 }
