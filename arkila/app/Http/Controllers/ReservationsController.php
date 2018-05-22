@@ -142,7 +142,7 @@ class ReservationsController extends Controller
 
     public function walkInReservation($id)
     {  
-        $destinations = Destination::allTerminal()->get();
+        $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
         return view('reservations.createWalkIn', compact('destinations', 'id'));
     }
 
