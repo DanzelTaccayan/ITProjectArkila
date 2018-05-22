@@ -22,7 +22,7 @@
                             <th>Destination Terminal</th>
                             <td>
                                 <select name="destination" id="" class="form-control select2">
-                                    <option value="">Select Destination</option>
+                                    <option value="">Select Terminal</option>
                                     @foreach($destinations as $destination)
                                     <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
                                     @endforeach
