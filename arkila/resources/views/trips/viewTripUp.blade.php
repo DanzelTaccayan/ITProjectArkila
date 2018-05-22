@@ -54,7 +54,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-right">Total Passenger</th>
+                                <th class="text-center">Total Passenger</th>
                                 <th class="text-right">{{$totalPassenger}}</th>
                                 <th class="text-right">{{$totalDiscountedPassenger}}</th>
                             </tr>

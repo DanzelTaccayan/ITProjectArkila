@@ -17,10 +17,6 @@
         {{method_field("PATCH")}}
         <div class="box-body">
             <div class="padding-side-15">
-                <div class="form-group">
-                           <label>Edit profile image</label>
-                           <input type="file" name="profilePicture" accept="image/*">
-                        </div>
                 <img class="profile-user-img img-responsive img-circle" src="#" alt="Operator profile picture">
                 <h4 class="name-heading">{{trim(strtoupper($driver->full_name))}}</h4>
                 <h4 class="form-heading-orange">Personal Information</h4>
@@ -79,6 +75,12 @@
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
                                 <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required >
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Profile Picture<span class="text-red">*</span></th>
+                            <td>
+                                <input type="file" name="profilePicture" accept="image/*">
                             </td>
                         </tr>
                     </tbody>

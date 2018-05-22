@@ -3,20 +3,20 @@
 @section('content')
 <div class="row">
         <div class="padding-side-5">
+            <div class="box box-solid" style="height: 300px; padding: 50px;">
+                <div class="box-body">
+                    <div class="text-center">
+                    <h1><i class="fa fa-warning text-red"></i> NO TERMINAL/DESTINATION FOUND</h1>
+                    <h4>CREATE A TERMINAL/DESTINATION FIRST BEFORE YOU CAN CREATE A RESERVATION DATE</h4>
+                    <button class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</button>
+                    </div>
+                </div>
+            </div>
             <div>
                 <h2 class="text-white">RESERVATION DATE</h2>
             </div>
             <div class="box">
                 <div class="box-body">
-                        <!-- Custom Tabs -->
-                    <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_1" data-toggle="tab">List of Reservations</a>
-                            <li><a href="#tab_2" data-toggle="tab">Online Reservation</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1">
                                 <div class="col-md-6">
                                     <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
                                 </div>
@@ -55,12 +55,42 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            
                             <!-- /.box-body -->
-                        </div>
-                    </div>
-                        <!-- /.tab-pane -->
-                    <!-- /.tab-content -->
+                        
+                    
+                    <table class="table table-bordered table-striped listReservation">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Reservation #</th>
+                                <th class="text-center">Destination</th>
+                                <th class="text-center">Reservation Date</th>
+                                <th class="text-center">Departure Time</th>
+                                <th class="text-center">Number of Slots</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+
+                            @foreach ($reservations->sortByDesc('id') as $reservation) 
+                            <tr>
+                                <td>{{ $reservation->id }}</td>
+                                <td>{{ $reservation->destination->destination_name }}</td>
+                                <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
+                                <td class="text-right">{{ $reservation->number_of_slots }}</td>
+                                <td>
+                                    <div class="text-center"> 
+                                        <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>
+                                        <button class="btn btn-success btn-sm">OPEN</button>
+                                        <button class="btn btn-danger btn-sm">CLOSE</button>
+                                        <button class="btn btn-outline-danger btn-sm">DELETE</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 </div>

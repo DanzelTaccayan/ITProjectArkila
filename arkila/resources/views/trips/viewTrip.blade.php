@@ -107,7 +107,7 @@
                     <tbody>
                         <tr>
                             <td>Total Fare collected</td>
-                            <td class="text-right">{{number_format((float)$totalFare, 2, '.', '')}}</td>
+                            <td class="text-center">{{number_format((float)$totalFare, 2, '.', '')}}</td>
                         </tr>
                         <tr>
                             <td>Office</td>

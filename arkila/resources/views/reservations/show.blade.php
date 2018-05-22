@@ -48,11 +48,8 @@
 						<tbody>
 							@foreach($requests as $request)
 							<tr>
-								@if($request->where('type', 'Online'))
-								<td>{{$request->user->full_name}}</td>
-								@else
-								<td>{{$request->user->name}}</td>	
-								@endif							
+
+								<td>{{$request->rsrv_code}}</td>							
 								<td>{{$request->destination_name}}</td>
 								<td>{{$request->status}}</td>
 								<td>
@@ -82,19 +79,24 @@
 			                		</tr>
 			                		<tr>
 			                			<th>Customer Name</th>
-			                			<td>Teo</td>
+			                			{{-- @if($request->where('type', 'Online'))
+										<td>{{$request->user->full_name}}</td>
+										@else
+										<td>{{$request->user->name}}</td>	
+										@endif --}}
+										<td></td>	
 			                		</tr>
 			                		<tr>
 			                			<th>Destination</th>
-			                			<td>Asingan</td>
+			                			<td>{{-- {{$request->user->destination_name}} --}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Reservation Type</th>
-			                			<td>Online</td>
+			                			<td>{{-- {{$request->user->type}} --}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Ticket Qty</th>
-			                			<td>2</td>
+			                			<td>{{-- {{$request->user->rsrv_code}} --}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Total Fee</th>
