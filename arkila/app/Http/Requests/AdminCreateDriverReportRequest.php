@@ -115,7 +115,10 @@ class AdminCreateDriverReportRequest extends FormRequest
             $rules['numDisMain'] = "nullable";
           }
 
-          
+          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0))
+            && (($this->request->get('numDisMain') !== null || $this->request->get('numDisMain') !== 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
+            $rules['numDisST'] = "nullable";
+          }
 
         }
 
