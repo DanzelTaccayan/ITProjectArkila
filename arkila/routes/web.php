@@ -289,7 +289,7 @@ Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('c
 Route::group(['middleware' => ['auth', 'customer']], function(){
     /*User Dashboard*/
     Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
-    Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');
+    // Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');
     Route::get('/home/user/view-announcement', 'CustomerModuleControllers\ViewAnnouncementsController@showAnnouncement')->name('customermodule.user.indexAnnouncements');
     Route::get('/home/user/view-announcement/modal', 'CustomerModuleControllers\AnnouncementModalController@showModalAnnouncement')->name('customermodule.user.indexAnnouncementModal');
     Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
@@ -300,6 +300,8 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     /*Reservation*/
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
+    Route::get('/home/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationPdf')->name('reservation.receipt');
+    Route::get('/home/routes/fare-list', 'CustomerModuleControllers\MakeReservationController@fareList')->name('reservation.fareList');
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
     Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');

@@ -12,6 +12,7 @@ use App\Http\Requests\CustomerReservationRequest;
 use Session;
 use Carbon\Carbon;
 use App\Ticket;
+use PDF;
 
 class MakeReservationController extends Controller
 {
@@ -134,6 +135,9 @@ class MakeReservationController extends Controller
 	public function reservationTransaction()
 	{
 		$requests = Reservation::where('user_id', auth()->user()->id)->get();
+		$a = Carbon::parse($requests->first()->expiry_date);
+		$b = Carbon::now();
+
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
 
@@ -143,5 +147,18 @@ class MakeReservationController extends Controller
 		$requests = Reservation::where('user_id', auth()->user()->id)->count();
 
 		return view('customermodule.user.transactions.customerRental', compact('reservations', 'requests'));
+	}
+
+	public function reservationPdf(Reservation $reservation)
+	{
+		$date = Carbon::now();
+        $pdf = PDF::loadView('pdf.reservationPdf', compact('reservation', 'date'));
+		return $pdf->stream("Receipt No. ". $reservation->rsrv_code .".pdf");
+	}
+
+	public function fareList()
+	{
+		$destinations = Destination::allTerminal()->get();
+		return view('customermodule.fareList', compact('destinations'));
 	}
 }

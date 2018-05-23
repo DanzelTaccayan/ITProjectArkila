@@ -31,7 +31,8 @@ class CreateReservationTable extends Migration
             $table->string('contact_number');
             $table->integer('ticket_quantity');
             $table->decimal('fare', 11, 2);
-            $table->date('expiry_date');
+            $table->date('expiry_date')
+            ->nullable();
             $table->enum('status', ['UNPAID', 'PAID', 'EXPIRED', 'CANCELLED', 'REFUNDED'])
             ->default('Unpaid');
             $table->date('date_paid')

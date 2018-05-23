@@ -32,7 +32,7 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalu">View</button>       
+                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
                                             </div>
                                         </div>
                                         </div>
@@ -58,7 +58,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="modal fade" id="modalu">
+                    @foreach($requests as $reservation)
+
+                    <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
@@ -71,38 +73,38 @@
                                             <tbody>
                                                 <tr>
                                                     <th>Reservation Code</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->rsrv_code}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Destination</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->destination_name}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Expiry Date</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->status}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Ticket Qty</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->ticket_quantity}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total Fee</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->fare}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Refund Code</th>
-                                                    <td></td>
+                                                    <td>{{$reservation->refund_code}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                                        <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                     </div>
                                 </div>
                         </div>
@@ -110,6 +112,7 @@
                     </div>
                     <!-- /.modal -->
                 </div>
+                    @endforeach
                 <!-- boxContainer-->
             </div>
             <!-- container-->

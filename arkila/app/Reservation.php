@@ -8,6 +8,7 @@ class Reservation extends Model
 {
     //
     protected $table = 'reservation';
+    protected $dates = ['expiry_date'];
     protected $primaryKey = 'id';
 	protected $guarded = [
     	'id',
