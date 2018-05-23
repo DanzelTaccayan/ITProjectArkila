@@ -29,7 +29,7 @@
                         <p class="info-container">{{$profile->address}}</p>
                         <label for="">Trips Completed:</label>
                         <p class="info-container">{{$counter}}</p>
-                        <p><strong>NOTE:</strong> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui quas incidunt quisquam eum exercitationem repellendus cumque, nihil deserunt libero. Laborum quod illo sint praesentium aspernatur nihil porro eaque a delectus.</p>
+                        <p><strong>NOTE:</strong> If there is a mistake in your infomation please approach the clerk.</p>
                     <hr>
                     <div class="profile-van" style="margin-top: 10px;">
                         <div class="info-box">

@@ -30,9 +30,9 @@
                                 <label>Contact Number: <span class="text-red">*</span></label>
                                 <div class = "input-group">
                                     <div class = "input-group-addon">
-                                        <span>+63</span>
+                                       <i class="fa fa-phone"></i>
                                     </div>
-                                <input type="text" class="form-control" placeholder="Contact Number" name="contactNumber" id="contactNumber" value="{{ old('contactNumber') }}" data-inputmask='"mask": "999-999-9999"' data-parsley-errors-container="#errContactNumber" data-mask val-phone required>
+                                <input type="text" class="form-control" placeholder="Contact Number" name="contactNumber" id="contactNumber" value="{{ old('contactNumber') }}" data-parsley-errors-container="#errContactNumber" val-phone required>
                                 </div>
                                 <p id="errContactNumber"></p>
                             </div>

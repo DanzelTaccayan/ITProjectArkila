@@ -32,8 +32,8 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary">View</button>                                           
-                                                </div>
+                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
+                                            </div>
                                         </div>
                                         </div>
                                     </li>
@@ -58,7 +58,61 @@
                         </div>
                       </div>
                     </div>
+                    @foreach($requests as $reservation)
+
+                    <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-red">
+                                        <h4 class="modal-title">RESERVATION DETAILS</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Reservation Code</th>
+                                                    <td>{{$reservation->rsrv_code}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Destination</th>
+                                                    <td>{{$reservation->destination_name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Expiry Date</th>
+                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>{{$reservation->status}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Ticket Qty</th>
+                                                    <td>{{$reservation->ticket_quantity}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total Fee</th>
+                                                    <td>{{$reservation->fare}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Refund Code</th>
+                                                    <td>{{$reservation->refund_code}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">   
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
                 </div>
+                    @endforeach
                 <!-- boxContainer-->
             </div>
             <!-- container-->

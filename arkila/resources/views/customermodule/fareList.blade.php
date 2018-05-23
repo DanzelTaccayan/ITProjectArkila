@@ -1,4 +1,4 @@
-@extends('layouts.customer_non_user')
+@extends('layouts.customer_user')
 @section('content')
 <section id="packages" class="bar no-mb">
         <div data-animate="fadeInUp" class="container">
@@ -6,11 +6,12 @@
                 <h2 style="color: #000040;">Fare list</h2>
               </div>
               <div class="row packages">
-               @foreach($terminals as $terminal)
+              @if($destinations->count() > 0)
+               @foreach($destinations as $destination)
                 <div class="col-md-3 mx-auto">
                   <div class="package">
                     <div class="package-header light-gray">
-                      <h5>Fare list {{$terminal->description}}</h5>
+                      <h5>Fare list {{$destination->destination_name}}</h5>
                     </div>
                     <div class="table-responsive">
                         <table class="table text-center">
@@ -21,19 +22,18 @@
                                 </tr>
                             </thead>
 
-                            @foreach($farelist as $fare)
-                              @if($fare->terminal_id == $terminal->terminal_id)
+                            @foreach($destination->routeFromDestination as $destination)
                                 <tr>
-                                  <td>{{$fare->description}}</td>
-                                  <td>{{$fare->amount}}</td>
+                                  <td>{{$destination->destination_name}}</td>
+                                  <td>{{$destination->tickets->first()->fare}}</td>
                                 </tr>
-                              @endif
                             @endforeach
                         </table>
                      </div>
                   </div>
                 </div>
                 @endforeach
+                @endif
               </div>
               <!-- Packages End-->
             </div>
