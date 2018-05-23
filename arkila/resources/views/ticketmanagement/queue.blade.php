@@ -53,32 +53,8 @@
                     </span>
                 </div>
                 <div class="box-body well">
-                    <ul class="list-group">
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        <li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
-
-                        
-                        
-                        
-                        
-
+                    <ul class="list-group" id="ticketul{{$terminal->destination_id}}">
                     </ul>
-
                 </div>
             </div>
     </div>
@@ -97,18 +73,34 @@
                 type: 'GET',
                 url: '/getVanQueue',
                 success: function(response){
-                    $.each(response.vanqueue, function(i,item){
-                            //var itemid = $('.item').attr('id');
-                            //console.log(item[i].destination_i);
-                            
-                            //console.log(item);
-                            console.log(item);
+                    var counter = 1; 
+                    $.each(response.vanqueue, function(i,item){                            
                         $('.item').each(function(i,obj){
                             if(obj.id == item.destination_id){
                                 $('#plno'+item.destination_id).append('ON DECK: <strong>'+item.van['plate_number']+'</strong>');
-                            }    
-                            //console.log(obj.id);
-                            
+                                $.each(response.tickets, function(i,items){
+                                    console.log(i);
+                                    $.each(items, function(q,qtems){
+                                        //console.log(qtems);
+                                        $.each(qtems, function(r,rtems){
+                                            //console.log(r);
+                                            //console.log(rtems);
+                                            if(obj.id == i){
+                                                //<li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
+                                                $('#ticketul'+i).append(
+                                                    $('<li>', {class: 'list-group-item col-lg-4'}).append([
+                                                        $('<span>', {class: 'queueNumber bg-blue'}).text(counter),
+                                                        $('<h4>', {class: 'text-center'}).append(
+                                                            $('<strong>').text(rtems)
+                                                        )
+                                                    ])
+                                                );
+                                            }
+                                            counter++;        
+                                        });
+                                    });
+                                });
+                            } 
                         });
                     });
                     
