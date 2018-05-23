@@ -29,10 +29,12 @@ class GettingStarted
 
       $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
         if($mainterminal == true){
-          //return $next($request);  
+          //dd('HI');  
           return redirect('getting-started/setup');
+        }else{
+          return $next($request);
         }
 
-        return $next($request);
+        
     }
 }

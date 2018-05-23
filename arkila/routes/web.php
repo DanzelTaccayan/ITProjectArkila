@@ -78,6 +78,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/vans', 'VansController', [
         'except' => ['show']
     ]);
+    
+    //Check if the driver has already a vanw
+    Route::post('/checkDriverVan', 'VansController@checkDriverVan')->name('checkDriverVan');
+
     //Creating Vans
     Route::get('/home/operators/{operator}/vans/create', 'VansController@createFromOperator')->name('vans.createFromOperator');
     Route::post('/home/operators/{operator}/vans', 'VansController@storeFromOperator')->name('vans.storeFromOperator');

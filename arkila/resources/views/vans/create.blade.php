@@ -162,6 +162,21 @@ $('select[name="operator"]').on('change',function(){
 }
         @endif
 	</script>
+    <script>
+        $('select[name="driver"]').on('change', function(){
+            $.ajax({
+                method: 'POST',
+                url: '{{route("checkDriverVan")}}',
+                data: {
+                    '_token': '{{csrf_token()}}',
+                    'driver': $('select[name="driver"]').val()
+                },
+                success: function(response){
+                    console.log(response);
+                }
+            });
+        });
+    </script>
 @endsection
 
 
