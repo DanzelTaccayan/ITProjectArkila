@@ -206,7 +206,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');
     Route::delete('/selectedLastTicket/{destination}','TransactionsController@deleteLastSelectedTicket')->name('transactions.selectedTicket');
     /********Archive ********/
-    Route::get('/home/archive', 'ArchiveController@index')->name('archive.index');
+    Route::get('/home/archive', 'ArchiveController@archive')->name('archive.index');
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
     Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
