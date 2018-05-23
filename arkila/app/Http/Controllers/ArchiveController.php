@@ -1,29 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Member;
 use App\VanQueue;
 use App\Van;
 use DB;
-use Carbon\Carbon;
 
 class ArchiveController extends Controller
 {
     public function index() {
         $operators = Member::allOperators()->where('status','Inactive')->get();
-
         return view('archive.index', compact('operators'));
-
     }
-
     //Operators
     public function showArchivedProfileOperator(Member $archivedOperator)
     {
-
         return view('archive.operatorArchive',compact('archivedOperator'));
     }
-
     public function archiveOperator(Member $operator)
     {
         if(count($operator->vanQueue) == 0) {
@@ -39,11 +31,9 @@ class ArchiveController extends Controller
                         ]);
                     }
                 }
-
                 //Count the vans of the operator and archive them
                 if($operator->van()->count()) {
                     foreach($operator->van as $van) {
-
                         if(count($operator->vanQueue) > 0) {
                             return back()->withErrors('The operator is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the operator.');
                         } else if (VanQueue::where('van_id',$operator->van->pluck('van_id'))->get()->count() > 0) {
@@ -51,10 +41,8 @@ class ArchiveController extends Controller
                                 ->get()
                                 ->pluck('plate_number')
                                 ->toArray();
-
                             return back()->withErrors('The vans ('.implode(" ",$vans).') of the operator are on the queue, remove them first before archiving the operator.');
                         }
-
                         //archive operator and van
                         $van->archivedMember()->attach($operator->member_id);
                         $van->members()->detach($operator->member_id);
@@ -63,50 +51,40 @@ class ArchiveController extends Controller
                             $van->archivedMember()->attach($van->driver()->first()->member_id);
                             $van->members()->detach($van->driver()->first()->member_id);
                         }
-
                         $van->update([
                             'status' => 'Inactive'
                         ]);
                     }
                 }
-                $date_archived = Carbon::now('Asia/Manila')->toDateTimeString();
                 $operator->update([
                     'status' => 'Inactive',
                     'notification' => 'Disable',
-                    'date_archived' => $date_archived
                 ]);
                 DB::commit();
             } catch(\Exception $e) {
                 DB::rollback();
                 return back()->withErrors('There seems to be a problem. Please try again');
             }
-
         } else {
             //Throw error message
         }
-
         return redirect(route('operators.index'));
     }
-
     public function restoreArchivedOperator(Member $archivedOperator)
     {
         // Start transaction!
         DB::beginTransaction();
         try {
             $archivedOperator->update([
-                'status' => 'Active',
-                'date_archived' => null
+                'status' => 'Active'
             ]);
-
             DB::commit();
-
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again');
         }
         return back();
     }
-
     //Drivers
     public function archiveDriver(Member $driver)
     {
@@ -116,51 +94,42 @@ class ArchiveController extends Controller
             if(count($driver->vanQueue) > 0) {
                 return back()->withErrors('The driver is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the driver.');
             }
-
             if($driver->operator_id) {
                 $driver->archivedOperator()->attach($driver->operator_id);
                 $driver->update([
                     'operator_id' => null
                 ]);
             }
-
             if($driver->van()->first()) {
                 $driver->archivedVan()->attach($driver->van()->first()->van_id);
                 $driver->van()->detach($driver->van()->first()->van_id);
             }
-
             $driver->update([
-                'status' => 'Inactive',
+                'status' => 'Inactive'
             ]);
-
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
         return back();
     }
-
     public function restoreArchivedDriver(Member $archivedDriver)
     {
         // Start transaction!
         DB::beginTransaction();
         try {
             $archivedDriver->update([
-                'status' => 'Active',
-                'date_archived' => null
+                'status' => 'Active'
             ]);
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-
         return back();
     }
-
     //Vans
     public function archiveVan(Van $van)
     {
@@ -171,7 +140,6 @@ class ArchiveController extends Controller
             if($van->vanQueue->count() > 0) {
                 return back()->withErrors('The van to be archived is on queue, remove it first from queue before archiving the van');
             }
-
             //update queue_list if the van is on queue
 //            if($vanOnQueue = $van->vanQueue()->whereNotNull('queue_number')->first())
 //            {
@@ -185,31 +153,26 @@ class ArchiveController extends Controller
 //            } elseif($specialVanOnQueue = $van->vanQueue()->whereNull('queue_number')->first()){
 //                $specialVanOnQueue->delete();
 //            }
-
             //Archive its operator
             if($van->operator()->first())
             {
                 $van->archivedMember()->attach($van->operator()->first()->member_id);
                 $van->members()->detach($van->operator()->first()->member_id);
             }
-
             //Archive its driver
             if($van->driver()->first())
             {
                 $van->archivedMember()->attach($van->driver()->first()->member_id);
                 $van->members()->detach($van->driver()->first()->member_id);
             }
-
             //Archive the relationship of the driver and operator, if they exists
             if($van->driver()->first() && $van->operator()->first())
             {
                 $van->operator()->first()->archivedDriver()->attach($van->driver()->first()->member_id);
             }
-
             $van->update([
-                'status' => 'Inactive',
+                'status' => 'Inactive'
             ]);
-
             DB::commit();
         }
         catch(\Exception $e)
@@ -219,6 +182,4 @@ class ArchiveController extends Controller
         }
         return back();
     }
-
-
 }

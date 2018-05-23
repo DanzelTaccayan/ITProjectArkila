@@ -409,6 +409,8 @@ class VansController extends Controller
             }else{
                 return 'submit';
             }
+        }else{
+            return 'submit';
         }
         
     }
