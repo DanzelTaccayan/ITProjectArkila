@@ -400,6 +400,18 @@ class VansController extends Controller
         }
     }
 
+    public function checkDriverVan()
+    {
+        if(request('driver') != null){
+            $driver = Member::find(request('driver'))->van;
+            if(count($driver) >= 1){
+                return 'modal';
+            }else{
+                return 'submit';
+            }
+        }
+        
+    }
 
     public function generatePDF()
     {
