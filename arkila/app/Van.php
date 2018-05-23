@@ -36,7 +36,7 @@ class Van extends Model
 
     public function archivedMember()
     {
-        return $this->belongsToMany(Member::class,'archive_van','van_id','member_id')->withTimestamps();
+        return $this->belongsToMany(Member::class,'van_history','van_id','member_id')->withTimestamps();
     }
 
     public function driver()

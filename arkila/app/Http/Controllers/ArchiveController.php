@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use App\VanQueue;
+use App\Van;
+use DB;
+use Carbon\Carbon;
 
 class ArchiveController extends Controller
 {
@@ -23,7 +26,7 @@ class ArchiveController extends Controller
 
     public function archiveOperator(Member $operator)
     {
-        if(is_null($operator->vanQueue)) {
+        if(count($operator->vanQueue) == 0) {
             // Start transaction!
             DB::beginTransaction();
             try {
@@ -111,7 +114,7 @@ class ArchiveController extends Controller
         DB::beginTransaction();
         try {
             if(count($driver->vanQueue) > 0) {
-                return back()->withErrors('The driver is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the operator.');
+                return back()->withErrors('The driver is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the driver.');
             }
 
             if($driver->operator_id) {
@@ -122,8 +125,8 @@ class ArchiveController extends Controller
             }
 
             if($driver->van()->first()) {
-                $driver->archivedVan()->attach($driver->van()->first()->plate_number);
-                $driver->van()->detach($driver->van()->first()->plate_number);
+                $driver->archivedVan()->attach($driver->van()->first()->van_id);
+                $driver->van()->detach($driver->van()->first()->van_id);
             }
 
             $driver->update([
@@ -133,6 +136,7 @@ class ArchiveController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
+            \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 

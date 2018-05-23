@@ -253,12 +253,12 @@ class DriversController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Driver  $driver
+     * @param  \App\Driver  $generalDriver
      * @return \Illuminate\Http\Response
      */
-    public function show(Member $driver)
+    public function show(Member $generalDriver)
     {
-        return view('drivers.show',compact('driver'));
+        return view('drivers.show',compact('generalDriver'));
     }
 
     /**

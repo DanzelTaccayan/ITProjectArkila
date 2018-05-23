@@ -32,11 +32,11 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
         Route::bind('operator',function($value){
-            return Member::allOperators()->where('member_id',$value)->first() ?? abort(404);
+            return Member::allOperators()->where('member_id',$value)->where('status','Active')->first() ?? abort(404);
         });
 
         Route::bind('driver', function($value){
-            return Member::allDrivers()->where('member_id',$value)->first() ?? abort(404);
+            return Member::allDrivers()->where('member_id',$value)->where('status','Active')->first() ?? abort(404);
         });
 
         Route::bind('archivedOperator', function($value){
@@ -45,6 +45,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('archivedDriver', function($value){
             return Member::allDrivers()->where('status','Inactive')->where('member_id',$value)->first() ?? abort(404);
+        });
+
+        Route::bind('generalDriver', function($value){
+            return Member::allDrivers()->where('member_id',$value)->first() ?? abort(404);
         });
 
         Route::bind('driver_user', function($value){

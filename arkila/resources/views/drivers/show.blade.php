@@ -10,14 +10,14 @@
                         <div class="profile-side">
                             <img class="profile-user-img img-responsive img-circle" src="#" alt="Driver profile picture">
                              <div class="profile-btn-group">
-                                <a href="{{route('drivers.edit',[$driver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
+                                <a href="{{route('drivers.edit',[$generalDriver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
                             </div>
                             <hr>
                             <div class="profile-btn-group">
                                <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous())
                                 {{session()->get('opLink')}}
                                 @else
-                                    @if($driver->status === 'Active')
+                                    @if($generalDriver->status === 'Active')
                                         {{route('drivers.index') }}
                                     @else
                                         {{route(URL::previous())}}
@@ -28,9 +28,9 @@
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
                                     <div class="info-box-content">
-                                      <h4><strong>{{$driver->van()->first()->plate_number ?? null}}</strong></h4>
-                                      <p>{{$driver->van()->first()->model->description ?? null}}</p>
-                                      <p style="color: gray;">{{$driver->van()->first()->seating_capacity ?? null}} seats</p>
+                                      <h4><strong>{{$generalDriver->van()->first()->plate_number ?? null}}</strong></h4>
+                                      <p>{{$generalDriver->van()->first()->model->description ?? null}}</p>
+                                      <p style="color: gray;">{{$generalDriver->van()->first()->seating_capacity ?? null}} seats</p>
                                     </div>
                                     <!-- /.info-box-content -->
                                 </div>
@@ -38,54 +38,54 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <h4 class="profile-username"><strong>{{trim(strtoupper($driver->full_name))}}</strong></h4>
+                        <h4 class="profile-username"><strong>{{trim(strtoupper($generalDriver->full_name))}}</strong></h4>
                         <div style="margin-bottom: 3%;">
-                            <button onclick="window.open('{{route('pdf.perDriver', [$driver->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
+                            <button onclick="window.open('{{route('pdf.perDriver', [$generalDriver->member_id])}}')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
                             <h4>Personal Information</h4>
                         </div>
                         <table class="table table-bordered table-striped info-table">
                             <tr>
                                 <th>Contact Number</th>
-                                <td>{{$driver->contact_number}}</td>
+                                <td>{{$generalDriver->contact_number}}</td>
                             </tr>
                             <tr>
                                 <th>Address</th>
-                                <td>{{$driver->address}}</td>
+                                <td>{{$generalDriver->address}}</td>
                             </tr>
                             <tr>
                                 <th>Provincial Address</th>
-                                <td>{{$driver->provincial_address}}</td>
+                                <td>{{$generalDriver->provincial_address}}</td>
                             </tr>
                             <tr>
                                 <th>Gender</th>
-                                <td>{{$driver->gender}}</td>
+                                <td>{{$generalDriver->gender}}</td>
                             </tr>
                             <tr>
                                 <th>SSS No.</th>
-                                <td>{{$driver->SSS}}</td>
+                                <td>{{$generalDriver->SSS}}</td>
                             </tr>
                             <tr>
                                 <th>License No.</th>
-                                <td>{{$driver->license_number}}</td>
+                                <td>{{$generalDriver->license_number}}</td>
                             </tr>
                             <tr>
                                 <th>License Expiry Date</th>
-                                <td>{{$driver->expiry_date}}</td>
+                                <td>{{$generalDriver->expiry_date}}</td>
                             </tr>
                         </table>
                         <h4>Contact Person</h4>
                         <table class="table table-bordered table-striped info-table">
                             <tr>
                                 <th>Contact Person</th>
-                                <td>{{$driver->person_in_case_of_emergency}}</td>
+                                <td>{{$generalDriver->person_in_case_of_emergency}}</td>
                             </tr>
                             <tr>
                                 <th>Address</th>
-                                <td>{{$driver->emergency_address}}</td>
+                                <td>{{$generalDriver->emergency_address}}</td>
                             </tr>
                             <tr>
                                 <th>Contact Number</th>
-                                <td>{{$driver->emergency_contactno}}</td>
+                                <td>{{$generalDriver->emergency_contactno}}</td>
                             </tr>
                         </table>
                     </div>
