@@ -63,7 +63,7 @@ class VansController extends Controller
         $this->validate(request(), [
             "operator" => ['required','numeric','exists:member,member_id',new checkOperator],
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
-            "plateNumber" => [new checkSpecialCharacters,'unique:van,plate_number','required','max:15'],
+            "plateNumber" => [new checkSpecialCharacters,new checkPlateNumber,'required','max:15'],
             "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
             "seatingCapacity" => 'required|numeric'
         ]);
@@ -140,7 +140,7 @@ class VansController extends Controller
     {
         $this->validate(request(), [
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
-            "plateNumber" => [new checkSpecialCharacters,'unique:van,plate_number','required','max:15'],
+            "plateNumber" => [new checkSpecialCharacters,new checkPlateNumber,'required','max:15'],
             "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
             "seatingCapacity" => 'required|numeric'
         ]);

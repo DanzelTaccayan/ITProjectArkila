@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="profile-side">   
-                            <img class="profile-user-img img-responsive img-circle" src="" alt="Operator profile picture">
+                            <img class="profile-user-img img-responsive img-circle" src="/uploads/profilePictures/{{$archivedOperator->profile_picture}}" alt="Operator profile picture">
                             <hr> 
                             <div class="profile-btn-group">
                                 <a href="#" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
@@ -32,8 +32,8 @@
                             <div style="margin: 15px;">
                                 <ul class="nav nav-stacked" style="border: 1px solid lightgray;">
                                     <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
-                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">1</span></a></li>
-                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">2</span></a></li>
+                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">{{$archivedOperator->archivedVan->count()}}</span></a></li>
+                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">{{$archivedOperator->archivedDriver->count()}}</span></a></li>
                                 </ul>
                             </div>
                             
@@ -42,7 +42,7 @@
                     <div class="col-md-9"> 
                         <div class="nav-tabs-custom">
                             <div class="tab-content" style="height: 550px;">
-                                <h3 class="profile-username"><strong>NAME</strong></h3> 
+                                <h3 class="profile-username"><strong>{{$archivedOperator->full_name}}</strong></h3>
                                 <div class="active tab-pane" id="info">
                                     <div style="margin-bottom: 3%;">
                                         <button onclick="window.open('')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT INFORMATION</button>
@@ -53,31 +53,31 @@
                                         <tbody>
                                             <tr>
                                                 <th>Contact Number</th>
-                                                <td>093909003</td>
+                                                <td>{{$archivedOperator->contact_number}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <td>32 nfsjefn nfieifn </td>
+                                                <td>{{$archivedOperator->address}} </td>
                                             </tr>
                                             <tr>
                                                 <th>Provincial Address</th>
-                                                <td>54 ngifgnfi in</td>
+                                                <td>{{$archivedOperator->provincial_address}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Gender</th>
-                                                <td>MALE</td>
+                                                <td>{{$archivedOperator->gender}}</td>
                                             </tr>
                                             <tr>
                                                 <th>SSS No.</th>
-                                                <td></td>
+                                                <td>{{$archivedOperator->SSS}}</td>
                                             </tr>
                                             <tr>
                                                 <th>License No.</th>
-                                                <td>3432434234</td>
+                                                <td>{{$archivedOperator->license_number}}</td>
                                             </tr>
                                             <tr>
                                                 <th>License Exp Date</th>
-                                                <td>DATE</td>
+                                                <td>{{$archivedOperator->expiry_date}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -86,15 +86,15 @@
                                         <tbody>
                                             <tr>
                                                 <th>Name</th>
-                                                <td>NAMEsdsdsd</td>
+                                                <td>{{$archivedOperator->person_in_case_of_emergency}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Contact Number</th>
-                                                <td>342342343</td>
+                                                <td>{{$archivedOperator->contact_number}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <td>424324 gerg</td>
+                                                <td>{{$archivedOperator->emergency_address}}</td>
                                             </tr>
                                         </tbody>
                                     </table> 
@@ -111,14 +111,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($archivedOperator->archivedVan as $archivedVan)
                                             <tr>
-                                                <td>AAA112</td>
-                                                <td>YUKI MARFIL</td>
-                                                <td>FD</td>
-                                                <td class="text-right" style="width: 10px;">15</td>
-                                                <td>Yung date</td>
-                                            </tr>                                            
-                                            
+                                                <td>{{$archivedVan->plate_number}}</td>
+                                                <td>{{$archivedVan->archivedMember->where('role','Driver')->first()->full_name ?? null}}</td>
+                                                <td>{{$archivedVan->model->description}}</td>
+                                                <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
+                                                <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -135,19 +136,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>HEHE</td>
-                                                <td>95868594645</td>
-                                                <td>YUNG DATE</td>
-                                                <td> 
-                                                    <div class="text-center">
-                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
 
-                                                    </div>                                                
-                                                </td>
+                                            @foreach($archivedOperator->archivedDriver as $archivedDriver)
+                                                <tr>
+                                                    <td>{{$archivedDriver->member_id}}</td>
+                                                    <td>{{$archivedDriver->full_name}}</td>
+                                                    <td>{{$archivedDriver->contact_number}}</td>
+                                                    <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+
+                                                        </div>
+                                                    </td>
                                             </tr>
-                                            
+                                            @endforeach
+
+
                                         </tbody>
                                     </table>                  
                                         <!-- /.tab-pane -->

@@ -46,7 +46,6 @@ class OperatorsController extends Controller
         DB::beginTransaction();
         try {
             $profilePictureName = 'avatar.jpg';
-            dd($request->file('profilePicture'));
             if($request->file('profilePicture')) {
                 $dateNow = Carbon::now();
                 $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.

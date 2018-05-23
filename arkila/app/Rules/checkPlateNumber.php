@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use App\Van;
 
 class checkPlateNumber implements Rule
 {
@@ -25,7 +26,12 @@ class checkPlateNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        return (preg_match('/^[A-Z\d]+$|^([A-Z\d])+[-]([A-Z\d])+$/',$value));
+        $vanCount = Van::all()->where('plate_number',$value)->count();
+        if($vanCount > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -35,6 +41,6 @@ class checkPlateNumber implements Rule
      */
     public function message()
     {
-        return 'The entered plate number must be in a valid format.';
+        return 'The entered plate number already exists';
     }
 }

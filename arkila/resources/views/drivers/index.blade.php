@@ -57,8 +57,8 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
-                                                    {{csrf_field()}} {{method_field('PATCH')}}
-
+                                                    {{csrf_field()}}
+                                                    {{method_field('PATCH')}}
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                                     <button type="submit" name="driverArc" value="Arch " class="btn btn-danger">Delete</button>
                                                 </form>
