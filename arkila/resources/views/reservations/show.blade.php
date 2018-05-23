@@ -33,9 +33,11 @@
 				</div>
 				<div class="col-md-9">
 					<h3 class="text-center">RESERVED CUSTOMERS</h3>
+					@if($reservation->status == 'OPEN')
 					<div class="col-md-6">
                         <a href="{{route('reservation.walk-in', $reservation->destination_terminal)}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RESERVATION</a>
-                    </div>	
+                    </div>
+					@endif
 					<table class="table table-striped table-bordered listReserved">
 						<thead>
 							<tr>
@@ -46,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($requests as $request)
+							@foreach($requests->sortByDesc('created_at') as $request)
 							<tr>
 
 								<td>{{$request->rsrv_code}}</td>							
@@ -54,15 +56,20 @@
 								<td>{{$request->status}}</td>
 								<td>
 									<div class="text-center">
-										<button class="btn btn-primary" data-toggle="modal" data-target="#reserved-info">View</button>
-										<button class="btn btn-info" data-toggle="modal" data-target="#reserved-refund">Refund</button>
+										<button class="btn btn-primary" data-toggle="modal" data-target="#{{'reserved-info'. $request->id}}">View</button>
+									@if($request->status == 'UNPAID')
+										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-pay' . $request->id}}">Payment</button>
+									@elseif($request->status == 'PAID')
+										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-refund'. $request->id}}">Refund</button>
+									@endif
 									</div>
 								</td>
 							</tr>
 							@endforeach
 						</tbody>
 					</table>
-					<div class="modal" id="reserved-info">
+					@foreach($requests as $request)
+					<div class="modal" id="{{'reserved-info' . $request->id}}">
 			          <div class="modal-dialog">
 			            <div class="modal-content">
 			              <div class="modal-header">
@@ -75,36 +82,32 @@
 			                	<tbody>
 			                		<tr>
 			                			<th>Reservation Code</th>
-			                			<td>1234567890qwerty</td>
+			                			<td>{{$request->rsrv_code}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Customer Name</th>
-			                			{{-- @if($request->where('type', 'Online'))
-										<td>{{$request->user->full_name}}</td>
-										@else
-										<td>{{$request->user->name}}</td>	
-										@endif --}}
+										<td>{{$request->name}}</td>
 										<td></td>	
 			                		</tr>
 			                		<tr>
 			                			<th>Destination</th>
-			                			<td>{{-- {{$request->user->destination_name}} --}}</td>
+			                			<td>{{$request->destination_name}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Reservation Type</th>
-			                			<td>{{-- {{$request->user->type}} --}}</td>
+			                			<td>{{$request->type}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Ticket Qty</th>
-			                			<td>{{-- {{$request->user->rsrv_code}} --}}</td>
+			                			<td>{{$request->ticket_quantity}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Total Fee</th>
-			                			<td>100</td>
+			                			<td>{{$request->fare}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Status</th>
-			                			<td>UNPAID</td>
+			                			<td>{{$request->status}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Date Paid</th>
@@ -112,21 +115,61 @@
 			                		</tr>
 			                		<tr>
 			                			<th>Date Reserved</th>
-			                			<td>10 May 2018</td>
+			                			<td>{{$request->created_at}}</td>
 			                		</tr>
 			                	</tbody>
 			                </table>
 			              </div>
 			              <div class="modal-footer">
 			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-			                <button type="button" class="btn btn-primary">Save changes</button>
+			                
 			              </div>
 			            </div>
 			            <!-- /.modal-content -->
 			          </div>
 			          <!-- /.modal-dialog -->
 			        </div>
-			        <div class="modal" id="reserved-refund">
+					<div class="modal" id="{{'reserved-pay' . $request->id}}">
+			          <div class="modal-dialog">
+			            <div class="modal-content">
+			              <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			                  <span aria-hidden="true">×</span></button>
+			                <h4 class="modal-title">Payment Details</h4>
+			              </div>
+			              <div class="modal-body">
+			              	<div class="padding-side-5">	
+				                <table class="table table-striped table-bordered">
+				                	<tbody>
+				                		<tr>
+				                			<th>Reservation Code</th>
+				                			<td>{{$request->rsrv_code}}</td>
+				                		</tr>
+				                		<tr>
+				                			<th>Destination</th>
+				                			<td>{{$request->destination_name}}</td>
+				                		</tr>
+				                			<th>Ticket Qty</th>
+				                			<td>{{$request->ticket_quantity}}</td>
+				                		</tr>
+				                	</tbody>
+				                </table>
+				                <h3 class="text-center">FEE: <strong class="text-green">{{$request->fare}}</strong></h3>
+				            </div>
+				           </div>
+			              <div class="modal-footer">
+			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+							<form action="{{route('reservation.payment', $request->id)}}" method="POST">
+			                {{ csrf_field() }} {{ method_field('PATCH') }}
+							<button type="submit" name="payment" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
+							</form>
+						  </div>
+			            </div>
+			            <!-- /.modal-content -->
+			          </div>
+			          <!-- /.modal-dialog -->
+			        </div>
+			        <div class="modal" id="{{'reserved-refund' . $request->id}}">
 			          <div class="modal-dialog">
 			            <div class="modal-content">
 			              <div class="modal-header">
@@ -134,31 +177,32 @@
 			                  <span aria-hidden="true">×</span></button>
 			                <h4 class="modal-title">REFUND</h4>
 			              </div>
-			              <form action="post" class="form-horizontal">
+			              <form action="{{route('reservation.refund', $request->id)}}" method="POST" class="form-horizontal">
+						  {{ csrf_field() }} {{ method_field('PATCH') }}
 				              <div class="modal-body">
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Reservation Code</label>
 			               			<div class="col-md-6">
-			               				<p class="info-container">1234567890qwerty</p>
+			               				<p class="info-container">{{$request->rsrv_code}}</p>
 			               			</div>
 				               	</div>
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Paid Amount</label>
 			               			<div class="col-md-6">
-			               				<p class="info-container"><strong>200</strong></p>
+			               				<p class="info-container"><strong>{{$request->fare}}</strong></p>
 			               			</div>
 				               	</div>
 				               	<div class="form-group">
 			               			<label class="col-md-4 control-label" for="">Enter Refund Code</label>
 			               			<div class="col-md-6">
-			               				<input type="text" class="form-control">
+			               				<input type="text" name="refundCode" class="form-control" required>
 			               			</div>
 				               	</div>
 
 				              </div>
 				              <div class="modal-footer">
 				                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-				                <button type="button" class="btn btn-primary">REFUND</button>
+				                <button type="submit" value="Refund" class="btn btn-primary">REFUND</button>
 				              </div>
 			              </form>
 			            </div>
@@ -166,6 +210,7 @@
 			          </div>
 			          <!-- /.modal-dialog -->
 			        </div>
+					@endforeach
 				</div>
 			</div>
 		</div>
@@ -177,15 +222,15 @@
 <script>
     $(function() {
         $('.listReserved').DataTable({
+			'pageLength': 5,
             'paging': true,
             'lengthChange': false,
             'searching': true,
             'ordering': true,
             'info': true,
             'autoWidth': true,
-            'order': [[ 0, "desc" ]],
             'aoColumnDefs': [{
-                'bSortable': false,
+                'bSortable': true,
                 'aTargets': [-1] /* 1st one, start by the right */
             }]
         })
