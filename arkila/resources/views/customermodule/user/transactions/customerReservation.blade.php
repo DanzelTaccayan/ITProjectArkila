@@ -32,8 +32,8 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary">View</button>                                           
-                                                </div>
+                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalu">View</button>       
+                                            </div>
                                         </div>
                                         </div>
                                     </li>
@@ -58,6 +58,57 @@
                         </div>
                       </div>
                     </div>
+                    <div class="modal fade" id="modalu">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-red">
+                                        <h4 class="modal-title">RESERVATION DETAILS</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Reservation Code</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Destination</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Expiry Date</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Ticket Qty</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total Fee</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Refund Code</th>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">   
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
                 </div>
                 <!-- boxContainer-->
             </div>
