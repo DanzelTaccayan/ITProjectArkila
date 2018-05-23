@@ -44,8 +44,8 @@
         							<td>
         								<div class="text-center">
 
-                                            <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
-                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->plate_number }}"><i class="fa fa-trash"></i> DELETE</button>
+                                            <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
+                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
         		                        </div>
 
         							</td>
@@ -58,7 +58,7 @@
                 </div>
                 @foreach($vans->where('status', 'Active') as $van)
                 <!-- MODAL DELETION -->
-                    <div class="modal fade" id="{{ 'deleteWarning'. $van->plate_number }}">
+                    <div class="modal fade" id="{{ 'deleteWarning'. $van->van_id }}">
                         <div class="modal-dialog">
                             <div class="col-md-offset-2 col-md-8">
                                 <div class="modal-content">
@@ -73,7 +73,7 @@
                                         <p>Are you sure you want to delete "{{$van->model->description}}" with plate number of "{{$van->plate_number}}"</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">
+                                        <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
                                             {{csrf_field()}}
                                             {{method_field('PATCH')}}
                                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>

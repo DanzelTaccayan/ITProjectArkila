@@ -62,6 +62,7 @@
                                     <div class="modal-footer">
                                         @if($operators && $operator)
                                         <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                                            {{method_field('PATCH')}}
                                             {{ csrf_field() }}
                                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                                             <button type="submit" class="btn btn-danger">Delete</button>

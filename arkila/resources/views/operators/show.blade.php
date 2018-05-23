@@ -23,7 +23,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="contactNumberO">Contact Number:</label>
-                    <p id="contactNumberO" name="contactNumberO" class="info-container" data-editable>{{$operator->edit_contact_number}}</p>
+                    <p id="contactNumberO" name="contactNumberO" class="info-container" data-editable>{{$operator->contact_number}}</p>
                 </div>
             </div>
             <div class="col-md-4">

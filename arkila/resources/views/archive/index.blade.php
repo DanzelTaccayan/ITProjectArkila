@@ -31,10 +31,10 @@
                         <td>{{ $operator->full_name }}</td>
                         <td>{{ $operator->contact_number }}</td>
                         <td>{{ $operator->address }}</td>
-                        <td>{{ $operator->date_archived }}</td>
+                        <td>{{$operator->updated_at->format('h:i A')." of ".$operator->updated_at->format('M d, Y')}}</td>
                         <td>
                             <div class="text-center">
-                                <a href="{{ route('archive.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                <a href="{{ route('archive.showArchivedProfileOperator', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                             </div>
                             <!-- /.text -->
                         </td>

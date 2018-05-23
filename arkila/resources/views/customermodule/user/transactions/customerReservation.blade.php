@@ -7,11 +7,11 @@
                     <div class="col-md-9">
                         <div class=" boxContainer">
                             <div id="reservation">
-                            @if ($requests == 0)
+                            @if ($requests->count() == 0)
                                 <h4 class="text-center">NO RESERVATION.</h4>
                             @else
                                 <ul class="list-group">
-                                    @foreach($reservations as $reservation)
+                                    @foreach($requests as $reservation)
                                     <li class="list-group-item">
                                         <div class="row">
                                         <div class="col-md-6">

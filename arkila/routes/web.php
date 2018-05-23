@@ -60,8 +60,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/operators/profile/{operator}','OperatorsController@showProfile')->name('operators.showProfile');
 
     /************ Drivers ******************************/
-    Route::resource('/home/drivers', 'DriversController');
-
+    Route::resource('/home/drivers', 'DriversController',[
+        'except' => ['show']
+    ]);
+    Route::get('/home/drivers/{generalDriver}', 'DriversController@show')->name('drivers.show');
     //Adding a driver to a specific operator
     Route::get('/home/operators/{operator}/drivers/create', 'DriversController@createFromOperator')->name('drivers.createFromOperator');
     Route::post('/home/operators/{operator}/drivers/', 'DriversController@storeFromOperator')->name('drivers.storeFromOperator');
@@ -142,7 +144,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     ]);
 
     Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
-    Route::post('/home/reservations/walk-in/store/{destination}', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
+    Route::post('/home/reservations/walk-in/store', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
+    Route::patch('/home/reservations/refund/{reservation}', 'ReservationsController@refund')->name('reservation.refund');
+    Route::patch('/home/reservations/payment/{reservation}', 'ReservationsController@payment')->name('reservation.payment');
 
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['show','edit']
@@ -202,7 +206,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
     Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
-    Route::patch('/home/archive/{operator}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
+    Route::patch('/home/archive/{driver}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
     Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
     Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
 

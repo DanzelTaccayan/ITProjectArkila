@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Member;
-use Illuminate\Http\Request;
+use App\VanQueue;
+use App\Van;
+use DB;
+use Carbon\Carbon;
 
 class ArchiveController extends Controller
 {
-    public function archive() {
+    public function index() {
         $operators = Member::allOperators()->where('status','Inactive')->get();
 
         return view('archive.index', compact('operators'));
@@ -23,7 +26,7 @@ class ArchiveController extends Controller
 
     public function archiveOperator(Member $operator)
     {
-        if(is_null($operator->vanQueue)) {
+        if(count($operator->vanQueue) == 0) {
             // Start transaction!
             DB::beginTransaction();
             try {
@@ -40,6 +43,17 @@ class ArchiveController extends Controller
                 //Count the vans of the operator and archive them
                 if($operator->van()->count()) {
                     foreach($operator->van as $van) {
+
+                        if(count($operator->vanQueue) > 0) {
+                            return back()->withErrors('The operator is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the operator.');
+                        } else if (VanQueue::where('van_id',$operator->van->pluck('van_id'))->get()->count() > 0) {
+                            $vans = Van::whereIn('van_id',VanQueue::where('van_id',$operator->van->pluck('van_id'))->get()->pluck('van_id'))
+                                ->get()
+                                ->pluck('plate_number')
+                                ->toArray();
+
+                            return back()->withErrors('The vans ('.implode(" ",$vans).') of the operator are on the queue, remove them first before archiving the operator.');
+                        }
 
                         //archive operator and van
                         $van->archivedMember()->attach($operator->member_id);
@@ -99,6 +113,10 @@ class ArchiveController extends Controller
         // Start transaction!
         DB::beginTransaction();
         try {
+            if(count($driver->vanQueue) > 0) {
+                return back()->withErrors('The driver is a driver on the van queue, please change him as a driver or delete the van on the queue before archiving the driver.');
+            }
+
             if($driver->operator_id) {
                 $driver->archivedOperator()->attach($driver->operator_id);
                 $driver->update([
@@ -107,8 +125,8 @@ class ArchiveController extends Controller
             }
 
             if($driver->van()->first()) {
-                $driver->archivedVan()->attach($driver->van()->first()->plate_number);
-                $driver->van()->detach($driver->van()->first()->plate_number);
+                $driver->archivedVan()->attach($driver->van()->first()->van_id);
+                $driver->van()->detach($driver->van()->first()->van_id);
             }
 
             $driver->update([
@@ -118,6 +136,7 @@ class ArchiveController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
+            \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
@@ -149,18 +168,23 @@ class ArchiveController extends Controller
         DB::beginTransaction();
         try
         {
+            if($van->vanQueue->count() > 0) {
+                return back()->withErrors('The van to be archived is on queue, remove it first from queue before archiving the van');
+            }
 
             //update queue_list if the van is on queue
-            if($vanOnQueue = $van->trips()->whereNotNull('queue_number')->first())
-            {
-                foreach(Trip::whereNotNull('queue_number')->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip)
-                {
-                    $trip->update([
-                        'queue_number' =>  $trip->queue_number -1
-                    ]);
-                }
-                $vanOnQueue->delete();
-            }
+//            if($vanOnQueue = $van->vanQueue()->whereNotNull('queue_number')->first())
+//            {
+//                foreach(VanQueue::whereNotNull('queue_number')->where('destination_id',$vanOnQueue->destination_id)->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip)
+//                {
+//                    $trip->update([
+//                        'queue_number' =>  $trip->queue_number -1
+//                    ]);
+//                }
+//                $vanOnQueue->delete();
+//            } elseif($specialVanOnQueue = $van->vanQueue()->whereNull('queue_number')->first()){
+//                $specialVanOnQueue->delete();
+//            }
 
             //Archive its operator
             if($van->operator()->first())

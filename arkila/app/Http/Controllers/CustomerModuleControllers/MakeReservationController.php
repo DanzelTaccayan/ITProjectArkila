@@ -133,9 +133,8 @@ class MakeReservationController extends Controller
 
 	public function reservationTransaction()
 	{
-		$reservations = Reservation::all();
-		$requests = Reservation::where('user_id', auth()->user()->id)->count();
-		return view('customermodule.user.transactions.customerReservation', compact('reservations', 'requests'));
+		$requests = Reservation::where('user_id', auth()->user()->id)->get();
+		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
 
 	public function rentalTransaction()

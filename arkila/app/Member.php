@@ -53,17 +53,17 @@ class Member extends Model
 
     public function archivedOperator()
     {
-        return $this->belongsToMany(Member::class,'archive_member','driver_id','operator_id')->withTimestamps();
+        return $this->belongsToMany(Member::class,'member_history','driver_id','operator_id')->withTimestamps();
     }
 
     public function archivedDriver()
     {
-        return $this->belongsToMany(Member::class,'archive_member','operator_id','driver_id')->withTimestamps();
+        return $this->belongsToMany(Member::class,'member_history','operator_id','driver_id')->withTimestamps();
     }
 
     public function archivedVan()
     {
-        return $this->belongsToMany(Van::class,'archive_van','member_id','van_id','')->withTimestamps();
+        return $this->belongsToMany(Van::class,'van_history','member_id','van_id')->withTimestamps();
     }
 
     public function countDriverTrip()
