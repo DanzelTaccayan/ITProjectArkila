@@ -10,29 +10,28 @@
     @section('links')
         @include('layouts.partials.stylesheets_form')
     @show
-
 </head>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav">
-    <div class="wrapper">
-        <!-- Full Width Column -->
-        <div class="content-wrapper bgform-image">
-            <div class="container">
-                <section class="content">
-                @yield('content')
+<body>          
+    <section class="content">
+    @yield('content')
 
-                </section>               
-            </div>
-        </div>
-    </div>
-    <!-- ./wrapper -->
-
+    </section>               
+           
     <!-- jQuery 3 -->
     @section('scripts')
         @include('layouts.partials.scripts_form')
         @include('message.error')
     @show
+
+    <script type="text/javascript">
+        $(window).height();   // returns height of browser viewport
+        $(document).height(); // returns height of HTML document (same as pageHeight in screenshot)
+        $(window).width();   // returns width of browser viewport
+        $(document).width(); // returns width of HTML document (same as pageWidth in screenshot)
+    </script>
+
 </body>
 
 </html>

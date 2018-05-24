@@ -36,7 +36,7 @@
                         @foreach($trips as $trip)
                         <tr>
                             <td>{{$trip->trip_id}}</td>
-                            <td>{{$trip->van->plate_number ?? 'Substitute Driver'}}</td>
+                            <td>{{$trip->van->plate_number}}</td>
                             <td>{{$trip->driver->first_name . " " . $trip->driver->middle_name . " " . $trip->driver->last_name}}</td>
                             <td>{{$trip->origin}}</td>
                             <td>{{$trip->destination}}</td>

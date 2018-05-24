@@ -28,7 +28,7 @@ Route::get('/ticketmanagement','TransactionsController@manage');
 Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customermodule.non-user.index');
 /***********************Super-Admin Module************************************/
 /*****************************************************************************/
- Route::group(['middleware' => ['auth', 'super-admin']], function(){
+ Route::group(['middleware' => ['auth', 'super-admin', 'prevent-back']], function(){
     Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
     ]);
@@ -247,7 +247,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
 /*************************************Driver Module****************************/
 /******************************************************************************/
-Route::group(['middleware' => ['auth', 'driver']], function(){
+Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
   /*Driver Dashboard*/
   Route::get('/home/driver-dashboard', 'DriverModuleControllers\DriverHomeController@index')->name('drivermodule.index');
   /*AJAX GET for queue and announcements*/
@@ -285,8 +285,9 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
 
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
+Route::get('/routes/fare-list', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
-Route::group(['middleware' => ['auth', 'customer']], function(){
+Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
     Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
     // Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');
@@ -301,7 +302,7 @@ Route::group(['middleware' => ['auth', 'customer']], function(){
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
     Route::get('/home/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationPdf')->name('reservation.receipt');
-    Route::get('/home/routes/fare-list', 'CustomerModuleControllers\MakeReservationController@fareList')->name('reservation.fareList');
+    
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
     Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');

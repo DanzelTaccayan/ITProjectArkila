@@ -38,7 +38,6 @@
 </div>
 @endif
 
-
 <div class="form-group">
     <label for="">Plate Number:</label>
     <input value="{{old('plateNumber')}}" name="plateNumber" type="text" class="form-control"placeholder="Plate Number" required val-platenum @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif >
@@ -65,7 +64,7 @@
         <select name="driver" id="driver" class="form-control select2"@if(count($operators) == 0) disabled @endif></select>
     @else
         <select name="driver" id="driver" class="form-control select2">
-        <option value="">None</option>
+        <option value="" data-van="null">None</option>
         @foreach($drivers as $driver)
             <option value="{{$driver->member_id}}">{{$driver->full_name}}</option>
         @endforeach
@@ -80,8 +79,6 @@
                 @if(count($operators) > 0)
                     <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
                 @endif
-            @else
-                <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
             @endif
         </span>
 
@@ -93,33 +90,32 @@
                     <button type="submit" class="btn btn-primary">Add unit</button>
                 </div>
                 @endif
-            @else
-            <div class="" id="addVanBtn">
-                <button type="submit" class="btn btn-primary">Add unit</button>
-            </div>
             @endif
+        <div id="addVanBtnM" class="hidden">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
             <div class="modal" id="driverWithVan-modal">
-        <div class="modal-dialog modal-sm" style="margin-top: 10%;">
-            <div class="modal-content">
-                <div class="modal-header bg-yellow">
-                    <h4 class="modal-title">WARNING</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    
-                </div>
-                <div class="modal-body">
-                    <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-right">    
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-                        <button type="submit" class="btn btn-primary">Continue</button>
+                <div class="modal-dialog modal-sm" style="margin-top: 10%;">
+                    <div class="modal-content">
+                        <div class="modal-header bg-yellow">
+                            <h4 class="modal-title">WARNING</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            
+                        </div>
+                        <div class="modal-body">
+                            <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="pull-right">    
+                                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                                <button type="submit" class="btn btn-primary">Continue</button>
+                            </div>
+                        </div>
                     </div>
+                    <!-- /.modal-content -->
                 </div>
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
         @endsection
 
 @section('scripts')
@@ -169,42 +165,40 @@ $('select[name="operator"]').on('change',function(){
 });
 
  function listDrivers(){
-            $.ajax({
-                method:'POST',
-                url: '{{route("vans.listDrivers")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'operator':$('select[name="operator"]').val()
-                },
-                success: function(drivers){
-                    $('[name="driver"]').append('<option value="">None</option>');
-                    drivers.forEach(function(driverObj){
+    $.ajax({
+        method:'POST',
+        url: '{{route("vans.listDrivers")}}',
+        data: {
+            '_token': '{{csrf_token()}}',
+            'operator':$('select[name="operator"]').val()
+        },
+        success: function(drivers){
+            $('[name="driver"]').append('<option value="" data-van="null">None</option>');
+            drivers.forEach(function(driverObj){
 
-                        $('[name="driver"]').append('<option value='+driverObj.id+'> '+driverObj.name+'</option>');
-                    })
-                }
+                $('[name="driver"]').append('<option value='+driverObj.id+' data-van='+driverObj.van+'> '+driverObj.name+'</option>');
+            })
+        }
 
-            });
+    });
 }
         @endif
 	</script>
     <script>
+        
         $('select[name="driver"]').on('change', function(){
-            $.ajax({
-                method: 'POST',
-                url: '{{route("checkDriverVan")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'driver': $('select[name="driver"]').val()
-                },
-                success: function(response){
-                    if(response == 'modal'){
-                        $( "#addVanBtn" ).replaceWith( "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#driverWithVan-modal'>Add unit</button>" );
-                    }else if (response == 'submit'){
-                        $( "#addVanBtn" ).replaceWith( "<button type='submit' class='btn btn-primary'>Add unit</button>" );
-                    }
-                }
-            });
+           var van = $(this).find(':selected').data('van');
+           console.log(van);
+           if(van !== null){
+            console.log(van);
+            $( "#addVanBtn" ).hide();
+            $( "#addVanBtnM" ).show();
+            $( "#addVanBtnM" ).removeClass("hidden");
+           } else {
+            console.log(van);
+            $( "#addVanBtn" ).show();
+            $( "#addVanBtnM" ).hide();
+           }
         });
     </script>
 @endsection
