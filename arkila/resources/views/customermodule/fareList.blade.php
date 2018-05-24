@@ -1,4 +1,4 @@
-@extends('layouts.customer_user')
+@extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('content')
 <section id="packages" class="bar no-mb">
         <div data-animate="fadeInUp" class="container">
@@ -14,7 +14,7 @@
                       <h5>Fare list {{$destination->destination_name}}</h5>
                     </div>
                     <div class="table-responsive">
-                        <table class="table text-center">
+                        <table class="table table-striped table-bordered text-center">
                             <thead>
                                 <tr>
                                     <th>Destination</th>

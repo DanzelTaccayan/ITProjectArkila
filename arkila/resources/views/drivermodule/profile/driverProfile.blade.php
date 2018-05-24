@@ -35,9 +35,9 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
                             <div class="info-box-content">
-                              <h4><strong>AAA</strong></h4>
-                              <p>HIACE</p>
-                              <p style="color: gray;">12 seats</p>
+                              <h4><strong>{{auth()->user()->member->van->first()->plate_number ?? 'None'}}</strong></h4>
+                              <p>{{auth()->user()->member->van->first()->model->description  ?? 'None'}}</p>
+                              <p style="color: gray;">{{auth()->user()->member->van->first()->seating_capacity  ?? 'None'}} seats</p>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

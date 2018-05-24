@@ -32,7 +32,7 @@
                                                     <a href="{{route('customermodule.user.reservation.customerReservation')}}" class="nav-link">Reservation</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="{{route('reservation.fareList')}}" class="nav-link">Fare List</a>
+                                                    <a href="{{route('customermodule.fareList')}}" class="nav-link">Fare List</a>
                                                 </li>
                                             </ul>
                                         </div>

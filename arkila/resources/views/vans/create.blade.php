@@ -80,8 +80,6 @@
                 @if(count($operators) > 0)
                     <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
                 @endif
-            @else
-                <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
             @endif
         </span>
 
@@ -93,33 +91,32 @@
                     <button type="submit" class="btn btn-primary">Add unit</button>
                 </div>
                 @endif
-            @else
-            <div class="" id="addVanBtn">
-                <button type="submit" class="btn btn-primary">Add unit</button>
-            </div>
             @endif
+        <div id="addVanBtnM" class="hidden">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
             <div class="modal" id="driverWithVan-modal">
-        <div class="modal-dialog modal-sm" style="margin-top: 10%;">
-            <div class="modal-content">
-                <div class="modal-header bg-yellow">
-                    <h4 class="modal-title">WARNING</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    
-                </div>
-                <div class="modal-body">
-                    <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-right">    
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-                        <button type="submit" class="btn btn-primary">Continue</button>
+                <div class="modal-dialog modal-sm" style="margin-top: 10%;">
+                    <div class="modal-content">
+                        <div class="modal-header bg-yellow">
+                            <h4 class="modal-title">WARNING</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            
+                        </div>
+                        <div class="modal-body">
+                            <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="pull-right">    
+                                <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                                <button type="submit" class="btn btn-primary">Continue</button>
+                            </div>
+                        </div>
                     </div>
+                    <!-- /.modal-content -->
                 </div>
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
         @endsection
 
 @section('scripts')
@@ -199,9 +196,12 @@ $('select[name="operator"]').on('change',function(){
                 },
                 success: function(response){
                     if(response == 'modal'){
-                        $( "#addVanBtn" ).replaceWith( "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#driverWithVan-modal'>Add unit</button>" );
+                        $( "#addVanBtn" ).hide()
+                        $( "#addVanBtnM" ).show();
+                        $( "#addVanBtnM" ).removeClass("hidden");
                     }else if (response == 'submit'){
-                        $( "#addVanBtn" ).replaceWith( "<button type='submit' class='btn btn-primary'>Add unit</button>" );
+                        $( "#addVanBtn" ).show()
+                        $( "#addVanBtnM" ).hide();
                     }
                 }
             });
