@@ -65,7 +65,8 @@
 @parent
     <script>
         $(document).ready(function(){
-            $.ajax({
+            setInterval(function(){
+                $.ajax({
                 type: 'GET',
                 url: '/getVanQueue',
                 success: function(response){
@@ -103,7 +104,8 @@
                     //console.log(response.vanqueue);
                     //console.log(response.tickets);
                 }    
-            });
+            });   
+            }, 2000);
         });
     </script>  
 @endsection
