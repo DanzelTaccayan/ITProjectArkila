@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Member;
 use DateTimeZone;
 use App\Fee;
+use App\Reservation;
 use DB;
 
 class TransactionsController extends Controller
@@ -24,11 +25,11 @@ class TransactionsController extends Controller
      */
     public function index()
     {
-
+        $reservations = Reservation::where('status', 'PAID')->get();
         $terminals = Destination::where('is_main_terminal','!=','1')->get();
         $transactions = Transaction::all();
         $selectedTickets = SelectedTicket::all();
-        return view('transaction.index',compact('terminals','transactions','selectedTickets'));
+        return view('transaction.index',compact('terminals','transactions','selectedTickets', 'reservations'));
     }
 
     public function manageTickets()

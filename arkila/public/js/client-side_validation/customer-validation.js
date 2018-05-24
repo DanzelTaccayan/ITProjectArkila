@@ -1,14 +1,12 @@
 $('[val-name]').parsley({
       maxlength: 30,
-      pattern: /^[a-zA-Z]$|^[a-zA-Z][a-zA-Z\s-]*[a-zA-Z]$/,
+      pattern: /^[A-Za-z\-\d .()]*$/,
       minlength: 2
  });	
 
 $('[name="first_name"]').attr('data-parsley-required-message','Please enter a first name.');
 $('[name="last_name"]').attr('data-parsley-required-message','Please  enter a last name.');
-$('[val-name]').attr('data-parsley-pattern-message','Please use letters (a-z) only.');
-
-$('[val-username]').parsley({
+$('[val-name]').attr('data-parsley-pattern-message','Please use only letters (a-z) and symbol [().-].').parsley({
   maxlength: 15,
   pattern: /^[\dA-Za-z][A-Za-z\d.-]*[A-Za-z\d]$/,
   minlength: 6

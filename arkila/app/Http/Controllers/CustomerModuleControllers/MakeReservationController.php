@@ -73,7 +73,7 @@ class MakeReservationController extends Controller
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
 	{
-		$expiry = Carbon::now()->addDays(2);
+		$expiry = Carbon::now()->addDays(2)->setTime(17, 00, 00);
 		$slot = $reservation->number_of_slots;
 		$quantity = $request->quantity;
 		if($reservation->status == 'OPEN')
