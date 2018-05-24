@@ -189,6 +189,7 @@ $('select[name="operator"]').on('change',function(){
         @endif
 	</script>
     <script>
+        
         $('select[name="driver"]').on('change', function(){
             $.ajax({
                 method: 'POST',
@@ -198,6 +199,7 @@ $('select[name="operator"]').on('change',function(){
                     'driver': $('select[name="driver"]').val()
                 },
                 success: function(response){
+                    console.log(response);
                     if(response == 'modal'){
                         $( "#addVanBtn" ).replaceWith( "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#driverWithVan-modal'>Add unit</button>" );
                     }else if (response == 'submit'){

@@ -150,7 +150,7 @@ class SetupController extends Controller
         ]);
 
 
-        return redirect('/home/route')->with('success', 'Your ready with the application.');
+        return redirect('/home/route')->with('success', 'Setup successfully completed!');
     }
 
     /**

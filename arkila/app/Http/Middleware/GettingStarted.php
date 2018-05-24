@@ -17,12 +17,11 @@ class GettingStarted
     public function handle($request, Closure $next)
     {
       $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
-        if($mainterminal == true){
-          //dd('HI');  
+        if(Auth::user()->isSuperAdmin() && $mainterminal == true){  
           return redirect('getting-started/setup');
-        }else{
-          return $next($request);
         }
+
+        return $next($request);
 
         
     }
