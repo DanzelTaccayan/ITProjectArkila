@@ -369,12 +369,13 @@ class VanQueueController extends Controller
     {
         $vans = request('vanQueue');
         $queueArr = [];
+        $number = request('number');
 
         // Start transaction!
         DB::beginTransaction();
         try {
-            if(is_array($vans)) {
-                foreach($vans[0] as $key => $vanInfo) {
+            if(is_array($vans) && !is_null($number)) {
+                foreach($vans[$number] as $key => $vanInfo) {
                     if($van = Van::find($vanInfo['vanid'])) {
                         $van->updateQueue($key);
                     }

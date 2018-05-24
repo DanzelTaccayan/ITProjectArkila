@@ -85,7 +85,11 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                									@else
                                                     <td>{{$reservation->status}}</td>
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <th>Ticket Qty</th>
@@ -97,14 +101,16 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Refund Code</th>
-                                                    <td>{{$reservation->refund_code}}</td>
+                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        @if($reservation->status == 'PAID')
                                         <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        @endif
                                     </div>
                                 </div>
                         </div>
