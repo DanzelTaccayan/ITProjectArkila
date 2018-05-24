@@ -263,7 +263,7 @@
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($regTicketNum =  $destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
-                                                                                        <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge bg-yellow pull-right">
+                                                                                        <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
@@ -274,7 +274,7 @@
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($discountedTicketNum = $destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
-                                                                                        <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge bg-blue pull-right">
+                                                                                        <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge  pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
                                                                                     @endif
