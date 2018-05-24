@@ -31,7 +31,7 @@ class DriverRequest extends FormRequest
             'lastName' => ['bail','required','max:25',new checkSpecialCharacters],
             'firstName' => ['bail','required','max:25',new checkSpecialCharacters],
             'middleName' => ['bail','nullable','max:25',new checkSpecialCharacters],
-            'contactNumber' => ['bail','required', new checkContactNumber],
+            'contactNumber' => ['bail','max:30','required', new checkContactNumber],
             'address' => ['bail','required','max:70',new checkSpecialCharacters],
             'provincialAddress' => ['bail','required','max:70',new checkSpecialCharacters],
             'gender' => [
@@ -41,7 +41,7 @@ class DriverRequest extends FormRequest
             ],
             'contactPerson' => ['bail','required', 'max:75',new checkSpecialCharacters],
             'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
-            'contactPersonContactNumber' => ['bail','required', new checkContactNumber],
+            'contactPersonContactNumber' => ['bail','max:30','required', new checkContactNumber],
             'licenseNo' => 'bail|required',
             'licenseExpiryDate' => 'bail|required',
             'sss' => 'nullable'
