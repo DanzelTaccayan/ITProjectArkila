@@ -49,6 +49,9 @@
 						</thead>
 						<tbody>
 							@foreach($requests->sortByDesc('created_at') as $request)
+							@if($request->status == 'UNPAID' && Carbon\Carbon::now()->gt($request->expiry_date))
+							@else
+
 							<tr>
 
 								<td>{{$request->rsrv_code}}</td>							
@@ -65,6 +68,7 @@
 									</div>
 								</td>
 							</tr>
+							@endif
 							@endforeach
 						</tbody>
 					</table>
@@ -111,7 +115,7 @@
 			                		</tr>
 			                		<tr>
 			                			<th>Date Paid</th>
-			                			<td>1 May 2018</td>
+			                			<td>{{$request->date_paid}}</td>
 			                		</tr>
 			                		<tr>
 			                			<th>Date Reserved</th>
