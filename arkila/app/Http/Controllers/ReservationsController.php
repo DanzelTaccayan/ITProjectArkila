@@ -223,11 +223,11 @@ class ReservationsController extends Controller
                 'refund_code' => null, 
             ]);
 
-            return redirect()->back()->with('success', 'The reservation had been successfully refunded.');
+            return back()->with('success', 'The reservation had been successfully refunded.');
         }
         else
         {
-            return redirect()->back()->with('error_code', 5);
+            return back()->withErrors('Refund code does not match.');
        }
     }
 

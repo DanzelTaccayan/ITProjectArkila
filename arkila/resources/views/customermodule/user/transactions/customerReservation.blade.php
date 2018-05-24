@@ -101,7 +101,11 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Refund Code</th>
+                                                    @if($reservation->status == 'REFUNDED')
+                                                    <td>REFUNDED</td>
+                                                    @else
                                                     <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
+                                                    @endif
                                                 </tr>
                                             </tbody>
                                         </table>
