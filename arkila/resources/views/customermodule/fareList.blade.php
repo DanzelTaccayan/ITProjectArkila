@@ -14,7 +14,7 @@
                       <h5>Fare list {{$destination->destination_name}}</h5>
                     </div>
                     <div class="table-responsive">
-                        <table class="table text-center">
+                        <table class="table table-striped table-bordered text-center">
                             <thead>
                                 <tr>
                                     <th>Destination</th>
