@@ -163,10 +163,4 @@ class MakeReservationController extends Controller
         $pdf = PDF::loadView('pdf.reservationPdf', compact('reservation', 'date'));
 		return $pdf->stream("Receipt No. ". $reservation->rsrv_code .".pdf");
 	}
-
-	public function fareList()
-	{
-		$destinations = Destination::allTerminal()->get();
-		return view('customermodule.fareList', compact('destinations'));
-	}
 }

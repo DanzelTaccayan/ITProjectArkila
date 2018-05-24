@@ -1408,7 +1408,7 @@ function image(name) {
 }
 
 /**
- * Setup mocha with `options`.
+ * setup mocha with `options`.
  *
  * Options:
  *
@@ -5774,7 +5774,7 @@ mocha.ui = function(ui){
 };
 
 /**
- * Setup mocha with the given setting options.
+ * setup mocha with the given setting options.
  */
 
 mocha.setup = function(opts){

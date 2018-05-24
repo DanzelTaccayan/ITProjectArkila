@@ -189,7 +189,7 @@
         },
 
         /**
-         * Setup the canvas
+         * setup the canvas
          */
         initTarget: function () {
             var interactive = !this.options.get('disableInteraction');

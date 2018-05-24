@@ -24,9 +24,9 @@ class ViewLiveVanQueueController extends Controller
         $vanqueue = VanQueue::where('queue_number', '1')->with(['van','destination','driver'])->get();
 
         $tickets = Ticket::whereIn('ticket_id',
-                Transaction::where('status', 'OnBoard')->orWhere('status', 'Pending')
+                Transaction::where('status', 'OnBoard')->orWhere('status', 'pending')->where('trip_id', null)
                 ->get()->pluck('ticket_id'))
-                ->with('destination')->get();
+                ->with('destination')->limit(32)->get();
         
         $terminalTickets = null;
         foreach($vanqueue as $vq){

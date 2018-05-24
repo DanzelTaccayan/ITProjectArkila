@@ -90,7 +90,7 @@
         labelHover = !!settings.labelHover,
         labelHoverClass = settings.labelHoverClass || 'hover',
 
-        // Setup clickable area
+        // setup clickable area
         area = ('' + settings.increaseArea).replace('%', '') | 0;
 
       // Selector limit

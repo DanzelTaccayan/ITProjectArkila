@@ -30,10 +30,6 @@
         margin: .5% 0%;
     }
 
-    .box-body {
-        height: 480px;
-    }
-
 </style>
 
 @endsection
@@ -88,7 +84,7 @@
                                             if(obj.id == i){
                                                 //<li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
                                                 $('#ticketul'+i).append(
-                                                    $('<li>', {class: 'list-group-item col-lg-4'}).append([
+                                                    $('<li>', {class: 'list-group-item col-lg-3'}).append([
                                                         $('<span>', {class: 'queueNumber bg-blue'}).text(counter),
                                                         $('<h4>', {class: 'text-center'}).append(
                                                             $('<strong>').text(rtems)

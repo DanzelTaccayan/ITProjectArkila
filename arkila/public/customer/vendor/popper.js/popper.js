@@ -889,7 +889,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 }
 
 /**
- * Setup needed event listeners used to update the popper position
+ * setup needed event listeners used to update the popper position
  * @method
  * @memberof Popper.Utils
  * @private

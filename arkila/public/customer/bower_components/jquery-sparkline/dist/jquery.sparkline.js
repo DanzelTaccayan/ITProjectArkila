@@ -1132,7 +1132,7 @@
         },
 
         /**
-         * Setup the canvas
+         * setup the canvas
          */
         initTarget: function () {
             var interactive = !this.options.get('disableInteraction');
@@ -2555,7 +2555,7 @@
         }
     });
 
-    // Setup a very simple "virtual canvas" to make drawing the few shapes we need easier
+    // setup a very simple "virtual canvas" to make drawing the few shapes we need easier
     // This is accessible as $(foo).simpledraw()
 
     VShape = createClass({

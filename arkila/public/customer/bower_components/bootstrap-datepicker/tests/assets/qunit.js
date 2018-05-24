@@ -95,7 +95,7 @@ Test.prototype = {
 		try {
 			this.testEnvironment.setup.call(this.testEnvironment);
 		} catch(e) {
-			QUnit.pushFailure( "Setup failed on " + this.testName + ": " + e.message, extractStacktrace( e, 1 ) );
+			QUnit.pushFailure( "setup failed on " + this.testName + ": " + e.message, extractStacktrace( e, 1 ) );
 		}
 	},
 	run: function() {
