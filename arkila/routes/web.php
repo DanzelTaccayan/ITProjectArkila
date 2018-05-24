@@ -286,6 +286,7 @@ Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
+Route::get('/routes/fare-list/', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
     Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
