@@ -6,6 +6,7 @@
 @endsection
 @section('content')
 
+@if($terminals->count() == 0)
 <div class="padding-side-5">
     <div class="padding-side-10">
         <div class="box box-solid" style="height: 300px; padding: 50px;">
@@ -18,6 +19,7 @@
         </div>
     </div>
 </div>
+@else
 <div class="row">
     <!-- /.col -->
     <div class="col-md-12">
@@ -132,7 +134,7 @@
         </div>
     </div>    
 </div>
-
+@endif
 
     
 
