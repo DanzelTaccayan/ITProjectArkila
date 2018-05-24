@@ -75,7 +75,7 @@ class TicketManagementController extends Controller
         $soldTickets = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Regular'],
-            ['is_sold', true],
+            ['is_sold', !=, null],
             ])->count();
         $regularTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
@@ -159,7 +159,7 @@ class TicketManagementController extends Controller
         $soldTickets = Ticket::where([
             ['destination_id', '7'],
             ['type', 'Discount'],
-            ['is_sold', true],
+            ['status',!=, null],
             ])->count();
         $discountTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
