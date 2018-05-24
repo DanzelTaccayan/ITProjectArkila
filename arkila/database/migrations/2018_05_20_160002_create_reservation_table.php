@@ -23,8 +23,8 @@ class CreateReservationTable extends Migration
             ->unsigned()
             ->nullable();
 
-            $table->string('rsrv_code');
-            $table->string('refund_code')
+            $table->longText('rsrv_code');
+            $table->longText('refund_code')
             ->nullable();
             $table->string('destination_name');
             $table->string('name');

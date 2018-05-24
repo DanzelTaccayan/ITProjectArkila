@@ -143,8 +143,6 @@ class MakeReservationController extends Controller
 	public function reservationTransaction()
 	{
 		$requests = Reservation::where('user_id', auth()->user()->id)->get();
-		$a = Carbon::parse($requests->first()->expiry_date);
-		$b = Carbon::now();
 
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}

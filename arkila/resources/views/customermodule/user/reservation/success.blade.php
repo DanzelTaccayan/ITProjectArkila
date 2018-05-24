@@ -20,7 +20,7 @@
                     			</tr>
                     			<tr>
                     				<th>Expiry Date</th>
-                    				<td>{{$transaction->expiry_date}}</td>
+                    				<td>{{$transaction->expiry_date->formatLocalized('%d %B %Y')}}</td>
                     			</tr>
                     			<tr>
                     				<th>Status</th>

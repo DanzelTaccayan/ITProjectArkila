@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use App\Profile;
 use App\Destination;
 use App\Ticket;
 use App\Fee;
+use App\Feature;
 use App\Rules\checkCurrency;
 
 class SetupController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('getting-started');
+    // } 
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +24,14 @@ class SetupController extends Controller
      */
     public function index()
     {
-        return view('setup.index');
+        $setup =  Feature::where('description','SetUp Page')->first();
+        $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+        if($setup->status == 'enable' && $mainterminal == true){
+            return view('setup.index');
+        }else{
+            return redirect()->back();
+        }
+        
     }
 
     /**
@@ -121,7 +134,6 @@ class SetupController extends Controller
             Ticket::create([
                 'ticket_number' => $ticketNumber,
                 'destination_id' => $destTerminal->destination_id,
-                'is_sold' => false,
                 'fare' => $request->discountedFare,
                 'type' => 'Discount'
             ]);
@@ -133,7 +145,6 @@ class SetupController extends Controller
             Ticket::create([
                 'ticket_number' => $ticketName,
                 'destination_id' => $destTerminal->destination_id,
-                'is_sold' => false,
                 'fare' => $request->regularFare,
                 'type' => 'Regular'
             ]);
@@ -149,6 +160,8 @@ class SetupController extends Controller
             'amount' => $request->addComFund,
         ]);
 
+        $setup =  Feature::where('description','SetUp Page')->first();
+        $setup->update(['status' => 'disable']);
 
         return redirect('/home/route')->with('success', 'Setup successfully completed!');
     }

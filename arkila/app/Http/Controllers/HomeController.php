@@ -34,7 +34,7 @@ class HomeController extends Controller
         $fees = Fee::latest()->get();
         $terminals = Destination::withMainTerminal()->get();
         $tickets = Ticket::all();
-        $features = Feature::all();
+        $features = Feature::where('description', '!=', 'SetUp Page')->get();
 
         return view('settings.index', compact('fees','tickets','features','terminals'));
     }
