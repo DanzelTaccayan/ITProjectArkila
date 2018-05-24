@@ -70,12 +70,11 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Number of Days: <span class="text-red">*</span></label>
-                                <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" val-num-days required>
+                                <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="" val-num-days required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Departure Date: <span class="text-red">*</span></label>
