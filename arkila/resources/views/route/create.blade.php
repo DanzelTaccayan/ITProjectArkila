@@ -21,7 +21,7 @@
       </div>
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" placeholder="Php 0.00" name="discountedFare" value="{{old('discountedFare')}}">
+          <input type="number" class="form-control" min="0" step="0.25" placeholder="Php 0.00" name="discountedFare" value="{{old('discountedFare')}}" required>
       </div>
       <div class="form-group">
           <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
@@ -29,7 +29,7 @@
       </div>
       <div class="form-group">
           <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="26" name="numticketDis" value="{{old('numticketDis')}}">
+          <input type="number" class="form-control" min="0" step="26" name="numticketDis" value="{{old('numticketDis')}}" required>
       </div>
   </div>
   @if ($type == 'Terminal')
