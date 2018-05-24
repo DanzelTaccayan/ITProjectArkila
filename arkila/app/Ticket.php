@@ -3,13 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use AustinHeap\Database\Encryption\Traits\HasEncryptedAttributes;
 
 class Ticket extends Model
 {
+    use HasEncryptedAttributes;
+
     protected $table = 'ticket';
     protected $primaryKey = 'ticket_id';
     protected $guarded = [
         'ticket_id',
+    ];
+
+    protected $encrypted = [
+        'reservation_code',
     ];
 
     public function destination()

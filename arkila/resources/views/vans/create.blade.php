@@ -38,7 +38,6 @@
 </div>
 @endif
 
-
 <div class="form-group">
     <label for="">Plate Number:</label>
     <input value="{{old('plateNumber')}}" name="plateNumber" type="text" class="form-control"placeholder="Plate Number" required val-platenum @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif >
@@ -65,7 +64,7 @@
         <select name="driver" id="driver" class="form-control select2"@if(count($operators) == 0) disabled @endif></select>
     @else
         <select name="driver" id="driver" class="form-control select2">
-        <option value="">None</option>
+        <option value="" data-van="null">None</option>
         @foreach($drivers as $driver)
             <option value="{{$driver->member_id}}">{{$driver->full_name}}</option>
         @endforeach
@@ -166,47 +165,40 @@ $('select[name="operator"]').on('change',function(){
 });
 
  function listDrivers(){
-            $.ajax({
-                method:'POST',
-                url: '{{route("vans.listDrivers")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'operator':$('select[name="operator"]').val()
-                },
-                success: function(drivers){
-                    $('[name="driver"]').append('<option value="">None</option>');
-                    drivers.forEach(function(driverObj){
+    $.ajax({
+        method:'POST',
+        url: '{{route("vans.listDrivers")}}',
+        data: {
+            '_token': '{{csrf_token()}}',
+            'operator':$('select[name="operator"]').val()
+        },
+        success: function(drivers){
+            $('[name="driver"]').append('<option value="" data-van="null">None</option>');
+            drivers.forEach(function(driverObj){
 
-                        $('[name="driver"]').append('<option value='+driverObj.id+'> '+driverObj.name+'</option>');
-                    })
-                }
+                $('[name="driver"]').append('<option value='+driverObj.id+' data-van='+driverObj.van+'> '+driverObj.name+'</option>');
+            })
+        }
 
-            });
+    });
 }
         @endif
 	</script>
     <script>
         
         $('select[name="driver"]').on('change', function(){
-            $.ajax({
-                method: 'POST',
-                url: '{{route("checkDriverVan")}}',
-                data: {
-                    '_token': '{{csrf_token()}}',
-                    'driver': $('select[name="driver"]').val()
-                },
-                success: function(response){
-                    console.log(response);
-                    if(response == 'modal'){
-                        $( "#addVanBtn" ).hide()
-                        $( "#addVanBtnM" ).show();
-                        $( "#addVanBtnM" ).removeClass("hidden");
-                    }else if (response == 'submit'){
-                        $( "#addVanBtn" ).show()
-                        $( "#addVanBtnM" ).hide();
-                    }
-                }
-            });
+           var van = $(this).find(':selected').data('van');
+           console.log(van);
+           if(van !== null){
+            console.log(van);
+            $( "#addVanBtn" ).hide();
+            $( "#addVanBtnM" ).show();
+            $( "#addVanBtnM" ).removeClass("hidden");
+           } else {
+            console.log(van);
+            $( "#addVanBtn" ).show();
+            $( "#addVanBtnM" ).hide();
+           }
         });
     </script>
 @endsection

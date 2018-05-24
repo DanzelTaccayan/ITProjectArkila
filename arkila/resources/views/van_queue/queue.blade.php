@@ -279,7 +279,7 @@ ol.arrow-drag{
               <div class= "col-md-9">
                 <div class="tab-content">
                 <!-- Cabanatuan Queue Tab -->
-                @foreach($terminals as $terminal)
+                @foreach($terminals as $key => $terminal)
                   <div data-val='{{$terminal->destination_id}}' class="tab-pane @if($terminals->first() == $terminal) {{'active'}} @else {{''}} @endif" id="queue{{$terminal->destination_id}}">
                     <div class="box box-solid">
                       <div class="box-body">
@@ -294,7 +294,7 @@ ol.arrow-drag{
                             </div>
                             <div class="queue-body"> 
                               <div class="queue-body-color scrollbar scrollbar-info thin">
-                                <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization arrow-drag">
+                                <ol id ="queue-list{{$terminal->destination_id}}" data-number="{{$key}}" class="rectangle-list serialization arrow-drag">
                                     @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
                                       <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                         <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
@@ -330,6 +330,7 @@ ol.arrow-drag{
                                                   <option value="CC">CC</option>
                                                   <option value="ER">ER</option>
                                                   <option value="OB">OB</option>
+                                                  <option value="NULL">None</option>
                                                 </select>
                                                </div>
                                              </div>
@@ -542,9 +543,13 @@ ol.arrow-drag{
                                 'remark' : $('#remark'+queueId).val()
                             },
                         success: function() {
+                            $('#badge'+queueId).empty();
+                            if($('#remark'+queueId).val() !== "NULL") {
+                                $('#badge'+queueId).append($('#remark'+queueId).val());
+                            }
+
                             $("#remarkitem"+queueId).hide();
                             $("#item"+queueId).show();
-                            $('#badge'+queueId).append($('#remark'+queueId).val());
                             new PNotify({
                                 title: "Success!",
                                 text: "Successfully update remark",
@@ -565,6 +570,7 @@ ol.arrow-drag{
                             specialUnitChecker();
                         }
                     });
+
 
             });
 
@@ -763,7 +769,6 @@ ol.arrow-drag{
         delay: 500,
         onDrop: function ($item, container, _super) {
           var queue = group.sortable("serialize").get();
-            console.log(queue);
           var jsonString = JSON.stringify(queue, null, ' ');
 
           $('#serialize_output2').text(jsonString);
@@ -774,10 +779,10 @@ ol.arrow-drag{
             url: '{{route("vanqueue.updateVanQueue")}}',
             data: {
                 '_token': '{{csrf_token()}}',
-                'vanQueue': queue
+                'vanQueue': queue,
+                'number': container.el.data('number')
             },
             success: function(queue){
-               console.log(queue);
                for(i = 0; i < queue.length; i++) {
                     $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
                }

@@ -96,7 +96,6 @@ class RoutesController extends Controller
                 Ticket::create([
                     'ticket_number' => $ticketNumber,
                     'destination_id' => $terminal->destination_id,
-                    'is_sold' => false,
                     'fare' => $request->discountedFare,
                     'type' => 'Discount'
                 ]);
@@ -108,7 +107,6 @@ class RoutesController extends Controller
                 Ticket::create([
                     'ticket_number' => $ticketName,
                     'destination_id' => $terminal->destination_id,
-                    'is_sold' => false,
                     'fare' => $request->regularFare,
                     'type' => 'Regular'
                 ]);
@@ -162,7 +160,6 @@ class RoutesController extends Controller
                 Ticket::create([
                     'ticket_number' => $ticketNumber,
                     'destination_id' => $route->destination_id,
-                    'is_sold' => false,
                     'fare' => $request->discountedFare,
                     'type' => 'Discount'
                 ]);
@@ -175,7 +172,6 @@ class RoutesController extends Controller
                 Ticket::create([
                     'ticket_number' => $ticketName,
                     'destination_id' => $route->destination_id,
-                    'is_sold' => false,
                     'fare' => $request->regularFare,
                     'type' => 'Regular'
                 ]);
@@ -254,7 +250,6 @@ class RoutesController extends Controller
         {
             $routeAll->update([
                 'destination_name' => $name,
-                'number_of_tickets' => $request->numticket,
                 'booking_fee' => $request->bookingFee,
                 'short_trip_fare' => $request->sTripFare,
                 'short_trip_fare_discount' => $request->sdTripFare,
@@ -266,7 +261,6 @@ class RoutesController extends Controller
         {
             $routeAll->update([
                 'destination_name' => $name,
-                'number_of_tickets' => $request->numticket,
             ]);
 
             $routeAll->routeOrigin()->detach($main->destination_id);

@@ -356,7 +356,8 @@ class VansController extends Controller
                     {
                         array_push($driversArr, [
                             "id" => $driver->member_id,
-                            "name" => $driver->full_name
+                            "name" => $driver->full_name,
+                            "van" => $driver->van->first()->van_id ?? null
                         ]);
                     }
                 }
@@ -364,7 +365,8 @@ class VansController extends Controller
                 {
                     array_push($driversArr, [
                         "id" => $driver->member_id,
-                        "name" => $driver->full_name
+                        "name" => $driver->full_name,
+                        "van" => $driver->van->first()->van_id ?? null
                     ]);
                 }
             }
@@ -398,21 +400,6 @@ class VansController extends Controller
         {
             return "Van not found";
         }
-    }
-
-    public function checkDriverVan()
-    {
-        if(request('driver') != null){
-            $driver = Member::find(request('driver'))->van;
-            if(count($driver) >= 1){
-                return 'modal';
-            }else{
-                return 'submit';
-            }
-        }else{
-            return 'submit';
-        }
-        
     }
 
     public function generatePDF()

@@ -107,7 +107,7 @@ class ReservationsController extends Controller
             return response()->json(["error" => "Please make sure that your input is valid, you can only open or close an specific reservation date."]);
         }
         else
-        {                  
+        {
             $reservation->update([
                 'status' => $request->statusBtn,
                 ]);
@@ -223,18 +223,22 @@ class ReservationsController extends Controller
                 'refund_code' => null, 
             ]);
 
-            return redirect()->back()->with('success', 'The reservation had been successfully refunded.');
+            return back()->with('success', 'The reservation had been successfully refunded.');
         }
         else
         {
-            return redirect()->back()->with('error_code', 5);
+            return back()->withErrors('Refund code does not match.');
        }
     }
 
     public function payment(Request $request, Reservation $reservation)
     {
+            $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
+
             $reservation->update([
                 'status' => 'PAID',
+                'refund_code' => $refundCode,
+                'date_paid' => Carbon::now(),
             ]);
 
             return redirect()->back()->with('success', 'The reservation has been paid.');

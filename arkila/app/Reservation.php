@@ -3,16 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use AustinHeap\Database\Encryption\Traits\HasEncryptedAttributes;
+
 
 class Reservation extends Model
 {
-    //
+    use HasEncryptedAttributes;
+
     protected $table = 'reservation';
     protected $dates = ['expiry_date'];
     protected $primaryKey = 'id';
 	protected $guarded = [
     	'id',
     ]; 
+    protected $encrypted = [
+        'refund_code', 'rsrv_code',
+    ];
+
     
 
     public function destination(){
