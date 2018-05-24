@@ -7,7 +7,7 @@ use DB;
 
 class ArchiveController extends Controller
 {
-    public function index() {
+    public function archive() {
         $operators = Member::allOperators()->where('status','Inactive')->get();
         return view('archive.index', compact('operators'));
     }
