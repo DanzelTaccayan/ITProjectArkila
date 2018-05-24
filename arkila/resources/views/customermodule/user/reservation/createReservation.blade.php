@@ -61,7 +61,7 @@
                         			</tr>
                         			<tr>
                         				<th>Ticket Price</th>
-                        				<td>P{{$reservation->destination->tickets->first()->fare}}</td>
+                        				<td>P{{$reservation->destination->tickets->where('type', 'Regular')->first()->fare}}</td>
                         			</tr>
                         		</tbody>
                         	</table>

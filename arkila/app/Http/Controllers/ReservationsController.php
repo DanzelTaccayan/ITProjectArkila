@@ -233,14 +233,18 @@ class ReservationsController extends Controller
 
     public function payment(Request $request, Reservation $reservation)
     {
+            $dateOfDeparture = $reservation->reservationDate->reservation_date;
+            $expiry = $dateOfDeparture->addDays(2)->setTime(17, 00, 00);
+            $newExpiry = $expiry->setTime(17, 00, 00);
             $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
 
             $reservation->update([
                 'status' => 'PAID',
                 'refund_code' => $refundCode,
                 'date_paid' => Carbon::now(),
+                'expiry_date' => $newExpiry,
             ]);
 
-            return redirect()->back()->with('success', 'The reservation has been paid.');
+            return back()->with('success', 'The reservation has been paid.');
     }
 }

@@ -81,7 +81,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Expiry Date</th>
-                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</td>
+                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{$reservation->expiry_date->format('g:i A')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -101,7 +101,9 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Refund Code</th>
-                                                    @if($reservation->status == 'REFUNDED')
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                									@elseif($reservation->status == 'REFUNDED')
                                                     <td>REFUNDED</td>
                                                     @else
                                                     <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
