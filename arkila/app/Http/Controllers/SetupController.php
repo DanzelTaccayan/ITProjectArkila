@@ -121,7 +121,6 @@ class SetupController extends Controller
             Ticket::create([
                 'ticket_number' => $ticketNumber,
                 'destination_id' => $destTerminal->destination_id,
-                'is_sold' => false,
                 'fare' => $request->discountedFare,
                 'type' => 'Discount'
             ]);
@@ -133,7 +132,6 @@ class SetupController extends Controller
             Ticket::create([
                 'ticket_number' => $ticketName,
                 'destination_id' => $destTerminal->destination_id,
-                'is_sold' => false,
                 'fare' => $request->regularFare,
                 'type' => 'Regular'
             ]);

@@ -16,8 +16,7 @@ class CreateTransactionTable extends Migration
         Schema::create('transaction', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('transaction_id');
-            $table->integer('ticket_id')
-            ->unsigned()
+            $table->string('ticket_name')
             ->nullable();
 
             $table->integer('trip_id')
@@ -27,12 +26,7 @@ class CreateTransactionTable extends Migration
             $table->string('origin');
 
             $table->decimal('amount_paid', 11, 2);
-            $table->enum('status', ['Pending', 'Cancelled', 'Departed','OnBoard','Refunded','Lost']);
-
-            $table->foreign('ticket_id')
-            ->references('ticket_id')->on('ticket')
-            ->onDelete('no action')
-            ->onUpdate('cascade');
+            $table->enum('status', ['Pending','Accepted','Departed','Refunded','Lost','Declined']);
 
             $table->foreign('trip_id')
             ->references('trip_id')->on('trip')

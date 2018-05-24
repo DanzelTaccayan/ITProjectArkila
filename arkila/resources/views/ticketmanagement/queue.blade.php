@@ -48,10 +48,10 @@
                         <h4 id="plno{{$terminal->destination_id}}"></h4>
                     </span>
                 </div>
-                <div class="box-body well">
-                    <ul class="list-group" id="ticketul{{$terminal->destination_id}}">
-                    </ul>
-                </div>
+                
+                <ul class="list-group" id="ticketul{{$terminal->destination_id}}">
+                </ul>
+                         
             </div>
     </div>
     @endforeach

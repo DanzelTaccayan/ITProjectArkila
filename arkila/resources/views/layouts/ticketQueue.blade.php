@@ -13,7 +13,7 @@
 </head>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body>          
+<body class="bg-gray">          
     <section class="content">
     @yield('content')
 
