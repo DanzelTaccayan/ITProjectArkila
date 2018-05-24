@@ -163,11 +163,9 @@
                                                             <label for="">Customer</label>
                                                             <select class="form-control select2">
                                                                 <option value="">Walk-in Customer</option>
-                                                                <option value=""> Reserved Cust 1</option>
-                                                                <option value=""> Reserved Cust 2</option>
-                                                                <option value=""> Reserved Cust 3</option>
-                                                                <option value=""> Reserved Cust 4</option>
-                                                                <option value=""> Reserved Cust 5</option>
+                                                                @foreach($reservations as $reservation)
+                                                                <option value="{{$reservation->id}}">{{$reservation->rsrv_code}}</option>
+                                                                @endforeach
                                                              </select>
                                                         </div>
                                                         <div class="" style="margin-top: 3%">
