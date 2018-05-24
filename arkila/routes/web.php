@@ -285,7 +285,6 @@ Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
 
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
-Route::get('/routes/fare-list', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
 Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
@@ -302,7 +301,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
     Route::get('/home/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationPdf')->name('reservation.receipt');
-    
+    Route::get('/home/routes/fare-list', 'CustomerModuleControllers\MakeReservationController@fareList')->name('reservation.fareList');
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
     Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');
