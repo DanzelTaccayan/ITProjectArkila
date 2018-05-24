@@ -24,11 +24,6 @@
 
     </section>
     </form>
-        
-    @include('layouts.partials.footer')
-
-    @include('layouts.partials.queue_sidebar')
-   
 
     <!-- jQuery 3 -->
     @section('scripts')
