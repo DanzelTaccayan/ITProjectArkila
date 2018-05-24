@@ -285,7 +285,7 @@ Route::group(['middleware' => ['auth', 'driver']], function(){
 
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
-Route::get('/home/routes/fare-list', 'CustomerModuleControllers\MakeReservationController@fareList')->name('customermodule.fareList');
+Route::get('/routes/fare-list', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
 Route::group(['middleware' => ['auth', 'customer']], function(){
     /*User Dashboard*/
