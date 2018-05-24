@@ -28,7 +28,7 @@ Route::get('/ticketmanagement','TransactionsController@manage');
 Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customermodule.non-user.index');
 /***********************Super-Admin Module************************************/
 /*****************************************************************************/
- Route::group(['middleware' => ['auth', 'super-admin']], function(){
+ Route::group(['middleware' => ['auth', 'super-admin', 'prevent-back']], function(){
     Route::resource('/getting-started/setup', 'SetupController',[
         'except' => ['create', 'show']
     ]);
@@ -247,7 +247,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
 /*************************************Driver Module****************************/
 /******************************************************************************/
-Route::group(['middleware' => ['auth', 'driver']], function(){
+Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
   /*Driver Dashboard*/
   Route::get('/home/driver-dashboard', 'DriverModuleControllers\DriverHomeController@index')->name('drivermodule.index');
   /*AJAX GET for queue and announcements*/
@@ -287,7 +287,7 @@ Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@ab
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
 Route::get('/routes/fare-list', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
-Route::group(['middleware' => ['auth', 'customer']], function(){
+Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
     Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
     // Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');

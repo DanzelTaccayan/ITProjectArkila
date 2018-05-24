@@ -14,7 +14,7 @@
             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('img/bantrans-logo.png') }}" alt="profile picture">
             <h2 class="text-center"><strong>Ban Trans - UV Express</strong></h2> 
             <hr>
-            <p class="text-justify" style="font-size: 12pt"><strong>WELCOME! </strong>Lets get started by clickin on the next button, you are required to fill in necessary information about the company. As you move along you will be required to set the main terminal, destination terminal and fees by simply filling in necessary information. This web application is created for Ban Trans only.</p>
+            <p class="text-justify" style="font-size: 12pt"><strong>WELCOME! </strong>Lets get started by clicking on the next button below. You are required to fill in necessary information about the company such as the contact number, address and email. As we move along, you will be required to set the main terminal, destination terminal and fees by simply filling in the necessary information.</p>
 
         </div>
 

@@ -185,6 +185,7 @@ $('select[name="operator"]').on('change',function(){
         @endif
 	</script>
     <script>
+        
         $('select[name="driver"]').on('change', function(){
            var van = $(this).find(':selected').data('van');
            console.log(van);
