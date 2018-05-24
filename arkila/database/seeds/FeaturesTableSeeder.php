@@ -41,5 +41,10 @@ class FeaturesTableSeeder extends Seeder
                 'description' => 'Customer Module',
                 'Status' => 'enable'
                 ]);
+
+            Feature::create([
+                'description' => 'SetUp Page',
+                'Status' => 'enable'
+                ]);
     }
 }
