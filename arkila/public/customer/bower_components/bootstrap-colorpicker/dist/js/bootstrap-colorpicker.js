@@ -787,7 +787,7 @@
       this.updateData(this.color);
     }
 
-    // Setup picker
+    // setup picker
     var $picker = this.picker = $(this.options.template);
     if (this.options.customClass) {
       $picker.addClass(this.options.customClass);

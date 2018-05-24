@@ -106,7 +106,7 @@ if (!document.createElement('canvas').getContext) {
                            '#default#VML');
       }
 
-      // Setup default CSS.  Only add one style sheet per document
+      // setup default CSS.  Only add one style sheet per document
       if (!doc.styleSheets['ex_canvas_']) {
         var ss = doc.createStyleSheet();
         ss.owningElement.id = 'ex_canvas_';
