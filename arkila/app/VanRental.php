@@ -10,6 +10,7 @@ class VanRental extends Model
 {
     protected $table = 'van_rental';
     protected $primaryKey = 'rent_id';
+    protected $dates = ['departure_date'];
     protected $guarded = [
         'rent_id',
     ];

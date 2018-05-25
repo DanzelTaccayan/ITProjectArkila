@@ -31,6 +31,11 @@ class Kernel extends ConsoleKernel
         ->before(function(){
             \File::cleanDirectory(storage_path('app/database-backup'));
         });
+
+        $schedule->call(function() {
+            $customerReservation = new \App\Http\Controllers\CustomerModuleControllers\MakeReservationController();
+            $customerReservation->slotsAndExpiryDate();
+        })->everyMinute();
     }
 
     /**

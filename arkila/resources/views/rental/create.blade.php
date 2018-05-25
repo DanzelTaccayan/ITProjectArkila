@@ -49,7 +49,7 @@
                         <select class="form-control select2" name="plateNumber" id="plateNumber">
                             <option value="" selected>Select Van Unit</option>
                         @foreach ($vans as $van)
-                           <option value="{{ $van->van_id }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
+                           <option value="{{ $van->van_id }}" @if($van->van_id == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
                            @endforeach
                        </select>
                     </div>
@@ -68,7 +68,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Number of Days: <span class="text-red">*</span></label>
-                        <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="" val-num-days required>
+                        <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="3" val-num-days required>
                     </div>
                 </div>
             </div>
