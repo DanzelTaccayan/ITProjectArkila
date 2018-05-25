@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'List of Rentals')\
+@section('title', 'List of Rentals')
 @section('content')
 <div class="padding-side-5">
     <div>
@@ -14,7 +14,7 @@
                         <a href="/home/rental/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RENTAL</a>
                     </div>
 
-                    <table id="listRent" class="table table-bordered table-striped rentalTable">
+                    <table class="table table-bordered table-striped rentalTable">
                         <thead>
                             <tr>
                                 <th>Name</th>

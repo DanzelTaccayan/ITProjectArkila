@@ -15,131 +15,96 @@
             </h3>
         </div>
         <div class="box-body">
-                <!-- One "tab" for each step in the form: -->
-                <div class="form-section">
-                    <h4>Trip Information</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Customer Name: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="Customer Name" name="name" id="name" value="{{ old('name') }}" val-fullname required>
+            <h4>Trip Information</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Customer Name: <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" placeholder="Customer Name" name="name" id="name" value="{{ old('name') }}" val-fullname required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                     <div class="form-group">
+                        <label>Contact Number: <span class="text-red">*</span></label>
+                        <div class = "input-group">
+                            <div class = "input-group-addon">
+                               <i class="fa fa-phone"></i>
                             </div>
+                        <input type="text" class="form-control" placeholder="Contact Number" name="contactNumber" id="contactNumber" value="{{ old('contactNumber') }}" data-parsley-errors-container="#errContactNumber" val-phone required>
                         </div>
-                        <div class="col-md-4">
-                             <div class="form-group">
-                                <label>Contact Number: <span class="text-red">*</span></label>
-                                <div class = "input-group">
-                                    <div class = "input-group-addon">
-                                       <i class="fa fa-phone"></i>
-                                    </div>
-                                <input type="text" class="form-control" placeholder="Contact Number" name="contactNumber" id="contactNumber" value="{{ old('contactNumber') }}" data-parsley-errors-container="#errContactNumber" val-phone required>
+                        <p id="errContactNumber"></p>
+                    </div>
+                </div> 
+                <div class="col-md-4">
+                     <div class="form-group">
+                        <label>Destination: <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" placeholder="Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Van:</label>
+                        <select class="form-control select2" name="plateNumber" id="plateNumber">
+                            <option value="" selected>Select Van Unit</option>
+                        @foreach ($vans as $van)
+                           <option value="{{ $van->van_id }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
+                           @endforeach
+                       </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Driver:</label>
+                        <select class="form-control select2" name="driver" id="driver">
+                            <option value="" selected>Select Driver</option>
+                        @foreach ($drivers as $driver)
+                           <option value="{{ $driver->member_id }}" @if($driver->member_id == old('driver') ) {{'selected'}} @endif>{{ $driver->full_name }}</option>
+                           @endforeach
+                       </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Number of Days: <span class="text-red">*</span></label>
+                        <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="" val-num-days required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Departure Date: <span class="text-red">*</span></label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control" name="date" id="date" value="{{ old('date') }}" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-parsley-errors-container="#errDepartureDate" data-mask val-book-date data-parsley-valid-departure required>
+                        </div>
+                        <p id="errDepartureDate"></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class = "bootstrap-timepicker">
+                        <div class="form-group">
+                            <label>Departure Time: <span class="text-red">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-clock-o"></i>
                                 </div>
-                                <p id="errContactNumber"></p>
+                                <input type="text" class="form-control" name="time" value="{{ old('time') }}" id = "timepicker" data-parsley-errors-container="#errDepartureTime" val-book-time required>
                             </div>
-                        </div> 
-                        <div class="col-md-4">
-                             <div class="form-group">
-                                <label>Destination: <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" placeholder="Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
-                            </div>
+                            <p id="errDepartureTime"></p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Van:</label>
-                                <select class="form-control select2" name="plateNumber" id="plateNumber">
-                                    <option value="" selected>Select Van Unit</option>
-                                @foreach ($vans as $van)
-                                   <option value="{{ $van->van_id }}" @if($van->plate_number == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
-                                   @endforeach
-                               </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Driver:</label>
-                                <select class="form-control select2" name="driver" id="driver">
-                                    <option value="" selected>Select Driver</option>
-                                @foreach ($drivers as $driver)
-                                   <option value="{{ $driver->member_id }}" @if($driver->member_id == old('driver') ) {{'selected'}} @endif>{{ $driver->full_name }}</option>
-                                   @endforeach
-                               </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Number of Days: <span class="text-red">*</span></label>
-                                <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="" val-num-days required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Departure Date: <span class="text-red">*</span></label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" class="form-control" name="date" id="date" value="{{ old('date') }}" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-parsley-errors-container="#errDepartureDate" data-mask val-book-date data-parsley-valid-departure required>
-                                </div>
-                                <p id="errDepartureDate"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class = "bootstrap-timepicker">
-                                <div class="form-group">
-                                    <label>Departure Time: <span class="text-red">*</span></label>
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                          <i class="fa fa-clock-o"></i>
-                                        </div>
-                                        <input type="text" class="form-control" name="time" value="{{ old('time') }}" id = "timepicker" data-parsley-errors-container="#errDepartureTime" val-book-time required>
-                                    </div>
-                                    <p id="errDepartureTime"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
                 </div>
-                <div class="form-section" style="margin-left:37%; font-size: 14pt">
-                    <h4 style="margin-left:17%; margin-bottom:3%; font-size: 14pt">Summary</h4>
-                    <div class = "row">
-                           <dl class = "dl-horizontal">
-                           <dt>Name:</dt>
-                            <dd id="nameView"></dd>
-                            <dt>Contact Number:</dt>
-                            <dd id="contactView"></dd>
-                            <dt>Destination:</dt>
-                            <dd id="destView"></dd>
-                            <dt>Van:</dt>
-                            <dd id="vanView"></dd>
-                            <dt>Driver:</dt>
-                            <dd id="driverView"></dd>
-                            <dt>Number of Days:</dt>
-                            <dd id="daysView"></dd>
-                            <dt>Departure Date:</dt>
-                            <dd id="dateView"></dd>
-                            <dt>Departure Time:</dt>
-                            <dd id="timeView"></dd>
-                            </dl>
-                        </div>
-                </div>
-                <!-- Circles which indicates the steps of the form: -->
-                <div style="text-align:center;margin-top:40px;">
-                    <span class="step"></span>
-                    <span class="step"></span>
-                </div>
+            </div> 
         </div>
         <div class="box-footer">
             <div style="overflow:auto;">
-                    <div class="form-navigation" style="float:right;">
-                        <button type="button" id="prevBtn"  class="previous btn btn-default">Previous</button>
-                        <button type="button" id="nextBtn" onclick="getData();"  class="next btn btn-primary">Next</button>
-                        <input type="submit" class="btn btn-primary">
-                    </div>
-                </div>
+                <input type="submit" class="btn btn-primary pull-right">
+            </div>
         </div>
 </div> 
 @endsection
