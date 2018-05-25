@@ -71,18 +71,18 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="bootstrap-timepicker">
+                            
                                 <label for="timeDepart" class="col-sm-4">Departure Time:</label>
                                 <div class=" col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input  type="time" value="{{old('timeDeparted')}}" id="timepicker" name="timeDeparted" class="form-control" required data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
+                                        <input type="text" name="timeDeparted" value="{{old('timeDeparted')}}" id="timepicker" class="form-control" placeholder="hh:mm" required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                 </div>
-                            </div>
+                            
                         </div>
 
 
@@ -210,21 +210,13 @@
         //document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
     }
     //document.getElementById('dest').value = document.getElementById('termId').value;
-</script>
 
-<script>
-    $('#timepicker').timepicker({
-        showInputs: false,
-        defaultTime: false
-    })
-</script>
-<script>
     function cloneDatePicker() {
 
         //Date picker
         $('.datepicker').datepicker({
             autoclose: true
-        })
+        });
 
     }
     $(function() {
@@ -232,7 +224,7 @@
         //Date picker
         cloneDatePicker();
 
-    })
+    });
 
 
 
@@ -264,11 +256,17 @@
             tabRow.rows[0].cells[tabRow.rows[0].cells.length - 1].children[0].children[0].style.display = "";
         }
     }
-</script>
 
-<script>
-     $('[data-mask]').inputmask()
-</script>
+    $('[data-mask]').inputmask();
 
+    $(function() {
+        //Date picker
+        $('#timepicker').timepicker({
+            showInputs: false
+            // startTime: new Time();
+        })
+
+    });
+</script>
 
 @endsection
