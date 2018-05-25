@@ -27,45 +27,6 @@
     </div>
     <div class="box" style="box-shadow: 0px 5px 10px gray;">
         <div class="row">
-            <div class="col-md-6" style="padding: 2% 4%">
-
-                <div class="text-center">
-                    <h4 class="report-header sblue">PASSENGER COUNT</h4>
-                </div>
-
-                <div class="box-body" id="inner-dest">
-
-                    <table class="table table-bordered table-striped table-responsive">
-                        <tbody>
-                            <tr>
-                                <th class="text-center">Route</th>
-                                <th class="text-center">Regular</th>
-                                <th class="text-center">Discounted</th>
-                            </tr>
-                            @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
-                            <tr>
-                                <td class="text-center">{{$key}}</td>
-                                @foreach($values as $innerKeys => $innerValues)
-                                <td class="text-right">{{$innerValues}}</td>
-                                @endforeach
-                            </tr>
-                            @endforeach
-                        </tbody>
-
-                        
-
-                        <tfoot>
-                            <tr>
-                                <th class="text-right">Total Passenger</th>
-                                <th class="text-right">{{$totalPassenger}}</th>
-                                <th class="text-right">{{$totalDiscountedPassenger}}</th>
-                            </tr>
-
-                        </tfoot>
-                    </table>
-                </div>
-
-            </div>
 
             <div class="col-md-6" style="padding: 2% 5%">
                 <div class="text-center">
@@ -101,13 +62,13 @@
                 </table>
 
                 <div class="text-center">
-                    <h4 class="report-header smaroon">SHARES</h4>
+                    <h4 class="report-header msgreen">SHARES</h4>
                 </div>
                 <table class="table table-bordered table-striped table-responsive">
                     <tbody>
                         <tr>
                             <td>Total Fare collected</td>
-                            <td class="text-center">{{number_format((float)$totalFare, 2, '.', '')}}</td>
+                            <td class="text-right">{{number_format((float)$totalFare, 2, '.', '')}}</td>
                         </tr>
                         <tr>
                             <td>Office</td>
@@ -119,8 +80,44 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
 
-                <button onclick="window.open('')" class="btn btn-primary btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT TRIP INFORMATION</button>
+            <div class="col-md-6" style="padding: 2% 4%">
+
+                <div class="text-center">
+                    <h4 class="report-header sblue">PASSENGER COUNT</h4>
+                </div>
+
+                <div class="box-body" id="inner-dest">
+
+                    <table class="table table-bordered table-striped table-responsive">
+                        <tbody>
+                            <tr>
+                                <th class="text-center">Route</th>
+                                <th class="text-center">Regular</th>
+                                <th class="text-center">Discounted</th>
+                            </tr>
+                            @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
+                            <tr>
+                                <td class="text-center">{{$key}}</td>
+                                @foreach($values as $innerKeys => $innerValues)
+                                <td class="text-right">{{$innerValues}}</td>
+                                @endforeach
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center">Total Passenger</th>
+                                <th class="text-right">{{$totalPassenger}}</th>
+                                <th class="text-right">{{$totalDiscountedPassenger}}</th>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+
+                <button onclick="window.print()" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT TRIP INFORMATION</button>
 
             </div>
 
