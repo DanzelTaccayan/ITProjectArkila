@@ -22,8 +22,6 @@
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Contact Number</th>
-                                <th>Van</th>
-                                <th>Driver</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -31,27 +29,21 @@
                         <tbody>
                             @foreach($rentals as $rental)
                                <tr>
-                                <td>{{ $rental->customer_name }}</td>
-                                <td>{{ $rental->destination }}</td>
-                                <td>{{ $rental->departure_date }}</td>
-                                <td>{{ $rental->departure_time }}</td>
-                                <td>{{ $rental->contact_number }}</td>
-                                <td>{{ $rental->plate_number }}</td>
-                                @if ($rental->rent_type == 'Walk-in')
-                                <td>{{ $rental->driver->full_name ?? 'None' }}</td>
-                                @else
-                                <td>{{ $rental->users->last_name ?? 'None' }}, {{ $rental->users->first_name ?? 'None'  }}</td>
-                                @endif
-
-                                <td>{{ $rental->status }}</td>
-                                <td>
-                                    <div class="text-center">
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewRental{{ $rental->rent_id }}">VIEW</button>
-                                    <button class="btn btn-success btn-sm">ACCEPT</button>
-                                    </div>
-                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#acceptRental{{ $rental->rent_id }}">PAYMENT</button>
-                                    </div>
-                                 </td>   
+                                    <td>{{ $rental->customer_name }}</td>
+                                    <td>{{ $rental->destination }}</td>
+                                    <td>{{ $rental->departure_date }}</td>
+                                    <td>{{ $rental->departure_time }}</td>
+                                    <td>{{ $rental->contact_number }}</td>
+                                    <td>{{ $rental->status }}</td>
+                                    <td>
+                                        <div class="text-center">
+                                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewRental{{ $rental->rent_id }}">VIEW</button>
+                                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#acceptRental{{ $rental->rent_id }}">ACCEPT</button>
+                                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#payRental{{ $rental->rent_id }}">PAYMENT</button>
+                                            <button class="btn bg-navy btn-sm" data-toggle="modal" data-target="#departRental{{ $rental->rent_id }}">DEPART</button>
+                                        </div>
+                                     </td>
+                                 </tr>   
                              @endforeach
                         </tbody>
                     </table>
@@ -60,9 +52,9 @@
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                     </div>
                                     <div class="modal-body">
                                         <table class="table table-striped table-bordered ">
@@ -100,8 +92,8 @@
                                                     <td>{{ $rental->plate_number ?? 'None'}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Rental Fee</th>
-                                                    <td></td>
+                                                    <th>Comment</th>
+                                                    <td>{{ $rental->comments}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th></th>
@@ -121,26 +113,80 @@
                     <div class="modal fade" id="acceptRental{{ $rental->rent_id }}">
                         <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">PAYMENT DETAILS</h4>
+                                    <div class="modal-header bg-green">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">ACCEPTANCE FORM</h4>
                                     </div>
+                                    <form action="" class="form-horizontal">
+                                        <div class="modal-body">
+                                            <div class="padding-side-15">
+                                                <table class="table table-striped table-bordered">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Destination</th>
+                                                            <td>{{ $rental->destination }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Van Unit</th>
+                                                            <td>
+                                                                <select name="" id="" class="form-control">
+                                                                    <option value=""></option>
+                                                                    <option value=""></option>
+                                                                    <option value=""></option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Driver</th>
+                                                            <td>
+                                                                <select name="" id="" class="form-control">
+                                                                    <option value="">HALULUO DELA CRUZ</option>
+                                                                    <option value=""></option>
+                                                                    <option value=""></option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                                            <button type="submit" class="btn btn-success">Accept</button> 
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                    <div class="modal fade" id="payRental{{ $rental->rent_id }}">
+                        <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">PAYMENT DETAILS</h4>
+                                    </div>
+                                    <form action="" class="form-horizontal">
                                     <div class="modal-body">
-                                        <table class="table table-striped table-bordered ">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Customer Name</th>
-                                                    <td>{{ $rental->customer_name }}</td>
-                                                </tr>
-                                                
-                                            </tbody>
-                                        </table>
+                                        <div class="padding-side-15">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                <label for="" class="col-sm-5">Rental Fee</label>
+                                                <div class="col-sm-7">
+                                                    <input type="number" class="form-control" step="0.25">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
-                                        <button type="submit" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button> 
+                                        <button type="submit" class="btn btn-info"><i class="fa fa-money"></i> Receive Payment</button> 
                                     </div>
+                                    </form>
                                 </div>
                         </div>
                         <!-- /.modal-dialog -->
