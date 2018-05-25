@@ -1,9 +1,9 @@
 @extends('layouts.master')
 @section('title', 'Reservations')
 @section('content')
-<div class="row">
+<div class="padding-side-5">
     @if($main->count() == 0 && $destinations->count() == 0)
-        <div class="padding-side-5">
+        <div class="row">
             <div class="box box-solid" style="height: 300px; padding: 50px;">
                 <div class="box-body">
                     <div class="text-center">
