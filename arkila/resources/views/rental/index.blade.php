@@ -43,7 +43,7 @@
                                             <button class="btn bg-navy btn-sm" data-toggle="modal" data-target="#departRental{{ $rental->rent_id }}">DEPART</button>
                                         </div>
                                      </td>
-                                 </tr>   
+                                 </tr>
                              @endforeach
                         </tbody>
                     </table>

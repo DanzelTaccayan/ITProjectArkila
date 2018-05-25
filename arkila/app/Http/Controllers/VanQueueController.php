@@ -87,85 +87,53 @@ class VanQueueController extends Controller
      */
     public function updateQueueNumber(VanQueue $vanOnQueue)
     {
-        // Start transaction!
-        DB::beginTransaction();
-        try {
-            $vansArr = [];
-            $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
+        if(!is_null(request('destination')) && !is_null(request('new_queue_num')) ) {
+            // Start transaction!
+            DB::beginTransaction();
+            try {
+                $responseArr = [];
+                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', request('destination'))->orderBy('queue_number', 'asc')->get();
 
-            $beingTransferredKey = $vanOnQueue->queue_number;
-            $beingReplacedKey = request('new_queue_num');
+                //Get the van queue id and the queue number of the being transferred van
+                $beingTransferredQueueNumber = $vanOnQueue->queue_number;
 
-            $beingTransferredVal = $vanOnQueue->van_queue_id;
-            $beingReplacedVal = VanQueue::where('queue_number',request('new_queue_num'))->first()->van_queue_id;
+                //Get the queue id and the queue number of the being replaced van
+                $beingReplacedQueueNumber = request('new_queue_num');
 
-            $vanCount = VanQueue::whereNotNull('queue_number')->count();
-            $responseArr = [[],'beingReplacedId'=> $beingReplacedVal];
-
-            $this->validate(request(),[
-                'new_queue_num' => 'required|digits_between:1,'.$vanCount,
-            ]);
-
-            for($i = 0,$n = 1; $i < count($queue) ; $i++,$n++) {
-                $vansArr[$n] =  $queue[$i]->van_queue_id;
+                if ($beingTransferredQueueNumber > $beingReplacedQueueNumber) {
+                    //Update the queue number of each van in ascending order
+                    for ($i = $beingReplacedQueueNumber - 1; $i < $beingTransferredQueueNumber - 1; $i++) {
+                        //Get the queue number of the van after the current van in the array
+                        $queue[$i]->update([
+                            'queue_number' => $queue[$i + 1]->queue_number
+                        ]);
+                    }
+                    //Give the assigned queue number to the designated van
+                    $vanOnQueue->update([
+                        'queue_number' => $beingReplacedQueueNumber
+                    ]);
+                } else {
+                    //if the replaced queue number is greater then the transferred then
+                    //Update the number of each van in descending order
+                    for ($i = $beingReplacedQueueNumber - 1; $i > $beingTransferredQueueNumber-1; $i--) {
+                        $queue[$i]->update([
+                            'queue_number' => $queue[$i - 1]->queue_number
+                        ]);
+                    }
+                    //Give the assigned queue number to the designated van
+                    $vanOnQueue->update([
+                        'queue_number' => $beingReplacedQueueNumber
+                    ]);
+                }
+                DB::commit();
+                $responseArr = VanQueue::select('van_queue_id as vanQueueId','queue_number as queueNumber')->whereNotNull('queue_number')->where('destination_id', request('destination'))->orderBy('queue_number', 'asc')->get();
+            } catch (\Exception $e) {
+                DB::rollback();
+                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
             }
 
-            $vansArr[$beingReplacedKey] = $beingTransferredVal;
-
-
-            if($beingTransferredKey > $beingReplacedKey) {
-
-                $beingReplacedKey += 1;
-
-                for($i = $beingReplacedKey; $i<= $beingTransferredKey; $i++) {
-                    $beingTransferredVal =  $vansArr[$i];
-                    $vansArr[$i] = $beingReplacedVal;
-                    $beingReplacedVal = $beingTransferredVal;
-                }
-
-                foreach($vansArr as $queueNum => $vanQueueId) {
-                    $vanQueue = VanQueue::find($vanQueueId);
-
-                    $vanQueue->update([
-                        'queue_number' => $queueNum
-                    ]);
-
-                    array_push($responseArr[0],[
-                        'vanId' => $vanQueue->van_queue_id,
-                        'queueNumber' => $vanQueue->queue_number
-                    ]);
-                }
-
-            } else {
-                $beingReplacedKey -= 1;
-
-                for($i = $beingReplacedKey; $i>= $beingTransferredKey; $i--) {
-                    $beingTransferredVal = $vansArr[$i];
-                    $vansArr[$i] = $beingReplacedVal;
-                    $beingReplacedVal = $beingTransferredVal;
-                }
-
-                foreach($vansArr as $queueNum => $vanQueueId) {
-                    $vanQueue = VanQueue::find($vanQueueId);
-
-                    $vanQueue->update([
-                        'queue_number' => $queueNum
-                    ]);
-
-                    array_push($responseArr[0],[
-                        'vanId' => $vanQueue->van_queue_id,
-                        'queueNumber' => $vanQueue->queue_number
-                    ]);
-                }
-            }
-
-            DB::commit();
-        } catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return response()->json($responseArr);
         }
-
-        return response()->json($responseArr);
     }
 
     public function updateDestination(VanQueue $vanOnQueue)

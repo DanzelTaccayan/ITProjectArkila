@@ -33,10 +33,8 @@ class CreateVanRentalTable extends Migration
             $table->string('contact_number');
             $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
-            $table->enum('cancelled_by', ['Customer', 'Driver'])
-            ->nullable();
             $table->enum('rent_type', ['Online', 'Walk-in']);
-            $table->text('comments')
+            $table->text('comment')
             ->nullable();
             $table->timestamps();
 
