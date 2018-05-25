@@ -33,10 +33,10 @@
                             <tr>
                                 <td>{{ $rental->customer_name }}</td>
                                 <td>{{ $rental->destination }}</td>
-                                <td>{{ $rental->departure_date }}</td>
-                                <td>{{ $rental->departure_time }}</td>
+                                <td>{{ $rental->departure_date->formatLocalized('%d %B %Y') }}</td>
+                                <td>{{ date('g:i A', strtotime($rental->departure_time)) }}</td>
                                 <td>{{ $rental->contact_number }}</td>
-                                <td>{{ $rental->plate_number }}</td>
+                                <td>{{ $rental->van->plate_number }}</td>
                                 @if ($rental->rent_type == 'Walk-in')
                                 <td>{{ $rental->driver->full_name ?? 'None' }}</td>
                                 @else
