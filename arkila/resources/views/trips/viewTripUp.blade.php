@@ -117,9 +117,6 @@
                         </tfoot>
                     </table>
                 </div>
-
-                <button onclick="window.print()" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print"></i> PRINT TRIP INFORMATION</button>
-
             </div>
 
 
