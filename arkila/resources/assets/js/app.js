@@ -7,7 +7,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+//window.Vue = require('vue');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,9 +16,22 @@ window.Vue = require('vue');
  */
 
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('notification', require('./components/DriverNotifications.vue'));
+// Vue.component('example-component', require('./components/ExampleComponent.vue'));
+// Vue.component('notification', require('./components/DriverNotifications.vue'));
 
-const app = new Vue({
-    el: '#app'
+// const app = new Vue({
+//     el: '#app'
+// });
+window._ = require('lodash');
+import Echo from 'laravel-echo';
+
+//window._ = require('lodash');
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '37ad8b23289f06684693',
+    cluster: 'ap1',
+    encrypted: false,
 });

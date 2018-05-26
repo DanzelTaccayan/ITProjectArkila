@@ -33,9 +33,8 @@
 </head>
 
 <body class="skin-blue sidebar-mini fixed sidebar-collapse">
-    <div id="app" class="wrapper">
-        @include('layouts.partials.header')
-
+    <div class="wrapper">
+            @include('layouts.partials.header')
         <!-- Left side column. contains the logo and sidebar -->
         @include('layouts.partials.main_sidebar')
 
@@ -63,6 +62,20 @@
      @include('message.success')
      @include('message.error')
      <script type="text/javascript" src="/js/app.js"></script>
+     <script type="text/javascript">
+     
+
+    $(document).ready(function(){
+        if(Laravel.userId){
+            $.get('/adminNotifications', function(response){
+                window.Echo.private(`App.User.${Laravel.userId}`)
+                    .notification((notification) => {
+                        
+                    });
+            });
+        }
+    });
+     </script>
     @show
     <div id="confirmBoxModal"></div>
 </body>
