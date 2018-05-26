@@ -56,8 +56,9 @@
 	                </table>
 				</div>
 				<div class="col-md-6">
-					@include('rental.rentalPayment')
 					@include('rental.rentalAccept')
+					@include('rental.rentalPayment')
+					@include('rental.rentalDepart')
 					<h2><strong>STATUS:
 						<span class="text-orange">PENDING</span> 
 						<span class="text-green">UNPAID</span>

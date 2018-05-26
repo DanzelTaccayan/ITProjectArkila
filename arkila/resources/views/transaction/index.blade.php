@@ -323,6 +323,32 @@
                                                             </div>
                                                             <!-- /.modal-dialog -->
                                                         </div>
+                                                @elseif(true)
+                                                        <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckERCC-modal">BOARD PASSENGERS</button>
+
+                                                        <div class="modal" id="ondeckERCC-modal">
+                                                            <div class="modal-dialog" style="margin-top: 10%;">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">×</span></button>
+                                                                        <h4 class="modal-title"></h4>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                                                        <p class="text-center"><strong class="text-blue" style="font-size: 20px">{{$vanOnQueue->van->plate_number}}</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">{{$vanOnQueue->van->remarks}}</strong>. THEREFORE IT CANNOT DEPART AND MUST BE MOVED TO THE SPECIAL UNITS</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <div class="text-center">
+                                                                            <button data-van="{{$vanOnQueue->van_queue_id}}" name="moveToSpecialUnits" type="button" class="btn btn-default"><i class="text-yellow fa fa-star"></i> MOVE TO SPECIAL UNITS</button>
+                                                                            <button data-van="{{$vanOnQueue->van_queue_id}}" name="remainOnDeck" type="button" class="btn btn-primary ">REMAIN ON DECK</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.modal-content -->
+                                                            </div>
+                                                            <!-- /.modal-dialog -->
+                                                        </div>
                                                 @else
                                                         <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#novan-modal">BOARD PASSENGERS</button>
                                                 @endif
