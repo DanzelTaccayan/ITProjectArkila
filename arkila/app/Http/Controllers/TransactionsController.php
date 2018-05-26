@@ -380,11 +380,16 @@ class TransactionsController extends Controller
     //Delete
     public function destroy(Ticket $ticket)
     {
-        $ticket->update([
-            'status' => null
-        ]);
-
-        return 'success';
+        DB::beginTransaction();
+        try {
+            $ticket->update([
+                'status' => ""
+            ]);
+            DB::commit();
+            return 'success';
+        } catch(\Exception $e) {
+            dd($e);
+        }
     }
 
     public function multipleDelete()
