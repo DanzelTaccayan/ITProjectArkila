@@ -131,4 +131,56 @@ class RentalsController extends Controller
         return back()->with('message', 'Successfully Deleted');
 
     }
+
+    public function updateStatus(VanRental $rental)
+    {
+        if(request('status') == 'Unpaid')
+        {
+            $this->validate(request(), [
+                'status' => [
+                    'required',
+                    Rule::in(['Unpaid'])
+                ],
+            ]);
+
+            $rental->update([
+                'status' => request('status'),
+            ]);
+
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        elseif(request('status') == 'Paid')
+        {
+            $this->validate(request(), [
+                'fare' => 'required|numeric|min:0',
+                'status' => [
+                    'required',
+                    Rule::in(['Paid'])
+                ],
+            ]);
+
+            $rental->update([
+                'rental_fare' => request('fare'),
+                'status' => request('status'),
+            ]);
+
+    
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully paid. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        else
+        {
+            $this->validate(request(), [
+                'status' => [
+                    'required',
+                    Rule::in(['Departed'])
+                ],
+            ]);
+
+            $rental->update([
+                'status' => request('status'),
+            ]);
+    
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully departed. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+    }
 }

@@ -1,7 +1,8 @@
 <h2><strong>STATUS: <span class="text-orange">PENDING</span>
 </strong></h2>
 <div class="">
-    <form action="" class="form-horizontal">
+    <form action="{{route('rental.updateStatus', $rental->rent_id)}}" method="POST" class="form-horizontal">
+    {{ csrf_field() }} {{ method_field('PATCH') }}
         <div class="padding-side-15" style="margin-top: 10%">
             <h4>CHOOSE SERVICE PROVIDER:</h4>
             <table class="table table-striped table-bordered">
@@ -30,7 +31,7 @@
             </table>
             <div class="text-center">   
                 <a href="{{route('rental.index')}}" class="btn btn-default">Back</a> 
-                <button type="submit" name="accept" value="Accepted" class="btn btn-success">Accept</button> 
+                <button type="submit" name="status" value="Unpaid" class="btn btn-success">Accept</button> 
             </div>
         </div>
     </form>

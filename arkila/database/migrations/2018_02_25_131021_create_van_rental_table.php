@@ -27,6 +27,8 @@ class CreateVanRentalTable extends Migration
             ->nullable();
 
             $table->longText('rental_code');
+            $table->decimal('rental_fare', 11, 2)
+            ->nullable();
 
             $table->longText('customer_name');
 
