@@ -3,7 +3,7 @@
 @section('content')
 	<div class="padding-side-10">
 		<div>
-		    <h2 class="text-white"><strong>RESERVATION CODE:</strong> {{$request->rsrv_code}}</h2>
+		    <h2 class="text-white"><strong>RESERVATION CODE:</strong> {{$reservation->rsrv_code}}</h2>
 		</div>
 		<div class="box box-solid">
 			<div class="box-body">	
@@ -14,79 +14,51 @@
 		                	<tbody>
 		                		<tr>
 		                			<th>Customer Name</th>
-									<td>{{$request->name}}</td>
+									<td>{{$reservation->name}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Destination</th>
-		                			<td>{{$request->destination_name}}</td>
+		                			<td>{{$reservation->destination_name}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Reservation Type</th>
-		                			<td>{{$request->type}}</td>
+		                			<td>{{$reservation->type}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Ticket Qty</th>
-		                			<td>{{$request->ticket_quantity}}</td>
+		                			<td>{{$reservation->ticket_quantity}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Total Fee</th>
-		                			<td>{{$request->fare}}</td>
+		                			<td>{{$reservation->fare}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Status</th>
-		                			<td>{{$request->status}}</td>
+		                			<td>{{$reservation->status}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Date Paid</th>
-		                			<td>{{$request->date_paid}}</td>
+		                			<td>{{$reservation->date_paid}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Date Reserved</th>
-		                			<td>{{$request->created_at}}</td>
+		                			<td>{{$reservation->created_at}}</td>
 		                		</tr>
 		                	</tbody>
 		                </table>
 		                <div class="text-center">
-							<a href="" class="btn btn-default">Back</a>
+							<a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-default">Back</a>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<h2><strong>STATUS: 
-							<span class="text-green">UNPAID</span>
-						</strong></h2>
-						<div class="padding-side-10" style="margin-top: 10%;">
-							<h4>RESERVATION FARE</h4>
-							<div style="border: 1px solid lightgray; margin-bottom: 5%;">
-								<h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">{{$request->fare}}</strong></h3>
-								<p class="text-center"><strong>EXPIRE DATE:</strong></p>
-							</div>
-							<div class="text-center">
-								<button type="submit" name="payment" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
-							</div>
-						</div>
-						<h2><strong>STATUS: 
-							<span class="text-aqua">PAID</span>
-						</strong></h2>
-						<div>
-							<div class="padding-side-10" style="margin-top: 10%;">
-							<p class=""><strong>CAN BE REFUNDED UNTIL:</strong></p>
-							<table class="table table-striped table-bordered">
-								<tbody>
-									<tr>
-										<th>Enter Refund Code</th>
-										<td>
-				   						<input type="text" name="refundCode" class="form-control" required></td>
-									</tr>
-								</tbody>
-							</table>
-							</div>
-							<div class="text-center">
-								<button type="submit" name="payment" class="btn btn-info">Refund</button>
-							</div>
-					    </div>
-						<h2><strong>STATUS: 
-							<span class="text-red">TICKET ON HAND</span>
-						</strong></h2>
+					
+					@if($reservation->status == 'UNPAID')
+						@include('reservations.reservationPay')
+					@elseif($reservation->status == 'PAID')
+						@include('reservations.reservationRefund')
+					@elseif($reservation->status == 'TICKET ON HAND')
+						@include('reservations.reservationOnHand')
+					@endif
 					</div>
 				</div>
 			</div>

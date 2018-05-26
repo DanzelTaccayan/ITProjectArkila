@@ -230,7 +230,7 @@ class ReservationsController extends Controller
                 'refund_code' => null, 
             ]);
 
-            return back()->with('success', 'The reservation had been successfully refunded.');
+            return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
         }
         else
         {
@@ -255,8 +255,8 @@ class ReservationsController extends Controller
             return back()->with('success', 'The reservation has been paid.');
     }
 
-    public function showReservation(Reservation $request)
+    public function showReservation(Reservation $reservation)
     {
-        return view('reservations.showReservation', compact('request'));
+        return view('reservations.showReservation', compact('reservation'));
     }
 }
