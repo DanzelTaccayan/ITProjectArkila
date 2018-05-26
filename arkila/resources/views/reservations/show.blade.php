@@ -59,7 +59,7 @@
 								<td>{{$request->status}}</td>
 								<td>
 									<div class="text-center">
-										<button class="btn btn-primary" data-toggle="modal" data-target="#{{'reserved-info'. $request->id}}">View</button>
+										<a href="{{route('reservation.showReservation', $request->id)}}" class="btn btn-primary">View</a>
 									@if($request->status == 'UNPAID')
 										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-pay' . $request->id}}">Payment</button>
 									@elseif($request->status == 'PAID')

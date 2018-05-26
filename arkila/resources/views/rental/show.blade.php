@@ -26,15 +26,19 @@
 	                        </tr>
 	                        <tr>
 	                            <th>Departure Date</th>
-	                            <td>{{ $rental->departure_date }}</td>
+	                            <td>{{ $rental->departure_date->formatLocalized('%d %B %Y') }}</td>
 	                        </tr>
 	                        <tr>
 	                            <th>Departure Time</th>
-	                            <td>{{ $rental->departure_time }}</td>
+	                            <td>{{ date('g:i A', strtotime($rental->departure_time)) }}</td>
 	                        </tr>
 	                        <tr>
 	                            <th>Departure Day</th>
-	                            <td>{{ $rental->departure_time }}</td>
+	                            <td>{{ $rental->departure_date->formatLocalized('%A') }}</td>
+	                        </tr>
+                            <tr>
+	                            <th>Departure Day</th>
+	                            <td>{{ $rental->number_of_days }}</td>
 	                        </tr>
 	                        <tr>
 	                            <th>Status</th>
@@ -46,7 +50,7 @@
 	                        </tr>
 	                        <tr>
 	                            <th>Van</th>
-	                            <td>{{ $rental->plate_number ?? 'None'}}</td>
+	                            <td>{{ $rental->van->plate_number ?? 'None'}}</td>
 	                        </tr>
 	                        <tr>
 	                            <th>Comment</th>
@@ -56,49 +60,13 @@
 	                </table>
 				</div>
 				<div class="col-md-6">
+                @if($rental->status == 'Pending')
 					@include('rental.rentalAccept')
+                @elseif($rental->status == 'Unpaid')
 					@include('rental.rentalPayment')
+                @elseif($rental->status == 'Paid')
 					@include('rental.rentalDepart')
-					<h2><strong>STATUS:
-						<span class="text-orange">PENDING</span> 
-						<span class="text-green">UNPAID</span>
-						<span class="text-aqua">PAID</span>
-					</strong></h2>
-					<div class="">
-						<form action="" class="form-horizontal">
-                            <div class="padding-side-15" style="margin-top: 10%">
-                            	<h4>CHOOSE SERVICE PROVIDER:</h4>
-                                <table class="table table-striped table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <th>Van Unit</th>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Driver</th>
-                                            <td>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">HALULUO DELA CRUZ</option>
-                                                    <option value=""></option>
-                                                    <option value=""></option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="text-center">	
-	                                <button type="button" class="btn btn-default">Back</button> 
-	                                <button type="submit" class="btn btn-success">Accept</button> 
-	                            </div>
-                            </div>
-                        </form>
-					</div>
+                @endif
 				</div>
 			</div>
 		</div>

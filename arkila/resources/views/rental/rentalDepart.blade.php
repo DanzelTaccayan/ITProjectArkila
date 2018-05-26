@@ -5,8 +5,8 @@
 	<form action="" class="form-horizontal">
         <div class="padding-side-15" style="margin-top: 10%">
             <div class="text-center">	
-                <button type="button" class="btn btn-default">Back</button> 
-                <button type="submit" class="btn bg-navy">Depart</button> 
+                <a href="{{route('rental.index')}}" class="btn btn-default">Back</a>
+                <button type="submit" name="depart" value="Departed" class="btn bg-navy">Depart</button> 
             </div>
         </div>
     </form>
