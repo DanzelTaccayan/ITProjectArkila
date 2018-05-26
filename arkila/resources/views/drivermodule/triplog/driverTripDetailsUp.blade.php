@@ -59,7 +59,7 @@
                 </table>
 
                 <div class="text-center">
-                    <h4 class="report-header smaroon">SHARES</h4>
+                    <h4 class="report-header msgreen">SHARES</h4>
                 </div>
                 <table class="table table-bordered table-striped">
                     <tbody>
