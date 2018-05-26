@@ -44,10 +44,8 @@
                             @foreach ($terminals as $terminal)
                                 
                                 <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
-                                    
-                                    <div class="time-header">
-                                        <h3 class="text-center" style="padding: 10px 0px 10px 0px; border-bottom: 2px solid gray; margin-bottom: 20px;"></i> {{strtoupper($mainTerminal->first()->destination_name)}} - {{strtoupper($terminal->destination_name)}}</h3>
-                                    </div>
+                                      
+                                    <h3 class="text-center" style="padding: 10px 0px 10px 0px;"></i> {{strtoupper($mainTerminal->first()->destination_name)}} - {{strtoupper($terminal->destination_name)}}</h3>
 
                                     <div class="col-md-6">
                                         <a href="{{route('route.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD ROUTE</a>
