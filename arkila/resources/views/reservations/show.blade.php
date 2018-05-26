@@ -82,47 +82,7 @@
 			                <h4 class="modal-title">Reservation Details</h4>
 			              </div>
 			              <div class="modal-body">
-			                <table class="table table-striped table-bordered">
-			                	<tbody>
-			                		<tr>
-			                			<th>Reservation Code</th>
-			                			<td>{{$request->rsrv_code}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Customer Name</th>
-										<td>{{$request->name}}</td>
-										<td></td>	
-			                		</tr>
-			                		<tr>
-			                			<th>Destination</th>
-			                			<td>{{$request->destination_name}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Reservation Type</th>
-			                			<td>{{$request->type}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Ticket Qty</th>
-			                			<td>{{$request->ticket_quantity}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Total Fee</th>
-			                			<td>{{$request->fare}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Status</th>
-			                			<td>{{$request->status}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Date Paid</th>
-			                			<td>{{$request->date_paid}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Date Reserved</th>
-			                			<td>{{$request->created_at}}</td>
-			                		</tr>
-			                	</tbody>
-			                </table>
+			                
 			              </div>
 			              <div class="modal-footer">
 			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

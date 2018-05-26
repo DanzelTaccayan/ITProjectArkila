@@ -257,6 +257,6 @@ class ReservationsController extends Controller
 
     public function showReservation()
     {
-        return view('reservation.showReservation');
+        return view('reservations.showReservation');
     }
 }
