@@ -453,8 +453,8 @@
                                                                 </div>
                                                                 <div class="">
                                                                 <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($transactions->where('destination',$terminal->destination_name)->where('status','OnBoard') as $transaction)
-                                                                        <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
+                                                                    @foreach($tickets->where('destination_id',$terminal->destination_id)->where('status','OnBoard') as $ticket)
+                                                                        <li data-val="{{$ticket->ticket_id}}" class="list-group-item">{{$ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
                                                                 </div>
@@ -498,8 +498,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($transactions->whereIn('destination',$terminal->routeFromDestination->pluck('destination_name'))->where('status','Pending') as $transaction)
-                                                                        <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
+                                                                    @foreach($tickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $ticket)
+                                                                        <li data-val='{{$ticket->ticket_id}}' class="list-group-item">{{$ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
                                                                 
@@ -795,17 +795,16 @@
                 var terminalId = $(this).data('val');
 
                 if($('#onBoardList'+terminalId).children().length > 0){
-                    var transactions = [];
+                    var tickets = [];
                     $('#onBoardList'+terminalId+' li').each(function(){
-                        transactions.push($(this).data('val'));
+                        tickets.push($(this).data('val'));
                     });
-                    if(transactions.length >= 10) {
+                    if(tickets.length >= 10) {
                         $.ajax({
                             method:'PATCH',
                             url: '/home/transactions/'+terminalId,
                             data: {
-                                '_token': '{{csrf_token()}}',
-                                'transactions' : transactions
+                                '_token': '{{csrf_token()}}'
                             },
                             success: function(){
                                 location.reload();
@@ -820,20 +819,14 @@
             });
 
             //Depart the ticket/s and add the van to the queue and mark it as OB
-            $('button[name="departOb"]').on('click',function(){
+            $('button[name="departOb"]').on('click',function() {
                var terminalId  = $(this).data('val');
-               var transactions = [];
-
-                $('#onBoardList'+terminalId+' li').each(function(){
-                    transactions.push($(this).data('val'));
-                });
 
                 $.ajax({
                     method:'PATCH',
                     url: '/home/transactions/'+terminalId,
                     data: {
-                        '_token': '{{csrf_token()}}',
-                        'transactions' : transactions
+                        '_token': '{{csrf_token()}}'
                     },
                     success: function(){
                         location.reload();
@@ -851,10 +844,10 @@
 
                 var actives = $('#pendingList'+terminalId).children('.active');
                 if (actives.length > 0) {
-                    var transactions = [];
+                    var tickets = [];
 
                     actives.each(function () {
-                        transactions.push($(this).data('val'));
+                        tickets.push($(this).data('val'));
                     });
 
                     $.ajax({
@@ -862,7 +855,7 @@
                         url: '{{route("transactions.updatePendingTransactions")}}',
                         data: {
                             '_token': '{{csrf_token()}}',
-                            'transactions':transactions
+                            'tickets': tickets
                         },
                         success: function(){
                         console.log('success');
@@ -887,9 +880,9 @@
                 var actives = $('#onBoardList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
-                    var transactions = [];
+                    var tickets = [];
                     actives.each(function () {
-                        transactions.push($(this).data('val'));
+                        tickets.push($(this).data('val'));
                     });
 
                     $.ajax({
@@ -897,7 +890,7 @@
                         url: '{{route("transactions.updateOnBoardTransactions")}}',
                         data: {
                             '_token': '{{csrf_token()}}',
-                            'transactions': transactions
+                            'tickets': tickets
                         },
                         success: function () {
                             console.log('success');
