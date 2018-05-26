@@ -309,6 +309,7 @@ class TransactionsController extends Controller
     //Refund
     public function refund(Ticket $ticket)
     {
+
         $ticket->update([
             'status' => null
         ]);
@@ -316,8 +317,8 @@ class TransactionsController extends Controller
         Transaction::create([
             'ticket_name' => $ticket->ticket_number,
             'destination' => $ticket->destination->destination_name,
-            'origin' => $ticket->destination->routeOrigin->destination_name,
-            'amount_paid' => $ticket-fare,
+            'origin' => $ticket->destination->routeOrigin->first()->destination_name,
+            'amount_paid' => $ticket->fare,
             'status' => 'Refunded'
         ]);
         return 'success';
@@ -383,7 +384,7 @@ class TransactionsController extends Controller
         DB::beginTransaction();
         try {
             $ticket->update([
-                'status' => ""
+                'status' => null
             ]);
             DB::commit();
             return 'success';
@@ -423,9 +424,9 @@ class TransactionsController extends Controller
         try  {
             if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
                 $ticketType = request('ticketType');
-                $ticket = $destination->tickets->where('type',$ticketType)->whereNull('status')->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+                $ticket = $destination->tickets()->where('type',$ticketType)->whereNull('status')->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
                 if(is_null($ticket)) {
-                    return \Response::json(['error' => 'There are no more tickets left, please add anotehr to select a ticket'], 422);
+                    return \Response::json(['error' => 'There are no more tickets left, please add another to select a ticket'], 422);
                 }
 
                 $selectedTicket = SelectedTicket::create([
@@ -439,6 +440,7 @@ class TransactionsController extends Controller
                 return response()->json($responseArr);
             }
         } catch(\Exception $e) {
+            \Log::info($e);
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
