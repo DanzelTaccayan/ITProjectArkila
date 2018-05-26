@@ -7,7 +7,7 @@
         	<h4>ENTER RENTAL FEE:</h4>
             <table class="table table-striped table-bordered">
                 <tbody>
-                    <th>Rental Fee</th>
+                    <th>Rental Fare</th>
                     <td>   
                     <input type="number" class="form-control" step="0.25">
                     </td> 
