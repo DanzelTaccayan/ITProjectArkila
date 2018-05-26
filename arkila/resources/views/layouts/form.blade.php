@@ -15,10 +15,8 @@
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 
 <body class="hold-transition skin-blue layout-top-nav">
-    <div class="wrapper">
-
-        @include('layouts.partials.header_2')
-
+    <div class="wrapper">    
+            @include('layouts.partials.header_2')
         <!-- Full Width Column -->
         <div class="content-wrapper bgform-image">
                 <div class="container">
