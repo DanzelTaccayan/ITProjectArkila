@@ -178,6 +178,7 @@
     $(document).ready(function() {
         $('.generalLedgerTable').DataTable({
 
+            'jQueryUI': false,
             'paging': false,
             'lengthChange': true,
             'searching': true,
