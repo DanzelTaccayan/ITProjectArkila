@@ -46,7 +46,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Van:</label>
-                        <select class="form-control select2" name="plateNumber" id="plateNumber">
+                        <select class="form-control select2" name="plateNumber" id="plateNumber" onchange="triggerDriver()">
                             <option value="" selected>Select Van Unit</option>
                         @foreach ($vans as $van)
                            <option value="{{ $van->van_id }}" @if($van->van_id == old('plateNumber') ) {{'selected'}} @endif>{{ $van->plate_number }}</option>
@@ -195,7 +195,19 @@
     $('[data-mask]').inputmask()
     $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
     </script>
-    
+    <script>
+    public function triggerDriver()
+    {
+        var van = document.getElementById('plateNumber').value;
+        var driver = document.getElementById('driver');
+
+        for (var i = 0; i < driver.options.length; i++) {
+            if (driver.options[i].value == van) {
+                driver.options[i].selected = true;
+            }
+        }        
+    }
+    </script>
   
       @include('message.error')
 @endsection

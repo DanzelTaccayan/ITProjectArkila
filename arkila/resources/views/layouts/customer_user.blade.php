@@ -41,7 +41,7 @@
 	    @include('layouts.partials.customer_scripts')
 		@include('message.error')
 		@include('message.success')
-        <script type="text/javascript" src="/js/app.js"></script>
+        
         <script type="text/javascript">
         $(document).ready(function(){
             if(Laravel.userId){

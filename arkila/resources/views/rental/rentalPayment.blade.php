@@ -14,8 +14,8 @@
                 </tbody>
             </table>
             <div class="text-center">	
-                <button type="button" class="btn btn-default">Back</button> 
-                <button type="submit" class="btn btn-info"><i class="fa fa-money"></i> Receive Payment</button> 
+                <a href="{{route('rental.index')}}" class="btn btn-default">Back</a> 
+                <button type="submit" name="payment" value="Paid" class="btn btn-info"><i class="fa fa-money"></i> Receive Payment</button> 
             </div>
         </div>
     </form>

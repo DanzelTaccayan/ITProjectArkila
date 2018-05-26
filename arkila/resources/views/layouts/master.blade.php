@@ -63,7 +63,7 @@
      @include('layouts.partials.scripts')
      @include('message.success')
      @include('message.error')
-     <script type="text/javascript" src="/js/app.js"></script>
+     
      <script type="text/javascript">
      
 
@@ -72,7 +72,7 @@
             $.get('/adminNotifications', function(response){
                 window.Echo.private(`App.User.${Laravel.userId}`)
                     .notification((notification) => {
-                        
+
                     });
             });
         }
