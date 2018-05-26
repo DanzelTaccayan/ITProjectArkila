@@ -148,6 +148,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['edit']
     ]);
+    Route::get('/home/reservation/customer/{reservation}', 'ReservationsController@showReservation')->name('reservation.showReservation');
 
     Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
     Route::post('/home/reservations/walk-in/store', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
@@ -157,6 +158,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['edit']
     ]);
+
+    Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
 
     Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
@@ -328,7 +331,8 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*Help*/
     Route::get('/home/customer/help', 'CustomerModuleControllers\ViewHelpController@viewHelp')->name('customermodule.user.help.customerHelp');
     /*Notifications*/
-    Route::get('/notifications', 'CustomerModuleControllers\ViewNotificationsController@notificaitons')->name('customermodule.notifications');
+    Route::get('/customerNotifications', 'CustomerModuleControllers\ViewNotificationsController@notificaitons')->name('customermodule.notifications');
+    Route::get('/markAsRead', 'CustomerModuleControllers\ViewNotificationsController@markAsRead')->name('customermodule.markAsRead');
 });
 /******************************************************************************/
 /******************************************************************************/

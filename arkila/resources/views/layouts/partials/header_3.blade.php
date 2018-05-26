@@ -52,6 +52,58 @@
 
             <!-- Notifications Menu -->
             <notification :userid="{{auth()->id()}}" :unreads="{{auth()->user()->unreadNotifications}}"></notification>
+            <!-- Notifications: style can be found in dropdown.less -->
+                <li class="dropdown notifications-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning"></span>
+                            </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">Notifications</li>
+                        <li>
+                            <!-- inner menu: contains the actual data -->
+                            <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                        <p style="margin:0 0 0;"> Booking request </p>
+                                        <span class="text-orange fa fa-book"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <p style="margin:0 0 0;"> Accepted </p>
+                                        <span class="text-green fa fa-check-circle"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <p style="margin:0 0 0;">Deleted/Cancelled</p>
+                                        <span class="text-red fa fa-times-circle"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <p style="margin:0 0 0;">
+                                            Information </p>
+                                            <span class="text-gray fa fa-info-circle"></span> 
+                                            <small>10/10/2018 01:00 PM</small>
+                                        </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <p style="margin:0 0 0;"> Departed </p>
+                                        <span class="text-blue fa fa-truck"></span> 
+                                        <small>10/10/2018 01:00 PM</small>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="#">View all</a></li>
+                    </ul>
+                </li>
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->

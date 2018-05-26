@@ -254,4 +254,9 @@ class ReservationsController extends Controller
 
             return back()->with('success', 'The reservation has been paid.');
     }
+
+    public function showReservation()
+    {
+        return view('reservations.showReservation');
+    }
 }

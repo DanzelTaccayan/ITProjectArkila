@@ -18,11 +18,11 @@
             <div class="table-responsive">
                 <div class="col col-md-6">
                     <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>
-                ADD REVENUE/EXPENSE
-            </a>
+                        ADD REVENUE/EXPENSE
+                    </a>
                     <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>
                 </div>
-                <table class="table table-bordered table-striped dailyLedgerTable">
+                <table id="dailyLedgerTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Payee/Payor</th>
@@ -117,7 +117,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>Expired Ticket</td>
+                                <td>Lost/Expired Ticket</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
                                 <td></td>
@@ -148,7 +148,7 @@
 @parent
     <script>
         $(function() {
-            $('.dailyLedgerTable').DataTable({
+            $('#dailyLedgerTable').DataTable({
                 'paging': false,
                 'lengthChange': true,
                 'searching': true,
@@ -157,6 +157,6 @@
                 'autoWidth': false,
                 'order': [[ 6, "desc" ]]
             })
-        })
+        });
     </script>
 @stop

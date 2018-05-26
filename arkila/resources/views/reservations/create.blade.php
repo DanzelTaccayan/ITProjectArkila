@@ -8,7 +8,7 @@
     <div class="box box-success">
         <div class="box-header with-border text-center">
             <h4>
-            <a href="{{ route('reservations.index') }}"><i class="pull-left fa fa-chevron-left"></i></a>
+              <a href="{{ route('reservations.index') }}"><i class="pull-left fa fa-chevron-left"></i></a>
             </h4>
             <h4 class="box-title">
             CREATE RESERVATION DATE

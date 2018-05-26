@@ -59,7 +59,7 @@
 								<td>{{$request->status}}</td>
 								<td>
 									<div class="text-center">
-										<button class="btn btn-primary" data-toggle="modal" data-target="#{{'reserved-info'. $request->id}}">View</button>
+										<a href="{{route('reservation.showReservation', $request->id)}}" class="btn btn-primary">View</a>
 									@if($request->status == 'UNPAID')
 										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-pay' . $request->id}}">Payment</button>
 									@elseif($request->status == 'PAID')
@@ -82,47 +82,7 @@
 			                <h4 class="modal-title">Reservation Details</h4>
 			              </div>
 			              <div class="modal-body">
-			                <table class="table table-striped table-bordered">
-			                	<tbody>
-			                		<tr>
-			                			<th>Reservation Code</th>
-			                			<td>{{$request->rsrv_code}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Customer Name</th>
-										<td>{{$request->name}}</td>
-										<td></td>	
-			                		</tr>
-			                		<tr>
-			                			<th>Destination</th>
-			                			<td>{{$request->destination_name}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Reservation Type</th>
-			                			<td>{{$request->type}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Ticket Qty</th>
-			                			<td>{{$request->ticket_quantity}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Total Fee</th>
-			                			<td>{{$request->fare}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Status</th>
-			                			<td>{{$request->status}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Date Paid</th>
-			                			<td>{{$request->date_paid}}</td>
-			                		</tr>
-			                		<tr>
-			                			<th>Date Reserved</th>
-			                			<td>{{$request->created_at}}</td>
-			                		</tr>
-			                	</tbody>
-			                </table>
+			                
 			              </div>
 			              <div class="modal-footer">
 			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

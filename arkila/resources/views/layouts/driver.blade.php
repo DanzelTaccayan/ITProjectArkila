@@ -28,7 +28,7 @@
 </head>
 
 <body class="hold-transition skin-blue layout-top-nav">
-    <div id="app" class="wrapper">
+    <div class="wrapper">
         @include('layouts.partials.header_3')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- Content Wrapper. Contains page content -->
@@ -58,8 +58,15 @@
         @include('layouts.partials.scripts')
         @include('message.error')
         @include('message.success')
-        <script type="text/javascript" src="/js/app.js"></script>
-        
+        <script type="text/javascript">
+        $(document).ready(function(){
+            if(Laravel.userId){
+                $.get('/driverNotifications', function(response){
+                    console.log(response);
+                });
+            }
+        });
+        </script>
     @show
 </body>
 

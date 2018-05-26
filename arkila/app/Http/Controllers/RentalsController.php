@@ -51,13 +51,30 @@ class RentalsController extends Controller
         $time = date('H:i', strtotime($request->time));
         $date = Carbon::parse($request->date);
         $fullName = ucwords(strtolower($request->name));
+        $destination = ucwords(strtolower($request->destination));
+
+        $codes = VanRental::all();
+        $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+        foreach ($codes as $code)
+        {
+            $allCodes = $code->rental_code;
+
+            do
+            {
+                $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+            } while ($rentalCode == $allCodes);
+        }
 
             VanRental::create([
+                'rental_code' => 'RN'.$rentalCode,
                 'customer_name' => $fullName,
                 'van_id' => $request->plateNumber,
+                'driver_id' => $request->driver,
                 'departure_date' => $date,
                 'departure_time' => $time,
-                'destination' => $request->destination,
+                'destination' => $destination,
                 'number_of_days' => $request->days,
                 'contact_number' => $request->contactNumber,
                 'rent_type' => 'Walk-in',
@@ -79,7 +96,7 @@ class RentalsController extends Controller
     {
         return view('rental.show', compact('rental'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -113,5 +130,57 @@ class RentalsController extends Controller
         $rental->delete();
         return back()->with('message', 'Successfully Deleted');
 
+    }
+
+    public function updateStatus(VanRental $rental)
+    {
+        if(request('status') == 'Unpaid')
+        {
+            $this->validate(request(), [
+                'status' => [
+                    'required',
+                    Rule::in(['Unpaid'])
+                ],
+            ]);
+
+            $rental->update([
+                'status' => request('status'),
+            ]);
+
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        elseif(request('status') == 'Paid')
+        {
+            $this->validate(request(), [
+                'fare' => 'required|numeric|min:0',
+                'status' => [
+                    'required',
+                    Rule::in(['Paid'])
+                ],
+            ]);
+
+            $rental->update([
+                'rental_fare' => request('fare'),
+                'status' => request('status'),
+            ]);
+
+    
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully paid. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        else
+        {
+            $this->validate(request(), [
+                'status' => [
+                    'required',
+                    Rule::in(['Departed'])
+                ],
+            ]);
+
+            $rental->update([
+                'status' => request('status'),
+            ]);
+    
+            return redirect(route('rental.index'))->with('success', 'Rental has been successfully departed. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
     }
 }

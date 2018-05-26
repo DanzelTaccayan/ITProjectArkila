@@ -29,7 +29,7 @@
                         {{csrf_field()}}
                         From: <input type="date" name="start">
                         To: <input type="date" name="end">
-                        <button type="submit" class="btn btn-default btn-sm" name"search">SEARCH</button>
+                        <button type="submit" class="btn btn-default btn-sm" name="search">SEARCH</button>
                     </form>
                 </div>
 
@@ -178,6 +178,7 @@
     $(document).ready(function() {
         $('.generalLedgerTable').DataTable({
 
+            'jQueryUI': false,
             'paging': false,
             'lengthChange': true,
             'searching': true,
