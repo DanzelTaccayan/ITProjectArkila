@@ -113,8 +113,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     ]);
     Route::get('/home/settings', 'HomeController@settings')->name('settings.index');
 
-     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
+    Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
 
+    Route::get('/adminNotifications', 'HomeController@notifications')->name('admin.getNotifs');
+  Route::get('/markAsRead', 'HomeController@markAsRead')->name('admin.markAsRead');
     /****************************************************/
 
     /************ User Management ******************************/
@@ -153,7 +155,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/reservations/payment/{reservation}', 'ReservationsController@payment')->name('reservation.payment');
 
     Route::resource('/home/rental', 'RentalsController',[
-        'except' => ['show','edit']
+        'except' => ['edit']
     ]);
 
     Route::resource('/home/company-profile', 'ProfileController',[

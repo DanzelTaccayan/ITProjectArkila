@@ -33,7 +33,7 @@
                             <td class="text-right">{{ date('g:i A', strtotime($reserve->departure_time)) }}</td>
                             <td class="text-right">{{$reserve->number_of_slots}}</td>
                             <td>
-                                @if($reserve->status == 'CLOSED')
+                                @if($reserve->status == 'CLOSED' || $reserve->reservation_date->subDays(2)->lt(Carbon\Carbon::now()))
                                 <p>CLOSED</p>
                                 @elseif($reserve->number_of_slots > 0)
                                 <div class="text-center">

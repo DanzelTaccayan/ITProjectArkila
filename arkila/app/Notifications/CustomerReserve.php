@@ -3,10 +3,11 @@
 namespace App\Notifications;
 
 use App\User;
-use App\Reserve;
+use App\Reservation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class CustomerReserve extends Notification implements ShouldQueue
@@ -20,7 +21,7 @@ class CustomerReserve extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, Reserve $reserve)
+    public function __construct(User $user, Reservation $reserve)
     {
         $this->user = $user;
         $this->reserve = $reserve;
@@ -34,7 +35,7 @@ class CustomerReserve extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -45,21 +46,21 @@ class CustomerReserve extends Notification implements ShouldQueue
      */
     public function toDatabase($notifiable)
     {
-       return [
-
-       ];
+        return [
+          'reservation_info' => $this->reserve,
+          'reservation_date' => $this->reserve->reservationDate,
+          'user_id' => $this->user->id,
+          'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
+        ];
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+    public function toBroadcast($notifiable)
     {
-        return [
-            //
-        ];
+        return new BroadcastMessage([
+          'reservation_info' => $this->reserve,
+          'reservation_date' => $this->reserve->reservationDate,
+          'user_id' => $this->user->id,
+          'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
+        ]);
     }
 }

@@ -35,6 +35,8 @@ class CreateReservationTable extends Migration
             ->nullable();
             $table->enum('status', ['UNPAID', 'PAID', 'TICKET ON HAND', 'CANCELLED', 'REFUNDED'])
             ->default('Unpaid');
+            $table->boolean('returned_slot')
+            ->default(false);
             $table->date('date_paid')
             ->nullable();
             $table->enum('type', ['Walk-in', 'Online']);

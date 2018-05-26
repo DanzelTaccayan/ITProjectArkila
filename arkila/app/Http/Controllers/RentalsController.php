@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\VanRental;
 use Carbon\Carbon;
 use App\Van;
-use App\VanModel;
 use App\Member;
 use App\Http\Requests\RentalRequest;
 use Illuminate\Validation\Rule;
@@ -49,14 +48,15 @@ class RentalsController extends Controller
      */
     public function store(RentalRequest $request)
     {
+        $time = date('H:i', strtotime($request->time));
+        $date = Carbon::parse($request->date);
         $fullName = ucwords(strtolower($request->name));
 
-            Rental::create([
+            VanRental::create([
                 'customer_name' => $fullName,
-                'plate_number' => $request->plateNumber,
-                'driver_id' => $request->driver,
-                'departure_date' => $request->date,
-                'departure_time' => $request->time,
+                'van_id' => $request->plateNumber,
+                'departure_date' => $date,
+                'departure_time' => $time,
                 'destination' => $request->destination,
                 'number_of_days' => $request->days,
                 'contact_number' => $request->contactNumber,
@@ -69,7 +69,17 @@ class RentalsController extends Controller
 
     }
 
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(VanRental $rental)
+    {
+        return view('rental.show', compact('rental'));
+    }
+    
     /**
      * Update the specified resource in storage.
      *

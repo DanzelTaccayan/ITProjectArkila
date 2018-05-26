@@ -3,12 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\checkName;
+use App\Rules\checkSpecialCharacters;
 use App\Rules\checkTime;
-use App\Rules\checkAddress;
-use App\Rules\checkContactNum;
+use App\Rules\checkContactNumber;
 use App\Rules\checkPlateNumber;
-use App\Rules\checkDriver;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -32,40 +30,47 @@ class RentalRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        $dateNow = Carbon::now();
-        $thisDate = $dateNow->setTimezone('Asia/Manila');
+        // $dateNow = Carbon::now();
+        // $thisDate = $dateNow->setTimezone('Asia/Manila');
         
-        $dateFormattedNow = $thisDate->format('m/d/Y');
-        $timeFormattedNow = $thisDate->format('h:i A');
+        // $dateFormattedNow = $thisDate->format('m/d/Y');
+        // $timeFormattedNow = $thisDate->format('h:i A');
 
-        $dateCarbon = new Carbon(request('date'));
-        $dateFormatted = $dateCarbon->format('m/d/Y');
+        // $dateCarbon = new Carbon(request('date'));
+        // $dateFormatted = $dateCarbon->format('m/d/Y');
 
-        if ($dateFormatted !== $dateFormattedNow) {
-            return [
-                "name" => ['bail',new checkName, 'required', 'max:35'],
+        // if ($dateFormatted !== $dateFormattedNow) {
+        //     return [
+        //         "name" => ['bail',new checkSpecialCharacters, 'required', 'max:35'],
+        //         "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+        //         "destination" => ['bail','required','max:50'],
+        //         "plateNumber" => ['required','between:6,9'],
+        //         "time" => ['bail',new checkTime, 'required'],
+        //         "days" => "bail|required|numeric|digits_between:1,15|min:1",
+        //         "contactNumber" => ['bail',new checkContactNumber],
+        
+        //     ];
+        // } else {
+        //     return [
+        //         "name" => ['bail',new checkSpecialCharacters, 'required', 'max:35'],
+        //         "date" =>  'bail|required|date_format:m/d/Y|after_or_equal:today',
+        //         "destination" => ['bail','required','max:50'],
+        //         "plateNumber" => ['required','between:6,9'],
+        //         "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
+        //         "days" => "bail|required|numeric|digits_between:1,15|min:1",
+        //         "contactNumber" => ['bail',new checkContactNumber],
+         
+        //         ];
+        // }
+        return [
+                "name" => ['bail',new checkSpecialCharacters, 'required', 'max:35'],
                 "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
-                "destination" => ['bail',new checkAddress,'required','max:50'],
-                "plateNumber" => [new checkPlateNumber,'required','between:6,9'],
-                "driver" => ['numeric',new checkDriver],
+                "destination" => ['bail','required','max:50'],
+                "plateNumber" => ['required','numeric'],
                 "time" => ['bail',new checkTime, 'required'],
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
-                "contactNumber" => ['bail',new checkContactNum],
-        
-            ];
-        } else {
-            return [
-                "name" => ['bail',new checkName, 'required', 'max:35'],
-                "date" =>  'bail|required|date_format:m/d/Y|after_or_equal:today',
-                "destination" => ['bail',new checkAddress,'required','max:50'],
-                "plateNumber" => [new checkPlateNumber,'required','between:6,9'],
-                "driver" => ['numeric', new checkDriver],
-                "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
-                "days" => "bail|required|numeric|digits_between:1,15|min:1",
-                "contactNumber" => ['bail',new checkContactNum],
-         
-                ];
-        }
+                "contactNumber" => ['bail',new checkContactNumber],
+        ];
     }
 
     public function messages() 

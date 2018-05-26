@@ -21,7 +21,6 @@
                                         <option value=""></option>
                                         <option value=""></option>
                                         <option value=""></option>
-
                                         <option value=""><strong>** OTHER DESTINATION **</strong></option>
                                     </select>
                                 </div>
@@ -29,7 +28,7 @@
                                     <p class="form-control" style="background: lightgray;">Other Destination</p>
                                     <input type="text" class="form-control" placeholder="Other Destination">
                                 </div>
-                        <div class="row">
+                        <div class="row">   
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Contact Number: <span class="text-red">*</span></label>
