@@ -11,28 +11,28 @@
                                 <h4 class="text-center">NO RESERVATION.</h4>
                             @else
                                 <ul class="list-group">
-                                    @foreach($reservations as $reservation)
+                                    @foreach($rentals as $rental)
                                     <li class="list-group-item">
                                         <div class="row">
                                         <div class="col-md-6">
                                         
-                                        <h4 style="margin-bottom: 1px;">{{$reservation->destination_name}}</h4>
-                                        <p style="color: gray;">{{$reservation->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($reservation->created_at)) }}</p>
+                                        <h4 style="margin-bottom: 1px;">{{$rental->destination}}</h4>
+                                        <p style="color: gray;">{{$rental->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($rental->created_at)) }}</p>
 
                                         <small>
-                                        @if($reservation->status === 'Unpaid')
+                                        @if($rental->status === 'Unpaid')
                                         <i class="fa fa-circle-o" style="color:red;"></i>
-                                        {{strtoupper($reservation->status)}}
-                                         @elseif($reservation->status === 'Paid')
+                                        {{strtoupper($rental->status)}}
+                                         @elseif($rental->status === 'Paid')
                                         <i class="fa fa-check-circle" style="color:green;"></i>
-                                        {{strtoupper($reservation->status)}}
+                                        {{strtoupper($rental->status)}}
                                         @endif
                                         </small>
                                         </div>
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary">View</button>                                           
+                                                    <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary">View</button>                                           
                                                 </div>
                                         </div>
                                         </div>
