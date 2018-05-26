@@ -33,7 +33,7 @@
 </head>
 
 <body class="skin-blue sidebar-mini fixed sidebar-collapse">
-    <div id="app" class="wrapper">
+    <div  class="wrapper">
         @include('layouts.partials.header')
 
         <!-- Left side column. contains the logo and sidebar -->
