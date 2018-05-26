@@ -69,7 +69,17 @@ class RentalsController extends Controller
 
     }
 
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(VanRental $rental)
+    {
+        return view('rental.show', compact('rental'));
+    }
+    
     /**
      * Update the specified resource in storage.
      *
