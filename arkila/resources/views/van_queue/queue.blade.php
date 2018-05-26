@@ -279,7 +279,7 @@ ol.arrow-drag{
               <div class= "col-md-9">
                 <div class="tab-content">
                 <!-- Cabanatuan Queue Tab -->
-                @foreach($terminals as $terminal)
+                @foreach($terminals as $key => $terminal)
                   <div data-val='{{$terminal->destination_id}}' class="tab-pane @if($terminals->first() == $terminal) {{'active'}} @else {{''}} @endif" id="queue{{$terminal->destination_id}}">
                     <div class="box box-solid">
                       <div class="box-body">
@@ -294,7 +294,7 @@ ol.arrow-drag{
                             </div>
                             <div class="queue-body"> 
                               <div class="queue-body-color scrollbar scrollbar-info thin">
-                                <ol id ="queue-list{{$terminal->destination_id}}" class="rectangle-list serialization arrow-drag">
+                                <ol id ="queue-list{{$terminal->destination_id}}" data-number="{{$key}}" class="rectangle-list serialization arrow-drag">
                                     @foreach ($queue->where('destination_id',$terminal->destination_id) as $vanOnQueue)
                                       <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                         <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
@@ -782,7 +782,7 @@ ol.arrow-drag{
             },
             success: function(queue){
                for(i = 0; i < queue.length; i++) {
-                    $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
+                    $('#queueIndicator'+queue[i].van_queue_id).text(queue[i].queue_number);
                }
                specialUnitChecker();
             }
