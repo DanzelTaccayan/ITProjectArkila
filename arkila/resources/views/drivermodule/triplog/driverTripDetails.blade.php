@@ -34,7 +34,7 @@
                     <tbody>
                         <tr>
                             <th>Driver:</th>
-                            <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}</td>
+                            <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}@if($trip->driver->van->first() == null)<strong> (Substitute)</strong>  @endif</td>
                         </tr>
                         <tr>
                             <th>Van:</th>
@@ -60,7 +60,7 @@
                 </table>
 
                 <div class="text-center">
-                    <h4 class="report-header smaroon">SHARES</h4>
+                    <h4 class="report-header msgreen">SHARES</h4>
                 </div>
                 <table class="table table-bordered table-striped table-responsive">
                     <tbody>
@@ -119,7 +119,7 @@
                     </table>
                 </div>
 
-                <button onclick="window.open('')" class="btn btn-primary btn-sm btn-flat pull-right"> <i class="fa fa-print" style="margin-bottom: 2%"></i> SAVE TRIP INFORMATION</button>
+                <button onclick="window.open('')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print" style="margin-bottom: 2%"></i> SAVE TRIP INFORMATION</button>
 
             </div>
 
