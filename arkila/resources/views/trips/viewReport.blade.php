@@ -40,7 +40,7 @@
                         <tbody>
                             <tr>
                                 <th>Driver:</th>
-                                <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}</td>
+                                <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}@if($trip->driver->van->first() == null)<strong> (Substitute)</strong>  @endif</td>
                             </tr>
                             <tr>
                                 <th>Van:</th>
@@ -65,7 +65,7 @@
                         </tbody>
                     </table>
                     <div class="text-center">
-                        <h4 class="report-header smaroon">SHARES</h4>
+                        <h4 class="report-header msgreen">SHARES</h4>
                     </div>
                     <table class="table table-bordered table-striped">
                     <tbody>

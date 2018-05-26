@@ -155,7 +155,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/reservations/payment/{reservation}', 'ReservationsController@payment')->name('reservation.payment');
 
     Route::resource('/home/rental', 'RentalsController',[
-        'except' => ['show','edit']
+        'except' => ['edit']
     ]);
 
     Route::resource('/home/company-profile', 'ProfileController',[

@@ -61,16 +61,7 @@ class TransactionsController extends Controller
                     ->get()
                     ->pluck('ticket_id'))
                              ->get() as $selectedTicket) {
-
-                    Transaction::create([
-                        'ticket_id' => $selectedTicket->ticket_id,
-                        'destination' => $selectedTicket->ticket->destination->destination_name,
-                        'origin' => $selectedTicket->ticket->destination->routeOrigin->first()->destination_name,
-                        'amount_paid' => $selectedTicket->ticket->fare,
-                        'status' => 'Pending'
-                    ]);
-
-                    $selectedTicket->ticket->update(['is_sold'=>'1']);
+                    $selectedTicket->ticket->update(['status'=>'Pending']);
                     $selectedTicket->delete();
                 }
 
@@ -84,8 +75,6 @@ class TransactionsController extends Controller
             \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
-
-
     }
 
     /**
