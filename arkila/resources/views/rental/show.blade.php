@@ -3,7 +3,7 @@
 @section('content')
 	<div class="padding-side-10">
 		<div>
-		    <h2 class="text-white"><strong>RENTAL CODE:</strong> uiahwduiohwiodh</h2>
+		    <h2 class="text-white"><strong>RENTAL CODE:</strong> {{$rental->rental_code}}</h2>
 		</div>
 		<div class="box box-solid">
 			<div class="box-body">	

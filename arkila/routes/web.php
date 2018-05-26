@@ -148,7 +148,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['edit']
     ]);
-    Route::get('/home/reservation/customer/{reservation}', 'ReservationsController@showReservation')->name('reservation.showReservation');
+    Route::get('/home/reservation/customer/{request}', 'ReservationsController@showReservation')->name('reservation.showReservation');
 
     Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
     Route::post('/home/reservations/walk-in/store', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
