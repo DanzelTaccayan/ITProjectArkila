@@ -25,7 +25,7 @@
                           </td>
                       </tr>
                       <tr>
-                          <th>Date</th>
+                          <th>Reservation Date</th>
                           <td>{{ $date->reservation_date->formatLocalized('%d %B %Y') }}</td>
                       </tr>
                       <tr>
