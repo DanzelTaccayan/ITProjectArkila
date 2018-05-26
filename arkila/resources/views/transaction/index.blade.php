@@ -323,7 +323,7 @@
                                                             </div>
                                                             <!-- /.modal-dialog -->
                                                         </div>
-                                                @elseif(true)
+                                                @elseif(false)
                                                         <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckERCC-modal">BOARD PASSENGERS</button>
 
                                                         <div class="modal" id="ondeckERCC-modal">

@@ -141,22 +141,22 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(App\Transaction::where('destination',$terminal->destination_name)->where('status','Pending')->get() as $transaction)
-                                                    <tr id="transaction{{$transaction->transaction_id}}">
-                                                        <td><input value="{{$transaction->transaction_id}}" name="checkInput" type="checkbox"></td>
-                                                        <td>{{ $transaction->ticket->ticket_number }}</td>
-                                                        <td>{{ $transaction->destination}}</td>
-                                                        <td>{{ $transaction->created_at }}</td>
-                                                        <td id="actionBody{{$transaction->transaction_id}}">
+                                                @foreach(App\Ticket::where('destination_id',$terminal->destination_id)->where('status','Pending')->get() as $ticket)
+                                                    <tr id="ticket{{$ticket->ticket_id}}">
+                                                        <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox"></td>
+                                                        <td>{{ $ticket->ticket_number }}</td>
+                                                        <td>{{ $ticket->destination->destination_name}}</td>
+                                                        <td>{{ $ticket->updated_at }}</td>
+                                                        <td id="actionBody{{$ticket->ticket_id}}">
                                                             <div class="text-center">
-                                                                <button type="button" data-transaction="{{$transaction->transaction_id}}" data-amount="{{$transaction->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-money"></i> REFUND</button>
+                                                                <button type="button" data-ticket="{{$ticket->ticket_id}}" data-amount="{{$ticket->fare}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$ticket->ticket_id}}"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-search-minus"></i> LOST</button>
+                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal{{$ticket->ticket_id}}"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$transaction->ticket->ticket_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$ticket->ticket_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                                             </div>
                                                         </td>
-                                                        <td id="destBody{{$transaction->transaction_id}}" class="hidden">
+                                                        <td id="destBody{{$ticket->ticket_id}}" class="hidden">
                                                             <select name="" id="" class="form-control">
                                                                 <option value="">dest 1</option>
                                                                 <option value="">dest 2</option>
@@ -173,8 +173,8 @@
                                         @endforeach
                                         </tbody>
                                         </table>
-                                        @foreach(App\Transaction::where('destination',$terminal->destination_name)->where('status','Pending')->get() as $transaction)
-                                        <div class="modal" id="refund-modal{{$transaction->ticket->ticket_id}}">
+                                        @foreach(App\Ticket::where('destination_id',$terminal->destination_id)->where('status','Pending')->get() as $ticket)
+                                        <div class="modal" id="refund-modal{{$ticket->ticket_id}}">
                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -185,13 +185,13 @@
                                                     <div class="modal-body">
                                                         <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
                                                         <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE</strong></p>
-                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong> WILL BE REFUNDED?</p>
-                                                        <h3 class="text-center ">VALUE: <strong id="amount{{$transaction->transaction_id}}" class="text-green"></strong></h3>
+                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong> WILL BE REFUNDED?</p>
+                                                        <h3 class="text-center ">VALUE: <strong id="amount{{$ticket->ticket_id}}" class="text-green"></strong></h3>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="text-center">
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button data-transaction="{{$transaction->transaction_id}}" data-dismiss="modal" name="refund" type="button" class="btn btn-primary">YES</button>
+                                                            <button data-ticket="{{$ticket->ticket_id}}" data-dismiss="modal" name="refund" type="button" class="btn btn-primary">YES</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -199,7 +199,7 @@
                                             </div>
                                             <!-- /.modal-dialog -->
                                         </div>
-                                        <div class="modal" id="lost-modal{{$transaction->ticket->ticket_id}}">
+                                        <div class="modal" id="lost-modal{{$ticket->ticket_id}}">
                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -210,12 +210,12 @@
                                                     <div class="modal-body">
                                                         <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST?</h1>
                                                         <p class="text-center">LOST OR UNRETURNED TICKETS WILL STILL BE <strong class="text-green">RECORDED AS SALE</strong></p>
-                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong> IS LOST OR UNRETURNED?</p>
+                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong> IS LOST OR UNRETURNED?</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="text-center">
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button data-transaction="{{$transaction->transaction_id}}" name="lostButton" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
+                                                            <button data-ticket="{{$ticket->ticket_id}}" name="lostButton" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,7 +223,7 @@
                                             </div>
                                             <!-- /.modal-dialog -->
                                         </div>
-                                        <div class="modal" id="delete-modal{{$transaction->ticket->ticket_id}}">
+                                        <div class="modal" id="delete-modal{{$ticket->ticket_id}}">
                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -234,12 +234,12 @@
                                                     <div class="modal-body">
                                                         <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE?</h1>
                                                         <p class="text-center">DELETED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE <strong class="text-maroon">{{ $transaction->ticket->ticket_number }} TICKET</strong>?</p>
+                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong>?</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="text-center">
                                                             <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button type="button" name="deleteTransaction" data-transaction="{{$transaction->transaction_id}}" class="btn btn-primary" data-dismiss="modal">YES</button>
+                                                            <button type="button" name="deleteTransaction" data-ticket="{{$ticket->ticket_id}}" class="btn btn-primary" data-dismiss="modal">YES</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -320,16 +320,16 @@
     <script>
         $(function() {
             $('button[name="deleteButton"]').on('click',function(){
-                var transactionId = $(this).data('transaction');
+                var ticketId = $(this).data('ticket');
                 $.ajax({
                     method:'PATCH',
-                    url: '/home/transactions/changeDestination/'+transactionId,
+                    url: '/home/transactions/changeDestination/'+ticketId,
                     data: {
                         '_token': '{{csrf_token()}}',
-                        'destination': $('#changeDestination'+transactionId).val(),
+                        'destination': $('#changeDestination'+ticketId).val(),
                     },
                     success: function(response){
-                        $('#changeDestination'+transactionId).val(response);
+                        $('#changeDestination'+ticketId).val(response);
                     }
 
                 });
@@ -338,22 +338,22 @@
             //Refund
             $('button[name="initialRefund"]').on('click',function(){
                 var amount = $(this).data('amount');
-                var transactionId = $(this).data('transaction');
+                var ticketId = $(this).data('ticket');
 
-                $('#amount'+transactionId).text('₱ '+amount);
+                $('#amount'+ticketId).text('₱ '+amount);
             });
             $('button[name="refund"]').on('click',function(){
-                var transactionId = $(this).data('transaction');
+                var ticketId = $(this).data('ticket');
 
                 $.ajax({
                     method:'PATCH',
-                    url: '/home/transactions/refund/'+transactionId,
+                    url: '/home/transactions/refund/'+ticketId,
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
                     success: function(){
-                        $('#transaction'+transactionId).remove();
-                        $('#refund-modal'+transactionId).remove();
+                        $('#ticket'+ticketId).remove();
+                        $('#refund-modal'+ticketId).remove();
                     }
                 });
             });
@@ -363,8 +363,8 @@
 
                 if(checked.length > 0) {
                     $.each(checked, function (index, createdElement) {
-                        var transactionId = $(createdElement).val();
-                        amount += parseFloat($('button[name="initialRefund"][data-transaction="'+transactionId+'"]').data('amount'));
+                        var ticketId = $(createdElement).val();
+                        amount += parseFloat($('button[name="initialRefund"][data-ticket="'+ticketId+'"]').data('amount'));
                     });
 
                     $('#multiRefundModal').text('('+checked.length+') SELECTED TICKETS');
@@ -389,9 +389,9 @@
                             'refund': checkedArr
                         },
                         success: function(){
-                            checkedArr.forEach(function(transactionId){
-                                $('#transaction'+transactionId).remove();
-                                $('#refund-modal'+transactionId).remove();
+                            checkedArr.forEach(function(ticketId){
+                                $('#ticket'+ticketId).remove();
+                                $('#refund-modal'+ticketId).remove();
                             })
                         }
                     });
@@ -401,17 +401,17 @@
 
             //Delete
             $('button[name="deleteTransaction"]').on('click',function(){
-                var transactionId = $(this).data('transaction');
+                var ticketId = $(this).data('ticket');
 
                 $.ajax({
                     method:'DELETE',
-                    url: '/home/transactions/'+transactionId,
+                    url: '/home/transactions/'+ticketId,
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
                     success: function(){
-                        $('#transaction'+transactionId).remove();
-                        $('#refund-modal'+transactionId).remove();
+                        $('#ticket'+ticketId).remove();
+                        $('#refund-modal'+ticketId).remove();
                     }
                 });
             });
@@ -439,9 +439,9 @@
                             'delete': checkedArr
                         },
                         success: function(){
-                            checkedArr.forEach(function(transactionId){
-                                $('#transaction'+transactionId).remove();
-                                $('#refund-modal'+transactionId).remove();
+                            checkedArr.forEach(function(ticketId){
+                                $('#ticket'+ticketId).remove();
+                                $('#refund-modal'+ticketId).remove();
                             })
                         }
                     });
@@ -451,17 +451,17 @@
 
             //Lost
             $('button[name="lostButton"]').on('click',function(){
-                var transactionId = $(this).data('transaction');
+                var ticketId = $(this).data('ticket');
 
                 $.ajax({
                     method:'PATCH',
-                    url: '/home/transactions/lost/'+transactionId,
+                    url: '/home/transactions/lost/'+ticketId,
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
                     success: function(){
-                        $('#transaction'+transactionId).remove();
-                        $('#refund-modal'+transactionId).remove();
+                        $('#ticket'+ticketId).remove();
+                        $('#refund-modal'+ticketId).remove();
                     }
                 });
             });

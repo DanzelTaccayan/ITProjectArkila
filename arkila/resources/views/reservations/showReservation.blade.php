@@ -9,7 +9,8 @@
 			<div class="box-body">	
 				<div class="row">
 					<div class="col-md-6">
-						<table class="table table-striped table-bordered">
+						<h3>RESERVATION DETAILS</h3>
+						<table class="table table-striped table-bordered form-table">
 		                	<tbody>
 		                		<tr>
 		                			<th>Customer Name</th>
@@ -45,9 +46,47 @@
 		                		</tr>
 		                	</tbody>
 		                </table>
+		                <div class="text-center">
+							<a href="" class="btn btn-default">Back</a>
+						</div>
 					</div>
 					<div class="col-md-6">
-						
+						<h2><strong>STATUS: 
+							<span class="text-green">UNPAID</span>
+						</strong></h2>
+						<div class="padding-side-10" style="margin-top: 10%;">
+							<h4>RESERVATION FARE</h4>
+							<div style="border: 1px solid lightgray; margin-bottom: 5%;">
+								<h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">{{$request->fare}}</strong></h3>
+								<p class="text-center"><strong>EXPIRE DATE:</strong></p>
+							</div>
+							<div class="text-center">
+								<button type="submit" name="payment" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
+							</div>
+						</div>
+						<h2><strong>STATUS: 
+							<span class="text-aqua">PAID</span>
+						</strong></h2>
+						<div>
+							<div class="padding-side-10" style="margin-top: 10%;">
+							<p class=""><strong>CAN BE REFUNDED UNTIL:</strong></p>
+							<table class="table table-striped table-bordered">
+								<tbody>
+									<tr>
+										<th>Enter Refund Code</th>
+										<td>
+				   						<input type="text" name="refundCode" class="form-control" required></td>
+									</tr>
+								</tbody>
+							</table>
+							</div>
+							<div class="text-center">
+								<button type="submit" name="payment" class="btn btn-info">Refund</button>
+							</div>
+					    </div>
+						<h2><strong>STATUS: 
+							<span class="text-red">TICKET ON HAND</span>
+						</strong></h2>
 					</div>
 				</div>
 			</div>
