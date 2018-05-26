@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CustomerModuleControllers;
 
+use App\User;
 use App\Destination;
 use App\ReservationDate;
 use App\Reservation;
@@ -119,7 +120,7 @@ class MakeReservationController extends Controller
 				$reservation->update([
 					'number_of_slots' => $newSlot,
 				]);
-	
+				
 				return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
 	
 		

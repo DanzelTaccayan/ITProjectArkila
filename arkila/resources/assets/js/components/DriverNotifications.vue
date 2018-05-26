@@ -15,10 +15,10 @@
 </li>
 </template>
 <script>
-  import NotificationItem from './NotificationItem.vue';
+  import DriverNotificationItem from './DriverNotificationItem.vue';
   export default{
     props:['unreads', 'userid'],
-    components:{NotificationItem},
+    components:{DriverNotificationItem},
     data(){
       return {
         unreadNotifications: this.unreads
