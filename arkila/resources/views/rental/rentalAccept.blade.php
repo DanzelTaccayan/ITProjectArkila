@@ -29,8 +29,8 @@
                 </tbody>
             </table>
             <div class="text-center">   
-                <button type="button" class="btn btn-default">Back</button> 
-                <button type="submit" class="btn btn-success">Accept</button> 
+                <a href="{{route('rental.index')}}" class="btn btn-default">Back</a> 
+                <button type="submit" name="accept" value="Accepted" class="btn btn-success">Accept</button> 
             </div>
         </div>
     </form>

@@ -51,13 +51,30 @@ class RentalsController extends Controller
         $time = date('H:i', strtotime($request->time));
         $date = Carbon::parse($request->date);
         $fullName = ucwords(strtolower($request->name));
+        $destination = ucwords(strtolower($request->destination));
+
+        $codes = VanRental::all();
+        $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+        foreach ($codes as $code)
+        {
+            $allCodes = $code->rental_code;
+
+            do
+            {
+                $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+            } while ($rentalCode == $allCodes);
+        }
 
             VanRental::create([
+                'rental_code' => 'RN'.$rentalCode,
                 'customer_name' => $fullName,
                 'van_id' => $request->plateNumber,
+                'driver_id' => $request->driver,
                 'departure_date' => $date,
                 'departure_time' => $time,
-                'destination' => $request->destination,
+                'destination' => $destination,
                 'number_of_days' => $request->days,
                 'contact_number' => $request->contactNumber,
                 'rent_type' => 'Walk-in',
@@ -79,7 +96,7 @@ class RentalsController extends Controller
     {
         return view('rental.show', compact('rental'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *

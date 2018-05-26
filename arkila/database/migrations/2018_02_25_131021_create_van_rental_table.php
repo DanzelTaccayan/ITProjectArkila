@@ -22,15 +22,20 @@ class CreateVanRentalTable extends Migration
             $table->integer('user_id')
             ->unsigned()
             ->nullable();
+            $table->integer('driver_id')
+            ->unsigned()
+            ->nullable();
 
-            $table->string('customer_name');
+            $table->longText('rental_code');
+
+            $table->longText('customer_name');
 
             $table->date('departure_date');
             $table->time('departure_time');
             $table->integer('number_of_days')
             ->unsigned();
             $table->string('destination');
-            $table->string('contact_number');
+            $table->longText('contact_number');
             $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
             $table->enum('rent_type', ['Online', 'Walk-in']);
@@ -48,6 +53,10 @@ class CreateVanRentalTable extends Migration
             ->onDelete('restrict')
             ->onUpdate('cascade');
 
+            $table->foreign('driver_id')
+            ->references('member_id')->on('member')
+            ->onDelete('restrict')
+            ->onUpdate('cascade');
         });
     }
 
