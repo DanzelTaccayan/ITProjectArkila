@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use Carbon\Carbon;
-use App\Rules\checkName;
+use App\Rules\checkSpecialCharacters;
 use App\Rules\checkTime;
-use App\Rules\checkAddress;
 use Illuminate\Http\Request;
-use App\Rules\checkContactNum;
+use App\Rules\checkContactNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRentalRequest extends FormRequest
@@ -29,36 +28,60 @@ class CustomerRentalRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-        $dateNow = Carbon::now();
-        $thisDate = $dateNow->setTimezone('Asia/Manila');
+        // $dateNow = Carbon::now();
+        // $thisDate = $dateNow->setTimezone('Asia/Manila');
 
-        $dateFormattedNow = $thisDate->format('m/d/Y');
-        $timeFormattedNow = $thisDate->format('h:i A');
+        // $dateFormattedNow = $thisDate->format('m/d/Y');
+        // $timeFormattedNow = $thisDate->format('h:i A');
 
 
-        $dateCarbon = new Carbon(request('date'));
-        $dateFormatted = $dateCarbon->format('m/d/Y');
+        // $dateCarbon = new Carbon(request('date'));
+        // $dateFormatted = $dateCarbon->format('m/d/Y');
 
-        if($dateFormatted !== $dateFormattedNow){
+        // if($dateFormatted !== $dateFormattedNow){
+        //     return [
+        //         "rentalDestination" => ["required",new checkAddress,"max:50"],
+        //         "contactNumber" => ["required", new checkContactNum],
+        //         "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
+        //         "date" => "required|date_format:m/d/Y|after_or_equal:today",
+        //         "time" => ["required", new checkTime],
+        //         "message" => "string|max:300|nullable",
+        //     ];
+        // }else{
+        //     return [
+        //         "rentalDestination" => ["required",new checkAddress,"max:50"],
+        //         "contactNumber" => ["required", new checkContactNum],
+        //         "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
+        //         "date" => "required|date_format:m/d/Y|after:" . $timeFormattedNow,
+        //         "time" => ["required", new checkTime],
+        //         "message" => "string|max:300|nullable",
+        //     ];
+        // }
+        if($request->destination == 'other')
+        {
             return [
-                "rentalDestination" => ["required",new checkAddress,"max:50"],
-                "contactNumber" => ["required", new checkContactNum],
-                "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
-                "date" => "required|date_format:m/d/Y|after_or_equal:today",
-                "time" => ["required", new checkTime],
-                "message" => "string|max:300|nullable",
-            ];
-        }else{
-            return [
-                "rentalDestination" => ["required",new checkAddress,"max:50"],
-                "contactNumber" => ["required", new checkContactNum],
-                "numberOfDays" => "required|numeric|digits_between:1,2|min:1",
-                "date" => "required|date_format:m/d/Y|after:" . $timeFormattedNow,
-                "time" => ["required", new checkTime],
-                "message" => "string|max:300|nullable",
+                "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+                "otherDestination" => ['bail','required','max:50'],
+                "time" => ['bail',new checkTime, 'required'],
+                "numberOfDays" => "bail|required|numeric|digits_between:1,15|min:1",
+                "contactNumber" => ['bail',new checkContactNumber],
+                "message" => "string|max:300|nullable",   
             ];
         }
-    }
+        else
+        {
+            return [
+                "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+                "destination" => ['bail','required','max:70'],
+                "time" => ['bail',new checkTime, 'required'],
+                "numberOfDays" => "bail|required|numeric|digits_between:1,15|min:1",
+                "contactNumber" => ['bail',new checkContactNumber],
+                "message" => "string|max:300|nullable",   
+            ];
+
+        }
+}
+
 
     public function messages()
     {

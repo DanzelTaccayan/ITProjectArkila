@@ -17,29 +17,30 @@
                         {{csrf_field()}}
                                 <div class="form-group">
                                 <label for="">Destination: <span class="text-red">*</span></label>   
-                                    <select name="" id="" class="form-control">
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""><strong>** OTHER DESTINATION **</strong></option>
+                                    <select name="destination" id="" class="form-control">
+                                    <option value=""><strong>Select Destination</strong></option>
+                                    @foreach($destinations as $destination)
+                                        <option value="{{$destination->destination_name}}">{{$destination->destination_name}}</option>
+                                    @endforeach
+                                        <option value="other"><strong>** OTHER DESTINATION **</strong></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <p class="form-control" style="background: lightgray;">Other Destination</p>
-                                    <input type="text" class="form-control" placeholder="Other Destination">
+                                    <input type="text" name="otherDestination" class="form-control" value="{{old('otherDestination')}}" placeholder="Other Destination">
                                 </div>
                         <div class="row">   
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Contact Number: <span class="text-red">*</span></label>
-                                    <input id="contactNumber" class="form-control" type="text" name="contactNumber" val-phone required>
+                                    <input id="contactNumber" class="form-control" type="text" value="{{old('contactNumber')}}" name="contactNumber" val-phone required>
                                 </div>                            
                             </div>
                             <!-- col-->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Number of Days: <span class="text-red">*</span></label>
-                                    <input id="numberOfDays" class="form-control" type="number" name="numberOfDays" val-num-days required>
+                                    <input id="numberOfDays" class="form-control" type="number" value="{{old('numberOfDays')}}" name="numberOfDays" val-num-days required>
                                 </div>
                             </div><!-- col-->
                         </div><!-- row-->
@@ -47,21 +48,21 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Departure Date: <span class="text-red"> *</span></label>
-                                    <input id="date" class="form-control date-mask" type="text" name="date" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask val-book-date data-parsley-valid-departure required>
+                                    <input id="date" class="form-control date-mask" type="text" name="date" value="{{old('date')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask val-book-date data-parsley-valid-departure required>
                                 </div>
                             </div><!-- col-->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Departure Time: <span class="text-red">*</span></label>
                                     <div class="bootstrap-timepicker">
-                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" val-book-time required>
+                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" value="{{old('time')}}" val-book-time required>
                                     </div><!-- bootstrap-timepicker-->
                                 </div>
                             </div><!-- col-->
                         </div><!-- row-->
                         <div class="form-group">
                             <label for="">Comment:</label>
-                            <textarea id="message" class="form-control" name="message" placeholder="Additional comments..." val-comment></textarea>
+                            <textarea id="message" class="form-control" name="message" placeholder="Additional comments..." value="{{old('message')}}" val-comment></textarea>
                         </div>
                         <div class="container-contact100-form-btn">
                             <button type="submit" class="contact100-form-btn" ><strong>Book</strong></button>
