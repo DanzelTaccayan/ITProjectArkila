@@ -214,7 +214,7 @@ ol.arrow-drag{
                         <select @if($vans->first() == null | $terminals->first() ==null | $drivers ->first() ==null) {{'disabled'}} @endif name="van" id="van" class="form-control select2">
                             @if($vans->first() != null)
                                 @foreach ($vans as $van)
-                                  <option value="{{$van->van_id}}">{{ $van->plate_number }}</option>
+                                  <option data-driver="{{$van->members()->where('role','Driver')->first()->member_id ?? null}}" value="{{$van->van_id}}">{{ $van->plate_number }}</option>
                                 @endforeach
                             @else
                                 <option> No Available Van Units</option>
@@ -488,6 +488,18 @@ ol.arrow-drag{
   <script src="{{ URL::asset('/jquery/jquery-sortable.js') }}"></script>
   <script>
     $('.select2').select2();
+    setDriver();
+
+    $('#van').on('change',function(){
+        setDriver();
+    });
+
+    function setDriver(){
+        var driverId = $('#van option:selected').data('driver');
+
+        $('#driver').val(driverId);
+        $('#driver').trigger('change');
+    }
   </script>
     <!-- List sortable -->
     <script>
