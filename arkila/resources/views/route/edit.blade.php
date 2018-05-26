@@ -21,7 +21,7 @@
       </div>
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{$fareDis->fare}}">
+          <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{$fareDis->fare}}" required>
       </div>
   </div>
   @if($route->is_terminal == true)

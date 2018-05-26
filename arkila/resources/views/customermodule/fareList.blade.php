@@ -8,11 +8,8 @@
               <div class="row packages">
               @if($destinations->count() > 0)
                @foreach($destinations as $destination)
-                <div class="col-md-3 mx-auto">
+                <div class="col-md-8 mx-auto">
                   <div class="package">
-                    <div class="package-header light-gray">
-                      <h5>Fare list {{$destination->destination_name}}</h5>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered text-center">
                             <thead>
@@ -21,7 +18,6 @@
                                     <th>Fare</th>
                                 </tr>
                             </thead>
-
                             @foreach($destination->routeFromDestination as $destination)
                                 <tr>
                                   <td>{{$destination->destination_name}}</td>

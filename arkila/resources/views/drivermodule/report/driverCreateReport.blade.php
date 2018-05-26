@@ -59,7 +59,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="text" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
+                                        <input type="time" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                 </div>
@@ -205,7 +205,16 @@
 
 <script>
     $('[data-mask]').inputmask()
-    $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
+    $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true});
+    
+    $(function() {
+        //Date picker
+        $('#timepicker').timepicker({
+            showInputs: false
+            // startTime: new Time();
+        })
+
+    });
 </script>
 
 

@@ -299,7 +299,7 @@ ol.arrow-drag{
                                       <li id="unit{{$vanOnQueue->van_queue_id}}" data-vanid="{{$vanOnQueue->van_id}}" class="queue-item form-horizontal">
                                         <span id="trip{{$vanOnQueue->van_queue_id}}" class="list-border">
                                           <div class="queuenum">
-                                              <p name="queueIndicator" id="queue{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
+                                              <p name="queueIndicator" id="queueIndicator{{$vanOnQueue->van_queue_id}}">{{ $vanOnQueue->queue_number }}</p>
                                           </div>
                                           <div class=item id="item{{$vanOnQueue->van_queue_id}}">
                                             <div  class="row">
@@ -356,7 +356,7 @@ ol.arrow-drag{
                                              </div>
                                              <div class="pull-right"> 
                                                 <button data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn">CANCEL</button>
-                                                <button name="changePosButton" data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-primary btn-sm">CHANGE</button>
+                                                <button name="changePosButton" data-vanqueue="{{$vanOnQueue->van_queue_id}}" data-destination = "{{$vanOnQueue->destination_id}}" class="btn btn-primary btn-sm">CHANGE</button>
                                                </div>
                                                <div class="clearfix"> </div>
                                           </div>
@@ -502,10 +502,9 @@ ol.arrow-drag{
                 "{{''}}";
         @endif
     }
-     
-     $
-     $(".tab-pane").removeClass("active in"); 
-     $(".tab-menu").removeClass("active in"); 
+
+     $(".tab-pane").removeClass("active in");
+     $(".tab-menu").removeClass("active in");
      $(activeTab).addClass("active");
      $(activeTab + "-menu").addClass("active");
 
@@ -576,7 +575,8 @@ ol.arrow-drag{
 
             //Change Position
             $('button[name="changePosButton"]').on('click',function(){
-                var queueId = $(this).data('val');
+                var queueId = $(this).data('vanqueue');
+                var destination = $(this).data('destination');
                 var newQueueNum = $('#posOption'+queueId).val();
                 $.ajax(
                     {
@@ -585,12 +585,24 @@ ol.arrow-drag{
                         data:
                             {
                                 '_token': '{{csrf_token()}}',
-                                'new_queue_num' : newQueueNum
+                                'new_queue_num' : newQueueNum,
+                                'destination' : destination
                             },
                         success: function(response)
                         {
                             $("#positem"+queueId).hide();
                             $("#item"+queueId).show();
+
+                            if($('#queueIndicator'+queueId).text() < newQueueNum){
+                                $('#unit'+queueId).insertAfter('#unit'+response[parseInt(newQueueNum)-2].vanQueueId);
+                            } else {
+                                $('#unit'+queueId).insertBefore('#unit'+response[newQueueNum].vanQueueId);
+                            }
+
+                            response.forEach(function(element){
+                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
+                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
+                            });
 
 
                             new PNotify({
@@ -610,21 +622,7 @@ ol.arrow-drag{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
-                            if(newQueueNum == 1)
-                            {
-                                $('#unit'+response.beingReplacedId).before($('#unit'+queueId));
-                            }
-                            else
-                            {
-                                $('#unit'+response.beingReplacedId).after($('#unit'+queueId));
-                            }
 
-
-                            response[0].forEach(function(van)
-                            {
-                                $('#posOption'+van.vanId).val(van.queueNumber);
-                                $('#queue'+van.vanId).text(van.queueNumber);
-                            });
 
                             specialUnitChecker();
                         }
@@ -691,7 +689,7 @@ ol.arrow-drag{
                                 $(element).val(oldQueueNumVal);
                             });
                             $('#posOption'+queueId).val(response.newDestiQueueCount);
-                            $('#queue'+queueId).text(response.newDestiQueueCount);
+                            $('#queueIndicator'+queueId).text(response.newDestiQueueCount);
 
                             specialUnitChecker();
                         }
@@ -784,7 +782,7 @@ ol.arrow-drag{
             },
             success: function(queue){
                for(i = 0; i < queue.length; i++) {
-                    $('#queue'+queue[i].van_queue_id).text(queue[i].queue_number);
+                    $('#queueIndicator'+queue[i].van_queue_id).text(queue[i].queue_number);
                }
                specialUnitChecker();
             }

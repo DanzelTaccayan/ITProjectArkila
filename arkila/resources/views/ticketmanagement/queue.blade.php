@@ -109,4 +109,16 @@
             //}, 2000);
         });
     </script>  
+    <script type="text/javascript">
+        function loadlink(){
+            $('#links').load('queue.blade.php',function () {
+                 $(this).unwrap();
+            });
+        }
+
+        loadlink(); // This will run on page load
+        setInterval(function(){
+            loadlink() // this will run after every 5 seconds
+        }, 5000);
+    </script>
 @endsection

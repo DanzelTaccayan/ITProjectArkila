@@ -51,7 +51,8 @@
     {{ Html::script('js/client-side_validation/driver-report-validation.js') }}
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
-    
+    <!-- bootstrap time picker -->
+    {{ Html::script('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}
     <!-- Awesome Functions-->
     {{ Html::script('js/awesome-functions-min.js') }}
     <script>    

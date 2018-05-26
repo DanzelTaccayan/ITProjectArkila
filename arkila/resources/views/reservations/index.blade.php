@@ -1,15 +1,15 @@
 @extends('layouts.master')
 @section('title', 'Reservations')
 @section('content')
-<div class="row">
+<div class="padding-side-5">
     @if($main->count() == 0 && $destinations->count() == 0)
-        <div class="padding-side-5">
+        <div class="row">
             <div class="box box-solid" style="height: 300px; padding: 50px;">
                 <div class="box-body">
                     <div class="text-center">
                     <h1><i class="fa fa-warning text-red"></i> NO TERMINAL/DESTINATION FOUND</h1>
                     <h4>CREATE A TERMINAL/DESTINATION FIRST BEFORE YOU CAN CREATE A RESERVATION DATE</h4>
-                    <button class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</button>
+                    <a href="{{route('reservations.create')}}" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
                     </div>
                 </div>
             </div>

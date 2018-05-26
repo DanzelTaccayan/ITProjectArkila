@@ -6,26 +6,36 @@
                 <h2>Rent a Van</h2>
             </div>
             <div class="row">
-                <div class="col-md-6 mx-auto" id="boxContainer">
+                <div class="col-md-6 mx-auto">
+                    <div class="contact100-form">   
+                        <h3>IMPORTANT</h3>
+                        <p></p>
+                    </div> 
+                </div>
+                <div class="col-md-6 mx-auto">
                     <form class="contact100-form" action="{{route('customermodule.storeRental')}}" method="POST" data-parsley-validate="">
                         {{csrf_field()}}
-                        <div class="form-group">
-                            <label for="">Destination: <span class="text-red">*</span></label>
-                            <input id="rentalDestination" class="form-control" type="text" name="rentalDestination" val-rent-dest required>
-                        </div>
-
-                        <div class="row">
+                                <div class="form-group">
+                                <label for="">Destination: <span class="text-red">*</span></label>   
+                                    <select name="" id="" class="form-control">
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""><strong>** OTHER DESTINATION **</strong></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <p class="form-control" style="background: lightgray;">Other Destination</p>
+                                    <input type="text" class="form-control" placeholder="Other Destination">
+                                </div>
+                        <div class="row">   
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Contact Number: <span class="text-red">*</span></label>
-                                    <div class="input-group">
-                                    <div class="input-group-num">
-                                        <span>+63</span>
-                                    </div>
-                                    <input id="contactNumber" class="form-control" type="text" name="contactNumber" data-inputmask='"mask": "999-999-9999"' data-mask val-phone required>
-                                    </div>
-                                </div>
-                            </div><!-- col-->
+                                    <input id="contactNumber" class="form-control" type="text" name="contactNumber" val-phone required>
+                                </div>                            
+                            </div>
+                            <!-- col-->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Number of Days: <span class="text-red">*</span></label>

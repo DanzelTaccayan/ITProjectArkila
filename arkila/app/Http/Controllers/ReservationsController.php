@@ -180,6 +180,11 @@ class ReservationsController extends Controller
             }
             $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
             $toBePaid = $ticket->fare * $quantity;
+
+            $dateOfDeparture = $dates->reservation_date;
+            $setExpiry = $dateOfDeparture->addDays(2)->setTime(17, 00, 00);
+            $expiryDate = $setExpiry->setTime(17, 00, 00);
+
     
             $destination = Destination::where('destination_id', $request->destination)->get()->first();
     
@@ -191,6 +196,8 @@ class ReservationsController extends Controller
                 'fare' => $toBePaid,
                 'name' => $name,
                 'contact_number' => $request->contactNumber,
+                'expiry_date' => $expiryDate,
+                'date_paid' => Carbon::now(),
                 'ticket_quantity' => $quantity,
                 'type' => 'Walk-in',
                 'status' => 'Paid',
