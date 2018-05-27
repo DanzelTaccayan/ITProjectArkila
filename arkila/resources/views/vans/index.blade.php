@@ -17,6 +17,7 @@
                     @else
                         <button title="Please add an operator first" class="btn btn-success btn-sm btn-flat" disabled><i class="fa fa-plus"></i> REGISTER VAN</button>
                     @endif
+                    <a href="{{route('archive.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
                     <button onclick="window.open('{{route('pdf.van')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT VAN LIST</button>
             	</div>
 

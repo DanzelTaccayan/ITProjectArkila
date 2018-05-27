@@ -44,7 +44,7 @@ th {
                             </tbody>
                         </table>
                         <div class="pull-right">   
-                            <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-edit"> </i> EDIT</button>
+                            <a href="{{route('company-profile.edit', $profile->id)}}" type="button" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-edit"> </i> EDIT</a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -61,7 +61,7 @@ th {
                                 @endforeach
                             </tbody>
                         </table>
-                        <button class="btn btn-sm pull-right btn-flat btn-primary"><i class="fa fa-gears"> </i> GO TO FEES</button>
+                        <a href="{{route('settings.index')}}" type="button" class="btn btn-sm pull-right btn-flat btn-primary"><i class="fa fa-gears"> </i> GO TO FEES</a>
                     </div>
             {{-- @foreach ($profiles as $profile)
                 

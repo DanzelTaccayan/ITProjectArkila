@@ -29,46 +29,63 @@ class MakeRentalController extends Controller
 
     public function storeRental(CustomerRentalRequest $request)
     {
+      $userRequests = VanRental::where('user_id', auth()->user()->id)
+      ->where(function($status){
+        $status->where([
+            ['status','!=', 'Departed'],
+            ['status','!=', 'Expired'],
+            ['status','!=', 'Refunded'],
+            ['status','!=', 'No Van Available']
+            ]);
+          })->count();
 
-      $carbonDate = new Carbon($request->date);
-      $departedDate = $carbonDate->format('Y-m-d');
-      $destination = $request->destination;
-
-      $codes = VanRental::all();
-      $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-
-      foreach ($codes as $code)
+      if($userRequests < 1)
       {
-          $allCodes = $code->rental_code;
-
-          do
+          $carbonDate = new Carbon($request->date);
+          $departedDate = $carbonDate->format('Y-m-d');
+          $destination = $request->destination;
+    
+          $codes = VanRental::all();
+          $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+    
+          foreach ($codes as $code)
           {
-              $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-
-          } while ($rentalCode == $allCodes);
+              $allCodes = $code->rental_code;
+    
+              do
+              {
+                  $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+    
+              } while ($rentalCode == $allCodes);
+          }
+    
+          if($request->destination == 'other')
+          {
+            $destination = $request->otherDestination;
+          }
+              $rent = VanRental::create([
+                "user_id" => Auth::id(),
+                "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
+                "departure_date" => $departedDate,
+                "rental_code" => 'RN'.$rentalCode,
+                "departure_time" => $request->time,
+                "number_of_days" => $request->numberOfDays,
+                "destination" => $destination,
+                "contact_number" => $request->contactNumber,
+                "status" => 'Pending',
+                "rent_type" => 'Online',
+                "comment" => $request->message !== null ? $request->message : null,
+              ]);
+          //dd($rent->departure_date);
+          // $user = User::find(Auth::id());
+          // $user->notify(new CustomerRent($user, $rent));
+          return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully made a rental');
       }
-
-      if($request->destination == 'other')
+      else
       {
-        $destination = $request->otherDestination;
+        return redirect(route('customermodule.rentalTransaction'))->withErrors('Sorry, you can only request one rent at a time.');
+        
       }
-          $rent = VanRental::create([
-            "user_id" => Auth::id(),
-            "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
-            "departure_date" => $departedDate,
-            "rental_code" => 'RN'.$rentalCode,
-            "departure_time" => $request->time,
-            "number_of_days" => $request->numberOfDays,
-            "destination" => $destination,
-            "contact_number" => $request->contactNumber,
-            "status" => 'Pending',
-            "rent_type" => 'Online',
-            "comment" => $request->message !== null ? $request->message : null,
-          ]);
-      //dd($rent->departure_date);
-      // $user = User::find(Auth::id());
-      // $user->notify(new CustomerRent($user, $rent));
-    	return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully made a rental');
     }
 
     public function rentalTransaction()

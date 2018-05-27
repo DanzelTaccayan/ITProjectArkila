@@ -74,71 +74,95 @@ class MakeReservationController extends Controller
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
 	{
-		if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
+		$userReservations = Reservation::where('user_id', auth()->user()->id)
+		->where(function($status){
+            $status->where([
+				['status','!=', 'DEPARTED'],
+				['status','!=', 'EXPIRED'],
+				['status','!=', 'REFUNDED'],
+				['status','!=', 'CANCELLED']
+				]);
+			})->count();
+
+		if($userReservations < 2)
 		{
-			if($reservation->status == 'OPEN')
-			{			
-				$quantity = $request->quantity;
-				$slot = $reservation->number_of_slots;
-				if($quantity <= $slot)
-				{
-					$expiry = Carbon::now()->addDays(2)->setTime(17, 00, 00);
-					$newSlot = $reservation->number_of_slots - $request->quantity;
-					$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
-					$ticket = Ticket::where('destination_id', $destination->destination_id)->get()->first();
-					$toBePaid = $ticket->fare * $quantity;
-			
-		
-					$codes = Reservation::all();
-					$newCode = bin2hex(openssl_random_pseudo_bytes(8));
-					foreach ($codes as $code)
+			if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
+			{
+				if($reservation->status == 'OPEN')
+				{			
+					$quantity = $request->quantity;
+					$slot = $reservation->number_of_slots;
+					if($quantity <= $slot)
 					{
-						$allCodes = $code->rsrv_code;
-		
-						do
+						$codes = Reservation::all();
+						$newCode = bin2hex(openssl_random_pseudo_bytes(8));
+						foreach ($codes as $code)
 						{
-							$newCode =  bin2hex(openssl_random_pseudo_bytes(8));
-		
-						} while ($newCode == $allCodes);
-					}
-					$this->validate(request(), [
-						'contactNumber' => 'bail|numeric|required',
-						'quantity' => 'bail|numeric|required|min:1|max:2',
-					]);
-					$transaction = Reservation::create([
-						'user_id' => auth()->user()->id,
-						'date_id' => $reservation->id,
-						'destination_name' => $destination->destination_name,
-						'rsrv_code' => 'RV'.$newCode,
-						'name' => auth()->user()->full_name,
-						'contact_number' => $request->contactNumber,
-						'ticket_quantity' => $quantity,
-						'fare' => $toBePaid,
-						'expiry_date' => $expiry,
-						'type' => 'Online',
-					]);
-		
-					$reservation->update([
-						'number_of_slots' => $newSlot,
-					]);
-		
-					return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
-		
+							$allCodes = $code->rsrv_code;
 			
+							do
+							{
+								$newCode =  bin2hex(openssl_random_pseudo_bytes(8));
+			
+							} while ($newCode == $allCodes);
+						}
+						$this->validate(request(), [
+							'contactNumber' => 'bail|numeric|required',
+							'quantity' => 'bail|numeric|required|min:1|max:4',
+						]);
+						$time = explode(':', $reservation->departure_time);
+						$newSlot = $reservation->number_of_slots - $request->quantity;
+						$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
+						$ticket = Ticket::where('destination_id', $destination->destination_id)->get()->first();
+						$toBePaid = $ticket->fare * $quantity;
+						$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
+						
+						if($expiry->lt(Carbon::now())) {
+							$expiry = $reservation->reservation_date->setTime($time[0], $time[1], $time[2]);
+						} else {
+							$expiry = Carbon::now()->addDays(2)->setTime(17, 00, 00);
+						}
+				
+			
+						$transaction = Reservation::create([
+							'user_id' => auth()->user()->id,
+							'date_id' => $reservation->id,
+							'destination_name' => $destination->destination_name,
+							'rsrv_code' => 'RV'.$newCode,
+							'name' => auth()->user()->full_name,
+							'contact_number' => $request->contactNumber,
+							'ticket_quantity' => $quantity,
+							'fare' => $toBePaid,
+							'expiry_date' => $expiry,
+							'type' => 'Online',
+						]);
+			
+						$reservation->update([
+							'number_of_slots' => $newSlot,
+						]);
+			
+						return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
+			
+				
+					}
+					else
+					{
+						return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
+					}
 				}
 				else
 				{
-					return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
+					return redirect(route('customermodule.showDate'))->withErrors('Sorry, reservation is closed.');	
 				}
 			}
 			else
 			{
-				return redirect(route('customermodule.showDate'))->withErrors('Sorry, reservation is closed.');	
+				return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
 			}
 		}
 		else
 		{
-			return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
+			return redirect(route('customermodule.showDate'))->withErrors('Sorry, you exceeded the number of reservations allowed.');							
 		}
 	}
 
@@ -149,7 +173,7 @@ class MakeReservationController extends Controller
 
 	public function reservationTransaction()
 	{
-		$requests = Reservation::where('user_id', auth()->user()->id)->get();
+		$requests = Reservation::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
 
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}

@@ -5,7 +5,7 @@
     @section('back-link',route('vans.index'))
 @else
     @section('form-action',route('vans.storeFromOperator',[$operator->member_id]))
-    @section('back-link', route('operators.showProfile',[$operator->member_id]))
+    @section('back-link', route('operators.show',[$operator->member_id]))
 @endif
 @section('form-title', 'ADD VAN')
 @section('form-body')
@@ -75,22 +75,15 @@
 @section('others')
     <div class="form-group">
         <span id="checkBox">
-            @if(isset($operators))
-                @if(count($operators) > 0)
-                    <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
-                @endif
-            @endif
+                <input name="addDriver" type="checkbox" class="minimal"> <span>Add new driver to this van unit</span>
         </span>
 
 @endsection
         @section('form-btn')
-            @if(isset($operators))
-                @if(count($operators) > 0)
                 <div class="" id="addVanBtn">
                     <button type="submit" class="btn btn-primary">Add unit</button>
                 </div>
-                @endif
-            @endif
+
         <div id="addVanBtnM" class="hidden">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
             <div class="modal" id="driverWithVan-modal">

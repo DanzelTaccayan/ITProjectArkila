@@ -11,7 +11,7 @@
                     	<table class="table table-striped table-bordered">
                     		<tbody>
 								<tr>
-                    				<th>Reservation Code</th>
+                    				<th>Rental Code</th>
                     				<td><strong>{{$transaction->rsrv_code}}</strong></td>
                     			</tr>
                     			<tr>
@@ -30,6 +30,10 @@
                                     <th>Departure Day</th>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <th>Number of Rental Days</th>
+                                    <td></td>
+                                </tr>
                     			<tr>
                     				<th>Expiry Date</th>
                     				<td>{{$transaction->expiry_date->formatLocalized('%d %B %Y')}}</td>
@@ -39,13 +43,17 @@
                     				<td>{{$transaction->status}}</td>
                     			</tr>
                     			<tr>
-                    				<th>Ticket Qty</th>
-                    				<td>{{$transaction->ticket_quantity}}</td>
-                    			</tr>
-                    			<tr>
-                    				<th>Total Amount to Pay</th>
-                    				<td>{{$transaction->fare}}</td>
-                    			</tr>
+                                    <th>Van Unit</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Driver</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Driver Contact Number</th>
+                                    <td></td>
+                                </tr>
                     		</tbody>
                     	</table>
                     	<p><strong>NOTE:</strong> Pay the total amount at the company office before the expiry date.</p>

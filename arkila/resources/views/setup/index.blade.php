@@ -1,8 +1,30 @@
 @extends('layouts.startup')
 @section('title', 'Setting Up')
 @section('form-action', route('setup.store'))
+@section('links')
+@parent
+<style>
+.col-md-6 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
 
+.left{
+    padding-right: 10px;
+}
 
+.right{
+    padding-left: 10px;
+}
+
+.step.active {
+    background-color: darkslategray;
+}
+
+</style>
+@endsection
 @section('form-body')
 
 <div class="box" style="margin: 8% 0%">  
@@ -16,17 +38,21 @@
             <hr>
             <p class="text-justify" style="font-size: 12pt"><strong>WELCOME! </strong>Lets get started by clicking on the next button below. You are required to fill in necessary information about the company such as the contact number, address and email. As we move along, you will be required to set the main terminal, destination terminal and fees by simply filling in the necessary information.</p>
 
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step active"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+            </div>
         </div>
 
         <!-- Company Profile-->
-        <div class="form-section" style="margin-bottom: 10%">
+        <div class="form-section" >
             <div class="box-header with-border text-center">
-                <h3 class="box-title">
-                Company Information
-                </h3>
+                <h1 ><strong>COMPANY INFORMATION</strong></h1>
             </div>
 
-            <div style="padding: 7% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
                     <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
@@ -40,17 +66,22 @@
                     <label>Email: </label>
                     <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
+                <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step active"></span>
+                <span class="step"></span>
+                <span class="step"></span>
             </div>
         </div>
         
         <!--Terminals -->
-        <div class="form-section" style="padding-right: 5%">
+        <div class="form-section">
             <div class="box-header with-border text-center">
-                <h3 class="box-title">
-                Terminal
-                </h3>
+                <h1><strong>TERMINALS</strong></h1>
             </div>
-            <div class="box" style="margin: 3%; padding: 3% 5%">
+            <div style="padding: 2% 10% 0% 10%">
                 <h4><strong>Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -60,9 +91,7 @@
                     <label>Booking Fee: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
                 </div>
-            </div>
-
-            <div class="box" style="margin: 3%; padding: 3% 5%">
+        
                 <h4><strong>Destination Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -72,42 +101,48 @@
                     <label>Booking Fee: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group col-md-6 left">
                     <label>Regular Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6 right">
                     <label>Discounted Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}" required>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6 left">
                     <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
+                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" required="">
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-6 right">
                     <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" required>
                 </div>
-                <div class="form-group" id="shotTripReg">
+                <div class="form-group col-md-6 left" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
                 </div>
-                <div class="form-group" id="shotTripDis">
+                <div class="form-group col-md-6 right" id="shotTripDis">
                     <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
                 </div>
+                <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step active"></span>
+                <span class="step"></span>
             </div>
         </div>
 
         <!-- Fees -->
-        <div class="form-section" style="margin-bottom: 11%">
+        <div class="form-section">
             <div class="box-header with-border text-center">
-                <h3 class="box-title">
-                Fees
-                </h3>
+                <h1><Storng>ADDITIONAL FEES</Storng></h1>
             </div>
 
-            <div style="padding: 7% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label>Description:</label>
                     <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
@@ -124,17 +159,15 @@
                     <label>Amount: <span class="text-red">*</span></label>
                     <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
                 </div>
+                <p class="font-italic"><strong>NOTE:</strong> You can edit these amounts in the Fees and Features page under the Settings tab.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step active"></span>
             </div>
         </div>
-
-    <div style="text-align:center;margin-top:40px;">
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-    </div>
-
 
     </div>
 

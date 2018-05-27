@@ -63,4 +63,9 @@ class Van extends Model
         }
     }
 
+    public function setPlateNumberAttribute($value)
+    {
+        $this->attributes['plate_number'] = strtoupper($value);
+    }
+
 }
