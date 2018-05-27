@@ -33,7 +33,7 @@ class CreateReservationTable extends Migration
             $table->decimal('fare', 11, 2);
             $table->dateTime('expiry_date')
             ->nullable();
-            $table->enum('status', ['UNPAID', 'PAID', 'TICKET ON HAND', 'CANCELLED', 'REFUNDED'])
+            $table->enum('status', ['UNPAID', 'PAID', 'TICKET ON HAND', 'CANCELLED', 'DEPARTED', 'EXPIRED', 'REFUNDED'])
             ->default('Unpaid');
             $table->boolean('returned_slot')
             ->default(false);

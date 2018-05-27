@@ -10,20 +10,22 @@
                     <tr>
                         <th>Van Unit</th>
                         <td>
-                            <select name="" id="" class="form-control select2">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select name="van" id="van" class="form-control select2">
+                                <option value="">Choose Van</option>
+                            @foreach($vans as $van)
+                                <option value="{{$van->van_id}}">{{$van->plate_number}}</option>
+                            @endforeach
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th>Driver</th>
                         <td>
-                            <select name="" id="" class="form-control select2">
-                                <option value="">HALULUO DELA CRUZ</option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select name="driver" id="driver" class="form-control select2">
+                                <option value="">Choose Driver</option>
+                                @foreach($drivers as $driver)
+                                <option value="{{$driver->member_id}}">{{$driver->full_name}}</option>
+                                @endforeach
                             </select>
                         </td>
                     </tr>
