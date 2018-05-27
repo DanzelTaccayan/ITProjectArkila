@@ -71,6 +71,7 @@ class ArchiveController extends Controller
         }
         return redirect(route('operators.index'));
     }
+
     public function restoreArchivedOperator(Member $archivedOperator)
     {
         // Start transaction!
@@ -117,6 +118,7 @@ class ArchiveController extends Controller
         }
         return back();
     }
+
     public function restoreArchivedDriver(Member $archivedDriver)
     {
         // Start transaction!
@@ -132,6 +134,7 @@ class ArchiveController extends Controller
         }
         return back();
     }
+
     //Vans
     public function archiveVan(Van $van)
     {
@@ -183,5 +186,17 @@ class ArchiveController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
         return back();
+    }
+
+    public function showAllArchivedDriver()
+    {
+        $archivedDrivers = Member::allDrivers()->where('status','Inactive')->get();
+        return view('archive.driverArchive',compact('archivedDrivers'));
+    }
+
+    public function showAllArchivedVans()
+    {
+        $archivedVans = Van::where('status','Inactive')->get();
+        return view('archive.vanArchive',compact('archivedVans'));
     }
 }

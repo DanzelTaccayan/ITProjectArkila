@@ -212,12 +212,14 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::delete('/selectedLastTicket/{destination}','TransactionsController@deleteLastSelectedTicket')->name('transactions.selectedTicket');
     /********Archive ********/
     Route::get('/home/archive', 'ArchiveController@archive')->name('archive.index');
+    Route::get('/home/archive/drivers', 'ArchiveController@showAllArchivedDriver')->name('archive.showAllArchivedDriver');
+    Route::get('/home/archive/vans','ArchiveController@showAllArchivedVans')->name('archive.showAllArchivedVans');
     Route::get('/home/archive/profile/{archivedOperator}','ArchiveController@showArchivedProfileOperator')->name('archive.showArchivedProfileOperator');
     Route::patch('/home/vans/{van}/archiveVan', 'ArchiveController@archiveVan')->name('vans.archiveVan');
     Route::patch('/home/archive/{operator}/archiveOperators', 'ArchiveController@archiveOperator')->name('operators.archiveOperator');
     Route::patch('/home/archive/{driver}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
     Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
-    Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('driver.restoreArchivedDriver');
+    Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('drivers.restoreArchivedDriver');
 
     /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');

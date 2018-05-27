@@ -674,6 +674,28 @@
                     $('#totalPayment'+terminalId).append('<strong></strong>');
                     $('#totalPayment'+terminalId).children('strong').text("₱ "+overall.toFixed(2));
 
+                },
+                error:function(response) {
+                    $.notify({
+                        // options
+                        icon: 'fa fa-warning',
+                        message: response.responseJSON.error
+                    },{
+                        // settings
+                        type: 'danger',
+                        autoHide: true,
+                        clickToHide: true,
+                        autoHideDelay: 2500,
+                        placement: {
+                            from: 'bottom',
+                            align: 'right'
+                        },
+                        icon_type: 'class',
+                        animate: {
+                            enter: 'animated bounceIn',
+                            exit: 'animated bounceOut'
+                        }
+                    });
                 }
 
             });
@@ -693,6 +715,28 @@
                 success: function(response){
                     element.closest('tr').remove();
                     updateDataOfDeletedTicket(response.destinationId,response.terminalId,response.ticketType,response.fare);
+                },
+                error:function(response) {
+                    $.notify({
+                        // options
+                        icon: 'fa fa-warning',
+                        message: response.responseJSON.error
+                    },{
+                        // settings
+                        type: 'danger',
+                        autoHide: true,
+                        clickToHide: true,
+                        autoHideDelay: 2500,
+                        placement: {
+                            from: 'bottom',
+                            align: 'right'
+                        },
+                        icon_type: 'class',
+                        animate: {
+                            enter: 'animated bounceIn',
+                            exit: 'animated bounceOut'
+                        }
+                    });
                 }
 
             });
@@ -714,6 +758,28 @@
                 success: function(response){
                     $('#selectedList'+terminalId).find('[data-val="' + response.lastSelected + '"]').closest('tr').remove();
                     updateDataOfDeletedTicket(destinationId,terminalId,ticketType,response.fare);
+                },
+                error:function(response) {
+                    $.notify({
+                        // options
+                        icon: 'fa fa-warning',
+                        message: response.responseJSON.error
+                    },{
+                        // settings
+                        type: 'danger',
+                        autoHide: true,
+                        clickToHide: true,
+                        autoHideDelay: 2500,
+                        placement: {
+                            from: 'bottom',
+                            align: 'right'
+                        },
+                        icon_type: 'class',
+                        animate: {
+                            enter: 'animated bounceIn',
+                            exit: 'animated bounceOut'
+                        }
+                    });
                 }
 
             });
@@ -806,6 +872,28 @@
                             },
                             success: function(){
                                 location.reload();
+                            },
+                            error:function(response) {
+                                $.notify({
+                                    // options
+                                    icon: 'fa fa-warning',
+                                    message: response.responseJSON.error
+                                },{
+                                    // settings
+                                    type: 'danger',
+                                    autoHide: true,
+                                    clickToHide: true,
+                                    autoHideDelay: 2500,
+                                    placement: {
+                                        from: 'bottom',
+                                        align: 'right'
+                                    },
+                                    icon_type: 'class',
+                                    animate: {
+                                        enter: 'animated bounceIn',
+                                        exit: 'animated bounceOut'
+                                    }
+                                });
                             }
 
                         });
@@ -828,6 +916,28 @@
                     },
                     success: function(){
                         location.reload();
+                    },
+                    error:function(response) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
 
                 });
@@ -856,19 +966,41 @@
                             'tickets': tickets
                         },
                         success: function(){
-                        console.log('success');
+                            actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
+                            actives.remove();
+
+                            var checkBox = $('a[name="checkBox'+terminalId+'"]');
+
+                            if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
+                                checkBox.removeClass('selected');
+                                checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+                            }
+                        },
+                        error:function(response) {
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
 
-                    actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
-                    actives.remove();
 
-                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
-
-                    if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
-                        checkBox.removeClass('selected');
-                        checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
-                    }
 
                 }
             });
@@ -891,20 +1023,39 @@
                             'tickets': tickets
                         },
                         success: function () {
-                            console.log('success');
+                            actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
+                            actives.remove();
+
+                            var checkBox = $('a[name="checkBox'+terminalId+'"]');
+
+                            if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
+                                checkBox.removeClass('selected');
+                                checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+                            }
+                        },
+                        error:function(response) {
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
-
-
-                    actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
-                    actives.remove();
-
-                    var checkBox = $('a[name="checkBox'+terminalId+'"]');
-
-                    if (checkBox.hasClass('selected') && checkBox.children('i').hasClass('glyphicon-check')) {
-                        checkBox.removeClass('selected');
-                        checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
-                    }
                 }
             });
 
@@ -986,8 +1137,29 @@
              },
              success: function(){
                  location.reload();
+             },
+             error:function(response) {
+                 $.notify({
+                     // options
+                     icon: 'fa fa-warning',
+                     message: response.responseJSON.error
+                 },{
+                     // settings
+                     type: 'danger',
+                     autoHide: true,
+                     clickToHide: true,
+                     autoHideDelay: 2500,
+                     placement: {
+                         from: 'bottom',
+                         align: 'right'
+                     },
+                     icon_type: 'class',
+                     animate: {
+                         enter: 'animated bounceIn',
+                         exit: 'animated bounceOut'
+                     }
+                 });
              }
-
          });
      });
 
@@ -1004,6 +1176,28 @@
              },
              success: function(){
                  location.reload();
+             },
+             error:function(response) {
+                 $.notify({
+                     // options
+                     icon: 'fa fa-warning',
+                     message: response.responseJSON.error
+                 },{
+                     // settings
+                     type: 'danger',
+                     autoHide: true,
+                     clickToHide: true,
+                     autoHideDelay: 2500,
+                     placement: {
+                         from: 'bottom',
+                         align: 'right'
+                     },
+                     icon_type: 'class',
+                     animate: {
+                         enter: 'animated bounceIn',
+                         exit: 'animated bounceOut'
+                     }
+                 });
              }
 
          });
@@ -1094,12 +1288,10 @@
                     if(response.status === 500) {
                         return 'Service unavailable. Please try later.';
                     } else {
-                        console.log(response);
-                        return response.responseJSON.message;
+                        return response.responseJSON.error;
                     }
                 },
                 success: function(response){
-                    console.log(response);
                 }
             });
         });

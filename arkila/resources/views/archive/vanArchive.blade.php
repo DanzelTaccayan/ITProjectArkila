@@ -25,12 +25,12 @@
                         </tr>
                         </thead>
                         <tbody>
-            
+                            @foreach($archivedVans as $archivedVan)
                                 <tr>
-                                    <td>aaa123</td>
-                                    <td>INUBA</td>
-                                    <td class="text-right" style="width: 10px;">12</td>
-                                    <td></td>
+                                    <td>{{$archivedVan->plate_number}}</td>
+                                    <td>{{$archivedVan->model->description}}</td>
+                                    <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
+                                    <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
                                     <td>
                                         <div class="text-center">
                                             <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
@@ -38,7 +38,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                           
+                            @endforeach
                         </tbody>
                 </table>
             </div>

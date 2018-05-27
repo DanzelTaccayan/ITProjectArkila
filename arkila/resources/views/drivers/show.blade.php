@@ -9,9 +9,11 @@
                     <div class="col-md-3">
                         <div class="profile-side">
                             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$generalDriver->profile_picture) }}" alt="Driver profile picture">
-                             <div class="profile-btn-group">
-                                <a href="{{route('drivers.edit',[$generalDriver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
-                            </div>
+                            @if($generalDriver->status === "Active")
+                                <div class="profile-btn-group">
+                                    <a href="{{route('drivers.edit',[$generalDriver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
+                                </div>
+                            @endif
                             <hr>
                             <div class="profile-btn-group">
                                <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous())

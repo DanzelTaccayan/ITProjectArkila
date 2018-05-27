@@ -25,20 +25,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                        
+                        @foreach($archivedDrivers as $archivedDriver)
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{$archivedDriver->full_name}}</td>
+                                <td>{{$archivedDriver->address}}</td>
+                                <td>{{$archivedDriver->contact_number}}</td>
+                                <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
                                 <td>
                                     <div class="text-center">
-                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                        <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                         <a href="" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> RESTORE</a>
                                     </div>
                                 </td>
                             </tr>
-                        
+                        @endforeach
                     </tbody>
                 </table>
             </div>

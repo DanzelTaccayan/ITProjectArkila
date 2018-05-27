@@ -328,6 +328,28 @@
                     },
                     success: function(response){
                         $('#changeDestination'+ticketId).val(response);
+                    },
+                    error:function(response) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
 
                 });
@@ -352,9 +374,32 @@
                     success: function(){
                         $('#ticket'+ticketId).remove();
                         $('#refund-modal'+ticketId).remove();
+                    },
+                    error:function(response) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
                 });
             });
+
             $('button[name="initialMultiRefund"]').on('click',function(){
                 var checked = $('input[name="checkInput"]:checked');
                 var amount = 0;
@@ -391,6 +436,28 @@
                                 $('#ticket'+ticketId).remove();
                                 $('#refund-modal'+ticketId).remove();
                             })
+                        },
+                        error:function(response) {
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
                 }
@@ -410,9 +477,52 @@
                     success: function(){
                         $('#ticket'+ticketId).remove();
                         $('#refund-modal'+ticketId).remove();
+
+                        new PNotify({
+                            title: "Success!",
+                            text: "Successfully cancelled ticket "+ response,
+                            hide: true,
+                            delay: 2500,
+                            animate: {
+                                animate: true,
+                                in_class: 'slideInDown',
+                                out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                        });
+                    },
+                    error:function(response) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
                 });
             });
+
             $('button[name="initialMultiDelete"]').on('click',function(){
                 var checkCount = $('input[name="checkInput"]:checked').length;
                 if(checkCount > 0) {
@@ -420,6 +530,7 @@
                     $('#multidelete-modal').modal('show');
                 }
             });
+
             $('button[name="multiDelete"]').on('click',function(){
                 var checked = $('input[name="checkInput"]:checked');
                 var checkedArr = [];
@@ -440,7 +551,50 @@
                             checkedArr.forEach(function(ticketId){
                                 $('#ticket'+ticketId).remove();
                                 $('#refund-modal'+ticketId).remove();
-                            })
+                            });
+
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully cancelled the following tickets:  "+ response,
+                                hide: true,
+                                delay: 2500,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+
+                        },
+                        error:function(response) {
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
                 }
@@ -457,9 +611,51 @@
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
-                    success: function(){
+                    success: function(response){
                         $('#ticket'+ticketId).remove();
                         $('#refund-modal'+ticketId).remove();
+
+                        new PNotify({
+                            title: "Success!",
+                            text: "Successfully updated "+ response,
+                            hide: true,
+                            delay: 2500,
+                            animate: {
+                                animate: true,
+                                in_class: 'slideInDown',
+                                out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                        });
+                    },
+                    error:function(response) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
                 });
             });
