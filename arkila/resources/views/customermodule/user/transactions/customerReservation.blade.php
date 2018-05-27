@@ -115,6 +115,7 @@
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
                                         @if($reservation->status == 'PAID')
+                                        <button class="btn btn-danger">CANCEL</button>
                                         <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                         @endif
                                     </div>
