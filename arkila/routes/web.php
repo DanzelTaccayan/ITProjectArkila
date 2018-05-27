@@ -160,7 +160,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['edit']
     ]);
-
     Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
 
     Route::resource('/home/company-profile', 'ProfileController',[
@@ -303,6 +302,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
     /**Services**/
     /*Rental*/
+    Route::patch('/home/rental/{rental}/cancelRental', 'CustomerModuleControllers\MakeRentalController@cancelRental')->name('rental.cancel');
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
     Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
