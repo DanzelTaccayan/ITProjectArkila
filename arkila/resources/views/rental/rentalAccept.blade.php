@@ -10,7 +10,7 @@
                     <tr>
                         <th>Van Unit</th>
                         <td>
-                            <select name="" id="" class="form-control">
+                            <select name="" id="" class="form-control select2">
                                 <option value=""></option>
                                 <option value=""></option>
                                 <option value=""></option>
@@ -20,7 +20,7 @@
                     <tr>
                         <th>Driver</th>
                         <td>
-                            <select name="" id="" class="form-control">
+                            <select name="" id="" class="form-control select2">
                                 <option value="">HALULUO DELA CRUZ</option>
                                 <option value=""></option>
                                 <option value=""></option>
@@ -29,8 +29,8 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="text-center">   
-                <a href="{{route('rental.index')}}" class="btn btn-default">Back</a> 
+            <div class="text-center">
+                <button type="submit" name="status" value="Unpaid" class="btn btn-danger">Decline</button> 
                 <button type="submit" name="status" value="Unpaid" class="btn btn-success">Accept</button> 
             </div>
         </div>
