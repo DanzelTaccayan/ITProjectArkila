@@ -12,11 +12,11 @@ class RentalsObserver{
 
   public function created(VanRental $rent)
   {
-    if($reserve->type == 'Online'){
+    if($rent->type == 'Online'){
       $user = User::find(Auth::id());
       $userAdmin = User::where('user_type', 'Super-Admin')->first();
       //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
-      $userAdmin->notify(new OnlineRentalAdminNotification($rent, $reserve));
+      $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
     }
   }
 
