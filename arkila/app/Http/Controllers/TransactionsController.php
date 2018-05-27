@@ -15,6 +15,7 @@ use DateTimeZone;
 use App\Fee;
 use App\Reservation;
 use DB;
+use Response;
 
 class TransactionsController extends Controller
 {
@@ -26,7 +27,7 @@ class TransactionsController extends Controller
     public function index()
     {
         $reservations = Reservation::where('status', 'PAID')->get();
-        $terminals = Destination::where('is_main_terminal','!=','1')->get();
+        $terminals = Destination::allTerminal()->get();
         $tickets = Ticket::all();
         $selectedTickets = SelectedTicket::all();
         return view('transaction.index',compact('terminals','tickets','selectedTickets', 'reservations'));
@@ -86,7 +87,7 @@ class TransactionsController extends Controller
     {
 
         if ($vanOnQueue = $destination->vanQueue()->where('queue_number', 1)->first()) {
-            if ($tickets = $destination->tickets->where('status','OnBoard')->get()) {
+            if ($tickets = $destination->tickets->where('status','OnBoard')) {
                 // Start transaction!
                 DB::beginTransaction();
                 try {
@@ -94,10 +95,10 @@ class TransactionsController extends Controller
                     $totalPassengers = count($tickets);
 
                     //Return Error
-                    if($totalPassengers >  $vanOnQueue->seating_capacity) {
-                        return back()->withErrors('Cannot Depart. The sold tickets exceeds the seating capacity of the van');
+                    if($totalPassengers >  $vanOnQueue->van->seating_capacity) {
+                        return Response::json(['error' => 'Cannot Depart. The sold tickets exceeds the seating capacity of the van'], 422);
                     } elseif ( $totalPassengers == 0 ) {
-                        return back()->withErrors('Cannot Depart. There are no sold tickets');
+                        return Response::json(['error' => 'Cannot Depart. There are no sold tickets'], 422);
                     }
 
                     $totalBooking = ($destination->routeOrigin->first()->booking_fee) * $totalPassengers;
