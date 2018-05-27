@@ -140,7 +140,7 @@
                     <div class="text-center">
                     <h1><i class="fa fa-warning text-red"></i> NO TERMINAL/DESTINATION FOUND</h1>
                     <h4>CREATE A TERMINAL/DESTINATION FIRST BEFORE YOU CAN SELL TICKETS</h4>
-                    <button class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</button>
+                    <a href="{{route('terminalCreate.create')}}" type="button" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
                     </div>
                 </div>
             </div>
