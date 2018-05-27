@@ -5,10 +5,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
-                        <div class=" boxContainer">
+                        <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
-                                <h4 class="text-center">NO RESERVATION.</h4>
+                                <h4 class="text-center">NO RENTALS.</h4>
                             @else
                                 <ul class="list-group">
                                     @foreach($requests as $rental)
@@ -38,6 +38,10 @@
                                         @elseif($rental->status == 'Expired')
                                         <i class="fa fa-times-circle" style="color:red;"></i>
                                         {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'No Van Available')
+                                        <i class="fa fa-times-circle" style="color:red;"></i>
+                                        {{strtoupper($rental->status)}}
+
                                         @endif
                                         </small>
                                         </div>
