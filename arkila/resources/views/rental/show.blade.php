@@ -37,7 +37,7 @@
 		                            <td>{{ $rental->departure_date->formatLocalized('%A') }}</td>
 		                        </tr>
 	                            <tr>
-		                            <th>Departure Day</th>
+		                            <th>Number of Rental Days</th>
 		                            <td>{{ $rental->number_of_days }}</td>
 		                        </tr>
 		                        <tr>
@@ -45,12 +45,12 @@
 		                            <td>{{ $rental->status }}</td>
 		                        </tr>
 		                        <tr>
-		                            <th>Driver</th>
-		                            <td>{{ $rental->driver->full_name ?? 'None' }}</td>
-		                        </tr>
-		                        <tr>
 		                            <th>Van</th>
 		                            <td>{{ $rental->van->plate_number ?? 'None'}}</td>
+		                        </tr>
+		                        <tr>
+		                            <th>Driver</th>
+		                            <td>{{ $rental->driver->full_name ?? 'None' }}</td>
 		                        </tr>
 		                        <tr>
 		                            <th>Comment</th>
@@ -58,13 +58,16 @@
 		                        </tr>
 		                    </tbody>
 		                </table>
+		                <div class="text-center">
+		                	<a href="{{route('rental.index')}}" class="btn btn-default">Back</a>
+		                </div>
 					</div>
 					<div class="col-md-6">
 		                @if($rental->status == 'Pending')
 							@include('rental.rentalAccept')
-		                @elseif($rental->status == 'Unpaid')
+		                @elseif($rental->status == 'UNPAID')
 							@include('rental.rentalPayment')
-		                @elseif($rental->status == 'Paid')
+		                @elseif($rental->status == 'Paid' || $rental->status == 'Cancelled')
 							@include('rental.rentalDepart')
 		                @endif
 					</div>

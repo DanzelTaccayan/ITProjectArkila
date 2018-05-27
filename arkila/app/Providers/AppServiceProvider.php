@@ -18,15 +18,11 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         view()->composer('layouts.partials.queue_sidebar', function($view){
-            $terminals = Destination::has('vanQueue');
+            $terminalsSideBar = Destination::allTerminal()->get();
 
-//            $view->with([
-//                'terminalsSideBar' => $terminalsSideBar,
-//                'tripsSideBar' => $tripsSideBar,
-//                'driversSideBar' => $driversSideBar,
-//                'vansSideBar' => $vansSideBar,
-//                'terminalsTicketSideBar' => $terminalsTicketSideBar
-//            ]);
+            $view->with([
+                'terminalsSideBar' => $terminalsSideBar,
+            ]);
         });
     }
 

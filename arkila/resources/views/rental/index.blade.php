@@ -13,7 +13,6 @@
                     <div class="col-md-6">
                         <a href="/home/rental/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD RENTAL</a>
                     </div>
-
                     <table class="table table-bordered table-striped rentalTable">
                         <thead>
                             <tr>
@@ -53,7 +52,9 @@
         </div>
     </div>
 </div>
-@endsection @section('scripts') @parent
+@endsection
+@section('scripts') 
+@parent
 <script>
     $(function() {
 
@@ -63,12 +64,7 @@
             'searching': true,
             'ordering': true,
             'info': true,
-            'autoWidth': true,
-            'order': [[ 7, "asc" ]],
-            'aoColumnDefs': [{
-                'bSortable': false,
-                'aTargets': [-1] /* 1st one, start by the right */
-            }]
+            'autoWidth': true
         })
     })
 </script>

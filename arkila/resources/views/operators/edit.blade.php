@@ -7,7 +7,7 @@
     <div class="box box-primary with-shadow">
         <div class="box-header with-border text-center">
             <h4>
-            <a href="{{route('operators.showProfile',[$operator->member_id])}}" class="pull-left"><i class="fa fa-chevron-left"></i></a>
+            <a href="{{route('operators.show',[$operator->member_id])}}" class="pull-left"><i class="fa fa-chevron-left"></i></a>
             </h4>
             <h3 class="box-title">
                 EDIT OPERATOR INFORMATION
@@ -25,7 +25,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input  value="{{old('contactNumber') ?? $operator->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input  value="{{old('contactNumber') ?? $operator->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                         <tr>
@@ -86,7 +86,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $operator->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input value="{{ old('contactPersonContactNumber') ?? $operator->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                     </tbody>
@@ -95,7 +95,7 @@
         </div>
         <div class="box-footer">
             <div class="pull-right">
-                <a href="" class="btn btn-default">Cancel</a>
+                <a href="{{route('operators.show',[$operator->member_id])}}" class="btn btn-default">Cancel</a>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Changes</button>
             </div>
         </div>    

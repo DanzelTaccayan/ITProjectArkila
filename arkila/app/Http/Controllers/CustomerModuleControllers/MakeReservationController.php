@@ -74,7 +74,7 @@ class MakeReservationController extends Controller
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
 	{
-		if ($reservation->reservation_date->subDays(2)->gt(Carbon::now()))
+		if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
 		{
 			if($reservation->status == 'OPEN')
 			{			

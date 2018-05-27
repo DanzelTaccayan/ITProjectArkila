@@ -8,212 +8,48 @@
         <div id="home-slider" class="carousel box-trip" data-interval="false">
         <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div class="item  active">
-                    <h4><i class="fa fa-home"></i> CABANATUAN</h4>
+                @foreach($terminalsSideBar as $terminalSidebar)
+                <div class="item  @if($terminalsSideBar->first() === $terminalSidebar) active @endif">
+                    <h4><i class="fa fa-home"></i> {{$terminalSidebar->destination_name}}</h4>
                     <div class="sidequeue-body"> 
                         <div class="sidequeue-body-color scrollbar scrollbar-info thin">
                             <ol id ="queue" class="sidequeue-list sidequeue-ol">
+                                @foreach($terminalSidebar->vanQueue as $vanSideBar)
                                 <li id="unit" data-vanid="" class="form-horizontal">
                                     <span id="trip" class="list-border">
                                         <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">1</p>
+                                            <p name="queueIndicator" id="queue">{{$vanSideBar->queue_number}}</p>
                                         </div>
                                         <div class=item id="item">
                                             <div  class="row">
                                                 <div class="col-md-12">
                                                     <p class="hidden"></p>
-                                                    SAMP 123
+                                                    {{$vanSideBar->van->plate_number}}
                                                     <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
+                                                        <i id="badge" class="badge badge-pill badge-default">{{$vanSideBar->remarks}}</i>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </span>
                                 </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">2</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">3</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">4</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">5</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">6</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">7</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">8</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">9</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
-                                <li id="unit" data-vanid="" class="form-horizontal">
-                                    <span id="trip" class="list-border">
-                                        <div class="sidequeuenum">
-                                            <p name="queueIndicator" id="queue">10</p>
-                                        </div>
-                                        <div class=item id="item">
-                                            <div  class="row">
-                                                <div class="col-md-12">
-                                                    <p class="hidden"></p>
-                                                    SAMP 123
-                                                    <div class="pull-right">
-                                                        <i id="badge" class="badge badge-pill badge-default">OB</i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </span>
-                                </li>
+                                @endforeach
                             </ol>
                         </div>
                     </div>
                 </div>
-                <div class="item">
-                    <h4><i class="fa fa-home"></i> SAN JOSE</h4>
-                    <div class="sidequeue-body"> 
-                        <div class="sidequeue-body-color scrollbar scrollbar-info thin">
-                        </div>
-                    </div>
-                </div>
+               @endforeach
             </div>
         <!-- /.carousel-inner -->
         </div>
-        <a href="" class="btn btn-success btn-sm btn-flat">GO TO VAN QUEUE PAGE</a>
+        <a href="{{route('vanqueue.index')}}" class="btn btn-success btn-sm btn-flat">GO TO VAN QUEUE PAGE</a>
+
         <div class="pull-right">
-            <a class="previous round step-btn" href="#home-slider" role="button" data-slide="prev">
+            <a class="previous round step-btn" href="#home-slider" role="button" data-slide="prev" tabindex="-1">
                 <i class="fa fa-chevron-left"></i>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="next round step-btn" href="#home-slider" role="button" data-slide="next">
+            <a class="next round step-btn" href="#home-slider" role="button" data-slide="next" tabindex="-1">
                 <i class="fa fa-chevron-right"></i>
                 <span class="sr-only">Next</span>
             </a>

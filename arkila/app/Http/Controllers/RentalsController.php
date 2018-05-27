@@ -24,9 +24,12 @@ class RentalsController extends Controller
     public function index()
     {
         //
-        $rentals = VanRental::all();
-        $vans = Van::all();
-        return view('rental.index', compact('vans', 'rentals'));
+        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded']])
+        ->orWhere(function($q){
+            $q->where([['status', 'Cancelled']])
+            ->where('is_refundable', true);
+        })->get();
+        return view('rental.index', compact('rentals'));
     }
 
     /**
@@ -77,6 +80,7 @@ class RentalsController extends Controller
                 'destination' => $destination,
                 'number_of_days' => $request->days,
                 'contact_number' => $request->contactNumber,
+                'is_refundable' => true,
                 'rent_type' => 'Walk-in',
                 'status' => 'Paid',
 
@@ -94,7 +98,10 @@ class RentalsController extends Controller
      */
     public function show(VanRental $rental)
     {
-        return view('rental.show', compact('rental'));
+        $vans = Van::all();
+        $drivers = Member::allDrivers()->get();
+
+        return view('rental.show', compact('rental', 'vans', 'drivers'));
     }
 
     /**
@@ -137,6 +144,8 @@ class RentalsController extends Controller
         if(request('status') == 'Unpaid')
         {
             $this->validate(request(), [
+                'driver' => 'required|numeric',
+                'van' => 'required|numeric',
                 'status' => [
                     'required',
                     Rule::in(['Unpaid'])
@@ -145,14 +154,18 @@ class RentalsController extends Controller
 
             $rental->update([
                 'status' => request('status'),
+                'driver_id' => request('driver'),
+                'van_id' => request('van'),
             ]);
 
-            return redirect(route('rental.index'))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+            return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
         }
         elseif(request('status') == 'Paid')
         {
+            $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
+
             $this->validate(request(), [
-                'fare' => 'required|numeric|min:0',
+                'fare' => 'required|numeric|min:1',
                 'status' => [
                     'required',
                     Rule::in(['Paid'])
@@ -162,12 +175,14 @@ class RentalsController extends Controller
             $rental->update([
                 'rental_fare' => request('fare'),
                 'status' => request('status'),
+                'refund_code' => $refundCode,
+                'is_refundable' => true,
             ]);
 
     
-            return redirect(route('rental.index'))->with('success', 'Rental has been successfully paid. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+            return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully paid. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
         }
-        else
+        elseif(request('status') == 'Departed')
         {
             $this->validate(request(), [
                 'status' => [
@@ -178,9 +193,42 @@ class RentalsController extends Controller
 
             $rental->update([
                 'status' => request('status'),
+                'is_refundable' => false,
+                'refund_code' => null,
             ]);
     
-            return redirect(route('rental.index'))->with('success', 'Rental has been successfully departed. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+            return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully departed. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        else
+        {
+            $this->validate(request(), [
+                'refund' => 'required|min:0|max:20',
+                'status' => [
+                    'required',
+                    Rule::in(['Refunded'])
+                ],
+            ]);
+            if($rental->is_refundable == true)
+            {
+                if(request('refund') == $rental->refund_code)
+                {
+                    $rental->update([
+                        'status' => request('status'),
+                        'is_refundable' => false,
+                        'refund_code' => null,
+                    ]);
+    
+                    return redirect(route('rental.index'))->with('success', 'Rental has been successfully refunded.');
+                }
+                else
+                {
+                    return back()->withErrors('Refund code does not match, please try again.');
+                }
+            }
+            else
+            {
+                return back()->withErrors('Rental code '.$rental->rental_code.' cannot be refunded.');
+            }
         }
     }
 }

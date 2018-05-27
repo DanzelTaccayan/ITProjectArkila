@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="profile-side">
-                            <img class="profile-user-img img-responsive img-circle" src="#" alt="Driver profile picture">
+                            <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$generalDriver->profile_picture) }}" alt="Driver profile picture">
                              <div class="profile-btn-group">
                                 <a href="{{route('drivers.edit',[$generalDriver->member_id])}}" class="btn btn-block btn-primary btn-sm"><strong>Update Information</strong></a>
                             </div>
@@ -24,17 +24,21 @@
                                     @endif
                                 @endif" class="btn btn-default btn-sm btn-block"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
                             </div>
-                            <div class="profile-van" style="margin-top: 10px;">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
-                                    <div class="info-box-content">
-                                      <h4><strong>{{$generalDriver->van()->first()->plate_number ?? null}}</strong></h4>
-                                      <p>{{$generalDriver->van()->first()->model->description ?? null}}</p>
-                                      <p style="color: gray;">{{$generalDriver->van()->first()->seating_capacity ?? null}} seats</p>
-                                    </div>
-                                    <!-- /.info-box-content -->
+                            @if($generalDriver->status === "Active")
+                                <div class="profile-van" style="margin-top: 10px;">
+
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
+                                            <div class="info-box-content">
+                                              <h4><strong>{{$generalDriver->van()->first()->plate_number ?? null}}</strong></h4>
+                                              <p>{{$generalDriver->van()->first()->model->description ?? null}}</p>
+                                              <p style="color: gray;">{{$generalDriver->van()->first()->seating_capacity ?? null}} seats</p>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-9">

@@ -7,7 +7,8 @@
 @else
     @section('back-link',route('vans.index') )
 @endif
-@section('form-action',route('vans.update',[$van->plate_number]))
+
+@section('form-action',route('vans.update',[$van->van_id]))
 
 @section('form-title', 'EDIT VAN')
 @section('method_field',method_field("PATCH"))
@@ -31,8 +32,8 @@
 
     <div class="form-group">
         <label for="">Van Model</label>
-        <p class="info-container">{{$van->vanModel->description}}</p>
-        <input type="hidden" value="{{$van->vanModel->description}}">
+        <p class="info-container">{{$van->model->description}}</p>
+        <input type="hidden" value="{{$van->model->description}}">
     </div>
 
     <div class="form-group">
