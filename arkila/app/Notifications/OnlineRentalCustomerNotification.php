@@ -54,19 +54,20 @@ class OnlineRentalCustomerNotification extends Notification
         $url = url('/home/transactions/rental');
 
         if($rent->status == 'Accepted'){
-            $message = ''.PHP_EOL;
-        }else if($rent->status == 'Declined'){
-            $message = ''.PHP_EOL;
-        }else if($rent->status == 'Cancelled'){
-            $message = ''.PHP_EOL;
+            $message = 'The rental for ' . $this->rent->destination .' on' .$dateHuman. 'that you have requested have been accepted. Payment for rental should be paid 48 hours from now'.PHP_EOL;
+            $message .= ''.PHP_EOL;
+        }else if($rent->status == 'NoVanAvailable'){
+            $message = 'There are no available vans for rental. We apologize for any inconvenience.'.PHP_EOL;
         }else if($rent->status == 'Departed'){
-            $message = ''.PHP_EOL;
+            $message = 'Have a safe trip to' . $this->rent->destination . '.' .PHP_EOL;
         }else if($rent->status == 'Refunded'){
-            $message = ''.PHP_EOL;
+             $message = 'We noticed you initiated a refund for your supposed trip to ' . $this->rent->destination. ' on ' .$dateHuman. '.'.PHP_EOL;
+            $message .= 'The total refunded amount is ' . $this->rent->fare . '.'.PHP_EOL;
+            $message .= 'We apologize for any inconvenience this refund may have caused you.'.PHP_EOL;
         }else if($rent->status == 'Paid'){
-            $message = ''.PHP_EOL;
+            $message = 'You have successfully paid your rental for ' . $this->rent->destination .' on ' . $dateHuman. '.'.PHP_EOL;
         }else if($rent->status == 'Expired'){
-            $message = ''.PHP_EOL;
+            $message = 'Your rent slot for ' . $this->rent->destination .' has expired because you have not paid' .  $this->rent->fare . '48 hours before the departure date.' .PHP_EOL;
         }
 
         return (new MailMessage)
