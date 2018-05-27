@@ -38,7 +38,17 @@
                 <div class="col-md-4">
                      <div class="form-group">
                         <label>Destination: <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" placeholder="Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
+                        <select name="" id="" class="form-control">
+                            <option value="">Select Destination</option>
+                            <option value=""></option>
+                            <option value="">** OTHER DESTINATION **</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                     <div class="form-group">
+                        <label>Other Destination: <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" placeholder="Other Destination" name="destination" id="destination" value="{{ old('destination') }}" val-book-dest required>
                     </div>
                 </div>
             </div>
