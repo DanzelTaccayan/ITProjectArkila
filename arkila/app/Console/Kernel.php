@@ -41,6 +41,12 @@ class Kernel extends ConsoleKernel
             $customerRental = new \App\Http\Controllers\CustomerModuleControllers\MakeRentalController();
             $customerRental->refundExpiry();
         })->everyMinute();
+
+        $schedule->call(function() {
+            $expiryStatus = new \App\Http\Controllers\CustomerModuleControllers\MakeRentalController();
+            $expiryStatus->expiredStatus();
+        })->everyMinute();
+
     }
 
     /**

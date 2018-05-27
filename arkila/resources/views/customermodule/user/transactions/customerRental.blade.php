@@ -20,11 +20,23 @@
                                         <p style="color: gray;">{{$rental->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($rental->created_at)) }}</p>
 
                                         <small>
-                                        @if($rental->status == 'Unpaid')
-                                        <i class="fa fa-circle-o" style="color:red;"></i>
+                                        @if($rental->status == 'Pending')
+                                        <i class="fa fa-circle" style="color:gray;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Unpaid')
+                                        <i class="fa fa-dot-circle-o" style="color:orange;"></i>
                                         {{strtoupper($rental->status)}}
                                          @elseif($rental->status == 'Paid')
                                         <i class="fa fa-check-circle" style="color:green;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Cancelled')
+                                        <i class="fa fa-minus-circle" style="color:gray;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Departed')
+                                        <i class="fa fa-chevron-circle-right" style="color:navyblue;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Expired')
+                                        <i class="fa fa-times-circle" style="color:red;"></i>
                                         {{strtoupper($rental->status)}}
                                         @endif
                                         </small>
@@ -33,7 +45,7 @@
                                         <div class="col-md-6">
                                             <div class="pull-right">
                                                     <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary">View</button>
-                                                    @if($rental->status == 'Paid' || $rental->status == 'Unpaid')
+                                                    @if($rental->status == 'Paid' || $rental->status == 'Unpaid' || $rental->status == 'Pending')
                                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancelModal{{$rental->rent_id}}">Cancel</button>                                           
                                                     @endif
                                                 </div>
@@ -75,7 +87,19 @@
                                         <span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                    <p>Are you sure you want to cancel rental with code:<strong>{{$rental->rental_code}}</strong>?</p>
+                                    @php $time = explode(':', $rental->departure_time); @endphp
+                                    @if($rental->status == 'Paid')
+                                    @if(Carbon\Carbon::now()->gt($rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2])))
+                                    <p>Its less than 24 hours before your specified departure time, if you will cancel now <strong class="text-red">you will NOT be able to refund</strong>.
+                                    Are you sure you want to cancel your van rental?</p>
+                                    @else
+                                    <p>If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund minus a cancellation fee.
+                                    Are you sure you want to cancel your van rental?</p>
+                                    @endif
+                                    @elseif($rental->status == 'Pending' || $rental->status == 'Unpaid')
+                                    <p>Are you sure you want to cancel your van rental?</p>
+                                    @endif
+
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
