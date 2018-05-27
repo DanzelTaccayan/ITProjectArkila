@@ -16,13 +16,13 @@ require('./bootstrap');
  */
 
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
-// Vue.component('notification', require('./components/DriverNotifications.vue'));
+Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('notification', require('./components/Notifications.vue'));
 
-// const app = new Vue({
-//     el: '#app'
-// });
-window._ = require('lodash');
+const app = new Vue({
+    el: '#app',
+});
+//window._ = require('lodash');
 import Echo from 'laravel-echo';
 
 //window._ = require('lodash');
@@ -33,5 +33,7 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '37ad8b23289f06684693',
     cluster: 'ap1',
-    encrypted: false,
+    encrypted: true,
+    namespace: false,
 });
+

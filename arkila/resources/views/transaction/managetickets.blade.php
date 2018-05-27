@@ -110,9 +110,7 @@
                         <ul class="nav nav-tabs">
 
                             @foreach($terminals as $terminal)
-                                @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
                                     <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
-                                @endif
                             @endforeach
 
                         </ul>
@@ -141,7 +139,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(App\Ticket::where('destination_id',$terminal->destination_id)->where('status','Pending')->get() as $ticket)
+                                                @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
                                                     <tr id="ticket{{$ticket->ticket_id}}">
                                                         <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>
@@ -173,7 +171,7 @@
                                         @endforeach
                                         </tbody>
                                         </table>
-                                        @foreach(App\Ticket::where('destination_id',$terminal->destination_id)->where('status','Pending')->get() as $ticket)
+                                        @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
                                         <div class="modal" id="refund-modal{{$ticket->ticket_id}}">
                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                 <div class="modal-content">
