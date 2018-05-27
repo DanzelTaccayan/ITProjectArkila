@@ -30,13 +30,13 @@
                             </div>
                             <hr> 
                             <div class="profile-btn-group">
-                                <a href="#" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
+                                <a href="{{route('operators.index')}}" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
                             </div>   
                             <div style="margin: 15px;">
                                 <ul class="nav nav-stacked" style="border: 1px solid lightgray;">
                                     <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
-                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">{{count($operator->van)}}</span></a></li>
-                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">{{count($operator->drivers)}}</span></a></li>
+                                    <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">{{count($operator->van->where('status','Active'))}}</span></a></li>
+                                    <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">{{count($operator->drivers->where('status','Active'))}}</span></a></li>
                                     <li><a href="#archivedVans" data-toggle="tab">Archived Vans<span class="badge badge-pill bg-red pull-right">{{$operator->archivedVan->count()}}</span></a></li>
                                     <li><a href="#archivedDrivers" data-toggle="tab">Archived Drivers<span class="badge badge-pill bg-red pull-right">{{$operator->archivedDriver->count()}}</span></a></li>
                                 </ul>
@@ -127,14 +127,14 @@
                                                 <td class="text-right" style="width: 10px;">{{$van->seating_capacity}}</td>
                                                 <td>
                                                     <div class="text-center">
-                                                        <a href="{{ route('vans.edit',[$van->plate_number] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->plate_number }}"><i class="fa fa-trash"></i> DELETE</button>
+                                                        <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
                                                     </div>
                                                 </td>
                                             </tr>
                                             
                                             <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="{{ 'deleteVan'. $van->plate_number }}">
+                                            <div class="modal fade" id="{{ 'deleteVan'. $van->van_id }}">
                                                 <div class="modal-dialog">
                                                     <div class="col-md-offset-2 col-md-8">
                                                         <div class="modal-content">
@@ -153,7 +153,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 
-                                                               <form method="POST" action="{{route('vans.archiveVan',[$van->plate_number])}}">
+                                                               <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
                                                                     {{csrf_field()}}
                                                                     {{method_field('PATCH')}}
 
@@ -200,13 +200,13 @@
                                                     <div class="text-center">
                                                         <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                                        
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$operator->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$driver->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
                                                     </div>                                                
                                                 </td>
                                             </tr>
                                             
                                             <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="{{ 'deleteDriver'.$operator->member_id }}">
+                                            <div class="modal fade" id="{{ 'deleteDriver'.$driver->member_id }}">
                                                 <div class="modal-dialog">
                                                     <div class="col-md-offset-2 col-md-8">
                                                         <div class="modal-content">

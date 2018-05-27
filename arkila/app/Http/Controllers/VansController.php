@@ -65,7 +65,7 @@ class VansController extends Controller
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
             "plateNumber" => [new checkSpecialCharacters,new checkPlateNumber,'required','max:15'],
             "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
-            "seatingCapacity" => 'required|numeric'
+            "seatingCapacity" => 'required|numeric|min:1'
         ]);
 
         // Start transaction!
@@ -142,7 +142,7 @@ class VansController extends Controller
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
             "plateNumber" => [new checkSpecialCharacters,new checkPlateNumber,'required','max:15'],
             "vanModel" =>  ['required','max:30',new checkSpecialCharacters],
-            "seatingCapacity" => 'required|numeric'
+            "seatingCapacity" => 'required|numeric|min:1'
         ]);
 
         // Start transaction!
@@ -203,7 +203,7 @@ class VansController extends Controller
         }
         else
         {
-            return redirect(route('operators.showProfile',[$operator->member_id]));
+            return redirect(route('operators.show',[$operator->member_id]));
         }
     }
 

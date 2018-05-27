@@ -133,6 +133,7 @@ class DriversController extends Controller
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
                 'contact_number' => $request->contactNumber,
+                'role' => 'Driver',
                 'address' => $request->address,
                 'provincial_address' => $request->provincialAddress,
                 'gender' => $request->gender,
@@ -149,7 +150,7 @@ class DriversController extends Controller
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
-                'username' => $driver->first_name[0].$driver->last_name,
+                'username' => $driver->first_name[0].$driver->last_name.$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
                 'status' => 'enable'
@@ -164,7 +165,7 @@ class DriversController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        return redirect(route('operators.showProfile',[$operator->member_id]));
+        return redirect(route('operators.show',[$operator->member_id]));
     }
 
     public function createFromVan(Van $vanNd)
@@ -172,7 +173,7 @@ class DriversController extends Controller
         if(session()->get('type') == 'createFromIndex') {
             session(['vanBack'=> route('vans.index')]);
         } else {
-            session(['vanBack'=> route('operators.showProfile',[session()->get('type')])]);
+            session(['vanBack'=> route('operators.show',[session()->get('type')])]);
         }
         session()->forget('type');
 
@@ -225,7 +226,7 @@ class DriversController extends Controller
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
-                'username' => $driver->first_name[0].$driver->last_name,
+                'username' => $driver->first_name[0].$driver->last_name.$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
                 'status' => 'enable'
@@ -242,8 +243,8 @@ class DriversController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        if(session()->get('vanBack') && session()->get('vanBack') == route('operators.showProfile',[$vanNd->operator->first()->member_id])) {
-            return redirect(route('operators.showProfile',[$vanNd->operator->first()->member_id]));
+        if(session()->get('vanBack') && session()->get('vanBack') == route('operators.show',[$vanNd->operator->first()->member_id])) {
+            return redirect(route('operators.show',[$vanNd->operator->first()->member_id]));
         } else {
             return redirect(route('vans.index'));
         }
