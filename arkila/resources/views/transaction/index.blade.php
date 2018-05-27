@@ -389,7 +389,7 @@
                                                         <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                                             <span class="col-md-6">
                                                                 <h6>On Deck:</h6>
-                                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->plate_number}}</h4>
+                                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->van->plate_number}}</h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
                                                                 <button type="button" name="changeDriverBtn" data-terminal="{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
@@ -551,9 +551,7 @@
                             <div class="nav-terminal  scrollbar scrollbar-info thin">
                             <ul class="nav nav-stacked ">
                                 @foreach($terminals as $terminal)
-                                    @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
                                         <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
-                                    @endif
                                 @endforeach
                             </ul>
                             </div>

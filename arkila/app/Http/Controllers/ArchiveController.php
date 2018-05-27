@@ -16,6 +16,7 @@ class ArchiveController extends Controller
     {
         return view('archive.operatorArchive',compact('archivedOperator'));
     }
+
     public function archiveOperator(Member $operator)
     {
         if(count($operator->vanQueue) == 0) {
@@ -85,6 +86,7 @@ class ArchiveController extends Controller
         }
         return back();
     }
+
     //Drivers
     public function archiveDriver(Member $driver)
     {

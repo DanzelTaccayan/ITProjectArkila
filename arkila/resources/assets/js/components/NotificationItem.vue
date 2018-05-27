@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <a v-bind:href="notificationUrl">
-      {{unread.data.name}} has made a rental request
+      {{unread.data.name}}
     </a>
   </div>
 </template>
