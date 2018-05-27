@@ -118,7 +118,92 @@
                         <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
+                    <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-red">
+                                        <h4 class="modal-title">RENTAL DETAILS</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Rental Code</th>
+                                                    <td>{{$reservation->rsrv_code}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Destination</th>
+                                                    <td>{{$reservation->destination_name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Date</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Time</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Day</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Number of Rental Days</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Expiry Date</th>
+                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{$reservation->expiry_date->format('g:i A')}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                                                    @else
+                                                    <td>{{$reservation->status}}</td>
+                                                    @endif
+                                                </tr>
+                                                <tr>
+                                                    <th>Van Unit</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Driver</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Driver Contact Number</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Refund Code</th>
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                                                    @elseif($reservation->status == 'REFUNDED')
+                                                    <td>REFUNDED</td>
+                                                    @else
+                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
+                                                    @endif
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">   
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        @if($reservation->status == 'PAID')
+                                        <button class="btn btn-danger">CANCEL</button>
+                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        @endif
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
             @endforeach
+
         </div>
         <!-- content-->
     </section>
