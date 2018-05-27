@@ -5,7 +5,7 @@
 <div class="padding-side-10" style="margin-top: 10%;">
     <h4>RESERVATION FARE</h4>
     <div style="border: 1px solid lightgray; margin-bottom: 5%;">
-        <h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">{{$request->fare}}</strong></h3>
+        <h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">₱ {{$request->fare}}</strong></h3>
         <p class="text-center"><strong>EXPIRE DATE:</strong></p>
     </div>
     <div class="text-center">
