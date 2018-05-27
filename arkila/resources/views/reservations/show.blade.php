@@ -60,11 +60,6 @@
 								<td>
 									<div class="text-center">
 										<a href="{{route('reservation.showReservation', $request->id)}}" class="btn btn-primary">View</a>
-									@if($request->status == 'UNPAID')
-										<button class="btn btn-info" data-toggle="modal" data-target="#{{'reserved-pay' . $request->id}}">Payment</button>
-									@elseif($request->status == 'PAID')
-										<a href="#" class="btn btn-info">Refund</a>
-									@endif
 									</div>
 								</td>
 							</tr>
@@ -72,68 +67,6 @@
 							@endforeach
 						</tbody>
 					</table>
-					@foreach($requests as $request)
-					<div class="modal" id="{{'reserved-info' . $request->id}}">
-			          <div class="modal-dialog">
-			            <div class="modal-content">
-			              <div class="modal-header">
-			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			                  <span aria-hidden="true">×</span></button>
-			                <h4 class="modal-title">Reservation Details</h4>
-			              </div>
-			              <div class="modal-body">
-			                
-			              </div>
-			              <div class="modal-footer">
-			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-			                
-			              </div>
-			            </div>
-			            <!-- /.modal-content -->
-			          </div>
-			          <!-- /.modal-dialog -->
-			        </div>
-					<div class="modal" id="{{'reserved-pay' . $request->id}}">
-			          <div class="modal-dialog">
-			            <div class="modal-content">
-			              <div class="modal-header">
-			                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			                  <span aria-hidden="true">×</span></button>
-			                <h4 class="modal-title">Payment Details</h4>
-			              </div>
-			              <div class="modal-body">
-			              	<div class="padding-side-5">	
-				                <table class="table table-striped table-bordered">
-				                	<tbody>
-				                		<tr>
-				                			<th>Reservation Code</th>
-				                			<td>{{$request->rsrv_code}}</td>
-				                		</tr>
-				                		<tr>
-				                			<th>Destination</th>
-				                			<td>{{$request->destination_name}}</td>
-				                		</tr>
-				                			<th>Ticket Qty</th>
-				                			<td>{{$request->ticket_quantity}}</td>
-				                		</tr>
-				                	</tbody>
-				                </table>
-				                <h3 class="text-center">FEE: <strong class="text-green">{{$request->fare}}</strong></h3>
-				            </div>
-				           </div>
-			              <div class="modal-footer">
-			                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-							<form action="{{route('reservation.payment', $request->id)}}" method="POST">
-			                {{ csrf_field() }} {{ method_field('PATCH') }}
-							<button type="submit" name="payment" class="btn btn-success"><i class="fa fa-money"></i> Receive Payment</button>
-							</form>
-						  </div>
-			            </div>
-			            <!-- /.modal-content -->
-			          </div>
-			          <!-- /.modal-dialog -->
-			        </div>
-					@endforeach
 				</div>
 			</div>
 		</div>
