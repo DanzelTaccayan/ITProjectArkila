@@ -71,7 +71,32 @@
 @endsection
 
 @section('form-btn')
-<button class="btn btn-primary" type="submit">@if( $van->driver->first()->member_id ?? null) Change Driver @else Add Driver @endif</button>
+<button id="editVanBtn" class="btn btn-primary" type="submit">Save Changes</button>
+<div id="editVanBtnM" class="hidden">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Save Changes</button>
+    <div class="modal" id="driverWithVan-modal">
+        <div class="modal-dialog modal-sm" style="margin-top: 10%;">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <h4 class="modal-title">WARNING</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    
+                </div>
+                <div class="modal-body">
+                    <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">    
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                        <button type="submit" class="btn btn-primary">Continue</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
 @endsection
 @section('scripts')
 	@parent
@@ -114,4 +139,47 @@
         }
 
 	</script>
+    <script>
+        @if(isset($operators))
+
+$('select[name="operator"]').on('change',function(){
+    $('select[name="driver"]').empty();
+    listDrivers();
+});
+
+ function listDrivers(){
+    $.ajax({
+        method:'POST',
+        url: '{{route("vans.listDrivers")}}',
+        data: {
+            '_token': '{{csrf_token()}}',
+            'operator':$('select[name="operator"]').val()
+        },
+        success: function(drivers){
+            $('[name="driver"]').append('<option value="" data-van="null">None</option>');
+            drivers.forEach(function(driverObj){
+
+                $('[name="driver"]').append('<option value='+driverObj.id+' data-van='+driverObj.van+'> '+driverObj.name+'</option>');
+            })
+        }
+
+    });
+}
+@endif
+
+$('select[name="driver"]').on('change', function(){
+   var van = $(this).find(':selected').data('van');
+   console.log(van);
+   if(van !== null){
+    console.log(van);
+    $( "#addVanBtn" ).hide();
+    $( "#addVanBtnM" ).show();
+    $( "#addVanBtnM" ).removeClass("hidden");
+   } else {
+    console.log(van);
+    $( "#addVanBtn" ).show();
+    $( "#addVanBtnM" ).hide();
+   }
+});
+</script>
 @endsection

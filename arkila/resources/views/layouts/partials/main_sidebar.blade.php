@@ -33,7 +33,7 @@
                     <span>Terminals and Routes</span>
                 </a>
             </li>
-            <li class="treeview {{--  {{ Request::is('home/transactions') ? 'active' : '' }} --}}">
+            <li class="treeview {{ Request::is('home/transactions/managetickets') ? 'active' : '' }} || {{ Request::is('home/ticket-management') ? 'active' : '' }} ">
                 <a href="">
                     <i class="fa fa-ticket"></i>
                     <span>Ticket Management</span>
@@ -42,11 +42,11 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="#"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
-                    <li class="#}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
+                    <li class="{{ Request::is('home/transactions/managetickets') ? 'active' : '' }}"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
+                    <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }} || {{ Request::is('home/booking-rules') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
                     <span>Rental and Resevation</span>
@@ -57,7 +57,7 @@
                 <ul class="treeview-menu">
                     <li class="{{ Request::is('home/rental') ? 'active' : '' }}"><a href="{{route('rental.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
                     <li class="{{ Request::is('home/reservations') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
-                    <li class=""><a href="{{route('bookingRules.index')}}"><i class="fa fa-circle-o"></i>  Booking Rules</a></li>
+                    <li class="{{ Request::is('home/booking-rules') ? 'active' : '' }}"><a href="{{route('bookingRules.index')}}"><i class="fa fa-circle-o"></i>  Booking Rules</a></li>
                 </ul>
             </li>
             <li class="treeview {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} ">

@@ -29,8 +29,8 @@
 		                			<td>{{$reservation->ticket_quantity}}</td>
 		                		</tr>
 		                		<tr>
-		                			<th>Total Fee</th>
-		                			<td>{{$reservation->fare}}</td>
+		                			<th>Total Fare</th>
+		                			<td>₱ {{$reservation->fare}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Status</th>

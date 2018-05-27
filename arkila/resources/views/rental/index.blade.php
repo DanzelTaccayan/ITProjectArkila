@@ -37,9 +37,6 @@
                                     <td>
                                         <div class="text-center">
                                             <a href="{{route('rental.show', $rental->rent_id)}}" class="btn btn-primary btn-sm">VIEW</a>
-                                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#acceptRental{{ $rental->rent_id }}">ACCEPT</button>
-                                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#payRental{{ $rental->rent_id }}">PAYMENT</button>
-                                            <button class="btn bg-navy btn-sm" data-toggle="modal" data-target="#departRental{{ $rental->rent_id }}">DEPART</button>
                                         </div>
                                      </td>
                                  </tr>

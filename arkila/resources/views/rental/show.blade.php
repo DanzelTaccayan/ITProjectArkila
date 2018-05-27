@@ -65,9 +65,9 @@
 					<div class="col-md-6">
 		                @if($rental->status == 'Pending')
 							@include('rental.rentalAccept')
-		                @elseif($rental->status == 'UNPAID')
+		                @elseif($rental->status == 'Unpaid')
 							@include('rental.rentalPayment')
-		                @elseif($rental->status == 'Paid')
+		                @elseif($rental->status == 'Paid' || $rental->status == 'Cancelled')
 							@include('rental.rentalDepart')
 		                @endif
 					</div>

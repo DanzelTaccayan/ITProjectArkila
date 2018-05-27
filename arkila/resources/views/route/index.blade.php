@@ -13,7 +13,7 @@
           <div class="box-body">
               <div class="text-center">
                 <h1>NO TERMINAL/DESTINATION FOUND.</h1>
-                <a href="/home/route" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
+                <a href="{{route('terminalCreate.create')}}" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
             </div>
           </div>
         </div>

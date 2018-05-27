@@ -5,7 +5,23 @@
     <div class="padding-side-10" style="margin-top: 10%;">
     <form action="{{route('reservation.refund', $reservation->id)}}" method="POST">
     {{ csrf_field() }} {{ method_field('PATCH') }}
-    <p class=""><strong>CAN BE REFUNDED UNTIL: </strong>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</p>
+    <table class="table table-striped table-bordered">
+        <tbody>
+            <tr>
+                <th>Paid Fare</th>
+                <td class="text-right">₱ </td>
+            </tr>
+            <tr style="border-bottom: 2px solid black">
+                <th>Cancellation Fee</th>
+                <td class="text-right"></td>
+            </tr>
+            <tr>
+                <th>Refund</th>
+                <td class="text-right"></td>
+            </tr>
+        </tbody>
+    </table>
+    <p class=""><strong>REFUNDABLE UNTIL: </strong>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</p>
     <table class="table table-striped table-bordered">
         <tbody>
             <tr>

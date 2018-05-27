@@ -98,254 +98,254 @@
 @section('content')
 <div class="row">
 
-                    <div class="col-md-4">
+    <div class="col-md-4">
 
-                        <div class="box box-solid">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Ticket</h3>
-                            </div>
-                            <form action="">
-                            <div class="box-body">
-                                    <label for="">Terminal</label>
-                                    <select name="terminal" id="terminal" class="form-control select2">
-                                        @php $counter = 0; @endphp
-                                        @foreach($terminals as $terminal)
-                                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                                @php $counter++; @endphp
-                                                <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
-                                            @endif
-                                        @endforeach
-                                     </select>
-                                     <label for="">Destination</label>
-                                    <select name="destination" id="destination" class="form-control select2">
-                                    </select>
-                                    <label for="">Regular Tickets</label>
-                                    <input type="text" class="form-control">
-                                    <label for="">Discounted Tickets</label>
-                                    <input type="text" class="form-control">
-                                    {{-- <label for="">Discount</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                          <input id="checkDiscount" type="checkbox">
-                                        </span>
-                                        <select name="discount" id="discount" class="form-control">
-                                     </select>
-                                    </div>
-                                    <label for="">Ticket</label>
-                                        <select name="tickets" id="ticket" class="form-control select2" multiple="multiple" data-placeholder="Select Ticket">
-                                        </select> --}}
-                            </div>
-
-                            <div class="box-footer">
-                                <div class="pull-right">
-                                    <button type="button" class="btn btn-success btn-sm btn-flat    " data-toggle="modal" data-target="#modal-default">SELL</button>
-                                </div>
-                                {{-- <div id="sellButtContainer" class="pull-right">
-                                    <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
-                                </div> --}}
-                                <div class="modal fade" id="modal-default">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Default Modal</h4>
-                                      </div>
-                                      <div class="modal-body">
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                            <label for=""></label>
-                                                <label for="">Regular</label>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">Asingan 1</li>
-                                                    <li class="list-group-item">Asingan 2</li>
-                                                    <li class="list-group-item">Asingan 3</li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="">Discounted</label>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">Asingan A</li>
-                                                    <li class="list-group-item">Asingan B</li>
-                                                </ul>
-                                            </div>    
-                                        </div>
-                                        
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                      </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                  </div>
-                                  <!-- /.modal-dialog -->
-                                </div>
-                                <!-- /.modal -->
-                            </div>
-                            </form>
-                        </div>
-
-                        <a href="{{route('transactions.manageTickets')}}" class="btn btn-warning btn-flat btn-block">Manage Tickets</a>
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Ticket</h3>
+            </div>
+            <form action="">
+            <div class="box-body">
+                    <label for="">Terminal</label>
+                    <select name="terminal" id="terminal" class="form-control select2">
+                        @php $counter = 0; @endphp
+                        @foreach($terminals as $terminal)
+                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
+                                @php $counter++; @endphp
+                                <option value="{{$terminal->terminal_id}}">{{$terminal->description}}</option>
+                            @endif
+                        @endforeach
+                     </select>
+                     <label for="">Destination</label>
+                    <select name="destination" id="destination" class="form-control select2">
+                    </select>
+                    <label for="">Regular Tickets</label>
+                    <input type="text" class="form-control">
+                    <label for="">Discounted Tickets</label>
+                    <input type="text" class="form-control">
+                    {{-- <label for="">Discount</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                          <input id="checkDiscount" type="checkbox">
+                        </span>
+                        <select name="discount" id="discount" class="form-control">
+                     </select>
                     </div>
+                    <label for="">Ticket</label>
+                        <select name="tickets" id="ticket" class="form-control select2" multiple="multiple" data-placeholder="Select Ticket">
+                        </select> --}}
+            </div>
 
-                    <div class="col-md-7">
-                        <div class="box box-solid">
-                            <div class="box-body">
-                                <div class="nav-tabs-custom">
-                                    <ul class="nav nav-tabs">
+            <div class="box-footer">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-sm btn-flat    " data-toggle="modal" data-target="#modal-default">SELL</button>
+                </div>
+                {{-- <div id="sellButtContainer" class="pull-right">
+                    <button type="button" class="btn btn-info btn-flat" @if($counter) title="Please add atleast one destination for the specified terminal on the terminal field" @else title="Please Add a van from the queue to start selling tickets" @endif disabled>Sell</button>
+                </div> --}}
+                <div class="modal fade" id="modal-default">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Default Modal</h4>
+                      </div>
+                      <div class="modal-body">
 
-                                        @foreach($terminals as $terminal)
-                                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->terminal_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
-                                            @endif
-                                        @endforeach
+                        <div class="row">
+                            <div class="col-md-6">
+                            <label for=""></label>
+                                <label for="">Regular</label>
+                                <ul class="list-group">
+                                    <li class="list-group-item">Asingan 1</li>
+                                    <li class="list-group-item">Asingan 2</li>
+                                    <li class="list-group-item">Asingan 3</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Discounted</label>
+                                <ul class="list-group">
+                                    <li class="list-group-item">Asingan A</li>
+                                    <li class="list-group-item">Asingan B</li>
+                                </ul>
+                            </div>    
+                        </div>
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                    <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
+                <!-- /.modal -->
+            </div>
+            </form>
+        </div>
 
-                                    </ul>
+        <a href="{{route('transactions.manageTickets')}}" class="btn btn-warning btn-flat btn-block">Manage Tickets</a>
+    </div>
 
-                                    <div class="tab-content">
-                                        @foreach($terminals as $terminal)
-                                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
-                                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->terminal_id}}">
-                                            <div id="sellTickets{{$terminal->terminal_id}}" class="row">
-                                                <div id="list-left1" class="dual-list list-left col-md-5">
-                                                    <div class="box box-solid ticket-box">
-                                                        <div id="ondeck-header{{$terminal->terminal_id}}" class="box-header bg-blue">
-                                                            <span class="col-md-6">
-                                                                <h6>On Deck:</h6>
-                                                                 <h4>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</h4>
-                                                            </span>
-                                                             <span class="pull-right btn-group">
-                                                                <button type="button" id="changeDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                                    <i class="fa fa-user"></i>
-                                                                </button>
-                                                                <button type="button" id="deleteDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </span>
+    <div class="col-md-7">
+        <div class="box box-solid">
+            <div class="box-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+
+                        @foreach($terminals as $terminal)
+                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
+                                <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->terminal_id}}" data-toggle="tab">{{$terminal->description}}</a></li>
+                            @endif
+                        @endforeach
+
+                    </ul>
+
+                    <div class="tab-content">
+                        @foreach($terminals as $terminal)
+                            @if($terminal->trips->where('queue_number',1)->first()->plate_number ?? null)
+                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->terminal_id}}">
+                            <div id="sellTickets{{$terminal->terminal_id}}" class="row">
+                                <div id="list-left1" class="dual-list list-left col-md-5">
+                                    <div class="box box-solid ticket-box">
+                                        <div id="ondeck-header{{$terminal->terminal_id}}" class="box-header bg-blue">
+                                            <span class="col-md-6">
+                                                <h6>On Deck:</h6>
+                                                 <h4>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</h4>
+                                            </span>
+                                             <span class="pull-right btn-group">
+                                                <button type="button" id="changeDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                    <i class="fa fa-user"></i>
+                                                </button>
+                                                <button type="button" id="deleteDriverBtn{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div id="changedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                            <span class="col-md-8">
+                                                <h6>Driver:</h6>
+                                                 <h4>
+                                                    <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
+                                                    <i class='fa fa-pencil'></i>
+                                                </h4>
+                                            </span>
+                                             <span class="pull-right btn-group">
+                                                <button type="button" id="onDeckBtn1-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
+                                                    <i class="fa fa-chevron-left"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div id="deletedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
+                                            <span class="col-md-12">
+                                                 <p>
+                                                     Are you sure you want to remove <strong>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</strong> on deck?
+                                                 </p>
+                                            </span>
+                                             <span class="pull-right">
+                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->trips->where('queue_number',1)->first()->trip_id])}}">
+                                                     {{method_field('DELETE')}}
+                                                     {{csrf_field()}}
+                                                    <button type="button" id="onDeckBtn2-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary">
+                                                        NO
+                                                    </button>
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        YES
+                                                    </button>
+                                                 </form>
+                                            </span>
+                                        </div>
+
+                                        <div class="box-body well">
+                                            <div class="text-right">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="btn-group">
+                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                         </div>
-                                                        <div id="changedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
-                                                            <span class="col-md-8">
-                                                                <h6>Driver:</h6>
-                                                                 <h4>
-                                                                    <a href="#" class="text-white" id="driverChange{{$terminal->terminal_id}}"></a>
-                                                                    <i class='fa fa-pencil'></i>
-                                                                </h4>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class=" glyphicon glyphicon-search"></i>
                                                             </span>
-                                                             <span class="pull-right btn-group">
-                                                                <button type="button" id="onDeckBtn1-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
-                                                                    <i class="fa fa-chevron-left"></i>
-                                                                </button>
-                                                            </span>
-                                                        </div>
-                                                        <div id="deletedriver-header{{$terminal->terminal_id}}" class="box-header bg-blue hidden">
-                                                            <span class="col-md-12">
-                                                                 <p>
-                                                                     Are you sure you want to remove <strong>{{$terminal->trips->where('queue_number',1)->first()->plate_number}}</strong> on deck?
-                                                                 </p>
-                                                            </span>
-                                                             <span class="pull-right">
-                                                                 <form method="POST" action="{{route('trips.destroy',[$terminal->trips->where('queue_number',1)->first()->trip_id])}}">
-                                                                     {{method_field('DELETE')}}
-                                                                     {{csrf_field()}}
-                                                                    <button type="button" id="onDeckBtn2-{{$terminal->terminal_id}}" class="btn btn-sm btn-primary">
-                                                                        NO
-                                                                    </button>
-                                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                                        YES
-                                                                    </button>
-                                                                 </form>
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="box-body well">
-                                                            <div class="text-right">
-                                                                <div class="row">
-                                                                    <div class="col-md-2">
-                                                                        <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-10">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">
-                                                                                <i class=" glyphicon glyphicon-search"></i>
-                                                                            </span>
-                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="">
-                                                                <ul id="onBoardList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($terminal->transactions->where('status','OnBoard') as $transaction)
-                                                                        <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
-                                                                    @endforeach
-                                                                </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="text-center ">
-                                                                <button name="depart" value="{{$terminal->terminal_id}}" href="" class="btn btn-primary btn-flat">Depart <i class="fa fa-automobile"></i></button>
-                                                            </div>
+                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="list-arrows col-md-2 text-center">
-                                                    <button id="board{{$terminal->terminal_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
-                                                        <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
-                                                    </button>
-                                                    <br>
-                                                    <button id="unboard{{$terminal->terminal_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
-                                                         UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
-                                                    </button>
-                                                </div>
-
-                                                <div id="list-right1" class="dual-list list-right col-md-5">
-                                                    <div class="box box-solid ticket-box">
-                                                        <div class="box-header bg-yellow bg-gray">
-                                                            <span class="">
-                                                                <h6>Sold Tickets for</h6>
-                                                                 <h4>{{$terminal->description}}</h4>
-                                                            </span>
-                                                        </div>
-                                                        <div class="box-body well">
-                                                                <div class="row">
-                                                                    <div class="col-md-2">
-                                                                        <div class="btn-group">
-                                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-10">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">
-                                                                                <i class="glyphicon glyphicon-search"></i>
-                                                                            </span>
-                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <ul id="pendingList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($terminal->transactions->where('status','Pending') as $transaction)
-                                                                        <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
-                                                                    @endforeach
-                                                                </ul>
-                                                                
-                                                        </div>
-
-                                                    </div>
+                                                <div class="">
+                                                <ul id="onBoardList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                    @foreach($terminal->transactions->where('status','OnBoard') as $transaction)
+                                                        <li data-val="{{$transaction->transaction_id}}" class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
+                                                    @endforeach
+                                                </ul>
                                                 </div>
                                             </div>
+                                            <div class="text-center ">
+                                                <button name="depart" value="{{$terminal->terminal_id}}" href="" class="btn btn-primary btn-flat">Depart <i class="fa fa-automobile"></i></button>
+                                            </div>
                                         </div>
-                                            @endif
-                                            @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="list-arrows col-md-2 text-center">
+                                    <button id="board{{$terminal->terminal_id}}" class="btn btn-outline-primary btn-sm btn-flat move-left1">
+                                        <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
+                                    </button>
+                                    <br>
+                                    <button id="unboard{{$terminal->terminal_id}}" class="btn btn-outline-warning btn-sm btn-flat move-right1">
+                                         UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
+                                    </button>
+                                </div>
+
+                                <div id="list-right1" class="dual-list list-right col-md-5">
+                                    <div class="box box-solid ticket-box">
+                                        <div class="box-header bg-yellow bg-gray">
+                                            <span class="">
+                                                <h6>Sold Tickets for</h6>
+                                                 <h4>{{$terminal->description}}</h4>
+                                            </span>
+                                        </div>
+                                        <div class="box-body well">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="btn-group">
+                                                            <a class="checkBox{{$terminal->terminal_id}} btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="glyphicon glyphicon-search"></i>
+                                                            </span>
+                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul id="pendingList{{$terminal->terminal_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                    @foreach($terminal->transactions->where('status','Pending') as $transaction)
+                                                        <li data-val='{{$transaction->transaction_id}}' class="list-group-item">{{$transaction->ticket->ticket_number}}</li>
+                                                    @endforeach
+                                                </ul>
+                                                
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+                            @endif
+                            @endforeach
                     </div>
-
-
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
 @endsection
 @section('scripts')
 @parent

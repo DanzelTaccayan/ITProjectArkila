@@ -80,7 +80,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['show']
     ]);
     
-    //Check if the driver has already a vanw
+    //Check if the driver has already a van
     Route::post('/checkDriverVan', 'VansController@checkDriverVan')->name('checkDriverVan');
 
     //Creating Vans

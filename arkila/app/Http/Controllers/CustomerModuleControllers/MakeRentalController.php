@@ -89,6 +89,8 @@ class MakeRentalController extends Controller
       if($rental->status == 'Unpaid' || $rental->status == 'Pending') {
         $rental->update([
           'status' => 'Cancelled',
+          'driver_id' => null,
+          'van_id' => null,
         ]);
       } elseif($rental->status == 'Paid') {
         
@@ -97,11 +99,15 @@ class MakeRentalController extends Controller
             'status' => 'Cancelled',
             'refund_code' => null,
             'is_refundable' => false,
+            'driver_id' => null,
+            'van_id' => null,
           ]);
         } else {
           $rental->update([
             'status' => 'Cancelled',
             'is_refundable' => true,
+            'driver_id' => null,
+            'van_id' => null,
           ]);
         }
       }
@@ -119,11 +125,52 @@ class MakeRentalController extends Controller
 
       foreach($rentals as $rental) {
         $updatedAt = Carbon::parse($rental->updated_at);
-        $refundRange = $updatedAt->addDays(7);
+        $refundExpiry = $updatedAt->addDays(7);
 
-        if($now->gt($refundRange)) {
+        if($now->gt($refundExpiry)) {
           $rental->update([
             'is_refundable' => false,
+            'refund_code' => null,
+            'status' => 'Expired',
+            'driver_id' => null,
+            'van_id' => null,
+          ]);
+        }
+      }
+    }
+
+    public function expiredStatus()
+    {
+      $rentals = VanRental::where([
+        ['status', '!=', 'Cancelled'],
+        ['status', '!=', 'Departed']
+        ])->get();
+
+      $now = Carbon::now();
+
+      foreach($rentals as $rental) {
+        $updatedAt = Carbon::parse($rental->updated_at);
+        $expired = $updatedAt->addDays(2);
+        $createdAt = Carbon::parse($rental->created_at);
+        $expiry = $createdAt->addDays(2);
+
+        if($rental->status == 'Pending' && $now->gt($expiry)){
+          $rental->update([
+            'status' => 'No Van Available',
+          ]);
+        } elseif($rental->status == 'Unpaid' && $now->gt($expired)) {
+          $rental->update([
+            'status' => 'Expired',
+            'driver_id' => null,
+            'van_id' => null,
+          ]);
+        } elseif($rental->status == 'Paid' && $now->gt($expired)) {
+          $rental->update([
+            'status' => 'Expired',
+            'is_refundable' => false,
+            'refund_code' => null,
+            'driver_id' => null,
+            'van_id' => null,
           ]);
         }
       }
