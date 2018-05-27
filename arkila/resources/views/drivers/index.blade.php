@@ -13,6 +13,7 @@
             <div class="table-responsive">
                  <div class="col-md-6">
                     <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>
+                    <a href="" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
                     <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
                 </div>
                 <table id="driverList" class="table table-bordered table-striped">
