@@ -101,7 +101,7 @@
                     <h2 class="text-white">LIST OF UNUSED TICKETS</h2>
                 </div>
                 <div class="d-inline">    
-                    <a href=" " class="btn bg-maroon btn-flat">POS</a>
+                    <a href="{{route('transactions.index')}}" class="btn bg-maroon btn-flat">SELL AND DEPART</a>
                 </div>
             </div>
             <div class="box box-solid">
@@ -151,7 +151,7 @@
 
                                                                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal{{$ticket->ticket_id}}"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$ticket->ticket_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$ticket->ticket_id}}"><i class="fa fa-trash"></i> CANCEL</button>
                                                             </div>
                                                         </td>
                                                         <td id="destBody{{$ticket->ticket_id}}" class="hidden">
@@ -230,9 +230,9 @@
                                                         <h4 class="modal-title"></h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE?</h1>
-                                                        <p class="text-center">DELETED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong>?</p>
+                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
+                                                        <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                        <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong>?</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="text-center">
@@ -283,9 +283,9 @@
                                                         <h4 class="modal-title"></h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE?</h1>
-                                                        <p class="text-center">DELETED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE THE <strong id="multiDeleteModal" class="text-maroon"></strong>?</p>
+                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
+                                                        <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                        <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL THE <strong id="multiDeleteModal" class="text-maroon"></strong>?</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <div class="text-center">
@@ -317,43 +317,6 @@
 
     <script>
         $(function() {
-            $('button[name="deleteButton"]').on('click',function(){
-                var ticketId = $(this).data('ticket');
-                $.ajax({
-                    method:'PATCH',
-                    url: '/home/transactions/changeDestination/'+ticketId,
-                    data: {
-                        '_token': '{{csrf_token()}}',
-                        'destination': $('#changeDestination'+ticketId).val(),
-                    },
-                    success: function(response){
-                        $('#changeDestination'+ticketId).val(response);
-                    },
-                    error:function(response) {
-                        $.notify({
-                            // options
-                            icon: 'fa fa-warning',
-                            message: response.responseJSON.error
-                        },{
-                            // settings
-                            type: 'danger',
-                            autoHide: true,
-                            clickToHide: true,
-                            autoHideDelay: 2500,
-                            placement: {
-                                from: 'bottom',
-                                align: 'right'
-                            },
-                            icon_type: 'class',
-                            animate: {
-                                enter: 'animated bounceIn',
-                                exit: 'animated bounceOut'
-                            }
-                        });
-                    }
-
-                });
-            });
 
             //Refund
             $('button[name="initialRefund"]').on('click',function(){
@@ -362,6 +325,7 @@
 
                 $('#amount'+ticketId).text('₱ '+amount);
             });
+
             $('button[name="refund"]').on('click',function(){
                 var ticketId = $(this).data('ticket');
 
@@ -371,9 +335,29 @@
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
-                    success: function(){
+                    success: function(response){
                         $('#ticket'+ticketId).remove();
                         $('#refund-modal'+ticketId).remove();
+
+                        new PNotify({
+                            title: "Success!",
+                            text: "Successfully refunded ticket:  "+ response,
+                            hide: true,
+                            delay: 2500,
+                            animate: {
+                                animate: true,
+                                in_class: 'slideInDown',
+                                out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                        });
                     },
                     error:function(response) {
                         $.notify({
@@ -415,6 +399,7 @@
                     $('#multirefund-modal').modal('show');
                 }
             });
+
             $('button[name="multiRefund"]').on('click',function(){
                 var checked = $('input[name="checkInput"]:checked');
                 var checkedArr = [];
@@ -431,11 +416,32 @@
                             '_token': '{{csrf_token()}}',
                             'refund': checkedArr
                         },
-                        success: function(){
+                        success: function(response){
                             checkedArr.forEach(function(ticketId){
                                 $('#ticket'+ticketId).remove();
                                 $('#refund-modal'+ticketId).remove();
-                            })
+                            });
+
+                            new PNotify({
+                                title: "Success!",
+                                text: "Successfully refunded the following tickets:  "+ response,
+                                hide: true,
+                                delay: 2500,
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
+
                         },
                         error:function(response) {
                             $.notify({
@@ -474,7 +480,7 @@
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
-                    success: function(){
+                    success: function(response){
                         $('#ticket'+ticketId).remove();
                         $('#refund-modal'+ticketId).remove();
 
@@ -547,7 +553,7 @@
                             '_token': '{{csrf_token()}}',
                             'delete': checkedArr
                         },
-                        success: function(){
+                        success: function(response){
                             checkedArr.forEach(function(ticketId){
                                 $('#ticket'+ticketId).remove();
                                 $('#refund-modal'+ticketId).remove();

@@ -356,7 +356,7 @@ class TransactionsController extends Controller
             ]);
 
             DB::commit();
-            return 'success';
+            return $ticket->ticket_number;
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
@@ -401,15 +401,16 @@ class TransactionsController extends Controller
                 Transaction::create([
                     'ticket_name' => $ticket->ticket_number,
                     'destination' => $ticket->destination->destination_name,
-                    'origin' => $ticket->destination->routeOrigin->destination_name,
+                    'origin' => $ticket->destination->routeOrigin->first()->destination_name,
                     'amount_paid' => $ticket->fare,
                     'status' => 'Refunded'
                 ]);
 
                 array_push($responseArr, $ticket->ticket_number);
             }
-            return implode(' ',$responseArr);
             DB::commit();
+
+            return implode(' ',$responseArr);
         } catch (\Exception $e) {
             DB::rollback();
             return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
@@ -485,7 +486,7 @@ class TransactionsController extends Controller
         ]);
         foreach(request('delete') as $ticketId)
         {
-            $ticketObj = Ticket::find(ticketId);
+            $ticketObj = Ticket::find($ticketId);
             if(is_null($ticketObj)) {
                 return Response::json(['error' => 'There is a given ticket that does not exist'],422);
             } else {
