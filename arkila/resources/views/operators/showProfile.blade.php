@@ -37,8 +37,8 @@
                                     <li class="active"><a href="#info" data-toggle="tab">Profile Information</a></li>
                                     <li><a href="#vans" data-toggle="tab">Vans<span class="badge badge-pill bg-orange pull-right">{{count($operator->van)}}</span></a></li>
                                     <li><a href="#drivers" data-toggle="tab">Drivers<span class="badge badge-pill bg-orange pull-right">{{count($operator->drivers)}}</span></a></li>
-                                    <li><a href="#archivedVans" data-toggle="tab">Archived Vans<span class="badge badge-pill bg-red pull-right">0</span></a></li>
-                                    <li><a href="#archivedDrivers" data-toggle="tab">Archived Drivers<span class="badge badge-pill bg-red pull-right">0</span></a></li>
+                                    <li><a href="#archivedVans" data-toggle="tab">Archived Vans<span class="badge badge-pill bg-red pull-right">{{$operator->archivedVan->count()}}</span></a></li>
+                                    <li><a href="#archivedDrivers" data-toggle="tab">Archived Drivers<span class="badge badge-pill bg-red pull-right">{{$operator->archivedDriver->count()}}</span></a></li>
                                 </ul>
                             </div>
                             
@@ -260,17 +260,15 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>huhu123</td>
-                                                <td>hello ace</td>
-                                                <td class="text-right">12</td>
-                                                <td></td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <a data-val='#' class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>VIEW</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach($operator->archivedVan as $archivedVan)
+                                                <tr>
+                                                    <td>{{$archivedVan->plate_number}}</td>
+                                                    <td>{{$archivedVan->archivedMember->where('role','Driver')->first()->full_name ?? null}}</td>
+                                                    <td>{{$archivedVan->model->description}}</td>
+                                                    <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
+                                                    <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -286,17 +284,18 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>ikaw</td>
-                                                <td>dyan</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <a href="" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i>VIEW</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach($operator->archivedDriver as $archivedDriver)
+                                                <tr>
+                                                    <td>{{$archivedDriver->full_name}}</td>
+                                                    <td>{{$archivedDriver->contact_number}}</td>
+                                                    <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

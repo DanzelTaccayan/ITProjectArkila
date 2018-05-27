@@ -51,7 +51,7 @@ class DriversController extends Controller
         // Start transaction!
         DB::beginTransaction();
         try {
-            $profilePictureName = 'avatar.jpg';
+            $profilePictureName = 'avatar.png';
             if($request->file('profilePicture')) {
                 $dateNow = Carbon::now();
                 $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
@@ -116,7 +116,7 @@ class DriversController extends Controller
         // Start transaction!
         DB::beginTransaction();
         try {
-            $profilePictureName = 'avatar.jpg';
+            $profilePictureName = 'avatar.png';
             if($request->file('profilePicture')) {
                 $dateNow = Carbon::now();
                 $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
@@ -188,7 +188,7 @@ class DriversController extends Controller
                 $vanNd->members()->detach($vanNd->driver->first()->member_id);
             }
 
-            $profilePictureName = 'avatar.jpg';
+            $profilePictureName = 'avatar.png';
             if($request->file('profilePicture')) {
                 $dateNow = Carbon::now();
                 $profilePictureName = $request->lastName[0].$request->firstName[0].$dateNow->month.'_'.$dateNow->day.'_'.$dateNow->year.rand(1,1000).'.'.
@@ -294,9 +294,9 @@ class DriversController extends Controller
                 $driver->archivedOperator()->attach($driver->operator_id);
             }
 
-            $profilePictureName = 'avatar.jpg';
+            $profilePictureName = 'avatar.png';
             if($request->file('profilePicture')) {
-                if(File::exists(public_path('uploads/profilePictures/'.$driver->profile_picture))) {
+                if(File::exists(public_path('uploads/profilePictures/'.$driver->profile_picture)) && $driver->profile_picture != "avatar.png") {
                     File::delete(public_path('uploads/profilePictures/'.$driver->profile_picture));
                 }
 
