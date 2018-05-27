@@ -290,29 +290,37 @@ class RoutesController extends Controller
         $isTerminal = $route->is_terminal;
         $terminal = $route->routeDestination()->first()->destination_id;
         $message = null;
-        if ($route->is_terminal == true)
-        {
-            foreach($route->routeFromDestination as $routes)
-            {
-                $routes->routeOrigin()->detach($main->destination_id);
-                $routes->delete();
-            }
-            $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
-        }
-        else
-        {
-            $route->routeOrigin()->detach($main->destination_id);
-            $route->delete();
-            $message = 'The route '. $route->destination_name .' has been successfully deleted!';
 
-        }
-        if($isTerminal == true)
+        if($route->vanQueue->count() == 0)
         {
-            return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+            if ($route->is_terminal == true)
+            {
+                foreach($route->routeFromDestination as $routes)
+                {
+                    $routes->routeOrigin()->detach($main->destination_id);
+                    $routes->delete();
+                }
+                $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+            }
+            else
+            {
+                $route->routeOrigin()->detach($main->destination_id);
+                $route->delete();
+                $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+
+            }
+            if($isTerminal == true)
+            {
+                return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+            }
+            else
+            {
+                return redirect('/home/route#terminal' .$terminal)->with('success', $message);
+            }  
         }
         else
         {
-            return redirect('/home/route#terminal' .$terminal)->with('success', $message);
+            return back()->withErrors('Unable to delete, there are still vans on queue in '. $route->destination_name .' Terminal.');
         }
 
     }

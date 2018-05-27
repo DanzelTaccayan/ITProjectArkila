@@ -8,6 +8,7 @@ use App\Reservation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class OnlineReserveCustomerNotification extends Notification
@@ -48,29 +49,29 @@ class OnlineReserveCustomerNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $message = null;
         $reservedate = Carbon::parse($this->reserve->reservationDate->reservation_date);
         $dateHuman = $reservedate->formatLocalized('%B %d,  %Y');
-        if($this->case == 'PAID'){
-            return (new MailMessage)
-                ->line('You have successfully paid your reservation for ' . $this->reserve->destination_name .' on ' . $dateHuman)
-                ->line('We hope you enjoy our service. Thank You!');
-        }else if($this->case == 'EXPIRED'){
-            return (new MailMessage)
-                ->line('Your reservation slot for ' . $this->reserve->destination_name .' has expired because you have not paid on or before ' . $this->reserve->expiry_date . '.')
-                ->line('Please pay on time to avoid your reservation from being removed')
-                ->action('Notification Action', url('/'))
-                ->line('Thank you for using our application!');
-        }else if($this->case == 'REFUNDED'){
-            return (new MailMessage)
-                ->line('The introduction to the notification.')
-                ->action('Notification Action', url('/'))
-                ->line('Thank you for using our application!');
-        }else if($this->case == 'DEPARTED'){
-            return (new MailMessage)
-                ->line('Have a safe trip to ' . $this->reserve->destination_name)
-                ->action('Notification Action', url('/'))
-                ->line('We hope you enjoy our service. Thank You!');
+        $url = url('/home/transactions/reservation');
+        //dd($dateHuman);
+        if($this->case == 'Paid'){
+            $message = 'You have successfully paid your reservation for ' . $this->reserve->destination_name .' on ' . $dateHuman. '.'.PHP_EOL;
+            
+        }else if($this->case == 'Expired'){
+            $message = 'Your reservation slot for ' . $this->reserve->destination_name .' has expired because you have not paid on or before ' . $this->reserve->expiry_date . '.'.PHP_EOL;
+            $message .= 'Please pay on time to avoid your reservation from being removed.'.PHP_EOL;
+        }else if($this->case == 'Refunded'){
+            $message = 'We noticed you initiated a refund for your supposed trip to ' . $this->reserve->destination_name . ' on ' .$dateHuman. '.'.PHP_EOL;
+            $message .= 'The total refunded amount is ' . $this->reserve->fare . '.'.PHP_EOL;
+            $message .= 'We apologize for any inconvenience this refund may have caused you.'.PHP_EOL;  
+        }else if($this->case == 'Departed'){
+            $message = 'Have a safe trip to ' . $this->reserve->destination_name . '.'.PHP_EOL;
         }
+        //dd($this->case);
+        return (new MailMessage)
+                ->line($message)
+                ->action('View Transaction',$url)
+                ->line('We hope you enjoy our services. Thank You!');
         
     }
 

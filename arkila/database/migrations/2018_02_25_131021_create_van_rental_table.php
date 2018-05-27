@@ -42,7 +42,7 @@ class CreateVanRentalTable extends Migration
             ->unsigned();
             $table->string('destination');
             $table->longText('contact_number');
-            $table->enum('status', ['Departed', 'Pending', 'Unavailable', 'Unpaid','Cancelled','Expired', 'Paid', 'Refunded'])
+            $table->enum('status', ['Departed', 'Pending', 'No Van Available', 'Unpaid','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->text('comment')

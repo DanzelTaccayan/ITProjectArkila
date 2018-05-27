@@ -5,10 +5,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
-                        <div class=" boxContainer">
+                        <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
-                                <h4 class="text-center">NO RESERVATION.</h4>
+                                <h4 class="text-center">NO RENTALS.</h4>
                             @else
                                 <ul class="list-group">
                                     @foreach($requests as $rental)
@@ -20,12 +20,28 @@
                                         <p style="color: gray;">{{$rental->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($rental->created_at)) }}</p>
 
                                         <small>
-                                        @if($rental->status == 'Unpaid')
-                                        <i class="fa fa-circle-o" style="color:red;"></i>
+                                        @if($rental->status == 'Pending')
+                                        <i class="fa fa-circle" style="color:gray;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Unpaid')
+                                        <i class="fa fa-dot-circle-o" style="color:orange;"></i>
                                         {{strtoupper($rental->status)}}
                                          @elseif($rental->status == 'Paid')
                                         <i class="fa fa-check-circle" style="color:green;"></i>
                                         {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Cancelled')
+                                        <i class="fa fa-minus-circle" style="color:gray;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Departed')
+                                        <i class="fa fa-chevron-circle-right" style="color:navyblue;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'Expired')
+                                        <i class="fa fa-times-circle" style="color:red;"></i>
+                                        {{strtoupper($rental->status)}}
+                                        @elseif($rental->status == 'No Van Available')
+                                        <i class="fa fa-times-circle" style="color:red;"></i>
+                                        {{strtoupper($rental->status)}}
+
                                         @endif
                                         </small>
                                         </div>
@@ -33,7 +49,7 @@
                                         <div class="col-md-6">
                                             <div class="pull-right">
                                                     <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary">View</button>
-                                                    @if($rental->status == 'Paid' || $rental->status == 'Unpaid')
+                                                    @if($rental->status == 'Paid' || $rental->status == 'Unpaid' || $rental->status == 'Pending')
                                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancelModal{{$rental->rent_id}}">Cancel</button>                                           
                                                     @endif
                                                 </div>
@@ -75,7 +91,19 @@
                                         <span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                    <p>Are you sure you want to cancel rental with code:<strong>{{$rental->rental_code}}</strong>?</p>
+                                    @php $time = explode(':', $rental->departure_time); @endphp
+                                    @if($rental->status == 'Paid')
+                                    @if(Carbon\Carbon::now()->gt($rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2])))
+                                    <p>Its less than 24 hours before your specified departure time, if you will cancel now <strong class="text-red">you will NOT be able to refund</strong>.
+                                    Are you sure you want to cancel your van rental?</p>
+                                    @else
+                                    <p>If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund minus a cancellation fee.
+                                    Are you sure you want to cancel your van rental?</p>
+                                    @endif
+                                    @elseif($rental->status == 'Pending' || $rental->status == 'Unpaid')
+                                    <p>Are you sure you want to cancel your van rental?</p>
+                                    @endif
+
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
@@ -90,7 +118,92 @@
                         <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
+                    <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-red">
+                                        <h4 class="modal-title">RENTAL DETAILS</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Rental Code</th>
+                                                    <td>{{$reservation->rsrv_code}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Destination</th>
+                                                    <td>{{$reservation->destination_name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Date</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Time</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Day</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Number of Rental Days</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Expiry Date</th>
+                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{$reservation->expiry_date->format('g:i A')}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                                                    @else
+                                                    <td>{{$reservation->status}}</td>
+                                                    @endif
+                                                </tr>
+                                                <tr>
+                                                    <th>Van Unit</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Driver</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Driver Contact Number</th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Refund Code</th>
+                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
+                                                    <td>Expired</td>
+                                                    @elseif($reservation->status == 'REFUNDED')
+                                                    <td>REFUNDED</td>
+                                                    @else
+                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
+                                                    @endif
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">   
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        @if($reservation->status == 'PAID')
+                                        <button class="btn btn-danger">CANCEL</button>
+                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        @endif
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
             @endforeach
+
         </div>
         <!-- content-->
     </section>

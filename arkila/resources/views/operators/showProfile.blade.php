@@ -197,13 +197,11 @@
                                                 <td>{{$driver->full_name}}</td>
                                                 <td>{{$driver->contact_number}}</td>
                                                 <td>
-
-                                                    
-                                                        <div class="text-center">
-                                                            <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                                           
-                                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$operator->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
-                                                        </div>                                                
+                                                    <div class="text-center">
+                                                        <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                                       
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$operator->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
+                                                    </div>                                                
                                                 </td>
                                             </tr>
                                             
@@ -287,6 +285,7 @@
                                             @foreach($operator->archivedDriver as $archivedDriver)
                                                 <tr>
                                                     <td>{{$archivedDriver->full_name}}</td>
+                                                    <td>{{$archivedDriver->address}}</td>
                                                     <td>{{$archivedDriver->contact_number}}</td>
                                                     <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
                                                     <td>

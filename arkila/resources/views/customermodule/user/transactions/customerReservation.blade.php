@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
-                        <div class=" boxContainer">
+                        <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
                                 <h4 class="text-center">NO RESERVATION.</h4>
@@ -106,7 +106,7 @@
                 									@elseif($reservation->status == 'REFUNDED')
                                                     <td>REFUNDED</td>
                                                     @else
-                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
+                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get a refund code.'}}</td>
                                                     @endif
                                                 </tr>
                                             </tbody>
@@ -115,6 +115,7 @@
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
                                         @if($reservation->status == 'PAID')
+                                        <button class="btn btn-danger">CANCEL</button>
                                         <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                         @endif
                                     </div>
