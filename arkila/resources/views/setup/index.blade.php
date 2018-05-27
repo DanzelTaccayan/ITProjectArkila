@@ -34,15 +34,21 @@
             <hr>
             <p class="text-justify" style="font-size: 12pt"><strong>WELCOME! </strong>Lets get started by clicking on the next button below. You are required to fill in necessary information about the company such as the contact number, address and email. As we move along, you will be required to set the main terminal, destination terminal and fees by simply filling in the necessary information.</p>
 
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step active"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+            </div>
         </div>
 
         <!-- Company Profile-->
         <div class="form-section" >
             <div class="box-header with-border text-center">
-                <h1 class="box-title"><strong>COMPANY INFORMATION</strong></h1>
+                <h1 ><strong>COMPANY INFORMATION</strong></h1>
             </div>
 
-            <div style="padding: 7% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
                     <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
@@ -56,16 +62,22 @@
                     <label>Email: </label>
                     <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets has been returned before editing the number of tickets for a specific route.</p>
+                <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step active"></span>
+                <span class="step"></span>
+                <span class="step"></span>
             </div>
         </div>
         
         <!--Terminals -->
         <div class="form-section">
             <div class="box-header with-border text-center">
-                <h1 class="box-title"><strong>TERMINALS</strong></h1>
+                <h1><strong>TERMINALS</strong></h1>
             </div>
-            <div style="padding: 4% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%">
                 <h4><strong>Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
@@ -110,17 +122,23 @@
                     <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets has been returned before editing the number of tickets for a specific route.</p>
+                <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step active"></span>
+                <span class="step"></span>
             </div>
         </div>
 
         <!-- Fees -->
         <div class="form-section">
             <div class="box-header with-border text-center">
-                <h1 class="box-title"><Storng>FEES</Storng></h1>
+                <h1><Storng>ADDITIONAL FEES</Storng></h1>
             </div>
 
-            <div style="padding: 7% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label>Description:</label>
                     <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
@@ -137,18 +155,15 @@
                     <label>Amount: <span class="text-red">*</span></label>
                     <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets has been returned before editing the number of tickets for a specific route.</p>
+                <p class="font-italic"><strong>NOTE:</strong> You can edit these amounts in the Fees and Features page under the Settings tab.</p>
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step"></span>
+                <span class="step active"></span>
             </div>
         </div>
-
-    <div style="text-align:center;margin-top:40px;">
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-    </div>
-
 
     </div>
 
