@@ -27,9 +27,9 @@ class TransactionsController extends Controller
     {
         $reservations = Reservation::where('status', 'PAID')->get();
         $terminals = Destination::where('is_main_terminal','!=','1')->get();
-        $transactions = Transaction::all();
+        $tickets = Ticket::all();
         $selectedTickets = SelectedTicket::all();
-        return view('transaction.index',compact('terminals','transactions','selectedTickets', 'reservations'));
+        return view('transaction.index',compact('terminals','tickets','selectedTickets', 'reservations'));
     }
 
     public function manageTickets()
@@ -48,8 +48,7 @@ class TransactionsController extends Controller
      */
     public function store(Destination $destination) {
         $this->validate(request(),[
-            'destination' => 'exists:destination,destination_id',
-            'ticket.*' => 'exists:ticket,ticket_id'
+            'destination' => 'exists:destination,destination_id'
         ]);
 
         // Start transaction!
@@ -80,114 +79,124 @@ class TransactionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Trip $trip
+     * @param  Destination $destination
      * @return \Illuminate\Http\Response
      */
-    public function depart(Destination $destination) {
-        if( $vanOnQueue = $destination->vanQueue()->where('queue_number',1)->first() ) {
-            $this->validate(request(),[
-                'transactions.*' => 'required|exists:transaction,transaction_id'
-            ]);
+    public function depart(Destination $destination)
+    {
 
-            // Start transaction!
-            DB::beginTransaction();
-            try {
-                //Compute for the total passenger, booking fee, and community fund
-                $totalPassengers = count(request('transactions'));
-                $totalBooking = ($destination->routeOrigin->first()->booking_fee) * $totalPassengers;
-                $totalCommunity = (Fee::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
+        if ($vanOnQueue = $destination->vanQueue()->where('queue_number', 1)->first()) {
+            if ($tickets = $destination->tickets->where('status','OnBoard')->get()) {
+                // Start transaction!
+                DB::beginTransaction();
+                try {
+                    //Compute for the total passenger, booking fee, and community fund
+                    $totalPassengers = count($tickets);
 
-                //Since SOP would only be applied to vans that has loaded 10 and more passengers
-                if($totalPassengers >= 10) {
-                    $sop = (Fee::where('description', 'SOP')->first()->amount);
+                    //Return Error
+                    if($totalPassengers >  $vanOnQueue->seating_capacity) {
+                        return back()->withErrors('Cannot Depart. The sold tickets exceeds the seating capacity of the van');
+                    } elseif ( $totalPassengers == 0 ) {
+                        return back()->withErrors('Cannot Depart. There are no sold tickets');
+                    }
 
-                    Ledger::create([
-                        'description' => 'SOP',
-                        'amount' => $sop,
-                        'type' => 'Revenue'
-                    ]);
+                    $totalBooking = ($destination->routeOrigin->first()->booking_fee) * $totalPassengers;
+                    $totalCommunity = (Fee::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
 
-                } else {
-                    $sop = null;
-                }
+                    //Since SOP would only be applied to vans that has loaded 10 and more passengers
+                    if ($totalPassengers >= 10) {
+                        $sop = (Fee::where('description', 'SOP')->first()->amount);
 
-                //Depart the Van
-                $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
-                $trip = Trip::create([
-                    'driver_id' => $vanOnQueue->driver_id,
-                    'van_id' => $vanOnQueue->van_id,
-                    'destination'=> $vanOnQueue->destination->destination_name,
-                    'origin'=>$destination->routeOrigin->first()->destination_name,
-                    'total_passengers' => $totalPassengers,
-                    'total_booking_fee' => $totalBooking,
-                    'community_fund' => $totalCommunity,
-                    'SOP' => $sop,
-                    'date_departed' => $dateDeparted,
-                    'report_status' => 'Accepted',
-                    'time_departed' => $dateDeparted->hour.':'.$dateDeparted->minute.':'.$dateDeparted->second
-                ]);
-
-
-                Ledger::create([
-                    'description' => 'Booking Fee',
-                    'amount' => $totalBooking,
-                    'type' => 'Revenue'
-                ]);
-                $vanOnQueue->delete();
-                //Check if the Van has less than 10 passengers; if it has less than 10 then ask if it would be marked as OB
-                if($totalPassengers <= 10) {
-                    if(VanQueue::where('destination_id',$destination->destination_id)->whereNotNull('queue_number')->first() ?? null) {
-                        $queueNumber = VanQueue::where('destination_id',$destination->destination_id)->orderBy('queue_number','desc')->first()->queue_number+1;
+                        Ledger::create([
+                            'description' => 'SOP',
+                            'amount' => $sop,
+                            'type' => 'Revenue'
+                        ]);
 
                     } else {
-                        $queueNumber = 1;
+                        $sop = null;
+                    }
+
+                    //Depart the Van
+                    $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
+                    $trip = Trip::create([
+                        'driver_id' => $vanOnQueue->driver_id,
+                        'van_id' => $vanOnQueue->van_id,
+                        'destination' => $vanOnQueue->destination->destination_name,
+                        'origin' => $destination->routeOrigin->first()->destination_name,
+                        'total_passengers' => $totalPassengers,
+                        'total_booking_fee' => $totalBooking,
+                        'community_fund' => $totalCommunity,
+                        'SOP' => $sop,
+                        'date_departed' => $dateDeparted,
+                        'report_status' => 'Accepted',
+                        'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second
+                    ]);
+
+
+                    Ledger::create([
+                        'description' => 'Booking Fee',
+                        'amount' => $totalBooking,
+                        'type' => 'Revenue'
+                    ]);
+                    $vanOnQueue->delete();
+                    //Check if the Van has less than 10 passengers; if it has less than 10 then ask if it would be marked as OB
+                    if ($totalPassengers <= 10) {
+                        if (VanQueue::where('destination_id', $destination->destination_id)->whereNotNull('queue_number')->first() ?? null) {
+                            $queueNumber = VanQueue::where('destination_id', $destination->destination_id)->orderBy('queue_number', 'desc')->first()->queue_number + 1;
+
+                        } else {
+                            $queueNumber = 1;
+
+                        }
+
+                        VanQueue::create([
+                            'destination_id' => Destination::where('destination_name', $trip->destination)->first()->destination_id,
+                            'driver_id' => $trip->driver_id,
+                            'van_id' => $trip->van_id,
+                            'remarks' => 'OB',
+                            'has_privilege' => 0,
+                            'queue_number' => $queueNumber
+                        ]);
+
 
                     }
 
-                    VanQueue::create([
-                        'destination_id' => Destination::where('destination_name',$trip->destination)->first()->destination_id,
-                        'driver_id' => $trip->driver_id,
-                        'van_id' => $trip->van_id,
-                        'remarks' => 'OB',
-                        'has_privilege' => 0,
-                        'queue_number' => $queueNumber
-                    ]);
+                    //Insert the departed tickets into the transaction table and then make the tickets available
+                    foreach ($tickets as $ticket) {
+                        Transaction::create([
+                            'ticket_name' => $ticket->ticket_number,
+                            'trip_id' => $trip->trip_id,
+                            'destination' => $vanOnQueue->destination->destination_name,
+                            'origin' => $destination->routeOrigin->first()->destination_name,
+                            'amount_paid' => $ticket->fare,
+                            'status' => 'Departed'
+                        ]);
 
-
-                }
-
-                //Update each Transactions, make them unavailable and update their status to departed
-                foreach(request('transactions') as $transactionId) {
-                    $transaction = Transaction::find($transactionId);
-
-                    $transaction->update([
-                        'status' => 'Departed',
-                        'trip_id' => $trip->trip_id
-                    ]);
-
-                    $transaction->ticket->update([
-                        'is_sold' => '1'
-                    ]);
-                }
-
-                //Update the queue in the van queue
-                $queue = $destination->vanQueue()->whereNotNull('queue_number')->get();
-                if(count($queue) > 1) {
-                    foreach ( $queue as $trip) {
-                        $tripQueueNum = ($trip->queue_number) - 1;
-                        $trip->update([
-                            'queue_number' => $tripQueueNum
+                        $ticket->update([
+                            'status' => null
                         ]);
                     }
+
+                    //Update the queue in the van queue
+                    $queue = $destination->vanQueue()->whereNotNull('queue_number')->get();
+                    if (count($queue) > 1) {
+                        foreach ($queue as $trip) {
+                            $tripQueueNum = ($trip->queue_number) - 1;
+                            $trip->update([
+                                'queue_number' => $tripQueueNum
+                            ]);
+                        }
+                    }
+
+                    DB::commit();
+                    return 'success';
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
                 }
 
-                DB::commit();
-                return 'success';
-            } catch(\Exception $e) {
-                DB::rollback();
-                return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
-            }
-
+        }
         }
         return 'Failed';
     }
@@ -195,33 +204,31 @@ class TransactionsController extends Controller
     public function updatePendingTransactions()
     {
         //UpdatePending
-        if(request('transactions')) {
+        if($tickets = request('tickets')) {
             $this->validate(request(),[
-                'transactions.*' => 'required|exists:transaction,transaction_id'
+                'tickets.*' => 'required|exists:ticket,ticket_id'
             ]);
 
             // Start transaction!
             DB::beginTransaction();
             try  {
-                $seatingCapacity = VanQueue::where('destination_id',Destination::where('destination_name',Transaction::find(request('transactions')[0])->destination)->first()->destination_id)
+                $seatingCapacity = VanQueue::where('destination_id',Ticket::find($tickets[0])->destination->destination_id)
                     ->where('queue_number',1)
                     ->first()
                     ->van
                     ->seating_capacity;
 
-                if($seatingCapacity >= count(request('transactions'))) {
-                    foreach(request('transactions') as $transactionId) {
-                        $transaction = Transaction::find($transactionId);
-                        $transaction->update([
-                            'status' => 'OnBoard',
-                            'trip_id' => null
+                if($seatingCapacity >= count($tickets)) {
+                    foreach($tickets as $ticketId) {
+                        $ticket = Ticket::find($ticketId);
+                        $ticket->update([
+                            'status' => 'OnBoard'
                         ]);
                     }
 
                     DB::commit();
                     return 'success';
-                }
-                else {
+                } else {
                     return 'The tickets boarded is greater than the seating capacity of the van on deck';
                 }
 
@@ -239,22 +246,20 @@ class TransactionsController extends Controller
 
     public function updateOnBoardTransactions()
     {
-        if(request('transactions')) {
+        if($tickets = request('tickets')) {
             $this->validate(request(),[
-                'transactions.*' => 'required|exists:transaction,transaction_id'
+                'tickets.*' => 'required|exists:ticket,ticket_id'
             ]);
 
             // Start transaction!
             DB::beginTransaction();
             try  {
-                foreach(request('transactions') as $transactionId) {
-                    $transaction = Transaction::find($transactionId);
-                    $transaction->update([
-                        'status' => 'Pending',
-                        'trip_id' => null
+                foreach($tickets as $ticketId) {
+                    $ticket = Ticket::find($ticketId);
+                    $ticket->update([
+                        'status' => 'Pending'
                     ]);
                 }
-
                 DB::commit();
                 return 'success';
             } catch(\Exception $e) {
@@ -302,41 +307,49 @@ class TransactionsController extends Controller
     }
 
     //Refund
-    public function refund(Transaction $transaction)
+    public function refund(Ticket $ticket)
     {
-        $transaction->update([
+
+        $ticket->update([
+            'status' => null
+        ]);
+
+        Transaction::create([
+            'ticket_name' => $ticket->ticket_number,
+            'destination' => $ticket->destination->destination_name,
+            'origin' => $ticket->destination->routeOrigin->first()->destination_name,
+            'amount_paid' => $ticket->fare,
             'status' => 'Refunded'
         ]);
-
-        $transaction->ticket->update([
-            'is_sold' => 0
-        ]);
-
         return 'success';
-
     }
 
     public function multipleRefund()
     {
-        $transactionObjArr = [];
+        $ticketObjArr = [];
         $this->validate(request(),[
-            'refund.*' => 'exists:transaction,transaction_id'
+            'refund.*' => 'exists:ticket,ticket_id'
         ]);
 
 
-        foreach(request('refund') as $transactionId)
+        foreach(request('refund') as $ticketId)
         {
-            array_push($transactionObjArr, Transaction::find($transactionId));
+            array_push($ticketObjArr, Ticket::find($ticketId));
         }
 
-        foreach($transactionObjArr as $transaction)
+        foreach($ticketObjArr as $ticket)
         {
-            $transaction->update([
-                'status' => 'Refunded'
+
+            $ticket->update([
+                'status' => null
             ]);
 
-            $transaction->ticket->update([
-                'is_sold' => 0
+            Transaction::create([
+                'ticket_name' => $ticket->ticket_number,
+                'destination' => $ticket->destination->destination_name,
+                'origin' => $ticket->destination->routeOrigin->destination_name,
+                'amount_paid' => $ticket->fare,
+                'status' => 'Refunded'
             ]);
         }
         return 'success';
@@ -344,54 +357,60 @@ class TransactionsController extends Controller
     }
 
     //Lost
-    public function lost(Transaction $transaction){
-        $transaction->update([
-            'status' => 'Lost'
+    public function lost(Ticket $ticket){
+        $ticket->update([
+            'status' => null
         ]);
 
         Ledger::create([
-            'description' => 'Lost Ticket',
-            'amount' => $transaction->amount_paid,
+            'description' => 'Lost/Expire Ticket',
+            'amount' => $ticket->fare,
             'type' => 'Revenue'
         ]);
 
-        $transaction->ticket->update([
-            'is_sold' => 0
+        Transaction::create([
+            'ticket_name' => $ticket->ticket_number,
+            'destination' => $ticket->destination->destination_name,
+            'origin' => $ticket->destination->routeOrigin->destination_name,
+            'amount_paid' => $ticket->fare,
+            'status' => 'Lost/Expired'
         ]);
 
     }
 
     //Delete
-    public function destroy(Transaction $transaction)
+    public function destroy(Ticket $ticket)
     {
-        $transaction->ticket->update([
-            'is_sold' => 1
-        ]);
-
-        $transaction->delete();
-
-        return 'success';
+        DB::beginTransaction();
+        try {
+            $ticket->update([
+                'status' => null
+            ]);
+            DB::commit();
+            return 'success';
+        } catch(\Exception $e) {
+            dd($e);
+        }
     }
 
     public function multipleDelete()
     {
-        $transactionObjArr = [];
+        $ticketObjArr = [];
         $this->validate(request(),[
-            'delete.*' => 'exists:transaction,transaction_id'
+            'delete.*' => 'exists:ticket,ticket_id'
         ]);
 
 
-        foreach(request('delete') as $transactionId)
+        foreach(request('delete') as $ticketId)
         {
-            array_push($transactionObjArr, Transaction::find($transactionId));
+            array_push($ticketObjArr, Ticket::find($ticketId));
         }
 
-        foreach($transactionObjArr as $transaction)
+        foreach($ticketObjArr as $ticket)
         {
-            $transaction->ticket->update([
-                'is_sold' => 1
+            $ticket->update([
+                'status' => null
             ]);
-            $transaction->delete();
         }
         return 'success';
     }
@@ -405,9 +424,9 @@ class TransactionsController extends Controller
         try  {
             if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
                 $ticketType = request('ticketType');
-                $ticket = $destination->tickets->where('type',$ticketType)->where('is_sold',0)->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+                $ticket = $destination->tickets()->where('type',$ticketType)->whereNull('status')->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
                 if(is_null($ticket)) {
-                    return \Response::json(['error' => 'There are no more tickets left, please add anotehr to select a ticket'], 422);
+                    return \Response::json(['error' => 'There are no more tickets left, please add another to select a ticket'], 422);
                 }
 
                 $selectedTicket = SelectedTicket::create([
@@ -421,6 +440,7 @@ class TransactionsController extends Controller
                 return response()->json($responseArr);
             }
         } catch(\Exception $e) {
+            \Log::info($e);
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }

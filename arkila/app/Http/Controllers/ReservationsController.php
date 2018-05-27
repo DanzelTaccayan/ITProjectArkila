@@ -154,7 +154,7 @@ class ReservationsController extends Controller
             ]);
             $name = ucwords(strtolower($request->name));
             $codes = Reservation::all();
-            $newCode = bin2hex(openssl_random_pseudo_bytes(8));
+            $newCode = bin2hex(openssl_random_pseudo_bytes(5));
             $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
 
             foreach ($codes as $code)
@@ -174,7 +174,7 @@ class ReservationsController extends Controller
     
                 do
                 {
-                    $newCode =  bin2hex(openssl_random_pseudo_bytes(8));
+                    $newCode =  bin2hex(openssl_random_pseudo_bytes(5));
     
                 } while ($newCode == $allCodes);
             }
@@ -191,7 +191,7 @@ class ReservationsController extends Controller
             Reservation::create([
                 'date_id' => $dateId,
                 'destination_name' => $destination->destination_name,
-                'rsrv_code' => $newCode,
+                'rsrv_code' => 'RV'.$newCode,
                 'refund_code' => $refundCode,
                 'fare' => $toBePaid,
                 'name' => $name,
@@ -230,7 +230,7 @@ class ReservationsController extends Controller
                 'refund_code' => null, 
             ]);
 
-            return back()->with('success', 'The reservation had been successfully refunded.');
+            return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
         }
         else
         {
@@ -253,5 +253,10 @@ class ReservationsController extends Controller
             ]);
 
             return back()->with('success', 'The reservation has been paid.');
+    }
+
+    public function showReservation(Reservation $reservation)
+    {
+        return view('reservations.showReservation', compact('reservation'));
     }
 }

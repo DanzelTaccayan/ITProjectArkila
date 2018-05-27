@@ -149,6 +149,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['edit']
     ]);
 
+    Route::get('/home/booking-rules', 'BookingRulesController@index')->name('bookingRules.index');
+    Route::get('/home/reservation/customer/{reservation}', 'ReservationsController@showReservation')->name('reservation.showReservation');
+
     Route::get('/home/reservations/walk-in/{reservation}', 'ReservationsController@walkInReservation')->name('reservation.walk-in');
     Route::post('/home/reservations/walk-in/store', 'ReservationsController@storeWalkIn')->name('reservation.walk-in-store');
     Route::patch('/home/reservations/refund/{reservation}', 'ReservationsController@refund')->name('reservation.refund');
@@ -157,6 +160,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['edit']
     ]);
+
+    Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
 
     Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
@@ -190,7 +195,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/moveToSpecialUnit/{vanOnQueue}','VanQueueController@moveToSpecialUnit')->name('vanqueue.moveToSpecialUnit');
      /* Transactions(Ticket) */
     Route::get('/home/transactions', 'TransactionsController@index')->name('transactions.index');
-    Route::delete('/home/transactions/{transaction}', 'TransactionsController@destroy')->name('transactions.destroy');
+    Route::delete('/home/transactions/{ticket}', 'TransactionsController@destroy')->name('transactions.destroy');
     Route::post('/home/transactions/{destination}', 'TransactionsController@store')->name('transactions.store');
     Route::patch('/home/transactions/{destination}', 'TransactionsController@depart')->name('transactions.depart');
     Route::patch('/updatePendingTransactions', 'TransactionsController@updatePendingTransactions')->name('transactions.updatePendingTransactions');
@@ -198,9 +203,9 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/listSourceDrivers','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');
     Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
-    Route::patch('/home/transactions/refund/{transaction}','TransactionsController@refund')->name('transactions.refund');
+    Route::patch('/home/transactions/refund/{ticket}','TransactionsController@refund')->name('transactions.refund');
     Route::patch('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
-    Route::patch('/home/transactions/lost/{transaction}','TransactionsController@lost')->name('transactions.lost');
+    Route::patch('/home/transactions/lost/{ticket}','TransactionsController@lost')->name('transactions.lost');
     Route::patch('/home/transactions/multipleLost','TransactionsController@multipleLost')->name('transactions.multipleLost');
     Route::delete('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
     //Selected Tickets
@@ -299,7 +304,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /**Services**/
     /*Rental*/
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
-    Route::post('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
+    Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
@@ -308,7 +313,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');
     Route::get('/home/transactions/reservation/', 'CustomerModuleControllers\MakeReservationController@reservationTransaction')->name('customermodule.reservationTransaction')->middleware('online-reservation');
-    Route::get('/home/transactions/rental/', 'CustomerModuleControllers\MakeReservationController@rentalTransaction')->name('customermodule.rentalTransaction')->middleware('online-reservation');
+    Route::get('/home/transactions/rental/', 'CustomerModuleControllers\MakeRentalController@rentalTransaction')->name('customermodule.rentalTransaction')->middleware('online-reservation');
 
     Route::get('/home/reservation/create/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationCreate')->name('customermodule.createReservation')->middleware('online-reservation');
     Route::post('/home/reservation/create-request/{reservation}', 'CustomerModuleControllers\MakeReservationController@storeRequest')->name('customermodule.storeReservation')->middleware('online-reservation');

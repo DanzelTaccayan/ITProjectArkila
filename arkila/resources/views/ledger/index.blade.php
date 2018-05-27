@@ -117,7 +117,7 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>Expired Ticket</td>
+                                <td>Lost/Expired Ticket</td>
                                 <td></td>
                                 <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
                                 <td></td>

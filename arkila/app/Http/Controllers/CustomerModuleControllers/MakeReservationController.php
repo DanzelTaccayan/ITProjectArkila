@@ -109,7 +109,7 @@ class MakeReservationController extends Controller
 						'user_id' => auth()->user()->id,
 						'date_id' => $reservation->id,
 						'destination_name' => $destination->destination_name,
-						'rsrv_code' => $newCode,
+						'rsrv_code' => 'RV'.$newCode,
 						'name' => auth()->user()->full_name,
 						'contact_number' => $request->contactNumber,
 						'ticket_quantity' => $quantity,
@@ -152,14 +152,6 @@ class MakeReservationController extends Controller
 		$requests = Reservation::where('user_id', auth()->user()->id)->get();
 
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
-	}
-
-	public function rentalTransaction()
-	{
-		$reservations = Reservation::all();
-		$requests = Reservation::where('user_id', auth()->user()->id)->count();
-
-		return view('customermodule.user.transactions.customerRental', compact('reservations', 'requests'));
 	}
 
 	public function reservationPdf(Reservation $reservation)
