@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CustomerReserve extends Notification implements ShouldQueue
+class OnlineReserveAdminNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
