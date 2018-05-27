@@ -7,18 +7,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="#" @click="markNotificationAsRead">Mark All As Read</a>
       <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
+      <a href="#" @click="markNotificationAsRead">Mark All As Read</a>
     </li>
     <li class="footer"><a href="#">View all</a></li>
   </ul>
 </li>
 </template>
 <script>
-  import DriverNotificationItem from './DriverNotificationItem.vue';
+  import NotificationItem from './NotificationItem.vue';
   export default{
     props:['unreads', 'userid'],
-    components:{DriverNotificationItem},
+    components:{NotificationItem},
     data(){
       return {
         unreadNotifications: this.unreads

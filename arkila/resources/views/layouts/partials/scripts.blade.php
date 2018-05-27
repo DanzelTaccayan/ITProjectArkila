@@ -1,3 +1,4 @@
+    {{ Html::script('js/app.js') }}
     <!-- jQuery 3 -->
     {{ Html::script('adminlte/bower_components/jquery/dist/jquery.min.js') }}
     <!-- jQuery UI 1.11.4 -->
@@ -51,6 +52,8 @@
     {{ Html::script('js/client-side_validation/driver-report-validation.js') }}
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
+    
+    
     <!-- bootstrap time picker -->
     {{ Html::script('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}
     <!-- Awesome Functions-->
