@@ -119,11 +119,12 @@ class MakeRentalController extends Controller
 
       foreach($rentals as $rental) {
         $updatedAt = Carbon::parse($rental->updated_at);
-        $refundRange = $updatedAt->addDays(7);
+        $refundExpiry = $updatedAt->addDays(7);
 
-        if($now->gt($refundRange)) {
+        if($now->gt($refundExpiry)) {
           $rental->update([
             'is_refundable' => false,
+            'refund_code' => null,
           ]);
         }
       }

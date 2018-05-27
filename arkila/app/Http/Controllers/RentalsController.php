@@ -24,7 +24,7 @@ class RentalsController extends Controller
     public function index()
     {
         //
-        $rentals = VanRental::where('status', '!=', 'Cancelled')
+        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded']])
         ->orWhere(function($q){
             $q->where([['status', 'Cancelled']])
             ->where('is_refundable', true);
@@ -182,7 +182,7 @@ class RentalsController extends Controller
     
             return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully paid. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
         }
-        else
+        elseif(request('status') == 'Departed')
         {
             $this->validate(request(), [
                 'status' => [
@@ -198,6 +198,37 @@ class RentalsController extends Controller
             ]);
     
             return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully departed. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
+        }
+        else
+        {
+            $this->validate(request(), [
+                'refund' => 'required|min:0|max:20',
+                'status' => [
+                    'required',
+                    Rule::in(['Refunded'])
+                ],
+            ]);
+            if($rental->is_refundable == true)
+            {
+                if(request('refund') == $rental->refund_code)
+                {
+                    $rental->update([
+                        'status' => request('status'),
+                        'is_refundable' => false,
+                        'refund_code' => null,
+                    ]);
+    
+                    return redirect(route('rental.index'))->with('success', 'Rental has been successfully refunded.');
+                }
+                else
+                {
+                    return back()->withErrors('Refund code does not match, please try again.');
+                }
+            }
+            else
+            {
+                return back()->withErrors('Rental code '.$rental->rental_code.' cannot be refunded.');
+            }
         }
     }
 }

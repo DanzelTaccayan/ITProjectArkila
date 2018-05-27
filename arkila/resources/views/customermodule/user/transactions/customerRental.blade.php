@@ -20,10 +20,10 @@
                                         <p style="color: gray;">{{$rental->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($rental->created_at)) }}</p>
 
                                         <small>
-                                        @if($rental->status === 'Unpaid')
+                                        @if($rental->status == 'Unpaid')
                                         <i class="fa fa-circle-o" style="color:red;"></i>
                                         {{strtoupper($rental->status)}}
-                                         @elseif($rental->status === 'Paid')
+                                         @elseif($rental->status == 'Paid')
                                         <i class="fa fa-check-circle" style="color:green;"></i>
                                         {{strtoupper($rental->status)}}
                                         @endif
@@ -33,7 +33,9 @@
                                         <div class="col-md-6">
                                             <div class="pull-right">
                                                     <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary">View</button>
+                                                    @if($rental->status == 'Paid' || $rental->status == 'Unpaid')
                                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancelModal{{$rental->rent_id}}">Cancel</button>                                           
+                                                    @endif
                                                 </div>
                                         </div>
                                         </div>
