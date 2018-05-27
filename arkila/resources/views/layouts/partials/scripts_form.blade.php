@@ -1,3 +1,4 @@
+    {{ Html::script('js/app.js') }}
     <!-- jQuery 3 -->
     {{ Html::script('adminlte/bower_components/jquery/dist/jquery.min.js') }}
     <!-- jQuery UI 1.11.4 -->
@@ -43,7 +44,7 @@
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}
     
-
+    
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button);
