@@ -57,7 +57,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/operators', 'OperatorsController',[
         'except' => ['destroy']
     ]);
-    Route::get('/home/operators/profile/{operator}','OperatorsController@showProfile')->name('operators.showProfile');
 
     /************ Drivers ******************************/
     Route::resource('/home/drivers', 'DriversController',[

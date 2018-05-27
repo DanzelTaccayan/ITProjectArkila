@@ -17,7 +17,7 @@
         {{method_field("PATCH")}}
         <div class="box-body">
             <div class="padding-side-15">
-                <img class="profile-user-img img-responsive img-circle" src="#" alt="Operator profile picture">
+                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$driver->profile_picture) }}" alt="Operator profile picture">
                 <h4 class="name-heading">{{trim(strtoupper($driver->full_name))}}</h4>
                 <h4 class="form-heading-orange">Personal Information</h4>
                 <table class="table table-bordered table-striped form-table">
@@ -44,7 +44,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('contactNumber') ?? $driver->edit_contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input value="{{old('contactNumber') ?? $driver->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
                             </td>
                         </tr>
                         <tr>
@@ -103,7 +103,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $driver->edit_emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required >
+                                <input value="{{ old('contactPersonContactNumber') ?? $driver->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required >
                             </td>
                         </tr>
                     </tbody>
@@ -112,7 +112,7 @@
         </div>
         <div class="box-footer">
             <div class="pull-right">
-                <a href="" class="btn btn-default">Cancel</a>
+                <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-default">Cancel</a>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Changes</button>
             </div>
         </div>

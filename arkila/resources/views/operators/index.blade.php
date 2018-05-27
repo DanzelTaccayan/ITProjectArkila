@@ -39,7 +39,7 @@
                         <td class="text-right">{{count($operator->drivers)}}</td>
                         <td>
                             <div class="text-center">
-                                <a href="{{ route('operators.showProfile', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                <a href="{{ route('operators.show', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                 <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->member_id}}"><i class="fa fa-trash"></i> DELETE</button>
                             </div>
                             <!-- /.text -->

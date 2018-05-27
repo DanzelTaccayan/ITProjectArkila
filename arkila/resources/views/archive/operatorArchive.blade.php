@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="profile-side">   
-                            <img class="profile-user-img img-responsive img-circle" src="/uploads/profilePictures/{{$archivedOperator->profile_picture}}" alt="Operator profile picture">
+                            <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$archivedOperator->profile_picture) }}" alt="Operator profile picture">
                             <hr> 
                             <div class="profile-btn-group">
                                 <a href="#" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
