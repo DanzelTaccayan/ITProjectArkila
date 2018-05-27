@@ -56,7 +56,7 @@ class MakeRentalController extends Controller
             "user_id" => Auth::id(),
             "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
             "departure_date" => $departedDate,
-            "rental_code" => 'RV'.$rentalCode,
+            "rental_code" => 'RN'.$rentalCode,
             "departure_time" => $request->time,
             "number_of_days" => $request->numberOfDays,
             "destination" => $destination,
@@ -74,9 +74,59 @@ class MakeRentalController extends Controller
     public function rentalTransaction()
     {
       $rentals = VanRental::all();
-      $requests = VanRental::where('user_id', auth()->user()->id)->count();
+      $requests = VanRental::where('user_id', auth()->user()->id)->get();
   
       return view('customermodule.user.transactions.customerRental', compact('rentals', 'requests'));
     }
-  
+
+    public function cancelRental(VanRental $rental)
+    {
+      $time = explode(':', $rental->departure_time);
+      $dateOfRental = Carbon::parse($rental->departure_date)->setTime($time[0], $time[1], $time[2]);
+      $now = Carbon::now();
+      $conditionDate = $dateOfRental->subDays(1);
+
+      if($rental->status == 'Unpaid' || $rental->status == 'Pending') {
+        $rental->update([
+          'status' => 'Cancelled',
+        ]);
+      } elseif($rental->status == 'Paid') {
+        
+        if($now->gt($conditionDate)) {
+          $rental->update([
+            'status' => 'Cancelled',
+            'refund_code' => null,
+            'is_refundable' => false,
+          ]);
+        } else {
+          $rental->update([
+            'status' => 'Cancelled',
+            'is_refundable' => true,
+          ]);
+        }
+      }
+      return back()->with('success', 'Rental marked as cancelled');
+    }
+    
+    public function refundExpiry()
+    {
+      $rentals = VanRental::where([
+        ['is_refundable', true],
+        ['status', 'Cancelled']
+        ])->get();
+
+      $now = Carbon::now();
+
+      foreach($rentals as $rental) {
+        $updatedAt = Carbon::parse($rental->updated_at);
+        $refundExpiry = $updatedAt->addDays(7);
+
+        if($now->gt($refundExpiry)) {
+          $rental->update([
+            'is_refundable' => false,
+            'refund_code' => null,
+          ]);
+        }
+      }
+    }
 }

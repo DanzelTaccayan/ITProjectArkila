@@ -27,6 +27,10 @@ class CreateVanRentalTable extends Migration
             ->nullable();
 
             $table->longText('rental_code');
+            $table->longText('refund_code')
+            ->nullable();
+            $table->boolean('is_refundable')
+            ->default(false);
             $table->decimal('rental_fare', 11, 2)
             ->nullable();
 
@@ -38,7 +42,7 @@ class CreateVanRentalTable extends Migration
             ->unsigned();
             $table->string('destination');
             $table->longText('contact_number');
-            $table->enum('status', ['Departed', 'Pending', 'Declined', 'Accepted','Cancelled','Expired', 'Paid', 'Refunded'])
+            $table->enum('status', ['Departed', 'Pending', 'Unavailable', 'Unpaid','Cancelled','Expired', 'Paid', 'Refunded'])
             ->default('Pending');
             $table->enum('rent_type', ['Online', 'Walk-in']);
             $table->text('comment')

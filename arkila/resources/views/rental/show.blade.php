@@ -67,7 +67,7 @@
 							@include('rental.rentalAccept')
 		                @elseif($rental->status == 'UNPAID')
 							@include('rental.rentalPayment')
-		                @elseif($rental->status == 'Paid')
+		                @elseif($rental->status == 'Paid' || $rental->status == 'Cancelled')
 							@include('rental.rentalDepart')
 		                @endif
 					</div>
