@@ -19,6 +19,10 @@
     padding-left: 10px;
 }
 
+.step.active {
+    background-color: darkslategray;
+}
+
 </style>
 @endsection
 @section('form-body')
@@ -108,7 +112,7 @@
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="0.25" name="numticket" value="{{old('numticket')}}" required="">
+                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" required="">
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
