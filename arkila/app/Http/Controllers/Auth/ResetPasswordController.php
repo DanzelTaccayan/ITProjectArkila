@@ -47,12 +47,19 @@ class ResetPasswordController extends Controller
     // }
 
     protected function resetPassword($user, $password)
-{
-    $user->forceFill([
-        'password' => bcrypt($password),
-        'remember_token' => Str::random(60),
-    ])->save();
-}
+    {
+        $user->forceFill([
+            'password' => bcrypt($password),
+            'remember_token' => Str::random(60),
+        ])->save();
+    }
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
 
 
 }

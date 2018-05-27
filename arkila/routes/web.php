@@ -115,7 +115,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
 
     Route::get('/adminNotifications', 'HomeController@notifications')->name('admin.getNotifs');
-  Route::get('/markAsRead', 'HomeController@markAsRead')->name('admin.markAsRead');
+    Route::get('/markAsRead', 'HomeController@markAsRead')->name('admin.markAsRead');
     /****************************************************/
 
     /************ User Management ******************************/

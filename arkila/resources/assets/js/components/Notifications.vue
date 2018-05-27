@@ -1,5 +1,5 @@
 <template>
-<li class="dropdown notifications-menu" id="markasread">
+<li class="dropdown notifications-menu" id="markasread" @click="markNotificationAsRead">
   <!-- Menu toggle button -->
   <a href="#" id="notifications" class="dropdown-toggle" role="button" data-toggle="dropdown">
     <i class="fa fa-bell-o"></i>
@@ -8,7 +8,7 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
-      <a href="#" @click="markNotificationAsRead">Mark All As Read</a>
+      
     </li>
     <li class="footer"><a href="#">View all</a></li>
   </ul>

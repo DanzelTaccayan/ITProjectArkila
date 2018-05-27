@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-// use App\Rental;
+use App\VanRental;
 use App\Observers\RentalsObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +15,7 @@ class RentalServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Rental::observe(RentalsObserver::class);
+        VanRental::observe(RentalsObserver::class);
     }
 
     /**
