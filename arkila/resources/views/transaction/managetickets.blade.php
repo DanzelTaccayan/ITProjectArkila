@@ -151,11 +151,11 @@
                                                         <td>{{ $ticket->updated_at }}</td>
                                                         <td id="actionBody{{$ticket->ticket_id}}">
                                                             <div class="text-center">
-                                                                <button type="button" data-ticket="{{$ticket->ticket_id}}" data-amount="{{$ticket->fare}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal{{$ticket->ticket_id}}"><i class="fa fa-money"></i> REFUND</button>
+                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->fare}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal{{$ticket->ticket_id}}"><i class="fa fa-search-minus"></i> LOST</button>
+                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#delete-modal{{$ticket->ticket_id}}"><i class="fa fa-trash"></i> CANCEL</button>
+                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
                                                             </div>
                                                         </td>
                                                         <td id="destBody{{$ticket->ticket_id}}" class="hidden">
@@ -175,139 +175,155 @@
                                         @endforeach
                                         </tbody>
                                         </table>
-                                        @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
-                                        <div class="modal" id="refund-modal{{$ticket->ticket_id}}">
-                                            <div class="modal-dialog" style="margin-top: 10%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
-                                                        <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE</strong></p>
-                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong> WILL BE REFUNDED?</p>
-                                                        <h3 class="text-center ">VALUE: <strong id="amount{{$ticket->ticket_id}}" class="text-green"></strong></h3>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button data-ticket="{{$ticket->ticket_id}}" data-dismiss="modal" name="refund" type="button" class="btn btn-primary">YES</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <div class="modal" id="lost-modal{{$ticket->ticket_id}}">
-                                            <div class="modal-dialog" style="margin-top: 10%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST?</h1>
-                                                        <p class="text-center">LOST OR UNRETURNED TICKETS WILL STILL BE <strong class="text-green">RECORDED AS SALE</strong></p>
-                                                        <p class="text-center">ARE YOU SURE <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong> IS LOST OR UNRETURNED?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button data-ticket="{{$ticket->ticket_id}}" name="lostButton" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <div class="modal" id="delete-modal{{$ticket->ticket_id}}">
-                                            <div class="modal-dialog" style="margin-top: 10%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
-                                                        <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                        <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL <strong class="text-maroon">{{ $ticket->ticket_number }} TICKET</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button type="button" name="deleteTransaction" data-ticket="{{$ticket->ticket_id}}" class="btn btn-primary" data-dismiss="modal">YES</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                                
-                                        @endforeach
-
-
-                                        <div class="modal" id="multirefund-modal">
-                                            <div class="modal-dialog" style="margin-top: 10%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
-                                                        <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE.</strong></p>
-                                                        <p class="text-center">ARE YOU SURE THE <strong id="multiRefundModal" class="text-maroon"></strong> WILL BE REFUNDED?</p>
-                                                        <h3 class="text-center ">TOTAL VALUE: <strong id="multiRefundModalAmount" class="text-green"></strong></h3>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button name="multiRefund" type="button" class="btn btn-primary" data-dismiss="modal">YES</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <div class="modal" id="multidelete-modal">
-                                            <div class="modal-dialog" style="margin-top: 10%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">×</span></button>
-                                                        <h4 class="modal-title"></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
-                                                        <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                        <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL THE <strong id="multiDeleteModal" class="text-maroon"></strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="text-center">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                            <button name="multiDelete" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
                                         </div>
                                     </div>
-
                             @endforeach
-                        </div>
+                                {{--Refund--}}
+                                <div class="modal" id="refund-modal">
+                                    <form id="refundForm" method="POST">
+                                        {{csrf_field()}}
+                                        {{method_field('PATCH')}}
+                                        <div class="modal-dialog" style="margin-top: 10%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+                                                    <h4 class="modal-title"></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
+                                                    <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE</strong></p>
+                                                    <p class="text-center">ARE YOU SURE <strong id="refundTicketNumber" class="text-maroon"></strong> WILL BE REFUNDED?</p>
+                                                    <h3 class="text-center ">VALUE: <strong id="refundAmount" class="text-green"></strong></h3>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                        <button type="submit" class="btn btn-primary">YES</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </form>
+                                </div>
 
+                                {{--Lost--}}
+                                <div class="modal" id="lost-modal">
+                                    <form id="lostForm" method="POST">
+                                        <div class="modal-dialog" style="margin-top: 10%;">
+
+                                            {{csrf_field()}}
+                                            {{method_field('PATCH')}}
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+                                                    <h4 class="modal-title"></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST?</h1>
+                                                    <p class="text-center">LOST OR UNRETURNED TICKETS WILL STILL BE <strong class="text-green">RECORDED AS SALE</strong></p>
+                                                    <p class="text-center">ARE YOU SURE <strong id="lostTicketNumber" class="text-maroon"></strong> IS LOST OR UNRETURNED?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                        <button type="submit" class="btn btn-primary">YES</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- /.modal-content -->
+                                        </div>
+                                    </form>
+                                    <!-- /.modal-dialog -->
+                                </div>
+
+                                {{--Cancel--}}
+                                <div class="modal" id="cancel-modal">
+                                    <form id="cancelForm" method="POST">
+                                        {{csrf_field()}}
+                                        {{method_field('DELETE')}}
+                                        <div class="modal-dialog" style="margin-top: 10%;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+                                                    <h4 class="modal-title"></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
+                                                    <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                    <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL <strong id="cancelTicketNumber" class="text-maroon"></strong>?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="text-center">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                        <button type="submit" class="btn btn-primary">YES</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                    </form>
+                                    <!-- /.modal-dialog -->
+                                </div>
+
+                                {{--MultiRefund--}}
+                                <div class="modal" id="multirefund-modal">
+                                    <div class="modal-dialog" style="margin-top: 10%;">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title"></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="text-center text-blue"><i class="fa fa-money"></i> REFUND?</h1>
+                                                <p class="text-center">REFUNDED TICKETS WILL <strong class="text-red">NOT BE RECORDED AS SALE.</strong></p>
+                                                <p class="text-center">ARE YOU SURE THE <strong id="multiRefundModal" class="text-maroon"></strong> WILL BE REFUNDED?</p>
+                                                <h3 class="text-center ">TOTAL VALUE: <strong id="multiRefundModalAmount" class="text-green"></strong></h3>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                    <button name="multiRefund" type="button" class="btn btn-primary" data-dismiss="modal">YES</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+
+                                {{--MultiDelete--}}
+                                <div class="modal" id="multidelete-modal">
+                                    <div class="modal-dialog" style="margin-top: 10%;">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title"></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
+                                                <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
+                                                <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL THE <strong id="multiDeleteModal" class="text-maroon"></strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                    <button name="multiDelete" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -325,69 +341,34 @@
             //Refund
             $('button[name="initialRefund"]').on('click',function(){
                 var amount = $(this).data('amount');
-                var ticketId = $(this).data('ticket');
+                var ticketNumber = $(this).data('ticketnumber');
+                var ticketId = $(this).data('ticketid');
 
-                $('#amount'+ticketId).text('₱ '+amount);
+
+                $('#refundTicketNumber').text(ticketNumber+' TICKET');
+                $('#refundAmount').text('₱ '+amount);
+                $('#refundForm').prop('action',"/home/transactions/refund/"+ticketId)
             });
 
-            $('button[name="refund"]').on('click',function(){
-                var ticketId = $(this).data('ticket');
+            //Cancel
+            $('button[name="initialCancel"]').on('click',function(){
+                var ticketId = $(this).data('ticketid');
+                var ticketNumber = $(this).data('ticketnumber');
 
-                $.ajax({
-                    method:'PATCH',
-                    url: '/home/transactions/refund/'+ticketId,
-                    data: {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(response){
-                        $('#ticket'+ticketId).remove();
-                        $('#refund-modal'+ticketId).remove();
-
-                        new PNotify({
-                            title: "Success!",
-                            text: "Successfully refunded ticket:  "+ response,
-                            hide: true,
-                            delay: 2500,
-                            animate: {
-                                animate: true,
-                                in_class: 'slideInDown',
-                                out_class: 'fadeOut'
-                            },
-                            animate_speed: 'fast',
-                            nonblock: {
-                                nonblock: true
-                            },
-                            cornerclass: "",
-                            width: "",
-                            type: "success",
-                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                        });
-                    },
-                    error:function(response) {
-                        $.notify({
-                            // options
-                            icon: 'fa fa-warning',
-                            message: response.responseJSON.error
-                        },{
-                            // settings
-                            type: 'danger',
-                            autoHide: true,
-                            clickToHide: true,
-                            autoHideDelay: 2500,
-                            placement: {
-                                from: 'bottom',
-                                align: 'right'
-                            },
-                            icon_type: 'class',
-                            animate: {
-                                enter: 'animated bounceIn',
-                                exit: 'animated bounceOut'
-                            }
-                        });
-                    }
-                });
+                $('#cancelTicketNumber').text(ticketNumber+' TICKET');
+                $('#cancelForm').prop('action','/home/transactions/'+ticketId);
             });
 
+            //Lost
+            $('button[name="initialLost"]').on('click', function(){
+                var ticketId = $(this).data('ticketid');
+                var ticketNumber = $(this).data('ticketnumber');
+
+                $('#lostTicketNumber').text(ticketNumber+' TICKET');
+                $('#lostForm').prop('action', '/home/transactions/lost/'+ticketId);
+            });
+
+            //Multi Refund
             $('button[name="initialMultiRefund"]').on('click',function(){
                 var checked = $('input[name="checkInput"]:checked');
                 var amount = 0;
@@ -395,7 +376,7 @@
                 if(checked.length > 0) {
                     $.each(checked, function (index, createdElement) {
                         var ticketId = $(createdElement).val();
-                        amount += parseFloat($('button[name="initialRefund"][data-ticket="'+ticketId+'"]').data('amount'));
+                        amount += parseFloat($('button[name="initialRefund"][data-ticketid="'+ticketId+'"]').data('amount'));
                     });
 
                     $('#multiRefundModal').text('('+checked.length+') SELECTED TICKETS');
@@ -474,65 +455,7 @@
 
             });
 
-            //Delete
-            $('button[name="deleteTransaction"]').on('click',function(){
-                var ticketId = $(this).data('ticket');
-
-                $.ajax({
-                    method:'DELETE',
-                    url: '/home/transactions/'+ticketId,
-                    data: {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(response){
-                        $('#ticket'+ticketId).remove();
-                        $('#refund-modal'+ticketId).remove();
-
-                        new PNotify({
-                            title: "Success!",
-                            text: "Successfully cancelled ticket "+ response,
-                            hide: true,
-                            delay: 2500,
-                            animate: {
-                                animate: true,
-                                in_class: 'slideInDown',
-                                out_class: 'fadeOut'
-                            },
-                            animate_speed: 'fast',
-                            nonblock: {
-                                nonblock: true
-                            },
-                            cornerclass: "",
-                            width: "",
-                            type: "success",
-                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                        });
-                    },
-                    error:function(response) {
-                        $.notify({
-                            // options
-                            icon: 'fa fa-warning',
-                            message: response.responseJSON.error
-                        },{
-                            // settings
-                            type: 'danger',
-                            autoHide: true,
-                            clickToHide: true,
-                            autoHideDelay: 2500,
-                            placement: {
-                                from: 'bottom',
-                                align: 'right'
-                            },
-                            icon_type: 'class',
-                            animate: {
-                                enter: 'animated bounceIn',
-                                exit: 'animated bounceOut'
-                            }
-                        });
-                    }
-                });
-            });
-
+            //Multi Cancel
             $('button[name="initialMultiDelete"]').on('click',function(){
                 var checkCount = $('input[name="checkInput"]:checked').length;
                 if(checkCount > 0) {
@@ -609,65 +532,6 @@
                     });
                 }
 
-            });
-
-            //Lost
-            $('button[name="lostButton"]').on('click',function(){
-                var ticketId = $(this).data('ticket');
-
-                $.ajax({
-                    method:'PATCH',
-                    url: '/home/transactions/lost/'+ticketId,
-                    data: {
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function(response){
-                        $('#ticket'+ticketId).remove();
-                        $('#refund-modal'+ticketId).remove();
-
-                        new PNotify({
-                            title: "Success!",
-                            text: "Successfully updated "+ response,
-                            hide: true,
-                            delay: 2500,
-                            animate: {
-                                animate: true,
-                                in_class: 'slideInDown',
-                                out_class: 'fadeOut'
-                            },
-                            animate_speed: 'fast',
-                            nonblock: {
-                                nonblock: true
-                            },
-                            cornerclass: "",
-                            width: "",
-                            type: "success",
-                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                        });
-                    },
-                    error:function(response) {
-                        $.notify({
-                            // options
-                            icon: 'fa fa-warning',
-                            message: response.responseJSON.error
-                        },{
-                            // settings
-                            type: 'danger',
-                            autoHide: true,
-                            clickToHide: true,
-                            autoHideDelay: 2500,
-                            placement: {
-                                from: 'bottom',
-                                align: 'right'
-                            },
-                            icon_type: 'class',
-                            animate: {
-                                enter: 'animated bounceIn',
-                                exit: 'animated bounceOut'
-                            }
-                        });
-                    }
-                });
             });
 
         });

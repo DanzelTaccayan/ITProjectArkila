@@ -756,7 +756,7 @@ ol.arrow-drag{
                 var van = $('#van').val();
                 var driver = $('#driver').val();
 
-                if( destination != "" && van != "" && driver != "") {
+                if( destination != null && van != null && driver != null) {
                     $.ajax({
                         method:'POST',
                         url: '/home/vanqueue/'+destination+'/'+van+'/'+driver,
@@ -771,6 +771,73 @@ ol.arrow-drag{
                         }
                     });
 
+                } else {
+                    if( driver == null ) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: 'Please choose a driver to drive the van'
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
+                    }
+                    if(destination == null) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: 'Please choose a destination before adding the van to the queue'
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
+                    }
+                    if (van == null) {
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: 'Please choose a van to add in the queue'
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
+                    }
                 }
             });
 
