@@ -40,43 +40,39 @@
                         <td>
                             <div class="text-center">
                                 <a href="{{ route('operators.show', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->member_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->member_id}}"><i class="fa fa-archive"></i> ARCHIVE</button>
                             </div>
                             <!-- /.text -->
                         </td>
                     </tr>
                     <!-- Modal for Delete-->
-                    <div class="modal fade" id="{{'deleteWarning'.$operator->member_id}}">
-                        <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title"> Confirm</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                            <h1>
-                                            <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
-                                            </h1>
-                                            <p>Are you sure you want to delete <strong>{{ $operator->full_name }}</strong>?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        @if($operators && $operator)
-                                        <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
-                                            {{method_field('PATCH')}}
-                                            {{ csrf_field() }}
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                        @endif
-                                    </div>
+                    <div class="modal" id="{{'deleteWarning'.$operator->member_id}}">
+                        <div class="modal-dialog" style="margin-top: 10%;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title"></h4>
                                 </div>
-                                <!-- /.modal-content -->
-                            <!-- /.col -->
+                                <div class="modal-body">
+                                    <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                                    <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                    <h4 class="text-center "><strong class="text-red">{{ $operator->full_name }}</strong>?</h4>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                                        {{method_field('PATCH')}}
+                                        {{ csrf_field() }}
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                            <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.modal -->
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
         </div>

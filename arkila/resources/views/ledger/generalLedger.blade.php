@@ -112,34 +112,33 @@
                                 </div>
                             </td>
                         </tr>
-
-                            <!-- Modal for Delete-->
-                            <div class="modal fade" id="{{'deleteLedger'. $ledger->ledger_id}}">
-                                <div class="modal-dialog modal-sm">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-red">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                                <h4 class="modal-title"> Confirm</h4>
+                        
+                        <div class="modal" id="{{'deleteLedger'. $ledger->ledger_id}}">
+                            <div class="modal-dialog" style="margin-top: 10%;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h1 class="text-center text-red"><i class="fa fa-warning"></i> DELETE</h1>
+                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
+                                        <h4 class="text-center "><strong class="text-red">{{$ledger->description}}</strong>?</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{{route('ledger.destroy', $ledger->ledger_id)}}" method="POST">
+                                            {{csrf_field()}} 
+                                            {{method_field('DELETE')}}
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                <button type="submit" class="btn btn-danger">DELETE</button>
                                             </div>
-                                            <div class="modal-body">
-                                                    <h1>
-                                                    <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
-                                                    </h1>
-                                                    <p>Are you sure you want to delete "{{$ledger->description}}"?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                 <form action="{{route('ledger.destroy', $ledger->ledger_id)}}" method="POST">
-                                                    {{csrf_field()}} {{method_field('DELETE')}}
-
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button> <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    <!-- /.col -->
+                                        </form>
+                                    </div>
                                 </div>
-                                <!-- /.modal-dialog -->
                             </div>
+                        </div>
                         @endif
                         @endforeach
                     </tbody>
