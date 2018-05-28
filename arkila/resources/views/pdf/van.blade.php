@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<style>
+    <style>
         table
         {
             width: 100%;
@@ -43,7 +43,7 @@
                  <td>{{$van->plate_number}}</td>
 				 <td>{{ $van->driver()->first()->full_name ?? 'None' }}</td>
 				 <td>{{ $van->operator()->first()->full_name ??  'None' }}</td>
-				 <td>{{$van->vanModel->description}}</td>
+				 <td>{{$van->model->description}}</td>
 				 <td>{{$van->seating_capacity}}</td>
             </tr>
         @endforeach
