@@ -125,8 +125,7 @@
                                         <div id="manageTickets{{$terminal->destination_id}}">
                                             <div class="pull-left col-md-6">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i>
-                                                    </button>
+                                                    <button type="button" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i></button>
                                                     <button name="initialMultiRefund" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
                                                     <button name="initialMultiDelete" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
                                                 </div>
@@ -145,7 +144,7 @@
                                                 <tbody>
                                                 @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
                                                     <tr id="ticket{{$ticket->ticket_id}}">
-                                                        <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox"></td>
+                                                        <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>
                                                         <td>{{ $ticket->destination->destination_name}}</td>
                                                         <td>{{ $ticket->updated_at }}</td>
@@ -576,13 +575,15 @@
             //Enable check and uncheck all functionality
             $(".checkbox-toggle").click(function () {
                 var clicks = $(this).data('clicks');
+                var terminalId = $(this).data('terminal');
+
                 if (clicks) {
                     //Uncheck all checkboxes
-                    $(".sold-tickets input[type='checkbox']").iCheck("uncheck");
+                    $(".sold-tickets input[type='checkbox'][data-terminal='"+terminalId+"']").iCheck("uncheck");
                     $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
                 } else {
                     //Check all checkboxes
-                    $(".sold-tickets input[type='checkbox']").iCheck("check");
+                    $(".sold-tickets input[type='checkbox'][data-terminal='"+terminalId+"']").iCheck("check");
                     $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
                 }
                 $(this).data("clicks", !clicks);
@@ -592,6 +593,7 @@
     <script>
         $(function() {
             $('.sold-tickets').DataTable({
+                'select':true,
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,

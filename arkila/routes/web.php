@@ -160,6 +160,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         'except' => ['edit']
     ]);
     Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
+    Route::patch('/home/rental/{rental}/change-departure', 'RentalsController@changeDepartureDateTime')->name('rental.changeDeparture');
 
     Route::resource('/home/company-profile', 'ProfileController',[
         'except' => ['show','store', 'create', 'destroy']
@@ -304,10 +305,12 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
     /**Services**/
     /*Rental*/
-    Route::patch('/home/rental/{rental}/cancelRental', 'CustomerModuleControllers\MakeRentalController@cancelRental')->name('rental.cancel');
+    Route::patch('/home/rental/{rental}/cancelRental', 'CustomerModuleControllers\MakeRentalController@cancelRental')->name('rental.cancel')->middleware('online-rental');
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
     Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
+    Route::patch('/home/reservation/{reservation}/cancelReservation', 'CustomerModuleControllers\MakeReservationController@cancelReservation')->name('reservation.cancel')->middleware('online-reservation');
+
     Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
     Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
     Route::get('/home/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationPdf')->name('reservation.receipt');

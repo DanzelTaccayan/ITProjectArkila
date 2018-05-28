@@ -1,7 +1,7 @@
 <h2><strong>CHANGE DEPARTURE
 </strong></h2>
 <div class="">
-	<form action="{{route('rental.updateStatus', $rental->rent_id)}}" method="POST" class="form-horizontal">
+	<form action="{{route('rental.changeDeparture', $rental->rent_id)}}" method="POST" class="form-horizontal">
     {{ csrf_field() }} {{ method_field('PATCH') }}
             <div class="padding-side-15">
                 <div class="form-group">
@@ -25,7 +25,7 @@
                     <p id="errDepartureTime"></p>
                 </div>
                 <div class="text-center">
-                    <button type="submit" name="status" value="Paid" class="btn btn-info"><i class="fa fa-money"></i>Save Changes</button> 
+                    <button type="submit" class="btn btn-info"><i class="fa fa-money"></i>Save Changes</button> 
                 </div>
             </div>
         </div>

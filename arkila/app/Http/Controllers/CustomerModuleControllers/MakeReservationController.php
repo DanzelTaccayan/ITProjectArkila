@@ -188,7 +188,7 @@ class MakeReservationController extends Controller
 	public function slotsAndExpiryDate()
 	{
 		$reservations = Reservation::where([
-			['status', '!=', 'CANCELLED'],
+			['status', '!=', 'DEPARTED'],
 			['status', '!=', 'REFUNDED'],
 			])->get();
 
@@ -198,12 +198,33 @@ class MakeReservationController extends Controller
 		{
 			foreach ($reservations as $reservation)
 			{
+				$time = explode(':', $reservation->reservationDate->departure_time);
+				$dateOfReservation = Carbon::parse($reservation->reservationDate->reservation_date)->setTime($time[0], $time[1], $time[2]);
+				$now = Carbon::now();
+				$conditionDate = $dateOfReservation->subDays(1);
+		  
 				$expiry_date = $reservation->expiry_date;
 				if($reservation->status !== 'EXPIRED' && Carbon::now()->gt($reservation->expiry_date))
 				{
-					$reservation->update([
-						'status' => 'EXPIRED',
-					]);
+					// to TEST
+					if($reservation->status == 'CANCELLED' && $now->gt($conditionDate))
+					{
+						$quantity = $reservation->ticket_quantity;
+						$orig = $reservation->reservationDate->number_of_slots;
+						$updatedSlots = $quantity + $orig;
+	
+						$reservation->reservationDate->update([
+							'number_of_slots' => $updatedSlots,
+						]);
+	
+					}
+					else
+					{
+						$reservation->update([
+							'status' => 'EXPIRED',
+						]);
+					}
+					// until HERE
 				}
 
 				if($reservation->reservationDate->reservation_date->subDays(2)->gt($reservation->expiry_date) && $reservation->status == 'EXPIRED' && $reservation->returned_slot == false)
@@ -224,4 +245,48 @@ class MakeReservationController extends Controller
 			}
 		}
 	}
+
+	public function cancelReservation(Reservation $reservation)
+    {
+      $time = explode(':', $reservation->reservationDate->departure_time);
+      $dateOfReservation = Carbon::parse($reservation->reservationDate->reservation_date)->setTime($time[0], $time[1], $time[2]);
+      $now = Carbon::now();
+      $conditionDate = $dateOfReservation->subDays(1);
+
+	  if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+		  
+		  if($reservation->status == 'UNPAID') {
+			$reservation->update([
+			  'status' => 'CANCELLED',
+			]);
+		  } elseif($reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+			
+			if($now->gt($conditionDate)) {
+			  $reservation->update([
+				'status' => 'CANCELLED',
+				'refund_code' => null,
+				'is_refundable' => false,
+			  ]);
+			} else {
+			  $reservation->update([
+				'status' => 'CANCELLED',
+				'is_refundable' => true,
+			  ]);
+			}
+		  }
+		  return back()->with('success', 'Reservation marked as cancelled');
+		} else {
+			if($reservation->status == 'CANCELLED') {
+				$message = 'The reservation is already marked as CANCELLED.';
+			} elseif($reservation->status == 'DEPARTED') {
+				$message = 'The reservation is already marked as DEPARTED.';
+			} elseif($reservation->status == 'EXPIRED') {
+				$message = 'The reservation is already marked as EXPIRED.';
+			} elseif($reservation->status == 'REFUNDED') {
+				$message = 'The reservation is already marked as REFUNDED.';
+			}
+			return back()->withErrors($message);
+		}
+	  }
+
 }
