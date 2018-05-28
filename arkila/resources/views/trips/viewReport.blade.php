@@ -17,12 +17,22 @@
 .smaroon {
     background: #800000;
 }
+.d-inline{
+    display: inline-block!important;
+}
+.back {
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
 </style>
 @endsection
 @section('content')
 <div class="padding-side-5">
-    <div>
+    <div class="d-inline">
         <h2 class="text-white">VIEW DRIVER REPORT</h2>
+    </div>
+    <div class="d-inline back">
+        <a href="{{route('trips.tripLog')}}" class="btn btn-default btn-flat"><strong>TRIP LOG</strong></a>
     </div>
 
     <div class="box" style="box-shadow: 0px 5px 10px gray;">
