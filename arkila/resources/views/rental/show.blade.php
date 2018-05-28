@@ -58,11 +58,14 @@
 		                        </tr>
 		                    </tbody>
 		                </table>
-		                <div class="text-center">
+		                <div>
 		                	<a href="{{route('rental.index')}}" class="btn btn-default">Back</a>
+			                <button id="changeDateBtn" class="btn btn-primary pull-right">Change Departure Date</button>
+			                <button id="cancelChangeDateBtn" class="btn btn-primary pull-right hidden">Cancel</button>
 		                </div>
 					</div>
 					<div class="col-md-6">
+						<div id="statusSection">
 		                @if($rental->status == 'Pending')
 							@include('rental.rentalAccept')
 		                @elseif($rental->status == 'Unpaid')
@@ -70,9 +73,32 @@
 		                @elseif($rental->status == 'Paid' || $rental->status == 'Cancelled')
 							@include('rental.rentalDepart')
 		                @endif
+		                </div>
+		                <div id="changeDateSection" class="hidden">
+		                	@include('rental.rentalChangeDate')
+		                </div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+@endsection
+@section('scripts')
+@parent
+<script>
+	 $('#changeDateBtn').click(function(){
+           	$('#statusSection').hide();
+           	$('#changeDateBtn').hide();
+            $('#changeDateSection').show();
+            $('#changeDateSection').removeClass("hidden");
+            $('#cancelChangeDateBtn').show();
+            $('#cancelChangeDateBtn').removeClass("hidden");	
+        });
+	 $('#cancelChangeDateBtn').click(function(){
+           	$('#statusSection').show();
+           	$('#changeDateBtn').show();
+            $('#changeDateSection').hide();
+            $('#cancelChangeDateBtn').hide();	
+        });
+</script>
 @endsection

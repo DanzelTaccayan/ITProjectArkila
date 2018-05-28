@@ -220,6 +220,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/archive/{driver}/archiveDrivers', 'ArchiveController@archiveDriver')->name('drivers.archiveDriver');
     Route::patch('/home/archive/operator/{archivedOperator}/restore','ArchiveController@restoreArchivedOperator')->name('operators.restoreArchivedOperator');
     Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('drivers.restoreArchivedDriver');
+    Route::patch('/home/archive/van/{archivedVan}/restore','ArchiveController@restoreArchivedVan')->name('vans.restoreArchivedVan');
 
     /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');

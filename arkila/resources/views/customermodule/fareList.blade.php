@@ -8,20 +8,22 @@
               <div class="row packages">
               @if($destinations->count() > 0)
                @foreach($destinations as $destination)
-                <div class="col-md-8 mx-auto">
-                  <div class="package">
+                <div class="col-md-8 mx-auto" style="min-height: 500px;">
+                  <div class="boxContainer">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered text-center">
                             <thead>
                                 <tr>
                                     <th>Destination</th>
-                                    <th>Fare</th>
+                                    <th>Regular Fare</th>
+                                    <th>Discounted Fare</th>
                                 </tr>
                             </thead>
                             @foreach($destination->routeFromDestination as $destination)
                                 <tr>
                                   <td>{{$destination->destination_name}}</td>
-                                  <td>{{$destination->tickets->first()->fare}}</td>
+                                  <td class="text-right">{{$destination->tickets->where('type', 'Regular')->first()->fare}}</td>
+                                  <td class="text-right">{{$destination->tickets->where('type', 'Discount')->first()->fare}}</td>
                                 </tr>
                             @endforeach
                         </table>

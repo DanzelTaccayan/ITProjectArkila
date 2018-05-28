@@ -44,7 +44,6 @@
         							<td class="pull-right">{{$van->seating_capacity}}</td>
         							<td>
         								<div class="text-center">
-
                                             <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
                                             <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
         		                        </div>

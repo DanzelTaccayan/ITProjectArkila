@@ -92,6 +92,10 @@
         .d-inline{
             display: inline-block!important;
         }
+        .back {
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
     </style>
 @stop
 @section('content')
@@ -100,7 +104,7 @@
                 <div class="d-inline">
                     <h2 class="text-white">LIST OF UNUSED TICKETS</h2>
                 </div>
-                <div class="d-inline">    
+                <div class="d-inline back">    
                     <a href="{{route('transactions.index')}}" class="btn bg-maroon btn-flat">SELL AND DEPART</a>
                 </div>
             </div>

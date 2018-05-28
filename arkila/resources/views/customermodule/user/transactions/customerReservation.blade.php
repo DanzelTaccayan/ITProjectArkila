@@ -32,7 +32,8 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
+                                                <button class="btn btn-default" data-toggle="modal" data-target="#reservationCancel{{$reservation->id}}">CANCEL</button>
+                                                <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
                                             </div>
                                         </div>
                                         </div>
@@ -59,6 +60,27 @@
                       </div>
                     </div>
                     @foreach($requests as $reservation)
+                    <div class="modal fade" id="reservationCancel{{$reservation->id}}">
+                        <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-red">
+                                        <h4 class="modal-title">CANCEL RESERVATION</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure?
+                                    </div>
+                                    <div class="modal-footer">   
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                                        @if($reservation->status == 'PAID')
+                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        @endif
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
 
                     <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
                         <div class="modal-dialog">
@@ -115,7 +137,6 @@
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
                                         @if($reservation->status == 'PAID')
-                                        <button class="btn btn-danger">CANCEL</button>
                                         <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                         @endif
                                     </div>

@@ -4,6 +4,7 @@ use App\Member;
 use App\VanQueue;
 use App\Van;
 use DB;
+use App\Rules\checkOperator;
 
 class ArchiveController extends Controller
 {
@@ -121,12 +122,18 @@ class ArchiveController extends Controller
 
     public function restoreArchivedDriver(Member $archivedDriver)
     {
+        $this->validate(request(), [
+            "operator" => ['bail','nullable','numeric','exists:member,member_id',new checkOperator]
+        ]);
+
         // Start transaction!
         DB::beginTransaction();
         try {
             $archivedDriver->update([
-                'status' => 'Active'
+                'status' => 'Active',
+                'operator_id' => request('operator')
             ]);
+
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
@@ -191,12 +198,36 @@ class ArchiveController extends Controller
     public function showAllArchivedDriver()
     {
         $archivedDrivers = Member::allDrivers()->where('status','Inactive')->get();
-        return view('archive.driverArchive',compact('archivedDrivers'));
+        $activeOperators = Member::allOperators()->where('status', 'Active')->get();
+        return view('archive.driverArchive',compact('archivedDrivers','activeOperators'));
     }
 
     public function showAllArchivedVans()
     {
         $archivedVans = Van::where('status','Inactive')->get();
-        return view('archive.vanArchive',compact('archivedVans'));
+        $activeOperators = Member::allOperators()->where('status', 'Active')->get();
+        return view('archive.vanArchive',compact('archivedVans','activeOperators'));
+    }
+
+    public function restoreArchivedVan(Van $archivedVan) {
+        $this->validate(request(), [
+            "operator" => ['bail','required','numeric','exists:member,member_id',new checkOperator]
+        ]);
+
+        // Start transaction!
+        DB::beginTransaction();
+        try {
+            $archivedVan->update([
+                'status' => 'Active'
+            ]);
+
+            $archivedVan->members()->attach(request('operator'));
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+        }
+        return back();
     }
 }

@@ -39,7 +39,10 @@
                                 </tr>
                                  <!--RESTORE MODAL-->
                                 <div class="modal fade" id="huhu">
-                                    <div class="modal-dialog">
+                                    <form method="POST" action="{{route('vans.restoreArchivedVan',[$archivedVan->van_id])}}">
+                                        {{csrf_field()}}
+                                        {{method_field('PATCH')}}
+                                        <div class="modal-dialog">
                                         <div class="col-md-offset-2 col-md-8">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-green">
@@ -49,25 +52,22 @@
                                                 </div>
                                                 <div class="modal-body row" style="margin: 0% 1%;">
                                                     <div class="form-group">
-                                                        <label for="">Name of Oerator:</label>
-
-                                                            <select name="operator" id="" class="form-control select2">
-                                                               
-                                                                    <option value="nemeof operator">HEHE</option>
-                                                                
-                                                            </select> 
+                                                        <label for="">Name of Operator:</label>
+                                                            @foreach($activeOperators as $activeOperator)
+                                                                <select name="operator" class="form-control select2">
+                                                                        <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
+                                                                </select>
+                                                            @endforeach
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    
-                                                    <form method="POST" action="">
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                         <button type="submit" class="btn btn-success" style="width:22%;">Restore</button>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    </form>
                                 </div>
                             @endforeach
                         </tbody>
