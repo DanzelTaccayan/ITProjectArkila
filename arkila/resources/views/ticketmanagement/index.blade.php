@@ -36,7 +36,7 @@
                         </td>
                         <td id="regEditQty{{$route->destination_id}}" class="hidden" style="width: 100px; background: #feeedb;" colspan="2">
                           <div class="col-md-6">
-                            <input type="number" id="regEditInput{{$route->destination_id}}" class="form-control" min="0" step="1" value="{{$route->number_of_tickets}}">
+                            <input type="number" id="regEditInput{{$route->destination_id}}" class="form-control" min="0" step="1" value="{{$route->number_of_tickets}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px">
                             <button id="regViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>

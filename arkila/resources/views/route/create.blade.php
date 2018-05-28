@@ -25,7 +25,7 @@
       </div>
       <div class="form-group">
           <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="1" name="numticket" value="{{old('numticket')}}" required>
+          <input type="number" class="form-control" min="0" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" required>
       </div>
       <div class="form-group">
           <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
