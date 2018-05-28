@@ -1,6 +1,5 @@
-@extends('layouts.form_lg') @section('title', 'asdasd') @section('form-title', 'Hello!') @section('form-body')
-
-@section('form-action', '/password/reset')
+@extends('layouts.landing')
+@section('content')
   
 <!--Start confirm password box-->
 <input type="hidden" name="token" value="{{$token}}">

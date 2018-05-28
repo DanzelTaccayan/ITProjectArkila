@@ -14,7 +14,6 @@ class ReservationObserver
     public function created(Reservation $reserve)
     {
         if($reserve->type == 'Online'){
-            
             $user = User::find(Auth::id());
             $userAdmin = User::where('user_type', 'Super-Admin')->first();
             //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
@@ -28,35 +27,24 @@ class ReservationObserver
         $case = null;
         
         if($reserve->type == 'Online'){
-            //Reservation Paid
-        if($reserve->status == 'PAID'){
-            $userCustomer = User::find($reserve->user_id);
-            $case = 'Paid';
-            //dd($case);
-            $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
-            
-        }
-
-        //Reservation Expired
-        if($reserve->status == 'EXPIRED'){
-            $userCustomer = User::find($reserve->user_id);
-            $case = 'Expired';
-            $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
-        }
-
-        //Reservation Refund
-        if($reserve->status == 'REFUNDED'){
-            $userCustomer = User::find($reserve->user_id);
-            $case = 'Refund';
-            $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
-        }
-
-        //Reservation Departed
-        if($reserve->status == 'DEPARTED'){
-            $userCustomer = User::find($reserve->user_id);
-            $case = 'Departed';
-            $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
-        }
+            if($reserve->status == 'PAID'){//Reservation Paid
+                $userCustomer = User::find($reserve->user_id);
+                $case = 'Paid';
+                //dd($case);
+                $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));   
+            }else if($reserve->status == 'EXPIRED'){//Reservation Expired
+                $userCustomer = User::find($reserve->user_id);
+                $case = 'Expired';
+                $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
+            }else if($reserve->status == 'REFUNDED'){//Reservation Refund
+                $userCustomer = User::find($reserve->user_id);
+                $case = 'Refund';
+                $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
+            }else if($reserve->status == 'DEPARTED'){//Reservation Departed
+                $userCustomer = User::find($reserve->user_id);
+                $case = 'Departed';
+                $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
+            }
         }
     }
     

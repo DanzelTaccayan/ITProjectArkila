@@ -5,30 +5,53 @@ namespace App\Observers;
 use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-use App\Rental;
+use App\VanRental;
 use App\User;
 
 class RentalsObserver{
 
-  public function created(Rental $rent)
+  public function created(VanRental $rent)
   {
-    $user = User::find(Auth::id());
-    $userDriverAndAdmin = User::join('member', 'users.id', '=', 'member.user_id')
-      ->join('member_van', 'member.member_id', '=', 'member_van.member_id')
-      ->join('van', 'member_van.plate_number', '=', 'van.plate_number')
-      ->join('van_model', 'van.model_id', '=', 'van_model.model_id')
-      ->where('user_type', 'Super-Admin')
-      ->orWhere('user_type', 'Driver')
-      ->where('van_model.model_id', $rent->model_id)
-      ->get();
-
-    foreach($userDriverAndAdmin as $userNotif){
-      $userNotif->notify(new CustomerRent($user, $rent));
+    if($rent->type == 'Online'){
+      $user = User::find(Auth::id());
+      $userAdmin = User::where('user_type', 'Super-Admin')->first();
+      //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
+      $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
     }
   }
 
-  public function updated(Rental $rent)
+  public function updated(VanRental $rent)
   {
-    
+    if($rent->rent_type == 'Online'){
+      if($rent->status == 'Accepted'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Accepted';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Declined'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Declined';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Cancelled'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Cancelled';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Departed'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Departed';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Refunded'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Refunded';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Paid'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Paid';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'Expired'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'Expired';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      } 
+    }
   }
 }

@@ -17,6 +17,7 @@
                     @else
                         <button title="Please add an operator first" class="btn btn-success btn-sm btn-flat" disabled><i class="fa fa-plus"></i> REGISTER VAN</button>
                     @endif
+                    <a href="{{route('archive.showAllArchivedVans')}}" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
                     <button onclick="window.open('{{route('pdf.van')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT VAN LIST</button>
             	</div>
 
@@ -43,7 +44,6 @@
         							<td class="pull-right">{{$van->seating_capacity}}</td>
         							<td>
         								<div class="text-center">
-
                                             <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
                                             <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
         		                        </div>

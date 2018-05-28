@@ -43519,7 +43519,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "li",
-    { staticClass: "dropdown notifications-menu", attrs: { id: "markasread" } },
+    {
+      staticClass: "dropdown notifications-menu",
+      attrs: { id: "markasread" },
+      on: { click: _vm.markNotificationAsRead }
+    },
     [
       _c(
         "a",
@@ -43544,24 +43548,12 @@ var render = function() {
       _c("ul", { staticClass: "dropdown-menu", attrs: { role: "menu" } }, [
         _c(
           "li",
-          [
-            _vm._l(_vm.unreadNotifications, function(unread) {
-              return _c("notification-item", {
-                key: unread.user_id,
-                attrs: { unread: unread }
-              })
-            }),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: { href: "#" },
-                on: { click: _vm.markNotificationAsRead }
-              },
-              [_vm._v("Mark All As Read")]
-            )
-          ],
-          2
+          _vm._l(_vm.unreadNotifications, function(unread) {
+            return _c("notification-item", {
+              key: unread.user_id,
+              attrs: { unread: unread }
+            })
+          })
         ),
         _vm._v(" "),
         _vm._m(0)

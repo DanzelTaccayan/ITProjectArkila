@@ -327,10 +327,10 @@ ol.arrow-drag{
                                               <label for="" class="col-sm-2 control-label">Remark:</label>
                                                <div class="col-sm-3">
                                                 <select name="remark" id="remark{{$vanOnQueue->van_queue_id}}" class="form-control">
-                                                  <option value="CC">CC</option>
-                                                  <option value="ER">ER</option>
-                                                  <option value="OB">OB</option>
-                                                  <option value="NULL">None</option>
+                                                  <option @if($vanOnQueue->remarks == "CC") selected @endif value="CC">CC</option>
+                                                  <option @if($vanOnQueue->remarks == "ER") selected @endif value="ER">ER</option>
+                                                  <option @if($vanOnQueue->remarks == "OB") selected @endif value="OB">OB</option>
+                                                  <option @if($vanOnQueue->remarks == null) selected @endif value="NULL">None</option>
                                                 </select>
                                                </div>
                                              </div>

@@ -46,7 +46,7 @@
                     <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/rental/*') ? 'active' : '' }} || {{ Request::is('home/reservations/*') ? 'active' : '' }} || {{ Request::is('home/booking-rules') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/rental/*') ? 'active' : '' }} || {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations/*') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }} || {{ Request::is('home/booking-rules') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
                     <span>Rental and Resevation</span>
@@ -55,12 +55,12 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/rental/*') ? 'active' : '' }}"><a href="{{route('rental.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
-                    <li class="{{ Request::is('home/reservations/*') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
+                    <li class="{{ Request::is('home/rental/*') ? 'active' : '' }} || {{ Request::is('home/rental') ? 'active' : '' }}"><a href="{{route('rental.index')}}"><i class="fa fa-circle-o"></i> Rental</a></li>
+                    <li class="{{ Request::is('home/reservations/*') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }}"><a href="{{route('reservations.index')}}"><i class="fa fa-circle-o"></i> Reservation</a></li>
                     <li class="{{ Request::is('home/booking-rules') ? 'active' : '' }}"><a href="{{route('bookingRules.index')}}"><i class="fa fa-circle-o"></i>  Booking Rules</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/drivers/*') ? 'active' : '' }} || {{ Request::is('home/vans/*') ? 'active' : '' }} || {{ Request::is('home/archive/*') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} ">
+            <li class="treeview {{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/operators') ? 'active' : '' }} || {{ Request::is('home/drivers/*') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/vans/*') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }} || {{ Request::is('home/archive/*') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} ">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Units and Personnel</span>
@@ -69,12 +69,12 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
-                    <li class="{{ Request::is('home/drivers/*') ? 'active' : '' }}"><a href="{{route('drivers.index')}}"><i class="fa fa-circle-o"></i>Drivers</a></li>
-                    <li class="{{ Request::is('home/vans/*') ? 'active' : '' }}"><a href="{{route('vans.index')}}"><i class="fa fa-circle-o"></i>Vans</a></li>
+                    <li class="{{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} || {{ Request::is('home/operators/*') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
+                    <li class="{{ Request::is('home/drivers/*') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/archive/drivers') ? 'active' : '' }}"><a href="{{route('drivers.index')}}"><i class="fa fa-circle-o"></i>Drivers</a></li>
+                    <li class="{{ Request::is('home/vans/*') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }}  || {{ Request::is('home/archive/vans') ? 'active' : '' }}"><a href="{{route('vans.index')}}"><i class="fa fa-circle-o"></i>Vans</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/trip-log/*') ? 'active' : '' }} || {{ Request::is('home/driver-report/*') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/trip-log') ? 'active' : '' }} || {{ Request::is('home/trip-log/*') ? 'active' : '' }} || {{ Request::is('home/terminal') ? 'active' : '' }} || {{ Request::is('home/terminal/*') ? 'active' : '' }} || {{ Request::is('home/driver-report/*') ? 'active' : '' }} || {{ Request::is('home/driver-report') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bus"></i>
                     <span>Trips and Reports</span>
@@ -83,8 +83,8 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/trip-log/*') ? 'active' : '' }}"><a href="{{route('trips.tripLog')}}"><i class="fa fa-circle-o"></i>Trip Log</a></li>
-                    <li class="{{ Request::is('home/driver-report/*') ? 'active' : '' }}"><a href="{{route('trips.driverReport')}}"><i class="fa fa-circle-o"></i> Driver Report</a></li>
+                    <li class="{{ Request::is('home/trip-log') ? 'active' : '' }} || {{ Request::is('home/terminal/*') ? 'active' : '' }} || {{ Request::is('home/terminal') ? 'active' : '' }} || {{ Request::is('home/trip-log/*') ? 'active' : '' }}"><a href="{{route('trips.tripLog')}}"><i class="fa fa-circle-o"></i>Trip Log</a></li>
+                    <li class="{{ Request::is('home/driver-report') ? 'active' : '' }} || {{ Request::is('home/driver-report/*') ? 'active' : '' }}"><a href="{{route('trips.driverReport')}}"><i class="fa fa-circle-o"></i> Driver Report</a></li>
                 </ul>
             </li>
             <li class="treeview {{ Request::is('home/ledger') ? 'active' : '' }} || {{ Request::is('home/general-ledger') ? 'active' : '' }}">
@@ -100,7 +100,7 @@
                     <li class="{{ Request::is('home/general-ledger') ? 'active' : '' }}"><a href="{{route('ledger.generalLedger')}}"><i class="fa fa-circle-o"></i> General Ledger</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/settings') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/settings') ? 'active' : '' }} || {{ Request::is('home/company-profile') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-gear"></i>
                     <span>Settings</span>

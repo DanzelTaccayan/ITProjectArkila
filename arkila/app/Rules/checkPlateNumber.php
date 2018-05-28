@@ -26,7 +26,7 @@ class checkPlateNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        $vanCount = Van::all()->where('plate_number',$value)->count();
+        $vanCount = Van::all()->where('plate_number',strtoupper($value))->count();
         if($vanCount > 0) {
             return false;
         } else {

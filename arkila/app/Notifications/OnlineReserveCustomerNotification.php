@@ -56,7 +56,6 @@ class OnlineReserveCustomerNotification extends Notification
         //dd($dateHuman);
         if($this->case == 'Paid'){
             $message = 'You have successfully paid your reservation for ' . $this->reserve->destination_name .' on ' . $dateHuman. '.'.PHP_EOL;
-            
         }else if($this->case == 'Expired'){
             $message = 'Your reservation slot for ' . $this->reserve->destination_name .' has expired because you have not paid on or before ' . $this->reserve->expiry_date . '.'.PHP_EOL;
             $message .= 'Please pay on time to avoid your reservation from being removed.'.PHP_EOL;
