@@ -21,7 +21,7 @@
                     <span>Van Queue</span>
                 </a>
             </li>
-            <li class="{{ Request::is('home/tansactions') ? 'active' : '' }}">
+            <li class="{{ Request::is('home/transactions') ? 'active' : '' }}">
                 <a href="{{route('transactions.index')}}">
                     <i class="fa fa-th"></i>
                     <span>Sell and Depart</span>
@@ -43,7 +43,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::is('home/transactions/managetickets') ? 'active' : '' }}"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
-                    <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
+                    <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
             </li>
             <li class="treeview {{ Request::is('home/rental/*') ? 'active' : '' }} || {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations/*') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }} || {{ Request::is('home/booking-rules') ? 'active' : '' }}">

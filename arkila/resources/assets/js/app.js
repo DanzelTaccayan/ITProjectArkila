@@ -15,25 +15,14 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('notification', require('./components/Notifications.vue'));
-
 const app = new Vue({
-    el: '#app',
-});
-//window._ = require('lodash');
-import Echo from 'laravel-echo';
-
-//window._ = require('lodash');
-
-window.Pusher = require('pusher-js');
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: '37ad8b23289f06684693',
-    cluster: 'ap1',
-    encrypted: true,
-    namespace: false,
+    el: '#app'
 });
 
+$(document).ready(function(){
+    if(Laravel.userId){
+        console.log('HI');
+    }
+});

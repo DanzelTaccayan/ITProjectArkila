@@ -8,7 +8,6 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
-      
     </li>
     <li class="footer"><a href="#">View all</a></li>
   </ul>

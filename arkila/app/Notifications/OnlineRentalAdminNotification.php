@@ -47,6 +47,7 @@ class OnlineRentalAdminNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
+          'notif_type' => 'rental',
           'rental_info' => $this->rent,
           'user_id' => $this->user->id,
           'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
@@ -56,6 +57,7 @@ class OnlineRentalAdminNotification extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
+          'notif_type' => 'rental',  
           'rental_info' => $this->rent,
           'user_id' => $this->user->id,
           'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,

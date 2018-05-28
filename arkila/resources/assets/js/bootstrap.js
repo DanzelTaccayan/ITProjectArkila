@@ -1,5 +1,6 @@
 
 window._ = require('lodash');
+//window.Popper = require('popper.js').default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -10,7 +11,7 @@ window._ = require('lodash');
 try {
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap-sass');
+    // require('bootstrap');
 } catch (e) {}
 
 /**
@@ -42,15 +43,14 @@ if (token) {
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
-//  import Echo from 'laravel-echo'
 
-//  //window._ = require('lodash');
+import Echo from 'laravel-echo'
 
-//  window.Pusher = require('pusher-js');
+window.Pusher = require('pusher-js');
 
-//  window.Echo = new Echo({
-//      broadcaster: 'pusher',
-//      key: '37ad8b23289f06684693',
-//      cluster: 'ap1',
-//      encrypted: false,
-//  });
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '37ad8b23289f06684693',
+    cluster: 'ap1',
+    encrypted: true
+});
