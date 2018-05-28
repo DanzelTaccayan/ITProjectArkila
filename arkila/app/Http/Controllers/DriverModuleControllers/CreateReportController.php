@@ -72,6 +72,7 @@ class CreateReportController extends Controller
      'report_status' => 'Pending',
      'date_departed' => $request->dateDeparted,
      'time_departed' => $timeDepartedFormat,
+     'reportedBy' => 'Driver',
    ]);
 
      $numberofmainpassengers = $request->numPassMain;

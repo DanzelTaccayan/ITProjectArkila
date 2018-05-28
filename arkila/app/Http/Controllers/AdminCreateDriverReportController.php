@@ -98,6 +98,7 @@ class AdminCreateDriverReportController extends Controller
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
            'report_status' => 'Accepted',
+           'reportedBy' => 'Super-Admin',
         ]);
 
        $insertLegderQuery = array(
@@ -119,6 +120,7 @@ class AdminCreateDriverReportController extends Controller
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
            'report_status' => 'Accepted',
+           'reportedBy' => 'SUper-Admin',
          ]);
 
         Ledger::create([
@@ -199,6 +201,7 @@ class AdminCreateDriverReportController extends Controller
           'report_status' => 'Accepted',
           'date_departed' => $request->dateDeparted,
           'time_departed' => $timeDepartedFormat,
+          'reportedBy' => 'Super-Admin',
         ]);
       }else if($totalPassengers <  10){
          $trip = Trip::create([
@@ -212,6 +215,7 @@ class AdminCreateDriverReportController extends Controller
            'report_status' => 'Accepted',
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
+           'reportedBy' => 'Super-Admin',
          ]);
       }
 
