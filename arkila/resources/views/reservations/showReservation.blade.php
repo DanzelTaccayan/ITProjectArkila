@@ -47,7 +47,7 @@
 		                	</tbody>
 		                </table>
 		                <div class="text-center">
-							<a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-default">Back</a>
+							<a href="{{route('reservations.show', $reservation->date_id)}}" class="btn btn-default">Back</a>
 						</div>
 					</div>
 					<div class="col-md-6">

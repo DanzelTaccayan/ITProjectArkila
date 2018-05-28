@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\OnlineReserveAdminNotification;
 use App\VanRental;
 use App\User;
 

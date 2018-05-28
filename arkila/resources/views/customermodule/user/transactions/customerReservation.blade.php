@@ -46,7 +46,9 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
+                                            @if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND')
                                                 <button class="btn btn-default" data-toggle="modal" data-target="#reservationCancel{{$reservation->id}}">CANCEL</button>
+                                            @endif
                                                 <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
                                             </div>
                                         </div>
