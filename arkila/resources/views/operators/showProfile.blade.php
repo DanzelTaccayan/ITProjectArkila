@@ -261,11 +261,41 @@
                                             @foreach($operator->archivedVan as $archivedVan)
                                                 <tr>
                                                     <td>{{$archivedVan->plate_number}}</td>
-                                                    <td>{{$archivedVan->archivedMember->where('role','Driver')->first()->full_name ?? null}}</td>
                                                     <td>{{$archivedVan->model->description}}</td>
                                                     <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
                                                     <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{$archivedVan->van_id}}"><i class="fa fa-undo"></i> RESTORE</a>
+                                                        </div>
+                                                    </td>
                                                 </tr>
+                                                <div class="modal fade" id="{{$archivedVan->van_id}}">
+                                                    <div class="modal-dialog">
+                                                        <div class="col-md-offset-2 col-md-8">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-green">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                    <h4 class="modal-title"> Confirm</h4>
+                                                                </div>
+                                                                <div class="modal-body row" style="margin: 0% 1%;">
+                                                                    <p style="font-size: 110%;">Are you sure you want to restore <strong>"{{$archivedVan->plate_number}}"</strong>?</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form action="" method="POST">
+                                                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                                                                        <button type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -291,9 +321,36 @@
                                                     <td>
                                                         <div class="text-center">
                                                             <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                                            <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#driverarc"><i class="fa fa-undo"></i> RESTORE</a>
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                <div class="modal fade" id="driverarc">
+                                                    <div class="modal-dialog">
+                                                        <div class="col-md-offset-2 col-md-8">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-green">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                    <h4 class="modal-title"> Confirm</h4>
+                                                                </div>
+                                                                <div class="modal-body row" style="margin: 0% 1%;">
+                                                                    <p style="font-size: 110%;">Are you sure you want to restore <strong>"{{$archivedDriver->full_name}}"</strong>?</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form action="" method="POST">
+                                                                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                                                                        <button type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-content -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
                                             @endforeach
                                         </tbody>
                                     </table>

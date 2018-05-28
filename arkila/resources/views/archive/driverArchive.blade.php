@@ -34,10 +34,42 @@
                                 <td>
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                        <a href="" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> RESTORE</a>
+                                        <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#huhu"><i class="fa fa-eye"></i> RESTORE</a>
                                     </div>
                                 </td>
                             </tr>
+                            <!--RESTORE MODAL-->
+                            <div class="modal fade" id="huhu">
+                                <div class="modal-dialog">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-primary">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title"> Choose Operator</h4>
+                                            </div>
+                                            <div class="modal-body row" style="margin: 0% 1%;">
+                                                <div class="form-group">
+                                                    <label for="">Name of Oerator:</label>
+
+                                                        <select name="operator" id="" class="form-control select2">
+                                                           
+                                                                <option value="nemeof operator">HEHE</option>
+                                                            
+                                                        </select> 
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                
+                                               <form method="POST" action="">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary" style="width:22%;">Restore</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -59,7 +91,7 @@
     $(function() {
         $('#archiveDriver').DataTable({
             'paging': true,
-            'lengthChange': true,
+            'lengthChange': false,
             'searching': true,
             'ordering': true,
             'info': true,
