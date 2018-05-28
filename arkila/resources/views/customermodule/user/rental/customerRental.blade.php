@@ -26,8 +26,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <p class="form-control" style="background: lightgray;">Other Destination</p>
-                                    <input type="text" name="otherDestination" class="form-control" value="{{old('otherDestination')}}" placeholder="Other Destination">
+                                    <input type="text" name="otherDestination" class="form-control" value="{{old('otherDestination')}}" placeholder="" disabled>
                                 </div>
                         <div class="row">   
                             <div class="col-md-6">
@@ -54,9 +53,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Departure Time: <span class="text-red">*</span></label>
-                                    <div class="bootstrap-timepicker">
-                                        <input type="text" id="timepicker" class="form-control timepicker" name="time" value="{{old('time')}}" val-book-time required>
-                                    </div><!-- bootstrap-timepicker-->
+                                        <input type="text" class="form-control" name="time" value="{{old('time')}}" val-book-time required>
                                 </div>
                             </div><!-- col-->
                         </div><!-- row-->
@@ -123,6 +120,17 @@
     $(function(){
         $('[data-mask]').inputmask();
         $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true});
+    });
+</script>
+<script>
+    $( "select[name='destination']" ).change(function() {
+        if( $( this ).val() == 'other' ){
+            $("input[name='otherDestination']").prop("disabled", false);
+            $("input[name='otherDestination']").attr("placeholder", "Enter Destination");
+        } else {
+            $("input[name='otherDestination']").prop("disabled", true);
+            $("input[name='otherDestination']").attr("placeholder", "");
+        }
     });
 </script>
 @endsection
