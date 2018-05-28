@@ -35,10 +35,37 @@
                         <td>
                             <div class="text-center">
                                 <a href="{{ route('archive.showArchivedProfileOperator', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#huhu"><i class="fa fa-eye"></i> RESTORE</a>
                             </div>
                             <!-- /.text -->
                         </td>
                     </tr>
+                    <div class="modal fade" id="huhu">
+                        <div class="modal-dialog">
+                            <div class="col-md-offset-2 col-md-8">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-green">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title"> Confirm</h4>
+                                    </div>
+                                    <div class="modal-body row" style="margin: 0% 1%;">
+                                        <p style="font-size: 110%;">Are you sure you want to restore <strong>"{{ $operator->full_name }}"</strong>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="" method="POST">
+                                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
                     @endforeach
                 </tbody>
             </table>

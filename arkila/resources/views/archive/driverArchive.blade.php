@@ -43,7 +43,7 @@
                                 <div class="modal-dialog">
                                     <div class="col-md-offset-2 col-md-8">
                                         <div class="modal-content">
-                                            <div class="modal-header bg-primary">
+                                            <div class="modal-header bg-success">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span></button>
                                                 <h4 class="modal-title"> Choose Operator</h4>
@@ -63,7 +63,7 @@
                                                 
                                                <form method="POST" action="">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-primary" style="width:22%;">Restore</button>
+                                                    <button type="submit" class="btn btn-success" style="width:22%;">Restore</button>
                                                 </form>
                                             </div>
                                         </div>
