@@ -53,11 +53,11 @@
                                                 <div class="modal-body row" style="margin: 0% 1%;">
                                                     <div class="form-group">
                                                         <label for="">Name of Operator:</label>
+                                                            <select name="operator" class="form-control select2">
                                                             @foreach($activeOperators as $activeOperator)
-                                                                <select name="operator" class="form-control select2">
-                                                                        <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
-                                                                </select>
+                                                                <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
                                                             @endforeach
+                                                            </select>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

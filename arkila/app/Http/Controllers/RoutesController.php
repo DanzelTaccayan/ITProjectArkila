@@ -231,6 +231,8 @@ class RoutesController extends Controller
      */
     public function update(RouteRequest $request, $route)
     {
+        $ticketRegular = Ticket::where([['type', 'Regular'],['destination_id', $route]])->get();
+        $ticketDiscounted = Ticket::where([['type', 'Discount'],['destination_id', $route]])->get();
         $routeAll = Destination::find($route);
         $terminals = Destination::allTerminal()->get();
         $main = Destination::where('is_main_terminal', '1')->first();
@@ -273,6 +275,24 @@ class RoutesController extends Controller
             }   
             
             $message = $name .' has been successfully edited.';
+        }
+
+        if($request->regularFare !== $ticketRegular->first()->fare)
+        {
+            foreach ($ticketRegular as $ticket) {
+                $ticket->update([
+                    'fare' => $request->regularFare,
+                ]);
+            }                
+        }
+        
+        if($request->discountedFare !== $ticketDiscounted->first()->fare)
+        {
+            foreach ($ticketDiscounted as $ticket) {
+                $ticket->update([
+                    'fare' => $request->discountedFare,
+                ]);
+            }                                
         }
         return redirect('/home/route#terminal' .$routeAll->routeDestination()->first()->destination_id)->with('success', $message);
     }

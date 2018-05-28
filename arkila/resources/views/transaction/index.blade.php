@@ -154,7 +154,7 @@
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
 
-                                    <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                                    <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -574,14 +574,17 @@
 
 <script>
     $(function(){
+             var url = window.location.href;
+     var activeTab = document.location.hash;
+
         $('.select2').select2();
      var activeTab = document.location.hash;
     if(!activeTab){
 
-            activeTab = @if($terminals->first()->destination_id ?? null)
-                "{{'#terminal'.$terminals->first()->destination_id}}";
+            activeTab = @if($terminal->destination_id ?? null)
+                "{{'#terminal'.$terminal->destination_id}}";
         @else
-                {{''}}
+                "{{''}}";
         @endif
     }
 

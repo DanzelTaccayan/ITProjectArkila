@@ -138,7 +138,7 @@
                                                     <th>Ticket No.</th>
                                                     <th>Destination</th>
                                                     <th>Date Purchased</th>
-                                                    <th id="actionHead">Actions</th>
+                                                    <th id="actionHead" class="text-center">Actions</th>
                                                     <th id="destHead" class="hidden">Actions</th>
                                                 </tr>
                                                 </thead>
@@ -734,7 +734,18 @@
                 'ordering': true,
                 'info': true,
                 'autoWidth': false,
-                "order": [[ 1, "desc" ]]
+                'order': [[ 3, "desc" ]], 
+                'aoColumnDefs': [
+                    {
+                    'bSortable': false,
+                    'aTargets': [0]
+                    },
+
+                    {
+                    'bSortable': false,
+                    'aTargets': [4]
+                    }
+                ], 
             })
         })
     </script>
