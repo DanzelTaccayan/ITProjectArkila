@@ -43,7 +43,7 @@
                                 <div class="modal-dialog">
                                     <div class="col-md-offset-2 col-md-8">
                                         <div class="modal-content">
-                                            <div class="modal-header bg-success">
+                                            <div class="modal-header bg-green">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span></button>
                                                 <h4 class="modal-title"> Choose Operator</h4>
