@@ -18,11 +18,12 @@
                         <img src="{{ URL::asset('img/bantrans-logo.png')}}" alt="bantrans_logo" class="pull-right" style="width:200px ;height:200px ;">
                         <img src="{{ URL::asset('img/apple-touch-icon.png')}}" alt="arkila_logo" class="pull-right" style="width:200px ;height:200px ;">
                         </div>
-                        <p class="lead">Ban Trans is a van transport association established in Baguio City in 2006 for UV Express franchisees or operators. <span> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Necessitatibus non quia voluptatem voluptatibus incidunt nulla id animi vel distinctio laborum perspiciatis dolor sit, voluptates architecto, quas laudantium beatae. Reiciendis, ratione.</span>
-                        <span>Consequatur rem suscipit, maiores nam adipisci obcaecati, ea laudantium cumque impedit aliquam odio soluta ullam debitis officia illum iste sapiente architecto, unde. Voluptate ullam nobis animi iusto qui eos deleniti.</span>
-                        <span>Sint dignissimos aliquid fugiat similique voluptatem earum hic totam quos minima nihil sed voluptas neque itaque deserunt optio commodi, eos illo dolor. Est tenetur, harum provident, quia enim possimus adipisci?</span>
-                        <span>Qui voluptatem rem distinctio autem dolore nesciunt praesentium ipsum odit, iure similique? Vel eum possimus officia, laboriosam explicabo facere repellat hic necessitatibus inventore fugiat, quaerat iste, quo fuga debitis natus.</span>
-                        <span>Recusandae sit impedit iste laborum mollitia ratione veritatis cupiditate ad dolorum quaerat accusamus libero a nam tempore similique voluptatum repellat, provident earum, facere officiis beatae, molestiae. Consectetur vitae ea, a!</span></p>
+                        <p class="lead text-justify">
+                            Founded in 2006, Ban Trans is a van transport association catering trips from its main terminal to different terminals and vice-versa. Ban Trans uses UV Express van units to cater to customers transportation needs.
+                        </p>
+                        <p class="lead text-justify">
+                        Arkila is a web application has been developed for you, our valued customers of Ban Trans. The application has automated most processes such as reserving seats and renting vans which could certainly help you feel more at ease while making a transaction. The application gives you a wide range of features to choose from such as reserving vans for special trips and also booking line reservations for a particular time and day. Furthermore, the application gives you features such as viewing announcements and also fare rates for all van destinations. Finally, you are able to view your past transactions with the association and viewing all related information about a specific trip.
+                        </p>
                 </div>
                 <!-- row-->
                 </div><!-- container-->
