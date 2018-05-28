@@ -154,7 +154,7 @@
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
 
-                                    <div class="tab-pane @if($terminal->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                                    <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -514,7 +514,7 @@
                                                 <button name="depart" class="btn bg-navy btn-flat pull-right"  data-val="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
 
-                                            <div class="modal" id="ob-modal">
+                                            <div class="modal" id="ob-modal{{$terminal->destination_id}}">
                                                   <div class="modal-dialog" style="margin-top: 10%;">
                                                     <div class="modal-content">
                                                       <div class="modal-header">
@@ -574,14 +574,17 @@
 
 <script>
     $(function(){
+             var url = window.location.href;
+     var activeTab = document.location.hash;
+
         $('.select2').select2();
      var activeTab = document.location.hash;
     if(!activeTab){
 
-            activeTab = @if($terminals->first()->destination_id ?? null)
-                "{{'#terminal'.$terminals->first()->destination_id}}";
+            activeTab = @if($terminal->destination_id ?? null)
+                "{{'#terminal'.$terminal->destination_id}}";
         @else
-                {{''}}
+                "{{''}}";
         @endif
     }
 
@@ -898,7 +901,7 @@
 
                         });
                     } else {
-                        $('#ob-modal').modal('show');
+                        $('#ob-modal'+terminalId).modal('show');
                     }
 
                 }

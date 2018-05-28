@@ -64,8 +64,8 @@
                                             </div>
                                             <div class="modal-footer">
 
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-success" style="width:22%;">Restore</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success" style="width:22%;">Restore</button>
 
                                             </div>
                                         </div>
