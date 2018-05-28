@@ -41,7 +41,10 @@
                         </td>
                     </tr>
                     <div class="modal fade" id="huhu">
-                        <div class="modal-dialog">
+                        <form action="{{route('operators.restoreArchivedOperator',[$operator->member_id])}}" method="POST">
+                            {{csrf_field()}}
+                            {{method_field('PATCH')}}
+                            <div class="modal-dialog">
                             <div class="col-md-offset-2 col-md-8">
                                 <div class="modal-content">
                                     <div class="modal-header bg-green">
@@ -63,7 +66,8 @@
                                 <!-- /.modal-content -->
                             </div>
                             <!-- /.col -->
-                        </div>
+                        </div>\
+                        </form>
                         <!-- /.modal-dialog -->
                     </div>
                     @endforeach

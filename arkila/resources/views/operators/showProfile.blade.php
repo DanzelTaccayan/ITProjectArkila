@@ -263,7 +263,7 @@
                                                     <td>{{$archivedVan->plate_number}}</td>
                                                     <td>{{$archivedVan->model->description}}</td>
                                                     <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
-                                                    <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
+                                                    <td>{{$archivedVan->archivedAt->created_at->format('h:i A')." of ".$archivedVan->archivedAt->created_at->format('M d, Y')}}</td>
                                                     <td>
                                                         <div class="text-center">
                                                             <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{$archivedVan->van_id}}"><i class="fa fa-undo"></i> RESTORE</a>
@@ -317,7 +317,7 @@
                                                     <td>{{$archivedDriver->full_name}}</td>
                                                     <td>{{$archivedDriver->address}}</td>
                                                     <td>{{$archivedDriver->contact_number}}</td>
-                                                    <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
+                                                    <td>{{$archivedDriver->archivedAt->created_at->format('h:i A')." of ".$archivedDriver->archivedAt->created_at->format('M d, Y')}}</td>
                                                     <td>
                                                         <div class="text-center">
                                                             <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
@@ -339,9 +339,11 @@
                                                                     <p style="font-size: 110%;">Are you sure you want to restore <strong>"{{$archivedDriver->full_name}}"</strong>?</p>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <form action="" method="POST">
+                                                                    <form action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}" method="POST">
+                                                                        {{csrf_field()}}
+                                                                        {{method_field('PATCH')}}
                                                                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
-                                                                        <button type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
+                                                                        <button name="operator" value="{{$operator->member_id}}" type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
                                                                     </form>
                                                                 </div>
                                                             </div>
