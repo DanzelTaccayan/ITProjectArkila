@@ -53,10 +53,10 @@ class OnlineRentalCustomerNotification extends Notification
         $dateHuman = $rentaldate->formatLocalized('%B %d,  %Y');
         $url = url('/home/transactions/rental');
 
-        if($rent->status == 'Accepted'){
+        if($rent->status == 'Unpaid'){
             $message = 'The rental for ' . $this->rent->destination .' on' .$dateHuman. 'that you have requested have been accepted. Payment for rental should be paid 48 hours from now'.PHP_EOL;
             $message .= ''.PHP_EOL;
-        }else if($rent->status == 'NoVanAvailable'){
+        }else if($rent->status == 'No Van Available'){
             $message = 'There are no available vans for rental. We apologize for any inconvenience.'.PHP_EOL;
         }else if($rent->status == 'Departed'){
             $message = 'Have a safe trip to' . $this->rent->destination . '.' .PHP_EOL;
