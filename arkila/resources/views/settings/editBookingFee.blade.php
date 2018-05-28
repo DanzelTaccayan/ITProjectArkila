@@ -16,7 +16,7 @@
     <div id="terminalForm">
       <div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{$bookingfee->booking_fee}}" required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="1" step="0.25" name="bookingFee" value="{{$bookingfee->booking_fee}}" required>
       </div>
     </div>
 

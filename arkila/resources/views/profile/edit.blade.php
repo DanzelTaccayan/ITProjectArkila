@@ -9,16 +9,16 @@
     <div class="form-group">
         <div class="form-group">
             <label for="contactNumber">Contact Number: </label>
-            <input value="{{$profile->contact_number}}" type="text" class="form-control" required>    
+            <input value="{{old('contactNumber') ?? $profile->contact_number }}" type="text" name="contactNumber" class="form-control" required>    
         </div>
 
         <div class="form-group">
             <label>Address:</label>
-            <input value="{{$profile->address}}" type="text" class="form-control" name="address">
+            <input value="{{old('address') ?? $profile->address }}" type="text" name="address" class="form-control" name="address">
         </div>
         <div class="form-group">
             <label>Email: </label>
-            <input value="{{$profile->email}}" type="text" class="form-control" name="email">
+            <input value="{{old('email') ?? $profile->email }}" type="text" name="email" class="form-control" name="email">
         </div>
     </div>
 
