@@ -6,6 +6,7 @@ use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\OnlineReserveAdminNotification;
+use App\Notifications\OnlineRentalCustomerNotification;
 use App\VanRental;
 use App\User;
 
