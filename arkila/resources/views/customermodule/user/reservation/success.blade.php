@@ -20,15 +20,15 @@
                     			</tr>
                                 <tr>
                                     <th>Departure Date</th>
-                                    <td></td>
+                                    <td>{{$transaction->departure_date->formatLocalized('%d %B %Y')}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Time</th>
-                                    <td></td>
+                                    <td>{{$transaction->departure_time}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Day</th>
-                                    <td></td>
+                                    <td>{{$transaction->departure_date->formatLocalized('%A')}}</td>
                                 </tr>
                     			<tr>
                     				<th>Expiry Date</th>
