@@ -34,43 +34,44 @@
                                 <td>
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                        <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#huhu"><i class="fa fa-eye"></i> RESTORE</a>
+                                        <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedDriver->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
                                     </div>
                                 </td>
                             </tr>
                             <!--RESTORE MODAL-->
-                            <div class="modal fade" id="huhu">
+                            <div class="modal" id="{{'restoreDriver'.$archivedDriver->member_id}}">
                                 <form method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
                                     {{csrf_field()}}
                                     {{method_field('PATCH')}}
-                                    <div class="modal-dialog">
-                                    <div class="col-md-offset-2 col-md-8">
+                                    <div class="modal-dialog" style="margin-top: 10%;">
                                         <div class="modal-content">
-                                            <div class="modal-header bg-green">
+                                            <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title"> Choose Operator</h4>
+                                                    <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title"></h4>
                                             </div>
-                                            <div class="modal-body row" style="margin: 0% 1%;">
+                                            <div class="modal-body">
+                                                <h1 class="text-center text-green"><i class="fa fa-undo"></i> RESTORE</h1>
+                                                <p class="text-center">RESTORE <strong class="text-green text-uppercase">{{$archivedDriver->full_name}} </strong>AS A DRIVER.</p> 
+                                                <p class="text-center">CHOOSE OPERATOR</p>            
                                                 <div class="form-group">
-                                                    <label for="">Name of Oerator:</label>
-                                                        <select name="operator" class="form-control select2">
-                                                            <option value="">None</option>
-                                                           @foreach($activeOperators as $activeOperator)
-                                                                <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <select name="operator" class="form-control select2">
+                                                        <option value="">None</option>
+                                                       @foreach($activeOperators as $activeOperator)
+                                                            <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-success" style="width:22%;">Restore</button>
-
+                                            <div class="modal-footer"> 
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                                                    <button type="submit" class="btn btn-success">RESTORE</button>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 </form>
                             </div>
                         @endforeach

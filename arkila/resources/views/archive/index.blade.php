@@ -35,12 +35,12 @@
                         <td>
                             <div class="text-center">
                                 <a href="{{ route('archive.showArchivedProfileOperator', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#huhu"><i class="fa fa-eye"></i> RESTORE</a>
+                                <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreOperator'.$operator->member_id}}"><i class="fa fa-eye"></i> RESTORE</a>
                             </div>
                             <!-- /.text -->
                         </td>
                     </tr>
-                    <div class="modal fade" id="huhu">
+                    <div class="modal fade" id="{{'restoreOperator'.$operator->member_id}}">
                         <form action="{{route('operators.restoreArchivedOperator',[$operator->member_id])}}" method="POST">
                             {{csrf_field()}}
                             {{method_field('PATCH')}}
