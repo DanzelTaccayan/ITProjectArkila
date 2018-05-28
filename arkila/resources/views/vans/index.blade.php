@@ -45,50 +45,42 @@
         							<td>
         								<div class="text-center">
                                             <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
-                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
+                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-archive"></i>ARCHIVE</button>
         		                        </div>
 
         							</td>
-        						</tr>
-                                
-                                
+        						</tr>   
         					@endforeach
                     </tbody>
                 </table>
                 </div>
                 @foreach($vans->where('status', 'Active') as $van)
-                <!-- MODAL DELETION -->
-                    <div class="modal fade" id="{{ 'deleteWarning'. $van->van_id }}">
-                        <div class="modal-dialog">
-                            <div class="col-md-offset-2 col-md-8">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title"> Confirm</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h3>  
-                                           <i class="fa fa-exclamation-triangle pull-left text-yellow"></i>
-                                        </h3>
-                                        <p>Are you sure you want to delete <strong>{{$van->plate_number}}</strong>?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
-                                            {{csrf_field()}}
-                                            {{method_field('PATCH')}}
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>    
-                                    </div>
-                                </div>
-                                <!-- /.modal-content -->
+                <div class="modal" id="{{ 'deleteWarning'. $van->van_id }}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
                             </div>
-                            <!-- /.col -->
+                            <div class="modal-body">
+                                <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                                <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                <h4 class="text-center "><strong class="text-red">{{$van->plate_number}}</strong>?</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
+                                    {{csrf_field()}}
+                                    {{method_field('PATCH')}}
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                        <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.modal -->
-                
+                </div>
                 @endforeach
             </div>
     </div>

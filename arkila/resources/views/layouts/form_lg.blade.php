@@ -3,10 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="_token" content="{{ csrf_token() }}"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Ban Trans | @yield('title')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script>
+        window.Laravel = @php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); @endphp
+    </script>
 
+    @if(!auth()->guest())
+        <script>
+            Laravel.userId = @php echo auth()->user()->id; @endphp
+        </script>
+    @endif
     @section('links')
         @include('layouts.partials.stylesheets_form')
     @show
@@ -14,7 +26,7 @@
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
-    <div class="wrapper">
+    <div id="app" class="wrapper">
         @include('layouts.partials.header_2')
         <!-- Full Width Column -->
         <div class="content-wrapper bgform-image">

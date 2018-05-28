@@ -82,43 +82,33 @@
                                                 </td>
                                             </tr>
                                             
-                                            <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="{{'route'.$routes->destination_id}}">
-                                                <div class="modal-dialog">
-                                                    <div class="col-md-offset-2 col-md-8">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-red">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span></button>
-                                                                <h4 class="modal-title"> Confirm</h4>
-                                                            </div>
-                                                            <div class="modal-body row" style="margin: 0% 1%;">
-                                                               <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                   <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                               </div>
-                                                               <div class="col-md-10">
-                                                                <p style="font-size: 110%;">Are you sure you want to delete "{{$routes->destination_name}}"</p>
-                                                               </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                
-                                                               <form method="POST" action="{{route('route.destroy', [$routes->destination_id])}}">
-                                                                    {{csrf_field()}}
-                                                                    {{method_field('DELETE')}}
-
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                                                    <button type="submit" class="btn btn-danger" style="width:22%;">Delete</button>
-                                                                </form>
-                                                            </div>
+                                            <div class="modal" id="{{'route'.$routes->destination_id}}">
+                                                <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title"></h4>
                                                         </div>
-                                                        <!-- /.modal-content -->
+                                                        <div class="modal-body">
+                                                            <h1 class="text-center text-red"><i class="fa fa-warning"></i> DELETE</h1>
+                                                            <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
+                                                            <h4 class="text-center "><strong class="text-red">{{$routes->destination_name}}</strong>?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form method="POST" action="{{route('route.destroy', [$routes->destination_id])}}">
+                                                                {{csrf_field()}}
+                                                                {{method_field('DELETE')}}
+                                                                <div class="text-center">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                                    <button type="submit" class="btn btn-danger">DELETE</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <!-- /.col -->
                                                 </div>
-                                                <!-- /.modal-dialog -->
                                             </div>
-                                            <!-- /.modal -->
-                                    
+
                                             @endforeach
                                             
                                         </tbody>

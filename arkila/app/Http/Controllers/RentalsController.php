@@ -172,6 +172,14 @@ class RentalsController extends Controller
 
             return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
         }
+        elseif(request('status') == 'Decline')
+        {
+            $rental->update([
+                'status' => 'No Van Available',
+            ]);
+            return redirect(route('rental.index'))->with('success', 'Rental has been declined.');
+
+        }
         elseif(request('status') == 'Paid')
         {
             $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
