@@ -47,6 +47,7 @@ class OnlineReserveAdminNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
+          'notif_type' => 'reservation', 
           'reservation_info' => $this->reserve,
           'reservation_date' => $this->reserve->reservationDate,
           'user_id' => $this->user->id,
@@ -57,6 +58,7 @@ class OnlineReserveAdminNotification extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
+          'notif_type' => 'reservation',
           'reservation_info' => $this->reserve,
           'reservation_date' => $this->reserve->reservationDate,
           'user_id' => $this->user->id,

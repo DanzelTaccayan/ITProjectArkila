@@ -16,9 +16,7 @@
 
 <body class="hold-transition skin-blue layout-top-nav">
     <div class="wrapper">    
-            <div id="app">
             @include('layouts.partials.header_2')
-            </div>
         <!-- Full Width Column -->
         <div class="content-wrapper bgform-image">
                 <div class="container">
