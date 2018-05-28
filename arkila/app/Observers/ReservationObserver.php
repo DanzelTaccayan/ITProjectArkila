@@ -44,6 +44,15 @@ class ReservationObserver
                 $userCustomer = User::find($reserve->user_id);
                 $case = 'Departed';
                 $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
+            }else if($reserve->status == 'CANCELLED'){//Reservation Departed
+                $userCustomer = User::find($reserve->user_id);
+                $case = 'Departed';
+                $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));
+                
+                $user = User::find(Auth::id());
+                $userAdmin = User::where('user_type', 'Super-Admin')->first();
+                //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
+                $userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve));
             }
         }
     }

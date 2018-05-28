@@ -32,7 +32,8 @@ class CreateTripTable extends Migration
             $table->date('date_departed')->nullable();
             $table->time('time_departed')->nullable();
             $table->enum('report_status', ['Pending', 'Accepted', 'Declined'])->default('Pending');
-
+            $table->enum('reportedBy', ['Super-Admin', 'Driver']);
+            
             $table->foreign('van_id')
             ->references('van_id')->on('van')
             ->onDelete('restrict')
