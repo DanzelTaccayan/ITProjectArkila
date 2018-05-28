@@ -23,9 +23,9 @@ class RentalsObserver{
   public function updated(VanRental $rent)
   {
     if($rent->rent_type == 'Online'){
-      if($rent->status == 'Accepted'){
+      if($rent->status == 'Unpaid'){
         $userCustomer = User::find($reserve->user_id);
-        $case = 'Accepted';
+        $case = 'Unpaid';
         $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
       }else if($rent->status == 'Declined'){
         $userCustomer = User::find($reserve->user_id);
@@ -50,6 +50,10 @@ class RentalsObserver{
       }else if($rent->status == 'Expired'){
         $userCustomer = User::find($reserve->user_id);
         $case = 'Expired';
+        $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
+      }else if($rent->status == 'No Van Available'){
+        $userCustomer = User::find($reserve->user_id);
+        $case = 'No Van Available';
         $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
       } 
     }

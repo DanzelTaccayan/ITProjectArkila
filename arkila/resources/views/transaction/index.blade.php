@@ -514,7 +514,7 @@
                                                 <button name="depart" class="btn bg-navy btn-flat pull-right"  data-val="{{$terminal->destination_id}}" style="height: 50px;"><i class="fa fa-automobile"></i> DEPART</button>
                                             </div>
 
-                                            <div class="modal" id="ob-modal">
+                                            <div class="modal" id="ob-modal{{$terminal->destination_id}}">
                                                   <div class="modal-dialog" style="margin-top: 10%;">
                                                     <div class="modal-content">
                                                       <div class="modal-header">
@@ -901,7 +901,7 @@
 
                         });
                     } else {
-                        $('#ob-modal').modal('show');
+                        $('#ob-modal'+terminalId).modal('show');
                     }
 
                 }

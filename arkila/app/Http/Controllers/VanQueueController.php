@@ -62,12 +62,13 @@ class VanQueueController extends Controller
                     'remarks' => NULL,
                     'queue_number' => $queueNumber
                 ]);
-    
+
                 DB::commit();
                 return '#queue'. $destination->destination_id;
             } else {
+                DB::rollback();
                 session()->flash('error', 'Van is already on the Queue');
-                return 'Van is already on Queue';
+
             }
 
         } catch (\Exception $e) {

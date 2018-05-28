@@ -338,7 +338,8 @@ class TransactionsController extends Controller
     public function refund(Ticket $ticket)
     {
         if(is_null($ticket->status)) {
-            return Response::json(['error' => 'The ticket to be refunded is not sold'],422);
+            return back()->withErrors('The ticket to be refunded is not sold');
+
         }
         // Start transaction!
         DB::beginTransaction();
@@ -356,11 +357,11 @@ class TransactionsController extends Controller
             ]);
 
             DB::commit();
-            return $ticket->ticket_number;
+            return back()->with('success', 'Ticket '.$ticket->ticket_number.'  has successfully been refunded');
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
 
     }
@@ -422,7 +423,7 @@ class TransactionsController extends Controller
     //Lost
     public function lost(Ticket $ticket) {
         if(is_null($ticket->status)) {
-            return Response::json(['error' => 'The given lost ticket is not sold'],422);
+            return back()->withErrors('Ticket '.$ticket->ticket_number.' is not sold');
         }
 
         //Being Transaction
@@ -447,11 +448,11 @@ class TransactionsController extends Controller
             ]);
 
             DB::commit();
-            return $ticket->ticket_number;
+            return back()->with('success','Successfully updated ticket '.$ticket->ticket_number.' as Lost/Expired');
         } catch (\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
 
     }
@@ -460,7 +461,7 @@ class TransactionsController extends Controller
     public function destroy(Ticket $ticket)
     {
         if(is_null($ticket->status)) {
-            return Response::json(['error' => 'The given ticket to be cancelled is unsold'],422);
+            return back()->withErrors('The given ticket to be cancelled is unsold');
         }
 
         DB::beginTransaction();
@@ -469,10 +470,11 @@ class TransactionsController extends Controller
                 'status' => null
             ]);
             DB::commit();
-            return $ticket->ticket_number;
+
+            return back()->with('success', 'Ticket '.$ticket->ticket_number.' has been cancelled.');
         } catch(\Exception $e) {
             DB::rollback();
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
     }
 
