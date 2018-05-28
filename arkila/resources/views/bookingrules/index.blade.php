@@ -10,34 +10,54 @@
 				<h3 class="box-title">Reservation Rules</h3>
 			</div>
 			<div class="box-body" style="min-height: 380px;">
-				<table class="table table-striped table-bordered">
-					<tbody>
-						<tr>
-							<th>Reservation Fee</th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>	
+				<div id="viewReservationRules">
+					<table class="table table-striped table-bordered">
+						<tbody>
+							<tr>
+								<th>Reservation Fee</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>Cancellation Fee</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>Duration Days</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>	
+				</div>
+				<div id="editReservationRules" class="padding-side-15 hidden">
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+				</div>
 			</div>
 			<div class="box-footer">
 				<div class="text-center">
-					<a href="" class="btn btn-primary"><i class="fa fa-edit"></i> EDIT</a>
+					<button id="editBtnReservation" class="btn btn-primary"><i class="fa fa-edit"></i> EDIT</button>
+					<div id="viewBtnsReservation" class="hidden">
+						<button id="viewBtnReservation" class="btn btn-default">CANCEL</button>
+						<button type="submit" class="btn btn-primary">SAVE</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -48,38 +68,91 @@
 				<h3 class="box-title">Rental Rules</h3>
 			</div>
 			<div class="box-body"  style="min-height: 380px;">
-				<table class="table table-striped table-bordered">
-					<tbody>
-						<tr>
-							<th>Rental Fee</th>
-							<td></td>
-						</tr>
-						<tr>
-							<th>Cancellation Fee</th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-						<tr>
-							<th></th>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
+				<div id="viewRentalRules">
+					<table class="table table-striped table-bordered">
+						<tbody>
+							<tr>
+								<th>Rental Fee</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>Cancellation Fee</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+							</tr>
+							<tr>
+								<th></th>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="editRentalRules" class="padding-side-15 hidden">
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="">Label</label>
+						<input type="text" class="form-control">
+					</div>
+				</div>
 			</div>
 			<div class="box-footer">
 				<div class="text-center">
-					<a href="" class="btn btn-primary"><i class="fa fa-edit"></i> EDIT</a>
+					<button id="editBtnRental" class="btn btn-primary"><i class="fa fa-edit"></i> EDIT</button>
+					<div id="viewBtnsRental" class="hidden">
+						<button id="viewBtnRental" class="btn btn-default">CANCEL</button>
+						<button type="submit" class="btn btn-primary">SAVE</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 </div>
+@endsection
+@section('scripts')
+@parent
+<script>
+	$('#editBtnReservation').click(function(){
+       	$('#viewReservationRules').hide();
+       	$('#editBtnReservation').hide();
+        $('#editReservationRules').show();
+        $('#viewBtnsReservation').show()
+        $('#editReservationRules').removeClass("hidden");
+        $('#viewBtnsReservation').removeClass("hidden");
+    });
+    $('#viewBtnReservation').click(function(){
+       	$('#viewReservationRules').show();
+       	$('#editBtnReservation').show();
+        $('#editReservationRules').hide();
+        $('#viewBtnsReservation').hide()
+    });
+    $('#editBtnRental').click(function(){
+       	$('#viewRentalRules').hide();
+       	$('#editBtnRental').hide();
+        $('#editRentalRules').show();
+        $('#viewBtnsRental').show()
+        $('#editRentalRules').removeClass("hidden");
+        $('#viewBtnsRental').removeClass("hidden");
+    });
+    $('#viewBtnRental').click(function(){
+       	$('#viewRentalRules').show();
+       	$('#editBtnRental').show();
+        $('#editRentalRules').hide();
+        $('#viewBtnsRental').hide()
+    });
+</script>
 @endsection
