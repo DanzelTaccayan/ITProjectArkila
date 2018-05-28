@@ -195,6 +195,7 @@ class ReservationsController extends Controller
                 'refund_code' => $refundCode,
                 'fare' => $toBePaid,
                 'name' => $name,
+                'is_refundable' => true,
                 'contact_number' => $request->contactNumber,
                 'expiry_date' => $expiryDate,
                 'date_paid' => Carbon::now(),
@@ -250,6 +251,7 @@ class ReservationsController extends Controller
                 'refund_code' => $refundCode,
                 'date_paid' => Carbon::now(),
                 'expiry_date' => $newExpiry,
+                'is_refundable' => true,
             ]);
 
             return back()->with('success', 'The reservation has been paid.');

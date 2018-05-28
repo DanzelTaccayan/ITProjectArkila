@@ -62,9 +62,10 @@ class RentalRequest extends FormRequest
          
         //         ];
         // }
+        $date = Carbon::now()->addDays(2)->formatLocalized('%d %B %Y');
         return [
                 "name" => ['bail',new checkSpecialCharacters, 'required', 'max:35'],
-                "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+                "date" => 'bail|required|date_format:m/d/Y|after:'.$date,
                 "destination" => ['bail','required','max:50'],
                 "plateNumber" => ['required','numeric'],
                 "time" => ['bail',new checkTime, 'required'],

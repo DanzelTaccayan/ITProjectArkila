@@ -20,15 +20,15 @@
                     			</tr>
                                 <tr>
                                     <th>Departure Date</th>
-                                    <td>{{$transaction->departure_date->formatLocalized('%d %B %Y')}}</td>
+                                    <td>{{$transaction->reservationDate->reservation_date->formatLocalized('%d %B %Y')}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Time</th>
-                                    <td>{{$transaction->departure_time}}</td>
+                                    <td>{{date('g:i A', strtotime($transaction->reservationDate->departure_time))}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Day</th>
-                                    <td>{{$transaction->departure_date->formatLocalized('%A')}}</td>
+                                    <td>{{$transaction->reservationDate->reservation_date->formatLocalized('%A')}}</td>
                                 </tr>
                     			<tr>
                     				<th>Expiry Date</th>

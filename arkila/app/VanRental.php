@@ -20,7 +20,7 @@ class VanRental extends Model
     }
 
     public function driver(){
-    	return $this->hasOne(Member::Class, 'member_id');
+    	return $this->hasOne(Member::Class, 'member_id', 'driver_id');
     }
 
     public function getFullNameAttribute(){
@@ -31,8 +31,8 @@ class VanRental extends Model
         return $this->belongsTo(User::Class, 'user_id', 'id');
     }
 
-    public function setContactNumberAttribute($value){
-        $contactArr = explode('-',$value);
-        $this->attributes['contact_number'] = $contactArr[0].$contactArr[1].$contactArr[2];
-    }
+    // public function setContactNumberAttribute($value){
+    //     $contactArr = explode('-',$value);
+    //     $this->attributes['contact_number'] = $contactArr[0].$contactArr[1].$contactArr[2];
+    // }
 }

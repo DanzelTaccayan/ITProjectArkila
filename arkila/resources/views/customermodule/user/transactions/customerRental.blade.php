@@ -48,10 +48,10 @@
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
-                                                    <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary">View</button>
                                                     @if($rental->status == 'Paid' || $rental->status == 'Unpaid' || $rental->status == 'Pending')
                                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancelModal{{$rental->rent_id}}">Cancel</button>                                           
                                                     @endif
+                                                    <button id="viewRentalModal{{$rental->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#rentalView{{$rental->rent_id}}">View</button>
                                                 </div>
                                         </div>
                                         </div>
@@ -118,7 +118,7 @@
                         <!-- /.modal-dialog -->
                     </div>
                     <!-- /.modal -->
-                    <div class="modal fade" id="{{'reservationView'.$reservation->id}}">
+                    <div class="modal fade" id="{{'rentalView'.$rental->rent_id}}">
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
@@ -131,69 +131,74 @@
                                             <tbody>
                                                 <tr>
                                                     <th>Rental Code</th>
-                                                    <td>{{$reservation->rsrv_code}}</td>
+                                                    <td>{{$rental->rental_code}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Destination</th>
-                                                    <td>{{$reservation->destination_name}}</td>
+                                                    <td>{{$rental->destination}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Departure Date</th>
-                                                    <td></td>
+                                                    <td>{{$rental->departure_date->formatLocalized('%d %B %Y')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Departure Time</th>
-                                                    <td></td>
+                                                    <td>{{date('g:i A', strtotime($rental->departure_time))}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Departure Day</th>
-                                                    <td></td>
+                                                    <td>{{$rental->departure_date->formatLocalized('%A')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Number of Rental Days</th>
-                                                    <td></td>
+                                                    <td>{{$rental->number_of_days}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Expiry Date</th>
-                                                    <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{$reservation->expiry_date->format('g:i A')}}</td>
+                                                    @if($rental->status == 'Pending')
+                                                    <td>{{$rental->created_at->addDays(2)->formatLocalized('%d %B %Y')}}</td>
+                                                    @elseif($rental->status == 'Unpaid' || $rental->status == 'Paid')
+                                                    <td>{{$rental->updated_at->addDays(2)->formatLocalized('%d %B %Y')}}</td>
+                                                    @elseif($rental->status == 'Cancelled' && $rental->is_refundable == true)
+                                                    <td>{{$rental->updated_at->addDays(7)->formatLocalized('%d %B %Y')}}</td>
+                                                    @else
+                                                    <td>{{$rental->status}}</td>
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
-                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
-                                                    <td>Expired</td>
-                                                    @else
-                                                    <td>{{$reservation->status}}</td>
-                                                    @endif
+                                                    <td>{{$rental->status}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Van Unit</th>
-                                                    <td></td>
+                                                    <td>{{$rental->van->plate_number ?? 'No van assigned'}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Driver</th>
-                                                    <td></td>
+                                                    <td>{{$rental->driver->full_name ?? 'No driver assigned.'}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Driver Contact Number</th>
-                                                    <td></td>
+                                                    <td>{{$rental->driver->contact_number ?? 'No driver assigned.'}}</td>
                                                 </tr>
+                                                @if($rental->status == 'Paid' || $rental->status == 'Refunded' || $rental->status == 'Unpaid' || $rental->status == 'Cancelled')
                                                 <tr>
                                                     <th>Refund Code</th>
-                                                    @if($reservation->status == 'UNPAID' && Carbon\Carbon::now()->gt($reservation->expiry_date))
-                                                    <td>Expired</td>
-                                                    @elseif($reservation->status == 'REFUNDED')
+                                                    @if($rental->status == 'Cancelled' && $rental->is_refundable == false)
+                                                    <td>CANCELLED</td>
+                                                    @elseif($rental->status == 'Refunded')
                                                     <td>REFUNDED</td>
                                                     @else
-                                                    <td>{{$reservation->refund_code ?? 'Please pay first to get the refund code'}}</td>
+                                                    <td>{{$rental->refund_code ?? 'Please pay first to get the refund code.'}}</td>
                                                     @endif
                                                 </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                                        @if($reservation->status == 'PAID')
-                                        <button class="btn btn-danger">CANCEL</button>
+                                        @if($rental->status == 'PAID')
                                         <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                         @endif
                                     </div>

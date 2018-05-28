@@ -57,10 +57,12 @@ class CustomerRentalRequest extends FormRequest
         //         "message" => "string|max:300|nullable",
         //     ];
         // }
+        $date = Carbon::now()->addDays(2)->formatLocalized('%d %B %Y');
+
         if($request->destination == 'other')
         {
             return [
-                "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+                "date" => 'bail|required|date_format:m/d/Y|after:'.$date,
                 "otherDestination" => ['bail','required','max:50'],
                 "time" => ['bail',new checkTime, 'required'],
                 "numberOfDays" => "bail|required|numeric|digits_between:1,15|min:1",
@@ -71,7 +73,7 @@ class CustomerRentalRequest extends FormRequest
         else
         {
             return [
-                "date" => 'bail|required|date_format:m/d/Y|after_or_equal:today',
+                "date" => 'bail|required|date_format:m/d/Y|after:'.$date,
                 "destination" => ['bail','required','max:70'],
                 "time" => ['bail',new checkTime, 'required'],
                 "numberOfDays" => "bail|required|numeric|digits_between:1,15|min:1",
