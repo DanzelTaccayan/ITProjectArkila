@@ -47,10 +47,10 @@ class OnlineReserveAdminNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-          'notif_type' => 'reservation', 
-          'reservation_info' => $this->reserve,
+          'notif_type' => 'Reservation', 
+          'info' => $this->reserve,
           'reservation_date' => $this->reserve->reservationDate,
-          'user_id' => $this->user->id,
+          'id' => $this->user->id,
           'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
         ];
     }
@@ -58,10 +58,10 @@ class OnlineReserveAdminNotification extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-          'notif_type' => 'reservation',
-          'reservation_info' => $this->reserve,
+          'notif_type' => 'Reservation',
+          'info' => $this->reserve,
           'reservation_date' => $this->reserve->reservationDate,
-          'user_id' => $this->user->id,
+          'id' => $this->user->id,
           'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,
         ]);
     }
