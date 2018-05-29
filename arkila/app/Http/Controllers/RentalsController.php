@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\BookingRules;
 use App\Destination;
 use App\Van;
+use App\User;
 use App\Member;
 use App\Rules\checkTime;
 use App\Http\Requests\RentalRequest;
@@ -111,6 +112,7 @@ class RentalsController extends Controller
     {
         $vans = Van::all();
         $drivers = Member::allDrivers()->get();
+        // $drivers = User::allDrivers()->whereNotIn('id', VanRental::select('driver_id')->where('status', '!=', 'Departed'))->get();
         $rules = BookingRules::where('reservation_fee', null)->get()->first();
 
         return view('rental.show', compact('rental', 'vans', 'drivers', 'rules'));

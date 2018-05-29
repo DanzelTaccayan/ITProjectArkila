@@ -35,7 +35,8 @@ class MakeRentalController extends Controller
             ['status','!=', 'Departed'],
             ['status','!=', 'Expired'],
             ['status','!=', 'Refunded'],
-            ['status','!=', 'No Van Available']
+            ['status','!=', 'No Van Available'],
+            ['status','!=', 'Cancelled']
             ]);
           })->count();
 
