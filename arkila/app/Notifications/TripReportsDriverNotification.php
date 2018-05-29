@@ -14,6 +14,8 @@ class TripReportsDriverNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected $user;
+    protected $trip;
     /**
      * Create a new notification instance.
      *

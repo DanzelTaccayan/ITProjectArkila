@@ -21,4 +21,18 @@ class ShowNotificationsControllers extends Controller
     {
       return auth()->user()->unreadNotifications->markAsRead();
     }
+
+    public function markAsReadSpecific($id)
+    {
+        $notification = auth()->user()
+        ->unreadNotifications()
+        ->where('id', $id)
+        ->first();
+
+        if (is_null($notification)) {
+        return response()->json('Notification not found.', 404);
+        }
+
+        $notification->markAsRead();
+    }
 }

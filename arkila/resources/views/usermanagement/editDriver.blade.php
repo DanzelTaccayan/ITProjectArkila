@@ -14,7 +14,7 @@
 
 
 <div class="form-group">
-  <label for="payor">User name:</label>
+  <label for="payor">Username:</label>
   <span name="username">{{$driver_user->username}}</span>
 </div>
 <div class="form-group">
@@ -44,33 +44,30 @@
   <button type="button" class="btn btn-danger btn-block" style="margin-top:5%" data-toggle="modal" data-target="#resetPass">Reset Password</button>
 
   <!-- Modal for Reset Password-->
-    <div class="modal fade" id="resetPass">
-        <div class="modal-dialog">
-            <div class="col-md-offset-2 col-md-8">
-                <div class="modal-content">
-                    <div class="modal-header bg-red">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"> Confirm</h4>
-                    </div>
-                    <div class="modal-body row" style="margin: 0% 1%;">
-                            <h1><i class="fa fa-exclamation-triangle pull-left text-yellow"> </i></h1>
-                              <p>Are you sure you want to reset {{ $driver_user->name }}'s password?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger" style="width:40%">Reset Password</button>
-
-                    </div>
+    
+    <div class="modal" id="resetPass">
+        <div class="modal-dialog" style="margin-top: 10%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title"></h4>
                 </div>
-                <!-- /.modal-content -->
+                <div class="modal-body">
+                    <h1 class="text-center text-red"><i class="fa fa-exclamation-triangle"></i> CONFIRMATION</h1>
+                    <p class="text-center">ARE YOU SURE YOU WANT TO RESET PASSWORD OF</p>             
+                    <h4 class="text-center "><strong class="text-red">{{$driver_user->first_name . " " . $driver_user->middle_name . " " . $driver_user->last_name}}</strong>?</h4>
+                </div>
+                <div class="modal-footer">   
+                  <div class="text-center">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                      <button type="submit" class="btn btn-danger">RESET PASSWORD</button>
+                  </div>
+                    
+                </div>
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
-
 
 </div>
 

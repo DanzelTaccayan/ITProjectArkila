@@ -23,7 +23,7 @@ Route::get('/home/register/success', 'Auth\SuccessRegistrationController@success
 
 Route::get('/ticketmanagement','TransactionsController@manage');
 
-
+Route::post('/markAsRead', 'MarkAsReadNotificationController@markAsRead');
 
 Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customermodule.non-user.index');
 /***********************Super-Admin Module************************************/
@@ -115,7 +115,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
 
     Route::get('/adminNotifications', 'HomeController@notifications')->name('admin.getNotifs');
-    Route::post('/markAsRead', 'HomeController@markAsRead')->name('admin.markAsRead');
+    Route::post('/markAsRead/{id}', 'HomeController@markAsReadSpecific')->name('admin.markAsReadSpecific');
     /****************************************************/
 
     /************ User Management ******************************/
@@ -281,7 +281,7 @@ Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
   /*Notifications*/
   Route::get('/home/notifications', 'DriverModuleControllers\ShowNotificationsControllers@index')->name('drivermodule.notifications');
   Route::get('/driverNotifications', 'DriverModuleControllers\ShowNotificationsControllers@notifications')->name('drivermodule.getNotifs');
-  Route::post('/markAsRead', 'DriverModuleControllers\ShowNotificationsControllers@markAsRead')->name('drivermodule.markAsRead');
+   
 });
 /******************************************************************************/
 /******************************************************************************/
