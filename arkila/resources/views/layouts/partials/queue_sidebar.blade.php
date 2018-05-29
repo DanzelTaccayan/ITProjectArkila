@@ -14,7 +14,7 @@
                     <div class="sidequeue-body"> 
                         <div class="sidequeue-body-color scrollbar scrollbar-info thin">
                             <ol id ="queue" class="sidequeue-list sidequeue-ol">
-                                @foreach($terminalSidebar->vanQueue as $vanSideBar)
+                                @foreach($terminalSidebar->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number','asc')->get() as $vanSideBar)
                                 <li id="unit" data-vanid="" class="form-horizontal">
                                     <span id="trip" class="list-border">
                                         <div class="sidequeuenum">

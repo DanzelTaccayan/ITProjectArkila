@@ -548,8 +548,9 @@
             $(activeTab).addClass("active");
             $(activeTab + "-menu").addClass("active");
 
-            $('a[href="#'+ activeTab +'"]').tab('show');
             window.location.hash = activeTab;
+            $('a[href="#'+ activeTab +'"]').tab('show');
+
 
         });
         $(function(){

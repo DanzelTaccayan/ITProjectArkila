@@ -45,41 +45,45 @@
                             <!-- /.text -->
                         </td>
                     </tr>
-                    <!-- Modal for Delete-->
-                    <div class="modal fade" id="{{'deleteWarning'.$operator->member_id}}">
-                        <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title"> Confirm</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                            <h1>
-                                            <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
-                                            </h1>
-                                            <p>Are you sure you want to delete <strong>{{ $operator->full_name }}</strong>?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        @if($operators && $operator)
-                                        <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
-                                            {{method_field('PATCH')}}
-                                            {{ csrf_field() }}
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                        @endif
-                                    </div>
-                                </div>
-                                <!-- /.modal-content -->
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- /.modal -->
+
                     @endforeach
                 </tbody>
             </table>
         </div>
+
+        @foreach ($operators->where('status', 'Active')->sortByDesc('member_id') as $operator)
+            <!-- Modal for Delete-->
+            <div class="modal fade" id="{{'deleteWarning'.$operator->member_id}}">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-red">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                            <h4 class="modal-title"> Confirm</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h1>
+                                <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
+                            </h1>
+                            <p>Are you sure you want to delete <strong>{{ $operator->full_name }}</strong>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                                {{method_field('PATCH')}}
+                                {{ csrf_field() }}
+                                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                    <!-- /.col -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+                <!-- /.modal -->
+        @endforeach
+
+
         <!-- /.box-body -->
     </div>
     <!-- /.box -->

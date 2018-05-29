@@ -27,7 +27,7 @@
                             <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$archivedOperator->profile_picture) }}" alt="Operator profile picture">
                             <hr> 
                             <div class="profile-btn-group">
-                                <a href="#" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
+                                <a href="{{route('archive.index')}}" class="btn btn-block btn-default btn-sm"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
                             </div>   
                             <div style="margin: 15px;">
                                 <ul class="nav nav-stacked" style="border: 1px solid lightgray;">

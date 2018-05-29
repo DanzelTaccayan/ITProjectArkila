@@ -737,13 +737,35 @@ ol.arrow-drag{
                                 '_token': '{{csrf_token()}}'
                             },
                         success: function(response) {
-                            if(response[0]) {
-                                $('#confirmBoxModal').load('/showConfirmationBox/' + response[0]);
-                            }
-                            else {
-                                if(response[1]) {
-                                    $('#confirmBoxModal').load('/showConfirmationBoxOB/'+response[1]);
-                                }
+                            if(response) {
+                                PNotify.removeAll();
+                                response.forEach(function(element){
+                                    new PNotify({
+                                        title: element.terminal+' Terminal',
+                                        text: 'The van unit('+element.plateNumber+') on deck has a remark of '+element.remarks+' and cannot depart. Please move it to the special units list in order for the next van to be on deck  or remove its remark in order to board passengers',
+                                        icon: 'glyphicon glyphicon-exclamation-sign',
+                                        hide: false,
+                                        confirm: {
+                                            confirm: true,
+                                            buttons: [{
+                                                text: 'Ok',
+                                                addClass: 'btn-primary',
+                                                click: function(notice) {
+                                                    notice.remove();
+                                                }
+                                            },
+                                                null]
+                                        },
+                                        buttons: {
+                                            closer: false,
+                                            sticker: false
+                                        },
+                                        history: {
+                                            history: false
+                                        }
+                                    });
+                                });
+
                             }
                         }
                     });

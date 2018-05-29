@@ -185,8 +185,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/updateQueueNumber/{vanOnQueue}', 'VanQueueController@updateQueueNumber')->name('vanqueue.updateQueueNumber');
      Route::post('/specialUnitChecker','VanQueueController@specialUnitChecker')->name('vanqueue.specialUnitChecker');
      Route::patch('/home/vanqueue/{vanOnQueue}/updateRemarks', 'VanQueueController@updateRemarks')->name('vanqueue.updateRemarks');
-     Route::get('/showConfirmationBox/{encodedQueue}','VanQueueController@showConfirmationBox');
-     Route::get('/showConfirmationBoxOB/{encodedQueue}','VanQueueController@showConfirmationBoxOb');
      Route::patch('/vanqueue', 'VanQueueController@updateVanQueue')->name('vanqueue.updateVanQueue');
      Route::patch('/putOnDeck/{vanOnQueue}','VanQueueController@putOnDeck')->name('vanqueue.putOnDeck');
      Route::post('/changeRemarksOB/{vanOnQueue}','VanQueueController@changeRemarksOB')->name('vanqueue.changeRemarksOB');

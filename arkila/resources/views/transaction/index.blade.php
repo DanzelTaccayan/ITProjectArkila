@@ -154,7 +154,7 @@
                             <div class="tab-content">
                                 @foreach($terminals as $terminal)
 
-                                    <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                                    <div data-terminal="{{$terminal->destination_id}}" class="tab-pane" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -323,7 +323,7 @@
                                                             </div>
                                                             <!-- /.modal-dialog -->
                                                         </div>
-                                                @elseif(false)
+                                                @elseif($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','ER')->orWhere('remarks','CC')->orderBy('queue_number')->first() ?? null)
                                                         <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckERCC-modal">BOARD PASSENGERS</button>
 
                                                         <div class="modal" id="ondeckERCC-modal">
@@ -336,7 +336,7 @@
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
-                                                                        <p class="text-center"><strong class="text-blue" style="font-size: 20px">{{$vanOnQueue->van->plate_number}}</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">{{$vanOnQueue->van->remarks}}</strong>. THEREFORE IT CANNOT DEPART AND MUST BE MOVED TO THE SPECIAL UNITS</p>
+                                                                        <p class="text-center"><strong class="text-blue" style="font-size: 20px">{{$vanOnQueue->van->plate_number}}</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">{{$vanOnQueue->remarks}}</strong>. THEREFORE IT CANNOT DEPART AND MUST BE MOVED TO THE SPECIAL UNITS</p>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <div class="text-center">
@@ -453,7 +453,7 @@
                                                                 </div>
                                                                 <div class="">
                                                                 <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($tickets->where('destination_id',$terminal->destination_id)->where('status','OnBoard') as $ticket)
+                                                                    @foreach($tickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $ticket)
                                                                         <li data-val="{{$ticket->ticket_id}}" class="list-group-item">{{$ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
@@ -551,7 +551,7 @@
                             <div class="nav-terminal  scrollbar scrollbar-info thin">
                             <ul class="nav nav-stacked ">
                                 @foreach($terminals as $terminal)
-                                        <li class="@if($terminals->first() == $terminal){{'active'}}@endif"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
+                                        <li id="navTerminal{{$terminal->destination_id}}" class="@if($terminals->first() == $terminal){{'active'}}@endif navItem"><a href="#terminal{{$terminal->destination_id}}" data-toggle="tab">{{$terminal->destination_name}}</a></li>
                                 @endforeach
                             </ul>
                             </div>
@@ -574,27 +574,39 @@
 
 <script>
     $(function(){
-             var url = window.location.href;
-     var activeTab = document.location.hash;
-
         $('.select2').select2();
      var activeTab = document.location.hash;
-    if(!activeTab){
 
-            activeTab = @if($terminal->destination_id ?? null)
-                "{{'#terminal'.$terminal->destination_id}}";
-        @else
-                "{{''}}";
-        @endif
-    }
+     var element = $(".tab-content :first");
+    element.removeClass('active');
 
-     $(".tab-pane").removeClass("active in");
-     $(".tab-menu").removeClass("active in");
+     if(!activeTab) {
+
+            activeTab = element.attr('id');
+
+            $('li[class="active navItem"]').removeClass('active');
+            $('#navTerminal'+$(activeTab).data('terminal')).addClass('active');
+
+     } else {
+         $('li[class="active navItem"]').removeClass('active');
+         $('#navTerminal'+$(activeTab).data('terminal')).addClass("active in");
+     }
+
      $(activeTab).addClass("active");
-     $(activeTab + "-menu").addClass("active");
 
      $('a[href="#'+ activeTab +'"]').tab('show');
      window.location.hash = activeTab;
+
+        $('.nav-stacked a').click(function () {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+
+        $('a[data-toggle="tab"]').on('click',function(){
+            $('.tab-pane').removeClass('hidden');
+        });
 
     });
 
@@ -627,7 +639,7 @@
 
                     var fare = '<td class="pull-right">'+element.fare+'</td>';
                     var deleteButt = '<td class="text-right"><button name="deleteSpecificSelectedTicket" class="btn btn-xs" data-val="'+element.selectedId+'"><i class="fa fa-trash"></i></button></td></tr>';
-                    $('#selectedList'+terminalId).append(ticketNumber+fare+deleteButt);
+                    $('#selectedList'+terminalId).prepend(ticketNumber+fare+deleteButt);
 
                     //Update the necessary information
                     if(ticketType == 'Regular') {
@@ -679,6 +691,7 @@
 
                 },
                 error:function(response) {
+                    $('div[data-notify="container"]').remove();
                     $.notify({
                         // options
                         icon: 'fa fa-warning',
@@ -708,7 +721,7 @@
         $(document).on('click','button[name="deleteSpecificSelectedTicket"]',function(){
             var element = $(this);
             var selectedTicketId = $(this).data('val');
-
+            element.prop('disabled',true);
             $.ajax({
                 method:'DELETE',
                 url: '/selectTicket/'+selectedTicketId,
@@ -720,6 +733,8 @@
                     updateDataOfDeletedTicket(response.destinationId,response.terminalId,response.ticketType,response.fare);
                 },
                 error:function(response) {
+                    $('div[data-notify="container"]').remove();
+                    element.prop('disabled',false);
                     $.notify({
                         // options
                         icon: 'fa fa-warning',
@@ -750,7 +765,6 @@
             var destinationId = $(this).data('route');
             var terminalId = $(this).data('terminal');
             var ticketType = $(this).data('type');
-
             $.ajax({
                 method:'DELETE',
                 url: '/selectedLastTicket/'+destinationId,
@@ -763,6 +777,7 @@
                     updateDataOfDeletedTicket(destinationId,terminalId,ticketType,response.fare);
                 },
                 error:function(response) {
+                    $('div[data-notify="container"]').remove();
                     $.notify({
                         // options
                         icon: 'fa fa-warning',
@@ -873,10 +888,13 @@
                             data: {
                                 '_token': '{{csrf_token()}}'
                             },
-                            success: function(){
-                                location.reload();
+                            success: function(response){
+                                alert(response);
+                                // window.location.replace('/home/trip-log/'+response)
                             },
                             error:function(response) {
+                                $('div[data-notify="container"]').remove();
+                                $('.notifyjs-corner').empty();
                                 $.notify({
                                     // options
                                     icon: 'fa fa-warning',
@@ -903,7 +921,29 @@
                     } else {
                         $('#ob-modal'+terminalId).modal('show');
                     }
+                } else {
+                    $('div[data-notify="container"]').remove();
 
+                    $.notify({
+                        // options
+                        icon: 'fa fa-warning',
+                        message: 'Unable to depart, there are no boarded tickets in the van'
+                    },{
+                        // settings
+                        type: 'danger',
+                        autoHide: true,
+                        clickToHide: true,
+                        autoHideDelay: 2500,
+                        placement: {
+                            from: 'bottom',
+                            align: 'right'
+                        },
+                        icon_type: 'class',
+                        animate: {
+                            enter: 'animated bounceIn',
+                            exit: 'animated bounceOut'
+                        }
+                    });
                 }
             });
 
@@ -917,10 +957,12 @@
                     data: {
                         '_token': '{{csrf_token()}}'
                     },
-                    success: function(){
-                        location.reload();
+                    success: function(response){
+                        alert(response);
+                        // window.location.replace('/home/trip-log/'+response)
                     },
                     error:function(response) {
+                        $('div[data-notify="container"]').remove();
                         $.notify({
                             // options
                             icon: 'fa fa-warning',
@@ -952,8 +994,8 @@
 
             $('button[name="board"]').on('click', function () {
                 var terminalId = $(this).data('terminal');
-
                 var actives = $('#pendingList'+terminalId).children('.active');
+
                 if (actives.length > 0) {
                     var tickets = [];
 
@@ -966,11 +1008,13 @@
                         url: '{{route("transactions.updatePendingTransactions")}}',
                         data: {
                             '_token': '{{csrf_token()}}',
-                            'tickets': tickets
+                            'tickets': tickets,
+                            'destination' : terminalId
                         },
                         success: function(){
                             actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
                             actives.remove();
+
 
                             var checkBox = $('a[name="checkBox'+terminalId+'"]');
 
@@ -980,6 +1024,7 @@
                             }
                         },
                         error:function(response) {
+                            $('div[data-notify="container"]').remove();
                             $.notify({
                                 // options
                                 icon: 'fa fa-warning',
@@ -1002,8 +1047,6 @@
                             });
                         }
                     });
-
-
 
                 }
             });
@@ -1026,6 +1069,7 @@
                             'tickets': tickets
                         },
                         success: function () {
+
                             actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
                             actives.remove();
 
@@ -1037,6 +1081,7 @@
                             }
                         },
                         error:function(response) {
+                            $('div[data-notify="container"]').remove();
                             $.notify({
                                 // options
                                 icon: 'fa fa-warning',
@@ -1059,6 +1104,8 @@
                             });
                         }
                     });
+                } else {
+                    $('div[data-notify="container"]').remove();
                 }
             });
 
@@ -1130,13 +1177,12 @@
 
      $('button[name="moveToSpecialUnits"]').on('click',function(){
          var vanOnQueue = $(this).data('van');
-
          $.ajax({
              method:'PATCH',
              url: '/moveToSpecialUnit/'+vanOnQueue,
              data: {
                  '_token': '{{csrf_token()}}',
-                 'fromOb' : true
+                 'fromDepart' : true
              },
              success: function(){
                  location.reload();
@@ -1175,7 +1221,7 @@
              data: {
                  '_token': '{{csrf_token()}}',
                  'remarks' : 'NULL',
-                 'fromOb' : true
+                 'fromDepart' : true
              },
              success: function(){
                  location.reload();
