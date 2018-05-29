@@ -22,11 +22,11 @@
         </div>
         <div class="form-group col-md-6 left">
             <label>Opening Time: </label>
-            <input type="time" class="form-control" name="openTime" value="" required>
+            <input type="text" class="form-control" name="openTime" value="" required>
         </div>
         <div class="form-group col-md-6 right">
             <label>Closing Time: </label>
-            <input type="time" class="form-control" name="closeTime" value="" required>
+            <input type="text" class="form-control" name="closeTime" value="" required>
         </div>
     </div>
 
