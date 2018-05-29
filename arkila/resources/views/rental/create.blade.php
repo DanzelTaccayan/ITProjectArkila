@@ -25,6 +25,26 @@
                 </div>
                 <div class="col-md-4">
                      <div class="form-group">
+                        <label>Destination: <span class="text-red">*</span></label>
+                        <select name="destination" id="destination" class="form-control">
+                            <option value="">Select Destination</option>
+                            @foreach ($destinations as $destination)
+                            <option value="{{$destination->destination_name}}">{{$destination->destination_name}}</option>
+                            @endforeach
+                            <option value="other">** OTHER DESTINATION **</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                     <div class="form-group">
+                        <label>Other Destination: <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" placeholder="" name="otherDestination" id="destination" value="{{ old('destination') }}" val-book-dest required disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                     <div class="form-group">
                         <label>Contact Number: <span class="text-red">*</span></label>
                         <div class = "input-group">
                             <div class = "input-group-addon">
@@ -36,28 +56,8 @@
                     </div>
                 </div> 
                 <div class="col-md-4">
-                     <div class="form-group">
-                        <label>Destination: <span class="text-red">*</span></label>
-                        <select name="destination" id="destination" class="form-control">
-                            <option value="">Select Destination</option>
-                            @foreach ($destinations as $destination)
-                            <option value="{{$destination->destination_name}}">{{$destination->destination_name}}</option>
-                            @endforeach
-                            <option value="otherDestination">** OTHER DESTINATION **</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                     <div class="form-group">
-                        <label>Other Destination: <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" placeholder="Other Destination" name="otherDestination" id="destination" value="{{ old('destination') }}" val-book-dest required>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
                     <div class="form-group">
-                        <label>Van:</label>
+                        <label>Van Unit:</label>
                         <select class="form-control select2" name="plateNumber" id="plateNumber" onchange="triggerDriver()">
                             <option value="" selected>Select Van Unit</option>
                         @foreach ($vans as $van)
@@ -77,14 +77,14 @@
                        </select>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Number of Days: <span class="text-red">*</span></label>
                         <input type="number" class="form-control" placeholder="Number of Days" name="days" id="days" value="{{ old('days') }}" min="0" max="3" val-num-days required>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departure Date: <span class="text-red">*</span></label>
@@ -105,7 +105,7 @@
                                 <div class="input-group-addon">
                                   <i class="fa fa-clock-o"></i>
                                 </div>
-                                <input type="text" class="form-control" name="time" value="{{ old('time') }}" id = "timepicker" data-parsley-errors-container="#errDepartureTime" val-book-time required>
+                                <input type="time" class="form-control" name="time" value="{{ old('time') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
                             </div>
                             <p id="errDepartureTime"></p>
                         </div>
@@ -220,6 +220,15 @@
         }        
     }
     </script>
-  
-      @include('message.error')
+    <script>
+        $( "select[name='destination']" ).change(function() {
+            if( $( this ).val() == 'other' ){
+                $("input[name='otherDestination']").prop("disabled", false);
+                $("input[name='otherDestination']").attr("placeholder", "Enter Destination");
+            } else {
+                $("input[name='otherDestination']").prop("disabled", true);
+                $("input[name='otherDestination']").attr("placeholder", "");
+            }
+        });
+    </script>
 @endsection
