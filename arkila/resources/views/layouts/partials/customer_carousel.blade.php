@@ -11,7 +11,7 @@
                                     <h1>3 Branches to serve you!</h1>
                                     <p>Baguio. Cabanatuan. San Jose.</p>
                                 </div>
-                                <div class="col-md-7"><img src="{{ URL::asset('img/template-homepage.png') }}" alt="" class="img-fluid">
+                                <div class="col-md-7"><img src="{{ URL::asset('img/IMG_0247.JPG') }}" alt="" class="img-fluid">
                                 </div>
                                 <!-- col-->
                             </div>
@@ -20,7 +20,7 @@
                         <!-- item-->
                         <div class="item">
                             <div class="row">
-                                <div class="col-md-7 text-center"><img src="../img/template-mac.png" alt="" class="img-fluid"></div>
+                                <div class="col-md-7 text-center"><img src="{{ URL::asset('img/IMG_0698.JPG') }}" alt=""></div>
                                 <div class="col-md-5">
                                     <h2>Baguio Terminal Operating Hours</h2>
                                     <ul class="list-unstyled">
@@ -39,7 +39,7 @@
                                     <h1>Need a Van Rental for a special occasion?</h1>
                                     <p>Ban Trans is here for you!</p>
                                 </div>
-                                <div class="col-md-7"><img src="../img/template-easy-customize.png" alt="" class="img-fluid"></div>
+                                <div class="col-md-7"><img src="{{ URL::asset('img/IMG_0760.JPG') }}" alt="" class="img-fluid"></div>
                                 <!-- col-->
                             </div>
                             <!-- row-->
@@ -47,7 +47,7 @@
                         <!-- item-->
                         <div class="item">
                             <div class="row">
-                                <div class="col-md-7"><img src="../img/template-easy-code.png" alt="" class="img-fluid"></div>
+                                <div class="col-md-7"><img src="{{ URL::asset('img/IMG_0249.JPG') }}" alt="" class="img-fluid"></div>
                                 <div class="col-md-5">
                                     <h1>Need a Reservation for a Trip?</h1>
                                     <p>We got you!</p>
