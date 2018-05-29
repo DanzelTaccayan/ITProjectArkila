@@ -148,38 +148,33 @@ class VanQueueController extends Controller
             ]);
             $vanQueueArr = [];
 
-            if(request('destination') != $vanOnQueue->destination_id)
-            {
+            if(request('destination') != $vanOnQueue->destination_id) {
                 $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
-                $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
                 $vanQueueArr['newDestiQueueCount'] = $queueNum;
                 $vanQueueArr['changedOldDestiQueueNumber'] = $vanOnQueue->queue_number;
                 $vanQueueArr['oldDestiId'] = $vanOnQueue->destination_id;
                 $vanQueueArr['oldDestiQueue'] = [];
-
-                foreach( $queue as $vanOnQueueObj)
-                {
-                    if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
-                    {
-                        $vanOnQueueObj->update([
-                            'queue_number' => ($vanOnQueueObj->queue_number)-1
-                        ]);
-                        array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
-                    }
-
-                }
 
                 $vanOnQueue->update([
                     'destination_id' => request('destination'),
                     'queue_number' => $queueNum
                 ]);
 
-                $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
+                $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+                $vanQueueArr['oldDestiQueueCount'] = count($queue);
+
+                foreach( $queue as $vanOnQueueObj) {
+                    if($vanOnQueueObj->queue_number > 1)  {
+                        $vanOnQueueObj->update([
+                            'queue_number' => ($vanOnQueueObj->queue_number)-1
+                        ]);
+                        array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
+                    }
+                }
 
                 DB::commit();
                 return response()->json($vanQueueArr);
             }
-
 
         } catch(\Exception $e) {
             DB::rollback();
