@@ -60,7 +60,7 @@ class CreateVanRentalTable extends Migration
             ->onUpdate('cascade');
 
             $table->foreign('driver_id')
-            ->references('member_id')->on('member')
+            ->references('id')->on('users')
             ->onDelete('restrict')
             ->onUpdate('cascade');
         });
