@@ -128,8 +128,7 @@
           });
           navigateTo(0); // Start at the beginning
         });
-    </script>
-    <script>
+    
       $('[name="numticketDis"]').keydown(function (e) {
         var key = e.keyCode || e.charCode;
         if (key == 8 || key == 46) {

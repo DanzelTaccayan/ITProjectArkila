@@ -10,27 +10,27 @@
                         <form class="contact100-form" action="{{route('register')}}" method="POST" data-parsley-validate="">
                             {{csrf_field()}}
                             <div class="form-group">
-                                <label for="">First name: <span class="text-red">*</span></label>    
-                                <input id="first_name" class="form-control" type="text" name="first_name" value="{{ old('first_name') }}" val-name required>
+                                <label for="first_name">First name: <span class="text-red">*</span></label>    
+                                <input id="first_name" class="form-control" type="text" name="first_name" value="{{ old('first_name') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="">Last name: <span class="text-red">*</span></label>    
-                               <input id="last_name" class="form-control" type="text" name="last_name" value="{{ old('last_name') }}" val-name required>
+                                <label for="last_name">Last name: <span class="text-red">*</span></label>    
+                               <input id="last_name" class="form-control" type="text" name="last_name" value="{{ old('last_name') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="">Username: <span class="text-red">*</span></label>    
+                                <label for="customerUsername">Username: <span class="text-red">*</span></label>    
                                 <input id="customerUsername" class="form-control" type="text" name="username" value="{{ old('username') }}" val-username required>
                             </div>
                             <div class="form-group">
-                                <label for="">Email: <span class="text-red">*</span></label>    
+                                <label for="customerEmail">Email: <span class="text-red">*</span></label>    
                                 <input id="customerEmail" class="form-control" type="text" name="email" value="{{ old('email') }}" required>   
                             </div>
                             <div class="form-group">
-                                <label for="">Password: <span class="text-red">*</span></label>    
+                                <label for="customerPassword">Password: <span class="text-red">*</span></label>    
                                 <input id="customerPassword" class="form-control" type="password" name="password" val-password pw-letter pw-number required>
                             </div>
                             <div class="form-group">
-                                <label for="">Confirm Password: <span class="text-red">*</span></label>    
+                                <label for="customerRepeatPassword">Confirm Password: <span class="text-red">*</span></label>    
                                 <input id="customerRepeatPassword" class="form-control" type="password" name="password_confirmation" required>
                             </div>
                             <div class="container-contact100-form-btn">
