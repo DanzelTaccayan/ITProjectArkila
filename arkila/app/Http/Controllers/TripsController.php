@@ -116,7 +116,8 @@ class TripsController extends Controller
         $trip->update([
             "report_status" => 'Accepted',
         ]);
-
+         
+        $trip->transaction()->update(['status' => 'Accepted']);
         $message = "Trip " . $trip->trip_id . " successfully accepted";
         return redirect(route('trips.tripLog'))->with('success', $message);
     }
@@ -126,6 +127,8 @@ class TripsController extends Controller
         $trip->update([
             "report_status" => 'Declined',
         ]);
+        
+        $trip->transaction()->update(['status' => 'Declined']);
         $message = "Trip " . $trip->trip_id . " successfully declined";
         return redirect(route('trips.driverReport'))->with('success', $message);
     }

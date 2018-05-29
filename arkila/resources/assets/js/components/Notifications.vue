@@ -35,17 +35,16 @@
     },
     methods: {
       markNotificationAsRead() {
-        if (this.unreadNotifications.length) {
+        if (this.unreadNotifications.length != 0) {
           axios.post('/markAsRead');
         }
       }
     },
     mounted() {
       console.log('Component mounted');
-      console.log(Laravel.userId);
       Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
-        console.log(notification);
+        console.log(notification.id);
         let newUnreadNotifications = {
           data:{
             notif_type:notification.notif_type,
@@ -57,7 +56,6 @@
         };
         //console.log(newUnreadNotifications.data);
         this.unreadNotifications.push(newUnreadNotifications);
-         console.log(this.unreadNotifications);
         });
     }
   }

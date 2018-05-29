@@ -30,7 +30,6 @@ class ReservationObserver
             if($reserve->status == 'PAID'){//Reservation Paid
                 $userCustomer = User::find($reserve->user_id);
                 $case = 'Paid';
-                //dd($case);
                 $userCustomer->notify(new OnlineReserveCustomerNotification($userCustomer, $reserve, $case));   
             }else if($reserve->status == 'EXPIRED'){//Reservation Expired
                 $userCustomer = User::find($reserve->user_id);
