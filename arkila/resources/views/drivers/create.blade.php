@@ -104,7 +104,7 @@
                                 Contact Number <span class="text-red">*</span>
                             </th>
                             <td>
-                                <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" val-phone required>
+                                <input type="text" name="contactNumber"  class="form-control" value="{{old('contactNumber')}}" placeholder="Contact Number" val-contact required>
                             </td>
                         </tr>
                         <tr>
@@ -178,7 +178,7 @@
                         <tr>
                             <th>Name <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname required>
+                                <input value="{{old('contactPerson')}}" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-cname required>
                             </td>
                         </tr>
                         <tr>
@@ -190,7 +190,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" val-phone required>
+                                <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" val-contact required>
                             </td>
                         </tr>
                     </tbody>
