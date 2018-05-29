@@ -18,7 +18,7 @@ class CreateSoldTicketTable extends Migration
             $table->string('ticket_number');
             $table->integer('destination_id')
                 ->unsigned();
-            $table->integer('customer_id')
+            $table->integer('user_id')
                 ->unsigned()
                 ->nullable();
             $table->decimal('amount_paid', 11, 2);

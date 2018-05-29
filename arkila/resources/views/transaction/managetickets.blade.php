@@ -142,7 +142,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
+                                                @foreach(App\SelectedTicket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
                                                     <tr id="ticket{{$ticket->ticket_id}}">
                                                         <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>

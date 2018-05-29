@@ -299,11 +299,6 @@ class TransactionsController extends Controller
         }
     }
 
-    public function manage()
-    {
-        return view('transaction.managetickets');
-    }
-
     public function listSourceDrivers()
     {
         $drivers = [];
