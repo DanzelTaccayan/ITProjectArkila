@@ -292,8 +292,8 @@
                                             </div>
                                             <div>
                                                 <hr>
-                                                
-                                                <div class="pull-right">   
+
+                                                <div class="pull-right">
                                                 <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px; padding-top: 13px;">SOLD TICKETS</a>
                                                 @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->orderBy('queue_number')->first() ?? null)
                                                     <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
@@ -356,28 +356,6 @@
 
                                                 <div class="clearfix"></div>
 
-                                                <div class="modal" id="novan-modal">
-                                                    <div class="modal-dialog" style="margin-top: 10%;">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">×</span></button>
-                                                                <h4 class="modal-title"></h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
-                                                                <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <div class="text-center">
-                                                                    <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <!-- /.modal-content -->
-                                                    </div>
-                                                  <!-- /.modal-dialog -->
-                                                </div>
 
                                             </div>
                                         </div>
@@ -453,8 +431,8 @@
                                                                 </div>
                                                                 <div class="">
                                                                 <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($tickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $ticket)
-                                                                        <li data-val="{{$ticket->ticket_id}}" class="list-group-item">{{$ticket->ticket_number}}</li>
+                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $soldTicket)
+                                                                        <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
                                                                 </div>
@@ -498,8 +476,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($tickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $ticket)
-                                                                        <li data-val='{{$ticket->ticket_id}}' class="list-group-item">{{$ticket->ticket_number}}</li>
+                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $soldTicket)
+                                                                        <li data-val='{{$soldTicket->sold_ticket_id}}' class="list-group-item">{{$soldTicket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
                                                                 
@@ -561,7 +539,28 @@
             </div>
         </div>
     @endif
-
+        <div class="modal" id="novan-modal">
+            <div class="modal-dialog" style="margin-top: 10%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h1 class="text-center"><i class="fa fa-warning"></i> OOPS!</h1>
+                        <p class="text-center"><strong>UNABLE TO BOARD PASSENGERS. THERE'S NO VAN UNIT AVAILABLE IN THE QUEUE.</strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <a href="{{route('vanqueue.index')}}" type="button" class="btn btn-success">GO TO VAN QUEUE</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </div>
 </div>
 
@@ -889,8 +888,7 @@
                                 '_token': '{{csrf_token()}}'
                             },
                             success: function(response){
-                                alert(response);
-                                // window.location.replace('/home/trip-log/'+response)
+                                window.location.replace('/home/trip-log/'+response)
                             },
                             error:function(response) {
                                 $('div[data-notify="container"]').remove();
@@ -958,8 +956,8 @@
                         '_token': '{{csrf_token()}}'
                     },
                     success: function(response){
-                        alert(response);
-                        // window.location.replace('/home/trip-log/'+response)
+
+                        window.location.replace('/home/trip-log/'+response)
                     },
                     error:function(response) {
                         $('div[data-notify="container"]').remove();
@@ -997,10 +995,10 @@
                 var actives = $('#pendingList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
-                    var tickets = [];
+                    var soldTickets = [];
 
                     actives.each(function () {
-                        tickets.push($(this).data('val'));
+                        soldTickets.push($(this).data('val'));
                     });
 
                     $.ajax({
@@ -1008,7 +1006,7 @@
                         url: '{{route("transactions.updatePendingTransactions")}}',
                         data: {
                             '_token': '{{csrf_token()}}',
-                            'tickets': tickets,
+                            'soldTickets': soldTickets,
                             'destination' : terminalId
                         },
                         success: function(){
@@ -1056,9 +1054,9 @@
                 var actives = $('#onBoardList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
-                    var tickets = [];
+                    var soldTickets = [];
                     actives.each(function () {
-                        tickets.push($(this).data('val'));
+                        soldTickets.push($(this).data('val'));
                     });
 
                     $.ajax({
@@ -1066,7 +1064,7 @@
                         url: '{{route("transactions.updateOnBoardTransactions")}}',
                         data: {
                             '_token': '{{csrf_token()}}',
-                            'tickets': tickets
+                            'soldTickets': soldTickets
                         },
                         success: function () {
 
