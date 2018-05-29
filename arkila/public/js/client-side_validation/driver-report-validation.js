@@ -31,6 +31,6 @@ window.Parsley.addValidator('departureReport', {
         }
       },
       messages: {
-        en: 'Departure date should be today or before',
+        en: 'Departure date must be today or a previous date.',
       }
     });
