@@ -89,12 +89,12 @@ class VanQueueController extends Controller
      */
     public function updateQueueNumber(VanQueue $vanOnQueue)
     {
-        if(!is_null(request('new_queue_num')) ) {
+        if(!is_null(request('destination')) && !is_null(request('new_queue_num')) ) {
             // Start transaction!
             DB::beginTransaction();
             try {
                 $responseArr = [];
-                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', $vanOnQueue->destination_id)->orderBy('queue_number', 'asc')->get();
+                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', request('destination'))->orderBy('queue_number', 'asc')->get();
 
                 //Get the van queue id and the queue number of the being transferred van
                 $beingTransferredQueueNumber = $vanOnQueue->queue_number;
