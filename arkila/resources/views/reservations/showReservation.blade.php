@@ -3,7 +3,7 @@
 @section('content')
 	<div class="padding-side-10">
 		<div>
-		    <h2 class="text-white"><strong>RESERVATION CODE:</strong> {{$reservation->rsrv_code}}</h2>
+		    <h2 class="text-white"><strong>RESERVATION CODE:</strong> {{strtoupper($reservation->rsrv_code)}}</h2>
 		</div>
 		<div class="box box-solid">
 			<div class="box-body">	
@@ -30,7 +30,7 @@
 		                		</tr>
 		                		<tr>
 		                			<th>Total Fare</th>
-		                			<td>₱ {{$reservation->fare}}</td>
+		                			<td>₱{{$reservation->fare}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Status</th>
@@ -38,11 +38,15 @@
 		                		</tr>
 		                		<tr>
 		                			<th>Date Paid</th>
-		                			<td>{{$reservation->date_paid}}</td>
-		                		</tr>
+									@if($reservation->date_paid != null)
+		                			<td>{{$reservation->date_paid->formatLocalized('%d %B %Y')}}</td>
+		                			@else
+									<td>Not yet paid.</td>
+									@endif
+								</tr>
 		                		<tr>
 		                			<th>Date Reserved</th>
-		                			<td>{{$reservation->created_at}}</td>
+		                			<td>{{$reservation->created_at->formatLocalized('%d %B %Y')}}</td>
 		                		</tr>
 		                	</tbody>
 		                </table>

@@ -11,7 +11,7 @@ class Reservation extends Model
     use HasEncryptedAttributes;
 
     protected $table = 'reservation';
-    protected $dates = ['expiry_date'];
+    protected $dates = ['expiry_date', 'date_paid'];
     protected $primaryKey = 'id';
 	protected $guarded = [
     	'id',

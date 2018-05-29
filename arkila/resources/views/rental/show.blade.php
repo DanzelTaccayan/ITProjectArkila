@@ -1,9 +1,9 @@
 @extends('layouts.master')
-@section('title', 'Reservation Dates')
+@section('title', 'Rental')
 @section('content')
 	<div class="padding-side-10">
 		<div>
-		    <h2 class="text-white"><strong>RENTAL CODE:</strong> {{$rental->rental_code}}</h2>
+		    <h2 class="text-white"><strong>RENTAL CODE:</strong> {{strtoupper($rental->rental_code)}}</h2>
 		</div>
 		<div class="box box-solid">
 			<div class="box-body">	
@@ -60,7 +60,9 @@
 		                </table>
 		                <div>
 		                	<a href="{{route('rental.index')}}" class="btn btn-default">Back</a>
+							@if($rental->status == 'Paid')
 			                <button id="changeDateBtn" class="btn btn-primary pull-right">Change Departure Date</button>
+							@endif
 			                <button id="cancelChangeDateBtn" class="btn btn-primary pull-right hidden">Cancel</button>
 		                </div>
 					</div>
