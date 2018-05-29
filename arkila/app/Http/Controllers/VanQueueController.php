@@ -93,7 +93,6 @@ class VanQueueController extends Controller
             // Start transaction!
             DB::beginTransaction();
             try {
-                $responseArr = [];
                 $queue = VanQueue::whereNotNull('queue_number')->where('destination_id', $vanOnQueue->destination_id)->orderBy('queue_number', 'asc')->get();
 
                 //Get the van queue id and the queue number of the being transferred van
@@ -128,9 +127,11 @@ class VanQueueController extends Controller
                     ]);
                 }
                 DB::commit();
-                $responseArr = VanQueue::select('van_queue_id as vanQueueId','queue_number as queueNumber')->whereNotNull('queue_number')->where('destination_id', request('destination'))->orderBy('queue_number', 'asc')->get();
+                $responseArr = VanQueue::select('van_queue_id as vanQueueId','queue_number as queueNumber')->whereNotNull('queue_number')->where('destination_id', $vanOnQueue->destination_id)->orderBy('queue_number', 'asc')->get();
+                \Log::info($responseArr);
             } catch (\Exception $e) {
                 DB::rollback();
+                \Log::info($e);
                 return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
             }
 
