@@ -86,19 +86,19 @@
 @section('scripts')
 @parent
 <script>
-	 $('#changeDateBtn').click(function(){
-           	$('#statusSection').hide();
-           	$('#changeDateBtn').hide();
-            $('#changeDateSection').show();
-            $('#changeDateSection').removeClass("hidden");
-            $('#cancelChangeDateBtn').show();
-            $('#cancelChangeDateBtn').removeClass("hidden");	
-        });
-	 $('#cancelChangeDateBtn').click(function(){
-           	$('#statusSection').show();
-           	$('#changeDateBtn').show();
-            $('#changeDateSection').hide();
-            $('#cancelChangeDateBtn').hide();	
-        });
+	$('#changeDateBtn').click(function(){
+       	$('#statusSection').hide();
+       	$('#changeDateBtn').hide();
+        $('#changeDateSection').show();
+        $('#changeDateSection').removeClass("hidden");
+        $('#cancelChangeDateBtn').show();
+        $('#cancelChangeDateBtn').removeClass("hidden");	
+    });
+	$('#cancelChangeDateBtn').click(function(){
+       	$('#statusSection').show();
+       	$('#changeDateBtn').show();
+        $('#changeDateSection').hide();
+        $('#cancelChangeDateBtn').hide();	
+    });
 </script>
 @endsection
