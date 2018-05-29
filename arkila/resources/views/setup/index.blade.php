@@ -66,6 +66,14 @@
                     <label>Email: </label>
                     <input type="text" class="form-control" name="email" value="{{old('email')}}">
                 </div>
+                <div class="form-group col-md-6 left">
+                    <label>Opening Time: </label>
+                    <input type="time" class="form-control" name="openTime" value="{{old('openTime')}}" required>
+                </div>
+                <div class="form-group col-md-6 right">
+                    <label>Closing Time: </label>
+                    <input type="time" class="form-control" name="closeTime" value="{{old('closeTime')}}" required>
+                </div>
                 <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">

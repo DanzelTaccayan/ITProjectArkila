@@ -41,6 +41,10 @@ th {
                                     <th>Phone No.</th>
                                     <td>{{$profile->contact_number}}</td>
                                 </tr>
+                                <tr>
+                                    <th>Office Hours</th>
+                                    <td>LAGAY DITO ORAS HEHE 6:00 AM to 7:00 PM</td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="pull-right">   
