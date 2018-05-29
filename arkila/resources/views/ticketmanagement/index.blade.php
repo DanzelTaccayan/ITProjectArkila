@@ -83,7 +83,7 @@
                   </tbody>
                 </table>
               </div>
-              <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets has been returned before editing the number of tickets for a specific route.</p>
+              <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets have been returned before editing the number of tickets for a specific route.</p>
               <!-- /.tab-pane -->
             </div>
             <!-- /.tab-content -->

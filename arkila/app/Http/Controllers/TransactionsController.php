@@ -88,7 +88,7 @@ class TransactionsController extends Controller
     {
 
         if ($vanOnQueue = $destination->vanQueue()->where('queue_number', 1)->first()) {
-            if ($tickets = $destination->tickets->where('status','OnBoard')) {
+            if ($tickets = Ticket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')) {
                 //Compute for the total passenger, booking fee, and community fund
                 $totalPassengers = count($tickets);
 
@@ -132,7 +132,8 @@ class TransactionsController extends Controller
                         'SOP' => $sop,
                         'date_departed' => $dateDeparted,
                         'report_status' => 'Accepted',
-                        'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second
+                        'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second,
+//                        'reportedBy' => 'Admin'
                     ]);
 
 
@@ -192,7 +193,8 @@ class TransactionsController extends Controller
                     }
 
                     DB::commit();
-                    session()->flash('success', 'Successfully departed '.$trip->van->plate_number);
+                    session()->flash('success', 'Van with plate #'.$trip->van->plate_number.' has successfully departed');
+                    dd($trip->trip_id);
                 } catch (\Exception $e) {
                     DB::rollback();
                     return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
@@ -200,7 +202,6 @@ class TransactionsController extends Controller
 
             }
         }
-        return 'Failed';
     }
 
     public function updatePendingTransactions()
@@ -209,19 +210,24 @@ class TransactionsController extends Controller
         if($tickets = request('tickets')) {
             $this->validate(request(),[
                 'tickets.*' => 'required|exists:ticket,ticket_id'
+                ,'destination' => 'required|exists:destination,destination_id'
             ]);
 
+            $destinationId = request('destination');
             // Start transaction!
             DB::beginTransaction();
             try  {
-                $seatingCapacity = VanQueue::where('destination_id',Ticket::find($tickets[0])->destination->destination_id)
+                $seatingCapacity = VanQueue::where('destination_id',$destinationId)
                     ->where('queue_number',1)
                     ->first()
                     ->van
                     ->seating_capacity;
 
                 if($seatingCapacity >= count($tickets)) {
-                    foreach($tickets as $ticketId) {
+                    $futureCount =intval(Ticket::whereIn('destination_id',Destination::find($destinationId)->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')->count()) + intval(count($tickets));
+
+                    if($seatingCapacity >= $futureCount ) {
+                        foreach($tickets as $ticketId) {
                         $ticket = Ticket::find($ticketId);
                         if(is_null($ticket->status) || $ticket->status == "OnBoard") {
                             DB::rollback();
@@ -236,11 +242,14 @@ class TransactionsController extends Controller
                             'status' => 'OnBoard'
                         ]);
                     }
-
+                    } else {
+                        DB::rollback();
+                        return Response::json(['error' => 'The tickets to be boarded would exceed the seating capacity of the van on deck'],422);
+                    }
                     DB::commit();
                     return 'success';
                 } else {
-                    return Response::json(['error' => 'The tickets boarded is greater then the seating capacity of the van on deck'],422);
+                    return Response::json(['error' => 'The tickets to be boarded is greater then the seating capacity of the van on deck'],422);
                 }
 
             } catch(\Exception $e) {
@@ -591,7 +600,9 @@ class TransactionsController extends Controller
                     ->orderBy('selected_ticket_id','desc')
                     ->where('type', $ticketType)
                     ->first();
-
+                if(is_null($lastTicket)) {
+                    return Response::json(['error' => 'Unable to delete, there are no selected '.strtolower(request('ticketType')).' tickets for '.$destination->destination_name],422);
+                }
                 $response_arr = [
                     'lastSelected' => $lastTicket->selected_ticket_id,
                     'fare'=> $lastTicket->ticket->fare
@@ -605,6 +616,7 @@ class TransactionsController extends Controller
 
         } catch(\Exception $e) {
             DB::rollback();
+            \Log::info($e);
             return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
         }
     }

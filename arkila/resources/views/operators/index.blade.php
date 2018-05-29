@@ -45,37 +45,42 @@
                             <!-- /.text -->
                         </td>
                     </tr>
-                    <!-- Modal for Delete-->
-                    <div class="modal" id="{{'deleteWarning'.$operator->member_id}}">
-                        <div class="modal-dialog" style="margin-top: 10%;">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span></button>
-                                    <h4 class="modal-title"></h4>
-                                </div>
-                                <div class="modal-body">
-                                    <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
-                                    <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
-                                    <h4 class="text-center "><strong class="text-red">{{ $operator->full_name }}</strong>?</h4>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
-                                        {{method_field('PATCH')}}
-                                        {{ csrf_field() }}
-                                        <div class="text-center">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                            <button type="submit" class="btn btn-danger">ARCHIVE</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
                 </tbody>
             </table>
         </div>
+
+        @foreach ($operators->where('status', 'Active')->sortByDesc('member_id') as $operator)
+            <!-- Modal for Delete-->
+            <div class="modal fade" id="{{'deleteWarning'.$operator->member_id}}">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-red">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                            <h4 class="modal-title"> Confirm</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h1>
+                                <i class="fa fa-exclamation-triangle pull-left text-yellow" ></i>
+                            </h1>
+                            <p>Are you sure you want to delete <strong>{{ $operator->full_name }}</strong>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                                {{method_field('PATCH')}}
+                                {{ csrf_field() }}
+                                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                    <!-- /.col -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+                <!-- /.modal -->
+        @endforeach
         <!-- /.box-body -->
     </div>
     <!-- /.box -->

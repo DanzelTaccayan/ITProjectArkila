@@ -20,8 +20,8 @@
                             <ul class="dropdown-menu megamenu">
                                 <li>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <img src="../img/template-easy-customize.png" alt="" class="img-fluid d-none d-lg-block">
+                                        <div class="col-md-6" style="margin-left:180px;">
+                                            <img src="{{ URL::asset('img/IMG_0752.JPG') }}" alt="" class="img-fluid d-none d-lg-block">
                                         </div>
                                         <div class="col-md-4">
                                             <ul class="list-unstyled">
@@ -50,8 +50,8 @@
                             <ul class="dropdown-menu megamenu">
                                 <li>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <img src="../img/template-easy-customize.png" alt="" class="img-fluid d-none d-lg-block">
+                                        <div class="col-md-6" style="margin-left:180px;">
+                                            <img src="{{ URL::asset('img/IMG_0714.JPG') }}" alt="" class="img-fluid d-none d-lg-block">
                                         </div>
                                         <div class="col-md-4">
                                             <ul class="list-unstyled">

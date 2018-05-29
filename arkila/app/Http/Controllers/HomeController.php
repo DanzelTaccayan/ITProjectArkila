@@ -66,12 +66,23 @@ class HomeController extends Controller
 
     public function notifications()
     {
-      return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+      return auth()->user()->unreadNotifications()->limit(10)->get()->toArray();
     }
 
-    public function markAsRead()
+    
+
+    public function markAsReadSpecific($id)
     {
-      return auth()->user()->unreadNotifications->markAsRead();
+        $notification = auth()->user()
+        ->unreadNotifications()
+        ->where('id', $id)
+        ->first();
+
+        if (is_null($notification)) {
+        return response()->json('Notification not found.', 404);
+        }
+
+        $notification->markAsRead();
     }
 
 }

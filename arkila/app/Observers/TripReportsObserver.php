@@ -5,31 +5,31 @@ namespace App\Observers;
 use Auth;
 use App\User;
 use App\Trip;
-use App\Notifications\TripReportsAdminNotifications;
-use App\Notifications\TripReportsDriverNotifications;
+use App\Notifications\TripReportsAdminNotification;
+use App\Notifications\TripReportsDriverNotification;
 use Illuminate\Support\Facades\Notification;
 
 class TripReportsObserver
 {
     public function created(Trip $trip)
     {
-        if($trip->reportedBy == 'Driver'){
+        if($trip->reportedBy == 'Driver' && $trip->report_status == 'Pending'){
             $userAdmin = User::where('user_type', 'Super-Admin')->first();
             $userDriver = User::find(Auth::id());
-            $userAdmin->notify(new TripReportsAdminNotifications($userDriver, $trip));
-        }else if($trip->reportedBy == 'Super-Admin'){
+            $userAdmin->notify(new TripReportsAdminNotification($userDriver, $trip));
+        }else if($trip->reportedBy == 'Super-Admin' && $trip->report_status == 'Accepted'){
             $userDriver = User::find($trip->driver->user->id);
-            $userAdmin = User::where('user_type', 'Super-Admin')->first();
-            $userDriver->notify(new TripReportsDriverNotifications($userAdmin, $trip));
+            $userAdmin = User::find(Auth::id());
+            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
         }
     }
 
     public function updated(Trip $trip)
     {
-        if($trip->reportedBy == 'Driver' && ($trip->report_status = 'Accepted' || $trip->report_status = 'Declined')){
+        if($trip->reportedBy == 'Driver' && ($trip->report_status == 'Accepted' || $trip->report_status == 'Declined')){
             $userDriver = User::find($trip->driver->user->id);
-            $userAdmin = User::where('user_type', 'Super-Admin')->first();
-            $userDriver->notify(new TripReportsDriverNotifications($userAdmin, $trip));
+            $userAdmin = User::find(Auth::id());
+            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
         }
     }
 }
