@@ -43,7 +43,7 @@ th {
                                 </tr>
                                 <tr>
                                     <th>Office Hours</th>
-                                    <td>LAGAY DITO ORAS HEHE 6:00 AM to 7:00 PM</td>
+                                    <td>{{$profile->open_time}} to {{$profile->close_time}}</td>
                                 </tr>
                             </tbody>
                         </table>

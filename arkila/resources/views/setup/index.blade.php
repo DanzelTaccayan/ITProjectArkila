@@ -64,15 +64,15 @@
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="text" class="form-control" name="email" value="{{old('email')}}">
+                    <input type="text" class="form-control" name="email" value="{{old('email')}}" val-email>
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Opening Time: </label>
-                    <input type="text" class="form-control" name="openTime" value="{{old('openTime')}}" required>
+                    <input type="time" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Closing Time: </label>
-                    <input type="text" class="form-control" name="closeTime" value="{{old('closeTime')}}" required>
+                    <input type="time" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
             </div>

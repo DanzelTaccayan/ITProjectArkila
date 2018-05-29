@@ -9,6 +9,7 @@ use App\Destination;
 use App\Ticket;
 use App\Fee;
 use App\Feature;
+use App\Rules\checkTime;
 use App\Rules\checkCurrency;
 
 class SetupController extends Controller
@@ -53,9 +54,11 @@ class SetupController extends Controller
     public function store(Request $request)
     {
         $this->validate(request(), [
-            "contactNumber" => 'required|max:15',
-            "email" => 'required|email|max:100',
-            "address" => 'required|max:200',
+            "contactNumber" => 'max:15',
+            "email" => 'email|max:100',
+            "address" => 'max:200',
+            "openTime" => ['required', new checkTime],
+            "closeTime" => ['required', new checkTime],
             "addMainTerminal" => 'required|unique:destination,destination_name|max:70',
             "mainBookingFee" => 'required|numeric',
             "addTerminal" => 'required|unique:destination,destination_name|max:70',
@@ -87,6 +90,8 @@ class SetupController extends Controller
             'contact_number' => $request->contactNumber,
             'email' => $request->email,
             'address' => $address,
+            'open_time' => $request->openTime,
+            'close_time' => $request->closeTime,
         ]);
 
         $mainTerminal = Destination::create([
