@@ -43,7 +43,7 @@
                                         <td>{{$userDriver->username}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/driver/{{$userDriver->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>MANAGE ACCOUNTS</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -76,7 +76,7 @@
                                         <td>{{$userCustomer->email}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
-                                                <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>Manage Account</a>
+                                                <a href="/home/user-management/customer/{{$userCustomer->id}}" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-cog"></i>MANAGE ACCOUNTS</a>
                                             </div>
                                         </td>
                                     </tr>
