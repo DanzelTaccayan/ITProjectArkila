@@ -475,7 +475,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <ul id="pendingList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                <ul id="pendingList{{$terminal->destination_id}}" class="pendingList list-group scrollbar scrollbar-info thin ticket-overflow">
                                                                     @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $soldTicket)
                                                                         <li data-val='{{$soldTicket->sold_ticket_id}}' class="list-group-item">{{$soldTicket->ticket_number}}</li>
                                                                     @endforeach
@@ -1010,6 +1010,10 @@
                             'destination' : terminalId
                         },
                         success: function(){
+                            soldTickets.forEach(function(element){
+                                $('.pendingList').find('li[data-val="'+element+'"]').remove();
+                            });
+
                             actives.clone().appendTo('#onBoardList'+terminalId).removeClass('active');
                             actives.remove();
 

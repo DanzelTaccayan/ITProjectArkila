@@ -546,14 +546,13 @@
     <script>
         $(function() {
             $('.sold-tickets').DataTable({
-                'select':true,
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
                 'ordering': true,
                 'info': true,
                 'autoWidth': false,
-                'order': [[ 3, "desc" ]], 
+                'order': [[ 3, "desc" ]],
                 'aoColumnDefs': [
                     {
                     'bSortable': false,
@@ -563,9 +562,10 @@
                     {
                     'bSortable': false,
                     'aTargets': [4]
-                    }
+                    },
                 ], 
-            })
+            });
+
         })
     </script>
 @endsection
