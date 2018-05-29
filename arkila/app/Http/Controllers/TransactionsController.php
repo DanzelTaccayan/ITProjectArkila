@@ -336,29 +336,23 @@ class TransactionsController extends Controller
     }
 
     //Refund
-    public function refund(Ticket $ticket)
+    public function refund(SoldTicket $soldTicket)
     {
-        if(is_null($ticket->status)) {
-            return back()->withErrors('The ticket to be refunded is not sold');
-
-        }
         // Start transaction!
         DB::beginTransaction();
         try  {
-            $ticket->update([
-                'status' => null
-            ]);
-
             Transaction::create([
-                'ticket_name' => $ticket->ticket_number,
-                'destination' => $ticket->destination->destination_name,
-                'origin' => $ticket->destination->routeOrigin->first()->destination_name,
-                'amount_paid' => $ticket->fare,
+                'ticket_name' => $soldTicket->ticket_number,
+                'destination' => $soldTicket->destination->destination_name,
+                'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                'amount_paid' => $soldTicket->amount_paid,
                 'status' => 'Refunded'
             ]);
 
+            $soldTicket->delete();
+
             DB::commit();
-            return back()->with('success', 'Ticket '.$ticket->ticket_number.'  has successfully been refunded');
+            return back()->with('success', 'Ticket '.$soldTicket->ticket_number.'  has successfully been refunded');
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
@@ -369,23 +363,19 @@ class TransactionsController extends Controller
 
     public function multipleRefund()
     {
-        $ticketObjArr = [];
-        $responseArr = [];
+        $soldTicketObjArr = [];
         $this->validate(request(),[
-            'refund.*' => 'exists:ticket,ticket_id'
+            'refund.*' => 'exists:sold_ticket,sold_ticket_id'
         ]);
 
-        foreach(request('refund') as $ticketId)
+        foreach(request('refund') as $soldTicketId)
         {
-            $ticketObj = Ticket::find($ticketId);
-            if(is_null($ticketObj)) {
+            $soldTicketObj = SoldTicket::find($soldTicketId);
+            if(is_null($soldTicketObj)) {
                 return Response::json(['error' => 'There is a given ticket that does not exist'], 422);
             } else {
-                if(is_null($ticketObj->status)) {
-                    return Response::json(['error' => 'There is a given ticket to be refunded that is not sold'],422);
-                }
 
-                array_push($ticketObjArr, $ticketObj);
+                array_push($soldTicketObjArr, $soldTicketObj);
 
             }
         }
@@ -393,26 +383,22 @@ class TransactionsController extends Controller
         //Begin Transaction
         DB::beginTransaction();
         try {
-            foreach($ticketObjArr as $ticket)
+            foreach($soldTicketObjArr as $soldTicket)
             {
-
-                $ticket->update([
-                    'status' => null
-                ]);
-
                 Transaction::create([
-                    'ticket_name' => $ticket->ticket_number,
-                    'destination' => $ticket->destination->destination_name,
-                    'origin' => $ticket->destination->routeOrigin->first()->destination_name,
-                    'amount_paid' => $ticket->fare,
+                    'ticket_name' => $soldTicket->ticket_number,
+                    'destination' => $soldTicket->destination->destination_name,
+                    'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                    'amount_paid' => $soldTicket->amount_paid,
                     'status' => 'Refunded'
                 ]);
 
-                array_push($responseArr, $ticket->ticket_number);
+                $soldTicket->delete();
             }
             DB::commit();
 
-            return implode(' ',$responseArr);
+            session()->flash('success', 'The selected tickets have been refunded');
+            return 'success';
         } catch (\Exception $e) {
             DB::rollback();
             return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
@@ -422,34 +408,27 @@ class TransactionsController extends Controller
     }
 
     //Lost
-    public function lost(Ticket $ticket) {
-        if(is_null($ticket->status)) {
-            return back()->withErrors('Ticket '.$ticket->ticket_number.' is not sold');
-        }
-
+    public function lost(SoldTicket $soldTicket) {
         //Being Transaction
         DB::beginTransaction();
         try{
-            $ticket->update([
-                'status' => null
-            ]);
-
             Ledger::create([
                 'description' => 'Lost/Expire Ticket',
-                'amount' => $ticket->fare,
+                'amount' => $soldTicket->amount_paid,
                 'type' => 'Revenue'
             ]);
 
             Transaction::create([
-                'ticket_name' => $ticket->ticket_number,
-                'destination' => $ticket->destination->destination_name,
-                'origin' => $ticket->destination->routeOrigin->first()->destination_name,
-                'amount_paid' => $ticket->fare,
+                'ticket_name' => $soldTicket->ticket_number,
+                'destination' => $soldTicket->destination->destination_name,
+                'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                'amount_paid' => $soldTicket->amount_paid,
                 'status' => 'Lost/Expired'
             ]);
-
+            $ticketNumber = $soldTicket->ticket_number;
+            $soldTicket->delete();
             DB::commit();
-            return back()->with('success','Successfully updated ticket '.$ticket->ticket_number.' as Lost/Expired');
+            return back()->with('success','Successfully updated ticket '.$ticketNumber.' as Lost/Expired');
         } catch (\Exception $e) {
             DB::rollback();
             \Log::info($e);
@@ -459,45 +438,36 @@ class TransactionsController extends Controller
     }
 
     //Delete
-    public function destroy(Ticket $ticket)
+    public function cancel(SoldTicket $soldTicket)
     {
-        if(is_null($ticket->status)) {
-            return back()->withErrors('The given ticket to be cancelled is unsold');
-        }
 
         DB::beginTransaction();
         try {
-            $ticket->update([
-                'status' => null
-            ]);
+            $ticketNumber = $soldTicket->ticket_number;
+            $soldTicket->delete();
             DB::commit();
 
-            return back()->with('success', 'Ticket '.$ticket->ticket_number.' has been cancelled.');
+            return back()->with('success', 'Ticket '.$ticketNumber.' has been cancelled.');
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
         }
     }
 
-    public function multipleDelete()
+    public function multipleCancel()
     {
-        $ticketObjArr = [];
-        $responseArr = [];
+        $soldTicketObjArr = [];
 
         $this->validate(request(),[
-            'delete.*' => 'exists:ticket,ticket_id'
+            'delete.*' => 'exists:sold_ticket,sold_ticket_id'
         ]);
-        foreach(request('delete') as $ticketId)
+        foreach(request('delete') as $soldTicketId)
         {
-            $ticketObj = Ticket::find($ticketId);
-            if(is_null($ticketObj)) {
+            $soldTicketObj = SoldTicket::find($soldTicketId);
+            if(is_null($soldTicketObj)) {
                 return Response::json(['error' => 'There is a given ticket that does not exist'],422);
             } else {
-                if(is_null($ticketObj->status)) {
-                    return Response::json(['error' => 'There is a given ticket to be cancelled that is not sold'],422);
-                }
-
-                array_push($ticketObjArr, Ticket::find($ticketId));
+                array_push($soldTicketObjArr, $soldTicketObj);
             }
 
         }
@@ -505,16 +475,13 @@ class TransactionsController extends Controller
         //Start Transaction
         DB::beginTransaction();
         try {
-            foreach($ticketObjArr as $ticket)
+            foreach($soldTicketObjArr as $soldTicket)
             {
-                $ticket->update([
-                    'status' => null
-                ]);
-
-                array_push($responseArr, $ticket->ticket_number);
+                $soldTicket->delete();
             }
             DB::commit();
-            return implode(" ",$responseArr);
+            session()->flash('success', 'The selected tickets have been cancelled');
+            return 'success';
         } catch(\Exception $e) {
             DB::rollback();
             return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);

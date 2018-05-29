@@ -192,7 +192,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
      Route::patch('/moveToSpecialUnit/{vanOnQueue}','VanQueueController@moveToSpecialUnit')->name('vanqueue.moveToSpecialUnit');
      /* Transactions(Ticket) */
     Route::get('/home/transactions', 'TransactionsController@index')->name('transactions.index');
-    Route::delete('/home/transactions/{ticket}', 'TransactionsController@destroy')->name('transactions.destroy');
     Route::post('/home/transactions/{destination}', 'TransactionsController@store')->name('transactions.store');
     Route::patch('/home/transactions/{destination}', 'TransactionsController@depart')->name('transactions.depart');
     Route::patch('/updatePendingTransactions', 'TransactionsController@updatePendingTransactions')->name('transactions.updatePendingTransactions');
@@ -200,11 +199,12 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/listSourceDrivers','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');
     Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
     Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
-    Route::patch('/home/transactions/refund/{ticket}','TransactionsController@refund')->name('transactions.refund');
-    Route::patch('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
-    Route::patch('/home/transactions/lost/{ticket}','TransactionsController@lost')->name('transactions.lost');
-    Route::patch('/home/transactions/multipleLost','TransactionsController@multipleLost')->name('transactions.multipleLost');
-    Route::delete('/multipleDelete','TransactionsController@multipleDelete')->name('transactions.multipleDelete');
+    Route::delete('/home/transactions/{soldTicket}', 'TransactionsController@cancel')->name('transactions.cancel');
+    Route::delete('/home/transactions/refund/{soldTicket}','TransactionsController@refund')->name('transactions.refund');
+    Route::delete('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
+    Route::delete('/home/transactions/lost/{soldTicket}','TransactionsController@lost')->name('transactions.lost');
+    Route::delete('/home/transactions/multipleLost','TransactionsController@multipleLost')->name('transactions.multipleLost');
+    Route::delete('/multipleCancel','TransactionsController@multipleCancel')->name('transactions.multipleCancel');
     //Selected Tickets
     Route::post('/selectTicket/{destination}','TransactionsController@selectTicket')->name('transactions.selectTicket');
     Route::delete('/selectTicket/{selectedTicket}','TransactionsController@deleteSelectedTicket')->name('transactions.selectedTicket');
