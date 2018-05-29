@@ -30,7 +30,7 @@ class CreateSoldTicketTable extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
 
-            $table->foreign('customer_id')
+            $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
