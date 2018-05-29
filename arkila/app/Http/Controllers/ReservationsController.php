@@ -96,23 +96,52 @@ class ReservationsController extends Controller
      */
     public function update(Request $request, ReservationDate $reservation)
     {
-        $validate = Validator::make($request->all(), [
-            "statusBtn" => [
-                'required',
-                Rule::in(['OPEN', 'CLOSED'])
+        $this->validate(request(), [
+            "openBtn" => [
+                Rule::in(['OPEN'])
               ],
-          ]);
+            "closeBtn" => [
+                Rule::in(['CLOSE'])
+              ],              
+        ]);
 
-        if($validate->fails())
+        if($request->status == 'OPEN')
         {
-            return response()->json(["error" => "Please make sure that your input is valid, you can only open or close an specific reservation date."]);
+            $reservation->update([
+                'status' => 'OPEN',
+            ]);
+
+            return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now open for requests.');
+
+        }
+        elseif($request->status == 'CLOSED')
+        {
+            $reservation->update([
+                'status' => 'CLOSED',
+            ]); 
+
+            return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now closed.');
+           
         }
         else
         {
-            $reservation->update([
-                'status' => $request->statusBtn,
-                ]);
-            return response()->json(['success' => 'Reservation marked as '. request('statusBtn'), 'status' => $request->statusBtn]);
+            $countReservedSlots = $reservation->transaction->where('date_id', $reservation->id)
+            ->where(function($q){
+                $q->where('status', 'PAID')
+                ->orWhere('status', 'UNPAID')
+                ->orWhere('status', 'TICKET ON HAND');
+            })->count();
+
+            if($countReservedSlots == 0 && $reservation->status == 'CLOSED')
+            {
+                $reservation->delete();
+                return back()->with('success', 'Reservation date '.$reservation->reservation_date.' is successfully deleted.');
+            }
+            else
+            {
+                return back()->withErrors('Cannot delete reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' because there are still pending requests.');
+            }
+
         }
     }
 
@@ -122,12 +151,12 @@ class ReservationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reservation $reservation)
-    {
-        //
-        $reservation->delete();
-        return back()->with('message', 'Successfully Deleted');
-    }
+    // public function destroy(Reservation $reservation)
+    // {
+    //     //
+    //     $reservation->delete();
+    //     return back()->with('message', 'Successfully Deleted');
+    // }
 
 
     public function walkInReservation($id)
@@ -278,4 +307,5 @@ class ReservationsController extends Controller
         $rules = BookingRules::where('cancellation_fee', null)->get()->first();
         return view('reservations.showReservation', compact('reservation', 'rules'));
     }
+
 }

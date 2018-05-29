@@ -37,10 +37,8 @@
                 </table>
                 <div class="text-center">
                     <button type="submit" name="status" value="Refunded" class="btn btn-info">Refund</button>
-                </div>
                 @endif
                 @if($rental->status == 'Paid')
-                <div class="text-center">
                     <button type="submit" name="status" value="Departed" class="btn bg-navy">Depart</button>
                 </div>
                 @endif

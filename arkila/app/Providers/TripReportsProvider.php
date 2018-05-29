@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Trip;
-use App\TripReportsObserver;
+use App\Observers\TripReportsObserver;
 use Illuminate\Support\ServiceProvider;
 
 class TripReportsProvider extends ServiceProvider

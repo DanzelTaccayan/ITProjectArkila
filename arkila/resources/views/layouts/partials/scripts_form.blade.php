@@ -38,8 +38,10 @@
     {{ Html::script('js/client-side_validation/parsley.min.js') }}
     {{ Html::script('js/client-side_validation/member-validation.js') }}
     {{ Html::script('js/client-side_validation/van-validation.js') }}
-    {{ Html::script('js/client-side_validation/settings-validation.js') }}
+    {{ Html::script('js/client-side_validation/terminal-route-validation.js') }}
     {{ Html::script('js/client-side_validation/booking-form-validation.js') }}
+    {{ Html::script('js/client-side_validation/company-profile-validation.js') }}
+    {{ Html::script('js/client-side_validation/ledger-validation.js') }}
     {{ Html::script('js/client-side_validation/driver-report-validation.js') }}
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}
     {{ Html::script('js/notifications/bootstrap-notify.min.js') }}

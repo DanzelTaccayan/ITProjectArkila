@@ -44,7 +44,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('contactNumber') ?? $driver->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input value="{{old('contactNumber') ?? $driver->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required>
                             </td>
                         </tr>
                         <tr>
@@ -91,7 +91,7 @@
                         <tr>
                             <th>Name <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPerson') ?? $driver->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname required >
+                                <input value="{{ old('contactPerson') ?? $driver->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-cname required >
                             </td>
                         </tr>
                         <tr>
@@ -103,7 +103,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $driver->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required >
+                                <input value="{{ old('contactPersonContactNumber') ?? $driver->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required >
                             </td>
                         </tr>
                     </tbody>

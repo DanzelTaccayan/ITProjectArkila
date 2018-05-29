@@ -18,15 +18,15 @@
 </div>
 <div class="form-group">
     <label for="Particulars">Particulars:<span class="text-red">*</span></label>
-    <input type="text" class="form-control" name="particulars" value="{{ $ledger->description }}" required>
+    <input type="text" class="form-control" name="particulars" value="{{ $ledger->description }}" val-particulars required>
 </div>
 <div class="form-group">
     <label for="or">OR#:</label>
-    <input type="text" class="form-control" name="or"  value="{{ $ledger->or_number }}">
+    <input type="text" class="form-control" name="or" value="{{ $ledger->or_number }}">
 </div>
 <div class="form-group">
     <label for="amount">Amount: <span class="text-red">*</span></label>
-    <input type="number" class="form-control" name="amount" step="0.25" min="0" placeholder="Php 0.00" value="{{ $ledger->amount }}" required>
+    <input type="number" class="form-control" name="amount" min="0" placeholder="Php 0.00" value="{{ $ledger->amount }}" val-partAmount required>
 </div>
 
 <div class="radio" style="margin-left: 7% ">        

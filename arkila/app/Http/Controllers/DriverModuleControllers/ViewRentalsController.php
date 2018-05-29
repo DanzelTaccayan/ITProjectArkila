@@ -15,11 +15,11 @@ class ViewRentalsController extends Controller
 {
     public function viewRentals()
     {
-        $user = User::find(Auth::id());
-        $model_id = $user->member->van->first()->model_id ?? null;
-        $rentals = VanRental::where('model_id', $model_id)->orWhere('model_id', null)->get();
-        $vans = Van::all();
-        return view('drivermodule.rentals.rental', compact('rentals', 'vans', 'model_id'));
+        // $user = User::find(Auth::id());
+        // $model_id = $user->member->van->first()->model_id ?? null;
+        // $rentals = VanRental::where('model_id', $model_id)->orWhere('model_id', null)->get();
+        // $vans = Van::all();
+        return view('drivermodule.rentals.rental');
     }
 
     public function updateRental(VanRental $rental)
