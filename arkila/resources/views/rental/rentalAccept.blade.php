@@ -32,7 +32,7 @@
                 </tbody>
             </table>
             <div class="text-center">
-                <button type="submit" name="status" value="Unpaid" class="btn btn-danger">Decline</button> 
+                <button type="submit" name="status" value="Decline" class="btn btn-danger">Decline</button> 
                 <button type="submit" name="status" value="Unpaid" class="btn btn-success">Accept</button> 
             </div>
         </div>

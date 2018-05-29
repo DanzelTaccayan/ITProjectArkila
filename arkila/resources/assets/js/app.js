@@ -20,9 +20,3 @@ Vue.component('notification', require('./components/Notifications.vue'));
 const app = new Vue({
     el: '#app'
 });
-
-$(document).ready(function(){
-    if(Laravel.userId){
-        console.log('HI');
-    }
-});

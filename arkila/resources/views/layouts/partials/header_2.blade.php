@@ -122,7 +122,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                           <div class="pull-left">
-                            <a href="{{route('accountSettings')}}" class="btn btn-default"><i class="fa fa-gear"></i> Account Settings
+                            <a href="{{route('accountSettings')}}" class="btn btn-default"><i class="fa fa-gear"></i> Change Password
                            </a>
                           </div>
                           <div class="pull-right">

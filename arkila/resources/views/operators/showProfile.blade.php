@@ -128,50 +128,38 @@
                                                 <td>
                                                     <div class="text-center">
                                                         <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->van_id }}"><i class="fa fa-trash"></i> DELETE</button>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->van_id }}"><i class="fa fa-archive"></i> ARCHIVE</button>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            
-                                            <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="{{ 'deleteVan'. $van->van_id }}">
-                                                <div class="modal-dialog">
-                                                    <div class="col-md-offset-2 col-md-8">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-red">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span></button>
-                                                                <h4 class="modal-title"> Confirm</h4>
-                                                            </div>
-                                                            <div class="modal-body row" style="margin: 0% 1%;">
-                                                               <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                   <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                               </div>
-                                                               <div class="col-md-10">
-                                                                <p style="font-size: 110%;">Are you sure you want to delete "{{$van->plate_number}}"</p>
-                                                               </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                
-                                                               <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
-                                                                    {{csrf_field()}}
-                                                                    {{method_field('PATCH')}}
 
-                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                                                    <button type="submit" class="btn btn-danger" style="width:22%;">Delete</button>
-                                                                </form>
-                                                            </div>
+                                            <div class="modal" id="{{ 'deleteVan'. $van->van_id }}">
+                                                <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title"></h4>
                                                         </div>
-                                                        <!-- /.modal-content -->
+                                                        <div class="modal-body">
+                                                            <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                                                            <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                                            <h4 class="text-center "><strong class="text-red">{{$van->plate_number}}</strong>?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
+                                                                {{csrf_field()}}
+                                                                {{method_field('PATCH')}}
+                                                                <div class="text-center">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <!-- /.col -->
                                                 </div>
-                                                <!-- /.modal-dialog -->
-                                            </div>
-                                            <!-- /.modal -->
-                                            
+                                            </div>                           
                                             @endforeach
-                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -200,46 +188,37 @@
                                                     <div class="text-center">
                                                         <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                                        
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$driver->member_id }}"><i class="fa fa-trash"></i>  DELETE</button>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$driver->member_id }}"><i class="fa fa-archive"></i> ARCHIVE</button>
                                                     </div>                                                
                                                 </td>
                                             </tr>
-                                            
-                                            <!--DELETE MODAL MIGUEL-->
-                                            <div class="modal fade" id="{{ 'deleteDriver'.$driver->member_id }}">
-                                                <div class="modal-dialog">
-                                                    <div class="col-md-offset-2 col-md-8">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-red">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                                <h4 class="modal-title"> Confirm</h4>
-                                                            </div>
-                                                            <div class="modal-body row" style="margin: 0% 1%;">
-                                                               <div class="col-md-2" style="font-size: 35px; margin-top: 7px;">
-                                                                   <i class="fa fa-exclamation-triangle pull-left" style="color:#d9534f;">  </i>
-                                                               </div>
-                                                               <div class="col-md-10">
-                                                                <p style="font-size: 110%;">Are you sure you want to delete "{{ $driver->full_name }}"</p>
-                                                               </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <form action="{{route('drivers.archiveDriver',[$driver->member_id])}}" method="POST">
-                                                                     {{ csrf_field() }} {{method_field('PATCH')}}
-                                                                    
-                                                                    <button type="button" class="btn btn-default btn-sm btn-flat" data-dismiss="modal">No</button>
-                                                                    <button type="submit" class="btn btn-danger btn-sm btn-flat" style="width:22%;">Delete</button>
-                                                                </form>
-                                                            </div>
+
+                                            <div class="modal" id="{{ 'deleteDriver'.$driver->member_id }}">
+                                                <div class="modal-dialog" style="margin-top: 10%;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span></button>
+                                                            <h4 class="modal-title"></h4>
                                                         </div>
-                                                        <!-- /.modal-content -->
+                                                        <div class="modal-body">
+                                                            <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                                                            <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                                            <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="{{route('drivers.archiveDriver',[$driver->member_id])}}" method="POST">
+                                                                {{ csrf_field() }} 
+                                                                {{method_field('PATCH')}}
+                                                                <div class="text-center">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                    <!-- /.col -->
                                                 </div>
-                                                <!-- /.modal-dialog -->
                                             </div>
-                                            <!-- /.modal -->
                                             @endforeach
 
                                         </tbody>

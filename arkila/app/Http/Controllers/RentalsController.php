@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\VanRental;
 use Carbon\Carbon;
+use App\BookingRules;
+use App\Destination;
 use App\Van;
 use App\Member;
+use App\Rules\checkTime;
 use App\Http\Requests\RentalRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +27,7 @@ class RentalsController extends Controller
     public function index()
     {
         //
-        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded']])
+        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded'], ['status', '!=', 'Expired'], ['status', '!=', 'No Van Available']])
         ->orWhere(function($q){
             $q->where([['status', 'Cancelled']])
             ->where('is_refundable', true);
@@ -41,7 +44,8 @@ class RentalsController extends Controller
     {
         $vans = Van::all();
         $drivers = Member::allDrivers()->get();
-        return view('rental.create', compact('vans', 'drivers'));
+        $destinations = Destination::allRoute()->get();
+        return view('rental.create', compact('vans', 'drivers', 'destinations'));
     }
     /**
      * Store a newly created resource in storage.
@@ -54,7 +58,14 @@ class RentalsController extends Controller
         $time = date('H:i', strtotime($request->time));
         $date = Carbon::parse($request->date);
         $fullName = ucwords(strtolower($request->name));
-        $destination = ucwords(strtolower($request->destination));
+        if($request->destination == 'otherDestination')
+        {
+            $destination = ucwords(strtolower($request->otherDestination));
+        }
+        else
+        {
+            $destination = ucwords(strtolower($request->destination));            
+        }
 
         $codes = VanRental::all();
         $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
@@ -100,8 +111,9 @@ class RentalsController extends Controller
     {
         $vans = Van::all();
         $drivers = Member::allDrivers()->get();
+        $rules = BookingRules::where('reservation_fee', null)->get()->first();
 
-        return view('rental.show', compact('rental', 'vans', 'drivers'));
+        return view('rental.show', compact('rental', 'vans', 'drivers', 'rules'));
     }
 
     /**
@@ -160,6 +172,14 @@ class RentalsController extends Controller
 
             return redirect(route('rental.show', $rental->rent_id))->with('success', 'Rental has been successfully accepted. [Van:'.$rental->van->plate_number.' Driver:'. $rental->driver->full_name .' ]');
         }
+        elseif(request('status') == 'Decline')
+        {
+            $rental->update([
+                'status' => 'No Van Available',
+            ]);
+            return redirect(route('rental.index'))->with('success', 'Rental has been declined.');
+
+        }
         elseif(request('status') == 'Paid')
         {
             $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
@@ -208,6 +228,7 @@ class RentalsController extends Controller
                     Rule::in(['Refunded'])
                 ],
             ]);
+            
             if($rental->is_refundable == true)
             {
                 if(request('refund') == $rental->refund_code)
@@ -230,5 +251,33 @@ class RentalsController extends Controller
                 return back()->withErrors('Rental code '.$rental->rental_code.' cannot be refunded.');
             }
         }
+    }
+
+    public function changeDepartureDateTime(Request $request, VanRental $rental)
+    {
+        if($rental->status == 'Paid')
+        {
+            // can change the date of departure 2 days before the departure date.
+            $date = $rental->departure_date->subDays(2)->formatLocalized('%d %B %Y');
+    
+            $this->validate(request(), [
+                'date' => 'bail|required|date_format:m/d/Y|before:'.$date,
+                'time' => ['bail',new checkTime, 'required'],
+            ]);
+            $time = date('H:i:s', strtotime($request->time));
+            $date = Carbon::parse($request->date);
+    
+            $rental->update([
+                'departure_date' => $date,
+                'departure_time' => $time,
+            ]);
+
+            return back()->with('success', 'You have successfully modified your departure date and time.');
+        }
+        else
+        {
+            return back()->withErrors('Cannot modify departure date and time');
+        }
+
     }
 }

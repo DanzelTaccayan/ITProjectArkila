@@ -170,6 +170,8 @@ class MakeRentalController extends Controller
         $expired = $updatedAt->addDays(2);
         $createdAt = Carbon::parse($rental->created_at);
         $expiry = $createdAt->addDays(2);
+        $time = explode(':', $rental->departure_time);
+        $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
 
         if($rental->status == 'Pending' && $now->gt($expiry)){
           $rental->update([
@@ -181,9 +183,9 @@ class MakeRentalController extends Controller
             'driver_id' => null,
             'van_id' => null,
           ]);
-        } elseif($rental->status == 'Paid' && $now->gt($expired)) {
+        } elseif($rental->status == 'Paid' && $now->gt($paidExpiry)) {
           $rental->update([
-            'status' => 'Expired',
+            'status' => 'Cancelled',
             'is_refundable' => false,
             'refund_code' => null,
             'driver_id' => null,

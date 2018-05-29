@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="_token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ URL::asset('img/apple-touch-icon.png') }}">
     <title>Ban Trans | @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -28,7 +29,7 @@
 </head>
 
 <body class="hold-transition skin-blue layout-top-nav">
-    <div class="wrapper">
+    <div id="app" class="wrapper">
         @include('layouts.partials.header_3')
         <!-- Left side column. contains the logo and sidebar -->
         <!-- Content Wrapper. Contains page content -->

@@ -69,7 +69,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} || {{ Request::is('home/operators/*') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
+                    <li class="{{ Request::is('home/operators/*') ? 'active' : '' }} || {{ Request::is('home/archive') ? 'active' : '' }} || {{ Request::is('home/operators/profile') ? 'active' : '' }} || {{ Request::is('home/operatorVanDriver') ? 'active' : '' }} || {{ Request::is('home/operators') ? 'active' : '' }}"><a href="{{route('operators.index')}}"><i class="fa fa-circle-o"></i> Operators</a></li>
                     <li class="{{ Request::is('home/drivers/*') ? 'active' : '' }} || {{ Request::is('home/drivers') ? 'active' : '' }} || {{ Request::is('home/archive/drivers') ? 'active' : '' }}"><a href="{{route('drivers.index')}}"><i class="fa fa-circle-o"></i>Drivers</a></li>
                     <li class="{{ Request::is('home/vans/*') ? 'active' : '' }} || {{ Request::is('home/vans') ? 'active' : '' }}  || {{ Request::is('home/archive/vans') ? 'active' : '' }}"><a href="{{route('vans.index')}}"><i class="fa fa-circle-o"></i>Vans</a></li>
                 </ul>

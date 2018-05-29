@@ -20,19 +20,35 @@
                                         <p style="color: gray;">{{$reservation->created_at->formatLocalized('%d %B %Y')}} {{ date('g:i A', strtotime($reservation->created_at)) }}</p>
 
                                         <small>
-                                        @if($reservation->status === 'Unpaid')
+                                        @if($reservation->status === 'UNPAID')
                                         <i class="fa fa-circle-o" style="color:red;"></i>
                                         {{strtoupper($reservation->status)}}
-                                         @elseif($reservation->status === 'Paid')
+                                         @elseif($reservation->status === 'PAID')
                                         <i class="fa fa-check-circle" style="color:green;"></i>
                                         {{strtoupper($reservation->status)}}
+                                        @elseif($reservation->status === 'CANCELLED')
+                                        <i class="fa fa-check-circle" style="color:red;"></i>
+                                        {{strtoupper($reservation->status)}}
+                                        @elseif($reservation->status === 'REFUNDED')
+                                        <i class="fa fa-check-circle" style="color:blue;"></i>
+                                        {{strtoupper($reservation->status)}}
+                                        @elseif($reservation->status === 'TICKET ON HAND')
+                                        <i class="fa fa-check-circle" style="color:yellow;"></i>
+                                        {{strtoupper($reservation->status)}}
+                                        @elseif($reservation->status === 'EXPIRED')
+                                        <i class="fa fa-check-circle" style="color:red;"></i>
+                                        {{strtoupper($reservation->status)}}
+
+
                                         @endif
                                         </small>
                                         </div>
                                         
                                         <div class="col-md-6">
                                             <div class="pull-right">
+                                            @if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND')
                                                 <button class="btn btn-default" data-toggle="modal" data-target="#reservationCancel{{$reservation->id}}">CANCEL</button>
+                                            @endif
                                                 <button id="viewRentalModal{{$reservation->id}}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{'reservationView'.$reservation->id}}">View</button>       
                                             </div>
                                         </div>
@@ -73,9 +89,10 @@
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                                        @if($reservation->status == 'PAID')
-                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
-                                        @endif
+                                        <form action="{{route('reservation.cancel', $reservation->id)}}" method="POST">
+                                        {{csrf_field()}} {{method_field('PATCH')}}
+                                        <button type="submit" name="cancel" value="Cancel" class="btn btn-danger">CANCEL</button>
+                                        </form>
                                     </div>
                                 </div>
                         </div>

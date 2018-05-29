@@ -37,6 +37,8 @@ class CreateReservationTable extends Migration
             ->default('Unpaid');
             $table->boolean('returned_slot')
             ->default(false);
+            $table->boolean('is_refundable')
+            ->default(false);
             $table->date('date_paid')
             ->nullable();
             $table->enum('type', ['Walk-in', 'Online']);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\ReservationDate;
+use App\BookingRules;
 use App\Destination;
 use App\Ticket;
 use Illuminate\Validation\Rule;
@@ -195,6 +196,7 @@ class ReservationsController extends Controller
                 'refund_code' => $refundCode,
                 'fare' => $toBePaid,
                 'name' => $name,
+                'is_refundable' => true,
                 'contact_number' => $request->contactNumber,
                 'expiry_date' => $expiryDate,
                 'date_paid' => Carbon::now(),
@@ -223,12 +225,27 @@ class ReservationsController extends Controller
             'refundCode' => 'required',
         ]);
 
+        $time = explode(':', $reservation->reservationDate->departure_time);
+        $limitDate = $reservation->reservationDate->reservation_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
+
         if($request->refundCode == $reservation->refund_code)
         {
             $reservation->update([
-                'status' => 'Refunded',
+                'status' => 'REFUNDED',
                 'refund_code' => null, 
+                'is_refundable' => false,
             ]);
+            if($limitDate->gt(Carbon::now()))
+            {
+                $newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+                $reservation->reservationDate->update([
+                    'number_of_slots' => $newSlot,
+                ]);
+
+                $reservation->update([
+                    'returned_slot' => true,
+                ]);
+            }
 
             return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
         }
@@ -250,6 +267,7 @@ class ReservationsController extends Controller
                 'refund_code' => $refundCode,
                 'date_paid' => Carbon::now(),
                 'expiry_date' => $newExpiry,
+                'is_refundable' => true,
             ]);
 
             return back()->with('success', 'The reservation has been paid.');
@@ -257,6 +275,7 @@ class ReservationsController extends Controller
 
     public function showReservation(Reservation $reservation)
     {
-        return view('reservations.showReservation', compact('reservation'));
+        $rules = BookingRules::where('cancellation_fee', null)->get()->first();
+        return view('reservations.showReservation', compact('reservation', 'rules'));
     }
 }
