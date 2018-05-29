@@ -20,7 +20,7 @@
                 <tbody>
                   <tr>
                     <th>Last Name <span class="text-red">*</span></th>
-                    <td><input value="{{old('lastName')}}" name="lastName" type="text" class="form-control val-name" placeholder="Last Name" val-name required></td>
+                    <td><input value="{{old('lastName')}}" name="lastName" type="text" class="form-control" placeholder="Last Name" val-name required></td>
                   </tr>
                   <tr>
                     <th>First Name <span class="text-red">*</span></th>
@@ -101,7 +101,7 @@
               <tr>
                 <th>Contact Number <span class="text-red">*</span></th>
                 <td>
-                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" {{-- data-inputmask='"mask": "999-999-9999" --}}' val-contact required>
+                  <input type="text" name="contactPersonContactNumber"  class="form-control" value="{{old('contactPersonContactNumber')}}" placeholder="Contact Number" val-contact required>
                 </td>
               </tr>
             </tbody>

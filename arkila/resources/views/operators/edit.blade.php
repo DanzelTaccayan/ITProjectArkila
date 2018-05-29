@@ -25,7 +25,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input  value="{{old('contactNumber') ?? $operator->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input  value="{{old('contactNumber') ?? $operator->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required>
                             </td>
                         </tr>
                         <tr>
@@ -49,13 +49,13 @@
                         <tr>
                             <th>License No</th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." val-license>
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required>
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date</th>
                             <td>
-                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date>
+                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date required>
                           </td>
                         </tr>
                         <tr>
@@ -74,7 +74,7 @@
                         <tr>
                             <th>Contact Person <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPerson') ?? $operator->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-fullname required>
+                                <input value="{{ old('contactPerson') ?? $operator->person_in_case_of_emergency }}" id="contactPersonO" name="contactPerson" type="text" class="form-control" placeholder="Contact Person In Case of Emergency" val-cname required>
                             </td>
                         </tr>
                         <tr>
@@ -86,7 +86,7 @@
                         <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{ old('contactPersonContactNumber') ?? $operator->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-phone required>
+                                <input value="{{ old('contactPersonContactNumber') ?? $operator->emergency_contactno }}" id="contactNumberO" name="contactPersonContactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required>
                             </td>
                         </tr>
                     </tbody>
