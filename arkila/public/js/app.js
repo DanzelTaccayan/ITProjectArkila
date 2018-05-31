@@ -17571,7 +17571,7 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.5';
+  var VERSION = '4.17.10';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -17995,6 +17995,14 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -46445,6 +46453,88 @@ var SocketIoPresenceChannel = function (_SocketIoPrivateChann) {
     return SocketIoPresenceChannel;
 }(SocketIoPrivateChannel);
 
+var NullChannel = function (_Channel) {
+    inherits(NullChannel, _Channel);
+
+    function NullChannel() {
+        classCallCheck(this, NullChannel);
+        return possibleConstructorReturn(this, (NullChannel.__proto__ || Object.getPrototypeOf(NullChannel)).apply(this, arguments));
+    }
+
+    createClass(NullChannel, [{
+        key: 'subscribe',
+        value: function subscribe() {}
+    }, {
+        key: 'unsubscribe',
+        value: function unsubscribe() {}
+    }, {
+        key: 'listen',
+        value: function listen(event, callback) {
+            return this;
+        }
+    }, {
+        key: 'stopListening',
+        value: function stopListening(event) {
+            return this;
+        }
+    }, {
+        key: 'on',
+        value: function on(event, callback) {
+            return this;
+        }
+    }]);
+    return NullChannel;
+}(Channel);
+
+var NullPrivateChannel = function (_NullChannel) {
+    inherits(NullPrivateChannel, _NullChannel);
+
+    function NullPrivateChannel() {
+        classCallCheck(this, NullPrivateChannel);
+        return possibleConstructorReturn(this, (NullPrivateChannel.__proto__ || Object.getPrototypeOf(NullPrivateChannel)).apply(this, arguments));
+    }
+
+    createClass(NullPrivateChannel, [{
+        key: 'whisper',
+        value: function whisper(eventName, data) {
+            return this;
+        }
+    }]);
+    return NullPrivateChannel;
+}(NullChannel);
+
+var NullPresenceChannel = function (_NullChannel) {
+    inherits(NullPresenceChannel, _NullChannel);
+
+    function NullPresenceChannel() {
+        classCallCheck(this, NullPresenceChannel);
+        return possibleConstructorReturn(this, (NullPresenceChannel.__proto__ || Object.getPrototypeOf(NullPresenceChannel)).apply(this, arguments));
+    }
+
+    createClass(NullPresenceChannel, [{
+        key: 'here',
+        value: function here(callback) {
+            return this;
+        }
+    }, {
+        key: 'joining',
+        value: function joining(callback) {
+            return this;
+        }
+    }, {
+        key: 'leaving',
+        value: function leaving(callback) {
+            return this;
+        }
+    }, {
+        key: 'whisper',
+        value: function whisper(eventName, data) {
+            return this;
+        }
+    }]);
+    return NullPresenceChannel;
+}(NullChannel);
+
 var PusherConnector = function (_Connector) {
     inherits(PusherConnector, _Connector);
 
@@ -46616,6 +46706,62 @@ var SocketIoConnector = function (_Connector) {
     return SocketIoConnector;
 }(Connector);
 
+var NullConnector = function (_Connector) {
+    inherits(NullConnector, _Connector);
+
+    function NullConnector() {
+        var _ref;
+
+        classCallCheck(this, NullConnector);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        var _this = possibleConstructorReturn(this, (_ref = NullConnector.__proto__ || Object.getPrototypeOf(NullConnector)).call.apply(_ref, [this].concat(args)));
+
+        _this.channels = {};
+        return _this;
+    }
+
+    createClass(NullConnector, [{
+        key: 'connect',
+        value: function connect() {}
+    }, {
+        key: 'listen',
+        value: function listen(name, event, callback) {
+            return new NullChannel();
+        }
+    }, {
+        key: 'channel',
+        value: function channel(name) {
+            return new NullChannel();
+        }
+    }, {
+        key: 'privateChannel',
+        value: function privateChannel(name) {
+            return new NullPrivateChannel();
+        }
+    }, {
+        key: 'presenceChannel',
+        value: function presenceChannel(name) {
+            return new NullPresenceChannel();
+        }
+    }, {
+        key: 'leave',
+        value: function leave(name) {}
+    }, {
+        key: 'socketId',
+        value: function socketId() {
+            return 'fake-socket-id';
+        }
+    }, {
+        key: 'disconnect',
+        value: function disconnect() {}
+    }]);
+    return NullConnector;
+}(Connector);
+
 var Echo = function () {
     function Echo(options) {
         classCallCheck(this, Echo);
@@ -46634,6 +46780,8 @@ var Echo = function () {
             this.connector = new PusherConnector(this.options);
         } else if (this.options.broadcaster == 'socket.io') {
             this.connector = new SocketIoConnector(this.options);
+        } else if (this.options.broadcaster == 'null') {
+            this.connector = new NullConnector(this.options);
         }
     }
 
@@ -62326,8 +62474,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -62351,7 +62497,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     console.log('Component mounted');
     Echo.private('App.User.' + this.userid).notification(function (notification) {
-      console.log(notification.id);
+      console.log(notification);
       var newUnreadNotifications = {
         data: {
           notif_type: notification.notif_type,
@@ -62361,7 +62507,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           name: notification.name
         }
       };
-      // console.log(newUnreadNotifications.data.notif_type);
       _this.unreadNotifications.push(newUnreadNotifications);
     });
   }
@@ -62429,6 +62574,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -62460,7 +62606,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/reservations/" + this.unread.data.reservation_date.id;
       }
-    } else if (this.unread.data.notif_type == 'VanRentalDriver') {
+    } else if (this.unread.data.notif_type == 'Van Rental') {
       if (this.unread.data.info.status == 'Pending') {
         this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
         this.destination = this.unread.data.info.destination;
@@ -62496,7 +62642,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     } else if (this.unread.data.notif_type == 'VanRentalDriver') {
       if (this.unread.data.info.status == 'Pending') {
-        console.log(this.unread.data);
         this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
         this.destination = this.unread.data.info.destination;
         this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
@@ -62791,13 +62936,19 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("a", { attrs: { href: _vm.notificationUrl } }, [
-    _c("p", { staticStyle: { margin: "0 0 0" } }, [_vm._v(_vm._s(_vm.title))]),
-    _vm._v(" "),
-    _c("span", { staticClass: "text-orange fa fa-book" }),
-    _vm._v(" "),
-    _c("small", [_vm._v(_vm._s(_vm.details))])
-  ])
+  return _vm.unread == 0
+    ? _c("p", [_vm._v("You don't have any notifications")])
+    : _vm.unread != 0
+      ? _c("a", { attrs: { href: _vm.notificationUrl } }, [
+          _c("p", { staticStyle: { margin: "0 0 0" } }, [
+            _vm._v(_vm._s(_vm.title))
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-orange fa fa-book" }),
+          _vm._v(" "),
+          _c("small", [_vm._v(_vm._s(_vm.details))])
+        ])
+      : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -62859,31 +63010,22 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c(
-          "li",
-          _vm._l(_vm.unreadNotifications, function(unread) {
-            return _c("notification-item", {
-              key: unread.user_id,
-              attrs: { unread: unread }
+        _c("li", [
+          _c(
+            "div",
+            _vm._l(_vm.unreadNotifications, function(unread) {
+              return _c("notification-item", {
+                key: unread.user_id,
+                attrs: { unread: unread }
+              })
             })
-          })
-        ),
-        _vm._v(" "),
-        _vm._m(0)
+          )
+        ])
       ])
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "footer" }, [
-      _c("a", { attrs: { href: "#" } }, [_vm._v("View all")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

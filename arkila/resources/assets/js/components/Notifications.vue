@@ -15,11 +15,9 @@
       </div>
     </li>
       <li>
-          <notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item>
-      </li>     
-    <li class="footer">
-      <a href="#">View all</a>
-    </li>
+          <div><notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item></div>
+          
+      </li>
   </ul>
 </li>
 </template>
@@ -44,7 +42,7 @@
       console.log('Component mounted');
       Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
-        console.log(notification.id);
+          console.log(notification);
         let newUnreadNotifications = {
           data:{
             notif_type:notification.notif_type,
@@ -54,7 +52,6 @@
             name:notification.name,
           }
         };
-        // console.log(newUnreadNotifications.data.notif_type);
         this.unreadNotifications.push(newUnreadNotifications);
         });
     }

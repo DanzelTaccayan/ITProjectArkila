@@ -81,7 +81,7 @@ class OperatorsController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again');
         }
 
-        return redirect(route('operators.index'))->with('success', 'Operator registered successfully');
+        return redirect(route('operators.index'))->with('success', 'Operator '. $request->firstName . $request->middleName . $request->lastName .' has been successfully registered');
     }
 
     /**
@@ -155,7 +155,7 @@ class OperatorsController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again');
         }
 
-        return redirect()->route('operators.show', compact('operator'))->with('success', 'Information updated successfully');
+        return redirect()->route('operators.show', compact('operator'))->with('success', 'Operator '. $operator->full_name . ' successfully updated');
     }
 
     public function generatePDF()
