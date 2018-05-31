@@ -14,14 +14,14 @@
                  <div class="col-md-6">
                     <a href="{{route('drivers.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER DRIVER</a>
                     <a href="{{route('archive.showAllArchivedDriver')}}" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
-                    <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER LIST</button>
+                    <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <table id="driverList" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Operator</th>
                             <th>Name</th>
+                            <th>Operator</th>
                             <th>Contact Number</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -31,8 +31,8 @@
                         @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
                         <tr>
                             <th>{{$driver->member_id}}</th>
-                            <td>{{trim(strtoupper($driver->operator->full_name ?? null)) }}</td>
                             <td>{{trim(strtoupper($driver->full_name ?? null))}}</td>
+                            <td>{{trim(strtoupper($driver->operator->full_name ?? null)) }}</td>
                             <td>{{$driver->contact_number}}</td>
                             <td>
                                 <div class="text-center">
