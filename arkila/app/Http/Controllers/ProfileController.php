@@ -82,7 +82,7 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'contactNumber' => ['bail',new checkContactNum],
             'address' => ['bail','max:100',new checkAddress],
-            'email' => "email|max:50",
+            'email' => "nullable|email|max:50",
             'openTime' => ['required', new checkTime],
             'closeTime' => ['required', new checkTime],
         ]);

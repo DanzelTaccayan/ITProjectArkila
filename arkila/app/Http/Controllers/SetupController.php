@@ -55,7 +55,7 @@ class SetupController extends Controller
     {
         $this->validate(request(), [
             "contactNumber" => 'max:15',
-            "email" => 'email|max:100',
+            "email" => 'nullable|email|max:100',
             "address" => 'max:200',
             "openTime" => ['required', new checkTime],
             "closeTime" => ['required', new checkTime],

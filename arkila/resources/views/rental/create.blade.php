@@ -105,7 +105,7 @@
                                 <div class="input-group-addon">
                                   <i class="fa fa-clock-o"></i>
                                 </div>
-                                <input type="time" class="form-control" name="time" value="{{ old('time') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
+                                <input type="text" class="form-control" name="time" value="{{ old('time') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
                             </div>
                             <p id="errDepartureTime"></p>
                         </div>
