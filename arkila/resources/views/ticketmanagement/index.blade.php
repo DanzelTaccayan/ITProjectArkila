@@ -62,7 +62,7 @@
                   <tbody>
                   @foreach ($routes as $route)
                     <tr>
-                      <td style="width: 390px">{{$route->destination_name}}</td>
+                      <td  class="text-center" style="width: 390px">{{$route->destination_name}}</td>
                         <td id="discViewQty{{$route->destination_id}}" class="text-right" style="width: 100px ">{{$route->tickets->where('type', 'Discount')->count()}}</td>
                         <td id="discViewAction{{$route->destination_id}}" style="width:200px">
                           <div class="text-center">

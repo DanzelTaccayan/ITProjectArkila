@@ -42,13 +42,12 @@
         <div class="nav-tabs-custom">
             <div class="tab-content">
                 @foreach ($terminals as $terminal)
-                <div class="box box-solid" style="height: 550px;">
-                    <div class="box-header">
-                        <h3 class="" style="padding: 10px 0px 10px 0px; border-bottom: 1px solid lightgray;"><strong class="fa fa-map-marker text-red"></strong> {{strtoupper($mainTerminal->first()->destination_name)}} <i class="fa fa-long-arrow-right"></i> {{strtoupper($terminal->destination_name)}}<small> LIST OF DESTINATIONS</small></h3>
-
-                    </div>
-                    <div class="box-body">
-                        <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
+                    <div class="box box-solid" style="height: 550px;">
+                        <div class="box-header">
+                            <h3 class="" style="padding: 10px 0px 10px 0px; border-bottom: 1px solid lightgray;"><strong class="fa fa-map-marker text-red"></strong> {{strtoupper($mainTerminal->first()->destination_name)}} <i class="fa fa-long-arrow-right"></i> {{strtoupper($terminal->destination_name)}}<small> LIST OF DESTINATIONS</small></h3>
+                        </div>
+                        <div class="box-body">
                             <div class="table-responsive">
                                 <div class="col-md-6">
                                     <a href="{{route('route.create')}}" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> ADD DESTINATION</a>
