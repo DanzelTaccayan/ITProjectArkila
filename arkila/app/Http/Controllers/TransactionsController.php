@@ -53,6 +53,13 @@ class TransactionsController extends Controller
             'destination' => 'exists:destination,destination_id'
         ]);
         if(SelectedTicket::whereIn('ticket_id',Ticket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->get()->pluck('ticket_id'))->get()->count() > 0 ) {
+
+            if(request('customer') != null) {
+                $reservationId = request('customer');
+                $reservation = Reservation::find(request('customer'));
+            } else {
+                $reservationId = null;
+            }
             // Start transaction!
             DB::beginTransaction();
             try  {
@@ -66,10 +73,17 @@ class TransactionsController extends Controller
                         'ticket_number' => $selectedTicket->ticket->ticket_number,
                         'destination_id' => $selectedTicket->ticket->destination_id,
                         'amount_paid' => $selectedTicket->ticket->fare,
+                        'reservation_id' => $reservationId,
                         'status' => 'Pending'
                     ]);
 
                     $selectedTicket->delete();
+                }
+
+                if($reservationId != null){
+                    $reservation->update([
+                        'status' => 'TICKET ON HAND',
+                    ]);                    
                 }
 
                 DB::commit();
@@ -165,6 +179,13 @@ class TransactionsController extends Controller
                                 'status' => 'Departed'
                             ]);
 
+                            if($soldTicket->reservation_id != null) {
+                                $reservation = Reservation::find($soldTicket->reservation_id);
+                                $reservation->update([
+                                    'status' => 'DEPARTED',
+                                    'is_refundable' => false,
+                                ]);
+                            }
                             $soldTicket->delete();
                         }
 

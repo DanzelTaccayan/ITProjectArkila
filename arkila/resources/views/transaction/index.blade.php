@@ -156,12 +156,15 @@
 
                                     <div data-terminal="{{$terminal->destination_id}}" class="tab-pane" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
+
                                             <div class="row">
+                                             <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
+                                                                {{csrf_field()}}
                                                 <div class="col-md-4">
                                                     <div class="well">
                                                         <div>
                                                             <label for="">Customer</label>
-                                                            <select class="form-control select2">
+                                                            <select class="form-control select2" name="customer">
                                                                 <option value="">Walk-in Customer</option>
                                                                 @foreach($reservations as $reservation)
                                                                 <option value="{{$reservation->id}}">{{$reservation->rsrv_code}}</option>
@@ -225,11 +228,11 @@
                                                             </table>
                                                         </div>
                                                         <div class="pull-right">
-                                                            <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
-                                                                {{csrf_field()}}
+                                                            
                                                                 <button type="submit" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
-                                                            </form>
+                                                            
                                                         </div>
+                                                        </form>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
