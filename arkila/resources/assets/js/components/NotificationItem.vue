@@ -1,5 +1,6 @@
 <template>
-    <a v-bind:href="notificationUrl">
+<p v-if="unread == 0">You don't have any notifications</p>
+    <a v-else-if="unread != 0" v-bind:href="notificationUrl">
       <p style="margin:0 0 0;">{{title}}</p>
       <span class="text-orange fa fa-book"></span>
       <small>{{details}}</small>
@@ -36,7 +37,7 @@ import moment from 'moment';
           this.details=this.destination + " on " + this.date + " at " + this.time;
           this.notificationUrl="/home/reservations/"+this.unread.data.reservation_date.id;
         }
-      }else if(this.unread.data.notif_type == 'VanRentalDriver'){
+      }else if(this.unread.data.notif_type == 'Van Rental'){
         if(this.unread.data.info.status == 'Pending'){
           this.title= this.unread.data.notif_type + " Request by " + this.unread.data.name;
           this.destination=this.unread.data.info.destination;
@@ -72,7 +73,6 @@ import moment from 'moment';
         }
       }else if(this.unread.data.notif_type == 'VanRentalDriver'){
         if(this.unread.data.info.status == 'Pending'){
-          console.log(this.unread.data);
           this.title=this.unread.data.notif_type + " Request by " + this.unread.data.name;
           this.destination=this.unread.data.info.destination;
           this.date=moment(this.unread.data.info.departure_date).format('MM D YYYY');

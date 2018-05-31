@@ -103,7 +103,7 @@ class DriversController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        return redirect(route('drivers.index'))->with('success', 'Information created successfully');
+        return redirect(route('drivers.index'))->with('success', 'Driver registered successfully');
     }
 
     public function createFromOperator(Member $operator)

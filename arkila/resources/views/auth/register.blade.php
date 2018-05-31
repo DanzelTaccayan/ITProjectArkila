@@ -11,11 +11,11 @@
                             {{csrf_field()}}
                             <div class="form-group">
                                 <label for="first_name">First name: <span class="text-red">*</span></label>    
-                                <input id="first_name" class="form-control" type="text" name="first_name" value="{{ old('first_name') }}" required>
+                                <input id="first_name" class="form-control" type="text" name="first_name" value="{{ old('first_name') }}" val-custname required>
                             </div>
                             <div class="form-group">
                                 <label for="last_name">Last name: <span class="text-red">*</span></label>    
-                               <input id="last_name" class="form-control" type="text" name="last_name" value="{{ old('last_name') }}" required>
+                               <input id="last_name" class="form-control" type="text" name="last_name" value="{{ old('last_name') }}" val-custname required>
                             </div>
                             <div class="form-group">
                                 <label for="customerUsername">Username: <span class="text-red">*</span></label>    
