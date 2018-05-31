@@ -62,13 +62,13 @@
                   <tr>
                     <th>SSS No</th>
                     <td>
-                      <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss {{-- data-inputmask='"mask": "99-9999999-9"' data-mask --}}>
+                      <input value="{{old('sss')}}" name="sss" type="text" class="form-control" placeholder="SSS No." val-sss >
                     </td>
                   </tr>
                   <tr>
                     <th>License No</th>
                     <td>
-                      <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license {{-- data-inputmask='"mask": "A99-99-999999"' data-mask --}}>
+                      <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license >
                     </td>
                   </tr>
                   <tr>

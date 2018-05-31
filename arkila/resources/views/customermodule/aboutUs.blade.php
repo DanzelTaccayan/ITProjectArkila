@@ -14,7 +14,7 @@
                         <div class="heading text-center">
                             <h2>About Us</h2>
                         </div>
-                        <div class="row"><div class="mx-auto" style="margin-bottom:     5%">  
+                        <div class="row"><div class="mx-auto" style="margin-bottom: 5%">  
                         <img src="{{ URL::asset('img/bantrans-logo.png')}}" alt="bantrans_logo" class="pull-right" style="width:200px ;height:200px ;">
                         <img src="{{ URL::asset('img/apple-touch-icon.png')}}" alt="arkila_logo" class="pull-right" style="width:200px ;height:200px ;">
                         </div>

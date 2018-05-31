@@ -50,3 +50,10 @@
     $('[name="contactPerson"]').attr('data-parsley-required-message','Please enter name of the contact person.');
     $('[name="contactPersonAddress"]').attr('data-parsley-required-message','Please enter address of the contact person.');
     $('[name="contactPersonContactNumber"]').attr('data-parsley-required-message','Please enter phone number of the contact person.');
+
+    $('[val-custname]').parsley({
+      maxlength: 25,
+      pattern: /^[A-Za-z\-\d .()]*$/
+    }); 
+
+    $('[val-custname]').attr('data-parsley-pattern-message','Please use only letters (a-z) and symbol [().-].');
