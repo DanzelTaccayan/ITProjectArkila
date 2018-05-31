@@ -8,7 +8,7 @@
                         <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
-                                <h4 class="text-center">NO RENTALS.</h4>
+                                <h2 class="text-center" style="padding-top: 10%">NO RENTAL AVAILABLE.</h2>
                             @else
                                 <ul class="list-group">
                                     @foreach($requests as $rental)
@@ -71,8 +71,8 @@
                         </div>
                         <div class="panel-body">
                           <ul class="nav nav-pills flex-column text-sm">
-                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-list"></i>My Rentals</a></li>
-                            <li class="nav-item"><a href="{{route('customermodule.reservationTransaction')}}" class="nav-link"><i class="fa fa-heart"></i> My Reservations</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i>My Rentals</a></li>
+                            <li class="nav-item"><a href="{{route('customermodule.reservationTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Reservations</a></li>
                           </ul>
                         </div>
                       </div>
@@ -86,9 +86,9 @@
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
-                                        <h4 class="modal-title">RESERVATION DETAILS</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">RESERVATION DETAILS</h4>
                                     </div>
                                     <div class="modal-body">
                                     @php $time = explode(':', $rental->departure_time); @endphp
@@ -122,9 +122,9 @@
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
-                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                     </div>
                                     <div class="modal-body">
                                         <table class="table table-striped table-bordered">

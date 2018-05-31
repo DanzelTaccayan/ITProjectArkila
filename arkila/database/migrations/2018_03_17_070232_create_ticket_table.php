@@ -23,8 +23,6 @@ class CreateTicketTable extends Migration
             ->nullable();
             $table->decimal('fare', 11, 2);
             $table->enum('type',['Discount','Regular']);
-            $table->enum('status', ['Pending','OnBoard'])
-            ->nullable();
             $table->timestamps();
 
             $table->foreign('destination_id')

@@ -8,7 +8,7 @@
                         <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
-                                <h4 class="text-center">NO RESERVATION.</h4>
+                                <h4 class="text-center"  style="padding-top: 10%">NO RESERVATION AVAILABLE.</h4>
                             @else
                                 <ul class="list-group">
                                     @foreach($requests as $reservation)
@@ -69,8 +69,8 @@
                         </div>
                         <div class="panel-body">
                           <ul class="nav nav-pills flex-column text-sm">
-                            <li class="nav-item"><a href="{{route('customermodule.rentalTransaction')}}" class="nav-link"><i class="fa fa-list"></i>My Rentals</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-heart"></i> My Reservations</a></li>
+                            <li class="nav-item"><a href="{{route('customermodule.rentalTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Rentals</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i> My Reservations</a></li>
                           </ul>
                         </div>
                       </div>

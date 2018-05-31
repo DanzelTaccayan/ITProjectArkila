@@ -127,7 +127,7 @@
                                                 <div class="btn-group">
                                                     <button type="button" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i></button>
                                                     <button name="initialMultiRefund" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
-                                                    <button name="initialMultiDelete" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
+                                                    <button name="initialMultiCancel" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
                                                 </div>
                                             </div>
                                             <table id="sold-tickets{{$terminal->destination_id}}" class="table table-bordered sold-tickets">
@@ -142,22 +142,22 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $ticket)
-                                                    <tr id="ticket{{$ticket->ticket_id}}">
-                                                        <td><input value="{{$ticket->ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
-                                                        <td>{{ $ticket->ticket_number }}</td>
-                                                        <td>{{ $ticket->destination->destination_name}}</td>
-                                                        <td>{{ $ticket->updated_at }}</td>
-                                                        <td id="actionBody{{$ticket->ticket_id}}">
+                                                @foreach(App\SoldTicket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $soldTicket)
+                                                    <tr id="ticket{{$soldTicket->sold_ticket_id}}">
+                                                        <td><input value="{{$soldTicket->sold_ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
+                                                        <td>{{ $soldTicket->ticket_number }}</td>
+                                                        <td>{{ $soldTicket->destination->destination_name}}</td>
+                                                        <td>{{ $soldTicket->updated_at }}</td>
+                                                        <td id="actionBody{{$soldTicket->sold_ticket_id}}">
                                                             <div class="text-center">
-                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->fare}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
+                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" data-amount="{{$soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
+                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button type="button" data-ticketid="{{$ticket->ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
+                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
                                                             </div>
                                                         </td>
-                                                        <td id="destBody{{$ticket->ticket_id}}" class="hidden">
+                                                        <td id="destBody{{$soldTicket->sold_ticket_id}}" class="hidden">
                                                             <select name="" id="" class="form-control">
                                                                 <option value="">dest 1</option>
                                                                 <option value="">dest 2</option>
@@ -181,7 +181,7 @@
                                 <div class="modal" id="refund-modal">
                                     <form id="refundForm" method="POST">
                                         {{csrf_field()}}
-                                        {{method_field('PATCH')}}
+                                        {{method_field('DELETE')}}
                                         <div class="modal-dialog" style="margin-top: 10%;">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -214,7 +214,7 @@
                                         <div class="modal-dialog" style="margin-top: 10%;">
 
                                             {{csrf_field()}}
-                                            {{method_field('PATCH')}}
+                                            {{method_field('DELETE')}}
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -297,8 +297,8 @@
                                     <!-- /.modal-dialog -->
                                 </div>
 
-                                {{--MultiDelete--}}
-                                <div class="modal" id="multidelete-modal">
+                                {{--Multi Cancel--}}
+                                <div class="modal" id="multicancel-modal">
                                     <div class="modal-dialog" style="margin-top: 10%;">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -309,12 +309,12 @@
                                             <div class="modal-body">
                                                 <h1 class="text-center text-red"><i class="fa fa-trash"></i> CANCEL?</h1>
                                                 <p class="text-center">CANCELLED TRANSACTIONS <strong class="text-red">WILL NOT BE RECORDED AS SALE</strong>.</p>
-                                                <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL THE <strong id="multiDeleteModal" class="text-maroon"></strong>?</p>
+                                                <p class="text-center">ARE YOU SURE YOU WANT TO CANCEL THE <strong id="multiCancelModal" class="text-maroon"></strong>?</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="text-center">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                    <button name="multiDelete" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
+                                                    <button name="multiCancel" type="button" data-dismiss="modal" class="btn btn-primary">YES</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -341,30 +341,30 @@
             $('button[name="initialRefund"]').on('click',function(){
                 var amount = $(this).data('amount');
                 var ticketNumber = $(this).data('ticketnumber');
-                var ticketId = $(this).data('ticketid');
+                var soldTicketId = $(this).data('soldticketid');
 
 
                 $('#refundTicketNumber').text(ticketNumber+' TICKET');
                 $('#refundAmount').text('₱ '+amount);
-                $('#refundForm').prop('action',"/home/transactions/refund/"+ticketId)
+                $('#refundForm').prop('action',"/home/transactions/refund/"+soldTicketId)
             });
 
             //Cancel
             $('button[name="initialCancel"]').on('click',function(){
-                var ticketId = $(this).data('ticketid');
+                var soldTicketId = $(this).data('soldticketid');
                 var ticketNumber = $(this).data('ticketnumber');
 
                 $('#cancelTicketNumber').text(ticketNumber+' TICKET');
-                $('#cancelForm').prop('action','/home/transactions/'+ticketId);
+                $('#cancelForm').prop('action','/home/transactions/'+soldTicketId);
             });
 
             //Lost
             $('button[name="initialLost"]').on('click', function(){
-                var ticketId = $(this).data('ticketid');
+                var soldTicketId = $(this).data('soldticketid');
                 var ticketNumber = $(this).data('ticketnumber');
 
                 $('#lostTicketNumber').text(ticketNumber+' TICKET');
-                $('#lostForm').prop('action', '/home/transactions/lost/'+ticketId);
+                $('#lostForm').prop('action', '/home/transactions/lost/'+soldTicketId);
             });
 
             //Multi Refund
@@ -374,8 +374,8 @@
 
                 if(checked.length > 0) {
                     $.each(checked, function (index, createdElement) {
-                        var ticketId = $(createdElement).val();
-                        amount += parseFloat($('button[name="initialRefund"][data-ticketid="'+ticketId+'"]').data('amount'));
+                        var soldTicketId = $(createdElement).val();
+                        amount += parseFloat($('button[name="initialRefund"][data-soldticketid="'+soldTicketId+'"]').data('amount'));
                     });
 
                     $('#multiRefundModal').text('('+checked.length+') SELECTED TICKETS');
@@ -394,38 +394,14 @@
                     });
 
                     $.ajax({
-                        method:'PATCH',
+                        method:'DELETE',
                         url: '{{route('transactions.multipleRefund')}}',
                         data: {
                             '_token': '{{csrf_token()}}',
                             'refund': checkedArr
                         },
-                        success: function(response){
-                            checkedArr.forEach(function(ticketId){
-                                $('#ticket'+ticketId).remove();
-                                $('#refund-modal'+ticketId).remove();
-                            });
-
-                            new PNotify({
-                                title: "Success!",
-                                text: "Successfully refunded the following tickets:  "+ response,
-                                hide: true,
-                                delay: 2500,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                            });
-
+                        success: function(){
+                            location.reload()
                         },
                         error:function(response) {
                             $.notify({
@@ -455,15 +431,15 @@
             });
 
             //Multi Cancel
-            $('button[name="initialMultiDelete"]').on('click',function(){
+            $('button[name="initialMultiCancel"]').on('click',function(){
                 var checkCount = $('input[name="checkInput"]:checked').length;
                 if(checkCount > 0) {
-                    $('#multiDeleteModal').text('('+checkCount+') SELECTED TICKETS');
-                    $('#multidelete-modal').modal('show');
+                    $('#multiCancelModal').text('('+checkCount+') SELECTED TICKETS');
+                    $('#multicancel-modal').modal('show');
                 }
             });
 
-            $('button[name="multiDelete"]').on('click',function(){
+            $('button[name="multiCancel"]').on('click',function(){
                 var checked = $('input[name="checkInput"]:checked');
                 var checkedArr = [];
 
@@ -474,37 +450,13 @@
 
                     $.ajax({
                         method:'DELETE',
-                        url: '{{route('transactions.multipleDelete')}}',
+                        url: '{{route('transactions.multipleCancel')}}',
                         data: {
                             '_token': '{{csrf_token()}}',
                             'delete': checkedArr
                         },
-                        success: function(response){
-                            checkedArr.forEach(function(ticketId){
-                                $('#ticket'+ticketId).remove();
-                                $('#refund-modal'+ticketId).remove();
-                            });
-
-                            new PNotify({
-                                title: "Success!",
-                                text: "Successfully cancelled the following tickets:  "+ response,
-                                hide: true,
-                                delay: 2500,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                            });
-
+                        success: function(){
+                            location.reload();
                         },
                         error:function(response) {
                             $.notify({
@@ -594,14 +546,13 @@
     <script>
         $(function() {
             $('.sold-tickets').DataTable({
-                'select':true,
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
                 'ordering': true,
                 'info': true,
                 'autoWidth': false,
-                'order': [[ 3, "desc" ]], 
+                'order': [[ 3, "desc" ]],
                 'aoColumnDefs': [
                     {
                     'bSortable': false,
@@ -611,9 +562,10 @@
                     {
                     'bSortable': false,
                     'aTargets': [4]
-                    }
+                    },
                 ], 
-            })
+            });
+
         })
     </script>
 @endsection

@@ -55,16 +55,24 @@
             <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
-                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}">    
+                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}" val-contact>    
                 </div>
 
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" class="form-control" name="address" value="{{old('address')}}">
+                    <input type="text" class="form-control" name="address" value="{{old('address')}}" val-address>
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="text" class="form-control" name="email" value="{{old('email')}}">
+                    <input type="text" class="form-control" name="email" value="{{old('email')}}" val-email>
+                </div>
+                <div class="form-group col-md-6 left">
+                    <label>Opening Time: </label>
+                    <input type="time" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
+                </div>
+                <div class="form-group col-md-6 right">
+                    <label>Closing Time: </label>
+                    <input type="time" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
             </div>
@@ -89,7 +97,7 @@
                 </div>
                 <div class="form-group">
                     <label>Booking Fee: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
                 </div>
         
                 <h4><strong>Destination Terminal</strong></h4> 
@@ -99,32 +107,32 @@
                 </div>
                 <div class="form-group">
                     <label>Booking Fee: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="bookingFee" value="{{old('bookingFee')}}" required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" name="bookingFee" value="{{old('bookingFee')}}" val-bookingFee required>
                 </div>
 
                 <div class="form-group col-md-6 left">
                     <label>Regular Fare: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="0" step="0.25" name="regularFare" value="{{old('regularFare')}}" required>
+                    <input type="number" class="form-control" min="0" name="regularFare" placeholder="Php 0.00" value="{{old('regularFare')}}" val-regularFare required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Discounted Fare: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="0" step="0.25" name="discountedFare" value="{{old('discountedFare')}}" required>
+                    <input type="number" class="form-control" min="0" name="discountedFare" placeholder="Php 0.00" value="{{old('discountedFare')}}" val-discountFare required>
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" required>
+                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" required>
+                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
                 </div>
                 <div class="form-group col-md-6 left" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sTripFare" value="{{old('sTripFare')}}" required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" name="sTripFare" placeholder="Php 0.00" value="{{old('sTripFare')}}" val-regularStFare required>
                 </div>
                 <div class="form-group col-md-6 right" id="shotTripDis">
                     <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="0" step="0.25" name="sdTripFare" value="{{old('sdTripFare')}}" required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="0" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
             </div>
@@ -149,7 +157,7 @@
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>
-                    <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-settings-amount required>
+                    <input type="number" class="form-control" name="addSop" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-sop required>
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
@@ -157,7 +165,7 @@
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>
-                    <input type="number" class="form-control" name="addComFund" min="0" step="0.25" placeholder="Php 0.00" value="{{old('addComFund')}}" val-settings-amount required>
+                    <input type="number" class="form-control" name="addComFund" min="0" placeholder="Php 0.00" value="{{old('addComFund')}}" val-cf required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> You can edit these amounts in the Fees and Features page under the Settings tab.</p>
             </div>

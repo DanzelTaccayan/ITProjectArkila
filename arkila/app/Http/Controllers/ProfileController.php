@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Profile;
 use App\Destination;
 use App\Fee;
-use App\Rules\checkContactNum;
+use App\Rules\checkContactNumber;
 use App\Rules\checkAddress;
+use App\Rules\checkTime;
 
 
 
@@ -80,14 +81,18 @@ class ProfileController extends Controller
     {
         $this->validate(request(), [
             'contactNumber' => ['bail',new checkContactNum],
-            'address' => ['bail','required','max:100',new checkAddress],
+            'address' => ['bail','max:100',new checkAddress],
             'email' => "email|max:50",
+            'openTime' => ['required', new checkTime],
+            'closeTime' => ['required', new checkTime],
         ]);
         
         $profile->update([
             'contact_number' => request('contactNumber'),
             'address' => request('address'),
             'email' => request('email'),
+            'open_time' => request('openTime'),
+            'close_time' => request('close_time'),
         ]);
 
         return redirect('/home/admin/profile')->with('success', 'Profile has been successfully edited');

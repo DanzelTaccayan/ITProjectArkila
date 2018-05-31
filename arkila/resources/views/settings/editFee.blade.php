@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label>Amount: <span class="text-red">*</span></label>
-        <input type="number" class="form-control" name="editFeeAmount" step = "0.25" value="{{$fee->amount}}" val-settings-amount>
+        <input type="number" class="form-control" name="editFeeAmount" min="0" value="{{$fee->amount}}" placeholder="Php 0.00" val-partAmount required>
     </div>
 
 @endsection

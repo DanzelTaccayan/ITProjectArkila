@@ -20,8 +20,9 @@ class VanRental extends Model
     }
 
     public function driver(){
-    	return $this->hasOne(Member::Class, 'member_id', 'driver_id');
+      return $this->belongsTo(User::class, 'driver_id', 'id');
     }
+
 
     public function getFullNameAttribute(){
         return "{$this->first_name} {$this->last_name}";

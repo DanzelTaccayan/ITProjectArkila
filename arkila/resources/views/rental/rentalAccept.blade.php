@@ -24,7 +24,7 @@
                             <select name="driver" id="driver" class="form-control select2">
                                 <option value="">Choose Driver</option>
                                 @foreach($drivers as $driver)
-                                <option value="{{$driver->member_id}}">{{$driver->full_name}}</option>
+                                <option value="{{$driver->user->id}}">{{$driver->full_name}}</option>
                                 @endforeach
                             </select>
                         </td>

@@ -93,6 +93,11 @@ class User extends Authenticatable
       return $this->user_type === 'Driver';
     }
 
+    public static function scopeAllDrivers($query)
+    {
+        return $query->where('user_type','Driver');
+    }
+
     public function isCustomer()
     {
       return $this->user_type === 'Customer';

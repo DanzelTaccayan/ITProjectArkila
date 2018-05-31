@@ -54,7 +54,7 @@
 
 							<tr>
 
-								<td>{{$request->rsrv_code}}</td>							
+								<td>{{strtoupper($request->rsrv_code)}}</td>							
 								<td>{{$request->destination_name}}</td>
 								<td>{{$request->status}}</td>
 								<td>

@@ -20,6 +20,14 @@
             <label>Email: </label>
             <input value="{{old('email') ?? $profile->email }}" type="text" name="email" class="form-control" name="email">
         </div>
+        <div class="form-group col-md-6 left">
+            <label>Opening Time: </label>
+            <input type="time" class="form-control" name="openTime" value="{{old('openTime') ?? $profile->open_time }}" val-time required>
+        </div>
+        <div class="form-group col-md-6 right">
+            <label>Closing Time: </label>
+            <input type="time" class="form-control" name="closeTime" value="{{old('closeTime') ?? $profile->close_time }}" val-time required>
+        </div>
     </div>
 
 @endsection
