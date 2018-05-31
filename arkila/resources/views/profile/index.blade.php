@@ -41,6 +41,10 @@ th {
                                     <th>Phone No.</th>
                                     <td>{{$profile->contact_number}}</td>
                                 </tr>
+                                <tr>
+                                    <th>Office Hours</th>
+                                    <td>{{$profile->open_time}} to {{$profile->close_time}}</td>
+                                </tr>
                             </tbody>
                         </table>
                         <div class="pull-right">   

@@ -46,7 +46,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" value="{{$dateNow}}" id="date" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" placeholder="mm/dd/yyyy" data-mask data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
+                                    <input type="text" value="{{$dateNow}}" id="text" name="dateDeparted" type="text" class="form-control" data-inputmask="'alias': 'mm/dd/yyyy'" placeholder="mm/dd/yyyy" data-mask data-parsley-errors-container="#errDateDeparted" val-date-depart data-parsley-departure-report required>
                                 </div>
                                 <p id="errDateDeparted"></p>
                             </div>
@@ -59,7 +59,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="time" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
+                                        <input type="text" value="{{$timeNow}}" id="timepicker" name="timeDeparted" placeholder="hh:mm " class="form-control" data-parsley-errors-container="#errTimeDeparted" val-time-depart required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                 </div>
@@ -79,13 +79,13 @@
                                     <input value="0" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassMain' min="0">
                                 </td>
                                 <td>
-                                    <input value="0" class='form-control pull-right'  type='number' name='numDisMain' min="0">
+                                    <input value="0" class='form-control pull-right num-pass' onblur='findTotal()'  type='number' name='numDisMain' min="0">
                                 </td>
                               </tr>
                               <tr>
                                 <th class="text-center">Short Trip</th>
                                 <td><input value="0" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numPassST' id='numPassST' min="0"></td>
-                                <td><input value="0" class='form-control pull-right'  type='number' name='numDisST' id='' min="0"></td>
+                                <td><input value="0" class='form-control pull-right num-pass' onblur='findTotal()' type='number' name='numDisST' id='' min="0"></td>
                               </tr>
                             </tbody>
                         </table>
@@ -117,18 +117,7 @@
 <!--   For sum of tables-->
 <script type="text/javascript">
     function findTotal() {
-        // var numMainPass = document.getElementById('numPassMain');
-        // var numSTPass = document.getElementById('numPassST');
-
-        // if(numMainPass == null){
-        //     var tot = parseInt(numSTPass.value);
-        //     console.log('null si main pass');
-        // }else if(numSTPass == null){
-        //     var tot = parseInt(numMainPass.value);
-        //     console.log('null si st pass');
-        // }else{
-        //     var tot = parseInt(numMainPass.value) + parseInt(numSTPass.value);
-        // }
+       
 
         var arr = document.getElementsByClassName('num-pass');
         var tot = 0;
@@ -142,11 +131,9 @@
         document.getElementById('totalPassenger').textContent = tot;
         document.getElementById('totalPassengers').value = tot;
 
-        //bookingFee.textContent = document.getElementById('totalPassengers').value * bookingFee.value;
-        //document.getElementById('totalFees').value = document.getElementById('totalPassengers').value * bookingFee.value;
+       
     }
 
-    //document.getElementById('dest').value = document.getElementById('termId').value;
 </script>
 
 <script>

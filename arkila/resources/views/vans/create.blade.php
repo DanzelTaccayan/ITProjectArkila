@@ -40,7 +40,7 @@
 
 <div class="form-group">
     <label for="">Plate Number:</label>
-    <input value="{{old('plateNumber')}}" name="plateNumber" type="text" class="form-control"placeholder="Plate Number" required val-platenum @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif >
+    <input value="{{old('plateNumber')}}" name="plateNumber" type="text" class="form-control" placeholder="Plate Number" required val-platenum @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif >
 </div>
 
 <div class="form-group">
@@ -55,7 +55,7 @@
 
 <div class="form-group">
     <label for="">Seating Capacity</label>
-    <input value="{{old('seatingCapacity')}}" name="seatingCapacity" type="number" class="form-control" placeholder="Seating Capacity" val-seatingcapacity required @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif>
+    <input value="{{old('seatingCapacity')}}" name="seatingCapacity" type="number" class="form-control" min="1" placeholder="Seating Capacity" val-seatingcapacity required @if(isset($operators)) @if(count($operators) == 0) disabled @endif @endif>
 </div>
 
 <div class="form-group">

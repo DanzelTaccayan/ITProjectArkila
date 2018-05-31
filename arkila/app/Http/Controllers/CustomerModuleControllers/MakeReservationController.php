@@ -94,6 +94,10 @@ class MakeReservationController extends Controller
 					$slot = $reservation->number_of_slots;
 					if($quantity <= $slot)
 					{
+						$this->validate(request(), [
+							'contactNumber' => 'bail|numeric|required',
+							'quantity' => 'bail|numeric|required|min:1|max:4',
+						]);
 						$codes = Reservation::all();
 						$newCode = bin2hex(openssl_random_pseudo_bytes(8));
 						foreach ($codes as $code)
@@ -106,10 +110,6 @@ class MakeReservationController extends Controller
 			
 							} while ($newCode == $allCodes);
 						}
-						$this->validate(request(), [
-							'contactNumber' => 'bail|numeric|required',
-							'quantity' => 'bail|numeric|required|min:1|max:4',
-						]);
 						$time = explode(':', $reservation->departure_time);
 						$newSlot = $reservation->number_of_slots - $request->quantity;
 						$destination = Destination::where('destination_id', Session::get('key'))->get()->first();

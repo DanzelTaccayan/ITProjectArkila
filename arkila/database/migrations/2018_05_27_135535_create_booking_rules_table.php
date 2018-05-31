@@ -14,6 +14,7 @@ class CreateBookingRulesTable extends Migration
     public function up()
     {
         Schema::create('booking_rules', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('rule_id');
             $table->string('description');
             $table->integer('valid_days');

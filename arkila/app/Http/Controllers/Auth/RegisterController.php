@@ -58,8 +58,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'last_name' => ['required','string','max:30', new checkName],
-            'first_name' => ['required','string','max:30', new checkName],
+            'last_name' => ['required','string','max:30'],
+            'first_name' => ['required','string','max:30'],
             'username' => 'required|string|max:15|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|max:15|confirmed',
@@ -118,7 +118,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $this->guard()->logout();
-        return redirect('/home/register/success')->with('success', 'We sent you an activation code. Check your email and click on the link to verify.');
+        return redirect('/home/register/success')->with('registrationsuccess', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
 
 }

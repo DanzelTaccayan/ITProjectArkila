@@ -588,7 +588,6 @@ ol.arrow-drag{
             //Change Position
             $('button[name="changePosButton"]').on('click',function(){
                 var queueId = $(this).data('vanqueue');
-                var destination = $(this).data('destination');
                 var newQueueNum = $('#posOption'+queueId).val();
                 $.ajax(
                     {
@@ -598,7 +597,6 @@ ol.arrow-drag{
                             {
                                 '_token': '{{csrf_token()}}',
                                 'new_queue_num' : newQueueNum,
-                                'destination' : destination
                             },
                         success: function(response)
                         {

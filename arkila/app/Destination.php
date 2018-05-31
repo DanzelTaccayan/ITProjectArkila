@@ -32,7 +32,10 @@ class Destination extends Model
         return $this->belongsToMany(Destination::class,'route_terminal','route','terminal_destination')
         ->withPivot('terminal_origin');
     }
-
+    public function soldTickets()
+    {
+        return $this->hasMany(SoldTicket::class,'destination_id','destination_id');
+    }
     public function routeFromOrigin()
     {
         return $this->belongsToMany(Destination::class,'route_terminal','terminal_origin','route')

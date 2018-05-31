@@ -52,7 +52,7 @@ class CreateReservationTable extends Migration
 
             $table->foreign('date_id')
             ->references('id')->on('reservation_date')
-            ->onDelete('restrict')
+            ->onDelete('set null')
             ->onUpdate('cascade');
 
         });

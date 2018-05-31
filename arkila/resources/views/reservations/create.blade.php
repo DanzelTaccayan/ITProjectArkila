@@ -21,7 +21,7 @@
                         <tr>
                             <th>Destination Terminal</th>
                             <td>
-                                <select name="destination" id="" class="form-control select2">
+                                <select name="destination" id="" class="form-control select2" val-dest-term required>
                                     <option value="">Select Terminal</option>
                                     @foreach($destinations as $destination)
                                     <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
@@ -31,15 +31,15 @@
                         </tr>
                         <tr>
                             <th>Date</th>
-                            <td><input type="text" name="date" value="{{old('date')}}" class="form-control" data-inputmask=" 'alias': 'mm/dd/yyyy'" data-mask  placeholder="mm/dd/yyy"></td>
+                            <td><input type="text" name="date" value="{{old('date')}}" class="form-control" data-inputmask=" 'alias': 'mm/dd/yyyy'" data-mask  placeholder="mm/dd/yyy" val-date-req required></td>
                         </tr>
                         <tr>
                             <th>Time</th>
-                            <td><input type="text" name="time" value="{{old('time')}}" id="timepicker" class="form-control" placeholder="00:00"></td>
+                            <td><input type="text" name="time" value="{{old('time')}}" id="timepicker" class="form-control" placeholder="00:00" val-time required></td>
                         </tr>
                         <tr>
                             <th>Number of Slot</th>
-                            <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder=""></td>
+                            <td><input type="text" name="slot" value="{{old('slot')}}" class="form-control" placeholder="" val-num-slot required></td>
                         </tr>
                     </tbody>
                 </table>

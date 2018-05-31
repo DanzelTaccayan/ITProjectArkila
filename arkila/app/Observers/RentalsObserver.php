@@ -5,8 +5,9 @@ namespace App\Observers;
 use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\OnlineReserveAdminNotification;
+use App\Notifications\OnlineRentalAdminNotification;
 use App\Notifications\OnlineRentalCustomerNotification;
+use App\Notifications\OnlineRentalDriverNotification;
 use App\VanRental;
 use App\User;
 
@@ -14,10 +15,9 @@ class RentalsObserver{
 
   public function created(VanRental $rent)
   {
-    if($rent->type == 'Online'){
+    if($rent->rent_type == 'Online' && $rent->status == 'Pending'){
       $user = User::find(Auth::id());
       $userAdmin = User::where('user_type', 'Super-Admin')->first();
-      //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
       $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
     }
   }
@@ -26,8 +26,14 @@ class RentalsObserver{
   {
     if($rent->rent_type == 'Online'){
       if($rent->status == 'Unpaid'){
-        $userCustomer = User::find($rent->user_id);
         $case = 'Unpaid';
+        $userAdmin = User::where('user_type', 'Super-Admin')->first();
+        $userCustomer = User::find($rent->user_id);
+        $driverId = $rent->driver->user->id ?? null;
+        if($driverId !== null){
+          $userDriver = User::find() ?? null;
+          $userDriver->notify(new OnlineRentalDriverNotification($userAdmin, $rent, $case));
+        }
         $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
       }else if($rent->status == 'Declined'){
         $userCustomer = User::find($rent->user_id);
@@ -42,6 +48,12 @@ class RentalsObserver{
         $userAdmin = User::where('user_type', 'Super-Admin')->first();
         //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
         $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
+
+        $driverId = $rent->driver->user->id ?? null;
+        if($driverId !== null){
+          $userDriver = User::find() ?? null;
+          $userDriver->notify(new OnlineRentalDriverNotification($userAdmin, $rent, $case));
+        }
       }else if($rent->status == 'Departed'){
         $userCustomer = User::find($rent->user_id);
         $case = 'Departed';

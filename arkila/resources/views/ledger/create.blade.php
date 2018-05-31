@@ -18,7 +18,7 @@
 </div>
 <div class="form-group">
     <label for="Particulars">Particulars: <span class="text-red">*</span></label>
-    <input type="text" class="form-control" name="particulars" value="{{ old('particulars') }}" required>
+    <input type="text" class="form-control" name="particulars" value="{{ old('particulars') }}" val-particulars required>
 </div>
 <div class="form-group">
     <label for="or">OR#:</label>
@@ -26,7 +26,7 @@
 </div>
 <div class="form-group">
     <label>Amount: <span class="text-red">*</span></label>
-    <input type="number" class="form-control" name="amount" min="0" step="0.25" placeholder="Php 0.00" value="{{ old('amount') }}" required>
+    <input type="number" class="form-control" name="amount" min="0" placeholder="Php 0.00" value="{{ old('amount') }}" val-partAmount required>
 </div>
 
 

@@ -54,7 +54,7 @@
             name:notification.name,
           }
         };
-        //console.log(newUnreadNotifications.data);
+        // console.log(newUnreadNotifications.data.notif_type);
         this.unreadNotifications.push(newUnreadNotifications);
         });
     }

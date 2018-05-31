@@ -46,11 +46,16 @@
                                             <td class="text-right" id="status{{$reservation->id}}">{{ $reservation->status }}</td>
                                             <td>
                                                 <div class="text-center"> 
-                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>            
-                                                    <button id="openBtn{{$reservation->id}}" name="openBtn" data-val="{{$reservation->id}}" value="OPEN" class="btn btn-success btn-sm">OPEN</button>
-                                                    <button id="closeBtn{{$reservation->id}}" name="closeBtn" data-val="{{$reservation->id}}" value="CLOSED" class="btn btn-danger btn-sm">CLOSE</button>               
-                                                    <button id="deleteBtn{{$reservation->id}}" name="deleteBtn" class="btn btn-outline-danger btn-sm">DELETE</button>
-                                                   
+                                                    <form action="{{route('reservations.update', $reservation->id)}}" method="POST">
+                                                    {{ csrf_field() }} {{ method_field('PATCH') }}  
+                                                        <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>  
+                                                        @if($reservation->status == 'OPEN')
+                                                        <button name="status" value="CLOSED" class="btn btn-danger btn-sm">CLOSE</button>               
+                                                        @elseif($reservation->status == 'CLOSED')
+                                                        <button name="status" value="OPEN" class="btn btn-success btn-sm">OPEN</button>
+                                                        <button name="deleteBtn" class="btn btn-outline-danger btn-sm">DELETE</button>
+                                                        @endif
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -170,146 +175,4 @@
         })
     })
 
-            $('button[name="openBtn"]').on('click',function() {
-                var openBtnId = $(this).data('val');
-
-                $.ajax( {
-                        method:'PATCH',
-                        url: '/home/reservations/'+openBtnId,
-                        data:
-                            {
-                                '_token': '{{csrf_token()}}',
-                                'statusBtn' : $('#openBtn'+openBtnId).val()
-                            },
-                        success: function(response) {
-                            if(response.success){
-                              new PNotify({
-                                title: "Success!",
-                                text: response.success,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                              });
-                            }else if(response.error){
-                                $.notify({
-                                  // options
-                                  icon: 'fa fa-warning',
-                                  message: response.error
-                                },{
-                                  // settings
-                                  type: 'danger',
-                                  delay: '999900',
-                                  placement: {
-                                    from: 'bottom',
-                                    align: 'right'
-                                  },
-                                  icon_type: 'class',
-                                  animate: {
-                                    enter: 'animated bounceIn',
-                                    exit: 'animated bounceOut'
-                                  }
-                                });
-                            }
-                        console.log(response);
-                        $("#status" + openBtnId).html(response.status)
-                        $("#openBtn" + openBtnId).hide();
-                        $("#closeBtn" + openBtnId).show();
-
-
-                        }
-                        
-                    });
-                });
-
-            $('button[name="closeBtn"]').on('click',function() {
-                var openBtnId = $(this).data('val');
-
-                $.ajax( {
-                        method:'PATCH',
-                        url: '/home/reservations/'+openBtnId,
-                        data:
-                            {
-                                '_token': '{{csrf_token()}}',
-                                'statusBtn' : $('#closeBtn'+openBtnId).val()
-                            },
-                        success: function(response) {
-                            if(response.success){
-                              new PNotify({
-                                title: "Success!",
-                                text: response.success,
-                                animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                              });
-                            }else if(response.error){
-                                $.notify({
-                                  // options
-                                  icon: 'fa fa-warning',
-                                  message: response.error
-                                },{
-                                  // settings
-                                  type: 'danger',
-                                  delay: '999900',
-                                  placement: {
-                                    from: 'bottom',
-                                    align: 'right'
-                                  },
-                                  icon_type: 'class',
-                                  animate: {
-                                    enter: 'animated bounceIn',
-                                    exit: 'animated bounceOut'
-                                  }
-                                });
-                            }   
-                        console.log(response);
-                        $("#status" + openBtnId).html(response.status)
-                        $("#openBtn" + openBtnId).show();
-                        $("#closeBtn" + openBtnId).hide();
-
-                        }
-                        
-                    });
-                });
-</script>
-<script>
-    @foreach($reservations as $reservation)
-
-@if($reservation->request->count() > 0 && $reservation->status == 'CLOSED')
-$("#openBtn"+{{$reservation->id}}).show();
-$("#closeBtn"+{{$reservation->id}}).hide();
-$("#deleteBtn"+{{$reservation->id}}).hide();
-
-@elseif($reservation->status == 'OPEN')
-$("#openBtn"+{{$reservation->id}}).hide();
-$("#closeBtn"+{{$reservation->id}}).show();
-$("#deleteBtn"+{{$reservation->id}}).hide();
-@else
-$("#openBtn"+{{$reservation->id}}).show();
-$("#closeBtn"+{{$reservation->id}}).hide();
-$("#deleteBtn"+{{$reservation->id}}).show();
-
-@endif
-@endforeach
-
-</script>
 @endsection
