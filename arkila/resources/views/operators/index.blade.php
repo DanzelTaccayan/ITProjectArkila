@@ -11,7 +11,7 @@
             <div class="col col-md-6">
                 <a href="/home/operators/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> REGISTER OPERATOR</a>
                 <a href="{{route('archive.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa fa-archive"></i> ARCHIVE</a>
-                <button onclick="window.open('{{route('pdf.operators')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT OPERATOR LIST</button>
+                <button onclick="window.open('{{route('pdf.operators')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
 
             </div>
             

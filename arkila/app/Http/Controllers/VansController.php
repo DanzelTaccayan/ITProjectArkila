@@ -127,7 +127,7 @@ class VansController extends Controller
             \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return redirect(route('vans.index'));
+        return redirect(route('vans.index'))->with('success', 'Van registered successfully');;
     }
 
     /**

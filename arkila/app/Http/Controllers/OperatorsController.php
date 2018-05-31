@@ -81,7 +81,7 @@ class OperatorsController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again');
         }
 
-        return redirect(route('operators.index'))->with('success', 'Information created successfully');
+        return redirect(route('operators.index'))->with('success', 'Operator registered successfully');
     }
 
     /**

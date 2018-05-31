@@ -735,7 +735,7 @@ ol.arrow-drag{
                                 '_token': '{{csrf_token()}}'
                             },
                         success: function(response) {
-                            if(response) {
+                            if(response.length > 0) {
                                 PNotify.removeAll();
                                 response.forEach(function(element){
                                     new PNotify({
