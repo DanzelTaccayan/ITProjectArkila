@@ -17,10 +17,15 @@ class TripReportsObserver
             $userAdmin = User::where('user_type', 'Super-Admin')->first();
             $userDriver = User::find(Auth::id());
             $userAdmin->notify(new TripReportsAdminNotification($userDriver, $trip));
-        }else if($trip->reportedBy == 'Super-Admin' && $trip->report_status == 'Accepted'){
-            $userDriver = User::find($trip->driver->user->id);
-            $userAdmin = User::find(Auth::id());
-            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+        }else if($trip->reportedBy == 'Super-Admin' && $trip->report_status == 'Departed'){
+            $driverId = $trip->driver->user->id ?? null;
+            if($driverId !== null){
+                $userDriver = User::find($trip->driver->user->id) ?? null;
+                if($userDriver !== null){
+                    $userAdmin = User::find(Auth::id());
+                    $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+                }
+            }
         }
     }
 

@@ -72,8 +72,6 @@ class AdminCreateDriverReportController extends Controller
 
 
     $mainterminal = Destination::where('is_main_terminal', true)->first()->destination_name;
-    // $memdriver = Member::find($driver_id);
-    // $getvanid = $memdriver->van->first()->van_id ?? null;
     $vanid = $request->van_platenumber;
 
     $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
@@ -81,8 +79,6 @@ class AdminCreateDriverReportController extends Controller
     $dateDeparted = $request->dateDeparted;
 
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
-    //$destination = $terminals->destination_id == $mainTerminal ? $request->origin : $mainTerminal;
-    //$destinationname = Destination::find($destination);
 
     if($terminals->destination_id == $mainTerminal){
       if($totalPassengers >=  10){
@@ -132,92 +128,63 @@ class AdminCreateDriverReportController extends Controller
      }
      $destinationArr = request('destination');
      $numOfPassengers = request('qty');
-     $numofdiscpass = request('disqty');
+     $numOfDiscountPassengers = request('disqty');
 
      $ticketArr = null;
 
-       for($i = 0; $i < count($numOfPassengers); $i++){
-         if(!($numOfPassengers[$i] == null)){
-           $ticketArr[$i] =array($destinationArr[$i] => array($numOfPassengers[$i] => $numofdiscpass[$i]));
-         }else{
-           continue;
-         }
-       }
-       //$ticketArr = array_merge($desArr, $numPass, $numDis);
+     $transanctionArr = null;
 
-     $transaction_array = array_values($ticketArr);
-     foreach($transaction_array as $index => $index_values){
-       foreach($index_values as $destinationid => $numofpassenger_values){
-         foreach($numofpassenger_values as $numofpassenger => $numofpassenger_discount){
-           $destination_name = Destination::find($destinationid);
-
-           if($numofpassenger_discount !== null){
-             for($i = 0; $i < $numofpassenger; $i++){
-               if($numofpassenger_discount > 0){
-                 $amountpaid = Ticket::where('destination_id', $destinationid)->where('type','Discount')->first()->fare;
-               }else{
-                 $amountpaid = Ticket::where('destination_id', $destinationid)->where('type','Regular')->first()->fare;
-               }
-               //echo $destination_name->destination_name . ' ' . $amountpaid . '<br/>' ;
-               Transaction::create([
-                 "trip_id" => $trip->trip_id,
-                 "destination" => $destination_name->destination_name,
-                 "origin" => $terminals->destination_name,
-                 "amount_paid" => $amountpaid,
-                 "status" => "Departed",
-               ]);
-
-               //echo $destination_name->destination_name . ' ' . $numofpassenger . ' ' . $amountpaid . ' ' . $numofpassenger_discount . '<br/>' ;
-               $numofpassenger_discount--;
-             }
-           }else{
-             for($i = 0; $i < $numofpassenger; $i++){
-               $amountpaid = Ticket::where('destination_id', $destinationid)->where('type','Regular')->first()->fare;
-               echo $destination_name->destination_name . ' ' . $amountpaid . '<br/>' ;
-               Transaction::create([
-                 "trip_id" => $trip->trip_id,
-                 "destination" => $destination_name->destination_name,
-                 "origin" => $terminals->destination_name,
-                 "amount_paid" => $amountpaid,
-                 "status" => "Departed",
-               ]);
-               //echo $destination_name->destination_name . ' ' . $numofpassenger . ' ' . $amountpaid . ' ' . $numofpassenger_discount . '<br/>' ;
-             }
-           }
-         }
-       }
-     }
-
-    }else{
-      if($totalPassengers >=  10){
-         $trip =Trip::create([
-          'driver_id' => $driver_id,
-          'van_id' => $vanid,
-          'destination' => $destination->destination_name,
-          'origin' => $terminals->destination_name,
-          'total_passengers' => $totalPassengers,
-          'total_booking_fee' => $totalBookingFee,
-          'community_fund' => $cf*$totalPassengers,
-          'report_status' => 'Accepted',
-          'date_departed' => $request->dateDeparted,
-          'time_departed' => $timeDepartedFormat,
-          'reportedBy' => 'Super-Admin',
-        ]);
-      }else if($totalPassengers <  10){
-         $trip = Trip::create([
-           'driver_id' => $driver_id,
-           'van_id' => $vanid,
-           'destination' => $destination->destination_name,
-           'origin' => $terminals->destination_name,
-           'total_passengers' => $totalPassengers,
-           'total_booking_fee' => $totalBookingFee,
-           'community_fund' => $cf*$totalPassengers,
-           'report_status' => 'Accepted',
-           'date_departed' => $request->dateDeparted,
-           'time_departed' => $timeDepartedFormat,
-           'reportedBy' => 'Super-Admin',
-         ]);
+  
+    //dd($destinationArr);
+     for($i = 0; $i < count($destinationArr); $i++){
+        if(($numOfPassengers[$i] !== null || $numOfPassengers[$i] != 0) 
+        && ($numOfDiscountPassengers[$i] !== null || $numOfDiscountPassengers[$i] != 0)){
+          $ticketArr[$i] = array($destinationArr[$i] => array(
+            'numOfRegPass' => $numOfPassengers[$i] == 0 ? 0 : $numOfPassengers[$i],
+            'numOfDisPass' => $numOfDiscountPassengers[$i] == 0 ? 0 : $numOfDiscountPassengers[$i], 
+          ));
+        }else{
+          continue;
+        }
       }
+
+      foreach($ticketArr as $key => $innerArray){
+        foreach($innerArray as $innerArrayKeys => $innerArrayValues){
+          foreach($innerArrayValues as $numPassKey => $numPassValue){
+            if($numPassValue != 0){
+              $ticketType = $numPassKey == 'numOfRegPass' ? 'Regular' : 'Discount';
+              for($i = 0; $i < $numPassValue; $i++){
+                $amountpaid = Ticket::where('destination_id', $innerArrayKeys)->where('type', $ticketType)->first()->fare;
+                //echo $key . ' ' . $amountpaid . ' ' . $innerArrayKeys . ' ' . $i . ' ' . $numPassValue . '<br/>';   
+                $destination_name = Destination::find($innerArrayKeys);  
+                Transaction::create([
+                  "trip_id" => $trip->trip_id,
+                  "destination" => $destination_name->destination_name,
+                  "origin" => $terminals->destination_name,
+                  "amount_paid" => $amountpaid,
+                  "status" => "Departed",
+                ]);
+              }
+            }
+          }
+        }
+      }
+
+      //dd($ticketArr);
+    }else{
+      $trip = Trip::create([
+        'driver_id' => $driver_id,
+        'van_id' => $vanid,
+        'destination' => $destination->destination_name,
+        'origin' => $terminals->destination_name,
+        'total_passengers' => $totalPassengers,
+        'total_booking_fee' => $totalBookingFee,
+        'community_fund' => $cf*$totalPassengers,
+        'report_status' => 'Accepted',
+        'date_departed' => $request->dateDeparted,
+        'time_departed' => $timeDepartedFormat,
+        'reportedBy' => 'Super-Admin',
+      ]);
 
       $numberofmainpassengers = $request->numPassMain;
       $numberofmaindiscount = $request->numDisMain;
@@ -229,143 +196,203 @@ class AdminCreateDriverReportController extends Controller
       $shortTripDiscountFare = $terminal->short_trip_fare_discount;
 
       $mainterm = Destination::where('is_main_terminal', true)->first()->destination_name;
-      if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
-         ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+          //1. If all are true
+        if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
+        ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+          for($i = 0; $i < $numberofmainpassengers; $i++){
+            $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
+            $amountpaid = $terminalfare;
+            Transaction::create([
+              "trip_id" => $trip->trip_id,
+              "destination" => $mainterm,
+              "origin" => $terminal->destination_name,
+              "amount_paid" => $amountpaid,
+              "status" => "Departed",
+            ]);
+          }
 
-            for($i = 0; $i < $numberofmainpassengers; $i++){
-               if($numberofmaindiscount > 0){
-                 $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Discount')->first()->fare;
-                 $amountpaid = $terminalfare;
-               }else{
-                 $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
-                 $amountpaid = $terminalfare;
-               }
+          for($i = 0; $i < $numberofmaindiscount; $i++){
+            $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Discount')->first()->fare;
+            $amountpaid = $terminalfare;
+            Transaction::create([
+              "trip_id" => $trip->trip_id,
+              "destination" => $mainterm,
+              "origin" => $terminal->destination_name,
+              "amount_paid" => $amountpaid,
+              "status" => "Departed",
+            ]);
+          }
 
-               Transaction::create([
-                 "trip_id" => $trip->trip_id,
-                 "destination" => $mainterm,
-                 "origin" => $terminal->destination_name,
-                 "amount_paid" => $amountpaid,
-                 "status" => "Departed",
-               ]);
+          for($i = 0; $i < $numberofstpassengers; $i++){
+            $amountpaid = $shortTripFare;
+            Transaction::create([
+              "trip_id" => $trip->trip_id,
+              "destination" => $mainterm,
+              "origin" => $terminal->destination_name,
+              "amount_paid" => $amountpaid,
+              "status" => "Departed",
+            ]);
+          }
 
-               $numberofmaindiscount--;
-            }
-
-            for($i = 0; $i < $numberofstpassengers; $i++){
-               if($numberofstdiscount > 0){
-                 $amountpaid = $shortTripDiscountFare;
-               }else{
-                 $amountpaid = $shortTripFare;
-               }
-
-               Transaction::create([
-                 "trip_id" => $trip->trip_id,
-                 "destination" => $mainterm,
-                 "origin" => $terminal->destination_name,
-                 "amount_paid" => $amountpaid,
-                 "status" => "Departed",
-               ]);
-
-               $numberofstdiscount--;
-            }
-
+          for($i = 0; $i < $numberofstdiscount; $i++){
+            $amountpaid = $shortTripDiscountFare;
+            Transaction::create([
+              "trip_id" => $trip->trip_id,
+              "destination" => $mainterm,
+              "origin" => $terminal->destination_name,
+              "amount_paid" => $amountpaid,
+              "status" => "Departed",
+            ]);
+          }
+      //2. If num of dis main pass is false     
       }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) &&
-         ($numberofstpassengers !== null && $numberofstdiscount == null)){
+      ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+        for($i = 0; $i < $numberofmainpassengers; $i++){
+          $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
+          $amountpaid = $terminalfare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
 
-         $amountpaid = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;;
+        for($i = 0; $i < $numberofstpassengers; $i++){
+          $amountpaid = $shortTripFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
 
-         for($i = 0; $i < $numberofmainpassengers; $i++){
-           Transaction::create([
-             "trip_id" => $trip->trip_id,
-             "destination" => $mainterm,
-             "origin" => $terminal->destination_name,
-             "amount_paid" => $amountpaid,
-             "status" => "Departed",
-           ]);
-         }
-
-         for($i = 0; $i < $numberofstpassengers; $i++){
-           Transaction::create([
-             "trip_id" => $trip->trip_id,
-             "destination" => $mainterm,
-             "origin" => $terminal->destination_name,
-             "amount_paid" => $shortTripFare,
-             "status" => "Departed",
-           ]);
-         }
-
-      }else if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
-         ($numberofstpassengers == null && $numberofstdiscount == null)){
-
-         for($i = 0; $i < $numberofmainpassengers; $i++){
-           if($numberofmaindiscount > 0){
-             $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Discount')->first()->fare;
-             $amountpaid = $terminalfare;
-           }else{
-             $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
-             $amountpaid = $terminalfare;
-           }
-
-           Transaction::create([
-             "trip_id" => $trip->trip_id,
-             "destination" => $mainterm,
-             "origin" => $terminal->destination_name,
-             "amount_paid" => $amountpaid,
-             "status" => "Departed",
-           ]);
-
-           $numberofmaindiscount--;
-         }
-
+        for($i = 0; $i < $numberofstdiscount; $i++){
+          $amountpaid = $shortTripDiscountFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      //3. If num of dis main pass and num st pass is false     
       }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) &&
-         ($numberofstpassengers == null && $numberofstdiscount == null)){
-         $amountpaid = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;;
+      ($numberofstpassengers == null && $numberofstdiscount !== null)){
+        for($i = 0; $i < $numberofmainpassengers; $i++){
+          $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
+          $amountpaid = $terminalfare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
 
-         for($i = 0; $i < $numberofmainpassengers; $i++){
-           Transaction::create([
-             "trip_id" => $trip->trip_id,
-             "destination" => $mainterm,
-             "origin" => $terminal->destination_name,
-             "amount_paid" => $amountpaid,
-             "status" => "Departed",
-           ]);
-         }
+        for($i = 0; $i < $numberofstdiscount; $i++){
+          $amountpaid = $shortTripDiscountFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      //4. If num of dis main pass, num st pass, and num st pass are false     
+      }else if(($numberofmainpassengers !== null && $numberofmaindiscount == null) &&
+      ($numberofstpassengers == null && $numberofstdiscount == null)){
+        $amountpaid = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;;
 
+        for($i = 0; $i < $numberofmainpassengers; $i++){
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      //5. If num main pass is false
+      }else if(($numberofmainpassengers == null && $numberofmaindiscount !== null) &&
+      ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+        for($i = 0; $i < $numberofmaindiscount; $i++){
+          $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Discount')->first()->fare;
+          $amountpaid = $terminalfare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+
+        for($i = 0; $i < $numberofstpassengers; $i++){
+          $amountpaid = $shortTripFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+
+        for($i = 0; $i < $numberofstdiscount; $i++){
+          $amountpaid = $shortTripDiscountFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      //6. if num main pass and num main dis pass are false
       }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) &&
-         ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+      ($numberofstpassengers !== null && $numberofstdiscount !== null)){
+        for($i = 0; $i < $numberofstpassengers; $i++){
+          $amountpaid = $shortTripFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
 
-         for($i = 0; $i < $numberofstpassengers; $i++){
-               if($numberofstdiscount > 0){
-                 $amountpaid = $shortTripDiscountFare;
-               }else{
-                 $amountpaid = $shortTripFare;
-               }
-
-               Transaction::create([
-                 "trip_id" => $trip->trip_id,
-                 "destination" => $mainterm,
-                 "origin" => $terminal->destination_name,
-                 "amount_paid" => $amountpaid,
-                 "status" => "Departed",
-               ]);
-
-               $numberofstdiscount--;
-            }
-
+        for($i = 0; $i < $numberofstdiscount; $i++){
+          $amountpaid = $shortTripDiscountFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      //7. if num main pass, num main dis pass, and  are false
       }else if(($numberofmainpassengers == null && $numberofmaindiscount == null) &&
-         ($numberofstpassengers !== null && $numberofstdiscount == null)){
-
-         for($i = 0; $i < $numberofstpassengers; $i++){
-           Transaction::create([
-             "trip_id" => $trip->trip_id,
-             "destination" => $mainterm,
-             "origin" => $terminal->destination_name,
-             "amount_paid" => $shortTripFare,
-             "status" => "Departed",
-           ]);
-         }
-      }
+      ($numberofstpassengers == null && $numberofstdiscount !== null)){
+        for($i = 0; $i < $numberofstdiscount; $i++){
+          $amountpaid = $shortTripDiscountFare;
+          Transaction::create([
+            "trip_id" => $trip->trip_id,
+            "destination" => $mainterm,
+            "origin" => $terminal->destination_name,
+            "amount_paid" => $amountpaid,
+            "status" => "Departed",
+          ]);
+        }
+      }  
     }
   return redirect('home/terminal')->with('success', 'Successfully created a report!');
   }

@@ -51,73 +51,74 @@ class AdminCreateDriverReportRequest extends FormRequest
           $qty = $this->request->get('qty');
           foreach($qty as $key => $value){
             $qtySum = $qtySum + $value;
-            if($value === null){
+            if($value == 0 || $value == null){
               $qtyCounter++;
             }
           }
 
-          if($totalPass > $qtySum){
+          $desc = $this->request->get('disqty');
+          $descCounter = 0;
+          $descSum = 0;
+          foreach($desc as $key => $value){
+            $descSum = $descSum + $value;
+            if($value == 0 || $value == null){
+              $descCounter = 0;
+            }
+          }
+
+          $totalSum = $qtySum + $descSum;
+
+          if($totalPass > $totalSum){
             $rules['qty'] = "numeric|min:1|max:".$totalPass."|required";
           }
 
-          if(($qtyCounter == count($qty)) && ($this->request->get('totalPassengers') !== null)){
+          if(($qtyCounter == count($qty) && $descCounter == count($desc)) 
+          && ($this->request->get('totalPassengers') !== null || $this->request->get('totalPassengers') != 0)){
             $rules['qty'] = "min:1";
           }
 
-          if($totalPass != $qtySum){
+          if($totalPass != $totalSum){
             $rules['totalPassengers'] = "in:" . $qtySum;
           }
 
         }else{
 
           $rules = [
-            "numPassMain" => "numeric|min:1|max:18|required_without_all:numPassST",
-            "numPassST" => "numeric|min:1|max:18|required_without_all:numPassMain",
+            "numPassMain" => "numeric|required_without_all:numPassST",
+            "numPassST" => "numeric|required_without_all:numPassMain",
           ];
 
-          if($this->request->get('numDisMain') > $this->request->get('numPassMain')){
-            $rules['numDisMain'] = "nullable|numeric|min:1|max:numPassMain";
-          }else{
-            $rules['numDisMain'] = "nullable|numeric|min:1|max:18";
-          }
 
-          if($this->request->get('numDisST') > $this->request->get('numPassST')){
-            $rules['numDisST'] = "nullable|numeric|min:1|max:numPassST";
-          }else{
-            $rules['numDisST'] = "nullable|numeric|min:1|max:18";
-          }
-
-          if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
-            && (($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
-            $rules['numPassMain'] = "nullable";
+          //1
+          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') !== 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
             $rules['numDisMain'] = "nullable";
-          }else if((($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))
-            && (($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') !== null || $this->request->get('numDisMain') != 0))){
+          //2.
+          }else if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') !== 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
+            $rules['numDisMain'] = "nullable";
             $rules['numPassST'] = "nullable";
-            $rules['numDisST'] = "nullable";
-          }
-
-          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0))
-            && (($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
-            $rules['numDisMain'] = "nullable";
-            $rules['numDisST'] = "nullable";
-          }
-
-          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          //3.
+          }else if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') !== 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
           && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
             $rules['numDisMain'] = "nullable";
             $rules['numPassST'] = "nullable";
             $rules['numDisST'] = "nullable";
-          }else if((($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))
-          && (($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))){
-            $rules['numDisST'] = "nullable";
+          //4.
+          }else if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') !== null || $this->request->get('numDisMain') != 0))
+          && (($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
+            $rules['numPassMain'] = "nullable";
+          //5.
+          }else if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
             $rules['numPassMain'] = "nullable";
             $rules['numDisMain'] = "nullable";
-          }
-
-          if((($this->request->get('numPassMain') !== null || $this->request->get('numPassMain') != 0) && ($this->request->get('numPassST') !== null || $this->request->get('numPassST') != 0))
-            && (($this->request->get('numDisMain') !== null || $this->request->get('numDisMain') !== 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
-            $rules['numDisST'] = "nullable";
+          //6.   
+          }else if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') !== null || $this->request->get('numDisST') != 0))){
+            $rules['numPassMain'] = "nullable";
+            $rules['numDisMain'] = "nullable";
+            $rules['numPassST'] = "nullable";
           }
 
         }
@@ -157,14 +158,26 @@ class AdminCreateDriverReportRequest extends FormRequest
           }
         }
 
-        if($totalPass > $qtySum){
+        $desc = $this->request->get('disqty');
+          $descCounter = 0;
+          $descSum = 0;
+          foreach($desc as $key => $value){
+            $descSum = $descSum + $value;
+            if($value == 0 || $value == null){
+              $descCounter = 0;
+            }
+          }
+        
+        $totalSum = $qtySum + $descSum;  
+          
+        if($totalPass > $totalSum){
           $messages["qty.max"] = "The number of passengers per destination should be equal to the total number of passengers";
         }
-        if(($qtyCounter == count($qty)) && ($this->request->get('totalPassengers') !== null)){
+        if(($qtyCounter == count($qty) && $descCounter == count($desc))){
           $messages["qty.min"] = "The number of passengers per destination should be equal to the total number of passengers";
         }
 
-        if($totalPass != $qtySum){
+        if($totalPass != $totalSum){
           $messages["totalPassengers"] = "The total number of passengers must be equal to the sum of passengers per destination";
         }
       }else{
@@ -174,18 +187,6 @@ class AdminCreateDriverReportRequest extends FormRequest
           "numDisST.numeric" => "Discouted passengers for short trips must be numeric",
           "numDisST.min" => "The number of discounted passengers must at least be 1",
         ];
-
-        if($this->request->get('numDisMain') > $this->request->get('numPassMain')){
-          $messages['numDisMain.max'] = "The number of discounted passengers cannot be more than the number of passengers";
-        }else{
-          $messages['numDisMain.max'] = "The number of discounted passengers cannot be more than 18";
-        }
-
-        if($this->request->get('numDisST') > $this->request->get('numPassST')){
-          $messages['numDisST.max'] = "The number of discounted passengers cannot be more than the number of passengers";
-        }else{
-          $messages['numDisST.max'] = "The number of discounted passengers cannot be more than the number of passengers";
-        }
 
       }
       return $messages;
