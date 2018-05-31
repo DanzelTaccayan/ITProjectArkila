@@ -158,7 +158,7 @@ class TransactionsController extends Controller
                             'date_departed' => $dateDeparted,
                             'report_status' => 'Accepted',
                             'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second,
-                            'reportedBy' => 'Super-Admin'
+                            'reported_by' => 'Super-Admin'
                         ]);
 
 

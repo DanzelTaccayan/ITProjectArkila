@@ -19,7 +19,7 @@ class CreateSoldTicketTable extends Migration
             $table->string('ticket_number');
             $table->integer('destination_id')
                 ->unsigned();
-            $table->integer('reservation_id')
+            $table->integer('user_id')
                 ->unsigned()
                 ->nullable();
             $table->decimal('amount_paid', 11, 2);
@@ -31,8 +31,8 @@ class CreateSoldTicketTable extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
 
-            $table->foreign('reservation_id')
-                ->references('id')->on('reservation')
+            $table->foreign('user_id')
+                ->references('id')->on('users')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
         });
