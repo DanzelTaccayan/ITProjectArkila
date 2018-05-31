@@ -38,47 +38,49 @@
                                     </div>
                                 </td>
                             </tr>
-                            <!--RESTORE MODAL-->
-                            <div class="modal" id="{{'restoreDriver'.$archivedDriver->member_id}}">
-                                <form method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
-                                    {{csrf_field()}}
-                                    {{method_field('PATCH')}}
-                                    <div class="modal-dialog" style="margin-top: 10%;">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span></button>
-                                                <h4 class="modal-title"></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h1 class="text-center text-green"><i class="fa fa-undo"></i> RESTORE</h1>
-                                                <p class="text-center">RESTORE <strong class="text-green text-uppercase">{{$archivedDriver->full_name}} </strong>AS A DRIVER.</p> 
-                                                <p class="text-center">CHOOSE OPERATOR</p>            
-                                                <div class="form-group">
-                                                    <select name="operator" class="form-control select2">
-                                                        <option value="">None</option>
-                                                       @foreach($activeOperators as $activeOperator)
-                                                            <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer"> 
-                                                <div class="text-center">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-                                                    <button type="submit" class="btn btn-success">RESTORE</button>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
             <!-- /.box-body -->
+            <!--RESTORE MODAL-->
+            @foreach($archivedDrivers as $archivedDriver)
+                <div class="modal" id="{{'restoreDriver'.$archivedDriver->member_id}}">
+                <form method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
+                    {{csrf_field()}}
+                    {{method_field('PATCH')}}
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-green"><i class="fa fa-undo"></i> RESTORE</h1>
+                                <p class="text-center">RESTORE <strong class="text-green text-uppercase">{{$archivedDriver->full_name}} </strong>AS A DRIVER.</p>
+                                <p class="text-center">CHOOSE OPERATOR</p>
+                                <div class="form-group">
+                                    <select name="operator" class="form-control select2">
+                                        <option value="">None</option>
+                                        @foreach($activeOperators as $activeOperator)
+                                            <option value="{{$activeOperator->member_id}}">{{$activeOperator->full_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                                    <button type="submit" class="btn btn-success">RESTORE</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+           @endforeach
         </div>
         <!-- /.box -->
     </div>
