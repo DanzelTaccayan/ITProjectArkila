@@ -52,7 +52,7 @@
                 <h1 ><strong>COMPANY INFORMATION</strong></h1>
             </div>
 
-            <div style="padding: 2% 10% 0% 10%">
+            <div style="padding: 2% 10% 0% 10%" class="padding-side-25">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
                     <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}" val-contact>    
@@ -74,7 +74,7 @@
                     <label>Closing Time: </label>
                     <input type="text" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited in the Company Profile page under the Settings tab.</p>
+                <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited later in the Company Profile page under the Settings tab.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <span class="step"></span>
@@ -90,7 +90,7 @@
                 <h1><strong>TERMINALS</strong></h1>
             </div>
             <div style="padding: 2% 10% 0% 10%">
-                <h4><strong>Main Terminal</strong></h4> 
+                <h4><strong><i class="fa fa-home"></i> Main Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
                     <input type="text" class="form-control" name="addMainTerminal" value="{{old('addMainTerminal')}}" required>
@@ -99,8 +99,8 @@
                     <label>Booking Fee: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="0" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
                 </div>
-        
-                <h4><strong>Destination Terminal</strong></h4> 
+                <hr>    
+                <h4><strong><i class="fa fa-map-marker"></i> Destination Terminal</strong></h4> 
                 <div class="form-group">
                     <label>Name: <span class="text-red">*</span> </label>
                     <input type="text" class="form-control" name="addTerminal" value="{{old('addTerminal')}}" required>
@@ -153,7 +153,8 @@
             <div style="padding: 2% 10% 0% 10%">
                 <div class="form-group">
                     <label>Description:</label>
-                    <input type="text" class="form-control" name="addFeesDescSop" value="SOP" readonly>
+                    <input type="hidden" name="addFeesDescSop" value="SOP">
+                    <p class="info-container">SOP</p>
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>
@@ -161,7 +162,8 @@
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
-                    <input type="text" class="form-control" name="addFeesDescCom" value="Community Fund" readonly>
+                    <input type="hidden" name="addFeesDescCom" value="Community Fund">
+                    <p class="info-container">Community Fund</p>
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>

@@ -172,10 +172,10 @@ class TransactionsController extends Controller
 
                         //Update the queue in the van queue
                         $queue = $destination->vanQueue()->whereNotNull('queue_number')->get();
-                        if (count($queue) >= 1) {
-                            foreach ($queue as $trip) {
-                                $tripQueueNum = ($trip->queue_number) - 1;
-                                $trip->update([
+                        if (count($queue) > 0) {
+                            foreach ($queue as $van) {
+                                $tripQueueNum = ($van->queue_number) - 1;
+                                $van->update([
                                     'queue_number' => $tripQueueNum
                                 ]);
                             }
@@ -190,7 +190,7 @@ class TransactionsController extends Controller
                             }
 
                             VanQueue::create([
-                                'destination_id' => Destination::where('destination_name', $trip->destination)->first()->destination_id,
+                                'destination_id' => $destination->destination_id,
                                 'driver_id' => $trip->driver_id,
                                 'van_id' => $trip->van_id,
                                 'remarks' => 'OB',
@@ -309,18 +309,23 @@ class TransactionsController extends Controller
         }
     }
 
-    public function listSourceDrivers()
+    public function listSourceDrivers($driverOnVan)
     {
         $drivers = [];
 
-        foreach(Member::where('status','Active')->whereNotNull('license_number')->whereNotIn('member_id',VanQueue::all()->pluck('driver_id'))->get() as $member){
+        foreach(Member::where('status','Active')->whereNotNull('license_number')->whereNotIn('member_id',VanQueue::all()->pluck('driver_id'))->get() as $member) {
             array_push($drivers,[
                 'value' => $member->member_id,
                     'text' => $member->full_name
                 ]
             );
         }
-
+        if($vanOnQueueDriver = Member::find($driverOnVan)) {
+            array_push($drivers, [
+                'value' => $vanOnQueueDriver->member_id,
+                'text' => $vanOnQueueDriver->full_name
+            ]);
+        }
         return response()->json($drivers);
 
     }

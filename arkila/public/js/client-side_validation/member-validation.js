@@ -11,10 +11,10 @@
 
     $('[val-contact]').parsley({
       maxlength: 30,
-      pattern: /^[\d\(\)+]+$/
+      pattern: /^[\d\(\)+-]+$/
     });
 
-    $('[val-contact]').attr('data-parsley-pattern-message','Please use only numbers and symbols [().+].');
+    $('[val-contact]').attr('data-parsley-pattern-message','Please use only numbers and symbols [().+-].');
     $('[val-contact]').attr('data-parsley-required-message','Please enter contact number.');
 
   // Validate address.

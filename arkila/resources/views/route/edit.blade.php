@@ -13,7 +13,7 @@
   <div class="form-section">
       <div class="form-group">
           <label>Name: <span class="text-red">*</span> </label>
-          <input type="text" class="form-control" name="addTerminal" value="{{$route->destination_name}}" readonly>
+          <p class="info-container">{{$route->destination_name}}</p>
       </div>
       <div class="form-group">
           <label>Regular Fare: <span class="text-red">*</span> </label>

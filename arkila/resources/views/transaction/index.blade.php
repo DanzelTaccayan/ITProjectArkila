@@ -295,12 +295,12 @@
 
                                                 <div class="pull-right">
                                                 <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px; padding-top: 13px;">SOLD TICKETS</a>
-                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->orderBy('queue_number')->first() ?? null)
+                                                @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->where('queue_number',1)->first() ?? null)
                                                     <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn bg-navy btn-flat" style="height: 50px;">BOARD PASSENGERS</button>
                                                 @elseif ($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','OB')->orderBy('queue_number')->first() ?? null)
-                                                        <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckOB-modal">BOARD PASSENGERS</button>
+                                                        <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckOB-modal{{$vanOnQueue->van_queue_id}}">BOARD PASSENGERS</button>
 
-                                                        <div class="modal" id="ondeckOB-modal">
+                                                        <div class="modal" id="ondeckOB-modal{{$vanOnQueue->van_queue_id}}">
                                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -324,9 +324,9 @@
                                                             <!-- /.modal-dialog -->
                                                         </div>
                                                 @elseif($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','ER')->orWhere('remarks','CC')->orderBy('queue_number')->first() ?? null)
-                                                        <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckERCC-modal">BOARD PASSENGERS</button>
+                                                        <button type="button" class="btn bg-navy btn-flat" style="height: 50px;" data-toggle="modal" data-target="#ondeckERCC-modal{{$vanOnQueue->van_queue_id}}">BOARD PASSENGERS</button>
 
-                                                        <div class="modal" id="ondeckERCC-modal">
+                                                        <div class="modal" id="ondeckERCC-modal{{$vanOnQueue->van_queue_id}}">
                                                             <div class="modal-dialog" style="margin-top: 10%;">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -359,7 +359,7 @@
 
                                             </div>
                                         </div>
-                                        @if($terminal->vanQueue->where('queue_number',1)->first() ?? null)
+                                        @if($vanOnDeck = $terminal->vanQueue->where('queue_number',1)->first() ?? null)
                                             <div id="boardTickets{{$terminal->destination_id}}" name="boardTickets">
                                             <div class="row">
                                                 <div id="list-left1" class="dual-list list-left col-md-5">
@@ -367,7 +367,7 @@
                                                         <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                                             <span class="col-md-6">
                                                                 <h6>On Deck:</h6>
-                                                                 <h4>{{$terminal->vanQueue->where('queue_number',1)->first()->van->plate_number}}</h4>
+                                                                 <h4>{{$vanOnDeck->van->plate_number}}</h4>
                                                             </span>
                                                              <span class="pull-right btn-group">
                                                                 <button type="button" name="changeDriverBtn" data-terminal="{{$terminal->destination_id}}" class="btn btn-sm btn-primary" style="border-radius: 100%">
@@ -382,7 +382,7 @@
                                                             <span class="col-md-8">
                                                                 <h6>Driver:</h6>
                                                                  <h4>
-                                                                    <a href="#" class="text-white" name="driverChange" data-terminal="{{$terminal->destination_id}}" data-driver="{{$terminal->vanQueue()->orderBy('queue_number')->whereNotNull('queue_number')->first()->driver_id}}" data-van="{{$terminal->vanQueue()->orderBy('queue_number')->whereNotNull('queue_number')->first()->van_queue_id}}"></a>
+                                                                    <a href="#" class="text-white" name="driverChange" data-terminal="{{$terminal->destination_id}}" data-driver="{{$vanOnDeck->driver_id}}" data-van="{{$vanOnDeck->van_queue_id}}"></a>
                                                                     <i class='fa fa-pencil'></i>
                                                                 </h4>
                                                             </span>
@@ -395,11 +395,11 @@
                                                         <div name="deletedriver-header" data-terminal="{{$terminal->destination_id}}" class="box-header bg-blue hidden">
                                                             <span class="col-md-12">
                                                                  <p>
-                                                                     Are you sure you want to remove <strong>{{$terminal->vanQueue->where('queue_number',1)->first()->van->plate_number}}</strong> on deck?
+                                                                     Are you sure you want to remove <strong>{{$vanOnDeck->van->plate_number}}</strong> on deck?
                                                                  </p>
                                                             </span>
                                                              <span class="pull-right">
-                                                                 <form method="POST" action="{{route('vanqueue.destroy',[$terminal->vanQueue->where('queue_number',1)->first()->van_queue_id])}}">
+                                                                 <form method="POST" action="{{route('vanqueue.destroy',[$vanOnDeck->van_queue_id])}}">
                                                                      {{method_field('DELETE')}}
                                                                      {{csrf_field()}}
                                                                     <button type="button" data-terminal="{{$terminal->destination_id}}" name="onDeckBtn2" class="btn btn-sm btn-primary">
@@ -956,7 +956,6 @@
                         '_token': '{{csrf_token()}}'
                     },
                     success: function(response){
-
                         window.location.replace('/home/trip-log/'+response)
                     },
                     error:function(response) {
@@ -1322,7 +1321,7 @@
                 type: 'select',
                 title: 'Change Driver',
                 value: $(this).data('driver'),
-                source: "{{route('transactions.listSourceDrivers')}}",
+                source: "/listSourceDrivers/"+$(this).data('driver'),
                 sourceCache: true,
                 pk: $(this).data('van'),
                 url: '/changeDriver/'+$(this).data('van'),

@@ -75,7 +75,7 @@
                         			</tr>
                         			<tr>
                         				<th>Contact Number *</th>
-                        				<td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control"></td>
+                        				<td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control" val-phone></td>
                         			</tr>
                         			<tr>
                         				<th>Ticket Qty *</th>

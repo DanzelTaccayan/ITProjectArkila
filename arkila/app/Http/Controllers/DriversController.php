@@ -103,7 +103,7 @@ class DriversController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        return redirect(route('drivers.index'))->with('success', 'Driver registered successfully');
+        return redirect(route('drivers.index'))->with('success', 'Driver '. $createdDriver->first_name .' '. $createdDriver->middle_name .' '. $createdDriver->last_name .' has been registered successfully');
     }
 
     public function createFromOperator(Member $operator)
@@ -165,7 +165,7 @@ class DriversController extends Controller
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
 
-        return redirect(route('operators.show',[$operator->member_id]));
+        return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Driver '. $createdDriver->first_name .' '. $createdDriver->middle_name .' '. $createdDriver->last_name .' has been registered successfully');
     }
 
     public function createFromVan(Van $vanNd)
@@ -246,7 +246,7 @@ class DriversController extends Controller
         if(session()->get('vanBack') && session()->get('vanBack') == route('operators.show',[$vanNd->operator->first()->member_id])) {
             return redirect(route('operators.show',[$vanNd->operator->first()->member_id]));
         } else {
-            return redirect(route('vans.index'));
+            return redirect(route('vans.index'))->with('success', 'Driver '. $createdDriver->first_name .' '. $createdDriver->middle_name .' '. $createdDriver->last_name .' and a Van has been registered successfully');
         }
 
     }
@@ -336,7 +336,7 @@ class DriversController extends Controller
             return redirect($routeOP);
 
         } else {
-            return redirect(route('drivers.index'));
+            return redirect(route('drivers.index'))->with('success', 'Driver '. $driver->full_name .' has been updated successfully');
         }
     }
     public function generatePDF()

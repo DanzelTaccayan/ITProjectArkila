@@ -127,7 +127,7 @@ class VansController extends Controller
             \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return redirect(route('vans.index'))->with('success', 'Van registered successfully');;
+        return redirect(route('vans.index'))->with('success', 'Van  '. request('plateNumber') .' successfully registered');
     }
 
     /**
@@ -203,7 +203,7 @@ class VansController extends Controller
         }
         else
         {
-            return redirect(route('operators.show',[$operator->member_id]));
+            return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Van  '. request('plateNumber') .' successfully registered');
         }
     }
 
@@ -305,7 +305,7 @@ class VansController extends Controller
                     $van->members()->attach($newDriver);
                 }
                 DB::commit();
-                session()->flash('message','Van '.request('plateNumber').'Successfully Edited');
+                session()->flash('message','Van '.request('plateNumber').'Successfully updated');
             }
             catch(\Exception $e)
             {
@@ -319,7 +319,7 @@ class VansController extends Controller
             }
             else
             {
-                return redirect(route('vans.index'));
+                return redirect(route('vans.index'))->with('success', 'Van  '. request('plateNumber') .' successfully updated');
             }
         }
         else
