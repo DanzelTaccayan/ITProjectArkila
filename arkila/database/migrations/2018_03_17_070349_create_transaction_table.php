@@ -27,6 +27,8 @@ class CreateTransactionTable extends Migration
 
             $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending','Accepted','Departed','Refunded','Lost/Expired','Declined']);
+            $table->boolean('is_reservation')
+            ->default(false);
 
             $table->foreign('trip_id')
             ->references('trip_id')->on('trip')
