@@ -68,9 +68,9 @@ class ArchiveController extends Controller
                 return back()->withErrors('There seems to be a problem. Please try again');
             }
         } else {
-            //Throw error message
+            return back()->withErrors('The operator is a driver on the van queue, please remove him as a driver or remove the van on the queue before archiving the operator.');
         }
-        return redirect(route('operators.index'));
+        return back()->with('success', 'Successfully archived '.$operator->full_name);
     }
 
     public function restoreArchivedOperator(Member $archivedOperator)
@@ -86,7 +86,7 @@ class ArchiveController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again');
         }
-        return back();
+        return back()->with('success', 'Successfully restored '.$archivedOperator->full_name);
     }
 
     //Drivers
@@ -117,7 +117,7 @@ class ArchiveController extends Controller
             \Log::info($e);
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return back();
+        return back()->with('success', 'Successfully archived '.$driver->full_name);
     }
 
     public function restoreArchivedDriver(Member $archivedDriver)
@@ -139,7 +139,7 @@ class ArchiveController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return back();
+        return back()->with('success', 'Successfully restored '.$archivedDriver->full_name);
     }
 
     //Vans
@@ -192,7 +192,7 @@ class ArchiveController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return back();
+        return back()->with('success', 'Successfully archived van '.$van->plate_number);
     }
 
     public function showAllArchivedDriver()
@@ -228,6 +228,6 @@ class ArchiveController extends Controller
             DB::rollback();
             return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
         }
-        return back();
+        return back()->with('success', 'Successfully restored van '.$archivedVan->plate_number);
     }
 }
