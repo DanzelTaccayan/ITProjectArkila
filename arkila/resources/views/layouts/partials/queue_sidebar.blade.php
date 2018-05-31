@@ -13,6 +13,9 @@
                     <h4><i class="fa fa-home"></i> {{$terminalSidebar->destination_name}}</h4>
                     <div class="sidequeue-body"> 
                         <div class="sidequeue-body-color scrollbar scrollbar-info thin">
+                            @if($terminalSidebar->vanQueue()->whereNotNull('queue_number')->count() == 0)
+                                <h2 class="text-center">NO VAN FOUND ON QUEUE.</h2>
+                            @else
                             <ol id ="queue" class="sidequeue-list sidequeue-ol">
                                 @foreach($terminalSidebar->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number','asc')->get() as $vanSideBar)
                                 <li id="unit" data-vanid="" class="form-horizontal">
@@ -35,6 +38,7 @@
                                 </li>
                                 @endforeach
                             </ol>
+                            @endif
                         </div>
                     </div>
                 </div>
