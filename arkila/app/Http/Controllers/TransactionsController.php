@@ -94,120 +94,130 @@ class TransactionsController extends Controller
      */
     public function depart(Destination $destination)
     {
+        if($vanOnQueue = $destination->vanQueue()->where('queue_number',1)->first()) {
+            if( $vanOnQueue->status == "ER" || $vanOnQueue->status == "CC") {
+                return Response::json(['error' => 'The van on queue for terminal '.$destination->destination_name.' has a remark of '.$vanOnQueue->status.', please move the van to the special units list or change its remark'], 422);
 
-        if ($vanOnQueue = $destination->vanQueue()->where('queue_number', 1)->first()) {
-            if ($soldTickets = SoldTicket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')->get()) {
-                //Compute for the total passenger, booking fee, and community fund
-                $totalPassengers = count($soldTickets);
+            } else {
+                if ($soldTickets = SoldTicket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')->get()) {
+                    //Compute for the total passenger, booking fee, and community fund
+                    $totalPassengers = count($soldTickets);
 
-                //Return Error
-                if($totalPassengers >  $vanOnQueue->van->seating_capacity) {
-                    return Response::json(['error' => 'Cannot Depart. The sold tickets exceeds the seating capacity of the van'], 422);
-                } elseif ( $totalPassengers == 0 ) {
-                    return Response::json(['error' => 'Cannot Depart. There are no sold tickets'], 422);
-                }
+                    //Return Error
+                    if($totalPassengers >  $vanOnQueue->van->seating_capacity) {
+                        return Response::json(['error' => 'Cannot Depart. The sold tickets exceeds the seating capacity of the van'], 422);
+                    } elseif ( $totalPassengers == 0 ) {
+                        return Response::json(['error' => 'Cannot Depart. There are no sold tickets'], 422);
+                    }
 
-                // Start transaction!
-                DB::beginTransaction();
-                try {
-                    $totalBooking = ($destination->routeOrigin->first()->booking_fee) * $totalPassengers;
-                    $totalCommunity = (Fee::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
+                    // Start transaction!
+                    DB::beginTransaction();
+                    try {
+                        $totalBooking = ($destination->routeOrigin->first()->booking_fee) * $totalPassengers;
+                        $totalCommunity = (Fee::where('description', 'Community Fund')->first()->amount) * $totalPassengers;
 
-                    //Since SOP would only be applied to vans that has loaded 10 and more passengers
-                    if ($totalPassengers >= 10) {
-                        $sop = (Fee::where('description', 'SOP')->first()->amount);
+                        //Since SOP would only be applied to vans that has loaded 10 and more passengers
+                        if ($totalPassengers >= 10) {
+                            $sop = (Fee::where('description', 'SOP')->first()->amount);
+
+                            Ledger::create([
+                                'description' => 'SOP',
+                                'amount' => $sop,
+                                'type' => 'Revenue'
+                            ]);
+
+                        } else {
+                            $sop = null;
+                        }
+
+                        //Depart the Van
+                        $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
+                        $trip = Trip::create([
+                            'driver_id' => $vanOnQueue->driver_id,
+                            'van_id' => $vanOnQueue->van_id,
+                            'destination' => $vanOnQueue->destination->destination_name,
+                            'origin' => $destination->routeOrigin->first()->destination_name,
+                            'total_passengers' => $totalPassengers,
+                            'total_booking_fee' => $totalBooking,
+                            'community_fund' => $totalCommunity,
+                            'SOP' => $sop,
+                            'date_departed' => $dateDeparted,
+                            'report_status' => 'Accepted',
+                            'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second,
+                            'reportedBy' => 'Super-Admin'
+                        ]);
+
 
                         Ledger::create([
-                            'description' => 'SOP',
-                            'amount' => $sop,
+                            'description' => 'Booking Fee',
+                            'amount' => $totalBooking,
                             'type' => 'Revenue'
                         ]);
 
-                    } else {
-                        $sop = null;
-                    }
-
-                    //Depart the Van
-                    $dateDeparted = Carbon::now(new DateTimeZone('Asia/Manila'));
-                    $trip = Trip::create([
-                        'driver_id' => $vanOnQueue->driver_id,
-                        'van_id' => $vanOnQueue->van_id,
-                        'destination' => $vanOnQueue->destination->destination_name,
-                        'origin' => $destination->routeOrigin->first()->destination_name,
-                        'total_passengers' => $totalPassengers,
-                        'total_booking_fee' => $totalBooking,
-                        'community_fund' => $totalCommunity,
-                        'SOP' => $sop,
-                        'date_departed' => $dateDeparted,
-                        'report_status' => 'Accepted',
-                        'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second,
-                        'reportedBy' => 'Super-Admin'
-                    ]);
-
-
-                    Ledger::create([
-                        'description' => 'Booking Fee',
-                        'amount' => $totalBooking,
-                        'type' => 'Revenue'
-                    ]);
-
-                    //Insert the departed tickets into the transaction table and then make the tickets available
-                    foreach ($soldTickets as $soldTicket) {
-                        Transaction::create([
-                            'ticket_name' => $soldTicket->ticket_number,
-                            'trip_id' => $trip->trip_id,
-                            'destination' => $vanOnQueue->destination->destination_name,
-                            'origin' => $destination->routeOrigin->first()->destination_name,
-                            'amount_paid' => $soldTicket->amount_paid,
-                            'status' => 'Departed'
-                        ]);
-
-                        $soldTicket->delete();
-                    }
-
-                    $vanOnQueue->delete();
-
-                    //Update the queue in the van queue
-                    $queue = $destination->vanQueue()->whereNotNull('queue_number')->get();
-                    if (count($queue) > 1) {
-                        foreach ($queue as $trip) {
-                            $tripQueueNum = ($trip->queue_number) - 1;
-                            $trip->update([
-                                'queue_number' => $tripQueueNum
+                        //Insert the departed tickets into the transaction table and then make the tickets available
+                        foreach ($soldTickets as $soldTicket) {
+                            Transaction::create([
+                                'ticket_name' => $soldTicket->ticket_number,
+                                'trip_id' => $trip->trip_id,
+                                'destination' => $vanOnQueue->destination->destination_name,
+                                'origin' => $destination->routeOrigin->first()->destination_name,
+                                'amount_paid' => $soldTicket->amount_paid,
+                                'status' => 'Departed'
                             ]);
-                        }
-                    }
 
-                    //Check if the Van has less than 10 passengers; if it has less than 10 then ask if it would be marked as OB
-                    if ($totalPassengers <= 10) {
-                        if ($destination->vanQueue()->whereNotNull('queue_number')->count()) {
-                            $queueNumber = $destination->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number', 'desc')->first()->queue_number + 1;
-                        } else {
-                            $queueNumber = 1;
+                            $soldTicket->delete();
                         }
 
-                        VanQueue::create([
-                            'destination_id' => Destination::where('destination_name', $trip->destination)->first()->destination_id,
-                            'driver_id' => $trip->driver_id,
-                            'van_id' => $trip->van_id,
-                            'remarks' => 'OB',
-                            'has_privilege' => 0,
-                            'queue_number' => $queueNumber
-                        ]);
+                        $vanOnQueue->delete();
 
+                        //Update the queue in the van queue
+                        $queue = $destination->vanQueue()->whereNotNull('queue_number')->get();
+                        if (count($queue) >= 1) {
+                            foreach ($queue as $trip) {
+                                $tripQueueNum = ($trip->queue_number) - 1;
+                                $trip->update([
+                                    'queue_number' => $tripQueueNum
+                                ]);
+                            }
+                        }
+
+                        //Check if the Van has less than 10 passengers; if it has less than 10 then ask if it would be marked as OB
+                        if ($totalPassengers < 10) {
+                            if ($destination->vanQueue()->whereNotNull('queue_number')->count()) {
+                                $queueNumber = $destination->vanQueue()->whereNotNull('queue_number')->orderBy('queue_number', 'desc')->first()->queue_number + 1;
+                            } else {
+                                $queueNumber = 1;
+                            }
+
+                            VanQueue::create([
+                                'destination_id' => Destination::where('destination_name', $trip->destination)->first()->destination_id,
+                                'driver_id' => $trip->driver_id,
+                                'van_id' => $trip->van_id,
+                                'remarks' => 'OB',
+                                'has_privilege' => 0,
+                                'queue_number' => $queueNumber
+                            ]);
+
+                        }
+
+                        DB::commit();
+                        session()->flash('success', 'Van with plate #'.$trip->van->plate_number.' has successfully departed');
+                        return $trip->trip_id;
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        \Log::info($e);
+                        return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
                     }
 
-                    DB::commit();
-                    session()->flash('success', 'Van with plate #'.$trip->van->plate_number.' has successfully departed');
-                    return $trip->trip_id;
-                } catch (\Exception $e) {
-                    DB::rollback();
-                    \Log::info($e);
-                    return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
                 }
 
             }
+
+        } else {
+            return Response::json(['error' => 'There is no van on queue for Terminal '.$destination->destination_name.', please add one to depart passengers'], 422);
+
         }
+
     }
 
     public function updatePendingTransactions()
