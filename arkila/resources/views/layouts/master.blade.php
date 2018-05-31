@@ -68,12 +68,9 @@
                     console.log(response);
                 });
             };
-
-            
         });
     </script>
     @show
-    <div id="confirmBoxModal"></div>
 </body>
 
 </html>

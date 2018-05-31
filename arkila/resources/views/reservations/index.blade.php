@@ -86,6 +86,7 @@
 <script>
     $(function() {
         $('.listReservation').DataTable({
+            'pageLength': 5,
             'paging': true,
             'lengthChange': false,
             'searching': true,
