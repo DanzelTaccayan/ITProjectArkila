@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CustomerRentalRequest;
+use App\Notifications\OnlineRentalAdminNotification;
 
 use App\Http\Controllers\Controller;
 
@@ -77,9 +78,7 @@ class MakeRentalController extends Controller
                 "rent_type" => 'Online',
                 "comment" => $request->message !== null ? $request->message : null,
               ]);
-          //dd($rent->departure_date);
-          // $user = User::find(Auth::id());
-          // $user->notify(new CustomerRent($user, $rent));
+         
           return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully made a rental');
       }
       else

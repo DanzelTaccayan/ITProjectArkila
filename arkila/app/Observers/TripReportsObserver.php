@@ -13,6 +13,7 @@ class TripReportsObserver
 {
     public function created(Trip $trip)
     {
+        //done
         if($trip->reportedBy == 'Driver' && $trip->report_status == 'Pending'){
             $userAdmin = User::where('user_type', 'Super-Admin')->first();
             $userDriver = User::find(Auth::id());

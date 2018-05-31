@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TripReportsDriverNotification;
 use App\Http\Requests\AdminCreateDriverReportRequest;
 use App\Http\Controllers\Controller;
 use App\Rules\checkCurrency;
@@ -94,7 +95,7 @@ class AdminCreateDriverReportController extends Controller
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
            'report_status' => 'Accepted',
-           'reportedBy' => 'Super-Admin',
+           'reported_by' => 'Admin',
         ]);
 
        $insertLegderQuery = array(
@@ -116,7 +117,7 @@ class AdminCreateDriverReportController extends Controller
            'date_departed' => $request->dateDeparted,
            'time_departed' => $timeDepartedFormat,
            'report_status' => 'Accepted',
-           'reportedBy' => 'SUper-Admin',
+           'reported_by' => 'Admin',
          ]);
 
         Ledger::create([
@@ -169,7 +170,6 @@ class AdminCreateDriverReportController extends Controller
           }
         }
       }
-
       //dd($ticketArr);
     }else{
       $trip = Trip::create([
@@ -183,7 +183,7 @@ class AdminCreateDriverReportController extends Controller
         'report_status' => 'Accepted',
         'date_departed' => $request->dateDeparted,
         'time_departed' => $timeDepartedFormat,
-        'reportedBy' => 'Super-Admin',
+        'reported_by' => 'Admin'
       ]);
 
       $numberofmainpassengers = $request->numPassMain;
@@ -392,7 +392,8 @@ class AdminCreateDriverReportController extends Controller
             "status" => "Departed",
           ]);
         }
-      }  
+      }
+      
     }
   return redirect('home/terminal')->with('success', 'Successfully created a report!');
   }
