@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Trip;
 use App\Ticket;
 use App\Van;
@@ -11,6 +12,7 @@ use App\Terminal;
 use App\Transaction;
 use App\Destination;
 use Carbon\Carbon;
+use App\Notifications\TripReportsDriverNotification;
 use PDF;
 use Illuminate\Validation\Rule;
 
@@ -118,6 +120,16 @@ class TripsController extends Controller
         ]);
          
         $trip->transactions()->update(['status' => 'Accepted']);
+        
+        $driverId = $trip->driver->user->id ?? null;
+        if($driverId !== null){
+          $userDriver = User::find($driverId) ?? null;
+          if($userDriver !== null){
+            $userAdmin = User::find(Auth::id());
+            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+          }
+        }
+        
         $message = "Trip " . $trip->trip_id . " successfully accepted";
         return redirect(route('trips.tripLog'))->with('success', $message);
     }
@@ -128,6 +140,15 @@ class TripsController extends Controller
             "report_status" => 'Declined',
         ]);
         
+        $driverId = $trip->driver->user->id ?? null;
+        if($driverId !== null){
+          $userDriver = User::find($driverId) ?? null;
+          if($userDriver !== null){
+            $userAdmin = User::find(Auth::id());
+            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+          }
+        }
+
         $trip->transactions()->update(['status' => 'Declined']);
         $message = "Trip " . $trip->trip_id . " successfully declined";
         return redirect(route('trips.driverReport'))->with('success', $message);

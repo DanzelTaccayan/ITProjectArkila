@@ -59,7 +59,7 @@ class OnlineRentalDriverNotification extends Notification implements ShouldQueue
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-          'notif_type' => 'Van Rental - Driver',
+          'notif_type' => 'VanRentalDriver',
           'info' => $this->rent,
           'id' => $this->user->id,
           'name' => $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name,

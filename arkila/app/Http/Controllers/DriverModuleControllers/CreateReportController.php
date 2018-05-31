@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DriverModuleControllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TripReportsAdminNotification;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Controllers\Controller;
 use App\Rules\checkCurrency;
@@ -19,14 +20,7 @@ use App\User;
 use App\Fee;
 class CreateReportController extends Controller
 {
-  // public function chooseTerminal()
-  // {
-  //   $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
-  //   $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
-  //   return view('drivermodule.report.driverChooseDestination',compact('origins','mainTerminal'));
-
-  // }
-
+  
   public function createReport()
   {
     $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
@@ -72,7 +66,7 @@ class CreateReportController extends Controller
      'report_status' => 'Pending',
      'date_departed' => $request->dateDeparted,
      'time_departed' => $timeDepartedFormat,
-     'reportedBy' => 'Driver',
+     'reported_by' => 'Driver',
    ]);
 
      $numberofmainpassengers = $request->numPassMain;
@@ -279,7 +273,9 @@ class CreateReportController extends Controller
           ]);
         }
       }
-  
+      
+      
+
       return redirect('/home/create-report')->with('success', 'Report created successfully!');
 
   }
