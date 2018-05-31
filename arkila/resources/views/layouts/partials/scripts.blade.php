@@ -47,7 +47,6 @@
     {{ Html::script('js/client-side_validation/member-validation.js') }}
     {{ Html::script('js/client-side_validation/driver-validation.js') }}
     {{ Html::script('js/client-side_validation/van-validation.js') }}
-    {{ Html::script('js/client-side_validation/settings-validation.js') }}
     {{ Html::script('js/client-side_validation/booking-form-validation.js') }}
     {{ Html::script('js/client-side_validation/driver-report-validation.js') }}
     {{ Html::script('js/notifications/pnotify.custom.min.js') }}

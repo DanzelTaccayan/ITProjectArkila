@@ -257,7 +257,7 @@ class RoutesController extends Controller
                 'short_trip_fare_discount' => $request->sdTripFare,
             ]);
 
-            $message = $name .' has been successfully edited.';
+            $message = $name .' has been successfully updated.';
         }
         else
         {
@@ -274,7 +274,7 @@ class RoutesController extends Controller
                 } 
             }   
             
-            $message = $name .' has been successfully edited.';
+            $message = $name .' has been successfully updated.';
         }
 
         if($request->regularFare !== $ticketRegular->first()->fare)
