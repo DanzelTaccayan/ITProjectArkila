@@ -42,17 +42,20 @@
       console.log('Component mounted');
       Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
-          console.log(notification);
+        console.log('puta');
+        console.log(notification);  
         let newUnreadNotifications = {
           data:{
             notif_type:notification.notif_type,
-            reservation_date:notification.reservation_date,
+            reservation_date:notification.reservation_date == null ? null : notification.reservation_date,
             info:notification.info,
             id:notification.user_id,
             name:notification.name,
           }
         };
         this.unreadNotifications.push(newUnreadNotifications);
+        console.log('HI');
+        console.log(newUnreadNotifications);
         });
     }
   }

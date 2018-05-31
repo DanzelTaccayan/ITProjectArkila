@@ -13,12 +13,11 @@ class TripReportsObserver
 {
     public function created(Trip $trip)
     {
-        //done
-        if($trip->reportedBy == 'Driver' && $trip->report_status == 'Pending'){
+        if($trip->reported_by == 'Driver' && $trip->report_status == 'Pending'){
             $userAdmin = User::where('user_type', 'Super-Admin')->first();
             $userDriver = User::find(Auth::id());
             $userAdmin->notify(new TripReportsAdminNotification($userDriver, $trip));
-        }else if($trip->reportedBy == 'Super-Admin' && $trip->report_status == 'Departed'){
+        }else if($trip->reported_by == 'Super-Admin' && $trip->report_status == 'Departed'){
             $driverId = $trip->driver->user->id ?? null;
             if($driverId !== null){
                 $userDriver = User::find($trip->driver->user->id) ?? null;
@@ -32,7 +31,7 @@ class TripReportsObserver
 
     public function updated(Trip $trip)
     {
-        if($trip->reportedBy == 'Driver' && ($trip->report_status == 'Accepted' || $trip->report_status == 'Declined')){
+        if($trip->reported_by == 'Driver' && ($trip->report_status == 'Accepted' || $trip->report_status == 'Declined')){
             $userDriver = User::find($trip->driver->user->id);
             $userAdmin = User::find(Auth::id());
             $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));

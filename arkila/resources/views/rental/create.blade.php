@@ -208,7 +208,7 @@
     $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
     </script>
     <script>
-    public function triggerDriver()
+    function triggerDriver()
     {
         var van = document.getElementById('plateNumber').value;
         var driver = document.getElementById('driver');
