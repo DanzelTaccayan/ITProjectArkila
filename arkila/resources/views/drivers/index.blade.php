@@ -27,7 +27,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
                         <tr>
                             <th>{{$driver->member_id}}</th>
@@ -43,39 +42,40 @@
                                 <!-- /.text-->
                             </td>
                         </tr>
-               
-                        <div class="modal" id="{{'deleteWarning'.$driver->member_id}}">
-                            <div class="modal-dialog" style="margin-top: 10%;">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title"></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
-                                        <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
-                                        <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
-                                            {{csrf_field()}}
-                                            {{method_field('PATCH')}}
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                <button type="submit" class="btn btn-danger">ARCHIVE</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
         <!-- /.box-body -->
+        @foreach($drivers->where('status','Active')->sortByDesc('member_id') as $driver)
+        <div class="modal" id="{{'deleteWarning'.$driver->member_id}}">
+            <div class="modal-dialog" style="margin-top: 10%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                        <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>
+                        <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
+                            {{csrf_field()}}
+                            {{method_field('PATCH')}}
+                            <div class="text-center">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
     <!-- /.box-->
 </div>
