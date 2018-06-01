@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('title', 'Booking Rules')
+@section('links')
 @section('content')
 <div class="padding-side-10">
 <h2 class="text-white text-center">BOOKING RULES</h2>
@@ -22,7 +23,7 @@
 								<td></td>
 							</tr>
 							<tr>
-								<th>Duration Days</th>
+								<th>Payment Due</th>
 								<td></td>
 							</tr>
 							<tr>
@@ -38,16 +39,21 @@
 				</div>
 				<div id="editReservationRules" class="padding-side-15 hidden">
 					<div class="form-group">
-						<label for="">Label</label>
-						<input type="text" class="form-control">
+						<label for="">Reservation Fee</label>
+						<input type="number" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="">Label</label>
-						<input type="text" class="form-control">
+						<label for="">Cancellation Fee</label>
+						<input type="number" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="">Label</label>
-						<input type="text" class="form-control">
+						<label for="">Payment Due</label>
+						<select name="" class="form-control" id="">
+							<option value="">1 day after reservation</option>
+							<option value="">2 days after reservation</option>
+							<option value="">3 days after reservation</option>
+							<option value="">4 days after reservation</option>
+						</select>
 					</div>
 				</div>
 			</div>
