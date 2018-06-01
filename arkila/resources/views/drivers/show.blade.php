@@ -32,9 +32,13 @@
                                         <div class="info-box">
                                             <span class="info-box-icon bg-red"><i class="fa fa-automobile"></i></span>
                                             <div class="info-box-content">
+                                            @if($generalDriver->van()->count() == 0)
+                                              <h3 class="text-gray text-center">NO VAN</h3>
+                                            @else
                                               <h4><strong>{{$generalDriver->van()->first()->plate_number ?? null}}</strong></h4>
                                               <p>{{$generalDriver->van()->first()->model->description ?? null}}</p>
                                               <p style="color: gray;">{{$generalDriver->van()->first()->seating_capacity ?? null}} seats</p>
+                                            @endif
                                             </div>
                                             <!-- /.info-box-content -->
                                         </div>

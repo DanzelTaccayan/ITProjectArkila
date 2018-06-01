@@ -7,7 +7,7 @@
 
 @stop
 @section('content')
-<div class="padding-side-5">
+<div class="padding-side-15">
     <div>
         <h2 class="text-white">USER MANAGEMENT</h2>
     </div>

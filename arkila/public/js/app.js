@@ -62497,17 +62497,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     console.log('Component mounted');
     Echo.private('App.User.' + this.userid).notification(function (notification) {
+      console.log('puta');
       console.log(notification);
       var newUnreadNotifications = {
         data: {
           notif_type: notification.notif_type,
-          reservation_date: notification.reservation_date,
+          reservation_date: notification.reservation_date == null ? null : notification.reservation_date,
           info: notification.info,
           id: notification.user_id,
           name: notification.name
         }
       };
       _this.unreadNotifications.push(newUnreadNotifications);
+      console.log('HI');
+      console.log(newUnreadNotifications);
     });
   }
 });
@@ -62590,7 +62593,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   mounted: function mounted() {
-    if (this.unread.data.notif_type == 'Reservation') {
+    //Done
+    if (this.unread.data.notif_type == 'Van Rental') {
+      if (this.unread.data.info.status == 'Pending') {
+        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
+        this.destination = this.unread.data.info.destination;
+        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
+        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
+        this.details = this.destination + " on " + this.date + " at " + this.time;
+        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
+      } else if (this.unread.data.info.status == 'Cancelled') {
+        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
+        this.destination = this.unread.data.info.destination;
+        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
+        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
+        this.details = this.destination + " on " + this.date + " at " + this.time;
+        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
+      }
+      //Done  
+    } else if (this.unread.data.notif_type == 'VanRentalDriver') {
+      if (this.unread.data.info.status == 'Unpaid') {
+        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
+        this.destination = this.unread.data.info.destination;
+        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
+        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
+        this.details = this.destination + " on " + this.date + " at " + this.time;
+        this.notificationUrl = "/home/view-rentals";
+      } else if (this.unread.data.info.status == 'Cancelled') {
+        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
+        this.destination = this.unread.data.info.destination;
+        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
+        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
+        this.details = this.destination + " on " + this.date + " at " + this.time;
+        this.notificationUrl = "/home/view-rentals";
+      }
+      //Done  
+    } else if (this.unread.data.notif_type == 'Reservation') {
       if (this.unread.data.info.status == 'UNPAID') {
         this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
         this.destination = this.unread.data.info.destination_name;
@@ -62606,55 +62644,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/reservations/" + this.unread.data.reservation_date.id;
       }
-    } else if (this.unread.data.notif_type == 'Van Rental') {
-      if (this.unread.data.info.status == 'Pending') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
-        this.destination = this.unread.data.info.destination;
-        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
-        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
-        this.details = this.destination + " on " + this.date + " at " + this.time;
-        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
-      } else if (this.unread.data.info.status == 'Cancelled') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
-        this.destination = this.unread.data.info.destination;
-        this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
-        this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
-        this.details = this.destination + " on " + this.date + " at " + this.time;
-        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
-      }
+      //DONE  
     } else if (this.unread.data.notif_type == 'Trip') {
-      if (this.unread.data.info.report_status == 'Pending' && this.unread.data.info.reportedBy == 'Driver') {
+      if (this.unread.data.info.report_status == 'Pending' && this.unread.data.info.reported_by == 'Driver') {
         this.title = this.unread.data.name + ' has made a trip from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination;
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/driver-report/" + this.unread.data.info.trip_id;
-      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reportedBy == 'Super-Admin') {
+      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reported_by == 'Super-Admin') {
         this.title = 'The Admin has departed you from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination;
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/view-trips/" + this.unread.data.info.trip_id;
-      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reportedBy == 'Driver') {
+      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reported_by == 'Driver') {
         this.title = 'Your trip from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination + ' has been accepted by the Admin';
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/view-trips/" + this.unread.data.info.trip_id;
-      } else if (this.unread.data.info.report_status == 'Declined' && this.unread.data.info.reportedBy == 'Driver') {
+      } else if (this.unread.data.info.report_status == 'Declined' && this.unread.data.info.reported_by == 'Driver') {
         this.title = 'Your trip from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination + ' has been declined by the Admin';
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/view-trips/" + this.unread.data.info.trip_id;
       }
-    } else if (this.unread.data.notif_type == 'VanRentalDriver') {
-      if (this.unread.data.info.status == 'Pending') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
+    } else if (this.unread.data.notif_type == 'Walk-in Rental') {
+      if (this.unread.data.info.status == 'Paid') {
+        this.title = "The Admin has assigned you a Van Rental for " + this.unread.data.info.customer_name;
         this.destination = this.unread.data.info.destination;
         this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
         this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
         this.details = this.destination + " on " + this.date + " at " + this.time;
-        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
-      } else if (this.unread.data.info.status == 'Cancelled') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
+        this.notificationUrl = "/home/view-rentals";
+      } else if (this.unread.data.info.status == 'Refunded') {
+        this.title = this.unread.data.info.customer_name + " has cancelled the rental";
         this.destination = this.unread.data.info.destination;
         this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
         this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
         this.details = this.destination + " on " + this.date + " at " + this.time;
-        this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
+        this.notificationUrl = "/home/view-rentals";
       }
     }
   }

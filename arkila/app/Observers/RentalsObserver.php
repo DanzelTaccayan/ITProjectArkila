@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\OnlineRentalAdminNotification;
 use App\Notifications\OnlineRentalCustomerNotification;
 use App\Notifications\OnlineRentalDriverNotification;
+use App\Notifications\WalkInRentalDriverNotification;
 use App\VanRental;
 use App\User;
 
@@ -19,19 +20,27 @@ class RentalsObserver{
       $user = User::find(Auth::id());
       $userAdmin = User::where('user_type', 'Super-Admin')->first();
       $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
+    }else if($rent->rent_type == 'Walk-in' && $rent->status == 'Paid'){
+      $driverId = $rent->driver->id ?? null;
+      if($driverId !== null){
+        $userDriver = User::find($driverId) ?? null;
+        $userAdmin = User::find(Auth::id());
+        $userDriver->notify(new WalkInRentalDriverNotification($userAdmin, $rent));
+      }
     }
   }
 
   public function updated(VanRental $rent)
-  {
+  { 
+    //dd($rent->driver->user->id ?? null);
     if($rent->rent_type == 'Online'){
       if($rent->status == 'Unpaid'){
         $case = 'Unpaid';
         $userAdmin = User::where('user_type', 'Super-Admin')->first();
         $userCustomer = User::find($rent->user_id);
-        $driverId = $rent->driver->user->id ?? null;
+        $driverId = $rent->driver->id ?? null;
         if($driverId !== null){
-          $userDriver = User::find() ?? null;
+          $userDriver = User::find($driverId) ?? null;
           $userDriver->notify(new OnlineRentalDriverNotification($userAdmin, $rent, $case));
         }
         $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
@@ -49,7 +58,7 @@ class RentalsObserver{
         //dd($userAdmin->notify(new OnlineReserveAdminNotification($user, $reserve)));
         $userAdmin->notify(new OnlineRentalAdminNotification($user,$rent));
 
-        $driverId = $rent->driver->user->id ?? null;
+        $driverId = $rent->driver->id ?? null;
         if($driverId !== null){
           $userDriver = User::find() ?? null;
           $userDriver->notify(new OnlineRentalDriverNotification($userAdmin, $rent, $case));
@@ -75,6 +84,15 @@ class RentalsObserver{
         $case = 'No Van Available';
         $userCustomer->notify(new OnlineRentalCustomerNotification($userCustomer, $rent, $case));
       } 
+    }else if($rent->rent_type == 'Walk-in'){
+      if($rent->status == 'Refunded'){
+        $driverId = $rent->driver->id ?? null;
+        if($driverId !== null){
+          $userDriver = User::find($driverId) ?? null;
+          $userAdmin = User::find(Auth::id());
+          $userDriver->notify(new WalkInRentalDriverNotification($userAdmin, $rent));
+        }
+      }
     }
   }
 }
