@@ -99,14 +99,14 @@ class MakeReservationController extends Controller
 							'quantity' => 'bail|numeric|required|min:1|max:4',
 						]);
 						$codes = Reservation::all();
-						$newCode = bin2hex(openssl_random_pseudo_bytes(8));
+						$newCode = bin2hex(openssl_random_pseudo_bytes(5));
 						foreach ($codes as $code)
 						{
 							$allCodes = $code->rsrv_code;
 			
 							do
 							{
-								$newCode =  bin2hex(openssl_random_pseudo_bytes(8));
+								$newCode =  bin2hex(openssl_random_pseudo_bytes(5));
 			
 							} while ($newCode == $allCodes);
 						}

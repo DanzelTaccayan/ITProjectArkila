@@ -148,14 +148,16 @@ class VanQueueController extends Controller
                 'destination' => 'required|exists:destination,destination_id'
             ]);
             $vanQueueArr = [];
+            $vanQueueArr['oldQueue'] = [];
+            $vanQueueArr['newQueue'] = [];
+
             if(request('destination') != $vanOnQueue->destination_id)
             {
                 $queueNum = count(VanQueue::where('destination_id',request('destination'))->whereNotNull('queue_number')->get())+1;
                 $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
-                $vanQueueArr['newDestiQueueCount'] = $queueNum;
-                $vanQueueArr['changedOldDestiQueueNumber'] = $vanOnQueue->queue_number;
-                $vanQueueArr['oldDestiId'] = $vanOnQueue->destination_id;
-                $vanQueueArr['oldDestiQueue'] = [];
+                $oldDestinationId = $vanOnQueue->destination_id;
+                $newDestinationId = request('destination');
+
                 foreach( $queue as $vanOnQueueObj)
                 {
                     if($vanOnQueue->queue_number < $vanOnQueueObj->queue_number )
@@ -163,14 +165,30 @@ class VanQueueController extends Controller
                         $vanOnQueueObj->update([
                             'queue_number' => ($vanOnQueueObj->queue_number)-1
                         ]);
-                        array_push($vanQueueArr['oldDestiQueue'],$vanOnQueueObj->van_queue_id);
                     }
                 }
                 $vanOnQueue->update([
                     'destination_id' => request('destination'),
                     'queue_number' => $queueNum
                 ]);
-                $vanQueueArr['oldDestiQueueCount'] = count(VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get());
+
+                $oldQueue = VanQueue::where('destination_id',$oldDestinationId)->whereNotNull('queue_number')->orderBy('queue_number','asc')->get();
+                $newQueue = VanQueue::where('destination_id',$newDestinationId)->whereNotNull('queue_number')->orderBy('queue_number','asc')->get();
+
+                foreach($oldQueue as $oldVanOnQueue) {
+                    array_push($vanQueueArr['oldQueue'], [
+                       'vanQueueId' => $oldVanOnQueue->van_queue_id,
+                        'queueNumber' => $oldVanOnQueue->queue_number
+                    ]);
+                }
+
+                foreach($newQueue as $newVanOnQueue) {
+                    array_push($vanQueueArr['newQueue'], [
+                        'vanQueueId' => $newVanOnQueue->van_queue_id,
+                        'queueNumber' => $newVanOnQueue->queue_number
+                    ]);
+                }
+
                 DB::commit();
                 return response()->json($vanQueueArr);
             }
@@ -271,7 +289,7 @@ class VanQueueController extends Controller
         $vans = request('vanQueue');
         $queueArr = [];
         $number = request('number');
-
+        $destinationId = $number+2;
         // Start transaction!
         DB::beginTransaction();
         try {
@@ -282,14 +300,13 @@ class VanQueueController extends Controller
                     }
                 }
 
-                $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
+                $queue = VanQueue::whereNotNull('queue_number')->where('destination_id',$destinationId)->orderBy('queue_number','asc')->get();
 
                 foreach($queue as $vanOnQueue) {
                     array_push($queueArr,
                         [
-                            'van_queue_id' => $vanOnQueue->van_queue_id,
-                            'van_id' => $vanOnQueue->van_id,
-                            'queue_number' => $vanOnQueue->queue_number
+                            'vanQueueId' => $vanOnQueue->van_queue_id,
+                            'queueNumber' => $vanOnQueue->queue_number
                         ]);
                 }
                 DB::commit();
