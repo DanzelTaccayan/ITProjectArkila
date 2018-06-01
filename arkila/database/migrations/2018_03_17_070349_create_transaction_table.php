@@ -28,8 +28,7 @@ class CreateTransactionTable extends Migration
             $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending','Accepted','Departed','Refunded','Lost/Expired','Declined']);
 
-            $table->enum('transaction_ticket_type', ['Regular', 'Discount'])
-            ->nullable();
+            $table->enum('transaction_ticket_type', ['Regular', 'Discount']);
 
             $table->foreign('trip_id')
             ->references('trip_id')->on('trip')
