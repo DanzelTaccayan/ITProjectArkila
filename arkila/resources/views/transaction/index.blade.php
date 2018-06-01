@@ -156,12 +156,15 @@
 
                                     <div data-terminal="{{$terminal->destination_id}}" class="tab-pane" id="terminal{{$terminal->destination_id}}">
                                         <div id="sellTickets{{$terminal->destination_id}}">
+
                                             <div class="row">
+                                             <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
+                                                                {{csrf_field()}}
                                                 <div class="col-md-4">
                                                     <div class="well">
                                                         <div>
                                                             <label for="">Customer</label>
-                                                            <select class="form-control select2">
+                                                            <select class="form-control select2" name="customer">
                                                                 <option value="">Walk-in Customer</option>
                                                                 @foreach($reservations as $reservation)
                                                                 <option value="{{$reservation->id}}">{{$reservation->rsrv_code}}</option>
@@ -225,11 +228,11 @@
                                                             </table>
                                                         </div>
                                                         <div class="pull-right">
-                                                            <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
-                                                                {{csrf_field()}}
+                                                            
                                                                 <button type="submit" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
-                                                            </form>
+                                                            
                                                         </div>
+                                                        </form>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
@@ -362,7 +365,53 @@
                                         @if($vanOnDeck = $terminal->vanQueue->where('queue_number',1)->first() ?? null)
                                             <div id="boardTickets{{$terminal->destination_id}}" name="boardTickets">
                                             <div class="row">
-                                                <div id="list-left1" class="dual-list list-left col-md-5">
+                                                <div id="list-right" class="dual-list list-right col-md-5">
+                                                    <div class="box box-solid ticket-box">
+                                                        <div class="box-header bg-yellow bg-gray">
+                                                            <span class="">
+                                                                <h6>Sold Tickets for</h6>
+                                                                 <h4>{{$terminal->destination_name}}</h4>
+                                                            </span>
+                                                        </div>
+                                                        <div class="box-body well">
+                                                            <div  class="text-right">
+                                                                <div class="row">
+                                                                    <div class="col-md-2">
+                                                                        <div class="btn-group">
+                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-10">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon">
+                                                                                <i class="glyphicon glyphicon-search"></i>
+                                                                            </span>
+                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <ul id="pendingList{{$terminal->destination_id}}" class="pendingList list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $soldTicket)
+                                                                        <li data-val='{{$soldTicket->sold_ticket_id}}' class="list-group-item">{{$soldTicket->ticket_number}}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>   
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="list-arrows col-md-2 text-center">
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-right">
+                                                        BOARD <i class="glyphicon glyphicon-chevron-right"></i>
+                                                    </button>
+                                                    <br>
+                                                    <button data-terminal="{{$terminal->destination_id}}" name="unboard" class="btn btn-outline-warning btn-sm btn-flat move-left">
+                                                        <i class="glyphicon glyphicon-chevron-left"></i> UNBOARD 
+                                                    </button>
+                                                </div>
+
+                                                <div id="list-left" class="dual-list list-left col-md-5">
                                                     <div class="box box-solid ticket-box">
                                                         <div id="ondeck-header{{$terminal->destination_id}}" class="box-header bg-blue">
                                                             <span class="col-md-6">
@@ -413,78 +462,32 @@
                                                         </div>
 
                                                         <div class="box-body well">
-                                                            <div class="text-right">
-                                                                <div class="row">
-                                                                    <div class="col-md-2">
-                                                                        <div class="btn-group">
-                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-10">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">
-                                                                                <i class=" glyphicon glyphicon-search"></i>
-                                                                            </span>
-                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                                        </div>
+                                                            <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <div class="btn-group">
+                                                                        <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
                                                                     </div>
                                                                 </div>
-                                                                <div class="">
-                                                                <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $soldTicket)
-                                                                        <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket_number}}</li>
-                                                                    @endforeach
-                                                                </ul>
+                                                                <div class="col-md-10">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon">
+                                                                            <i class=" glyphicon glyphicon-search"></i>
+                                                                        </span>
+                                                                        <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+                                                                    </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="">
+                                                            <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
+                                                                @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $soldTicket)
+                                                                    <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket_number}}</li>
+                                                                @endforeach
+                                                            </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="list-arrows col-md-2 text-center">
-                                                    <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-left1">
-                                                        <i class="glyphicon glyphicon-chevron-left"></i>  BOARD
-                                                    </button>
-                                                    <br>
-                                                    <button data-terminal="{{$terminal->destination_id}}" name="unboard" class="btn btn-outline-warning btn-sm btn-flat move-right1">
-                                                         UNBOARD <i class="glyphicon glyphicon-chevron-right"></i>
-                                                    </button>
-                                                </div>
-
-                                                <div id="list-right1" class="dual-list list-right col-md-5">
-                                                    <div class="box box-solid ticket-box">
-                                                        <div class="box-header bg-yellow bg-gray">
-                                                            <span class="">
-                                                                <h6>Sold Tickets for</h6>
-                                                                 <h4>{{$terminal->description}}</h4>
-                                                            </span>
-                                                        </div>
-                                                        <div class="box-body well">
-                                                                <div class="row">
-                                                                    <div class="col-md-2">
-                                                                        <div class="btn-group">
-                                                                            <a name="checkBox{{$terminal->destination_id}}" class="checkBox btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-10">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-addon">
-                                                                                <i class="glyphicon glyphicon-search"></i>
-                                                                            </span>
-                                                                            <input type="text" name="SearchDualList" class="form-control" placeholder="search" />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <ul id="pendingList{{$terminal->destination_id}}" class="pendingList list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $soldTicket)
-                                                                        <li data-val='{{$soldTicket->sold_ticket_id}}' class="list-group-item">{{$soldTicket->ticket_number}}</li>
-                                                                    @endforeach
-                                                                </ul>
-                                                                
-                                                        </div>
-
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div>
                                                 <hr>
