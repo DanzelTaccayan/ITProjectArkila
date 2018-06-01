@@ -33,7 +33,12 @@
 </head>
 
 <body class="skin-blue sidebar-mini fixed sidebar-collapse">
-    <div id="app" class="wrapper">
+
+    <div id="loader">
+        <div id="shadow"></div>
+        <div id="box"></div>
+    </div>
+    <div id="app" class="wrapper hidden">
         @include('layouts.partials.header')
         <!-- Left side column. contains the logo and sidebar -->
         @include('layouts.partials.main_sidebar')
@@ -70,7 +75,16 @@
             };
         });
     </script>
+    <script>
+        $(document).ready(function(){
+                $("#loader").hide();
+                $("#app").show();
+                $("#app").removeClass('hidden');
+        });
+    </script>
     @show
+
+    
 </body>
 
 </html>
