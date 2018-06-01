@@ -71,7 +71,7 @@
                         </td>
                         <td id="discEditQty{{$route->destination_id}}" class="hidden" colspan="2" style="width: 100px; background: #feeedb;">
                           <div class="col-md-6">
-                            <input type="number" id="disEditInput{{$route->destination_id}}" class="form-control discInput" min="0" step="26" value="{{$route->tickets->where('type', 'Discount')->count()}}">
+                            <input type="number" id="disEditInput{{$route->destination_id}}" class="form-control discInput" min="26" step="26" value="{{$route->tickets->where('type', 'Discount')->count()}}" required>
                           </div>
                           <div class="col-md-6 text-center" style="margin-top: 4px;">
                             <button id="discViewBtn{{$route->destination_id}}" class="btn btn-default btn-sm">CANCEL</button>

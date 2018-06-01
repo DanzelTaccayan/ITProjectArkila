@@ -79,7 +79,7 @@
                         			</tr>
                         			<tr>
                         				<th>Ticket Qty *</th>
-                        				<td><input type="number" name="quantity" value="{{old('quantity')}}" class="form-control"></td>
+                        				<td><input type="number" name="quantity" min="1" value="{{old('quantity')}}" class="form-control"></td>
                         			</tr>
                         		</tbody>
                         	</table>

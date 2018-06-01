@@ -29,7 +29,7 @@
       </div>
       <div class="form-group">
           <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="0" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
+          <input type="number" class="form-control" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
       </div>
   </div>
   @if ($type == 'Terminal')
