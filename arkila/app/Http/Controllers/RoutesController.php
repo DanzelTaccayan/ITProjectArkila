@@ -246,24 +246,19 @@ class RoutesController extends Controller
             ['destination_id', $route],
             ['type', 'Discount']
             ])->get();
-        $name = ucwords(strtolower($request->addTerminal));
 
         if($request->type == 'Terminal')
         {
             $routeAll->update([
-                'destination_name' => $name,
                 'booking_fee' => $request->bookingFee,
                 'short_trip_fare' => $request->sTripFare,
                 'short_trip_fare_discount' => $request->sdTripFare,
             ]);
 
-            $message = $name .' has been successfully updated.';
+            $message = $routeAll->destination_name .' has been successfully updated.';
         }
         else
         {
-            $routeAll->update([
-                'destination_name' => $name,
-            ]);
 
             $routeAll->routeOrigin()->detach($main->destination_id);
 
@@ -274,7 +269,7 @@ class RoutesController extends Controller
                 } 
             }   
             
-            $message = $name .' has been successfully updated.';
+            $message = $routeAll->destination_name .' has been successfully updated.';
         }
 
         if($request->regularFare !== $ticketRegular->first()->fare)

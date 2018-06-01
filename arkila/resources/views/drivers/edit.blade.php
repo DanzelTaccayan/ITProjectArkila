@@ -74,7 +74,7 @@
                         <tr>
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date  required >
+                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" val-license-exp required>
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +85,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <h4 class="form-heading-orange">Personal Information</h4>
+                <h4 class="form-heading-orange">Contact Information</h4>
                 <table class="table table-bordered table-striped form-table">
                     <tbody>
                         <tr>

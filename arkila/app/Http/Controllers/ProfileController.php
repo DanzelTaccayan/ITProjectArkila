@@ -7,8 +7,9 @@ use App\Profile;
 use App\Destination;
 use App\Fee;
 use App\Rules\checkContactNumber;
-use App\Rules\checkAddress;
 use App\Rules\checkTime;
+use \Carbon\Carbon;
+use Validator;
 
 
 
@@ -65,9 +66,9 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profile $profile)
+    public function edit(Profile $company_profile)
     {
-        return view('profile.edit', compact('profile'));        
+        return view('profile.edit', compact('company_profile'));       
     }
 
     /**
@@ -77,15 +78,20 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Profile $profile)
+    public function update(Profile $profile, Request $request)
     {
-        $this->validate(request(), [
-            'contactNumber' => ['bail',new checkContactNum],
-            'address' => ['bail','max:100',new checkAddress],
+        $request->openTime = Carbon::parse($request->openTime)->format('g:i A');
+        $request->closeTime = Carbon::parse($request->closeTime)->format('g:i A');
+
+        dd($request->openTime);
+
+        Validator::make($request->all(), [
+            'contactNumber' => ['bail',new checkContactNumber],
+            'address' => ['bail','max:100'],
             'email' => "nullable|email|max:50",
             'openTime' => ['required', new checkTime],
             'closeTime' => ['required', new checkTime],
-        ]);
+        ])->validate();
         
         $profile->update([
             'contact_number' => request('contactNumber'),

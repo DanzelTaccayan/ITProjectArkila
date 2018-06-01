@@ -619,7 +619,7 @@ ol.arrow-drag{
 
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update remark",
+                                text: "Successfully updated remark",
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',

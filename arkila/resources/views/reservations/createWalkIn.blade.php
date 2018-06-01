@@ -35,7 +35,7 @@
                       <tr>
                           <th>Destination Terminal</th>
                           <td>
-                              <select name="destination" id="" class="form-control select2">
+                              <select name="destination" id="" class="form-control select2" val-dest-term required>
                                   <option value="">Select Destination</option>
                                   @foreach($destinations->routeFromDestination as $destination)
                                   <option value="{{$destination->destination_id}}" @if($destination->destination_id == old('destination')) {{'selected'}}@endif>{{$destination->destination_name}}</option>
@@ -45,15 +45,15 @@
                         </tr>
                       <tr>
                           <th>Customer Name</th>
-                          <td><input type="text" name="name" value="{{old('name')}}" class="form-control" placeholder=""></td>
+                          <td><input type="text" name="name" value="{{old('name')}}" class="form-control" val-cname required></td>
                       </tr>
                       <tr>
                           <th>Contact Number</th>
-                          <td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control" placeholder=""></td>
+                          <td><input type="text" name="contactNumber" value="{{old('contactNumber')}}" class="form-control" val-contact required></td>
                       </tr>
                       <tr>
-                          <th>Ticket Qty</th>
-                          <td><input type="text" name="quantity" value="{{old('quantity')}}" class="form-control" placeholder=""></td>
+                          <th>Ticket Quantity</th>
+                          <td><input type="text" name="quantity" value="{{old('quantity')}}" class="form-control" val-tick-qty required></td>
                       </tr>
                     </tbody>
                 </table>
