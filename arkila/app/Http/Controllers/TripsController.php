@@ -49,6 +49,7 @@ class TripsController extends Controller
 
           $numPassCountArr = array();
           $originArray = null;
+    
 
           $driverShare = 0;
           $totalFare = 0;
@@ -121,14 +122,14 @@ class TripsController extends Controller
          
         $trip->transactions()->update(['status' => 'Accepted']);
         
-        $driverId = $trip->driver->user->id ?? null;
-        if($driverId !== null){
-          $userDriver = User::find($driverId) ?? null;
-          if($userDriver !== null){
-            $userAdmin = User::find(Auth::id());
-            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
-          }
-        }
+        // $driverId = $trip->driver->user->id ?? null;
+        // if($driverId !== null){
+        //   $userDriver = User::find($driverId) ?? null;
+        //   if($userDriver !== null){
+        //     $userAdmin = User::find(Auth::id());
+        //     $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+        //   }
+        // }
         
         $message = "Trip " . $trip->trip_id . " successfully accepted";
         return redirect(route('trips.tripLog'))->with('success', $message);
@@ -140,14 +141,14 @@ class TripsController extends Controller
             "report_status" => 'Declined',
         ]);
         
-        $driverId = $trip->driver->user->id ?? null;
-        if($driverId !== null){
-          $userDriver = User::find($driverId) ?? null;
-          if($userDriver !== null){
-            $userAdmin = User::find(Auth::id());
-            $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
-          }
-        }
+        // $driverId = $trip->driver->user->id ?? null;
+        // if($driverId !== null){
+        //   $userDriver = User::find($driverId) ?? null;
+        //   if($userDriver !== null){
+        //     $userAdmin = User::find(Auth::id());
+        //     $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
+        //   }
+        // }
 
         $trip->transactions()->update(['status' => 'Declined']);
         $message = "Trip " . $trip->trip_id . " successfully declined";
@@ -157,31 +158,42 @@ class TripsController extends Controller
     public function viewTripLog(Trip $trip)
     {
         $mainTerminal = Destination::where('is_main_terminal', true)->first()->destination_name;
-
-        if($trip->origin == $mainTerminal){
+        $transactions = $trip->transactions->where('ticket_name', '!=', null)->count() > 0 ? true : false;
+        //dd($transactions);
+        if($trip->origin == $mainTerminal && $transactions == false){
 
           $transaction = Transaction::where('trip_id',$trip->trip_id)
             ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid')
             ->groupBy('amount_paid', 'destination')
             ->orderBy('amount_paid', 'ampd','DESC')
             ->get();
+          
+          foreach($transaction as $trans){
+            echo $trans->ampd . ' ' . $trans->origin . ' ' . $trans->destination . ' ' . $trans->amount_paid . '<br/>';
+          }
+
+          echo '<br/>';
+
           $destinationCount = Transaction::where('trip_id',$trip->trip_id)
             ->selectRaw('COUNT(destination) as descount, origin, destination, amount_paid')
             ->groupBy('destination')->get();
-          //dd($transaction);
+
+          foreach($destinationCount as $trans){
+            echo $trans->descount . ' ' . $trans->origin . ' ' . $trans->destination . ' ' . $trans->amount_paid . '<br/>';
+          } 
+
           $numPassCountArr = null;
           $tempArr = null;
           $finalArr = null;
           foreach($destinationCount as $desKey => $desValues){
-
             $tempArr[$desValues->destination] = array();
           }
-          // foreach($transaction as $tr){
-          //   echo $tr->ampd . ' ' . $tr->origin . ' ' . $tr->destination . ' ' . $tr->amount_paid . '<br/>';
-          // }
-          //dd($tempArr);
+
+          echo '<br/>';
+
           foreach($transaction  as $transkeys => $transvalues){
             //echo $transvalues->ampd . ' ' . $transvalues->origin . ' ' . $transvalues->destination . ' ' . $transvalues->amount_paid . '<br/>';
+            
             $test1 = Ticket::where('ticket_number', 'like', '%' . $transvalues->destination  . '%')
               ->where('fare', $transvalues->amount_paid)->first()->type ?? null;
             if($test1 == "Regular"){
@@ -194,7 +206,9 @@ class TripsController extends Controller
               );
             }
           }
-          //dd($numPassCountArr);
+
+          dd($numPassCountArr);
+
           foreach($tempArr as $tempArrKeys => $tempArrValues){
             foreach($numPassCountArr as $numPassKeys => $numPassInnerValues){
               foreach($numPassInnerValues as $keys => $values){
@@ -202,19 +216,15 @@ class TripsController extends Controller
                   array_push($tempArr[$tempArrKeys], $values);
                 }
               }
-
             }
           }
 
-          //dd($numPassCountArr);
+
           $totalPassenger = array_sum(array_column($tempArr, 0));
           $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
-
+          
           if($totalDiscountedPassenger == 0){
             foreach($tempArr as $key => $innerArray){
-              // foreach($innerArray as $innerArrayKeys => $innerArrayValues){
-
-              // }
               array_push($tempArr[$key], 0);
             }
           }
@@ -228,8 +238,10 @@ class TripsController extends Controller
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
           $officeShare = $totalFare - $driverShare;
           //dd($tempArr);
-          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
+          // return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
+        }else if($trip->origin == $mainTerminal && $transactions == true){
+          dd('HELLO');
         }else{
 
           $transaction = Transaction::where('trip_id', $trip->trip_id)

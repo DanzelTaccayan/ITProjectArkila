@@ -87,15 +87,16 @@ class TransactionsController extends Controller
                 }
 
                 DB::commit();
-                return back()->with('success', 'Successfully, Sold tickets');
+                session()->flash('success', 'Successfully, Sold tickets');
             } catch(\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
-                return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+
+                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'], 422);
             }
 
         } else {
-            return back()->withErrors('Select Ticket/s first before selling');
+            return Response::json(['error' => 'Select Ticket/s first before selling'], 422);
         }
 
     }
@@ -158,7 +159,7 @@ class TransactionsController extends Controller
                             'date_departed' => $dateDeparted,
                             'report_status' => 'Accepted',
                             'time_departed' => $dateDeparted->hour . ':' . $dateDeparted->minute . ':' . $dateDeparted->second,
-                            'reportedBy' => 'Super-Admin'
+                            'reported_by' => 'Super-Admin'
                         ]);
 
 

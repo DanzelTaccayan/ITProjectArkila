@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Number of Days: <span class="text-red">*</span></label>
-                                    <input id="numberOfDays" class="form-control" type="number" value="{{old('numberOfDays')}}" name="numberOfDays" val-num-days required>
+                                    <input id="numberOfDays" class="form-control" type="number" min="1" value="{{old('numberOfDays')}}" name="numberOfDays" val-num-days required>
                                 </div>
                             </div><!-- col-->
                         </div><!-- row-->

@@ -603,6 +603,8 @@ ol.arrow-drag{
                             $("#positem"+queueId).hide();
                             $("#item"+queueId).show();
 
+
+
                             if($('#queueIndicator'+queueId).text() < newQueueNum){
                                 $('#unit'+queueId).insertAfter('#unit'+response[parseInt(newQueueNum)-2].vanQueueId);
                             } else {
@@ -617,7 +619,7 @@ ol.arrow-drag{
 
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update remark",
+                                text: "Successfully updated remark",
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -674,32 +676,41 @@ ol.arrow-drag{
                             });
                             $('#unit'+queueId).appendTo($('#queue-list'+destId));
                             $('#posOption'+queueId).empty();
+
                             //Change the settings of the old destination of the moved van
-                            $.each($('#queue-list'+response.oldDestiId).children().find($('select[name="changePosition"]')),function(index,element){
-                                var oldQueueNumVal = index+1;
-                                $(element).empty();
-                                for (var i = 1; i <= response.changedOldDestiQueueNumber; i++) {
-                                    var option = $('<option></option>').attr("value", i).text(i);
-                                    $(element).append(option);
+                            response.oldQueue.forEach(function(element){
+                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
+
+                                //Empty
+                                $('#posOption'+element.vanQueueId).empty();
+
+                                //Append all the choices
+                                for(var i = 1; i <= response.oldQueue.length; i++){
+                                    $('#posOption'+element.vanQueueId).append($("<option></option>")
+                                        .attr("value",i).text(i));
                                 }
-                                $(element).val(oldQueueNumVal);
+
+                                //Change the val
+                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
                             });
-                            // change the queue numbers of the vans of the past destination
-                            $.each($('#queue-list'+response.oldDestiId).children().find($('p[name="queueIndicator"]')), function(index,element){
-                                $(element).text(index+1);
-                            });
-                            //Change the settings of the old destination of the moved van
-                            $.each($('#queue-list'+destId).children().find($('select[name="changePosition"]')),function(index,element) {
-                                var oldQueueNumVal = $(element).val();
-                                $(element).empty();
-                                for (var i = 1; i <= response.newDestiQueueCount; i++) {
-                                    var option = $('<option></option>').attr("value", i).text(i);
-                                    $(element).append(option);
+
+                            //Change the settings of the new destination of the moved van
+                            response.newQueue.forEach(function(element){
+                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
+
+                                //Empty
+                                $('#posOption'+element.vanQueueId).empty();
+
+                                //Append all the choices
+                                for(var i = 1; i <= response.newQueue.length; i++){
+                                    $('#posOption'+element.vanQueueId).append($("<option></option>")
+                                        .attr("value",i).text(i));
                                 }
-                                $(element).val(oldQueueNumVal);
+
+                                //Change the val
+                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
                             });
-                            $('#posOption'+queueId).val(response.newDestiQueueCount);
-                            $('#queueIndicator'+queueId).text(response.newDestiQueueCount);
+
 
                             specialUnitChecker();
                         }
@@ -880,9 +891,10 @@ ol.arrow-drag{
                 'number': container.el.data('number')
             },
             success: function(queue){
-               for(i = 0; i < queue.length; i++) {
-                    $('#queueIndicator'+queue[i].van_queue_id).text(queue[i].queue_number);
-               }
+               queue.forEach(function(element){
+                   $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
+                   $('#posOption'+element.vanQueueId).val(element.queueNumber);
+               });
                specialUnitChecker();
             }
 

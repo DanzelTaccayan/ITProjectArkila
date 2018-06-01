@@ -91,6 +91,7 @@ class RentalsController extends Controller
                 'departure_time' => $time,
                 'destination' => $destination,
                 'number_of_days' => $request->days,
+                'rental_fare' => $request->fare,
                 'contact_number' => $request->contactNumber,
                 'is_refundable' => true,
                 'rent_type' => 'Walk-in',

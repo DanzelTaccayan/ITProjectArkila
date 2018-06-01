@@ -25,7 +25,7 @@
         }
     </style>
 
-    <h1>Ban Trans Drivers List</h1>
+    <h1>Ban Trans List of Drivers</h1>
     <h2>{{ $date->formatLocalized('%A %d %B %Y') }}</h2>
     <table>
         <thead>
