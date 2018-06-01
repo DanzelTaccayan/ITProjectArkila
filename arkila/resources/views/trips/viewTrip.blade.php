@@ -108,7 +108,8 @@
                                 <th class="text-center">Regular</th>
                                 <th class="text-center">Discounted</th>
                             </tr>
-                            @php $totalArr = null; @endphp @foreach($tempArr as $key => $values)
+                            @php $totalArr = null; @endphp 
+                            @foreach($tempArr as $key => $values)
                             <tr>
                                 <td class="text-center">{{$key}}</td>
                                 @foreach($values as $innerKeys => $innerValues)
