@@ -67,3 +67,7 @@ $('[val-announcement]').parsley({
 });
 
 $('[val-announcement]').attr('data-parsley-required-message','Please enter announcement.');
+
+$('[val-tick-qty]').attr('data-parsley-required-message','Please enter ticket quantity.');
+
+

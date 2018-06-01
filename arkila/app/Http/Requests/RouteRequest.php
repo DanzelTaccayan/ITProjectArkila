@@ -41,6 +41,8 @@ class RouteRequest extends FormRequest
                         "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'numeric|required|min:1',
+                        "numticketDis" => 'numeric|required|min:26',
                         "type" => [
                             'required',
                             Rule::in(['Terminal', 'Route'])
@@ -54,6 +56,8 @@ class RouteRequest extends FormRequest
                         "addTerminal" => 'required|unique:destination,destination_name|max:70',
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
+                        "numticket" => 'numeric|required|min:1',
+                        "numticketDis" => 'numeric|required|min:26',
                         "dest" => 'required',
                         "dest.*" => 'numeric',
                         "type" => [
@@ -71,7 +75,6 @@ class RouteRequest extends FormRequest
                 if ($request->type == 'Terminal')
                 {   
                     return [
-                        "addTerminal" => 'required|unique:destination,destination_name,'. $idRoute . ',destination_id|max:70',
                         "bookingFee" => 'required|numeric',
                         "sTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "sdTripFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
@@ -87,7 +90,6 @@ class RouteRequest extends FormRequest
                 {
                     
                     return [
-                        "addTerminal" => 'required|max:70|unique:destination,destination_name,'. $idRoute . ',destination_id',
                         "discountedFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "regularFare" => ['required', new checkCurrency, 'numeric','min:1','max:5000'],
                         "dest" => 'required',
@@ -106,7 +108,11 @@ class RouteRequest extends FormRequest
     public function messages()
     {
         return [
-            'addTerminal.unique' => 'The terminal name has already been taken.'
+            'addTerminal.unique' => 'The terminal name has already been taken.',
+            'sTripFare.min' => 'The short trip fare regular must be at least 1.',
+            'sdTripFare.min' => 'The short trip fare discounted must be at least 1.',
+            'dest.required' => 'The destination terminal field is required.',
+
 
         ];
     }
