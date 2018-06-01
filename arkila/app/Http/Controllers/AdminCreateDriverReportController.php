@@ -395,6 +395,6 @@ class AdminCreateDriverReportController extends Controller
       }
       
     }
-  return redirect('home/terminal')->with('success', 'Successfully created a report!');
+  return redirect('home/trip-log')->with('success', 'Successfully created a report!');
   }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Trip;
 use App\Ticket;
 use App\VanQueue;
+use App\SoldTicket;
 use App\Transaction;
 use App\Destination;
 use Illuminate\Http\Request;
@@ -24,9 +25,10 @@ class ViewLiveVanQueueController extends Controller
         $vanqueue = VanQueue::where('queue_number', '1')->with(['van','destination','driver'])->get();
 
         $tickets = Ticket::whereIn('ticket_number',
-                Transaction::where('status', 'OnBoard')->orWhere('status', 'pending')->where('trip_id', null)
-                ->get()->pluck('ticket_name'))
-                ->with('destination')->limit(32)->get();
+            SoldTicket::where('status', 'OnBoard')
+            ->orWhere('status', 'Pending')
+            ->get()->pluck('ticket_number'))
+        ->with('destination')->limit(32)->get();
         
         $terminalTickets = null;
         foreach($vanqueue as $vq){
