@@ -38,32 +38,44 @@
 
                 <section class="content">
                 @yield('form-body')
-
-                <div class="modal fade" id="form-modal">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title"> @yield('modal-title') </h4>
+                    <div class="modal fade" id="form-modal">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title"> @yield('modal-title') </h4>
+                                </div>
+                                <!-- /.modal-header -->
+                                <div class="modal-body">
+                                    @yield('modal-body')
+                                </div>
+                                <!-- /.modal-body -->
+                                <div class="modal-footer">
+                                    @yield('modal-btn')
+                                </div>
+                                <!--/.modal-foorer -->
                             </div>
-                            <!-- /.modal-header -->
-                            <div class="modal-body">
-                                @yield('modal-body')
-                            </div>
-                            <!-- /.modal-body -->
-                            <div class="modal-footer">
-                                @yield('modal-btn')
-                            </div>
-                            <!--/.modal-foorer -->
+                            <!-- /.modal-content -->
                         </div>
-                        <!-- /.modal-content -->
+                        <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.modal-dialog -->
-                </div>
-                <!-- /.modal -->
+                    <!-- /.modal -->
                 </section>
                 </form>
+
+                <div class="modal in" id="submit-loader" class="hidden">
+                    <div class="modal-dialog modal-sm" style="margin-top: 15%;">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          <div class="text-center">
+                            <img src="{{ URL::asset('img/loading.gif') }}">
+                            <h4>Please  wait...</h4>
+                          </div>
+                        </div> 
+                      </div>
+                    </div>
+                </div>
             </div>
             <!-- /.container -->
 
@@ -80,6 +92,20 @@
     @section('scripts')
         @include('layouts.partials.scripts_form')
         @include('message.error')
+
+        <script>
+            $(document).ready(function() {
+                $("form").on('submit', function(e){
+                    var form = $(this);
+
+                    if (form.parsley().isValid()){
+                      $('#submit-loader').removeClass('hidden');
+                      $('#submit-loader').css("display","block");
+                    }
+                    return true;
+                });
+            });
+        </script>
     @show
 </body>
 
