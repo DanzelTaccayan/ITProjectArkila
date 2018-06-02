@@ -34,6 +34,20 @@
 
         <div class="box box-solid">
             <div class="box-header with-border">
+                <h3 class="box-title">Ticket Queue</h3>
+                <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body"> 
+                <a type="button" onclick=" window.open('/live-queue')" class="btn btn-primary btn-sm btn-flat btn-block pull-right">TICKET QUEUE</a>
+            </div>
+        </div>
+
+        <div class="box box-solid">
+            <div class="box-header with-border">
                 <h3 class="box-title">Database</h3>
                 <div class="box-tools">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse">

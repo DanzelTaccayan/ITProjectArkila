@@ -28,9 +28,9 @@
                 <tbody>
                     @foreach ($operators as $operator)
                     <tr>
-                        <td>{{ $operator->full_name }}</td>
+                        <td class="text-uppercase">{{ $operator->full_name }}</td>
                         <td>{{ $operator->contact_number }}</td>
-                        <td>{{ $operator->address }}</td>
+                        <td class="text-uppercase">{{ $operator->address }}</td>
                         <td>{{$operator->updated_at->format('h:i A')." of ".$operator->updated_at->format('M d, Y')}}</td>
                         <td>
                             <div class="text-center">

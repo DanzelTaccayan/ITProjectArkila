@@ -35,12 +35,12 @@
                     <tbody>
                         @foreach($vans->where('status', 'Active') as $van)
         						<tr>
-        							<td>{{$van->plate_number}}</td>
-        							<td>
+        							<td class="text-uppercase">{{$van->plate_number}}</td>
+        							<td class="text-uppercase">
         							{{ $van->driver()->first()->full_name ?? null }}
         							</td>
-        							<td>{{ $van->operator()->first()->full_name ??  null }}</td>
-        							<td>{{$van->model->description}}</td>
+        							<td class="text-uppercase">{{ $van->operator()->first()->full_name ??  null }}</td>
+        							<td class="text-uppercase">{{$van->model->description}}</td>
         							<td class="pull-right">{{$van->seating_capacity}}</td>
         							<td>
         								<div class="text-center">
