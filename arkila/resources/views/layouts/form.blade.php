@@ -34,7 +34,7 @@
                 <div class="container">
                     <section class="content">
                         <div class="form-box">
-                            <form action="@yield('form-action')" name="preloadSubmit" method="POST" class="parsley-form" data-parsley-validate="">
+                            <form id="form" action="@yield('form-action')" method="POST" class="parsley-form" data-parsley-validate="">
                             {{csrf_field()}} @yield('method_field')
                             <div class="form-box-header">
                                     <p>
@@ -59,8 +59,20 @@
                             </div>
                             </form>
                         </div>
-                        
                     </section>
+
+                    <div class="modal in" id="submit-loader" class="hidden">
+                        <div class="modal-dialog modal-sm" style="margin-top: 15%;">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <div class="text-center">
+                                <img src="{{ URL::asset('img/loading.gif') }}">
+                                <h4>Please  wait...</h4>
+                              </div>
+                            </div> 
+                          </div>
+                        </div>
+                    </div>
                 
             </div>
             <!-- /.container -->
@@ -76,6 +88,20 @@
     @section('scripts')
         @include('layouts.partials.scripts_form')
         @include('message.error')
+
+        <script>
+            $(document).ready(function() {
+                $("form").on('submit', function(e){
+                    var form = $(this);
+
+                    if (form.parsley().isValid()){
+                      $('#submit-loader').removeClass('hidden');
+                      $('#submit-loader').css("display","block");
+                    }
+                    return true;
+                });
+            });
+        </script>
     @show
 </body>
  

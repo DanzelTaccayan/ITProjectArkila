@@ -68,11 +68,11 @@
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Opening Time: </label>
-                    <input type="text" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
+                    <input type="time" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Closing Time: </label>
-                    <input type="text" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
+                    <input type="time" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited later in the Company Profile page under the Settings tab.</p>
             </div>
@@ -107,16 +107,16 @@
                 </div>
                 <div class="form-group">
                     <label>Booking Fee: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="1" name="bookingFee" value="{{old('bookingFee')}}" val-bookingFee required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="bookingFee" value="{{old('bookingFee')}}" val-bookingFee required>
                 </div>
 
                 <div class="form-group col-md-6 left">
                     <label>Regular Fare: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" name="regularFare" placeholder="Php 0.00" value="{{old('regularFare')}}" val-regularFare required>
+                    <input type="number" class="form-control" min="1" max="5000" name="regularFare" placeholder="Php 0.00" value="{{old('regularFare')}}" val-regularFare required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Discounted Fare: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" name="discountedFare" placeholder="Php 0.00" value="{{old('discountedFare')}}" val-discountFare required>
+                    <input type="number" class="form-control" min="1" max="5000" name="discountedFare" placeholder="Php 0.00" value="{{old('discountedFare')}}" val-discountFare required>
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
@@ -128,11 +128,11 @@
                 </div>
                 <div class="form-group col-md-6 left" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="1" name="sTripFare" placeholder="Php 0.00" value="{{old('sTripFare')}}" val-regularStFare required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sTripFare" placeholder="Php 0.00" value="{{old('sTripFare')}}" val-regularStFare required>
                 </div>
                 <div class="form-group col-md-6 right" id="shotTripDis">
                     <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="1" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
             </div>
