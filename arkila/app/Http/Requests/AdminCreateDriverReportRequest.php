@@ -34,7 +34,7 @@ class AdminCreateDriverReportRequest extends FormRequest
       $rules = [
         "driverAndOperator" => "required|exists:member,member_id",
         "dateDeparted" => "required|date_format:m/d/Y",
-        "timeDeparted" => [new checkTime, "required"],
+        "timeDeparted" => 'required|date_format:H:i',
         // "qty" => "present|array",
         "totalPassengers" => "numeric|min:1|max:18|required",
       ];

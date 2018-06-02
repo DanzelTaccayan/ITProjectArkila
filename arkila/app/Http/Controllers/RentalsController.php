@@ -281,6 +281,5 @@ class RentalsController extends Controller
         {
             return back()->withErrors('Cannot modify departure date and time');
         }
-
     }
 }

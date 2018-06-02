@@ -118,14 +118,6 @@
                     <label>Discounted Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control" min="1" max="5000" name="discountedFare" placeholder="Php 0.00" value="{{old('discountedFare')}}" val-discountFare required>
                 </div>
-                <div class="form-group col-md-6 left">
-                    <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
-                </div>
-                <div class="form-group col-md-6 right">
-                    <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
-                </div>
                 <div class="form-group col-md-6 left" id="shotTripReg">
                     <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sTripFare" placeholder="Php 0.00" value="{{old('sTripFare')}}" val-regularStFare required>
@@ -133,6 +125,14 @@
                 <div class="form-group col-md-6 right" id="shotTripDis">
                     <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
+                </div>
+                <div class="form-group col-md-6 left">
+                    <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
+                </div>
+                <div class="form-group col-md-6 right">
+                    <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
+                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
             </div>

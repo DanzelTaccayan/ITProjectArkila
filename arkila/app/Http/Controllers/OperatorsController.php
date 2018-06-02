@@ -7,9 +7,9 @@ use App\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use PDF;
-use DB;
 use Carbon\Carbon;
 use Image;
+use DB;
 
 class OperatorsController extends Controller
 {
