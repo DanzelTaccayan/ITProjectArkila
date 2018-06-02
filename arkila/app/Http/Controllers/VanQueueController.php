@@ -6,9 +6,8 @@ use App\VanQueue;
 use App\Destination;
 use App\Member;
 use App\Van;
-use DB;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Response;
 use Illuminate\Validation\Rule;
 
 class VanQueueController extends Controller
@@ -350,7 +349,7 @@ class VanQueueController extends Controller
             }
             return redirect('/home/vanqueue#queue'. $vanOnQueue->destination_id)->with('success',  $vanOnQueue->van->plate_number .' has been moved on deck.');
         } else {
-            abort(422,'Error, The Van is already put on deck');
+            return back()->withErrors('Error, The Van is already on deck');
         }
     }
 
@@ -422,7 +421,7 @@ class VanQueueController extends Controller
                 return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
         } else {
-            abort(422,'Error, The Van is already on the special units List');
+            return back()->withErrors(422,'Error, The Van is already on the special units List');
         }
 
     }

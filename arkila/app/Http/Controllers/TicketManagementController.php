@@ -90,65 +90,65 @@ class TicketManagementController extends Controller
             "numberOfTicket" => "required|min:1|numeric",
         ]);
 
-        if($validate->fails())
-        {
+        if($validate->fails()) {
             return response()->json(["error" => "Please make sure that your input is valid, you can only enter numeric values greater than zero for the number of regular tickets."]);
         }
-        else
-        {
+        else {
             list($name, $lastNumberOfTicket) = explode('-', $regularTicket->first()->ticket_number);
             $startCount = $lastNumberOfTicket + 1;
             
-            if ($soldTickets == 0)
-            {
-                if($ticketOrig == $ticketRequest)
-                {
-                    return response()->json(['success' => "The number of tickets of ". $ticket_management->destination_name ." remained at ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
-                }
-                else
-                {
+            if ($soldTickets == 0) {
 
-                    $ticket_management->update([
-                    'number_of_tickets' => $ticketRequest,
-                    ]);
-    
-                    if ($ticketOrig > $ticketRequest)
-                    {
-                        $numTicket = $ticketOrig - $ticketRequest;
-    
-                        foreach($regularTicket as $count => $ticket)
+                if($ticketOrig == $ticketRequest) {
+                    return response()->json(['success' => "The number of tickets of ". $ticket_management->destination_name ." remained at ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
+                } else {
+                    DB::beginTransaction();
+                    try{
+                        $ticket_management->update([
+                            'number_of_tickets' => $ticketRequest,
+                        ]);
+
+                        if ($ticketOrig > $ticketRequest)
                         {
-                            if ($count+1 <= $numTicket)
+                            $numTicket = $ticketOrig - $ticketRequest;
+
+                            foreach($regularTicket as $count => $ticket)
                             {
-                                $ticket->delete();
+                                if ($count+1 <= $numTicket)
+                                {
+                                    $ticket->delete();
+                                }
+                            }
+                            return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
+                        }
+                        elseif($ticketOrig < $ticketRequest)
+                        {
+                            $numTicket = $ticketRequest - $ticketOrig;
+                            $end = $numTicket + $ticketOrig;
+
+                            for($i=$startCount; $i <= $end; $i++ )
+                            {
+                                $ticketName = $name.'-'.$i;
+                                Ticket::create([
+                                    'ticket_number' => $ticketName,
+                                    'destination_id' => $ticket_management->destination_id,
+                                    'fare' => $fare,
+                                    'type' => 'Regular',
+                                ]);
                             }
                         }
-                        return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
+
+                        DB::commit();
+                        return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest ]);
                     }
-                    elseif($ticketOrig < $ticketRequest)
-                    {
-                        $numTicket = $ticketRequest - $ticketOrig;
-                        $end = $numTicket + $ticketOrig;
-    
-                        for($i=$startCount; $i <= $end; $i++ )
-                        {
-                        $ticketName = $name.'-'.$i;
-                            Ticket::create([
-                            'ticket_number' => $ticketName,
-                            'destination_id' => $ticket_management->destination_id,
-                            'fare' => $fare,
-                            'type' => 'Regular',
-                            ]);
-                        }       
+                    catch(\Exception $e) {
+                        DB::rollback();
+                        return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
                     }
-    
-                    return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." regular ticket's number to ". $ticketRequest, 'ticketqty' => $ticketRequest ]);
         
                 }
-            }
-            else
-            {
-                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.']);
+            } else {
+                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.'],422);
             }
         }            
     }
@@ -160,7 +160,6 @@ class TicketManagementController extends Controller
             ['type', 'Discount'],
             ['status','!=', null],
             ])->count();
-
         $discountTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Discount'],
@@ -179,68 +178,62 @@ class TicketManagementController extends Controller
 
         if($validate->fails() || $requestNumTicket % 26 !== 0)
         {
-            return response()->json(["error" => "Please make sure that your input is valid, you can only enter numeric values divisible by 26 for the number of discounted tickets."]);
-        }
-        else
-        {
+            return response()->json(["error" => "Please make sure that your input is valid, you can only enter numeric values divisible by 26 for the number of discounted tickets."],422);
+        } else {
+            if ($soldTickets == 0) {
+                DB::beginTransaction();
+                try{
+                    if($requestNumTicket == $discountTicket->count()) {
+                        DB::rollback();
+                        return response()->json(['success' => "The route ". $ticket_management->destination_name ." number of tickets remained at a number of ". $requestNumTicket." tickets.", 'ticketqty' => $requestNumTicket]);
+                    }
+                    elseif ($requestNumTicket < $discountTicket->count()) {
+                        $numTicket = $discountTicket->count() - $requestNumTicket;
 
-            if ($soldTickets == 0)
-            {
-                if($requestNumTicket == $discountTicket->count())
-                {
-                    return response()->json(['success' => "The route ". $ticket_management->destination_name ." number of tickets remained at a number of ". $requestNumTicket." tickets.", 'ticketqty' => $requestNumTicket]);             
-                }
-                elseif ($requestNumTicket < $discountTicket->count())
-                {
-                    $numTicket = $discountTicket->count() - $requestNumTicket;
-    
-                    foreach($discountTicket as $count => $ticket)
-                    {
-                        if ($count+1 <= $numTicket)
-                        {
-                            $ticket->delete();
+                        foreach($discountTicket as $count => $ticket) {
+                            if ($count+1 <= $numTicket) {
+                                $ticket->delete();
+                            }
                         }
+                        DB::commit();
+                        return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket, 'ticketqty' => $requestNumTicket ]);
+                    } else {
+                        if (is_numeric($lastChar)) {
+                            $counter = $lastChar+1;
+                        } else {
+                            $counter = 1;
+                        }
+
+                        for($i=1; $i <= $toBeAdded; $i++ ) {
+                            // if($i-1 % 26 == 0)
+                            // {
+                            //     $counter++;
+                            // }
+
+                            if($c >= 26) {
+                                $c = 0;
+                                $counter++;
+                            }
+
+                            $ticketName = $name.'-'.$discountedTickets[$c].$counter;
+                            $c++;
+                            Ticket::create([
+                                'ticket_number' => $ticketName,
+                                'destination_id' => $ticket_management->destination_id,
+                                'fare' => $fare,
+                                'type' => 'Discount',
+                            ]);
+                        }
+                        DB::commit();
                     }
                     return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket, 'ticketqty' => $requestNumTicket ]);
                 }
-                else                      
-                {
-                    if (is_numeric($lastChar))
-                    {
-                        $counter = $lastChar+1;
-                    }
-                    else
-                    {
-                        $counter = 1;
-                    }    
-    
-                    for($i=1; $i <= $toBeAdded; $i++ )
-                    {
-                        // if($i-1 % 26 == 0)
-                        // {
-                        //     $counter++;
-                        // }
-    
-                        if($c >= 26)
-                        {
-                            $c = 0;
-                            $counter++;
-                        }
-    
-                        $ticketName = $name.'-'.$discountedTickets[$c].$counter;
-                        $c++;
-                        Ticket::create([
-                            'ticket_number' => $ticketName,
-                            'destination_id' => $ticket_management->destination_id,
-                            'fare' => $fare,
-                            'type' => 'Discount',
-                        ]);
-                    }                 
+                catch(\Exception $e) {
+                    DB::rollback();
+                    return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
                 }
-                return response()->json(['success' => "Successfully updated ". $ticket_management->destination_name ." discounted ticket's number to ". $requestNumTicket, 'ticketqty' => $requestNumTicket ]);
-            }
-            else
-            {
+
+            } else {
                 // session()->flash('error', 'Cannot edit the ticket number, all tickets must be return first.');
                 return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.']);
             } 

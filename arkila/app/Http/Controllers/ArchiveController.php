@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 use App\Member;
 use App\VanQueue;
 use App\Van;
-use DB;
 use App\Rules\checkOperator;
 
 class ArchiveController extends Controller

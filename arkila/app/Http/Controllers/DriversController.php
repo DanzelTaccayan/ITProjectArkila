@@ -9,7 +9,6 @@ use App\User;
 use PDF;
 use Carbon\Carbon;
 use Image;
-use DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 

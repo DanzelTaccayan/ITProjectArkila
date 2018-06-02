@@ -14,7 +14,6 @@ use App\Member;
 use App\VanModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use DB;
 use PDF;
 
 
@@ -125,7 +124,7 @@ class VansController extends Controller
         {
             DB::rollback();
             \Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return redirect(route('vans.index'))->with('success', 'Van  '. request('plateNumber') .' successfully registered');
     }
@@ -193,7 +192,7 @@ class VansController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         if(request('addDriver') === 'on')
@@ -310,7 +309,7 @@ class VansController extends Controller
             catch(\Exception $e)
             {
                 DB::rollback();
-                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
 
             if(session()->get('opLink'))
