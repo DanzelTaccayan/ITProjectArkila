@@ -112,6 +112,6 @@
     <script type="text/javascript">
         setTimeout(function(){
            window.location.reload(1);
-        }, 40000);
+        }, 60000);
     </script>
 @endsection

@@ -128,7 +128,7 @@
                                                 <td>
                                                     <div class="text-center">
                                                         <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> EDIT</a>
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->van_id }}"><i class="fa fa-archive"></i> ARCHIVE</button>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteVan'.$van->van_id }}"><i class="fa fa-trash"></i>DELETE</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -142,8 +142,8 @@
                                                             <h4 class="modal-title"></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
-                                                            <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                                            <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
+                                                            <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
                                                             <h4 class="text-center "><strong class="text-red">{{$van->plate_number}}</strong>?</h4>
                                                         </div>
                                                         <div class="modal-footer">
@@ -152,7 +152,7 @@
                                                                 {{method_field('PATCH')}}
                                                                 <div class="text-center">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                                                    <button type="submit" class="btn btn-danger">DELETE</button>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -188,7 +188,7 @@
                                                     <div class="text-center">
                                                         <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                                        
-                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$driver->member_id }}"><i class="fa fa-archive"></i> ARCHIVE</button>
+                                                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteDriver'.$driver->member_id }}"><i class="fa fa-trash"></i> DELETE</button>
                                                     </div>                                                
                                                 </td>
                                             </tr>
@@ -202,8 +202,8 @@
                                                             <h4 class="modal-title"></h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
-                                                            <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
+                                                            <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
+                                                            <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
                                                             <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
                                                         </div>
                                                         <div class="modal-footer">
@@ -212,7 +212,7 @@
                                                                 {{method_field('PATCH')}}
                                                                 <div class="text-center">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                                                    <button type="submit" class="btn btn-danger">DELETE</button>
                                                                 </div>
                                                             </form>
                                                         </div>

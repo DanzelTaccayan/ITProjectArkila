@@ -96,7 +96,7 @@
                                         <h4 class="modal-title"></h4>
                                     </div>
                                     <div class="modal-body">
-                                        <h1 class="text-center text-red"><i class="fa fa-warning"></i> DELETE</h1>
+                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
                                         <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
                                         <h4 class="text-center "><strong class="text-red">{{$routes->destination_name}}</strong>?</h4>
                                     </div>
