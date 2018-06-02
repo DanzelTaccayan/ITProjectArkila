@@ -65,7 +65,7 @@ class ArchiveController extends Controller
                 DB::commit();
             } catch(\Exception $e) {
                 DB::rollback();
-                return back()->withErrors('There seems to be a problem. Please try again');
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
         } else {
             return back()->withErrors('The operator is a driver on the van queue, please remove him as a driver or remove the van on the queue before archiving the operator.');
@@ -84,7 +84,7 @@ class ArchiveController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully restored '.$archivedOperator->full_name);
     }
@@ -115,7 +115,7 @@ class ArchiveController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully archived '.$driver->full_name);
     }
@@ -137,7 +137,7 @@ class ArchiveController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully restored '.$archivedDriver->full_name);
     }
@@ -152,19 +152,7 @@ class ArchiveController extends Controller
             if($van->vanQueue->count() > 0) {
                 return back()->withErrors('The van to be archived is on queue, remove it first from queue before archiving the van');
             }
-            //update queue_list if the van is on queue
-//            if($vanOnQueue = $van->vanQueue()->whereNotNull('queue_number')->first())
-//            {
-//                foreach(VanQueue::whereNotNull('queue_number')->where('destination_id',$vanOnQueue->destination_id)->where('queue_number','>',$vanOnQueue->queue_number)->get() as $trip)
-//                {
-//                    $trip->update([
-//                        'queue_number' =>  $trip->queue_number -1
-//                    ]);
-//                }
-//                $vanOnQueue->delete();
-//            } elseif($specialVanOnQueue = $van->vanQueue()->whereNull('queue_number')->first()){
-//                $specialVanOnQueue->delete();
-//            }
+
             //Archive its operator
             if($van->operator()->first())
             {
@@ -190,7 +178,7 @@ class ArchiveController extends Controller
         catch(\Exception $e)
         {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully archived van '.$van->plate_number);
     }
@@ -226,7 +214,7 @@ class ArchiveController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully restored van '.$archivedVan->plate_number);
     }
