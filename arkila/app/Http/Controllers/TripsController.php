@@ -201,63 +201,63 @@ class TripsController extends Controller
           return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
         }else if($trip->origin == $mainTerminal && $transactions == true){
-          //discount
-          $discount = Transaction::where('trip_id',$trip->trip_id)
-            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
-            ->where('transaction_ticket_type', 'Discount')
-            ->groupBy('tickets')
-            ->get();
-          
-          $regular = Transaction::where('trip_id',$trip->trip_id)
-            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
-            ->where('transaction_ticket_type', 'Regular')
-            ->groupBy('tickets')
-            ->get();
+            //discount
+            $discount = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->where('transaction_ticket_type', 'Discount')
+              ->groupBy('tickets')
+              ->get();
+            
+            $regular = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->where('transaction_ticket_type', 'Regular')
+              ->groupBy('tickets')
+              ->get();
 
-          $transactions = Transaction::where('trip_id',$trip->trip_id)
-            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
-            ->groupBy('tickets')
-            ->get();
-             
-          
-          $tempArr = null;
+            $transactions = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->groupBy('tickets')
+              ->get();
+               
+            
+            $tempArr = null;
 
-          foreach($transactions as $tranKey => $tranValues){
-              $tempArr[$tranValues->tickets] = array_fill_keys(
-                array('Regular', 'Discount'), 0
-              );
-          }
+            foreach($transactions as $tranKey => $tranValues){
+                $tempArr[$tranValues->tickets] = array_fill_keys(
+                  array('Regular', 'Discount'), 0
+                );
+            }
 
-          foreach($discount as $tran){
-            $tempArr[$tran->tickets]['Discount'] = $tran->counts; 
-          }  
-          
-          foreach($regular as $tran){
-            $tempArr[$tran->tickets]['Regular'] = $tran->counts;
-          }  
+            foreach($discount as $tran){
+              $tempArr[$tran->tickets]['Discount'] = $tran->counts; 
+            }  
+            
+            foreach($regular as $tran){
+              $tempArr[$tran->tickets]['Regular'] = $tran->counts;
+            }  
 
-          
+            
 
-          $totalPassenger = 0;
-          $totalDiscountedPassenger = 0;
-          foreach($tempArr as $destinationKey => $numOfPassValue){
-            foreach($numOfPassValue as $type => $num){
-              if($type == 'Regular'){
-                $totalPassenger = $totalPassenger + $num;
-              }else if($type == 'Discount'){
-                $totalDiscountedPassenger = $totalDiscountedPassenger + $num;
+            $totalPassenger = 0;
+            $totalDiscountedPassenger = 0;
+            foreach($tempArr as $destinationKey => $numOfPassValue){
+              foreach($numOfPassValue as $type => $num){
+                if($type == 'Regular'){
+                  $totalPassenger = $totalPassenger + $num;
+                }else if($type == 'Discount'){
+                  $totalDiscountedPassenger = $totalDiscountedPassenger + $num;
+                }
               }
             }
-          }
-          
-          $driverShare = 0;
-          $totalFare = 0;
-          foreach($transactions  as $transkeys => $transvalues){
-            $totalFare += $transvalues->ampd * $transvalues->amount_paid;
-          }
+            
+            $driverShare = 0;
+            $totalFare = 0;
+            foreach($transactions  as $transkeys => $transvalues){
+              $totalFare += $transvalues->ampd * $transvalues->amount_paid;
+            }
 
-          $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
-          $officeShare = $totalFare - $driverShare;
+            $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
+            $officeShare = $totalFare - $driverShare;
           
           return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
         }else{
