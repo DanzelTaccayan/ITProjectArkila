@@ -135,8 +135,6 @@ class AdminCreateDriverReportController extends Controller
 
      $transanctionArr = null;
 
-  
-    //dd($destinationArr);
      for($i = 0; $i < count($destinationArr); $i++){
         if(($numOfPassengers[$i] !== null || $numOfPassengers[$i] != 0) 
         && ($numOfDiscountPassengers[$i] !== null || $numOfDiscountPassengers[$i] != 0)){
@@ -164,7 +162,7 @@ class AdminCreateDriverReportController extends Controller
                   "origin" => $terminals->destination_name,
                   "amount_paid" => $amountpaid,
                   "status" => "Departed",
-                  "transaction_trip_type" => $ticketType,
+                  "transaction_ticket_type" => $ticketType,
                 ]);
               }
             }
@@ -209,7 +207,7 @@ class AdminCreateDriverReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Departed",
-              "transaction_trip_type" => "Regular",
+              "transaction_ticket_type" => "Regular",
             ]);
           }
 
@@ -222,7 +220,7 @@ class AdminCreateDriverReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Departed",
-              "transaction_trip_type" => "Discount",
+              "transaction_ticket_type" => "Discount",
             ]);
           }
 
@@ -234,7 +232,7 @@ class AdminCreateDriverReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Departed",
-              "transaction_trip_type" => "Regular",
+              "transaction_ticket_type" => "Regular",
             ]);
           }
 
@@ -246,7 +244,7 @@ class AdminCreateDriverReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Departed",
-              "transaction_trip_type" => "Discount",
+              "transaction_ticket_type" => "Discount",
             ]);
           }
       //2. If num of dis main pass is false     
@@ -261,7 +259,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -273,7 +271,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -285,7 +283,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //3. If num of dis main pass and num st pass is false     
@@ -300,7 +298,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -312,7 +310,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //4. If num of dis main pass, num st pass, and num st pass are false     
@@ -327,7 +325,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
       //5. If num main pass is false
@@ -342,7 +340,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
 
@@ -354,7 +352,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -366,7 +364,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //6. if num main pass and num main dis pass are false
@@ -380,7 +378,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -392,7 +390,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //7. if num main pass, num main dis pass, and  are false
@@ -406,7 +404,7 @@ class AdminCreateDriverReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Departed",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       }

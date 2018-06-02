@@ -88,7 +88,7 @@ class CreateReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Pending",
-              "transaction_trip_type" => "Regular",
+              "transaction_ticket_type" => "Regular",
             ]);
           }
 
@@ -101,7 +101,7 @@ class CreateReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Pending",
-              "transaction_trip_type" => "Discount",
+              "transaction_ticket_type" => "Discount",
             ]);
           }
 
@@ -113,7 +113,7 @@ class CreateReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Pending",
-              "transaction_trip_type" => "Regular",
+              "transaction_ticket_type" => "Regular",
             ]);
           }
 
@@ -125,7 +125,7 @@ class CreateReportController extends Controller
               "origin" => $terminal->destination_name,
               "amount_paid" => $amountpaid,
               "status" => "Pending",
-              "transaction_trip_type" => "Discount",
+              "transaction_ticket_type" => "Discount",
             ]);
           }
       //2. If num of dis main pass is false     
@@ -140,7 +140,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -152,7 +152,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -164,7 +164,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //3. If num of dis main pass and num st pass is false     
@@ -179,7 +179,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -191,7 +191,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
      //4. If num of dis main pass, num st pass, and num st pass are false     
@@ -206,7 +206,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
       //5. If num main pass is false
@@ -221,7 +221,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "ttransaction_ticket_type" => "Discount",
           ]);
         }
 
@@ -233,7 +233,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -245,7 +245,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //6. if num main pass and num main dis pass are false
@@ -259,7 +259,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Regular",
+            "transaction_ticket_type" => "Regular",
           ]);
         }
 
@@ -271,7 +271,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       //7. if num main pass, num main dis pass, and  are false
@@ -285,7 +285,7 @@ class CreateReportController extends Controller
             "origin" => $terminal->destination_name,
             "amount_paid" => $amountpaid,
             "status" => "Pending",
-            "transaction_trip_type" => "Discount",
+            "transaction_ticket_type" => "Discount",
           ]);
         }
       }
