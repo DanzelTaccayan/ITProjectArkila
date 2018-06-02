@@ -32,7 +32,7 @@
         <div class="content-wrapper bgform-image">
             <div class="container">
 
-                <form id="@yield('form-id')" name="preloadSubmit" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="" enctype="multipart/form-data">
+                <form id="@yield('form-id')" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="" enctype="multipart/form-data">
                 {{csrf_field()}}
                 @yield('method_field')
 
@@ -64,18 +64,7 @@
                 </section>
                 </form>
 
-                <div class="modal in" id="submit-loader" class="hidden">
-                    <div class="modal-dialog modal-sm" style="margin-top: 15%;">
-                      <div class="modal-content">
-                        <div class="modal-body">
-                          <div class="text-center">
-                            <img src="{{ URL::asset('img/loading.gif') }}">
-                            <h4>Please  wait...</h4>
-                          </div>
-                        </div> 
-                      </div>
-                    </div>
-                </div>
+                @include('layouts.partials.preloader_div')
             </div>
             <!-- /.container -->
 

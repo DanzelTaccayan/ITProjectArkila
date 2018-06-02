@@ -278,7 +278,8 @@ class TransactionsController extends Controller
                     }
 
                     $soldTicket->update([
-                        'status' => 'OnBoard'
+                        'status' => 'OnBoard',
+                        'destination_id' => $destinationId
                     ]);
                 }
                 } else {
@@ -360,7 +361,7 @@ class TransactionsController extends Controller
             'value' => 'exists:member,member_id'
         ]);
 
-        DB:beginTransaction();
+        DB::beginTransaction();
         try{
             $vanOnQueue->update([
                 'driver_id' => request('value')
@@ -369,6 +370,7 @@ class TransactionsController extends Controller
             return 'success';
         } catch(\Exception $e) {
             DB::rollback;
+            \Log::info($e);
             return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
 
@@ -537,7 +539,7 @@ class TransactionsController extends Controller
     {
         if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
             $ticketType = request('ticketType');
-            $ticket = $destination->tickets()->where('type',$ticketType)->whereNotIn('ticket_number',$destination->soldTickets->pluck('ticket_number'))->whereNotIn('ticket_id', $destination->selectedTickets->pluck('ticket_id'))->first();
+            $ticket = $destination->tickets()->where('type',$ticketType)->whereNotIn('ticket_number', SoldTicket::all()->pluck('ticket_number'))->whereNotIn('ticket_id', SelectedTicket::all()->pluck('ticket_id'))->first();
             if(is_null($ticket)) {
                 return Response::json(['error' => 'There are no more tickets left, please add another to select a ticket'], 422);
             }

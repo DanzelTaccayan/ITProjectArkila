@@ -477,7 +477,9 @@ ol.arrow-drag{
       </div>
     </div>
   </div>
+        @include('layouts.partials.preloader_div')
 </div>
+
 @endif
 
 @endsection
@@ -502,12 +504,17 @@ ol.arrow-drag{
     }
 
     $('form[name="formPutOnDeck"]').on('submit',function() {
+        $('#submit-loader').removeClass('hidden');
+        $('#submit-loader').css("display","block");
         $(this).find('button[type="submit"]').prop('disabled',true);
         $("#ondeck-sp"+$(this).data('van')).hide();
         $("#item-sp"+$(this).data('van')).show();
     });
 
     $('form[name="deleteForm"]').on('submit',function(){
+        $('#submit-loader').removeClass('hidden');
+        $('#submit-loader').css("display","block");
+
         $(this).find('button[type="submit"]').prop('disabled',true);
         if($(this).data('type') === "normal") {
             $('#deleteitem'+$(this).data('van')).hide();
@@ -564,6 +571,11 @@ ol.arrow-drag{
             //Update Remarks
             $('button[name="updateRemarksButton"]').on('click',function() {
                 var queueId = $(this).data('val');
+                var button = $(this);
+
+                button.prop('disabled',true);
+                $("#remarkitem"+queueId).hide();
+                $("#item"+queueId).show();
 
                 $.ajax( {
                         method:'PATCH',
@@ -573,17 +585,17 @@ ol.arrow-drag{
                                 '_token': '{{csrf_token()}}',
                                 'remark' : $('#remark'+queueId).val()
                             },
-                        success: function() {
+                        success: function(response) {
+                            button.prop('disabled',false);
+                            PNotify.removeAll();
                             $('#badge'+queueId).empty();
                             if($('#remark'+queueId).val() !== "NULL") {
                                 $('#badge'+queueId).append($('#remark'+queueId).val());
                             }
 
-                            $("#remarkitem"+queueId).hide();
-                            $("#item"+queueId).show();
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update remark",
+                                text: response,
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -599,6 +611,29 @@ ol.arrow-drag{
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
                             specialUnitChecker();
+                        },
+                        error: function(response){
+                            button.prop('disabled',false);
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
 
@@ -609,6 +644,12 @@ ol.arrow-drag{
             $('button[name="changePosButton"]').on('click',function(){
                 var queueId = $(this).data('vanqueue');
                 var newQueueNum = $('#posOption'+queueId).val();
+                var button = $(this);
+
+                button.prop('disabled',true);
+                $("#positem"+queueId).hide();
+                $("#item"+queueId).show();
+
                 $.ajax(
                     {
                         method:'PATCH',
@@ -618,45 +659,83 @@ ol.arrow-drag{
                                 '_token': '{{csrf_token()}}',
                                 'new_queue_num' : newQueueNum,
                             },
-                        success: function(response)
-                        {
-                            $("#positem"+queueId).hide();
-                            $("#item"+queueId).show();
+                        success: function(response) {
+                            button.prop('disabled',false);
+                            PNotify.removeAll();
+                            if($('#queueIndicator'+queueId).text() != newQueueNum){
+                                if($('#queueIndicator'+queueId).text() < newQueueNum){
+                                    $('#unit'+queueId).insertAfter('#unit'+response[parseInt(newQueueNum)-2].vanQueueId);
+                                } else {
+                                    $('#unit'+queueId).insertBefore('#unit'+response[newQueueNum].vanQueueId);
+                                }
 
+                                response.forEach(function(element){
+                                    $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
+                                    $('#posOption'+element.vanQueueId).val(element.queueNumber);
+                                });
 
+                                new PNotify({
+                                    title: "Success!",
+                                    text: "Successfully changed the van's position on the queue",
+                                    animate: {
+                                        animate: true,
+                                        in_class: 'slideInDown',
+                                        out_class: 'fadeOut'
+                                    },
+                                    animate_speed: 'fast',
+                                    nonblock: {
+                                        nonblock: true
+                                    },
+                                    cornerclass: "",
+                                    width: "",
+                                    type: "success",
+                                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                                });
 
-                            if($('#queueIndicator'+queueId).text() < newQueueNum){
-                                $('#unit'+queueId).insertAfter('#unit'+response[parseInt(newQueueNum)-2].vanQueueId);
+                                specialUnitChecker();
                             } else {
-                                $('#unit'+queueId).insertBefore('#unit'+response[newQueueNum].vanQueueId);
+                                new PNotify({
+                                    title: "Notification",
+                                    text: "The van's position on the queue has not been changed",
+                                    animate: {
+                                        animate: true,
+                                        in_class: 'slideInDown',
+                                        out_class: 'fadeOut'
+                                    },
+                                    animate_speed: 'fast',
+                                    nonblock: {
+                                        nonblock: true
+                                    },
+                                    cornerclass: "",
+                                    width: "",
+                                    type: "success",
+                                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                                });
                             }
+                        },
+                        error: function(response) {
+                            button.prop('disabled',false);
 
-                            response.forEach(function(element){
-                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
-                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
-                            });
-
-
-                            new PNotify({
-                                title: "Success!",
-                                text: "Successfully updated remark",
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
                                 animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
                             });
-
-
-                            specialUnitChecker();
                         }
                     });
             });
@@ -665,6 +744,11 @@ ol.arrow-drag{
             $('button[name="destBtn"]').on('click',function() {
                 var queueId = $(this).data('val');
                 var destId = $('#destOption'+queueId).val();
+                var button = $(this);
+
+                button.prop('disabled',true);
+                $("#destitem" + queueId).hide();
+                $("#item" + queueId).show();
                 $.ajax({
                     method:'PATCH',
                     url:'/home/vanqueue/changeDestination/'+queueId,
@@ -675,64 +759,107 @@ ol.arrow-drag{
                         },
                     success:
                         function(response) {
-                            $("#destitem"+queueId).hide();
-                            $("#item"+queueId).show();
-                            new PNotify({
-                                title: "Success!",
-                                text: "Successfully updated remark",
+                            button.prop('disabled',false);
+                            PNotify.removeAll();
+                            if(response === "Destination not Updated") {
+                                new PNotify({
+                                    title: "Success!",
+                                    text: "Destination not updated",
+                                    animate: {
+                                        animate: true,
+                                        in_class: 'slideInDown',
+                                        out_class: 'fadeOut'
+                                    },
+                                    animate_speed: 'fast',
+                                    nonblock: {
+                                        nonblock: true
+                                    },
+                                    cornerclass: "",
+                                    width: "",
+                                    type: "success",
+                                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                                });
+                            } else {
+                                new PNotify({
+                                    title: "Success!",
+                                    text: "Successfully updated the van's destination",
+                                    animate: {
+                                        animate: true,
+                                        in_class: 'slideInDown',
+                                        out_class: 'fadeOut'
+                                    },
+                                    animate_speed: 'fast',
+                                    nonblock: {
+                                        nonblock: true
+                                    },
+                                    cornerclass: "",
+                                    width: "",
+                                    type: "success",
+                                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                                });
+                                $('#unit' + queueId).appendTo($('#queue-list' + destId));
+                                $('#posOption' + queueId).empty();
+
+                                //Change the settings of the old destination of the moved van
+                                response.oldQueue.forEach(function (element) {
+                                    $('#queueIndicator' + element.vanQueueId).text(element.queueNumber);
+
+                                    //Empty
+                                    $('#posOption' + element.vanQueueId).empty();
+
+                                    //Append all the choices
+                                    for (var i = 1; i <= response.oldQueue.length; i++) {
+                                        $('#posOption' + element.vanQueueId).append($("<option></option>")
+                                            .attr("value", i).text(i));
+                                    }
+
+                                    //Change the val
+                                    $('#posOption' + element.vanQueueId).val(element.queueNumber);
+                                });
+
+                                //Change the settings of the new destination of the moved van
+                                response.newQueue.forEach(function (element) {
+                                    $('#queueIndicator' + element.vanQueueId).text(element.queueNumber);
+
+                                    //Empty
+                                    $('#posOption' + element.vanQueueId).empty();
+
+                                    //Append all the choices
+                                    for (var i = 1; i <= response.newQueue.length; i++) {
+                                        $('#posOption' + element.vanQueueId).append($("<option></option>")
+                                            .attr("value", i).text(i));
+                                    }
+
+                                    //Change the val
+                                    $('#posOption' + element.vanQueueId).val(element.queueNumber);
+                                });
+
+                                specialUnitChecker();
+                            }
+                        },
+                    error:
+                        function(response) {
+                            button.prop('disabled',false);
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
                                 animate: {
-                                    animate: true,
-                                    in_class: 'slideInDown',
-                                    out_class: 'fadeOut'
-                                },
-                                animate_speed: 'fast',
-                                nonblock: {
-                                    nonblock: true
-                                },
-                                cornerclass: "",
-                                width: "",
-                                type: "success",
-                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                            });
-                            $('#unit'+queueId).appendTo($('#queue-list'+destId));
-                            $('#posOption'+queueId).empty();
-
-                            //Change the settings of the old destination of the moved van
-                            response.oldQueue.forEach(function(element){
-                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
-
-                                //Empty
-                                $('#posOption'+element.vanQueueId).empty();
-
-                                //Append all the choices
-                                for(var i = 1; i <= response.oldQueue.length; i++){
-                                    $('#posOption'+element.vanQueueId).append($("<option></option>")
-                                        .attr("value",i).text(i));
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
                                 }
-
-                                //Change the val
-                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
                             });
-
-                            //Change the settings of the new destination of the moved van
-                            response.newQueue.forEach(function(element){
-                                $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
-
-                                //Empty
-                                $('#posOption'+element.vanQueueId).empty();
-
-                                //Append all the choices
-                                for(var i = 1; i <= response.newQueue.length; i++){
-                                    $('#posOption'+element.vanQueueId).append($("<option></option>")
-                                        .attr("value",i).text(i));
-                                }
-
-                                //Change the val
-                                $('#posOption'+element.vanQueueId).val(element.queueNumber);
-                            });
-
-
-                            specialUnitChecker();
                         }
                 });
             });
@@ -740,7 +867,8 @@ ol.arrow-drag{
             //Move to special units
             $('a[name="moveToSpecialUnitsList"]').on('click',function() {
                 var queueId = $(this).data('val');
-
+                $('#submit-loader').removeClass('hidden');
+                $('#submit-loader').css("display","block");
                 $.ajax({
                     method:'PATCH',
                     url:'/moveToSpecialUnit/'+queueId,
@@ -752,7 +880,29 @@ ol.arrow-drag{
                         location.reload();
                     },
                     error: function(response){
-                        alert(response);
+                        $('#submit-loader').addClass('hidden');
+                        $('#submit-loader').css("display","none");
+
+                        $.notify({
+                            // options
+                            icon: 'fa fa-warning',
+                            message: response.responseJSON.error
+                        },{
+                            // settings
+                            type: 'danger',
+                            autoHide: true,
+                            clickToHide: true,
+                            autoHideDelay: 2500,
+                            placement: {
+                                from: 'bottom',
+                                align: 'right'
+                            },
+                            icon_type: 'class',
+                            animate: {
+                                enter: 'animated bounceIn',
+                                exit: 'animated bounceOut'
+                            }
+                        });
                     }
                 });
             });
@@ -808,6 +958,8 @@ ol.arrow-drag{
                 var driver = $('#driver').val();
 
                 if( destination != null && van != null && driver != null) {
+                    $('#submit-loader').removeClass('hidden');
+                    $('#submit-loader').css("display","block");
                     $.ajax({
                         method:'POST',
                         url: '/home/vanqueue/'+destination+'/'+van+'/'+driver,
@@ -819,6 +971,31 @@ ol.arrow-drag{
                                 window.location.hash = response;
                                 location.reload();
                             }
+                        },
+                        error: function (response) {
+                            $('#submit-loader').addClass('hidden');
+                            $('#submit-loader').css("display","none");
+
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
                         }
                     });
 
@@ -915,8 +1092,49 @@ ol.arrow-drag{
                    $('#queueIndicator'+element.vanQueueId).text(element.queueNumber);
                    $('#posOption'+element.vanQueueId).val(element.queueNumber);
                });
+                PNotify.removeAll();
+                new PNotify({
+                    title: "Success!",
+                    text: "Successfully changed the order of the queue",
+                    animate: {
+                        animate: true,
+                        in_class: 'slideInDown',
+                        out_class: 'fadeOut'
+                    },
+                    animate_speed: 'fast',
+                    nonblock: {
+                        nonblock: true
+                    },
+                    cornerclass: "",
+                    width: "",
+                    type: "success",
+                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                });
+
                specialUnitChecker();
-            }
+            },
+              error: function(response){
+                  $.notify({
+                      // options
+                      icon: 'fa fa-warning',
+                      message: response.responseJSON.error
+                  },{
+                      // settings
+                      type: 'danger',
+                      autoHide: true,
+                      clickToHide: true,
+                      autoHideDelay: 2500,
+                      placement: {
+                          from: 'bottom',
+                          align: 'right'
+                      },
+                      icon_type: 'class',
+                      animate: {
+                          enter: 'animated bounceIn',
+                          exit: 'animated bounceOut'
+                      }
+                  });
+              }
 
         });
 

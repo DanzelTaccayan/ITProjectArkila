@@ -259,7 +259,7 @@
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
                                                                                     @if($regTicketNum =  $destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
-                                                                                        <span id="regularTicketPerDest{{$destination->destination_id}}" class="badge pull-right">
+                                                                                        <span data-name="regularTicketPerDest" data-destination="{{$destination->destination_id}}" data-terminal="{{$terminal->destination_id}}" class="badge pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
@@ -443,7 +443,7 @@
                                                                  </p>
                                                             </span>
                                                              <span class="pull-right">
-                                                                 <form method="POST" action="{{route('vanqueue.destroy',[$vanOnDeck->van_queue_id])}}">
+                                                                 <form name="deleteVanForm" method="POST" action="{{route('vanqueue.destroy',[$vanOnDeck->van_queue_id])}}">
                                                                      {{method_field('DELETE')}}
                                                                      {{csrf_field()}}
                                                                     <button type="button" data-terminal="{{$terminal->destination_id}}" name="onDeckBtn2" class="btn btn-sm btn-primary">
@@ -452,6 +452,7 @@
                                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                                         YES
                                                                     </button>
+                                                                     <input name="fromDepart" value="true" hidden>
                                                                  </form>
                                                             </span>
                                                         </div>
@@ -474,7 +475,7 @@
                                                             </div>
                                                             <div class="">
                                                             <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','OnBoard') as $soldTicket)
+                                                                @foreach($soldTickets->whereIn('destination_id',$terminal->destination_id)->where('status','OnBoard') as $soldTicket)
                                                                     <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket_number}}</li>
                                                                 @endforeach
                                                             </ul>
@@ -560,6 +561,7 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+    @include('layouts.partials.preloader_div')
 </div>
 
 
@@ -641,11 +643,11 @@
                     //Update the necessary information
                     if(ticketType == 'Regular') {
                         //Change The number of clicks (Regular)
-                        if($('#regularTicketPerDest'+destinationId).text()) {
-                            $('#regularTicketPerDest'+destinationId).text(parseFloat($('#regularTicketPerDest'+destinationId).text())+1);
-
+                        var regTicket = $('span[data-name="regularTicketPerDest"][data-destination="'+destinationId+'"][data-terminal="'+terminalId+'"]');
+                        if(regTicket.text()) {
+                            regTicket.text(parseFloat(regTicket.text())+1);
                         } else {
-                            buttonElement.append('<span id="regularTicketPerDest'+destinationId+'" class="badge bg-yellow pull-right">1</span>');
+                            buttonElement.append('<span data-name="regularTicketPerDest" data-destination="'+destinationId+'" data-terminal="'+terminalId+'" class="badge pull-right">1</span>');
                             buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
                         }
 
@@ -869,6 +871,16 @@
 {{--Boarding, Unboarding, and Departure--}}
 <script type="text/javascript">
         $(function () {
+            //Remove the van from queue
+            $('form[name="deleteVanForm"]').on('submit',function(){
+                var terminalId = $(this).find('button[name="onDeckBtn2"]').data('terminal');
+                $("#ondeck-header"+terminalId).show();
+                $('div[name="deletedriver-header"][data-terminal="'+terminalId+'"]').hide();
+                $(this).find('button[type="submit"]').prop('disabled',true);
+
+                $('#submit-loader').removeClass('hidden');
+                $('#submit-loader').css("display","block");
+            });
             //Depart the ticket
             $('button[name="depart"]').on('click', function(){
                 var terminalId = $(this).data('val');
@@ -1142,10 +1154,12 @@
         //change sell ticket form
         $('button[name="buttonSell"]').on('click',function(){
             var terminalId = $(this).data('terminal');
-            var form = $(this);
-        
-
+            var button = $(this);
             var type = $('select[name="customer"][data-terminal="'+terminalId+'"]').val();
+
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            button.prop('disabled',true);
 
             if(type == 'walkIn') { 
                $.ajax({
@@ -1158,6 +1172,9 @@
                          location.reload();
                      },
                      error:function(response) {
+                         $('#submit-loader').addClass('hidden');
+                         $('#submit-loader').css("display","none");
+                         button.prop('disabled',false);
                          $.notify({
                              // options
                              icon: 'fa fa-warning',
