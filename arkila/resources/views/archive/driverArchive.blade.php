@@ -27,8 +27,8 @@
                     <tbody>
                         @foreach($archivedDrivers as $archivedDriver)
                             <tr>
-                                <td>{{$archivedDriver->full_name}}</td>
-                                <td>{{$archivedDriver->address}}</td>
+                                <td class="text-uppercase">{{$archivedDriver->full_name}}</td>
+                                <td class="text-uppercase">{{$archivedDriver->address}}</td>
                                 <td>{{$archivedDriver->contact_number}}</td>
                                 <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
                                 <td>

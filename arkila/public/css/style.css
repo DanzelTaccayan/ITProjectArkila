@@ -963,6 +963,5 @@ input:checked+.slider:before {
 }
 
 body {
-  background: #6997DB; 
-  overflow: hidden;
+  background: #6997DB;
 }

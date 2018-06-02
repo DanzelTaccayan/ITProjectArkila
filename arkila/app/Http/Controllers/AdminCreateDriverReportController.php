@@ -74,9 +74,6 @@ class AdminCreateDriverReportController extends Controller
 
     $mainterminal = Destination::where('is_main_terminal', true)->first()->destination_name;
     $vanid = $request->van_platenumber;
-
-    $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
-    $timeDepartedFormat = $timeDeparted->format('H:i:s');
     $dateDeparted = $request->dateDeparted;
 
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
@@ -93,7 +90,7 @@ class AdminCreateDriverReportController extends Controller
            'community_fund' => $cf*$totalPassengers,
            'SOP' => $sop,
            'date_departed' => $request->dateDeparted,
-           'time_departed' => $timeDepartedFormat,
+           'time_departed' => $request->timeDeparted,
            'report_status' => 'Accepted',
            'reported_by' => 'Admin',
         ]);

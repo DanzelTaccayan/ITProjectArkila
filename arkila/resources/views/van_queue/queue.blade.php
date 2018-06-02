@@ -380,7 +380,7 @@ ol.arrow-drag{
                                           <div id="deleteitem{{$vanOnQueue->van_queue_id}}" class="deleteitem hidden">
                                                   <p><strong>{{ $vanOnQueue->van->plate_number }}</strong> will be deleted. Do you want to continue?</p>
                                               <div class="pull-right">
-                                                  <form method="POST" action="{{route('vanqueue.destroy',[$vanOnQueue->van_queue_id])}}">
+                                                  <form name="deleteForm" data-type="normal" data-van="{{$vanOnQueue->van_queue_id}}" method="POST" action="{{route('vanqueue.destroy',[$vanOnQueue->van_queue_id])}}">
                                                       {{method_field('DELETE')}}
                                                       {{csrf_field()}}
                                                     <a data-val="{{$vanOnQueue->van_queue_id}}" class="btn btn-default btn-sm itemBtn"> CANCEL</a>
@@ -433,7 +433,7 @@ ol.arrow-drag{
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <div class="pull-right">
-                                                        <form action="{{route('vanqueue.putOnDeck',[$specializedVanOnQueue->van_queue_id])}}" method="POST">
+                                                        <form name="formPutOnDeck" data-van="{{$specializedVanOnQueue->van_queue_id}}" action="{{route('vanqueue.putOnDeck',[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                             {{method_field('PATCH')}}
                                                             {{csrf_field()}}
                                                             <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}">NO</a>
@@ -450,11 +450,11 @@ ol.arrow-drag{
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <div class="pull-right">
-                                                        <form action="{{route("vanqueue.destroy",[$specializedVanOnQueue->van_queue_id])}}" method="POST">
+                                                        <form name="deleteForm" data-van="{{$specializedVanOnQueue->van_queue_id}}" action="{{route("vanqueue.destroy",[$specializedVanOnQueue->van_queue_id])}}" method="POST">
                                                              {{method_field('DELETE')}}
                                                             {{csrf_field()}}
                                                             <a class="btn btn-default btn-sm itemSpBtn" data-val="{{$specializedVanOnQueue->van_queue_id}}"> NO</a>
-                                                            <button class="btn btn-danger btn-sm">YES</button>
+                                                            <button type="submit" class="btn btn-danger btn-sm">YES</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -500,6 +500,26 @@ ol.arrow-drag{
         $('#driver').val(driverId);
         $('#driver').trigger('change');
     }
+
+    $('form[name="formPutOnDeck"]').on('submit',function() {
+        $(this).find('button[type="submit"]').prop('disabled',true);
+        $("#ondeck-sp"+$(this).data('van')).hide();
+        $("#item-sp"+$(this).data('van')).show();
+    });
+
+    $('form[name="deleteForm"]').on('submit',function(){
+        $(this).find('button[type="submit"]').prop('disabled',true);
+        if($(this).data('type') === "normal") {
+            $('#deleteitem'+$(this).data('van')).hide();
+            $("#item"+$(this).data('van')).show();
+        } else {
+            $("#item-sp"+$(this).data('van')).show();
+            $("#delete-sp"+$(this).data('van')).hide();
+        }
+    });
+
+    $('form[name=""]')
+
   </script>
     <!-- List sortable -->
     <script>
@@ -659,7 +679,7 @@ ol.arrow-drag{
                             $("#item"+queueId).show();
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update remark",
+                                text: "Successfully updated remark",
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',

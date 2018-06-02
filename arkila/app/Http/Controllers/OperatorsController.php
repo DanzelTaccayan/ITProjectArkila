@@ -7,9 +7,9 @@ use App\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use PDF;
-use DB;
 use Carbon\Carbon;
 use Image;
+use DB;
 
 class OperatorsController extends Controller
 {
@@ -78,7 +78,7 @@ class OperatorsController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         return redirect(route('operators.index'))->with('success', 'Operator '. $request->firstName . $request->middleName . $request->lastName .' has been successfully registered');
@@ -152,7 +152,7 @@ class OperatorsController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         return redirect()->route('operators.show', compact('operator'))->with('success', 'Operator '. $operator->full_name . ' successfully updated');

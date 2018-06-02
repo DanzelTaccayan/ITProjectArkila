@@ -68,7 +68,7 @@ class RentalRequest extends FormRequest
                 "date" => 'bail|required|date_format:m/d/Y|after:'.$date,
                 "destination" => ['bail','required','max:50'],
                 "plateNumber" => ['required','numeric'],
-                "time" => ['bail',new checkTime, 'required'],
+                "time" => 'required|date_format:H:i',
                 "days" => "bail|required|numeric|digits_between:1,15|min:1",
                 "contactNumber" => ['bail',new checkContactNumber],
         ];

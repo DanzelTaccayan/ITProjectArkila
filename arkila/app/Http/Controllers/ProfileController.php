@@ -78,30 +78,25 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Profile $profile, Request $request)
+    public function update(Profile $company_profile)
     {
-        $request->openTime = Carbon::parse($request->openTime)->format('g:i A');
-        $request->closeTime = Carbon::parse($request->closeTime)->format('g:i A');
-
-        dd($request->openTime);
-
-        Validator::make($request->all(), [
+        $this->validate(request(), [
             'contactNumber' => ['bail',new checkContactNumber],
             'address' => ['bail','max:100'],
             'email' => "nullable|email|max:50",
-            'openTime' => ['required', new checkTime],
-            'closeTime' => ['required', new checkTime],
-        ])->validate();
+            'openTime' => 'required|date_format:H:i',
+            'closeTime' => 'required|date_format:H:i',
+        ]);
         
-        $profile->update([
+        $company_profile->update([
             'contact_number' => request('contactNumber'),
             'address' => request('address'),
             'email' => request('email'),
             'open_time' => request('openTime'),
-            'close_time' => request('close_time'),
+            'close_time' => request('closeTime'),
         ]);
 
-        return redirect('/home/admin/profile')->with('success', 'Profile has been successfully edited');
+        return redirect('/home/company-profile')->with('success', 'Profile has been successfully updated');
 
     }
 

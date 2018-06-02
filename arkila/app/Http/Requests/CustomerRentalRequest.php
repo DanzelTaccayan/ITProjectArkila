@@ -75,7 +75,7 @@ class CustomerRentalRequest extends FormRequest
             return [
                 "date" => 'bail|required|date_format:m/d/Y|after:'.$date,
                 "destination" => ['bail','required','max:70'],
-                "time" => ['bail',new checkTime, 'required'],
+                "time" => 'required|date_format:H:i',
                 "numberOfDays" => "bail|required|numeric|digits_between:1,15|min:1",
                 "contactNumber" => ['bail',new checkContactNumber],
                 "message" => "string|max:300|nullable",   

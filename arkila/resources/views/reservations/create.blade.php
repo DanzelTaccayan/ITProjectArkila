@@ -35,7 +35,7 @@
                         </tr>
                         <tr>
                             <th>Time</th>
-                            <td><input type="text" name="time" value="{{old('time')}}" id="timepicker" class="form-control" placeholder="00:00" val-time required></td>
+                            <td><input type="time" name="time" value="{{old('time')}}" class="form-control" placeholder="00:00" val-time required></td>
                         </tr>
                         <tr>
                             <th>Number of Slot</th>

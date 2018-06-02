@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CustomerModuleControllers;
 
 use App\User;
+use App\Ledger;
 use App\VanRental;
 use App\Destination;
 use App\VanModel;
@@ -79,7 +80,7 @@ class MakeRentalController extends Controller
                 "comment" => $request->message !== null ? $request->message : null,
               ]);
          
-          return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully made a rental');
+          return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully created a rental');
       }
       else
       {
@@ -98,6 +99,7 @@ class MakeRentalController extends Controller
 
     public function cancelRental(VanRental $rental)
     {
+      $rule = $this->rentalRules();
       $time = explode(':', $rental->departure_time);
       $dateOfRental = Carbon::parse($rental->departure_date)->setTime($time[0], $time[1], $time[2]);
       $now = Carbon::now();
@@ -111,6 +113,12 @@ class MakeRentalController extends Controller
         ]);
       } elseif($rental->status == 'Paid') {
         
+        Ledger::create([
+          'description' => 'Cancellation Fee',
+          'amount' => $rule->cancellation_fee,
+          'type' => 'Revenue',
+        ]);
+
         if($now->gt($conditionDate)) {
           $rental->update([
             'status' => 'Cancelled',
@@ -132,7 +140,9 @@ class MakeRentalController extends Controller
     }
     
     public function refundExpiry()
-    {
+    {  
+      // if the cancellation is refundable, he/she is given 7 days to refund
+      // else the transaction will expired
       $rentals = VanRental::where([
         ['is_refundable', true],
         ['status', 'Cancelled']
@@ -166,10 +176,12 @@ class MakeRentalController extends Controller
       $now = Carbon::now();
 
       foreach($rentals as $rental) {
+
+        $rule = $this->rentalRules();
         $updatedAt = Carbon::parse($rental->updated_at);
-        $expired = $updatedAt->addDays(2);
+        $expired = $updatedAt->addDays($rule->valid_days);
         $createdAt = Carbon::parse($rental->created_at);
-        $expiry = $createdAt->addDays(2);
+        $expiry = $createdAt->addDays($rule->valid_days);
         $time = explode(':', $rental->departure_time);
         $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
 
@@ -194,4 +206,9 @@ class MakeRentalController extends Controller
         }
       }
     }
+
+    public function rentalRules()
+	  {   
+		  return BookingRules::where('reservation_fee', null)->get()->first();;
+	  } 
 }

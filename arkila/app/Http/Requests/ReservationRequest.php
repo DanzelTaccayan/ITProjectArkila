@@ -43,7 +43,7 @@ class ReservationRequest extends FormRequest
             return [
                 "date" => "bail|required|date_format:m/d/Y|after:today",
                 "destination" => "bail|required",
-                "time" => ['bail',new checkTime, 'required'],
+                "time" => 'required|date_format:H:i',
                 "slot" => "bail|required|numeric|min:1|max:30",
                 ];
     }

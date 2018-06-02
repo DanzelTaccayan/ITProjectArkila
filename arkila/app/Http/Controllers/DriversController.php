@@ -9,10 +9,9 @@ use App\User;
 use PDF;
 use Carbon\Carbon;
 use Image;
-use DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-
+use DB;
 
 class DriversController extends Controller
 {
@@ -100,7 +99,7 @@ class DriversController extends Controller
         } catch(\Exception $e) {
             \Log::info($e);
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         return redirect(route('drivers.index'))->with('success', 'Driver '. $createdDriver->first_name .' '. $createdDriver->middle_name .' '. $createdDriver->last_name .' has been registered successfully');
@@ -162,10 +161,10 @@ class DriversController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
-        return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Driver '. $createdDriver->first_name .' '. $createdDriver->middle_name .' '. $createdDriver->last_name .' has been registered successfully');
+        return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Driver '. $driver->first_name .' '. $driver->middle_name .' '. $driver->last_name .' has been registered successfully');
     }
 
     public function createFromVan(Van $vanNd)
@@ -240,7 +239,7 @@ class DriversController extends Controller
         } catch(\Exception $e) {
             \Log::info($e);
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         if(session()->get('vanBack') && session()->get('vanBack') == route('operators.show',[$vanNd->operator->first()->member_id])) {
@@ -327,7 +326,7 @@ class DriversController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
         if(session()->get('opLink')) {

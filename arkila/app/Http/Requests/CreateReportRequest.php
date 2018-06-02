@@ -29,7 +29,7 @@ class CreateReportRequest extends FormRequest
     {
         $rules = [
           "dateDeparted" => "required|date_format:m/d/Y",
-          "timeDeparted" => [new checkTime, "required"],
+          "timeDeparted" => 'required|date_format:H:i',
           "totalPassengers" => "numeric|min:1|max:18|required",
           "numPassMain" => "numeric|required_without_all:numPassST",
           "numPassST" => "numeric|required_without_all:numPassMain",

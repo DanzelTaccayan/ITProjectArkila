@@ -15,8 +15,8 @@ use App\Member;
 use DateTimeZone;
 use App\Fee;
 use App\Reservation;
-use DB;
 use Response;
+use DB;
 
 class TransactionsController extends Controller
 {
@@ -93,7 +93,7 @@ class TransactionsController extends Controller
                 DB::rollback();
                 \Log::info($e);
 
-                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'], 422);
+                return Response::json(['error' => 'Oops! Something went wront on the server. If the problem persists contact the administrator'], 422);
             }
 
         } else {
@@ -230,7 +230,7 @@ class TransactionsController extends Controller
                     } catch (\Exception $e) {
                         DB::rollback();
                         \Log::info($e);
-                        return back()->withErrors('There seems to be a problem. Please try again, if the problem persists please contact the administrator');
+                        return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
                     }
 
                 }
@@ -290,7 +290,7 @@ class TransactionsController extends Controller
             } catch(\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
-                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+                return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
             }
 
         } else {
@@ -326,7 +326,7 @@ class TransactionsController extends Controller
             } catch(\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
-                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+                return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
             }
         } else {
             return Response::json(['error' => 'error no transaction given'],422);
@@ -369,7 +369,7 @@ class TransactionsController extends Controller
             return 'success';
         } catch(\Exception $e) {
             DB::rollback;
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
 
     }
@@ -396,7 +396,7 @@ class TransactionsController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
     }
@@ -442,7 +442,7 @@ class TransactionsController extends Controller
             return 'success';
         } catch (\Exception $e) {
             DB::rollback();
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
 
 
@@ -474,7 +474,7 @@ class TransactionsController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
     }
@@ -492,7 +492,7 @@ class TransactionsController extends Controller
             return back()->with('success', 'Ticket '.$ticketNumber.' has been cancelled.');
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
     }
 
@@ -526,7 +526,7 @@ class TransactionsController extends Controller
             return 'success';
         } catch(\Exception $e) {
             DB::rollback();
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
 
     }
@@ -558,7 +558,7 @@ class TransactionsController extends Controller
             } catch(\Exception $e) {
                 \Log::info($e);
                 DB::rollback();
-                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+                return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
             }
 
         } else {
@@ -584,7 +584,7 @@ class TransactionsController extends Controller
             return response()->json($responseArr);
         } catch(\Exception $e) {
             DB::rollback();
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
 
     }
@@ -618,7 +618,7 @@ class TransactionsController extends Controller
         } catch(\Exception $e) {
             DB::rollback();
             \Log::info($e);
-            return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'],422);
+            return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
         }
     }
 }

@@ -31,14 +31,14 @@
                         <div class="row">   
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Contact Number: <span class="text-red">*</span></label>
+                                    <label for="contactNumber">Contact Number: <span class="text-red">*</span></label>
                                     <input id="contactNumber" class="form-control" type="text" value="{{old('contactNumber')}}" name="contactNumber" val-phone required>
                                 </div>                            
                             </div>
                             <!-- col-->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Number of Days: <span class="text-red">*</span></label>
+                                    <label for="numberOfDays">Number of Days: <span class="text-red">*</span></label>
                                     <input id="numberOfDays" class="form-control" type="number" min="1" value="{{old('numberOfDays')}}" name="numberOfDays" val-num-days required>
                                 </div>
                             </div><!-- col-->
@@ -46,14 +46,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Departure Date: <span class="text-red"> *</span></label>
+                                    <label for="date">Departure Date: <span class="text-red"> *</span></label>
                                     <input id="date" class="form-control date-mask" type="text" name="date" value="{{old('date')}}" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask val-book-date data-parsley-valid-departure required>
                                 </div>
                             </div><!-- col-->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Departure Time: <span class="text-red">*</span></label>
-                                        <input type="text" class="form-control" name="time" value="{{old('time')}}" val-book-time required>
+                                    <label for="time">Departure Time: <span class="text-red">*</span></label>
+                                        <input type="time" class="form-control" name="time" value="{{old('time')}}" style="width: 200px;" val-book-time required>
                                 </div>
                             </div><!-- col-->
                         </div><!-- row-->

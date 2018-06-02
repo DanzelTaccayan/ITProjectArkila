@@ -10,7 +10,7 @@
                 <td class="text-right">₱{{$reservation->fare}} </td>
             </tr>
             <tr style="border-bottom: 2px solid black">
-                <th>Cancellation Fee</th>
+                <th>Reservation Fee</th>
                 <td class="text-right">₱{{$rules->reservation_fee}}</td>
             </tr>
             <tr>
@@ -19,7 +19,7 @@
             </tr>
         </tbody>
     </table>
-    <p class=""><strong>REFUNDABLE UNTIL: </strong>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</p>
+    <p class=""><strong>REFUNDABLE UNTIL: </strong>{{$reservation->reservationDate->reservation_date->subDays(2)->formatLocalized('%d %B %Y')}}</p>
     <form action="{{route('reservation.refund', $reservation->id)}}" method="POST">
     {{ csrf_field() }} {{ method_field('PATCH') }}
     <table class="table table-striped table-bordered">
