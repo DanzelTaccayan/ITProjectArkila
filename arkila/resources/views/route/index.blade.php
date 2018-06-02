@@ -87,6 +87,7 @@
                                 </table>
                             </div>
                         </div>
+                        @foreach($terminal->routeFromDestination as $routes)
                         <div class="modal" id="{{'route'.$routes->destination_id}}">
                             <div class="modal-dialog" style="margin-top: 10%;">
                                 <div class="modal-content">
@@ -113,6 +114,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
                 @endforeach
