@@ -27,8 +27,8 @@
                         <tbody>
                             @foreach($archivedVans as $archivedVan)
                                 <tr>
-                                    <td>{{$archivedVan->plate_number}}</td>
-                                    <td>{{$archivedVan->model->description}}</td>
+                                    <td class="text-uppercase">{{$archivedVan->plate_number}}</td>
+                                    <td class="text-uppercase">{{$archivedVan->model->description}}</td>
                                     <td class="text-right" style="width: 10px;">{{$archivedVan->seating_capacity}}</td>
                                     <td>{{$archivedVan->updated_at->format('h:i A')." of ".$archivedVan->updated_at->format('M d, Y')}}</td>
                                     <td>

@@ -121,9 +121,9 @@
                                         <tbody>
                                             @foreach($operator->van->where('status', 'Active') as $van)
                                             <tr>
-                                                <td>{{$van->plate_number}}</td>
-                                                <td>{{$van->driver()->first()->full_name ?? $van->driver()->first()}}</td>
-                                                <td>{{$van->model->description}}</td>
+                                                <td class="text-uppercase">{{$van->plate_number}}</td>
+                                                <td class="text-uppercase">{{$van->driver()->first()->full_name ?? $van->driver()->first()}}</td>
+                                                <td class="text-uppercase">{{$van->model->description}}</td>
                                                 <td class="text-right" style="width: 10px;">{{$van->seating_capacity}}</td>
                                                 <td>
                                                     <div class="text-center">
@@ -182,7 +182,7 @@
                                             @foreach($operator->drivers->where('status', 'Active') as $driver)
                                             <tr>
                                                 <td>{{$driver->member_id}}</td>
-                                                <td>{{$driver->full_name}}</td>
+                                                <td class="text-uppercase">{{$driver->full_name}}</td>
                                                 <td>{{$driver->contact_number}}</td>
                                                 <td>
                                                     <div class="text-center">
@@ -261,8 +261,8 @@
                                         <tbody>
                                             @foreach($operator->archivedDriver as $archivedDriver)
                                                 <tr>
-                                                    <td>{{$archivedDriver->full_name}}</td>
-                                                    <td>{{$archivedDriver->address}}</td>
+                                                    <td class="text-uppercase">{{$archivedDriver->full_name}}</td>
+                                                    <td class="text-uppercase">{{$archivedDriver->address}}</td>
                                                     <td>{{$archivedDriver->contact_number}}</td>
                                                     <td>{{$archivedDriver->archivedAt->created_at->format('h:i A')." of ".$archivedDriver->archivedAt->created_at->format('M d, Y')}}</td>
                                                     <td>

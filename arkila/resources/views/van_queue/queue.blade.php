@@ -659,7 +659,7 @@ ol.arrow-drag{
                             $("#item"+queueId).show();
                             new PNotify({
                                 title: "Success!",
-                                text: "Successfully update remark",
+                                text: "Successfully updated remark",
                                 animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
