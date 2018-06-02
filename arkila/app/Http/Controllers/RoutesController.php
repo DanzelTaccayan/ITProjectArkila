@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RouteRequest;
 use App\Destination;
 use App\Ticket;
+use App\SoldTicket;
 
 
 class RoutesController extends Controller
@@ -300,42 +301,55 @@ class RoutesController extends Controller
      */
     public function destroy(Destination $route)
     {
+        $isTerminal = $route->is_terminal;
+        $numberOfSoldTickets = 0;
+        if($isTerminal == true) {
+            foreach($route->routeFromDestination as $routes) {
+                $soldTickets = SoldTicket::where('destination_id', $routes->destination_id)->get();
+                foreach ($soldTickets as $soldTicket) {
+                    if ($soldTicket != null) {
+                        $numberOfSoldTickets++;
+                    }
+                }
+            }
+        } else {
+            $numberOfSoldTickets = SoldTicket::where('destination_id', $route->destination_id)->count();
+        }
         $main = Destination::where('is_main_terminal', '1')->first();
         $terminals = Destination::allTerminal()->get();
-        $isTerminal = $route->is_terminal;
         $terminal = $route->routeDestination()->first()->destination_id;
         $message = null;
 
-        if($route->vanQueue->count() == 0)
-        {
-            if ($route->is_terminal == true)
-            {
-                foreach($route->routeFromDestination as $routes)
-                {
-                    $routes->routeOrigin()->detach($main->destination_id);
-                    $routes->delete();
-                }
-                $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
-            }
-            else
-            {
-                $route->routeOrigin()->detach($main->destination_id);
-                $route->delete();
-                $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+        if($numberOfSoldTickets == 0) {
 
+            if($route->vanQueue->count() == 0) {
+    
+                if ($isTerminal == true) {
+                    foreach($route->routeFromDestination as $routes) {
+                        $routes->routeOrigin()->detach($main->destination_id);
+                        $routes->delete();
+                    }
+                    $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+                } else {
+                    $route->routeOrigin()->detach($main->destination_id);
+                    $route->delete();
+                    $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+    
+                }
+                if($isTerminal == true) {
+                    return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+                } else {
+                    return redirect('/home/route#terminal' .$terminal)->with('success', $message);
+                }  
+            } else {
+                return back()->withErrors('Unable to delete, there are still vans on queue in '. $route->destination_name .' Terminal.');
             }
-            if($isTerminal == true)
-            {
-                return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+        } else {
+            if($isTerminal == true) {
+                return back()->withErrors('Unable to delete terminal '. $route->destination_name .', there are still tickets that needs to be returned');            
+            } else {
+                return back()->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');            
             }
-            else
-            {
-                return redirect('/home/route#terminal' .$terminal)->with('success', $message);
-            }  
-        }
-        else
-        {
-            return back()->withErrors('Unable to delete, there are still vans on queue in '. $route->destination_name .' Terminal.');
         }
 
     }
