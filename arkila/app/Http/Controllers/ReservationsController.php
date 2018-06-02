@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Reservation;
 use App\ReservationDate;
+use App\Ledger;
 use App\BookingRules;
 use App\Destination;
 use App\Ticket;
@@ -208,12 +209,12 @@ class ReservationsController extends Controller
     
                 } while ($newCode == $allCodes);
             }
+            $rule = $this->reservationRules();
             $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
-            $toBePaid = $ticket->fare * $quantity;
-
+            $toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
+            $time = explode(':', $dates->departure_time);
             $dateOfDeparture = $dates->reservation_date;
-            $setExpiry = $dateOfDeparture->addDays(2)->setTime(17, 00, 00);
-            $expiryDate = $setExpiry->setTime(17, 00, 00);
+            $expiryDate = $dateOfDeparture->setTime($time[0], $time[1], $time[2]);
 
     
             $destination = Destination::where('destination_id', $request->destination)->get()->first();
@@ -232,6 +233,12 @@ class ReservationsController extends Controller
                 'ticket_quantity' => $quantity,
                 'type' => 'Walk-in',
                 'status' => 'Paid',
+            ]);
+
+            Ledger::create([
+                'description' => 'Reservation Fee',
+                'amount' => $rule->reservation_fee,
+                'type' => 'Revenue',
             ]);
 
             $newNumTicket = $dates->number_of_slots - $quantity;
@@ -286,17 +293,24 @@ class ReservationsController extends Controller
 
     public function payment(Request $request, Reservation $reservation)
     {
+            $rule = $this->reservationRules();
+            $time = explode(':', $reservation->reservationDate->departure_time);
             $dateOfDeparture = $reservation->reservationDate->reservation_date;
-            $expiry = $dateOfDeparture->addDays(2)->setTime(17, 00, 00);
-            $newExpiry = $expiry->setTime(17, 00, 00);
+            $expiry = $dateOfDeparture->setTime($time[0], $time[1], $time[2]);
             $refundCode = bin2hex(openssl_random_pseudo_bytes(4));
 
             $reservation->update([
                 'status' => 'PAID',
                 'refund_code' => $refundCode,
                 'date_paid' => Carbon::now(),
-                'expiry_date' => $newExpiry,
+                'expiry_date' => $expiry,
                 'is_refundable' => true,
+            ]);
+
+            Ledger::create([
+                'description' => 'Reservation Fee',
+                'amount' => $rule->reservation_fee,
+                'type' => 'Revenue',
             ]);
 
             return back()->with('success', 'The reservation has been paid.');
@@ -306,6 +320,11 @@ class ReservationsController extends Controller
     {
         $rules = BookingRules::where('cancellation_fee', null)->get()->first();
         return view('reservations.showReservation', compact('reservation', 'rules'));
+    }
+
+    public function reservationRules()
+    {
+        return BookingRules::where('cancellation_fee', null)->get()->first();;
     }
 
 }

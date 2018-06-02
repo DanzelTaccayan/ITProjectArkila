@@ -6,6 +6,7 @@ use App\User;
 use App\Destination;
 use App\ReservationDate;
 use App\Reservation;
+use App\BookingRules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -110,17 +111,18 @@ class MakeReservationController extends Controller
 			
 							} while ($newCode == $allCodes);
 						}
+						$rule = $this->reservationRules();
 						$time = explode(':', $reservation->departure_time);
 						$newSlot = $reservation->number_of_slots - $request->quantity;
 						$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
 						$ticket = Ticket::where([['destination_id', $destination->destination_id], ['type', 'Regular']])->get()->first();
-						$toBePaid = $ticket->fare * $quantity;
+						$toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
 						$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
 						
 						if($expiry->lt(Carbon::now())) {
 							$expiry = $reservation->reservation_date->setTime($time[0], $time[1], $time[2]);
 						} else {
-							$expiry = Carbon::now()->addDays(2)->setTime(17, 00, 00);
+							$expiry = Carbon::now()->addDays($rule->valid_days)->setTime($time[0], $time[1], $time[2]);
 						}
 				
 			
@@ -288,5 +290,10 @@ class MakeReservationController extends Controller
 			return back()->withErrors($message);
 		}
 	  }
+
+	  public function reservationRules()
+	  {
+		  return BookingRules::where('cancellation_fee', null)->get()->first();;
+	  }  
 
 }
