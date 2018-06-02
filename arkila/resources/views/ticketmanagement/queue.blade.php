@@ -35,7 +35,7 @@
 @endsection
 @section('content')
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="20000">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="10000">
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
      @foreach($terminals as $terminal)
@@ -110,15 +110,8 @@
         });
     </script>  
     <script type="text/javascript">
-        function loadlink(){
-            $('#links').load('queue.blade.php',function () {
-                 $(this).unwrap();
-            });
-        }
-
-        loadlink(); // This will run on page load
-        setInterval(function(){
-            loadlink() // this will run after every 5 seconds
-        }, 5000);
+        setTimeout(function(){
+           window.location.reload(1);
+        }, 40000);
     </script>
 @endsection

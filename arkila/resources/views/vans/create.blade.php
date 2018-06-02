@@ -85,7 +85,7 @@
 </div>
 
 <div id="addVanBtnM" class="hidden">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>s
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
     <div class="modal" id="driverWithVan-modal">                          
         <div class="modal-dialog" style="margin-top: 10%;">
             <div class="modal-content">

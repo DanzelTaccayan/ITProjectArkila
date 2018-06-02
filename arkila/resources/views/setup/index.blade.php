@@ -68,11 +68,11 @@
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Opening Time: </label>
-                    <input type="text" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
+                    <input type="time" class="form-control" name="openTime" value="{{old('openTime')}}" val-time required>
                 </div>
                 <div class="form-group col-md-6 right">
                     <label>Closing Time: </label>
-                    <input type="text" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
+                    <input type="time" class="form-control" name="closeTime" value="{{old('closeTime')}}" val-time required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> The information you will enter can be edited later in the Company Profile page under the Settings tab.</p>
             </div>
