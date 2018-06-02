@@ -46,7 +46,7 @@ class DriverRequest extends FormRequest
                 'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
                 'contactPersonContactNumber' => ['bail','max:30','required', new checkContactNumber],
                 'licenseNo' => 'bail|required',
-                'licenseExpiryDate' => 'bail|required',
+                'licenseExpiryDate' => 'bail|required|date|after:today',
                 'sss' => 'nullable'
             ];
         } else {
@@ -60,7 +60,7 @@ class DriverRequest extends FormRequest
                 'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
                 'contactPersonContactNumber' => ['bail','max:30','required', new checkContactNumber],
                 'licenseNo' => 'bail|required',
-                'licenseExpiryDate' => 'bail|required',
+                'licenseExpiryDate' => 'bail|required|date|after:today',
                 'sss' => 'nullable'
             ];
         }

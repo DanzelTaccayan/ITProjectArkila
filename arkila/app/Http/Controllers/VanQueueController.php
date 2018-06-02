@@ -75,7 +75,7 @@ class VanQueueController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
     }
@@ -128,11 +128,11 @@ class VanQueueController extends Controller
                 }
                 DB::commit();
                 $responseArr = VanQueue::select('van_queue_id as vanQueueId','queue_number as queueNumber')->whereNotNull('queue_number')->where('destination_id', $vanOnQueue->destination_id)->orderBy('queue_number', 'asc')->get();
-                \Log::info($responseArr);
+
             } catch (\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
-                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
 
             return response()->json($responseArr);
@@ -194,7 +194,7 @@ class VanQueueController extends Controller
             }
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return 'Destination not Updated';
     }
@@ -227,7 +227,7 @@ class VanQueueController extends Controller
             return 'Successfully updated the remark of van '.$vanOnQueue->van->plate_number;
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
 
@@ -259,7 +259,7 @@ class VanQueueController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         // session()->flash('success', 'Van on Queue Successfully Removed');
         return redirect('/home/vanqueue#queue'. $vanqueue->destination_id)->with('success',  $vanqueue->van->plate_number .' has been successfully removed from the queue.');
@@ -317,38 +317,41 @@ class VanQueueController extends Controller
 
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
     }
 
     public function putOnDeck(VanQueue $vanOnQueue)
     {
-        // Start transaction!
-        DB::beginTransaction();
-        try {
-            $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
+        if($vanOnQueue->has_privilege === 1 ) {
+            // Start transaction!
+            DB::beginTransaction();
+            try {
+                $queue = VanQueue::where('destination_id',$vanOnQueue->destination_id)->whereNotNull('queue_number')->get();
 
-            foreach($queue as $vanOnQueueObj) {
-                $newQueueNumber = ($vanOnQueueObj->queue_number)+1;
-                $vanOnQueueObj->update([
-                    'queue_number' => $newQueueNumber
+                foreach($queue as $vanOnQueueObj) {
+                    $newQueueNumber = ($vanOnQueueObj->queue_number)+1;
+                    $vanOnQueueObj->update([
+                        'queue_number' => $newQueueNumber
+                    ]);
+                }
+
+                $vanOnQueue->update([
+                    'queue_number' => 1,
+                    'remarks' => null,
+                    'has_privilege' => 0
                 ]);
+
+                DB::commit();
+            } catch(\Exception $e) {
+                DB::rollback();
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
-
-            $vanOnQueue->update([
-                'queue_number' => 1,
-                'remarks' => null,
-                'has_privilege' => 0
-            ]);
-
-            DB::commit();
-        } catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return redirect('/home/vanqueue#queue'. $vanOnQueue->destination_id)->with('success',  $vanOnQueue->van->plate_number .' has been moved on deck.');
+        } else {
+            abort(422,'Error, The Van is already put on deck');
         }
-
-        return redirect('/home/vanqueue#queue'. $vanOnQueue->destination_id)->with('success',  $vanOnQueue->van->plate_number .' has been moved on deck.');
     }
 
     public function changeRemarksOB(VanQueue $vanOnQueue)
@@ -385,7 +388,7 @@ class VanQueueController extends Controller
 
         } catch(\Exception $e) {
             DB::rollback();
-            return back()->withErrors('There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
     }
 
@@ -416,7 +419,7 @@ class VanQueueController extends Controller
                 return 'Success';
             } catch(\Exception $e) {
                 DB::rollback();
-                return back()->withErrors('There seems to be a problem. Please try again There seems to be a problem. Please try again, If the problem persist contact an admin to fix the issue');
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
         } else {
             abort(422,'Error, The Van is already on the special units List');
