@@ -43,7 +43,7 @@ th {
                                 </tr>
                                 <tr>
                                     <th>Office Hours</th>
-                                    <td>{{$profile->open_time}} to {{$profile->close_time}}</td>
+                                    <td>{{date('g:i A', strtotime($profile->open_time))}} to {{date('g:i A', strtotime($profile->close_time))}}</td>
                                 </tr>
                             </tbody>
                         </table>
