@@ -111,7 +111,7 @@
       <div class="box-footer">
           <div style="overflow:auto;">
                   <div class="text-center">
-                      <button name="preloadSubmit" type="submit" class="btn btn-success">REGISTER</button>
+                      <button type="submit" class="btn btn-success">REGISTER</button>
                   </div>
               </div>
       </div>
@@ -136,7 +136,7 @@
 
     <script>
     $(function () {
-        $('button[name="preloadSubmit"]').on('submit',function(){
+        $('form[name="preloadSubmit"]').on('submit',function(){
             $(this).prop('disabled',true);
 
         });

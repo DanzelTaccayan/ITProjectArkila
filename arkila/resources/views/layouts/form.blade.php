@@ -34,7 +34,7 @@
                 <div class="container">
                     <section class="content">
                         <div class="form-box">
-                            <form action="@yield('form-action')" method="POST" class="parsley-form" data-parsley-validate="">
+                            <form action="@yield('form-action')" name="preloadSubmit" method="POST" class="parsley-form" data-parsley-validate="">
                             {{csrf_field()}} @yield('method_field')
                             <div class="form-box-header">
                                     <p>
