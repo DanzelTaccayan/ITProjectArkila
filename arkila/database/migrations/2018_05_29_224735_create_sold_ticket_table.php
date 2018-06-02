@@ -31,6 +31,8 @@ class CreateSoldTicketTable extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
 
+            $table->enum('ticket_type', ['Regular', 'Discount']);
+
             $table->foreign('reservation_id')
                 ->references('id')->on('reservation')
                 ->onDelete('restrict')

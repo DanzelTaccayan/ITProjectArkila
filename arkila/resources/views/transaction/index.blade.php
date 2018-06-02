@@ -158,14 +158,12 @@
                                         <div id="sellTickets{{$terminal->destination_id}}">
 
                                             <div class="row">
-                                             <form method="POST" action="{{route('transactions.store',[$terminal->destination_id])}}">
-                                                                {{csrf_field()}}
                                                 <div class="col-md-4">
                                                     <div class="well">
                                                         <div>
                                                             <label for="">Customer</label>
-                                                            <select class="form-control select2" name="customer">
-                                                                <option value="">Walk-in Customer</option>
+                                                            <select class="form-control select2" data-terminal="{{$terminal->destination_id}}" name="customer">
+                                                                <option value="walkIn">Walk-in Customer</option>
                                                                 @foreach($reservations as $reservation)
                                                                 <option value="{{$reservation->id}}">{{$reservation->rsrv_code}}</option>
                                                                 @endforeach
@@ -227,12 +225,9 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                        <div class="pull-right">
-                                                            
-                                                                <button type="submit" class="btn btn-success btn-flat" data-toggle="modal" data-target="#modal-default">SELL</button>
-                                                            
+                                                        <div class="pull-right">                           
+                                                            <button name="buttonSell" class="btn btn-success btn-flat" data-toggle="modal" data-terminal="{{$terminal->destination_id}}">SELL</button>                    
                                                         </div>
-                                                        </form>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>
@@ -1143,6 +1138,93 @@
 {{--hide and showing--}}
 <script>
      $(function(){
+
+        //change sell ticket form
+        $('button[name="buttonSell"]').on('click',function(){
+            var terminalId = $(this).data('terminal');
+            var form = $(this);
+        
+
+            var type = $('select[name="customer"][data-terminal="'+terminalId+'"]').val();
+
+            if(type == 'walkIn') { 
+               $.ajax({
+                     method:'POST',
+                     url: '/home/transactions/'+terminalId,
+                     data: {
+                         '_token': '{{csrf_token()}}'
+                     },
+                     success: function(){
+                         location.reload();
+                     },
+                     error:function(response) {
+                         $.notify({
+                             // options
+                             icon: 'fa fa-warning',
+                             message: response.responseJSON.error
+                         },{
+                             // settings
+                             type: 'danger',
+                             autoHide: true,
+                             clickToHide: true,
+                             autoHideDelay: 2500,
+                             placement: {
+                                 from: 'bottom',
+                                 align: 'right'
+                             },
+                             icon_type: 'class',
+                             animate: {
+                                 enter: 'animated bounceIn',
+                                 exit: 'animated bounceOut'
+                             }
+                         });
+                     }
+
+                 });
+            
+            } else {
+
+                $.ajax({
+                     method:'POST',
+                     url: '/home/transactions/'+terminalId,
+                     data: {
+                         '_token': '{{csrf_token()}}',
+                         'customer' : type
+                     },
+                     success: function(){
+                         location.reload();
+                     },
+                     error:function(response) {
+                         $.notify({
+                             // options
+                             icon: 'fa fa-warning',
+                             message: response.responseJSON.error
+                         },{
+                             // settings
+                             type: 'danger',
+                             autoHide: true,
+                             clickToHide: true,
+                             autoHideDelay: 2500,
+                             placement: {
+                                 from: 'bottom',
+                                 align: 'right'
+                             },
+                             icon_type: 'class',
+                             animate: {
+                                 enter: 'animated bounceIn',
+                                 exit: 'animated bounceOut'
+                             }
+                         });
+                     }
+
+                 });
+
+                    
+            }
+
+        });
+
+
         $('div[name="changedriver-header"]').hide();
         $('div[name="deletedriver-header"]').hide();
 

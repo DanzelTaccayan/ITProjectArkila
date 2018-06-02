@@ -74,6 +74,7 @@ class TransactionsController extends Controller
                         'destination_id' => $selectedTicket->ticket->destination_id,
                         'amount_paid' => $selectedTicket->ticket->fare,
                         'reservation_id' => $reservationId,
+                        'ticket_type' => $selectedTicket->ticket->type,
                         'status' => 'Pending'
                     ]);
 
@@ -87,15 +88,16 @@ class TransactionsController extends Controller
                 }
 
                 DB::commit();
-                return back()->with('success', 'Successfully, Sold tickets');
+                session()->flash('success', 'Successfully, Sold tickets');
             } catch(\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
-                return back()->withErrors('There seems to be a problem. Please try again, If the problem persists please contact the administator');
+
+                return Response::json(['error' => 'There seems to be a problem. Please try again, If the problem persists please contact the administator'], 422);
             }
 
         } else {
-            return back()->withErrors('Select Ticket/s first before selling');
+            return Response::json(['error' => 'Select Ticket/s first before selling'], 422);
         }
 
     }
@@ -176,6 +178,7 @@ class TransactionsController extends Controller
                                 'destination' => $vanOnQueue->destination->destination_name,
                                 'origin' => $destination->routeOrigin->first()->destination_name,
                                 'amount_paid' => $soldTicket->amount_paid,
+                                'transaction_ticket_type' => $soldTicket->ticket_type,
                                 'status' => 'Departed'
                             ]);
 
@@ -382,6 +385,7 @@ class TransactionsController extends Controller
                 'destination' => $soldTicket->destination->destination_name,
                 'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
                 'amount_paid' => $soldTicket->amount_paid,
+                'transaction_ticket_type' => $soldTicket->ticket_type,
                 'status' => 'Refunded'
             ]);
 
@@ -426,6 +430,7 @@ class TransactionsController extends Controller
                     'destination' => $soldTicket->destination->destination_name,
                     'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
                     'amount_paid' => $soldTicket->amount_paid,
+                    'transaction_ticket_type' => $soldTicket->ticket_type,
                     'status' => 'Refunded'
                 ]);
 
@@ -459,6 +464,7 @@ class TransactionsController extends Controller
                 'destination' => $soldTicket->destination->destination_name,
                 'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
                 'amount_paid' => $soldTicket->amount_paid,
+                'transaction_ticket_type' => $soldTicket->ticket_type,
                 'status' => 'Lost/Expired'
             ]);
             $ticketNumber = $soldTicket->ticket_number;

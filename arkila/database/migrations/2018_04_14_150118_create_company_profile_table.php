@@ -23,8 +23,8 @@ class CreateCompanyProfileTable extends Migration
             $table->string('address')
             ->nullable()->default(null);
             $table->timestamps();
-            $table->string('open_time');
-            $table->string('close_time');
+            $table->time('open_time');
+            $table->time('close_time');
         });
     }
 
