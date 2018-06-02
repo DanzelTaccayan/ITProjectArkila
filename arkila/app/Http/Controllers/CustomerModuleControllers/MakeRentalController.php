@@ -80,7 +80,7 @@ class MakeRentalController extends Controller
                 "comment" => $request->message !== null ? $request->message : null,
               ]);
          
-          return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully made a rental');
+          return redirect(route('customermodule.rentalTransaction'))->with('success', 'Successfully created a rental');
       }
       else
       {
