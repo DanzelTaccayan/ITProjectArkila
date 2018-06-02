@@ -16,6 +16,7 @@ use DateTimeZone;
 use App\Fee;
 use App\Reservation;
 use Response;
+use DB;
 
 class TransactionsController extends Controller
 {

@@ -4,6 +4,7 @@ use App\Member;
 use App\VanQueue;
 use App\Van;
 use App\Rules\checkOperator;
+use DB;
 
 class ArchiveController extends Controller
 {

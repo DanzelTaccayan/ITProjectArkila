@@ -6,6 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Destination;
 use App\Ticket;
+use DB;
 
 class TicketManagementController extends Controller
 {

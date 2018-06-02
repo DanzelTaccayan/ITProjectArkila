@@ -15,6 +15,7 @@ use App\VanModel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use PDF;
+use DB;
 
 
 

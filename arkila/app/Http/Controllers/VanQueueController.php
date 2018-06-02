@@ -9,6 +9,7 @@ use App\Van;
 use Illuminate\Http\Request;
 use Response;
 use Illuminate\Validation\Rule;
+use DB;
 
 class VanQueueController extends Controller
 {

@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-
+use DB;
 
 class DriversController extends Controller
 {

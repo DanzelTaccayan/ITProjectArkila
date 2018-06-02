@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use PDF;
 use Carbon\Carbon;
 use Image;
+use DB;
 
 class OperatorsController extends Controller
 {
