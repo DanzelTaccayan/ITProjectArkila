@@ -78,7 +78,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="text" name="timeDeparted" value="{{old('timeDeparted')}}" id="timepicker" class="form-control" placeholder="hh:mm" required>
+                                        <input type="time" name="timeDeparted" value="{{old('timeDeparted')}}" class="form-control" placeholder="hh:mm" required>
                                     </div>
                                     <p id="errTimeDeparted"></p>
                                 </div>
