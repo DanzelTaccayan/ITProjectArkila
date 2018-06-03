@@ -18,10 +18,10 @@ class OnlineReservation
     public function handle($request, Closure $next)
     {
       $onlineReservation = Feature::where('description','Online Reservation')->first();
-      if(Auth::user()->isSuperAdmin() || $onlineReservation->status == 'enable'){
+      if($onlineReservation->status == 'enable'){
           return $next($request);
       }else{
-          abort(403);
+          abort(503);
       }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\CustomerModuleControllers;
-
 use App\User;
 use App\Destination;
 use App\ReservationDate;

@@ -1,4 +1,4 @@
-@extends('layouts.customer_user')
+@extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('content')
 <section class="mainSection">
         <div class="container">

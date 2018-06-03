@@ -1,4 +1,4 @@
-@extends('layouts.customer_user')
+@extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('content')
 <div id="content">
     <div class="container" style="height:600px;">
@@ -33,6 +33,7 @@
                             <td class="text-right">{{ date('g:i A', strtotime($reserve->departure_time)) }}</td>
                             <td class="text-right">{{$reserve->number_of_slots}}</td>
                             <td>
+                            @if(Auth::user())
                                 @if($reserve->status == 'CLOSED' || $reserve->reservation_date->subDays(1)->lt(Carbon\Carbon::now()))
                                 <p>CLOSED</p>
                                 @elseif($reserve->number_of_slots > 0)
@@ -42,6 +43,9 @@
                                 @else
                                 <p>Fully Booked</p>
                                 @endif
+                            @else
+                              <p>Sign in to reserve</p>
+                            @endif
                             </td>
                         </tr>
                         @endforeach
