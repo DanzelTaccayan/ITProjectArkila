@@ -22,13 +22,8 @@ class GettingStarted
       $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
       if((Auth::user()->isSuperAdmin()) && ($setup->status == 'enable' && $mainterminal == true)){
         return redirect('/getting-started/setup');
-        
       }else{
         return $next($request);
-      }
-
-      
-
-        
+      }        
     }
 }

@@ -12,6 +12,8 @@
         window.Laravel = @php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); @endphp
+
+        var submitStatus = false;
     </script>
 
     @if(!auth()->guest())
@@ -60,19 +62,7 @@
                             </form>
                         </div>
                     </section>
-
-                    <div class="modal in" id="submit-loader" class="hidden">
-                        <div class="modal-dialog modal-sm" style="margin-top: 15%;">
-                          <div class="modal-content">
-                            <div class="modal-body">
-                              <div class="text-center">
-                                <img src="{{ URL::asset('img/loading.gif') }}">
-                                <h4>Please  wait...</h4>
-                              </div>
-                            </div> 
-                          </div>
-                        </div>
-                    </div>
+                    @include('layouts.partials.preloader_div')
                 
             </div>
             <!-- /.container -->
@@ -92,13 +82,19 @@
         <script>
             $(document).ready(function() {
                 $("form").on('submit', function(e){
-                    var form = $(this);
+                    if(submitStatus) {
+                        e.preventDefault();
+                    } else {
 
-                    if (form.parsley().isValid()){
-                      $('#submit-loader').removeClass('hidden');
-                      $('#submit-loader').css("display","block");
+                        var form = $(this);
+
+                        if (form.parsley().isValid()){
+                            submitStatus = true;
+                            $('#submit-loader').removeClass('hidden');
+                            $('#submit-loader').css("display","block");
+                        }
                     }
-                    return true;
+
                 });
             });
         </script>

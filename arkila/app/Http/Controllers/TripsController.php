@@ -110,7 +110,6 @@ class TripsController extends Controller
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund);
           $officeShare = $totalFare - $driverShare;
 
-      //dd($numPassCountArr);
       return view('trips.viewReport', compact('numPassCountArr','trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger', 'totalDiscountedPassenger'));
     }
 
@@ -122,15 +121,6 @@ class TripsController extends Controller
          
         $trip->transactions()->update(['status' => 'Accepted']);
         
-        // $driverId = $trip->driver->user->id ?? null;
-        // if($driverId !== null){
-        //   $userDriver = User::find($driverId) ?? null;
-        //   if($userDriver !== null){
-        //     $userAdmin = User::find(Auth::id());
-        //     $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
-        //   }
-        // }
-        
         $message = "Trip " . $trip->trip_id . " successfully accepted";
         return redirect(route('trips.tripLog'))->with('success', $message);
     }
@@ -141,15 +131,6 @@ class TripsController extends Controller
             "report_status" => 'Declined',
         ]);
         
-        // $driverId = $trip->driver->user->id ?? null;
-        // if($driverId !== null){
-        //   $userDriver = User::find($driverId) ?? null;
-        //   if($userDriver !== null){
-        //     $userAdmin = User::find(Auth::id());
-        //     $userDriver->notify(new TripReportsDriverNotification($userAdmin, $trip));
-        //   }
-        // }
-
         $trip->transactions()->update(['status' => 'Declined']);
         $message = "Trip " . $trip->trip_id . " successfully declined";
         return redirect(route('trips.driverReport'))->with('success', $message);
@@ -163,7 +144,7 @@ class TripsController extends Controller
         if($trip->origin == $mainTerminal && $transactions == false){
 
           $transaction = Transaction::where('trip_id',$trip->trip_id)
-            ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid, transaction_trip_type')
+            ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid, transaction_ticket_type')
             ->groupBy('amount_paid', 'destination')
             ->orderBy('amount_paid', 'ampd','DESC')
             ->get();
@@ -183,13 +164,13 @@ class TripsController extends Controller
           }
 
           foreach($transaction  as $transkeys => $transvalues){
-            if($transvalues->transaction_trip_type == "Regular"){
+            if($transvalues->transaction_ticket_type == "Regular"){
               $tempArr[$transvalues->destination]['Regular'] = $transvalues->ampd; 
             }else{
               $tempArr[$transvalues->destination]['Regular'] = 0;
             }
 
-            if($transvalues->transaction_trip_type == "Discount"){
+            if($transvalues->transaction_ticket_type == "Discount"){
               $tempArr[$transvalues->destination]['Discount'] = $transvalues->ampd;
             }else{
               $tempArr[$transvalues->destination]['Discount'] = 0;  
@@ -220,11 +201,69 @@ class TripsController extends Controller
           return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
         }else if($trip->origin == $mainTerminal && $transactions == true){
+            //discount
+            $discount = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->where('transaction_ticket_type', 'Discount')
+              ->groupBy('tickets')
+              ->get();
+            
+            $regular = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->where('transaction_ticket_type', 'Regular')
+              ->groupBy('tickets')
+              ->get();
+
+            $transactions = Transaction::where('trip_id',$trip->trip_id)
+              ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+              ->groupBy('tickets')
+              ->get();
+               
+            
+            $tempArr = null;
+
+            foreach($transactions as $tranKey => $tranValues){
+                $tempArr[$tranValues->tickets] = array_fill_keys(
+                  array('Regular', 'Discount'), 0
+                );
+            }
+
+            foreach($discount as $tran){
+              $tempArr[$tran->tickets]['Discount'] = $tran->counts; 
+            }  
+            
+            foreach($regular as $tran){
+              $tempArr[$tran->tickets]['Regular'] = $tran->counts;
+            }  
+
+            
+
+            $totalPassenger = 0;
+            $totalDiscountedPassenger = 0;
+            foreach($tempArr as $destinationKey => $numOfPassValue){
+              foreach($numOfPassValue as $type => $num){
+                if($type == 'Regular'){
+                  $totalPassenger = $totalPassenger + $num;
+                }else if($type == 'Discount'){
+                  $totalDiscountedPassenger = $totalDiscountedPassenger + $num;
+                }
+              }
+            }
+            
+            $driverShare = 0;
+            $totalFare = 0;
+            foreach($transactions  as $transkeys => $transvalues){
+              $totalFare += $transvalues->ampd * $transvalues->amount_paid;
+            }
+
+            $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
+            $officeShare = $totalFare - $driverShare;
           
+          return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
         }else{
 
           $transaction = Transaction::where('trip_id', $trip->trip_id)
-            ->selectRaw('COUNT(amount_paid) as ampd, origin, amount_paid, transaction_trip_type')
+            ->selectRaw('COUNT(amount_paid) as ampd, origin, amount_paid, transaction_ticket_type')
             ->groupBy('amount_paid')->get();
 
           $mainRegCount = 0;
@@ -237,8 +276,9 @@ class TripsController extends Controller
 
           $driverShare = 0;
           $totalFare = 0;
+          
           foreach($transaction as $trans){
-
+            //echo $trans->ampd . ' ' . $trans->origin . ' ' . $trans->amount_paid . ' ' . $trans->transaction_ticket_type . '<br/>';
             $test1 = Ticket::where('ticket_number', 'like', '%' . $trans->origin . '%')
               ->where('fare', $trans->amount_paid)->first() ?? null;
             $test2 = Destination::where('destination_name', 'like', '%' . $trans->origin . '%')
@@ -268,6 +308,7 @@ class TripsController extends Controller
             $totalFare += $trans->ampd * $trans->amount_paid;
           }
 
+          //dd($transaction);
           $numPassCountArr[0] = $mainRegCount;
           $numPassCountArr[1] = $mainDisCount;
           $numPassCountArr[2] = $stRegCount;

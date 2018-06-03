@@ -23,65 +23,55 @@ class TripLogController extends Controller
     public function viewSpecificTrip(Trip $trip)
     {
       $mainTerminal = Destination::where('is_main_terminal', true)->first()->destination_name;
-
-      if($trip->origin == $mainTerminal){
-
+      $transactions = $trip->transactions->where('ticket_name', '!=', null)->count() > 0 ? true : false;
+      
+      if($trip->origin == $mainTerminal  && $transactions == false){
+        
         $transaction = Transaction::where('trip_id',$trip->trip_id)
-          ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid')
-          ->groupBy('amount_paid', 'destination')
-          ->orderBy('amount_paid', 'ampd','DESC')
-          ->get();
+        ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid, transaction_ticket_type')
+        ->groupBy('amount_paid', 'destination')
+        ->orderBy('amount_paid', 'ampd','DESC')
+        ->get();
+   
         $destinationCount = Transaction::where('trip_id',$trip->trip_id)
           ->selectRaw('COUNT(destination) as descount, origin, destination, amount_paid')
           ->groupBy('destination')->get();
-        //dd($transaction);
+
         $numPassCountArr = null;
         $tempArr = null;
+
         $finalArr = null;
         foreach($destinationCount as $desKey => $desValues){
-
-          $tempArr[$desValues->destination] = array();
+            $tempArr[$desValues->destination] = array_fill_keys(
+              array('Regular', 'Discount'), ''
+            );
         }
-        // foreach($transaction as $tr){
-        //   echo $tr->ampd . ' ' . $tr->origin . ' ' . $tr->destination . ' ' . $tr->amount_paid . '<br/>';
-        // }
-        //dd($tempArr);
+
         foreach($transaction  as $transkeys => $transvalues){
-          //echo $transvalues->ampd . ' ' . $transvalues->origin . ' ' . $transvalues->destination . ' ' . $transvalues->amount_paid . '<br/>';
-          $test1 = Ticket::where('ticket_number', 'like', '%' . $transvalues->destination  . '%')
-            ->where('fare', $transvalues->amount_paid)->first()->type ?? null;
-          if($test1 == "Regular"){
-            $numPassCountArr[$transkeys] = array(
-              $transvalues->destination => $transvalues->ampd
-            );
-          }else if($test1 == "Discount"){
-            $numPassCountArr[$transkeys] = array(
-              $transvalues->destination => $transvalues->ampd
-            );
+          if($transvalues->transaction_ticket_type == "Regular"){
+            $tempArr[$transvalues->destination]['Regular'] = $transvalues->ampd; 
+          }else{
+            $tempArr[$transvalues->destination]['Regular'] = 0;
           }
-        }
-        //dd($numPassCountArr);
-        foreach($tempArr as $tempArrKeys => $tempArrValues){
-          foreach($numPassCountArr as $numPassKeys => $numPassInnerValues){
-            foreach($numPassInnerValues as $keys => $values){
-              if($keys == $tempArrKeys){
-                array_push($tempArr[$tempArrKeys], $values);
-              }
-            }
 
-          }
+          if($transvalues->transaction_ticket_type == "Discount"){
+            $tempArr[$transvalues->destination]['Discount'] = $transvalues->ampd;
+          }else{
+            $tempArr[$transvalues->destination]['Discount'] = 0;  
+          } 
         }
 
         $totalPassenger = 0;
-
-
-        foreach($tempArr as $places => $innerValues){
-          foreach($innerValues as $keys => $values){
-            $totalPassenger += $values;
+        $totalDiscountedPassenger = 0;
+        foreach($tempArr as $destinationKey => $numOfPassValue){
+          foreach($numOfPassValue as $type => $num){
+            if($type == 'Regular'){
+              $totalPassenger = $totalPassenger + $num;
+            }else if($type == 'Discount'){
+              $totalDiscountedPassenger = $totalDiscountedPassenger + $num;
+            }
           }
         }
-
-        $totalDiscountedPassenger = array_sum(array_column($tempArr, 1)) !== null ? array_sum(array_column($tempArr, 1)) : 0;
 
         $driverShare = 0;
         $totalFare = 0;
@@ -94,6 +84,66 @@ class TripLogController extends Controller
 
         return view('drivermodule.triplog.driverTripDetails', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
+      }else if($trip->origin == $mainTerminal && $transactions == true){
+        //discount
+          $discount = Transaction::where('trip_id',$trip->trip_id)
+            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+            ->where('transaction_ticket_type', 'Discount')
+            ->groupBy('tickets')
+            ->get();
+          
+          $regular = Transaction::where('trip_id',$trip->trip_id)
+            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+            ->where('transaction_ticket_type', 'Regular')
+            ->groupBy('tickets')
+            ->get();
+
+          $transactions = Transaction::where('trip_id',$trip->trip_id)
+            ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
+            ->groupBy('tickets')
+            ->get();
+             
+          
+          $tempArr = null;
+
+          foreach($transactions as $tranKey => $tranValues){
+              $tempArr[$tranValues->tickets] = array_fill_keys(
+                array('Regular', 'Discount'), 0
+              );
+          }
+
+          foreach($discount as $tran){
+            $tempArr[$tran->tickets]['Discount'] = $tran->counts; 
+          }  
+          
+          foreach($regular as $tran){
+            $tempArr[$tran->tickets]['Regular'] = $tran->counts;
+          }  
+
+          
+
+          $totalPassenger = 0;
+          $totalDiscountedPassenger = 0;
+          foreach($tempArr as $destinationKey => $numOfPassValue){
+            foreach($numOfPassValue as $type => $num){
+              if($type == 'Regular'){
+                $totalPassenger = $totalPassenger + $num;
+              }else if($type == 'Discount'){
+                $totalDiscountedPassenger = $totalDiscountedPassenger + $num;
+              }
+            }
+          }
+          
+          $driverShare = 0;
+          $totalFare = 0;
+          foreach($transactions  as $transkeys => $transvalues){
+            $totalFare += $transvalues->ampd * $transvalues->amount_paid;
+          }
+
+          $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
+          $officeShare = $totalFare - $driverShare;
+        
+        return view('drivermodule.triplog.driverTripDetails', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
       }else{
 
         $transaction = Transaction::where('trip_id', $trip->trip_id)

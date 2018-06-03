@@ -41,7 +41,7 @@ class CustomerReservationRequest extends FormRequest
             return [
                 "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
                 "destination" => "bail|required|exists:destination,destination_id",
-                "time" => ['bail',new checkTime, 'required'],
+                "time" => 'required|date_format:H:i',
                 "numberOfSeats" => "bail|required|numeric|digits_between:1,4|min:0|max:15",
                 "contactNumber" => ['bail',new checkContactNum],
                 "message" => "string|max:300|nullable",
@@ -50,7 +50,7 @@ class CustomerReservationRequest extends FormRequest
             return [
                 "date" => "bail|required|date_format:m/d/Y|after_or_equal:today",
                 "destination" => "bail|required|exists:destination,description",
-                "time" => ['bail',new checkTime, 'required', 'after:' . $timeFormattedNow],
+                "time" => ['bail','date_format:H:i', 'required', 'after:' . $timeFormattedNow],
                 "numberOfSeats" => "bail|required|numeric|digits_between:1,4|min:1|max:15",
                 "contactNumber" => ['bail',new checkContactNum],
                 "message" => "string|max:300|nullable",

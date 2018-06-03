@@ -34,7 +34,12 @@ class Ticket extends Model
         return $this->hasOne(SelectedTicket::class,'ticket_id');
     }
 
-    public function scopeShowAllSelectedTickets($query, $destinations){
-        return $query->whereIn('destination_id',$destinations)->whereIn('ticket_id',SelectedTicket::all()->pluck('ticket_id'));
+    public function soldTicket()
+    {
+        return $this->hasOne(SoldTicket::class, 'ticket_id');
+    }
+
+    public function scopeShowAllSelectedTickets($query, $destinations,$terminalId){
+        return $query->whereIn('destination_id',$destinations)->whereIn('ticket_id',SelectedTicket::where('selected_from_terminal',$terminalId)->pluck('ticket_id'));
     }
 }

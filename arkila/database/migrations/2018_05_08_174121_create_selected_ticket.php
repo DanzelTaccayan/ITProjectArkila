@@ -20,9 +20,17 @@ class CreateSelectedTicket extends Migration
             $table->integer('ticket_id')
                 ->unsigned();
 
+            $table->integer('selected_from_terminal')
+                ->unsigned();
+
 
             $table->foreign('ticket_id')
                 ->references('ticket_id')->on('ticket')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->foreign('selected_from_terminal')
+                ->references('destination_id')->on('destination')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

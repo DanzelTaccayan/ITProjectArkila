@@ -47,7 +47,7 @@
                     <tbody>
                         <tr>
                             <th>Driver:</th> 
-                            <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}@if($trip->driver->van->first() == null)<strong> (Substitute)</strong>  @endif</td>
+                            <td>{{$trip->driver->first_name . ' ' . $trip->driver->last_name}}@if($trip->driver->van->first() == null || $trip->driver->van->first()->van_id != $trip->van_id)<strong> (Substitute)</strong>  @endif</td>
                         </tr>
                         <tr>
                             <th>Van:</th>

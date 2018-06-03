@@ -26,6 +26,8 @@ class CreateTransactionTable extends Migration
             $table->string('origin');
 
             $table->decimal('amount_paid', 11, 2);
+            $table->boolean('is_short_trip')
+            ->default(false);
             $table->enum('status', ['Pending','Accepted','Departed','Refunded','Lost/Expired','Declined']);
 
             $table->enum('transaction_ticket_type', ['Regular', 'Discount']);

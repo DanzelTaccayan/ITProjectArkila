@@ -12,6 +12,8 @@
         window.Laravel = @php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); @endphp
+
+        var submitStatus = false;
     </script>
 
     @if(!auth()->guest())
@@ -32,7 +34,7 @@
         <div class="content-wrapper bgform-image">
             <div class="container">
 
-                <form id="@yield('form-id')" name="preloadSubmit" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="" enctype="multipart/form-data">
+                <form id="@yield('form-id')" class="parsley-form" action="@yield('form-action')" method="POST" data-parsley-validate="" enctype="multipart/form-data">
                 {{csrf_field()}}
                 @yield('method_field')
 
@@ -64,18 +66,7 @@
                 </section>
                 </form>
 
-                <div class="modal in" id="submit-loader" class="hidden">
-                    <div class="modal-dialog modal-sm" style="margin-top: 15%;">
-                      <div class="modal-content">
-                        <div class="modal-body">
-                          <div class="text-center">
-                            <img src="{{ URL::asset('img/loading.gif') }}">
-                            <h4>Please  wait...</h4>
-                          </div>
-                        </div> 
-                      </div>
-                    </div>
-                </div>
+                @include('layouts.partials.preloader_div')
             </div>
             <!-- /.container -->
 
@@ -97,12 +88,15 @@
             $(document).ready(function() {
                 $("form").on('submit', function(e){
                     var form = $(this);
-
-                    if (form.parsley().isValid()){
-                      $('#submit-loader').removeClass('hidden');
-                      $('#submit-loader').css("display","block");
+                    if(submitStatus) {
+                        e.preventDefault();
+                    } else {
+                        if (form.parsley().isValid()){
+                            submitStatus = true;
+                            $('#submit-loader').removeClass('hidden');
+                            $('#submit-loader').css("display","block");
+                        }
                     }
-                    return true;
                 });
             });
         </script>

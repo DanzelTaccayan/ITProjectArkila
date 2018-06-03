@@ -12,7 +12,7 @@ class SoldTicket extends Model
         'sold_ticket_id',
     ];
 
-    public function destination() {
-        return $this->belongsTo(Destination::class, 'destination_id');
+    public function ticket() {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 }
