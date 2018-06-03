@@ -9,16 +9,16 @@
     <div class="form-group">
         <div class="form-group">
             <label for="contactNumber">Contact Number: </label>
-            <input value="{{old('contactNumber') ?? $company_profile->contact_number }}" type="text" name="contactNumber" class="form-control" required>    
+            <input value="{{old('contactNumber') ?? $company_profile->contact_number }}" type="text" name="contactNumber" class="form-control" val-contact required>    
         </div>
 
         <div class="form-group">
             <label>Address:</label>
-            <input value="{{old('address') ?? $company_profile->address }}" type="text" name="address" class="form-control" name="address">
+            <input value="{{old('address') ?? $company_profile->address }}" type="text" name="address" class="form-control" val-address name="address">
         </div>
         <div class="form-group">
             <label>Email: </label>
-            <input value="{{old('email') ?? $company_profile->email }}" type="text" name="email" class="form-control" name="email">
+            <input value="{{old('email') ?? $company_profile->email }}" type="email" name="email" class="form-control" val-email name="email">
         </div>
         <div class="form-group col-md-6 left">
             <label>Opening Time: </label>
