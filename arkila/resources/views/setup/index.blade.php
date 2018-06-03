@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="text" class="form-control" name="email" value="{{old('email')}}" val-email>
+                    <input type="email" class="form-control" name="email" value="{{old('email')}}" val-email>
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Opening Time: </label>
