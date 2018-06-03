@@ -9,7 +9,7 @@
                 @if(session('registrationsuccess'))
                   <p>{{session('registrationsuccess')}}</p>
                 @endif
-                <a href="{{route('customermodule.non-user.index')}}" class="btn btn-template-outlined"><i class="fa fa-chevron-left"> Back to home</i></a>
+                <a href="{{route('customer.non-user.index')}}" class="btn btn-template-outlined"><i class="fa fa-chevron-left"> Back to home</i></a>
             </div>
         </div>
     </div>
