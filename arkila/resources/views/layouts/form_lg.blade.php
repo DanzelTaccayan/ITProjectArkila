@@ -12,6 +12,8 @@
         window.Laravel = @php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); @endphp
+
+        var submitStatus = false;
     </script>
 
     @if(!auth()->guest())
@@ -86,12 +88,15 @@
             $(document).ready(function() {
                 $("form").on('submit', function(e){
                     var form = $(this);
-
-                    if (form.parsley().isValid()){
-                      $('#submit-loader').removeClass('hidden');
-                      $('#submit-loader').css("display","block");
+                    if(submitStatus) {
+                        e.preventDefault();
+                    } else {
+                        if (form.parsley().isValid()){
+                            submitStatus = true;
+                            $('#submit-loader').removeClass('hidden');
+                            $('#submit-loader').css("display","block");
+                        }
                     }
-                    return true;
                 });
             });
         </script>

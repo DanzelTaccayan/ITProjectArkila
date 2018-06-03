@@ -183,7 +183,7 @@
                                                             <div class="table-area scrollbar scrollbar-info thin">
                                                             <table class="table table-condensed table-striped">
                                                                 <tbody id="selectedList{{$terminal->destination_id}}">
-                                                                    @foreach(App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get() as $ticket)
+                                                                    @foreach(App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->get() as $ticket)
                                                                             <tr>
                                                                                 <td>
                                                                                 @if($ticket->type == "Regular")
@@ -209,18 +209,18 @@
                                                                 <tbody>
                                                                     <tr class="info">
                                                                         <td>Regular</td>
-                                                                        <td id="totalRegularTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td id="regularTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Regular')->get()->pluck('fare')->sum()}}</td>
+                                                                        <td id="totalRegularTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->where('type','Regular')->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="regularTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->where('type','Regular')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="info">
                                                                         <td>Discounted</td>
-                                                                        <td id="totalDiscountedTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td id="discountedTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->where('type','Discount')->get()->pluck('fare')->sum()}}</td>
+                                                                        <td id="totalDiscountedTicket{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->where('type','Discount')->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="discountedTotalPayment{{$terminal->destination_id}}" class="text-right">₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->where('type','Discount')->get()->pluck('fare')->sum()}}</td>
                                                                     </tr>
                                                                     <tr class="success">
                                                                         <td><strong>Total</strong></td>
-                                                                        <td id="totalTickets{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->count()}} <i class="fa fa-ticket"></i></td>
-                                                                        <td id="totalPayment{{$terminal->destination_id}}" class="text-right"><strong>₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'))->get()->pluck('fare')->sum()}}</strong></td>
+                                                                        <td id="totalTickets{{$terminal->destination_id}}" class="text-right">{{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->get()->count()}} <i class="fa fa-ticket"></i></td>
+                                                                        <td id="totalPayment{{$terminal->destination_id}}" class="text-right"><strong>₱ {{App\Ticket::showAllSelectedTickets($terminal->routeFromDestination->pluck('destination_id'), $terminal->destination_id)->get()->pluck('fare')->sum()}}</strong></td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -258,24 +258,24 @@
                                                                             <td id="row{{$destination->destination_id}}">
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Regular" class="btn btn-primary btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($regTicketNum =  $destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
+                                                                                    @if($regTicketNum =  $terminal->selectedTicketsFrom()->whereIn('selected_ticket.ticket_id',$destination->selectedTickets()->where('type','Regular')->pluck('ticket.ticket_id'))->count())
                                                                                         <span data-name="regularTicketPerDest" data-destination="{{$destination->destination_id}}" data-terminal="{{$terminal->destination_id}}" class="badge pull-right">
                                                                                             {{$regTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($destination->tickets->where('type','Regular')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Regular" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}"  @if($regTicketNum == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                             <td>
                                                                                 <button name="ticketButton" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" data-type="Discount" class="btn btn-warning btn-flat btn-dest">
                                                                                     {{$destination->destination_name}}
-                                                                                    @if($discountedTicketNum = $destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count())
-                                                                                        <span id="discountTicketPerDest{{$destination->destination_id}}" class="badge  pull-right">
+                                                                                    @if($discountedTicketNum = $terminal->selectedTicketsFrom()->whereIn('selected_ticket.ticket_id',$destination->selectedTickets()->where('type','Discount')->pluck('ticket.ticket_id'))->count())
+                                                                                        <span data-name="discountedTicketPerDest" data-destination="{{$destination->destination_id}}" data-terminal="{{$terminal->destination_id}}" class="badge  pull-right">
                                                                                             {{$discountedTicketNum}}
                                                                                         </span>
                                                                                     @endif
                                                                                 </button>
-                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($destination->tickets->where('type','Discount')->whereIn('ticket_id',$destination->selectedTickets->pluck('ticket_id'))->count() == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
+                                                                                <button name="deleteLastSelectedTicket" data-type="Discount" data-terminal="{{$terminal->destination_id}}" data-route="{{$destination->destination_id}}" @if($discountedTicketNum == 0 ) class="btn btn-flat" disabled @else class="btn btn-danger btn-flat" @endif><i class="fa fa-minus"> </i></button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -625,7 +625,8 @@
                 url: '/selectTicket/'+destinationId,
                 data: {
                     '_token': '{{csrf_token()}}',
-                    'ticketType': ticketType
+                    'ticketType': ticketType,
+                    'terminal' : terminalId
                 },
                 success: function(element){
 
@@ -661,11 +662,12 @@
 
                     } else {
                         //Change The number of clicks (Discounted)
-                        if($('#discountTicketPerDest'+destinationId).text()) {
-                            $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())+1);
+                        var discountedTicket = $('span[data-name="discountedTicketPerDest"][data-destination="'+destinationId+'"][data-terminal="'+terminalId+'"]');
+                        if(discountedTicket.text()) {
+                            discountedTicket.text(parseFloat(discountedTicket.text())+1);
 
                         } else {
-                            buttonElement.append('<span id="discountTicketPerDest'+destinationId+'" class="badge bg-blue pull-right">1</span>');
+                            buttonElement.append('<span data-name="discountedTicketPerDest" data-destination="'+destinationId+'" data-terminal="'+terminalId+'" class="badge pull-right">1</span>');
                             buttonElement.parents('td').children('button[name="deleteLastSelectedTicket"]').prop('disabled',false).addClass('btn-danger');
                         }
 
@@ -769,7 +771,8 @@
                 url: '/selectedLastTicket/'+destinationId,
                 data: {
                     '_token': '{{csrf_token()}}',
-                    'ticketType': ticketType
+                    'ticketType': ticketType,
+                    'terminal' : terminalId
                 },
                 success: function(response){
                     $('#selectedList'+terminalId).find('[data-val="' + response.lastSelected + '"]').closest('tr').remove();
@@ -805,14 +808,15 @@
         function updateDataOfDeletedTicket(destinationId,terminalId,ticketType,fare) {
             var error = true;
             //Update the necessary information
-            if(ticketType == 'Regular') {
+            if(ticketType === 'Regular') {
                 //Change The number of clicks (Regular)
-                if(parseFloat($('#regularTicketPerDest'+destinationId).text()) > 0) {
-                    if(parseFloat($('#regularTicketPerDest'+destinationId).text()) === 1) {
-                        $('#regularTicketPerDest'+destinationId).parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
-                        $('#regularTicketPerDest'+destinationId).remove();
+                var regTicket = $('span[data-name="regularTicketPerDest"][data-destination="'+destinationId+'"][data-terminal="'+terminalId+'"]');
+                if(parseFloat(regTicket.text()) > 0) {
+                    if(parseFloat(regTicket.text()) === 1) {
+                        regTicket.parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
+                        regTicket.remove();
                     } else {
-                        $('#regularTicketPerDest'+destinationId).text(parseFloat($('#regularTicketPerDest'+destinationId).text())-1);
+                        regTicket.text(parseFloat(regTicket.text())-1);
                     }
 
 
@@ -828,13 +832,14 @@
                 error = false;
             } else {
                 //Change The number of clicks (Discounted)
-                if(parseFloat($('#discountTicketPerDest'+destinationId).text()) > 0) {
+                var discountedTicket = $('span[data-name="discountedTicketPerDest"][data-destination="'+destinationId+'"][data-terminal="'+terminalId+'"]');
+                if(parseFloat(discountedTicket.text()) > 0) {
 
-                    if(parseFloat($('#discountTicketPerDest'+destinationId).text()) === 1) {
-                        $('#discountTicketPerDest'+destinationId).parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
-                        $('#discountTicketPerDest'+destinationId).remove();
+                    if(parseFloat(discountedTicket.text()) === 1) {
+                        discountedTicket.parents('td').children().closest('button[name="deleteLastSelectedTicket"]').removeClass('btn-danger').prop('disabled',true);
+                        discountedTicket.remove();
                     } else {
-                        $('#discountTicketPerDest'+destinationId).text(parseFloat($('#discountTicketPerDest'+destinationId).text())-1);
+                        discountedTicket.text(parseFloat(discountedTicket.text())-1);
                     }
 
 

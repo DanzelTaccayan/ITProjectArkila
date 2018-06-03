@@ -16,6 +16,11 @@ class Destination extends Model
         return $this->hasMany(Ticket::class, 'destination_id');
     }
 
+    public function selectedTicketsFrom()
+    {
+        return $this->hasMany(SelectedTicket::class,'selected_from_terminal','destination_id');
+    }
+
     public function reservationDates()
     {
         return $this->belongsTo(ReservationDate::class, 'destination_terminal', 'destination_id');

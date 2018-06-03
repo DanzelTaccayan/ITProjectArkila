@@ -20,7 +20,7 @@ class CreateSelectedTicket extends Migration
             $table->integer('ticket_id')
                 ->unsigned();
 
-            $table->integer('selected_from')
+            $table->integer('selected_from_terminal')
                 ->unsigned();
 
 

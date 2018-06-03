@@ -49,10 +49,8 @@ class TransactionsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Destination $destination) {
-        $this->validate(request(),[
-            'destination' => 'exists:destination,destination_id'
-        ]);
-        if(SelectedTicket::whereIn('ticket_id',Ticket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->get()->pluck('ticket_id'))->get()->count() > 0 ) {
+
+        if(SelectedTicket::where('selected_from_terminal',$destination->destination_id)->get()->count() > 0 ) {
 
             if(request('customer') != null) {
                 $reservationId = request('customer');
@@ -63,11 +61,7 @@ class TransactionsController extends Controller
             // Start transaction!
             DB::beginTransaction();
             try  {
-                foreach (SelectedTicket::whereIn('ticket_id',Ticket::whereIn('destination_id',$destination->routeFromDestination
-                    ->pluck('destination_id'))
-                    ->get()
-                    ->pluck('ticket_id'))
-                             ->get() as $selectedTicket) {
+                foreach (SelectedTicket::where('selected_from_terminal',$destination->destination_id)->get() as $selectedTicket) {
 
                     SoldTicket::create([
                         'ticket_number' => $selectedTicket->ticket->ticket_number,
@@ -537,6 +531,10 @@ class TransactionsController extends Controller
     //Selected Ticket
     public function selectTicket(Destination $destination)
     {
+        $this->validate(request(),[
+           'terminal' => 'required|exists:destination,destination_id'
+        ]);
+
         if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
             $ticketType = request('ticketType');
             $ticket = $destination->tickets()->where('type',$ticketType)->whereNotIn('ticket_number', SoldTicket::all()->pluck('ticket_number'))->whereNotIn('ticket_id', SelectedTicket::all()->pluck('ticket_id'))->first();
@@ -549,6 +547,7 @@ class TransactionsController extends Controller
             try  {
                 $selectedTicket = SelectedTicket::create([
                     'ticket_id' => $ticket->ticket_id,
+                    'selected_from_terminal' => request('terminal')
                 ]);
 
                 $responseArr = ['ticketNumber' => $selectedTicket->ticket->ticket_number, 'fare' => $selectedTicket->ticket->fare,'selectedId' => $selectedTicket->selected_ticket_id];
@@ -575,7 +574,7 @@ class TransactionsController extends Controller
         DB::beginTransaction();
         try  {
             $responseArr = ['destinationId' =>$selectedTicket->ticket->destination->destination_id,
-                'terminalId'=> $selectedTicket->ticket->destination->routeDestination->first()->destination_id ,
+                'terminalId'=> $selectedTicket->selected_from_terminal ,
                 'ticketType'=> $selectedTicket->ticket->type,
                 'fare' => $selectedTicket->ticket->fare
             ];
@@ -593,14 +592,18 @@ class TransactionsController extends Controller
 
     public function deleteLastSelectedTicket(Destination $destination)
     {
+        $this->validate(request(),['terminal' => 'required|exists:destination,destination_id']);
         // Start transaction!
         DB::beginTransaction();
         try  {
             if(request('ticketType') === 'Regular' || request('ticketType') === 'Discount') {
 
                 $ticketType = request('ticketType');
+                $terminalId = request('terminal');
+
                 $lastTicket =$destination->selectedtickets()
                     ->orderBy('selected_ticket_id','desc')
+                    ->where('selected_from_terminal', $terminalId)
                     ->where('type', $ticketType)
                     ->first();
                 if(is_null($lastTicket)) {
