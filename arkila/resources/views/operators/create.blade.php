@@ -201,17 +201,4 @@
           navigateTo(0); // Start at the beginning
         });
     </script>
-    <script>
-    $(document).ready(function() {
-        $("#regForm").on('submit', function(e){
-            var form = $(this);
-
-            if (form.parsley().isValid()){
-              $('#submit-loader').removeClass('hidden');
-              $('#submit-loader').css("display","block");
-            }
-            return true;
-        });
-    });
-</script>
 @endsection
