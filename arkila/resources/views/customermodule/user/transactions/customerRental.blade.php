@@ -4,6 +4,20 @@
         <div id="content">
             <div class="container">
                 <div class="row">
+                    <div class="col-md-3 mt-4 mt-md-0">
+                      <!-- CUSTOMER MENU -->
+                      <div class="panel panel-default sidebar-menu">
+                        <div class="panel-heading">
+                          <h3 class="h4 panel-title">MY TRANSACTIONS</h3>
+                        </div>
+                        <div class="panel-body">
+                          <ul class="nav nav-pills flex-column text-sm">
+                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i>My Rentals</a></li>
+                            <li class="nav-item"><a href="{{route('customermodule.reservationTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Reservations</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                     <div class="col-md-9">
                         <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
@@ -63,20 +77,6 @@
                         </div>
                         <!-- box-->
                     </div>
-                    <div class="col-md-3 mt-4 mt-md-0">
-                      <!-- CUSTOMER MENU -->
-                      <div class="panel panel-default sidebar-menu">
-                        <div class="panel-heading">
-                          <h3 class="h4 panel-title">MY TRANSACTIONS</h3>
-                        </div>
-                        <div class="panel-body">
-                          <ul class="nav nav-pills flex-column text-sm">
-                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i>My Rentals</a></li>
-                            <li class="nav-item"><a href="{{route('customermodule.reservationTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Reservations</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
                 </div>
                 <!-- boxContainer-->
             </div>
@@ -84,11 +84,11 @@
             @foreach ($requests as $rental)
             <div class="modal fade" id="{{'cancelModal'.$rental->rent_id}}">
                         <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content">    
                                     <div class="modal-header bg-red">
+                                        <h4 class="modal-title">WARNING</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">RESERVATION DETAILS</h4>
                                     </div>
                                     <div class="modal-body">
                                     @php $time = explode(':', $rental->departure_time); @endphp
@@ -122,9 +122,9 @@
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
+                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">RENTAL DETAILS</h4>
                                     </div>
                                     <div class="modal-body">
                                         <table class="table table-striped table-bordered">
@@ -198,8 +198,8 @@
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                                        @if($rental->status == 'PAID')
-                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        @if($rental->status == 'Paid')
+                                        <button onclick="window.open('{{route('rental.receipt', $rental->rent_id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
                                         @endif
                                     </div>
                                 </div>

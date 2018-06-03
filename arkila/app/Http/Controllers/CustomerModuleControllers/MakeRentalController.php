@@ -207,6 +207,11 @@ class MakeRentalController extends Controller
       }
     }
 
+    public function receipt()
+    {
+      return view('customermodule.user.rental.receipt');
+    }
+
     public function rentalRules()
 	  {   
 		  return BookingRules::where('description', 'Rental')->get()->first();;
