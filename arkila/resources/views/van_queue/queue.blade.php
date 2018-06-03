@@ -304,7 +304,7 @@ ol.arrow-drag{
                                           <div class=item id="item{{$vanOnQueue->van_queue_id}}">
                                             <div  class="row">
                                               <div class="col-md-12">
-                                                <p class="hidden">{{ $vanOnQueue->van->plate_number }}</p>
+                                                <p class="hidden hidden_plateNo">{{ $vanOnQueue->van->plate_number }}</p>
                                                 {{ $vanOnQueue->van->plate_number }}
                                                 <div class="pull-right">
                                                     <i id="badge{{$vanOnQueue->van_queue_id}}" class="badge badge-pill badge-default">{{ $vanOnQueue->remarks }}</i>
@@ -1161,7 +1161,7 @@ ol.arrow-drag{
 
                 // Loop through all list items, and hide those who don't match the search query
                 for (i = 0; i < li.length; i++) {
-                    p = li[i].getElementsByTagName('p')[0];
+                    p = li[i].getElementsByClassName('hidden_plateNo')[0];
                     if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
                         li[i].style.display = "";
                     } else {
