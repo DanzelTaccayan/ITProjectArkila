@@ -25,7 +25,7 @@ Route::get('/ticketmanagement','TransactionsController@manage');
 
 Route::post('/markAsRead', 'MarkAsReadNotificationController@markAsRead');
 
-Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customermodule.non-user.index');
+Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customer.non-user.index');
 /***********************Super-Admin Module************************************/
 /*****************************************************************************/
  Route::group(['middleware' => ['auth', 'super-admin', 'prevent-back']], function(){
@@ -296,7 +296,7 @@ Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('c
 Route::get('/routes/fare-list/', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
-    Route::get('/', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
+    Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
     // Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');
     Route::get('/home/user/view-announcement', 'CustomerModuleControllers\ViewAnnouncementsController@showAnnouncement')->name('customermodule.user.indexAnnouncements');
     Route::get('/home/user/view-announcement/modal', 'CustomerModuleControllers\AnnouncementModalController@showModalAnnouncement')->name('customermodule.user.indexAnnouncementModal');

@@ -1,4 +1,4 @@
-@if (count($errors) >0)
+@if (count($errors) > 0)
 @foreach ($errors->all() as $error)
     <script type="text/javascript">
 		$.notify({

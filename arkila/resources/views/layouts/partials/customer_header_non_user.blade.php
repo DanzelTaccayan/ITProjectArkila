@@ -2,7 +2,7 @@
     <header class="nav-holder make-sticky">
         <div id="navbar" class="navbar navbar-expand-lg">
             <div class="container">
-                <a href="{{route('customermodule.non-user.index')}}" class="navbar-brand home">
+                <a href="{{route('customer.non-user.index')}}" class="navbar-brand home">
                <img src="{{ URL::asset('img/bantranslogo.png') }}" alt="Ban Trans logo" class="d-none d-md-inline-block" style="width:230px;">
                <img src="{{ URL::asset('img/bantranslogo.png') }}" alt="Ban Trans logo" class="d-inline-block d-md-none" style="width:100px;">
                <span class="sr-only">Ban Trans</span></a>
@@ -14,7 +14,7 @@
                 <div id="navigation" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item dropdown">
-                            <a href="{{route('customermodule.non-user.index')}}">Home</a>
+                            <a href="{{route('customer.non-user.index')}}">Home</a>
                         </li>
                         <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Services</a>
                             <ul class="dropdown-menu megamenu">
