@@ -59,7 +59,7 @@ class AdminCreateDriverReportController extends Controller
 
   public function storeReport(Destination $terminals, Destination $destination, AdminCreateDriverReportRequest $request)
   {
-        //dd($request->timeDeparted);
+    
    	$totalPassengers = $request->totalPassengers;
     $totalBookingFee = $terminals->booking_fee * $totalPassengers;
     $totalPassenger = (float)$request->totalPassengers;
@@ -112,7 +112,7 @@ class AdminCreateDriverReportController extends Controller
            'total_booking_fee' => $totalBookingFee,
            'community_fund' => $cf*$totalPassengers,
            'date_departed' => $request->dateDeparted,
-           'time_departed' => $timeDepartedFormat,
+           'time_departed' => $request->timeDeparted,
            'report_status' => 'Accepted',
            'reported_by' => 'Admin',
          ]);
@@ -178,7 +178,7 @@ class AdminCreateDriverReportController extends Controller
         'community_fund' => $cf*$totalPassengers,
         'report_status' => 'Accepted',
         'date_departed' => $request->dateDeparted,
-        'time_departed' => $timeDepartedFormat,
+        'time_departed' => $request->timeDeparted,
         'reported_by' => 'Admin'
       ]);
 

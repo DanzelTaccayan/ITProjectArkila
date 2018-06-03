@@ -65,7 +65,7 @@ class CreateReportController extends Controller
      'community_fund' => $cf->amount*$totalPassengers,
      'report_status' => 'Pending',
      'date_departed' => $request->dateDeparted,
-     'time_departed' => $timeDepartedFormat,
+     'time_departed' => $request->timeDeparted,
      'reported_by' => 'Driver',
    ]);
 

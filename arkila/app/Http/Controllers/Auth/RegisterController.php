@@ -49,9 +49,9 @@ class RegisterController extends Controller
     {
         $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
         if($mainterminal == true){
-            return view('auth.register');
+            return redirect()->back();
         }else{
-            return redirect()->back()->('error', 'User registration is not yet allowed without further notice');
+            return view('auth.register');
         }
         
     }

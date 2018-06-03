@@ -276,8 +276,9 @@ class TripsController extends Controller
 
           $driverShare = 0;
           $totalFare = 0;
+          
           foreach($transaction as $trans){
-
+            //echo $trans->ampd . ' ' . $trans->origin . ' ' . $trans->amount_paid . ' ' . $trans->transaction_ticket_type . '<br/>';
             $test1 = Ticket::where('ticket_number', 'like', '%' . $trans->origin . '%')
               ->where('fare', $trans->amount_paid)->first() ?? null;
             $test2 = Destination::where('destination_name', 'like', '%' . $trans->origin . '%')
@@ -307,6 +308,7 @@ class TripsController extends Controller
             $totalFare += $trans->ampd * $trans->amount_paid;
           }
 
+          //dd($transaction);
           $numPassCountArr[0] = $mainRegCount;
           $numPassCountArr[1] = $mainDisCount;
           $numPassCountArr[2] = $stRegCount;

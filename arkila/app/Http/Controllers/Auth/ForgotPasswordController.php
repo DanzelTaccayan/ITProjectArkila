@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Destination;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Password;
@@ -37,6 +38,13 @@ class ForgotPasswordController extends Controller
 
     public function showLinkRequestForm()
     {
-        return view('auth.passwords.email');
+        $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+        
+        if($mainterminal == true){
+            return redirect()->back();
+        }else{
+            return view('auth.passwords.email');
+        }
+        
     }
 }
