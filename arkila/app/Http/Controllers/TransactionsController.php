@@ -64,12 +64,10 @@ class TransactionsController extends Controller
                 foreach (SelectedTicket::where('selected_from_terminal',$destination->destination_id)->get() as $selectedTicket) {
 
                     SoldTicket::create([
-                        'ticket_number' => $selectedTicket->ticket->ticket_number,
-                        'destination_id' => $selectedTicket->ticket->destination_id,
+                        'ticket_id' => $selectedTicket->ticket->ticket_id,
                         'amount_paid' => $selectedTicket->ticket->fare,
                         'reservation_id' => $reservationId,
-                        'ticket_type' => $selectedTicket->ticket->type,
-                        'status' => 'Pending'
+                        'boarded_at' => null
                     ]);
 
                     $selectedTicket->delete();
@@ -109,7 +107,7 @@ class TransactionsController extends Controller
                 return Response::json(['error' => 'The van on queue for terminal '.$destination->destination_name.' has a remark of '.$vanOnQueue->status.', please move the van to the special units list or change its remark'], 422);
 
             } else {
-                if ($soldTickets = SoldTicket::whereIn('destination_id',$destination->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')->get()) {
+                if ($soldTickets = SoldTicket::where('boarded_at',$destination->destination_id)->get()) {
                     //Compute for the total passenger, booking fee, and community fund
                     $totalPassengers = count($soldTickets);
 
@@ -167,12 +165,12 @@ class TransactionsController extends Controller
                         //Insert the departed tickets into the transaction table and then make the tickets available
                         foreach ($soldTickets as $soldTicket) {
                             Transaction::create([
-                                'ticket_name' => $soldTicket->ticket_number,
+                                'ticket_name' => $soldTicket->ticket->ticket_number,
                                 'trip_id' => $trip->trip_id,
                                 'destination' => $vanOnQueue->destination->destination_name,
                                 'origin' => $destination->routeOrigin->first()->destination_name,
                                 'amount_paid' => $soldTicket->amount_paid,
-                                'transaction_ticket_type' => $soldTicket->ticket_type,
+                                'transaction_ticket_type' => $soldTicket->ticket->type,
                                 'status' => 'Departed'
                             ]);
 
@@ -257,25 +255,23 @@ class TransactionsController extends Controller
                     ->van
                     ->seating_capacity;
 
-                $futureCount =intval(SoldTicket::whereIn('destination_id',Destination::find($destinationId)->routeFromDestination->pluck('destination_id'))->where('status','OnBoard')->count()) + intval(count($soldTickets));
+                $futureCount =intval(SoldTicket::where('boarded_at',$destinationId)->count()) + intval(count($soldTickets));
 
                 if($seatingCapacity >= $futureCount ) {
                     foreach($soldTickets as $soldId) {
-                    $soldTicket = SoldTicket::find($soldId);
-                    if($soldTicket->status == "OnBoard") {
-                        DB::rollback();
-                        if(is_null($soldTicket->status)) {
+                        $soldTicket = SoldTicket::find($soldId);
+                        if(is_null($soldTicket)) {
+                            DB::rollback();
                             return Response::json(['error' => 'There is a given ticket that is unsold'],422);
-                        } else {
+                        } elseif (!is_null($soldTicket->boarded_at)) {
+                            DB::rollback();
                             return Response::json(['error' => 'There is a given ticket that is already On Board'],422);
+                        } else {
+                            $soldTicket->update([
+                                'boarded_at' => $destinationId
+                            ]);
                         }
                     }
-
-                    $soldTicket->update([
-                        'status' => 'OnBoard',
-                        'destination_id' => $destinationId
-                    ]);
-                }
                 } else {
                     DB::rollback();
                     return Response::json(['error' => 'The tickets to be boarded would exceed the seating capacity of the van on deck'],422);
@@ -306,15 +302,18 @@ class TransactionsController extends Controller
             try  {
                 foreach($soldTickets as $soldTicketId) {
                     $soldTicket = SoldTicket::find($soldTicketId);
-
-                    if($soldTicket->status == "Pending") {
+                    if(is_null($soldTicket)) {
+                        DB::rollback();
+                        return Response::json(['error' => 'There is a given ticket that is not sold'],422);
+                    } elseif(is_null($soldTicket->boarded_at)) {
                         DB::rollback();
                         return Response::json(['error' => 'There is a given ticket that is already Pending'],422);
+                    } else {
+                        $soldTicket->update([
+                            'boarded_at' => null
+                        ]);
                     }
 
-                    $soldTicket->update([
-                        'status' => 'Pending'
-                    ]);
                 }
                 DB::commit();
                 return 'success';
@@ -377,11 +376,11 @@ class TransactionsController extends Controller
         DB::beginTransaction();
         try  {
             Transaction::create([
-                'ticket_name' => $soldTicket->ticket_number,
-                'destination' => $soldTicket->destination->destination_name,
-                'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                'ticket_name' => $soldTicket->ticket->ticket_number,
+                'destination' => $soldTicket->ticket->destination->destination_name,
+                'origin' => $soldTicket->ticket->destination->routeOrigin->first()->destination_name,
                 'amount_paid' => $soldTicket->amount_paid,
-                'transaction_ticket_type' => $soldTicket->ticket_type,
+                'transaction_ticket_type' => $soldTicket->ticket->type,
                 'status' => 'Refunded'
             ]);
 
@@ -419,14 +418,13 @@ class TransactionsController extends Controller
         //Begin Transaction
         DB::beginTransaction();
         try {
-            foreach($soldTicketObjArr as $soldTicket)
-            {
+            foreach($soldTicketObjArr as $soldTicket) {
                 Transaction::create([
-                    'ticket_name' => $soldTicket->ticket_number,
-                    'destination' => $soldTicket->destination->destination_name,
-                    'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                    'ticket_name' => $soldTicket->ticket->ticket_number,
+                    'destination' => $soldTicket->ticket->destination->destination_name,
+                    'origin' => $soldTicket->ticket->destination->routeOrigin->first()->destination_name,
                     'amount_paid' => $soldTicket->amount_paid,
-                    'transaction_ticket_type' => $soldTicket->ticket_type,
+                    'transaction_ticket_type' => $soldTicket->ticket->type,
                     'status' => 'Refunded'
                 ]);
 
@@ -456,14 +454,14 @@ class TransactionsController extends Controller
             ]);
 
             Transaction::create([
-                'ticket_name' => $soldTicket->ticket_number,
-                'destination' => $soldTicket->destination->destination_name,
-                'origin' => $soldTicket->destination->routeOrigin->first()->destination_name,
+                'ticket_name' => $soldTicket->ticket->ticket_number,
+                'destination' => $soldTicket->ticket->destination->destination_name,
+                'origin' => $soldTicket->ticket->destination->routeOrigin->first()->destination_name,
                 'amount_paid' => $soldTicket->amount_paid,
-                'transaction_ticket_type' => $soldTicket->ticket_type,
+                'transaction_ticket_type' => $soldTicket->ticket->type,
                 'status' => 'Lost/Expired'
             ]);
-            $ticketNumber = $soldTicket->ticket_number;
+            $ticketNumber = $soldTicket->ticket->ticket_number;
             $soldTicket->delete();
             DB::commit();
             return back()->with('success','Successfully updated ticket '.$ticketNumber.' as Lost/Expired');
@@ -481,7 +479,7 @@ class TransactionsController extends Controller
 
         DB::beginTransaction();
         try {
-            $ticketNumber = $soldTicket->ticket_number;
+            $ticketNumber = $soldTicket->ticket->ticket_number;
             $soldTicket->delete();
             DB::commit();
 
@@ -499,22 +497,19 @@ class TransactionsController extends Controller
         $this->validate(request(),[
             'delete.*' => 'exists:sold_ticket,sold_ticket_id'
         ]);
-        foreach(request('delete') as $soldTicketId)
-        {
+        foreach(request('delete') as $soldTicketId) {
             $soldTicketObj = SoldTicket::find($soldTicketId);
             if(is_null($soldTicketObj)) {
                 return Response::json(['error' => 'There is a given ticket that does not exist'],422);
             } else {
                 array_push($soldTicketObjArr, $soldTicketObj);
             }
-
         }
 
         //Start Transaction
         DB::beginTransaction();
         try {
-            foreach($soldTicketObjArr as $soldTicket)
-            {
+            foreach($soldTicketObjArr as $soldTicket) {
                 $soldTicket->delete();
             }
             DB::commit();
@@ -537,7 +532,7 @@ class TransactionsController extends Controller
 
         if(request('ticketType') === "Regular" || request('ticketType') === "Discount") {
             $ticketType = request('ticketType');
-            $ticket = $destination->tickets()->where('type',$ticketType)->whereNotIn('ticket_number', SoldTicket::all()->pluck('ticket_number'))->whereNotIn('ticket_id', SelectedTicket::all()->pluck('ticket_id'))->first();
+            $ticket = $destination->tickets()->where('type',$ticketType)->whereNotIn('ticket_id', SoldTicket::all()->pluck('ticket_id'))->whereNotIn('ticket_id', SelectedTicket::all()->pluck('ticket_id'))->first();
             if(is_null($ticket)) {
                 return Response::json(['error' => 'There are no more tickets left, please add another to select a ticket'], 422);
             }
