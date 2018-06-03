@@ -304,6 +304,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /**Services**/
     /*Rental*/
     Route::get('/home/rental/receipt/{rental}', 'CustomerModuleControllers\MakeRentalController@receipt')->name('rental.receipt');
+    Route::get('/home/rental/success/{rental}', 'CustomerModuleControllers\MakeRentalController@success')->name('rental.success');
     Route::patch('/home/rental/{rental}/cancelRental', 'CustomerModuleControllers\MakeRentalController@cancelRental')->name('rental.cancel')->middleware('online-rental');
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
     Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
