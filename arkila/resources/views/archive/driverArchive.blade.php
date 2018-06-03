@@ -46,7 +46,7 @@
             <!--RESTORE MODAL-->
             @foreach($archivedDrivers as $archivedDriver)
                 <div class="modal" id="{{'restoreDriver'.$archivedDriver->member_id}}">
-                <form method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
+                <form name="driverRestoreForm" method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
                     {{csrf_field()}}
                     {{method_field('PATCH')}}
                     <div class="modal-dialog" style="margin-top: 10%;">
@@ -82,6 +82,7 @@
             </div>
            @endforeach
         </div>
+        @include('layouts.partials.preloader_div')
         <!-- /.box -->
     </div>
 </div>  
@@ -95,6 +96,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="driverRestoreForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#archiveDriver').DataTable({
             'paging': true,
             'lengthChange': false,

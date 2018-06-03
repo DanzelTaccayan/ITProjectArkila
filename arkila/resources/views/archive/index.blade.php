@@ -47,7 +47,7 @@
             <!-- /.box-body -->
             @foreach ($operators as $operator)
                 <div class="modal fade" id="{{'restoreOperator'.$operator->member_id}}">
-                    <form action="{{route('operators.restoreArchivedOperator',[$operator->member_id])}}" method="POST">
+                    <form name="restoreOperatorForm" action="{{route('operators.restoreArchivedOperator',[$operator->member_id])}}" method="POST">
                         {{csrf_field()}}
                         {{method_field('PATCH')}}
                         <div class="modal-dialog">
@@ -77,6 +77,7 @@
             @endforeach
         </div>
         <!-- /.box -->
+        @include('layouts.partials.preloader_div')
     </div>
 </div>  
  
@@ -89,6 +90,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="restoreOperatorForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('.archiveOpe').DataTable({
             'paging': true,
             'lengthChange': false,

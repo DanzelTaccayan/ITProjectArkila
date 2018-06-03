@@ -65,7 +65,7 @@
                         <h4 class="text-center "><strong class="text-red">{{trim($operator->full_name)}}</strong>?</h4>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                        <form name="archiveOperatorForm" action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
                             {{csrf_field()}}
                             {{method_field('PATCH')}}
                             <div class="text-center">
@@ -79,6 +79,7 @@
         </div>
         @endforeach
     </div>
+        @include('layouts.partials.preloader_div')
 </div>
 @endsection
 @section('scripts') 
@@ -89,6 +90,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="archiveOperatorForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#operatorList').DataTable({
             'paging': true,
             'lengthChange': false,

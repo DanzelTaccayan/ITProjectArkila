@@ -69,7 +69,7 @@
                                 <h4 class="text-center "><strong class="text-red">{{$van->plate_number}}</strong>?</h4>
                             </div>
                             <div class="modal-footer">
-                                <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
+                                <form name="archiveVanForm" method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
                                     {{csrf_field()}}
                                     {{method_field('PATCH')}}
                                     <div class="text-center">
@@ -83,6 +83,7 @@
                 </div>
                 @endforeach
             </div>
+        @include('layouts.partials.preloader_div')
     </div>
 </div>
 @endsection 
@@ -91,6 +92,13 @@
 
 <script>
     $(document).ready(function() {
+        $('form[name="archiveVanForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#van').DataTable({
             'paging': true,
             'lengthChange': false,

@@ -1084,7 +1084,15 @@
                             '_token': '{{csrf_token()}}',
                             'soldTickets': soldTickets
                         },
-                        success: function () {
+                        success: function (response) {
+                            $.each(actives,function(index,element){
+                                var ticket = $(element).data('val');
+
+                                if(response[ticket]) {
+                                    $(element).clone().appendTo('#pendingList'+response[ticket][0]).removeClass('active');
+                                    $(element).remove();
+                                }
+                            });
 
                             actives.clone().appendTo('#pendingList'+terminalId).removeClass('active');
                             actives.remove();

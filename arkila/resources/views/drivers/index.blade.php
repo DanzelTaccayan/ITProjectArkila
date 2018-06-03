@@ -63,7 +63,7 @@
                         <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
+                        <form name="archiveDriverForm" action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
                             {{csrf_field()}}
                             {{method_field('PATCH')}}
                             <div class="text-center">
@@ -76,6 +76,7 @@
             </div>
         </div>
         @endforeach
+        @include('layouts.partials.preloader_div')
     </div>
     <!-- /.box-->
 </div>
@@ -86,6 +87,13 @@
 
 <script>
     $(function() {
+        $('form[name="archiveDriverForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#driverList').DataTable({
             'paging': true,
             'lengthChange': false,

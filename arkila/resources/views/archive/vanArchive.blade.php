@@ -45,7 +45,7 @@
             <!--RESTORE MODAL-->
             @foreach($archivedVans as $archivedVan)
                 <div class="modal" id="{{'restoreDriver'.$archivedVan->van_id}}">
-                <form method="POST" action="{{route('vans.restoreArchivedVan',[$archivedVan->van_id])}}">
+                <form name="vanRestoreForm" method="POST" action="{{route('vans.restoreArchivedVan',[$archivedVan->van_id])}}">
                     {{csrf_field()}}
                     {{method_field('PATCH')}}
                     <div class="modal-dialog" style="margin-top: 10%;">
@@ -81,6 +81,7 @@
            @endforeach
         </div>
         <!-- /.box -->
+        @include('layouts.partials.preloader_div')
     </div>
 </div>  
  
@@ -93,6 +94,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="vanRestoreForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#archiveVan').DataTable({
             'paging': true,
             'lengthChange': false,
