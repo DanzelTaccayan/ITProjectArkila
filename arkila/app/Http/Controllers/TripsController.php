@@ -39,9 +39,9 @@ class TripsController extends Controller
     public function viewReport(Trip $trip)
     {
       $transaction = Transaction::where('trip_id', $trip->trip_id)
-            ->selectRaw('COUNT(amount_paid) as ampd, origin, amount_paid')
+            ->selectRaw('COUNT(amount_paid) as ampd, origin, is_short_trip, transaction_ticket_type,amount_paid')
             ->groupBy('amount_paid')->get();
-          //dd($transaction);
+          
           $mainRegCount = 0;
           $mainDisCount = 0;
           $stRegCount = 0;
@@ -49,33 +49,29 @@ class TripsController extends Controller
 
           $numPassCountArr = array();
           $originArray = null;
-    
 
+          // foreach($transaction as $tran){
+          //   echo $tran->ampd . ' ' . $tran->origin . ' ' . $tran->is_short_trip . ' ' . $tran->amount_paid . '<br/>';
+          // }
+    
           $driverShare = 0;
           $totalFare = 0;
           foreach($transaction as $trans){
-            //echo $trans . "<br/>";
-            $test1 = Ticket::where('ticket_number', 'like', '%' . $trans->origin . '%')
-              ->where('fare', $trans->amount_paid)->first() ?? null;
-            $test2 = Destination::where('destination_name', 'like', '%' . $trans->origin . '%')
-              ->where('short_trip_fare', $trans->amount_paid)
-              ->orWhere('short_trip_fare_discount', $trans->amount_paid)->first() ?? null;
-
-            if($test1 !== null){
+            if($trans->is_short_trip == false){
               for($i = 0; $i < $trans->ampd; $i++){
-                if($test1->type == "Regular"){
+                if($trans->transaction_ticket_type == "Regular"){
                   $mainRegCount++;
-                }else if($test1->type == "Discount"){
+                }else if($trans->transaction_ticket_type == "Discount"){
                   $mainDisCount++;
                 }
               }
             }
 
-            if($test2 !== null){
+            if($trans->is_short_trip == true){
               for($i = 0; $i < $trans->ampd; $i++){
-                if($trans->amount_paid == $test2->short_trip_fare){
+                if($trans->transaction_ticket_type == "Regular"){
                   $stRegCount++;
-                }else if($trans->amount_paid == $test2->short_trip_fare_discount){
+                }else if($trans->transaction_ticket_type == "Discount"){
                   $stDisCount++;
                 }
               }
@@ -91,7 +87,7 @@ class TripsController extends Controller
 
           $totalPassenger = 0;
           $totalDiscountedPassenger = 0;
-
+          //dd($numPassCountArr);
           foreach($numPassCountArr as $keys => $value){
             if($keys % 2 == 0){
               $totalPassenger += $value;
@@ -263,7 +259,7 @@ class TripsController extends Controller
         }else{
 
           $transaction = Transaction::where('trip_id', $trip->trip_id)
-            ->selectRaw('COUNT(amount_paid) as ampd, origin, amount_paid, transaction_ticket_type')
+            ->selectRaw('COUNT(amount_paid) as ampd, origin, is_short_trip, transaction_ticket_type,amount_paid')
             ->groupBy('amount_paid')->get();
 
           $mainRegCount = 0;
@@ -278,28 +274,21 @@ class TripsController extends Controller
           $totalFare = 0;
           
           foreach($transaction as $trans){
-            //echo $trans->ampd . ' ' . $trans->origin . ' ' . $trans->amount_paid . ' ' . $trans->transaction_ticket_type . '<br/>';
-            $test1 = Ticket::where('ticket_number', 'like', '%' . $trans->origin . '%')
-              ->where('fare', $trans->amount_paid)->first() ?? null;
-            $test2 = Destination::where('destination_name', 'like', '%' . $trans->origin . '%')
-              ->where('short_trip_fare', $trans->amount_paid)
-              ->orWhere('short_trip_fare_discount', $trans->amount_paid)->first() ?? null;
-
-            if($test1 !== null){
+            if($trans->is_short_trip == false){
               for($i = 0; $i < $trans->ampd; $i++){
-                if($test1->type == "Regular"){
+                if($trans->transaction_ticket_type == "Regular"){
                   $mainRegCount++;
-                }else if($test1->type == "Discount"){
+                }else if($trans->transaction_ticket_type == "Discount"){
                   $mainDisCount++;
                 }
               }
             }
 
-            if($test2 !== null){
+            if($trans->is_short_trip == true){
               for($i = 0; $i < $trans->ampd; $i++){
-                if($trans->amount_paid == $test2->short_trip_fare){
+                if($trans->transaction_ticket_type == "Regular"){
                   $stRegCount++;
-                }else if($trans->amount_paid == $test2->short_trip_fare_discount){
+                }else if($trans->transaction_ticket_type == "Discount"){
                   $stDisCount++;
                 }
               }
@@ -308,7 +297,6 @@ class TripsController extends Controller
             $totalFare += $trans->ampd * $trans->amount_paid;
           }
 
-          //dd($transaction);
           $numPassCountArr[0] = $mainRegCount;
           $numPassCountArr[1] = $mainDisCount;
           $numPassCountArr[2] = $stRegCount;
