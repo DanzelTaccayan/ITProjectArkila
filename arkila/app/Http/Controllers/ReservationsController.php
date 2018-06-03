@@ -126,12 +126,17 @@ class ReservationsController extends Controller
         }
         else
         {
-            $countReservedSlots = $reservation->transaction->where('date_id', $reservation->id)
-            ->where(function($q){
-                $q->where('status', 'PAID')
-                ->orWhere('status', 'UNPAID')
-                ->orWhere('status', 'TICKET ON HAND');
-            })->count();
+        	if($reservation->transaction == null){
+        		$countReservedSlots = 0;
+        	} else {
+				 $countReservedSlots = $reservation->transaction->where('date_id', $reservation->id)
+	            ->where(function($q){
+	                $q->where('status', 'PAID')
+	                ->orWhere('status', 'UNPAID')
+	                ->orWhere('status', 'TICKET ON HAND');
+	            })->count();
+        	}
+
 
             if($countReservedSlots == 0 && $reservation->status == 'CLOSED')
             {
