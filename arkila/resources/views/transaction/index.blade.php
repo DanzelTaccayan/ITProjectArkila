@@ -386,8 +386,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <ul id="pendingList{{$terminal->destination_id}}" class="pendingList list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                    @foreach($soldTickets->whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending') as $soldTicket)
-                                                                        <li data-val='{{$soldTicket->sold_ticket_id}}' class="list-group-item">{{$soldTicket->ticket_number}}</li>
+                                                                    @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->whereIn('ticket.ticket_id',App\SoldTicket::whereNull('boarded_at')->pluck('sold_ticket.ticket_id'))->get()  as $ticket)
+                                                                        <li data-val='{{$ticket->soldTicket->sold_ticket_id}}' class="list-group-item">{{$ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
                                                             </div>   
@@ -475,8 +475,8 @@
                                                             </div>
                                                             <div class="">
                                                             <ul id="onBoardList{{$terminal->destination_id}}" class="list-group scrollbar scrollbar-info thin ticket-overflow">
-                                                                @foreach($soldTickets->whereIn('destination_id',$terminal->destination_id)->where('status','OnBoard') as $soldTicket)
-                                                                    <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket_number}}</li>
+                                                                @foreach($soldTickets->where('boarded_at',$terminal->destination_id) as $soldTicket)
+                                                                    <li data-val="{{$soldTicket->sold_ticket_id}}" class="list-group-item">{{$soldTicket->ticket->ticket_number}}</li>
                                                                 @endforeach
                                                             </ul>
                                                             </div>

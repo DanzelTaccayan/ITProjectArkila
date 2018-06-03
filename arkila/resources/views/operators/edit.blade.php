@@ -49,13 +49,13 @@
                         <tr>
                             <th>License No <span class="text-red">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required>
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No.">
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate" val-license-exp data-parsley-expire-date required>
+                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate">
                           </td>
                         </tr>
                         <tr>

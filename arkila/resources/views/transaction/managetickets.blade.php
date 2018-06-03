@@ -142,34 +142,21 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach(App\SoldTicket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->where('status','Pending')->get() as $soldTicket)
-                                                    <tr id="ticket{{$soldTicket->sold_ticket_id}}">
-                                                        <td><input value="{{$soldTicket->sold_ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
-                                                        <td>{{ $soldTicket->ticket_number }}</td>
-                                                        <td>{{ $soldTicket->destination->destination_name}}</td>
-                                                        <td>{{ $soldTicket->updated_at }}</td>
-                                                        <td id="actionBody{{$soldTicket->sold_ticket_id}}">
+                                                @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->whereIn('ticket.ticket_id',App\SoldTicket::whereNull('boarded_at')->pluck('sold_ticket.ticket_id'))->get()  as $ticket)
+                                                    <tr id="ticket{{$ticket->soldTicket->sold_ticket_id}}">
+                                                        <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
+                                                        <td>{{ $ticket->ticket_number }}</td>
+                                                        <td>{{ $ticket->destination->destination_name}}</td>
+                                                        <td>{{ $ticket->updated_at }}</td>
+                                                        <td id="actionBody{{$ticket->soldTicket->sold_ticket_id}}">
                                                             <div class="text-center">
-                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" data-amount="{{$soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
+                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
+                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
 
-                                                                <button type="button" data-soldticketid="{{$soldTicket->sold_ticket_id}}" data-ticketnumber="{{$soldTicket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
+                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
                                                             </div>
                                                         </td>
-                                                        <td id="destBody{{$soldTicket->sold_ticket_id}}" class="hidden">
-                                                            <select name="" id="" class="form-control">
-                                                                <option value="">dest 1</option>
-                                                                <option value="">dest 2</option>
-                                                                <option value="">dest 3</option>
-                                                            </select>
-                                                            <div class="pull-right">
-                                                                <button class="btn btn-default btn-sm btn-flat btn-cancel">CANCEL</button>
-                                                                <button class="btn btn-info btn-sm btn-flat">CHANGE</button>
-                                                            </div>
-                                                        </td>
-
-
                                                     </tr>
                                         @endforeach
                                         </tbody>
@@ -336,6 +323,26 @@
 
     <script>
         $(function() {
+            $('.sold-tickets').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false,
+                'order': [[ 3, "desc" ]],
+                'aoColumnDefs': [
+                    {
+                        'bSortable': false,
+                        'aTargets': [0]
+                    },
+
+                    {
+                        'bSortable': false,
+                        'aTargets': [4]
+                    },
+                ],
+            });
 
             //Refund
             $('button[name="initialRefund"]').on('click',function(){
@@ -542,30 +549,5 @@
                 $(this).data("clicks", !clicks);
             });
         });
-    </script>
-    <script>
-        $(function() {
-            $('.sold-tickets').DataTable({
-                'paging': true,
-                'lengthChange': false,
-                'searching': true,
-                'ordering': true,
-                'info': true,
-                'autoWidth': false,
-                'order': [[ 3, "desc" ]],
-                'aoColumnDefs': [
-                    {
-                    'bSortable': false,
-                    'aTargets': [0]
-                    },
-
-                    {
-                    'bSortable': false,
-                    'aTargets': [4]
-                    },
-                ], 
-            });
-
-        })
     </script>
 @endsection

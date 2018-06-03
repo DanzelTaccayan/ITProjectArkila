@@ -16,22 +16,31 @@ class CreateSoldTicketTable extends Migration
         Schema::create('sold_ticket', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('sold_ticket_id');
-            $table->string('ticket_number');
-            $table->integer('destination_id')
+
+            $table->integer('ticket_id')
                 ->unsigned();
+
+            $table->integer('boarded_at')
+                ->unsigned()
+                ->nullable();
+
             $table->integer('reservation_id')
                 ->unsigned()
                 ->nullable();
+
             $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending','OnBoard']);
             $table->timestamps();
 
-            $table->foreign('destination_id')
-                ->references('destination_id')->on('destination')
+            $table->foreign('ticket_id')
+                ->references('ticket_id')->on('ticket')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
 
-            $table->enum('ticket_type', ['Regular', 'Discount']);
+            $table->foreign('boarded_at')
+                ->references('destination_id')->on('destination')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
 
             $table->foreign('reservation_id')
                 ->references('id')->on('reservation')

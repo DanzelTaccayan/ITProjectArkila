@@ -153,7 +153,7 @@
                                 License No: <span class="text-red">*</span>
                             </th>
                             <td>
-                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required> 
+                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No."> 
                             </td>
                         </tr>
                         <tr>
@@ -161,7 +161,7 @@
                                 License Expiry Date: <span class="text-red">*</span>
                             </th>
                             <td>
-                                <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" val-license-exp required>
+                                <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'">
                             </td>
                         </tr>
                         <tr>
