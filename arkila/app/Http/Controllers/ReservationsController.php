@@ -28,8 +28,6 @@ class ReservationsController extends Controller
      */
     public function index()
     {
-        //
-        // $terminals = Terminal::whereNotIn('terminal_id',[auth()->user()->terminal_id])->get();
         $destinations = Destination::allTerminal()->get();
         $main = Destination::mainTerminal()->get()->first();
         $reservations = ReservationDate::all();
@@ -329,7 +327,7 @@ class ReservationsController extends Controller
 
     public function reservationRules()
     {
-        return BookingRules::where('cancellation_fee', null)->get()->first();;
+        return BookingRules::where('description', 'Reservation')->get()->first();;
     }
 
 }

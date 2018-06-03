@@ -72,7 +72,7 @@
                         <select class="form-control select2" name="driver" id="driver" val-driver required>
                             <option value="" selected>Select Driver</option>
                         @foreach ($drivers as $driver)
-                           <option value="{{ $driver->member_id }}" @if($driver->member_id == old('driver') ) {{'selected'}} @endif>{{ $driver->full_name }}</option>
+                           <option value="{{ $driver->user->id }}" @if($driver->user->id == old('driver') ) {{'selected'}} @endif>{{ $driver->full_name }}</option>
                            @endforeach
                        </select>
                     </div>
@@ -105,7 +105,7 @@
                                 <div class="input-group-addon">
                                   <i class="fa fa-clock-o"></i>
                                 </div>
-                                <input type="text" class="form-control" name="time" value="{{ old('time') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
+                                <input type="time" class="form-control" name="time" value="{{ old('time') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
                             </div>
                             <p id="errDepartureTime"></p>
                         </div>
@@ -126,13 +126,14 @@
                             <tr>
                                 <th>Rental Fee</th>
                                 <td id="noSelected" class="text-right">0</td>
-                                <td id="otherSelected" class="text-right hidden" value="">100</td>
+                                <td id="otherSelected" class="text-right hidden" value="">{{$rule->fee}}</td>
                                 <td id="withSelected" class="text-right hidden" value="">0</td>
-                                <input type="hidden" name="fee" value="100">
+                                <input type="hidden" name="fee" value="{{$rule->fee}}">
                             </tr>
                             <tr style="border-top: 2px solid black">
                                 <th>Total Fare</th>
                                 <td id="totalFare" class="text-right">0</td>
+                                <input type="hidden" id="hiddenFare" name="totalFare" value="">
                             </tr>
                         </tbody>
                     </table>
@@ -266,7 +267,7 @@
                 var fee = parseInt(inputFee);
                 var totalfare = fare + fee;
                 $("#totalFare").text(totalfare);
-
+                $("#hiddenFare").val(totalfare);
                 // fee rental fee
                 $("input[name='fare']").keyup(function() {
                     var inputFee = $("input[name='fee']").val()
@@ -279,6 +280,7 @@
                     var fee = parseInt(inputFee);
                     var totalfare = fare + fee;
                     $("#totalFare").text(totalfare);
+                    $("#hiddenFare").val(totalfare);
                 });
 
 
@@ -300,6 +302,7 @@
                 var fee = 0;
                 var totalfare = fare + fee;
                 $("#totalFare").text(totalfare);
+                $("#hiddenFare").val(totalfare);
 
 
                 //fee 0
@@ -313,6 +316,7 @@
                     var fee = 0;
                     var totalfare = fare + fee;
                     $("#totalFare").text(totalfare);
+                    $("#hiddenFare").val(totalfare);
                 });
             }
         });
@@ -328,6 +332,7 @@
             var fee = 0;
             var totalfare = fare + fee;
             $("#totalFare").text(totalfare);
+            $("#hiddenFare").val(totalfare);
         });
     </script>
     <script>

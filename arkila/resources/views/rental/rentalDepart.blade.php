@@ -17,14 +17,25 @@
                         <th>Paid Fare</th>
                         <td class="text-right">₱{{$rental->rental_fare}}</td>
                     </tr>
-                    <tr style="border-bottom: 2px solid black">
+                    <tr>
                         <th>Cancellation Fee</th>
                         <td class="text-right">₱{{$rules->cancellation_fee}}</td>
                     </tr>
+                    @if($destination)
                     <tr>
                         <th>Refund</th>
-                        <td class="text-right"><strong>₱{{$rental->rental_fare - $rules->cancellation_fee}}</strong></td>
+                        <td class="text-right"><strong>₱{{number_format($rental->rental_fare - $rules->cancellation_fee, 2)}}</strong></td>
                     </tr>
+                    @else
+                    <tr style="border-bottom: 2px solid black">
+                        <th>Rental Fee</th>
+                        <td class="text-right">₱{{$rules->fee}}</td>
+                    </tr>
+                    <tr>
+                        <th>Refund</th>
+                        <td class="text-right"><strong>₱{{number_format(($rental->rental_fare - $rules->cancellation_fee) - $rules->fee, 2)}}</strong></td>
+                    </tr>
+                    @endif
                 </table>
                 <p><strong>REFUNDABLE UNTIL:</strong></p>
                 <table class="table table-striped table-bordered">
