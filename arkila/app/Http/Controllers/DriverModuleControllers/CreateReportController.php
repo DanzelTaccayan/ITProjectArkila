@@ -35,7 +35,6 @@ class CreateReportController extends Controller
   }
   public function storeReport(CreateReportRequest $request)
   {
-    //dd(request('destinationName'));
     $terminal = Destination::find($request->origin);
     $totalPassengers = $request->totalPassengers;
 
@@ -49,8 +48,6 @@ class CreateReportController extends Controller
     $van_id = $driver_user->member->van->first()->van_id;
     $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
 
-    $timeDeparted = Carbon::createFromFormat('h:i A', $request->timeDeparted);
-    $timeDepartedFormat = $timeDeparted->format('H:i:s');
     $dateDeparted = $request->dateDeparted;
 
     $mainterminal = Destination::where('is_main_terminal', true)->first();
@@ -292,7 +289,7 @@ class CreateReportController extends Controller
       
       
 
-      return redirect('/home/create-report')->with('success', 'Report created successfully!');
+      return redirect('/home/view-trips/'.$trip->trip_id)->with('success', 'Report created successfully!');
 
   }
 }
