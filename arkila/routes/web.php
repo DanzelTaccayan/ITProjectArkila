@@ -303,6 +303,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
     /**Services**/
     /*Rental*/
+    Route::get('/home/rental/receipt/{rental}', 'CustomerModuleControllers\MakeRentalController@receipt')->name('rental.receipt');
     Route::patch('/home/rental/{rental}/cancelRental', 'CustomerModuleControllers\MakeRentalController@cancelRental')->name('rental.cancel')->middleware('online-rental');
     Route::get('/home/create-rental', 'CustomerModuleControllers\MakeRentalController@createRental')->name('customermodule.user.rental.customerRental')->middleware('online-rental');
     Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');

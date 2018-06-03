@@ -197,7 +197,6 @@ class TripsController extends Controller
           return view('trips.viewTrip', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
 
         }else if($trip->origin == $mainTerminal && $transactions == true){
-            //discount
             $discount = Transaction::where('trip_id',$trip->trip_id)
               ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
               ->where('transaction_ticket_type', 'Discount')
@@ -214,8 +213,9 @@ class TripsController extends Controller
               ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
               ->groupBy('tickets')
               ->get();
-               
             
+            $totalFares = Transaction::where('trip_id',$trip->trip_id)->get();
+
             $tempArr = null;
 
             foreach($transactions as $tranKey => $tranValues){
@@ -248,8 +248,8 @@ class TripsController extends Controller
             
             $driverShare = 0;
             $totalFare = 0;
-            foreach($transactions  as $transkeys => $transvalues){
-              $totalFare += $transvalues->ampd * $transvalues->amount_paid;
+            foreach($totalFares  as $tAmount){
+              $totalFare += $tAmount->amount_paid;
             }
 
             $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);

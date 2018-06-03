@@ -115,7 +115,7 @@ class MakeRentalController extends Controller
         
         Ledger::create([
           'description' => 'Cancellation Fee',
-          'amount' => $rule->cancellation_fee,
+          'amount' => $rule->cancellation_fee, 
           'type' => 'Revenue',
         ]);
 
@@ -207,8 +207,13 @@ class MakeRentalController extends Controller
       }
     }
 
+    public function receipt()
+    {
+      return view('customermodule.user.rental.receipt');
+    }
+
     public function rentalRules()
 	  {   
-		  return BookingRules::where('reservation_fee', null)->get()->first();;
+		  return BookingRules::where('description', 'Rental')->get()->first();;
 	  } 
 }

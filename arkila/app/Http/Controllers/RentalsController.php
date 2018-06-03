@@ -43,10 +43,11 @@ class RentalsController extends Controller
      */
     public function create()
     {
+        $rule = $this->rentalRules();
         $vans = Van::all();
         $drivers = Member::allDrivers()->get();
         $destinations = Destination::allRoute()->get();
-        return view('rental.create', compact('vans', 'drivers', 'destinations'));
+        return view('rental.create', compact('vans', 'drivers', 'destinations', 'rule'));
     }
     /**
      * Store a newly created resource in storage.
@@ -59,7 +60,7 @@ class RentalsController extends Controller
         $time = date('H:i', strtotime($request->time));
         $date = Carbon::parse($request->date);
         $fullName = ucwords(strtolower($request->name));
-        if($request->destination == 'otherDestination')
+        if($request->destination == 'other')
         {
             $destination = ucwords(strtolower($request->otherDestination));
         }
@@ -91,7 +92,7 @@ class RentalsController extends Controller
                 'departure_time' => $time,
                 'destination' => $destination,
                 'number_of_days' => $request->days,
-                'rental_fare' => $request->fare,
+                'rental_fare' => $request->totalFare,
                 'contact_number' => $request->contactNumber,
                 'is_refundable' => true,
                 'rent_type' => 'Walk-in',
@@ -114,9 +115,10 @@ class RentalsController extends Controller
         $vans = Van::all();
         $drivers = Member::allDrivers()->get();
         // $drivers = User::allDrivers()->whereNotIn('id', VanRental::select('driver_id')->where('status', '!=', 'Departed'))->get();
-        $rules = BookingRules::where('reservation_fee', null)->get()->first();
+        $rules = $this->rentalRules();
+        $destination = Destination::where('destination_name', 'like', '%' . $rental->destination . '%')->get()->first();
 
-        return view('rental.show', compact('rental', 'vans', 'drivers', 'rules'));
+        return view('rental.show', compact('rental', 'vans', 'drivers', 'rules', 'destination'));
     }
 
     /**
@@ -281,5 +283,10 @@ class RentalsController extends Controller
         {
             return back()->withErrors('Cannot modify departure date and time');
         }
+    }
+
+    public function rentalRules() 
+    {
+        return BookingRules::where('description', 'Rental')->get()->first();
     }
 }

@@ -116,7 +116,7 @@ class MakeReservationController extends Controller
 						$newSlot = $reservation->number_of_slots - $request->quantity;
 						$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
 						$ticket = Ticket::where([['destination_id', $destination->destination_id], ['type', 'Regular']])->get()->first();
-						$toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
+						$toBePaid = ($ticket->fare * $quantity) + $rule->fee;
 						$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
 						
 						if($expiry->lt(Carbon::now())) {
@@ -293,7 +293,7 @@ class MakeReservationController extends Controller
 
 	  public function reservationRules()
 	  {
-		  return BookingRules::where('cancellation_fee', null)->get()->first();;
+		  return BookingRules::where('description', 'Reservation')->get()->first();;
 	  }  
 
 }
