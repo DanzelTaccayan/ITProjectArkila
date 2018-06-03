@@ -112,12 +112,30 @@
                     </div>
                 </div>
             </div> 
+            <h4>Rental Fare</h4>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Fare: <span class="text-red">*</span></label>
-                        <input type="number" class="form-control" name="fare" value="{{ old('fare') }}" data-parsley-errors-container="#errDepartureTime" val-book-time required>
-                    </div>
+                <div class="col-md-6">
+                    <table class="table table-striped table-bordered form-table">
+                        <tbody>
+                            <tr>
+                                <th>Rental Fare</th>
+                                <td>
+                                    <input type="number" name="fare" class="form-control text-right" min=0>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Rental Fee</th>
+                                <td id="noSelected" class="text-right">0</td>
+                                <td id="otherSelected" class="text-right hidden" value="">100</td>
+                                <td id="withSelected" class="text-right hidden" value="">0</td>
+                                <input type="hidden" name="fee" value="100">
+                            </tr>
+                            <tr style="border-top: 2px solid black">
+                                <th>Total Fare</th>
+                                <td id="totalFare" class="text-right">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -233,10 +251,86 @@
             if( $( this ).val() == 'other' ){
                 $("input[name='otherDestination']").prop("disabled", false);
                 $("input[name='otherDestination']").attr("placeholder", "Enter Destination");
+                $("#noSelected").hide();
+                $("#withSelected ").hide();
+                $("#otherSelected").show();
+                $("#otherSelected").removeClass("hidden");
+
+                var inputFee = $("input[name='fee']").val()
+                var inputFare = $("input[name='fare']").val()
+                if(!inputFare) {
+                    var fare = 0;
+                } else {
+                    var fare = parseInt(inputFare);
+                }
+                var fee = parseInt(inputFee);
+                var totalfare = fare + fee;
+                $("#totalFare").text(totalfare);
+
+                // fee rental fee
+                $("input[name='fare']").keyup(function() {
+                    var inputFee = $("input[name='fee']").val()
+                    var inputFare = $("input[name='fare']").val()
+                    if(!inputFare) {
+                        var fare = 0;
+                    } else {
+                        var fare = parseInt(inputFare);
+                    }
+                    var fee = parseInt(inputFee);
+                    var totalfare = fare + fee;
+                    $("#totalFare").text(totalfare);
+                });
+
+
             } else {
                 $("input[name='otherDestination']").prop("disabled", true);
                 $("input[name='otherDestination']").attr("placeholder", "");
+                $("#noSelected").hide();
+                $("#otherSelected ").hide();
+                $("#withSelected").show();
+                $("#withSelected").removeClass("hidden");
+
+                var inputFare = $("input[name='fare']").val()
+                if(!inputFare) {
+                    var fare = 0;
+                } else {
+                    var fare = parseInt(inputFare);
+                }
+
+                var fee = 0;
+                var totalfare = fare + fee;
+                $("#totalFare").text(totalfare);
+
+
+                //fee 0
+                $("input[name='fare']").keyup(function() {
+                    var inputFare = $("input[name='fare']").val()
+                    if(!inputFare) {
+                        var fare = 0;
+                    } else {
+                        var fare = parseInt(inputFare);
+                    }
+                    var fee = 0;
+                    var totalfare = fare + fee;
+                    $("#totalFare").text(totalfare);
+                });
             }
         });
+
+        //fee 0
+        $("input[name='fare']").keyup(function() {
+            var inputFare = $("input[name='fare']").val()
+            if(!inputFare) {
+                var fare = 0;
+            } else {
+                var fare = parseInt(inputFare);
+            }
+            var fee = 0;
+            var totalfare = fare + fee;
+            $("#totalFare").text(totalfare);
+        });
+    </script>
+    <script>
+
     </script>
 @endsection
