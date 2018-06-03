@@ -126,8 +126,8 @@
                                             <div class="pull-left col-md-6">
                                                 <div class="btn-group">
                                                     <button type="button" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i></button>
-                                                    <button name="initialMultiRefund" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
-                                                    <button name="initialMultiCancel" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
+                                                    <button name="initialMultiRefund" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
+                                                    <button name="initialMultiCancel" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
                                                 </div>
                                             </div>
                                             <table id="sold-tickets{{$terminal->destination_id}}" class="table table-bordered sold-tickets">
@@ -138,17 +138,16 @@
                                                     <th>Destination</th>
                                                     <th>Date Purchased</th>
                                                     <th id="actionHead" class="text-center">Actions</th>
-                                                    <th id="destHead" class="hidden">Actions</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->whereIn('ticket.ticket_id',App\SoldTicket::whereNull('boarded_at')->pluck('sold_ticket.ticket_id'))->get()  as $ticket)
                                                     <tr id="ticket{{$ticket->soldTicket->sold_ticket_id}}">
-                                                        <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
+                                                        <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" class="icheckbox_flat-blue" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>
                                                         <td>{{ $ticket->destination->destination_name}}</td>
                                                         <td>{{ $ticket->updated_at }}</td>
-                                                        <td id="actionBody{{$ticket->soldTicket->sold_ticket_id}}">
+                                                        <td>
                                                             <div class="text-center">
                                                                 <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
 
@@ -312,6 +311,7 @@
                         </div>
                     </div>
                 </div>
+                @include('layouts.partials.preloader_div')
             </div>
         </div>
 
@@ -320,10 +320,9 @@
 @section('scripts')
     @parent
     {{ Html::script('/jquery/bootstrap3-editable/js/bootstrap-editable.min.js') }}
-
     <script>
-        $(function() {
-            $('.sold-tickets').DataTable({
+        $(document).ready(function() {
+            var soldTicketsTables = $('.sold-tickets').DataTable({
                 'paging': true,
                 'lengthChange': false,
                 'searching': true,
@@ -331,18 +330,177 @@
                 'info': true,
                 'autoWidth': false,
                 'order': [[ 3, "desc" ]],
-                'aoColumnDefs': [
-                    {
-                        'bSortable': false,
-                        'aTargets': [0]
-                    },
-
-                    {
-                        'bSortable': false,
-                        'aTargets': [4]
-                    },
+                'ColumnDefs': [
+                    {'orderable': false, 'targets': 0},
+                    {'orderable': false, 'targets': 4},
                 ],
             });
+            // //Enable iCheck plugin for checkboxes
+            // //iCheck for checkbox and radio inputs
+            // soldTicketsTables.column(0).$('input[name="checkInput"]').iCheck({
+            //     checkboxClass: 'icheckbox_flat-blue'
+            // });
+
+            //Enable check and uncheck all functionality
+            $(".checkbox-toggle").click(function () {
+                var clicks = $(this).data('clicks');
+                var terminalId = $(this).data('terminal');
+
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]').iCheck("uncheck");
+                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                } else {
+                    //Check all checkboxes
+                    soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]').iCheck("check");
+                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                }
+                $(this).data("clicks", !clicks);
+            });
+
+            //Multi Refund
+            $('button[name="initialMultiRefund"]').on('click',function(){
+                var terminalId = $(this).data('terminal');
+                var checked = soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]:checked');
+                var buttonList = soldTicketsTables.table('#sold-tickets'+terminalId).column(4);
+                var amount = 0;
+
+                if(checked.length > 0) {
+                    $.each(checked, function (index, createdElement) {
+                        var soldTicketId = $(createdElement).val();
+
+                        amount += parseFloat(buttonList.$('button[name="initialRefund"][data-soldticketid="'+soldTicketId+'"]').data('amount'));
+                    });
+
+                    $('#multiRefundModal').text('('+checked.length+') SELECTED TICKETS');
+
+                    $('#multiRefundModalAmount').text('₱ '+amount.toFixed(2));
+                    $('#multirefund-modal').modal('show');
+                    $('#multirefund-modal').find('button[name="multiRefund"]').attr('data-terminal',terminalId);
+                }
+            });
+
+            $('button[name="multiRefund"]').on('click',function(){
+                var terminalId = $(this).data('terminal');
+                var checked = soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]:checked');
+                var checkedArr = [];
+
+                if(checked.length > 0){
+                    $.each(checked,function(index, createdElement){
+                        checkedArr.push($(createdElement).val());
+                    });
+                    $('#submit-loader').removeClass('hidden');
+                    $('#submit-loader').css("display","block");
+                    $.ajax({
+                        method:'DELETE',
+                        url: '{{route('transactions.multipleRefund')}}',
+                        data: {
+                            '_token': '{{csrf_token()}}',
+                            'refund': checkedArr
+                        },
+                        success: function(){
+                            location.reload()
+                        },
+                        error:function(response) {
+                            $('#submit-loader').addClass('hidden');
+                            $('#submit-loader').css("display","none");
+
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
+            //Multi Cancel
+            $('button[name="initialMultiCancel"]').on('click',function(){
+                var terminalId = $(this).data('terminal');
+                var checkCount = soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]:checked').length;
+
+                if(checkCount > 0) {
+                    $('#multiCancelModal').text('('+checkCount+') SELECTED TICKETS');
+                    $('#multicancel-modal').find('button[name="multiCancel"]').attr('data-terminal',terminalId);
+                    $('#multicancel-modal').modal('show');
+                }
+            });
+
+            $('button[name="multiCancel"]').on('click',function(){
+                var terminalId = $(this).data('terminal');
+                var checked = soldTicketsTables.table('#sold-tickets'+terminalId).column(0).$('input[name="checkInput"]:checked');
+
+                var checkedArr = [];
+
+                if(checked.length > 0){
+                    $.each(checked,function(index, createdElement){
+                        checkedArr.push($(createdElement).val());
+                    });
+
+                    $('#submit-loader').removeClass('hidden');
+                    $('#submit-loader').css("display","block");
+                    $.ajax({
+                        method:'DELETE',
+                        url: '{{route('transactions.multipleCancel')}}',
+                        data: {
+                            '_token': '{{csrf_token()}}',
+                            'delete': checkedArr
+                        },
+                        success: function(){
+                            location.reload();
+                        },
+                        error:function(response) {
+                            $('#submit-loader').addClass('hidden');
+                            $('#submit-loader').css("display","none");
+
+                            $.notify({
+                                // options
+                                icon: 'fa fa-warning',
+                                message: response.responseJSON.error
+                            },{
+                                // settings
+                                type: 'danger',
+                                autoHide: true,
+                                clickToHide: true,
+                                autoHideDelay: 2500,
+                                placement: {
+                                    from: 'bottom',
+                                    align: 'right'
+                                },
+                                icon_type: 'class',
+                                animate: {
+                                    enter: 'animated bounceIn',
+                                    exit: 'animated bounceOut'
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
+
+        });
+    </script>
+    <script>
+        $(function() {
 
             //Refund
             $('button[name="initialRefund"]').on('click',function(){
@@ -374,123 +532,35 @@
                 $('#lostForm').prop('action', '/home/transactions/lost/'+soldTicketId);
             });
 
-            //Multi Refund
-            $('button[name="initialMultiRefund"]').on('click',function(){
-                var checked = $('input[name="checkInput"]:checked');
-                var amount = 0;
+            //Disable on submit
+            //Disable Refund
+            $('#refundForm').on('submit',function(){
+                $('#refund-modal').modal('hide');
 
-                if(checked.length > 0) {
-                    $.each(checked, function (index, createdElement) {
-                        var soldTicketId = $(createdElement).val();
-                        amount += parseFloat($('button[name="initialRefund"][data-soldticketid="'+soldTicketId+'"]').data('amount'));
-                    });
-
-                    $('#multiRefundModal').text('('+checked.length+') SELECTED TICKETS');
-                    $('#multiRefundModalAmount').text('₱ '+amount.toFixed(2));
-                    $('#multirefund-modal').modal('show');
-                }
+                $('#submit-loader').removeClass('hidden');
+                $('#submit-loader').css("display","block");
+                $(this).find('button[type="submit"]').prop('disabled',true);
             });
 
-            $('button[name="multiRefund"]').on('click',function(){
-                var checked = $('input[name="checkInput"]:checked');
-                var checkedArr = [];
+            //Disable Lost
+            $('#lostForm').on('submit',function(){
+                $('#lost-modal').modal('hide');
 
-                if(checked.length > 0){
-                    $.each(checked,function(index, createdElement){
-                        checkedArr.push($(createdElement).val());
-                    });
-
-                    $.ajax({
-                        method:'DELETE',
-                        url: '{{route('transactions.multipleRefund')}}',
-                        data: {
-                            '_token': '{{csrf_token()}}',
-                            'refund': checkedArr
-                        },
-                        success: function(){
-                            location.reload()
-                        },
-                        error:function(response) {
-                            $.notify({
-                                // options
-                                icon: 'fa fa-warning',
-                                message: response.responseJSON.error
-                            },{
-                                // settings
-                                type: 'danger',
-                                autoHide: true,
-                                clickToHide: true,
-                                autoHideDelay: 2500,
-                                placement: {
-                                    from: 'bottom',
-                                    align: 'right'
-                                },
-                                icon_type: 'class',
-                                animate: {
-                                    enter: 'animated bounceIn',
-                                    exit: 'animated bounceOut'
-                                }
-                            });
-                        }
-                    });
-                }
-
+                $('#submit-loader').removeClass('hidden');
+                $('#submit-loader').css("display","block");
+                $(this).find('button[type="submit"]').prop('disabled',true);
             });
 
-            //Multi Cancel
-            $('button[name="initialMultiCancel"]').on('click',function(){
-                var checkCount = $('input[name="checkInput"]:checked').length;
-                if(checkCount > 0) {
-                    $('#multiCancelModal').text('('+checkCount+') SELECTED TICKETS');
-                    $('#multicancel-modal').modal('show');
-                }
+            //Disable Cancel
+            $('#cancelForm').on('submit',function(){
+                $('#cancel-modal').modal('hide');
+
+                $('#submit-loader').removeClass('hidden');
+                $('#submit-loader').css("display","block");
+                $(this).find('button[type="submit"]').prop('disabled',true);
             });
 
-            $('button[name="multiCancel"]').on('click',function(){
-                var checked = $('input[name="checkInput"]:checked');
-                var checkedArr = [];
 
-                if(checked.length > 0){
-                    $.each(checked,function(index, createdElement){
-                        checkedArr.push($(createdElement).val());
-                    });
-
-                    $.ajax({
-                        method:'DELETE',
-                        url: '{{route('transactions.multipleCancel')}}',
-                        data: {
-                            '_token': '{{csrf_token()}}',
-                            'delete': checkedArr
-                        },
-                        success: function(){
-                            location.reload();
-                        },
-                        error:function(response) {
-                            $.notify({
-                                // options
-                                icon: 'fa fa-warning',
-                                message: response.responseJSON.error
-                            },{
-                                // settings
-                                type: 'danger',
-                                autoHide: true,
-                                clickToHide: true,
-                                autoHideDelay: 2500,
-                                placement: {
-                                    from: 'bottom',
-                                    align: 'right'
-                                },
-                                icon_type: 'class',
-                                animate: {
-                                    enter: 'animated bounceIn',
-                                    exit: 'animated bounceOut'
-                                }
-                            });
-                        }
-                    });
-                }
-
-            });
 
         });
     </script>
@@ -524,30 +594,7 @@
             });
         });
     </script>
-    <script>
-        $(function () {
-            //Enable iCheck plugin for checkboxes
-            //iCheck for checkbox and radio inputs
-            $('.sold-tickets input[type="checkbox"]').iCheck({
-                checkboxClass: 'icheckbox_flat-blue'
-            });
 
-            //Enable check and uncheck all functionality
-            $(".checkbox-toggle").click(function () {
-                var clicks = $(this).data('clicks');
-                var terminalId = $(this).data('terminal');
 
-                if (clicks) {
-                    //Uncheck all checkboxes
-                    $(".sold-tickets input[type='checkbox'][data-terminal='"+terminalId+"']").iCheck("uncheck");
-                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-                } else {
-                    //Check all checkboxes
-                    $(".sold-tickets input[type='checkbox'][data-terminal='"+terminalId+"']").iCheck("check");
-                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-                }
-                $(this).data("clicks", !clicks);
-            });
-        });
-    </script>
+
 @endsection
