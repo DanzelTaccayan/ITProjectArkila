@@ -55,6 +55,12 @@
 							<option value="">4 days after reservation</option>
 						</select>
 					</div>
+					<div class="form-group">
+						<label for="">Refund Expiry (more than 24 hours before departure date)</label>
+						<select class="form-control">
+							<option value="	"></option>
+						</select>
+					</div>
 				</div>
 			</div>
 			<div class="box-footer">
@@ -86,7 +92,7 @@
 								<td></td>
 							</tr>
 							<tr>
-								<th></th>
+								<th>Payment Due</th>
 								<td></td>
 							</tr>
 							<tr>
@@ -102,16 +108,24 @@
 				</div>
 				<div id="editRentalRules" class="padding-side-15 hidden">
 					<div class="form-group">
-						<label for="">Label</label>
+						<label for="">Rental Fee</label>
 						<input type="text" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="">Label</label>
+						<label for="">Cancellation Fee</label>
 						<input type="text" class="form-control">
 					</div>
 					<div class="form-group">
-						<label for="">Label</label>
-						<input type="text" class="form-control">
+						<label for="">Payment Due</label>
+						<select class="form-control">
+							<option value="	"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="">Refund Expiry (more than 24 hours before departure date)</label>
+						<select class="form-control">
+							<option value="	"></option>
+						</select>
 					</div>
 				</div>
 			</div>

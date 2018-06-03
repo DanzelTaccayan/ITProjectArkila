@@ -4,6 +4,20 @@
         <div id="content">
             <div class="container">
                 <div class="row">
+                    <div class="col-md-3 mt-4 mt-md-0">
+                      <!-- CUSTOMER MENU -->
+                      <div class="panel panel-default sidebar-menu">
+                        <div class="panel-heading">
+                          <h3 class="h4 panel-title">MY TRANSACTIONS</h3>
+                        </div>
+                        <div class="panel-body">
+                          <ul class="nav nav-pills flex-column text-sm">
+                            <li class="nav-item"><a href="{{route('customermodule.rentalTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Rentals</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i> My Reservations</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                     <div class="col-md-9">
                         <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
@@ -61,26 +75,12 @@
                         </div>
                         <!-- box-->
                     </div>
-                    <div class="col-md-3 mt-4 mt-md-0">
-                      <!-- CUSTOMER MENU -->
-                      <div class="panel panel-default sidebar-menu">
-                        <div class="panel-heading">
-                          <h3 class="h4 panel-title">MY TRANSACTIONS</h3>
-                        </div>
-                        <div class="panel-body">
-                          <ul class="nav nav-pills flex-column text-sm">
-                            <li class="nav-item"><a href="{{route('customermodule.rentalTransaction')}}" class="nav-link"><i class="fa fa-circle-o"></i> My Rentals</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link active"><i class="fa fa-circle-o"></i> My Reservations</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
                     @foreach($requests as $reservation)
                     <div class="modal fade" id="reservationCancel{{$reservation->id}}">
                         <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header bg-red">
-                                        <h4 class="modal-title">CANCEL RESERVATION</h4>
+                                        <h4 class="modal-title">WARNING</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
                                     </div>

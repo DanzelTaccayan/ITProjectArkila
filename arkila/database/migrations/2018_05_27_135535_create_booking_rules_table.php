@@ -20,7 +20,7 @@ class CreateBookingRulesTable extends Migration
             $table->integer('valid_days');
             $table->decimal('cancellation_fee', 11,2)
             ->nullable();
-            $table->decimal('reservation_fee', 11,2)
+            $table->decimal('fee', 11,2)
             ->nullable();
             $table->timestamps();
         });

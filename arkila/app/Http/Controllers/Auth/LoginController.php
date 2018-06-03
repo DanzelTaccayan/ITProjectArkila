@@ -54,41 +54,41 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user)
     {
-        if($user->status == 'disable'){
-          Auth::logout();
-          dd('HEHEHE');
-          return back()->with('error', 'You need to confirm your account. We have sent you an activation link, please check your email.');
-        }else if($user->status === 'enable'){
-          $customermodule = Feature::where('description','Customer Module')->first();
-          if($customermodule->status == 'enable'){
-            if($user->isCustomer() && $user->isEnable()){
+        $customermodule = Feature::where('description','Customer Module')->first();
+        if($customermodule->status == 'enable'){
+          if($user->isCustomer()){
+            if($user->isEnable()){
               return redirect(route('customermodule.user.index'));
-            }
-          }else{
-            abort(403);
-          }
-
-
-          $drivermodule = Feature::where('description','Driver Module')->first();
-          if($drivermodule->status == 'enable'){
-            if($user->isDriver() && $user->isEnable()){
-              return redirect(route('drivermodule.index'));
-            }
-          }else{
-            abort(403);
-          }
-
-
-          if($user->isSuperAdmin() && $user->isEnable()){
-            $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
-            if($mainterminal){
-              return redirect('getting-started/setup');
             }else{
-              return redirect('home/vanqueue');
+              Auth::logout();
+              return redirect()->back()->withErrors('You need to confirm your account. We have sent you an activation link to your e-mail address');
             }
-
           }
+        }else{
+          return redirect()->back();
+        }
 
+        $drivermodule = Feature::where('description','Driver Module')->first();
+        if($drivermodule->status == 'enable'){
+          if($user->isDriver()){
+            if($user->isEnable()){
+              return redirect(route('drivermodule.index'));
+            }else{
+              Auth::logout();
+              return redirect()->back()->withErrors('Your user account has been disabled by the administrator. Contact the administrator if you have any concerns'); 
+            }
+          }
+        }else{
+          return redirect()->back();
+        }
+
+        if($user->isSuperAdmin() && $user->isEnable()){
+          $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+          if($mainterminal){
+            return redirect('getting-started/setup');
+          }else{
+            return redirect('home/vanqueue');
+          }
         }
 
         abort(401);
