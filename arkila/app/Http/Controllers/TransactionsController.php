@@ -346,7 +346,12 @@ class TransactionsController extends Controller
     {
         $drivers = [];
 
-        foreach(Member::where('status','Active')->whereNotNull('license_number')->whereNotIn('member_id',VanQueue::all()->pluck('driver_id'))->get() as $member) {
+        foreach(Member::whereNotIn('member_id', function($query) {
+                $query->select('driver_id')->from('van_queue');
+            })
+            ->whereNotIn('member_id', Member::all()->where('license_number','IS', NULL)->pluck('member_id'))
+            ->where('status','Active')->get() as $member) {
+
             array_push($drivers,[
                 'value' => $member->member_id,
                     'text' => $member->full_name

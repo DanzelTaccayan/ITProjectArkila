@@ -25,7 +25,7 @@
                         <tr>
                             <th>Last Name: <span class="text-red">*</span></th>
                             <td><input value="{{ old('lastName') ?? $operator->last_name}}" type="text" id="lastNAmeO" name="lastName" class="form-control" placeholder="Last Name" val-name required></td>
-                        </tr>0
+                        </tr>
                         <tr>
                             <th>First Name: <span class="text-red">*</span></th>
                             <td><input value="{{ old('firstName') ?? $operator->first_name}}" type="text" id="firstNameO" name="firstName" class="form-control" placeholder="First Name" val-name required></td>
