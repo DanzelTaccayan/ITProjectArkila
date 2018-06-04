@@ -1,6 +1,13 @@
 @extends('layouts.master')
 @section('title', 'List of Rentals')
 @section('content')
+<div class="padding-side-10">
+    <div class="box box-solid with-shadow" style="height: 300px; padding: 50px;">
+        <div class="box-body">
+            
+        </div>
+    </div>
+</div>
 <div class="padding-side-5">
     <div>
         <h2 class="text-white">RENTALS</h2>
