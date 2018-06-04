@@ -7,7 +7,7 @@
     <div class="box box-warning" style="box-shadow: 0px 5px 10px gray;">
         <div class="box-header with-border text-center">
             <h4>
-                <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous()) {{ session()->get('opLink') }} @else {{ route('drivers.index')}} @endif" class="pull-left"><i class="fa fa-chevron-left"></i></a>
+                <a href="{{route('drivers.show',[$driver->member_id])}}" class="pull-left"><i class="fa fa-chevron-left"></i></a>
             </h4>
             <h3 class="box-title">
                 EDIT DRIVER INFORMATION
@@ -44,7 +44,7 @@
                         <tr>
                             <th>Last Name: <span class="text-red">*</span></th>
                             <td><input value="{{ old('lastName') ?? $driver->last_name}}" type="text" id="lastNAmeO" name="lastName" class="form-control" placeholder="Last Name" val-name required></td>
-                        </tr>0
+                        </tr>
                         <tr>
                             <th>First Name: <span class="text-red">*</span></th>
                             <td><input value="{{ old('firstName') ?? $driver->first_name}}" type="text" id="firstNameO" name="firstName" class="form-control" placeholder="First Name" val-name required></td>

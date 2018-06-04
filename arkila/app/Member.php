@@ -90,12 +90,21 @@ class Member extends Model
 
     public function getExpiryDateAttribute($value)
     {
-        return Carbon::parse($value)->format('m/d/Y');
+        if($value) {
+            return Carbon::parse($value)->format('m/d/Y');
+        } else {
+            return $value;
+        }
     }
 
     public function getDateArchivedAttribute($value)
     {
-        return Carbon::parse($value)->format('M d, Y h:i:s A');
+        if($value) {
+            return Carbon::parse($value)->format('M d, Y h:i:s A');
+
+        } else {
+            return $value;
+        }
     }
 
     public function setExpiryDateAttribute($value)
