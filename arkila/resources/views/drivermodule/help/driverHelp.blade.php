@@ -6,18 +6,18 @@
     <div class="col-md-offset-2 col-md-8">
         <div class="box box-solid">
             <div class="box-header  with-border">
-                <h5 class="text-center"><strong>View Announcements and Van Queue</strong></h5>
+                <h5 class="text-center"><strong>View Announcements and Van's Queue Number</strong></h5>
             </div>
             <div class="box-body">
                 <ul>
                     <li>
-                        <strong>Step 1:</strong> Go to the Home tab on the Menu
+                        <strong>Step 1:</strong> Go to the "Home" tab on the navigation bar.
                     </li>
                     <li>
-                        <strong>Step 2:</strong> View announcements in the announcements column
+                        <strong>Step 2:</strong> View announcements in the "Announcements" tab.
                     </li>
                     <li>
-                        <strong>Step 3:</strong> View van queue in the van queue column
+                        <strong>Step 3:</strong> View van's queue number in the "On Queue" tab.
                     </li>
                 </ul>
             </div>
@@ -31,7 +31,7 @@
             <div class="box-body">
                 <ul>
                     <li>
-                        <strong>Step 1:</strong> Go to the Trip Log tab on the Menu
+                        <strong>Step 1:</strong> Go to the "Trip Log" tab on the navigation bar.
                     </li>
                     <li>
                         <strong>Step 2:</strong> View pending, accepted and declined trips in the trips table
@@ -48,19 +48,19 @@
             <div class="box-body">
                 <ul>
                     <li>
-                        <strong>Step 1:</strong> Go to the Create Report tab on the Menu
+                        <strong>Step 1:</strong> Go to the "Create Report" tab on the navigation bar.
                     </li>
                     <li>
-                        <strong>Step 2:</strong> Choose which terminal you want to create a report for and click on the select terminal button which will redirect you to the report page
+                        <strong>Step 2:</strong>Under the "Departure Details" tab, choose which origin terminal and the departure date and time.
                     </li>
                     <li>
-                        <strong>Step 3:</strong> Under the report page, Enter the number of passengers per destination, Date of departure and the time of departure
+                        <strong>Step 3:</strong> Under the "Passenger Count" tab, enter the number of regular or discounted tickets that came from the main terminal or short trip.
                     </li>
                     <li>
-                        <strong>Step 4:</strong> You will then be shown your total number of passengers and the total booking fee for the said trip
+                        <strong>Step 4:</strong> After entering the information of the report, click the "Submit" button to create the report.
                     </li>
                     <li>
-                        <strong>Step 5:</strong> Click on the submit button to turn the report in to the admin
+                        <strong>Step 5:</strong> The departure details, shares and passenger count will be shown after clicking the submit button.
                     </li>
                 </ul>
             </div>
@@ -74,10 +74,10 @@
             <div class="box-body">
                 <ul>
                     <li>
-                        <strong>Step 1:</strong> Go to the Profile tab on the Menu
+                        <strong>Step 1:</strong> On the top right side of the page, click the name of the driver and you will be redirected to the profile page.
                     </li>
                     <li>
-                        <strong>Step 2:</strong> Under the profile tab, you can enable or disable notifications, change your password and view your personal information
+                        <strong>Step 2:</strong> Under the profile page, you can see your personal information and you can change your password by click the "Account Settings" button.
                     </li>
                 </ul>
             </div>
