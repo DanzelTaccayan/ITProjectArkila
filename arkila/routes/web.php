@@ -159,6 +159,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['edit']
     ]);
+    Route::post('/home/rental-rule/store', 'BookingRulesController@storeOrUpdateRental')->name('rental.rule');
+    Route::post('/home/reservation-rule/store', 'BookingRulesController@storeOrUpdateReservation')->name('reservation.rule');
     Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
     Route::patch('/home/rental/{rental}/change-departure', 'RentalsController@changeDepartureDateTime')->name('rental.changeDeparture');
 

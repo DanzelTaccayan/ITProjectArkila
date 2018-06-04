@@ -156,9 +156,11 @@
                                                 <tr>
                                                     <th>Expiry Date</th>
                                                     @if($rental->status == 'Pending')
-                                                    <td>{{$rental->created_at->addDays(2)->formatLocalized('%d %B %Y')}}</td>
-                                                    @elseif($rental->status == 'Unpaid' || $rental->status == 'Paid')
-                                                    <td>{{$rental->updated_at->addDays(2)->formatLocalized('%d %B %Y')}}</td>
+                                                    <td>{{$rental->created_at->addDays($rule->request_expiry)->formatLocalized('%d %B %Y')}} {{date('g:i A', strtotime($rental->departure_time))}}</td>
+                                                    @elseif($rental->status == 'Unpaid')
+                                                    <td>{{$rental->updated_at->addDays($rule->payment_due)->formatLocalized('%d %B %Y')}} {{date('g:i A', strtotime($rental->departure_time))}}</td>
+                                                    @elseif($rental->status == 'Paid')
+                                                    <td>{{$rental->departure_date->formatLocalized('%B %d %Y')}} {{date('g:i A', strtotime($rental->departure_time))}}</td>
                                                     @elseif($rental->status == 'Cancelled' && $rental->is_refundable == true)
                                                     <td>{{$rental->updated_at->addDays(7)->formatLocalized('%d %B %Y')}}</td>
                                                     @else

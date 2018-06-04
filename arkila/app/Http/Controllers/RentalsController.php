@@ -197,8 +197,22 @@ class RentalsController extends Controller
                 ],
             ]);
 
+            $destination = Destination::allRoute()->where('destination_name', $rental->destination)->count();
+            if($destination == 0) {
+                $rule = $this->rentalRules();
+                $totalPayment = request('fare') + $rule->fee;
+
+                Ledger::create([
+                    'description' => 'Rental Fee',
+                    'amount' => $rule->fee,
+                    'type' => 'Revenue',
+                ]);
+            } else {
+                $totalPayment = request('fare');
+            }
+
             $rental->update([
-                'rental_fare' => request('fare'),
+                'rental_fare' => $totalPayment,
                 'status' => request('status'),
                 'refund_code' => $refundCode,
                 'is_refundable' => true,

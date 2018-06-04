@@ -23,7 +23,7 @@ class Destination extends Model
 
     public function reservationDates()
     {
-        return $this->belongsTo(ReservationDate::class, 'destination_terminal', 'destination_id');
+        return $this->hasMany(ReservationDate::class, 'destination_terminal', 'destination_id');
     }
     
     public function routeOrigin()

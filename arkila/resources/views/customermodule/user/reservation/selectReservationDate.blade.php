@@ -21,10 +21,12 @@
                 </thead>
                 <tbody>
                     @foreach($destination->first()->routeDestination as $route)
+                    @php $count = 0 @endphp
                     @if($reservations->where('destination_terminal', $route->destination_id)->count() == 0)
+                    
                     <tr>
                     <td class="text-center" colspan="5">NO AVAILABLE DATE OF RESERVATION</td>    
-                    </tr
+                    </tr>
                     @else
                         @foreach($reservations->where('destination_terminal', $route->destination_id) as $reserve)
                         <tr>

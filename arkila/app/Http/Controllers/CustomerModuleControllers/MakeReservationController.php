@@ -65,6 +65,8 @@ class MakeReservationController extends Controller
 		{
 			$getDestination = Session::get('key');
 			$destination = Destination::where('destination_id', $getDestination)->get();
+			// $terminals = $destination->first()->routeDestination;
+			// dd($terminals);
 			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
 			$reservations = ReservationDate::all();
 	
@@ -121,7 +123,7 @@ class MakeReservationController extends Controller
 						if($expiry->lt(Carbon::now())) {
 							$expiry = $reservation->reservation_date->setTime($time[0], $time[1], $time[2]);
 						} else {
-							$expiry = Carbon::now()->addDays($rule->valid_days)->setTime($time[0], $time[1], $time[2]);
+							$expiry = Carbon::now()->addDays($rule->payment_due)->setTime($time[0], $time[1], $time[2]);
 						}
 				
 			
@@ -158,6 +160,7 @@ class MakeReservationController extends Controller
 			}
 			else
 			{
+				//reservation day limit
 				return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
 			}
 		}

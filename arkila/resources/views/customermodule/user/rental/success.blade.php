@@ -12,53 +12,41 @@
                     		<tbody>
 								<tr>
                     				<th>Rental Code</th>
-                    				<td><strong>{{$transaction->rsrv_code}}</strong></td>
+                    				<td><strong>{{$rental->rental_code}}</strong></td>
                     			</tr>
                     			<tr>
                     				<th>Destination</th>
-                    				<td>{{$transaction->destination_name}}</td>
+                    				<td>{{$rental->destination}}</td>
                     			</tr>
                                 <tr>
                                     <th>Departure Date</th>
-                                    <td></td>
+                                    <td>{{$rental->departure_date->formatLocalized('%d %B %Y')}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Time</th>
-                                    <td></td>
+                                    <td>{{date('g:i A', strtotime($rental->departure_time))}}</td>
                                 </tr>
                                 <tr>
                                     <th>Departure Day</th>
-                                    <td></td>
+                                    <td>{{$rental->departure_date->formatLocalized('%A')}}</td>
                                 </tr>
                                 <tr>
                                     <th>Number of Rental Days</th>
-                                    <td></td>
+                                    <td>{{$rental->number_of_days}}</td>
                                 </tr>
                     			<tr>
                     				<th>Expiry Date</th>
-                    				<td>{{$transaction->expiry_date->formatLocalized('%d %B %Y')}}</td>
+                    				<td>{{$rental->created_at->addDays($rule->request_expiry)->formatLocalized('%d %B %Y')}}</td>
                     			</tr>
                     			<tr>
                     				<th>Status</th>
-                    				<td>{{$transaction->status}}</td>
+                    				<td>{{$rental->status}}</td>
                     			</tr>
-                    			<tr>
-                                    <th>Van Unit</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Driver</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Driver Contact Number</th>
-                                    <td></td>
-                                </tr>
                     		</tbody>
                     	</table>
                     	<p><strong>NOTE:</strong> Pay the total amount at the company office before the expiry date.</p>
                     	<div class="mx-auto">
-                    		<a href="{{route('customermodule.reservationTransaction')}}" class="btn btn-primary btn-lg">OK</a>
+                    		<a href="{{route('customermodule.rentalTransaction')}}" class="btn btn-primary btn-lg">OK</a>
                     	</div>
                     </div>
                 </div>
