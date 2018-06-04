@@ -10,32 +10,33 @@
 			<div class="box-header text-center">
 				<h3 class="box-title">Reservation Rules</h3>
 			</div>
-			<div class="box-body" style="min-height: 380px;">
+			<div class="box-body" style="min-height: 410px;">
 				<div id="viewReservationRules">
-					<table class="table table-striped table-bordered">
-						<tbody>
-							<tr>
-								<th>Reservation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Cancellation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Payment Due</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>	
+					<div class="padding-side-10" style="margin-top: 7%;">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th>Reservation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Cancellation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Payment Due</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Refund Expiry</th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>	
+					</div>
+					<div class="padding-side-15">
+						<p class="well"><strong>NOTE:</strong> The Refund Expiry only applies when the customer cancelled more than 24 hours after the Departure Date.</p>
+					</div>
 				</div>
 				<div id="editReservationRules" class="padding-side-15 hidden">
 					<div class="form-group">
@@ -58,7 +59,13 @@
 					<div class="form-group">
 						<label for="">Refund Expiry (more than 24 hours before departure date)</label>
 						<select class="form-control">
-							<option value="	"></option>
+							<option value="">1 day after cancellation</option>
+							<option value="">2 days after cancellation</option>
+							<option value="">3 days after cancellation</option>
+							<option value="">4 days after cancellation</option>
+							<option value="">5 days after cancellation</option>
+							<option value="">6 days after cancellation</option>
+							<option value="">7 days after cancellation</option>
 						</select>
 					</div>
 				</div>
@@ -79,32 +86,37 @@
 			<div class="box-header text-center">
 				<h3 class="box-title">Rental Rules</h3>
 			</div>
-			<div class="box-body"  style="min-height: 380px;">
+			<div class="box-body"  style="min-height: 410px;">
 				<div id="viewRentalRules">
-					<table class="table table-striped table-bordered">
-						<tbody>
-							<tr>
-								<th>Rental Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Cancellation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Payment Due</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="padding-side-10" style="margin-top: 7%;">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th>Rental Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Cancellation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Request Expiry</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Payment Due</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Refund Expiry</th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="padding-side-15">
+						<p class="well"><strong>NOTE:</strong> The Refund Expiry only applies when the customer cancelled more than 24 hours after the Departure Date.</p>
+					</div>
 				</div>
 				<div id="editRentalRules" class="padding-side-15 hidden">
 					<div class="form-group">
@@ -116,15 +128,33 @@
 						<input type="text" class="form-control">
 					</div>
 					<div class="form-group">
+						<label for="">Request Expiry</label>
+						<select name="" class="form-control" id="">
+							<option value="">1 day after request</option>
+							<option value="">2 days after request</option>
+							<option value="">3 days after request</option>
+							<option value="">4 days after request</option>
+						</select>
+					</div>
+					<div class="form-group">
 						<label for="">Payment Due</label>
-						<select class="form-control">
-							<option value="	"></option>
+						<select name="" class="form-control" id="">
+							<option value="">1 day after payment</option>
+							<option value="">2 days after payment</option>
+							<option value="">3 days after payment</option>
+							<option value="">4 days after payment</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="">Refund Expiry (more than 24 hours before departure date)</label>
 						<select class="form-control">
-							<option value="	"></option>
+							<option value="">1 day after cancellation</option>
+							<option value="">2 days after cancellation</option>
+							<option value="">3 days after cancellation</option>
+							<option value="">4 days after cancellation</option>
+							<option value="">5 days after cancellation</option>
+							<option value="">6 days after cancellation</option>
+							<option value="">7 days after cancellation</option>
 						</select>
 					</div>
 				</div>

@@ -20,6 +20,18 @@
                                 <span class="label label-danger"></span>
                             </a>
                     <ul class="dropdown-menu" style="width: 420px;">
+                        <div class="modal in" id="announcement-loader" class="hidden">
+                            <div class="modal-dialog modal-sm" style="margin-top: 15%;">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="text-center">
+                                            <img src="{{ URL::asset('img/loading.gif') }}">
+                                            <h4>Please  wait...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}
@@ -75,7 +87,7 @@
                            </a>
                           </div>
                           <div class="pull-right">
-                             <a  href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default">Sign out</a>
+                             <a  href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-default"><i class="fa fa-sign-out"></i> Sign out</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{csrf_field()}}
                             </form>

@@ -1,12 +1,12 @@
-<section style="background: white center top no-repeat; background-size: cover;" class="bar no-mb padding-big text-md-center">
+<section style="background: lightsteelblue center top no-repeat; background-size: cover;" class="bar no-mb padding-big text-md-center">
     <div class="dark-mask"></div>
     <div class="container">
         <div class="text-center" >
-            <h2 class="text-uppercase"><i class="fa fa-bullhorn"></i> Announcements</h2>
+            <h2 class="text-uppercase text-white"><i class="fa fa-bullhorn"></i> Announcements</h2>
         </div>
         <!-- Carousel Start-->
         @if($announcements->count() == 0)
-            <h4 class="text-center">NO ANNOUNCEMENT.</h4>
+            <h4 class="text-center t5ext-white">NO ANNOUNCEMENT.</h4>
         @else
             <ul class="owl-carousel testimonials list-unstyled equal-height">
                 @foreach($announcements as $announcement)

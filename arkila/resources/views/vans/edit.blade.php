@@ -26,8 +26,7 @@
 
 	<div class="form-group">
         <label for="">Plate Number:</label>
-        <p class="info-container">{{$van->plate_number}}</p>
-        <input type="hidden" value="{{$van->plate_number}}">
+        <input type="text" class="form-control" value="{{$van->plate_number}}" name="plateNumber">
     </div>
 
     <div class="form-group">

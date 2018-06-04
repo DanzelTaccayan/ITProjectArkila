@@ -42,6 +42,18 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Last Name: <span class="text-red">*</span></th>
+                            <td><input value="{{ old('lastName') ?? $driver->last_name}}" type="text" id="lastNAmeO" name="lastName" class="form-control" placeholder="Last Name" val-name required></td>
+                        </tr>0
+                        <tr>
+                            <th>First Name: <span class="text-red">*</span></th>
+                            <td><input value="{{ old('firstName') ?? $driver->first_name}}" type="text" id="firstNameO" name="firstName" class="form-control" placeholder="First Name" val-name required></td>
+                        </tr>
+                        <tr>
+                            <th>Middle Name:</th>
+                            <td><input value="{{ old('middleName') ?? $driver->middle_name}}" type="text" id="middleNameO" name="middleName" class="form-control" placeholder="Middle Name" val-name></td>
+                        </tr>
+                        <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
                                 <input value="{{old('contactNumber') ?? $driver->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required>
