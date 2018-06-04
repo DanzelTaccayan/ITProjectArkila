@@ -18,7 +18,7 @@ $('[val-discountStFare]').attr('data-parsley-required-message','Please enter sho
 
 /** TICKET VALIDATION **/
 $('[val-regularTick]').attr('data-parsley-required-message','Please enter number of regular tickets.');
-$('[val-discountTick]').attr('data-parsley-required-message','Please enter number of discounted tickets.');
+$('[val-discountTick]').attr('data-parsley-required-message','Please enter number of discount tickets.');
 
 /** FEES VALIDATION **/
 $('[val-sop]').attr('data-parsley-required-message','Please enter SOP amount.');

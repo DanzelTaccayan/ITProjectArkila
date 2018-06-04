@@ -55,16 +55,16 @@
             <div style="padding: 2% 10% 0% 10%" class="padding-side-25">
                 <div class="form-group">
                     <label for="contactNumber">Contact Number: </label>
-                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}" val-contact>    
+                    <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}" val-contact required>    
                 </div>
 
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" class="form-control" name="address" value="{{old('address')}}" val-address>
+                    <input type="text" class="form-control" name="address" value="{{old('address')}}" val-address required>
                 </div>
                 <div class="form-group">
                     <label>Email: </label>
-                    <input type="email" class="form-control" name="email" value="{{old('email')}}" val-email>
+                    <input type="email" class="form-control" name="email" value="{{old('email')}}" val-email required>
                 </div>
                 <div class="form-group col-md-6 left">
                     <label>Opening Time: </label>
@@ -119,11 +119,11 @@
                     <input type="number" class="form-control" min="1" max="5000" name="discountedFare" placeholder="Php 0.00" value="{{old('discountedFare')}}" val-discountFare required>
                 </div>
                 <div class="form-group col-md-6 left" id="shotTripReg">
-                    <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
+                    <label>Short Trip Regular Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sTripFare" placeholder="Php 0.00" value="{{old('sTripFare')}}" val-regularStFare required>
                 </div>
                 <div class="form-group col-md-6 right" id="shotTripDis">
-                    <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
+                    <label>Short Trip Discounted Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
                 </div>
                 <div class="form-group col-md-6 left">
@@ -131,10 +131,11 @@
                     <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
                 </div>
                 <div class="form-group col-md-6 right">
-                    <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
+                    <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> You can add more terminals after setting up in the Terminals and Routes page.</p>
+                <p><stron>NOTE:</stron> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys)</p>
+                <p class="font-italic"><strong>NOTE:</strong> You can add more destination terminals later in the Terminals and Routes page.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <span class="step"></span>
@@ -150,7 +151,7 @@
                 <h1><Storng>ADDITIONAL FEES</Storng></h1>
             </div>
 
-            <div style="padding: 2% 10% 0% 10%">
+            <div class="padding-side-15">
                 <div class="form-group">
                     <label>Description:</label>
                     <input type="hidden" name="addFeesDescSop" value="SOP">
@@ -169,7 +170,7 @@
                     <label>Amount: <span class="text-red">*</span></label>
                     <input type="number" class="form-control" name="addComFund" min="1" placeholder="Php 0.00" value="{{old('addComFund')}}" val-cf required>
                 </div>
-                <p class="font-italic"><strong>NOTE:</strong> You can edit these amounts in the Fees and Features page under the Settings tab.</p>
+                <p class="font-italic"><strong>NOTE:</strong> The amounts can be edited later in the Fees and Features page under the Settings tab.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <span class="step"></span>
@@ -186,7 +187,7 @@
             <div class="form-navigation" style="float:right;">
                 <button type="button" id="prevBtn" class="previous btn btn-default">Previous</button>
                 <button type="button" id="nextBtn" class="next btn btn-primary">Next</button>
-                <input type="submit" class="btn btn-primary">
+                <input type="submit" class="btn btn-primary" value="Let's Start">
             </div>
         </div>
     </div>
