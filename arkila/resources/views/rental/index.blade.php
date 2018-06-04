@@ -7,7 +7,7 @@
             <div class="text-center">
                 <h1><i class="fa fa-warning text-yellow"></i> NO RENTAL RULES</h1>
                 <h4>PLEASE SET UP THE RULES FOR RENTAL FIRST BEFORE USING THE RENTAL FEAUTURE.</h4>
-                <a href="" class="btn btn-success btn-flat"  style="margin-top: 3%;>GO TO BOOKING RULES</a>
+                <a href="" class="btn btn-success btn-flat"  style="margin-top: 3%;">GO TO BOOKING RULES</a>
             </div>
         </div>
     </div>
