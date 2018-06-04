@@ -12,30 +12,31 @@
 			</div>
 			<div class="box-body" style="min-height: 380px;">
 				<div id="viewReservationRules">
-					<table class="table table-striped table-bordered">
-						<tbody>
-							<tr>
-								<th>Reservation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Cancellation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Payment Due</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>	
+					<div class="padding-side-10" style="margin-top: 7%;">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th>Reservation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Cancellation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Payment Due</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Refund Expiry</th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>	
+					</div>
+					<div class="padding-side-15">
+						<p class="well"><strong>NOTE:</strong> The Refund Expiry only applies when the customer cancelled more than 24 hours after the Departure Date.</p>
+					</div>
 				</div>
 				<div id="editReservationRules" class="padding-side-15 hidden">
 					<div class="form-group">
@@ -81,30 +82,31 @@
 			</div>
 			<div class="box-body"  style="min-height: 380px;">
 				<div id="viewRentalRules">
-					<table class="table table-striped table-bordered">
-						<tbody>
-							<tr>
-								<th>Rental Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Cancellation Fee</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>Payment Due</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-							<tr>
-								<th></th>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="padding-side-10" style="margin-top: 7%;">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th>Rental Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Cancellation Fee</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Payment Due</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Refund Expiry</th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="padding-side-15">
+						<p class="well"><strong>NOTE:</strong> The Refund Expiry only applies when the customer cancelled more than 24 hours after the Departure Date.</p>
+					</div>
 				</div>
 				<div id="editRentalRules" class="padding-side-15 hidden">
 					<div class="form-group">
