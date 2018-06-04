@@ -20,6 +20,18 @@
                                 <span class="label label-danger"></span>
                             </a>
                     <ul class="dropdown-menu" style="width: 420px;">
+                        <div class="modal in" id="announcement-loader" class="hidden">
+                            <div class="modal-dialog modal-sm" style="margin-top: 15%;">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="text-center">
+                                            <img src="{{ URL::asset('img/loading.gif') }}">
+                                            <h4>Please  wait...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <form method="post" action="{{ route('announcements.index') }}">
                             {{ csrf_field() }}

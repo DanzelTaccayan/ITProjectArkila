@@ -22,9 +22,20 @@
                                 <i class="fa fa-bullhorn"></i>
                                 <span class="label label-danger"></span>
                             </a>
-                    <ul class="dropdown-menu" style="width: 420px;">
-
-                        <form method="post" action="{{ route('announcements.index') }}">
+                    <ul class="dropdown-menu" style="min-width: 420px; min-height: 400px;">
+                        <div class="modal in" id="announcement-loader" class="hidden">
+                            <div class="modal-dialog modal-sm" style="margin-top: 15%;">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="text-center">
+                                            <img src="{{ URL::asset('img/loading.gif') }}">
+                                            <h4>Please  wait...</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="post" action="{{ route('announcements.index') }}" name="quickAnnounce">
                             {{ csrf_field() }}
                             <li class="header box-body">
                                 <h4>Quick Announcement:</h4>
