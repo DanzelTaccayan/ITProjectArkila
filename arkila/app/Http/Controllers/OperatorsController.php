@@ -176,4 +176,24 @@ class OperatorsController extends Controller
         return $pdf->stream("$operator->last_name"."$operator->first_name-Bio-Data.pdf");
     }
 
+    public function deleteMember(Member $member) {
+        $trips = $member->trips->count();
+
+        foreach($member->van as $van) {
+            if($van->trips) {
+                return back()->withErrors('The van ('.$van->plate_number .') 
+                associated with '.$member->role.' '.$member->full_name.' has a record in the trip log therefore member '.$member->full_name.' cannot be deleted');
+                break;
+            }
+
+            if($van->rental) {
+                return back()->withErrors('The van ('.$van->plate_number .') 
+                associated with '.$member->role.' '.$member->full_name.' has a record in the list of rental therefore member '.$member->full_name.' cannot be deleted');
+                break;
+            }
+        }
+
+
+    }
+
 }

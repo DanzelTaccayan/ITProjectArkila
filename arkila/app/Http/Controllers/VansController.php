@@ -217,7 +217,8 @@ class VansController extends Controller
     {
         $operators = Member::allOperators()->where('status','Active')->get();
         $drivers = Member::allDrivers()->where('status','Active')->get();
-        return view('vans.edit', compact('van','operators','drivers'));
+        $models = VanModel::all();
+        return view('vans.edit', compact('van','operators','drivers','models'));
     }
 
     /**
@@ -230,45 +231,46 @@ class VansController extends Controller
     public function update(Van $van)
     {
 
-        if(request('addDriver') != 'on')
-        {
+        if(request('addDriver') != 'on') {
             $this->validate(request(), [
-                "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
-                "operator" => ['required','exists:member,member_id', new checkOperator]
+                "driver" => ['bail','nullable','numeric','exists:member,member_id',new checkDriver],
+                "operator" => ['bail','required','exists:member,member_id', new checkOperator],
+                "plateNumber" => 'bail|required',
+                "vanModel" => ['bail','required',new checkVanModel, 'exists:van_model,description'],
             ]);
+
+            $vanCount = Van::all()
+                ->whereIn('plate_number', Van::all()->whereNotIn('plate_number', $van->plate_number)->pluck('plate_number'))
+                ->where('plate_number',request('plateNumber'))
+                ->count();
+
+            if($vanCount) {
+                return back()->withErrors('The entered plate number already exists');
+            }
 
             // Start transaction!
             DB::beginTransaction();
-            try
-            {
+            try {
                 //Archiving
-                if($van->operator()->first())
-                {
-                    if(request('operator') == $van->operator()->first()->member_id)
-                    {
+                if($van->operator()->first()) {
+                    if(request('operator') == $van->operator()->first()->member_id) {
                         //check if the van has a past driver
-                        if($van->driver()->first())
-                        {
-                            if(request('driver') != $van->driver()->first()->member_id)
-                            {
+                        if($van->driver()->first()) {
+                            if(request('driver') != $van->driver()->first()->member_id) {
                                 //archive the relationship of the van and the driver
                                 $van->archivedMember()->attach($van->driver()->first()->member_id);
                             }
                         }
 
-                    }
-                    else
-                    {
+                    } else {
                         //Archive the old operator and van
                         $van->archivedMember()->attach($van->operator()->first()->member_id);
 
                         //Archive the relationship of the old operator and driver
-                        if($van->driver()->first())
-                        {
+                        if($van->driver()->first()) {
                             $van->driver()->first()->archivedOperator()->attach($van->operator()->first()->member_id);
 
-                            if(request('driver') != $van->driver()->first()->member_id)
-                            {
+                            if(request('driver') != $van->driver()->first()->member_id) {
                                 //archive the relationship of the van and the driver
                                 $van->archivedMember()->attach($van->driver()->first()->member_id);
                             }
@@ -304,6 +306,19 @@ class VansController extends Controller
                     }
                     $van->members()->attach($newDriver);
                 }
+                $vanModel = VanModel::where('description',request('vanModel'))->first();
+                $oldVanModel = $van->model;
+
+                $van->update([
+                    'plate_number' => request('plateNumber'),
+                    'seating_capacity' => request('seatingCapacity'),
+                    'model_id' => $vanModel->model_id
+                ]);
+
+                if($oldVanModel->van->count() === 0) {
+                    $oldVanModel->delete();
+                }
+
                 DB::commit();
                 session()->flash('message','Van '.request('plateNumber').'Successfully updated');
             }

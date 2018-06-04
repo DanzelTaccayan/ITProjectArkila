@@ -26,23 +26,22 @@
 
 	<div class="form-group">
         <label for="">Plate Number:</label>
-        <input type="text" class="form-control" value="{{$van->plate_number}}" name="plateNumber">
+        <input type="text" class="form-control" value="{{$van->plate_number ?? old('plateNumber')}}" name="plateNumber">
     </div>
 
     <div class="form-group">
         <label for="">Van Model</label>
-        <input list="models" value="{{$van->model->description}}" name="vanModel" type="text" class="form-control" maxlength="50" placeholder="Van Model" val-van-model required>
-        <datalist id="models">
+        <input list="vanmodels" value="{{$van->model->description ?? old('vanModel')}}" name="vanModel" type="text" class="form-control" maxlength="50" placeholder="Van Model" val-van-model required>
+        <datalist id="vanmodels">
             @foreach($models as $model)
-            <option value="{{$model->description}}">
+                <option value="{{$model->description}}">
             @endforeach
-    </datalist>
+        </datalist>
     </div>
 
     <div class="form-group">
         <label for="">Seating Capacity</label>
-        <p class="info-container">{{$van->seating_capacity}}</p>
-        <input type="number" class="form-control" value="{{$van->plate_number}}" name="seatingCapacity">
+        <input type="number" class="form-control" value="{{$van->seating_capacity ?? old('seatingCapacity')}}" name="seatingCapacity">
     </div>
 
     <div class="form-group">

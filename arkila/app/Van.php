@@ -54,6 +54,11 @@ class Van extends Model
     	return $this->hasMany(VanQueue::Class, 'van_id','van_id');
     }
 
+    public function trips()
+    {
+        $this->hasMany(Trip::class, 'van_id','van_id');
+    }
+
     public function updateQueue($queue_number)
     {
         $queue_number+=1;
@@ -67,5 +72,4 @@ class Van extends Model
     {
         $this->attributes['plate_number'] = strtoupper($value);
     }
-
 }

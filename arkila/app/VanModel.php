@@ -14,7 +14,7 @@ class VanModel extends Model
     ];
     
     public function van() {
-    	return $this->hasMany(Van::Class, 'van_id');
+    	return $this->hasMany(Van::Class, 'model_id');
         
     }
 
