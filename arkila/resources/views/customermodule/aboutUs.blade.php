@@ -2,6 +2,9 @@
 @section('links')
 @parent
 <style> 
+.bg-blue{
+    background: #007bff
+}
 .bg-green{
     background: #28a745;
 }
@@ -40,7 +43,7 @@
                         </div>
                         <ul class="ul-icons list-unstyled">
                             <li>
-                                <div class="icon-filled">
+                                <div class="icon-filled bg-blue">
                                     <i class="fa fa-home"></i>
                                 </div>
                                 San Jose
