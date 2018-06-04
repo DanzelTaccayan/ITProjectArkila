@@ -27,8 +27,6 @@
                         <p class="info-container">{{$profile->contact_number}}</p>
                         <label for="">Address:</label>
                         <p class="info-container">{{$profile->address}}</p>
-                        <label for="">Trips Completed:</label>
-                        <p class="info-container">{{$counter}}</p>
                         <p><strong>NOTE:</strong> If there is a mistake in your infomation please approach the clerk.</p>
                     <hr>
                     <div class="profile-van" style="margin-top: 10px;">
