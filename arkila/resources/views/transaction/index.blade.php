@@ -135,12 +135,12 @@
 
     @if(count($terminals) === 0)
         <div class="padding-side-10">
-            <div class="box box-solid" style="height: 300px; padding: 50px;">
+            <div class="box box-solid" style="height: 300px; padding: 50px; margin-top:7%;">
                 <div class="box-body">
                     <div class="text-center">
                     <h1><i class="fa fa-warning text-red"></i> NO TERMINAL/DESTINATION FOUND</h1>
                     <h4>CREATE A TERMINAL/DESTINATION FIRST BEFORE YOU CAN SELL TICKETS</h4>
-                    <a href="{{route('terminalCreate.create')}}" type="button" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
+                    <a href="{{route('terminalCreate.create')}} style="margin-top: 3%;"" type="button" class="btn btn-success btn-flat">CREATE TERMINAL</a>
                     </div>
                 </div>
             </div>
