@@ -39,7 +39,7 @@
                                     <!-- driver -->
                                     @foreach($userDrivers as $userDriver)
                                     <tr>
-                                        <td>{{strtoupper($userDriver->first_name)}} {{strtoupper($userDriver->last_name)}}</td>
+                                        <td>{{strtoupper($userDriver->last_name)}}, {{strtoupper($userDriver->first_name)}}</td>
                                         <td>{{$userDriver->username}}</td>
                                         <td class="center-block">
                                             <div class="text-center">
@@ -71,7 +71,7 @@
                                     <!-- customer -->
                                     @foreach($userCustomers as $userCustomer)
                                     <tr>
-                                        <td>{{strtoupper($userCustomer->first_name)}} {{strtoupper($userCustomer->last_name)}}</td>
+                                        <td>{{strtoupper($userCustomer->last_name)}}, {{strtoupper($userCustomer->first_name)}}</td>
                                         <td>{{$userCustomer->username}}</td>
                                         <td>{{$userCustomer->email}}</td>
                                         <td class="center-block">
