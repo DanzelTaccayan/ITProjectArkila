@@ -1,9 +1,9 @@
-@extends('layouts.customer_user')
+@extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('content')
 <section class="mainSection">
         <div class="col-md-8 mx-auto">
             <div class="heading text-center">
-                <h2>FAQ's</h2>
+                <h2>FAQs</h2>
             </div>
             <div class="box box-solid">
                 <div class="box-body">
