@@ -68,13 +68,13 @@
                         <tr>
                             <th>License No. <span class="text-red">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No.">
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required>
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" val-license-exp required>
                             </td>
                         </tr>
                         <tr>
