@@ -22,7 +22,7 @@
                                     @if($generalDriver->status === 'Active')
                                         {{route('drivers.index') }}
                                     @else
-                                        {{route(URL::previous())}}
+                                        {{route('archive.showAllArchivedDriver')}}
                                     @endif
                                 @endif" class="btn btn-default btn-sm btn-block"><i class="fa fa-chevron-left"></i> <strong>Back</strong></a>
                             </div>

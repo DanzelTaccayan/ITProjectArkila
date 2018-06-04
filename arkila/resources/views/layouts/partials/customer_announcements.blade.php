@@ -1,12 +1,12 @@
-<section style="background: white center top no-repeat; background-size: cover;" class="bar no-mb padding-big text-md-center">
+<section style="background: lightsteelblue center top no-repeat; background-size: cover;" class="bar no-mb padding-big text-md-center">
     <div class="dark-mask"></div>
     <div class="container">
         <div class="text-center" >
-            <h2 class="text-uppercase"><i class="fa fa-bullhorn"></i> Announcements</h2>
+            <h2 class="text-uppercase text-white"><i class="fa fa-bullhorn"></i> Announcements</h2>
         </div>
         <!-- Carousel Start-->
         @if($announcements->count() == 0)
-            <h4 class="text-center">NO ANNOUNCEMENT.</h4>
+            <h4 class="text-center t5ext-white">NO ANNOUNCEMENT.</h4>
         @else
             <ul class="owl-carousel testimonials list-unstyled equal-height">
                 @foreach($announcements as $announcement)
@@ -18,7 +18,7 @@
                             </div>
                             <div class="bottom d-flex align-items-center justify-content-between align-self-end">
                                 <div class="mx-auto">
-                                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="">See More</button>
+                                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#seeMore{{$announcement->announcement_id}}">See More</button>
                                 </div>
                                 <div class="testimonial-info d-flex">
                                     <h5>{{$announcement->created_at->formatLocalized('%B %d %Y')}}</h5>
@@ -31,6 +31,26 @@
                     </li>
                 @endforeach
             </ul>
+            @foreach($announcements as $announcement)
+            <div class="modal fade" id="seeMore{{$announcement->announcement_id}}">
+                <div class="modal-dialog">
+                        <div class="modal-content">    
+                            <div class="modal-header bg-red">
+                                <h4 class="modal-title">{{$announcement->title}}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p style="text-align: justify;">{{$announcement->description}}</p>
+                            </div>
+                            <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                            </div>
+                        </div>
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            @endforeach
+                   
         @endif
         <!-- Carousel End-->
     </div>

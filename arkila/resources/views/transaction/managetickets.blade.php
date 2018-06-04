@@ -146,7 +146,7 @@
                                                         <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" class="icheckbox_flat-blue" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>
                                                         <td>{{ $ticket->destination->destination_name}}</td>
-                                                        <td>{{ $ticket->updated_at }}</td>
+                                                        <td>{{$ticket->updated_at->format('h:i A')." of ".$ticket->updated_at->format('M d, Y')}}</td>
                                                         <td>
                                                             <div class="text-center">
                                                                 <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>

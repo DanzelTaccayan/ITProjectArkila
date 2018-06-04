@@ -31,14 +31,18 @@
 
     <div class="form-group">
         <label for="">Van Model</label>
-        <p class="info-container">{{$van->model->description}}</p>
-        <input type="hidden" value="{{$van->model->description}}">
+        <input list="models" value="{{$van->model->description}}" name="vanModel" type="text" class="form-control" maxlength="50" placeholder="Van Model" val-van-model required>
+        <datalist id="models">
+            @foreach($models as $model)
+            <option value="{{$model->description}}">
+            @endforeach
+    </datalist>
     </div>
 
     <div class="form-group">
         <label for="">Seating Capacity</label>
         <p class="info-container">{{$van->seating_capacity}}</p>
-        <input type="hidden" value="{{$van->seating_capacity}}">
+        <input type="number" class="form-control" value="{{$van->plate_number}}" name="seatingCapacity">
     </div>
 
     <div class="form-group">

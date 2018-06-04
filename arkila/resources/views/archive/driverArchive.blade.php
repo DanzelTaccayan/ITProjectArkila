@@ -35,6 +35,7 @@
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                         <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedDriver->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
+                                        <button type="button" data-toggle="modal" data-target="#delete" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                     </div>
                                 </td>
                             </tr>
@@ -79,6 +80,32 @@
                         </div>
                     </div>
                 </form>
+            </div>
+            <!--delete modal -->
+            <div class="modal" id="delete">
+                <div class="modal-dialog" style="margin-top: 10%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <h1 class="text-center text-red"><i class="fa fa-trash"></i>DELETE</h1>
+                            <p class="text-center">ARE YOU SURE YOU WANT TO PERMANENTLY DELETE</p>
+                            <h4 class="text-center "><strong class="text-red">{{$archivedDriver->full_name}}</strong>?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <form name="" action="" method="POST">
+                                
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="submit" class="btn btn-danger">DELETE</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
            @endforeach
         </div>

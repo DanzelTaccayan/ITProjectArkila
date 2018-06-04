@@ -2,6 +2,9 @@
 @section('links')
 @parent
 <style> 
+.bg-blue{
+    background: #007bff
+}
 .bg-green{
     background: #28a745;
 }
@@ -40,7 +43,7 @@
                         </div>
                         <ul class="ul-icons list-unstyled">
                             <li>
-                                <div class="icon-filled">
+                                <div class="icon-filled bg-blue">
                                     <i class="fa fa-home"></i>
                                 </div>
                                 San Jose
@@ -53,10 +56,10 @@
                         </div>
                         <ul class="ul-icons list-unstyled">
                             <li>
-                                <div class="icon-filled bg-green">
-                                    <i class="fa fa-check"></i>
-                                </div>
-                                Regular trips to different terminals and terminal routes.
+                                <div class="icon-filled bg-green"><i class="fa fa-clock-o"></i></div>Main terminal open from <strong>{{date('g:i A', strtotime($profile->first()->open_time))}}</strong> to <strong>{{date('g:i A', strtotime($profile->first()->close_time))}}</strong>.
+                            </li>
+                            <li>
+                                <div class="icon-filled bg-green"><i class="fa fa-check"></i></div>Regular trips to different destinations.
                             </li>
                             <li>
                                 <div class="icon-filled bg-green"><i class="fa fa-check"></i></div>Van rental available to any destination.

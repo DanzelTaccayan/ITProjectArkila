@@ -9,11 +9,11 @@
 @if($terminals->count() == 0)
 <div class="padding-side-5">
     <div class="padding-side-10">
-        <div class="box box-solid" style="height: 300px; padding: 50px;">
+        <div class="box box-solid" style="height: 300px; padding: 50px; margin-top:7%;">
           <div class="box-body">
               <div class="text-center">
                 <h1>NO TERMINAL/DESTINATION FOUND.</h1>
-                <a href="{{route('terminalCreate.create')}}" class="btn btn-success btn-flat btn-lg">CREATE TERMINAL</a>
+                <a href="{{route('terminalCreate.create')}}" class="btn btn-success btn-flat" style="margin-top: 3%;">CREATE TERMINAL</a>
             </div>
           </div>
         </div>
