@@ -7,6 +7,7 @@ use App\Http\Requests\RouteRequest;
 use App\Destination;
 use App\Ticket;
 use App\SoldTicket;
+use DB;
 
 
 class RoutesController extends Controller

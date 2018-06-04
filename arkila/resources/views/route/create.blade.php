@@ -5,7 +5,7 @@
 @if ($type == 'Terminal')
 @section('form-title', 'CREATE TERMINAL')
 @elseif ($type == 'Route')
-@section('form-title', 'CREATE ROUTE')
+@section('form-title', 'CREATE DESTINATION')
 @endif
 
 @section('form-body')
@@ -28,8 +28,9 @@
           <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
       </div>
       <div class="form-group">
-          <label>Number of Discounted Tickets: <span class="text-red">*</span> </label>
+          <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
+          <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys.)</p> 
       </div>
   </div>
   @if ($type == 'Terminal')
@@ -41,11 +42,11 @@
           <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" placeholder="Php 0.00" name="bookingFee" value="{{old('bookingFee')}}" val-bookingFee required>
       </div>
       <div class="form-group" id="shotTripReg">
-          <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
+          <label>Short Trip Regular Fare: <span class="text-red">*</span> </label>
           <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" placeholder="Php 0.00" name="sTripFare" value="{{old('sTripFare')}}" val-regularStFare required>
       </div>
        <div class="form-group" id="shotTripDis">
-          <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
+          <label>Short Trip Discounted Fare: <span class="text-red">*</span> </label>
           <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" placeholder="Php 0.00" name="sdTripFare" value="{{old('sdTripFare')}}" val-discountStFare required>
       </div>
     </div>
