@@ -77,7 +77,15 @@ class AdminCreateDriverReportController extends Controller
     $dateDeparted = $request->dateDeparted;
 
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
+    
+    $dateTimeToday = Carbon::now();
+    $timeRequest = explode(':', $request->timeDeparted);
+    $dateRequest = Carbon::parse($request->dateDeparted)->setTime($timeRequest[0], $timeRequest[1], 00);
 
+    if($dateTimeToday->lte($dateRequest)) {
+      return back()->withErrors('The time deprated cannot be after ' . $dateTimeToday->format('g:i A'));
+    } else {
+    
     if($terminals->destination_id == $mainTerminal){
       if($totalPassengers >=  10){
         $trip = Trip::create([
@@ -422,8 +430,8 @@ class AdminCreateDriverReportController extends Controller
           ]);
         }
       }
-      
+      }
     }
-  return redirect('home/trip-log')->with('success', 'Successfully created a report!');
+  return redirect('home/trip-log/'.$trip->trip_id)->with('success', 'Successfully created a report!');
   }
 }
