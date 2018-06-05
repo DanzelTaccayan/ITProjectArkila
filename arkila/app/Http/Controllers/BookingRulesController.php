@@ -28,9 +28,9 @@ class BookingRulesController extends Controller
             'reservationRefund' => 'required|numeric|min:0',
         ]);
         $reservationRule = BookingRules::where('description', 'Reservation')->get()->first();
-        if($reservationRule->count() == 0) {
+        if(!$reservationRule) {
             BookingRules::create([
-                'descriprion' => 'Reservation',
+                'description' => 'Reservation',
                 'fee' => $request->reservationFee,
                 'cancellation_fee' => $request->reservationCancellation,
                 'payment_due' => $request->reservationPayment,
@@ -58,9 +58,9 @@ class BookingRulesController extends Controller
         ]);
         $rentalRule = BookingRules::where('description', 'Rental')->get()->first();
 
-        if($rentalRule->count() == 0) {
+        if(!$rentalRule) {
             BookingRules::create([
-                'descriprion' => 'Rental',
+                'description' => 'Rental',
                 'fee' => $request->rentalFee,
                 'cancellation_fee' => $request->rentalCancellation,
                 'payment_due' => $request->rentalPayment,
