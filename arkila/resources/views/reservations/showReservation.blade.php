@@ -60,6 +60,8 @@
 						@include('reservations.reservationPay')
 					@elseif($reservation->status == 'PAID')
 						@include('reservations.reservationRefund')
+					@elseif($reservation->status == 'CANCELLED' && $reservation->is_refundable == true)
+						@include('reservations.reservationRefund')
 					@elseif($reservation->status == 'TICKET ON HAND')
 						@include('reservations.reservationOnHand')
 					@endif

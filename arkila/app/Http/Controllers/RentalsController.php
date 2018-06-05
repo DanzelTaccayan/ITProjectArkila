@@ -107,8 +107,17 @@ class RentalsController extends Controller
 	                'rent_type' => 'Walk-in',
 	                'status' => 'Paid',
 
-	            ]);
+                ]);
 
+                if($request->destination == 'other') {
+                    Ledger::create([
+                        'description' => 'Rental Fee',
+                        'amount' => $rule->fee,
+                        'type' => 'Revenue',
+                    ]);
+                }
+
+                
 	            return redirect('/home/rental/')->with('success', 'Rental request from ' . $fullName . ' was created successfully');
         } else {
          		return redirect(route('rental.index'));
@@ -228,6 +237,7 @@ class RentalsController extends Controller
                 'status' => request('status'),
                 'refund_code' => $refundCode,
                 'is_refundable' => true,
+                'date_paid' => Carbon::now(),
             ]);
 
     

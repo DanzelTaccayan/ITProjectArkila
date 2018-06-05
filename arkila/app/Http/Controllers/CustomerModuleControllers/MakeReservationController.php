@@ -6,6 +6,7 @@ use App\Destination;
 use App\ReservationDate;
 use App\Reservation;
 use App\BookingRules;
+use App\Ledger;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -227,12 +228,12 @@ class MakeReservationController extends Controller
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
 
-	public function reservationPdf(Reservation $reservation)
-	{
-		$date = Carbon::now();
-        $pdf = PDF::loadView('pdf.reservationPdf', compact('reservation', 'date'));
-		return $pdf->stream("Receipt No. ". $reservation->rsrv_code .".pdf");
-	}
+	// public function reservationPdf(Reservation $reservation)
+	// {
+	// 	$date = Carbon::now();
+    //     $pdf = PDF::loadView('pdf.reservationPdf', compact('reservation', 'date'));
+	// 	return $pdf->stream("Receipt No. ". $reservation->rsrv_code .".pdf");
+	// }
 
 	public function slotsAndExpiryDate()
 	{
@@ -253,30 +254,15 @@ class MakeReservationController extends Controller
 				$conditionDate = $dateOfReservation->subDays(1);
 		  
 				$expiry_date = $reservation->expiry_date;
+				//if transaction is not expired and exceeded the expiry date
 				if($reservation->status !== 'EXPIRED' && Carbon::now()->gt($reservation->expiry_date))
 				{
-					// to TEST
-					if($reservation->status == 'CANCELLED' && $now->gt($conditionDate))
-					{
-						$quantity = $reservation->ticket_quantity;
-						$orig = $reservation->reservationDate->number_of_slots;
-						$updatedSlots = $quantity + $orig;
-	
-						$reservation->reservationDate->update([
-							'number_of_slots' => $updatedSlots,
-						]);
-	
-					}
-					else
-					{
 						$reservation->update([
 							'status' => 'EXPIRED',
 						]);
-					}
-					// until HERE
 				}
 
-				if($reservation->reservationDate->reservation_date->subDays(2)->gt($reservation->expiry_date) && $reservation->status == 'EXPIRED' && $reservation->returned_slot == false)
+				if($reservation->reservationDate->reservation_date->subDays(1)->gt($reservation->expiry_date) && $reservation->status == 'EXPIRED' && $reservation->returned_slot == false)
 				{
 					$quantity = $reservation->ticket_quantity;
 					$orig = $reservation->reservationDate->number_of_slots;
@@ -304,6 +290,7 @@ class MakeReservationController extends Controller
       $conditionDate = $dateOfReservation->subDays(1);
 
 	  if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+		// if cancelled and more than one day before departure		  
 		  
 		  if($reservation->status == 'UNPAID') {
 			$reservation->update([
@@ -341,6 +328,21 @@ class MakeReservationController extends Controller
 				$message = 'The reservation is already marked as REFUNDED.';
 			}
 			return back()->withErrors($message);
+		}
+
+		if($now->lt($conditionDate)) {
+			$quantity = $reservation->ticket_quantity;
+			$orig = $reservation->reservationDate->number_of_slots;
+			$updatedSlots = $quantity + $orig;
+
+			$reservation->reservationDate->update([
+				'number_of_slots' => $updatedSlots,
+			]);
+
+			$reservation->update([
+				'returned_slot' => true,
+			]);
+
 		}
 	  }
 

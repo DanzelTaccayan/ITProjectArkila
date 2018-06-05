@@ -189,6 +189,7 @@ class MakeRentalController extends Controller
         $expiry = $createdAt->addDays($rule->request_expiry);
         $time = explode(':', $rental->departure_time);
         $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
+        $paidStatusExpiry = $rental->departure_date->setTime($time[0], $time[1]+15, $time[2]);
 
         if($rental->status == 'Pending' && $now->gt($expiry)){
           $rental->update([
@@ -201,20 +202,36 @@ class MakeRentalController extends Controller
             'van_id' => null,
           ]);
         } elseif($rental->status == 'Paid' && $now->gt($paidExpiry)) {
-          $rental->update([
-            'status' => 'Cancelled',
-            'is_refundable' => false,
-            'refund_code' => null,
-            'driver_id' => null,
-            'van_id' => null,
-          ]);
+          if($now->gt($paidStatusExpiry)) {
+            $rental->update([
+              'status' => 'Expired',
+              'is_refundable' => false,
+              'refund_code' => null,
+              'driver_id' => null,
+              'van_id' => null,
+            ]);              
+          } else {
+            $rental->update([
+              // 'status' => 'Cancelled',
+              'is_refundable' => false,
+              'refund_code' => null,
+              'driver_id' => null,
+              'van_id' => null,
+            ]);
+          }
         }
       }
     }
 
-    public function receipt()
+    public function receipt(VanRental $rental)
     {
-      return view('customermodule.user.rental.receipt');
+      $rule = $this->rentalRules();
+      if($rule) {
+        $destinations = Destination::where('destination_name', $rental->destination)->get();
+        return view('e_receipt.rental-receipt', compact('rental', 'rule', 'destinations'));
+      } else {
+        return back()->withErrors('Rental is not available at this moment.');
+      }
     }
 
     public function success(VanRental $rental)
@@ -223,7 +240,7 @@ class MakeRentalController extends Controller
       if($rule) {
         return view('customermodule.user.rental.success', compact('rental', 'rule'));
       } else {
-        return back();
+        return back()->withErrors('Rental is not available at this moment.');
       }
     }
 
