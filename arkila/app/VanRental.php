@@ -3,17 +3,25 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use AustinHeap\Database\Encryption\Traits\HasEncryptedAttributes;
 use App\Van;
 use App\User;
 
 class VanRental extends Model
 {
+    use HasEncryptedAttributes;
+
     protected $table = 'van_rental';
     protected $primaryKey = 'rent_id';
     protected $dates = ['departure_date'];
     protected $guarded = [
         'rent_id',
     ];
+
+    protected $encrypted = [
+        'refund_code', 'rental_code',
+    ];
+
 
     public function van(){
     	return $this->belongsTo(Van::Class, 'van_id');
