@@ -97,8 +97,7 @@
                 <div class="modal-body">
                     <h1 class="text-center text-yellow"><i class="fa fa-exclamation-triangle text-yellow"></i> WARNING!</h1>
                     <p class="text-center">A VAN HAS ALREADY BEEN ASSOCIATED TO THIS DRIVER</p>
-                    <p class="text-center">IF YOU WISH TO CONTINUE</p>
-                    <p class="text-center text-green ">THE DRIVER WILL BE ASSOICIATED WITH THIS VAN INSTEAD.</p>
+                    <p class="text-center">IF YOU WISH TO CONTINUE,THE DRIVER WILL BE ASSOICIATED WITH THIS VAN INSTEAD.</p>
                 </div>
                 <div class="modal-footer">
                     <div class="text-center">
