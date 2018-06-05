@@ -45,7 +45,7 @@
         							<td>
         								<div class="text-center">
                                             <a href="{{ route('vans.edit',[$van->van_id] ) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
-                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-trash"></i>DELETE</button>
+                                            <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{ 'deleteWarning'. $van->van_id }}"><i class="fa fa-archive"></i>ARCHIVE</button>
         		                        </div>
 
         							</td>
@@ -64,17 +64,17 @@
                                 <h4 class="modal-title"></h4>
                             </div>
                             <div class="modal-body">
-                                <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
-                                <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
+                                <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                                <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>             
                                 <h4 class="text-center "><strong class="text-red">{{$van->plate_number}}</strong>?</h4>
                             </div>
                             <div class="modal-footer">
-                                <form method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
+                                <form name="archiveVanForm" method="POST" action="{{route('vans.archiveVan',[$van->van_id])}}">
                                     {{csrf_field()}}
                                     {{method_field('PATCH')}}
                                     <div class="text-center">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                        <button type="submit" class="btn btn-danger">DELETE</button>
+                                        <button type="submit" class="btn btn-danger">ARCHIVE</button>
                                     </div>
                                 </form>
                             </div>
@@ -83,6 +83,7 @@
                 </div>
                 @endforeach
             </div>
+        @include('layouts.partials.preloader_div')
     </div>
 </div>
 @endsection 
@@ -91,6 +92,13 @@
 
 <script>
     $(document).ready(function() {
+        $('form[name="archiveVanForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#van').DataTable({
             'paging': true,
             'lengthChange': false,

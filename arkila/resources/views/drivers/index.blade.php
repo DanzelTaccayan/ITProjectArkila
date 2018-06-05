@@ -37,7 +37,7 @@
                                 <div class="text-center">
                                     <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                     
-                                    <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
+                                    <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-archive"></i> ARCHIVE</button>
                                 </div>
                                 <!-- /.text-->
                             </td>
@@ -58,17 +58,17 @@
                         <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body">
-                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
-                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>
+                        <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                        <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>
                         <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
+                        <form name="archiveDriverForm" action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
                             {{csrf_field()}}
                             {{method_field('PATCH')}}
                             <div class="text-center">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                <button type="submit" class="btn btn-danger">DELETE</button>
+                                <button type="submit" class="btn btn-danger">ARCHIVE</button>
                             </div>
                         </form>
                     </div>
@@ -76,6 +76,7 @@
             </div>
         </div>
         @endforeach
+        @include('layouts.partials.preloader_div')
     </div>
     <!-- /.box-->
 </div>
@@ -86,6 +87,13 @@
 
 <script>
     $(function() {
+        $('form[name="archiveDriverForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#driverList').DataTable({
             'paging': true,
             'lengthChange': false,

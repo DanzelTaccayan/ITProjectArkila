@@ -10,6 +10,7 @@ use App\Rules\checkTime;
 use App\Destination;
 use App\Member;
 use App\Van;
+use Carbon\Carbon;
 
 
 class AdminCreateDriverReportRequest extends FormRequest
@@ -31,10 +32,11 @@ class AdminCreateDriverReportRequest extends FormRequest
      */
     public function rules()
     {
+      $now = Carbon::now()->formatLocalized('%B %d %Y');
       $rules = [
         "driverAndOperator" => "required|exists:member,member_id",
-        "dateDeparted" => "required|date_format:m/d/Y",
-        "timeDeparted" => 'required|date_format:H:i',
+        "dateDeparted" => "required|date_format:m/d/Y|before_or_equal: ".$now,
+        "timeDeparted" => 'required|date_format:H:i|',
         // "qty" => "present|array",
         "totalPassengers" => "numeric|min:1|max:18|required",
       ];

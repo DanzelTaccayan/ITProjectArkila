@@ -82,6 +82,13 @@
                 $("#app").removeClass('hidden');
         });
     </script>
+    <script>
+        $('form[name="quickAnnounce"]').on('submit',function() {
+        $('#announcement-loader').removeClass('hidden');
+        $('#announcement-loader').css("display","block");
+        $(this).find('button[type="submit"]').prop('disabled',true);
+    });
+    </script>
     @show
 
     

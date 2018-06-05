@@ -35,6 +35,7 @@
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                         <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedDriver->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
+                                        <button type="button" data-toggle="modal" data-target="#delete" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                     </div>
                                 </td>
                             </tr>
@@ -46,7 +47,7 @@
             <!--RESTORE MODAL-->
             @foreach($archivedDrivers as $archivedDriver)
                 <div class="modal" id="{{'restoreDriver'.$archivedDriver->member_id}}">
-                <form method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
+                <form name="driverRestoreForm" method="POST" action="{{route('drivers.restoreArchivedDriver',[$archivedDriver->member_id])}}">
                     {{csrf_field()}}
                     {{method_field('PATCH')}}
                     <div class="modal-dialog" style="margin-top: 10%;">
@@ -80,8 +81,35 @@
                     </div>
                 </form>
             </div>
+            <!--delete modal -->
+            <div class="modal" id="delete">
+                <div class="modal-dialog" style="margin-top: 10%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <h1 class="text-center text-red"><i class="fa fa-trash"></i>DELETE</h1>
+                            <p class="text-center">ARE YOU SURE YOU WANT TO PERMANENTLY DELETE</p>
+                            <h4 class="text-center "><strong class="text-red">{{$archivedDriver->full_name}}</strong>?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <form name="" action="" method="POST">
+                                
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="submit" class="btn btn-danger">DELETE</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
            @endforeach
         </div>
+        @include('layouts.partials.preloader_div')
         <!-- /.box -->
     </div>
 </div>  
@@ -95,6 +123,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="driverRestoreForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#archiveDriver').DataTable({
             'paging': true,
             'lengthChange': false,

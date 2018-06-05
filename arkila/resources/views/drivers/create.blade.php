@@ -125,7 +125,7 @@
                         </tr>
                         <tr>
                             <th>
-                                Gender: <span class="text-red">*</span>
+                                Gender <span class="text-red">*</span>
                             </th>
                             <td>
                                 <div class="radio">
@@ -150,18 +150,18 @@
                         </tr>
                         <tr>
                             <th>
-                                License No: <span class="text-red">*</span>
+                                License No <span class="text-red">*</span>
                             </th>
                             <td>
-                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No."> 
+                               <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required> 
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                License Expiry Date: <span class="text-red">*</span>
+                                License Expiry Date <span class="text-red">*</span>
                             </th>
                             <td>
-                                <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                <input type="text" name="licenseExpiryDate" class="form-control date-mask" placeholder="mm/dd/yyyy" value="{{old('licenseExpiryDate')}}" data-inputmask="'alias': 'mm/dd/yyyy'" val-license-exp required>
                             </td>
                         </tr>
                         <tr>

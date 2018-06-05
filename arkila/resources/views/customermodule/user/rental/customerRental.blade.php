@@ -1,4 +1,13 @@
 @extends('layouts.customer_user')
+@section('links')
+@parent
+<style>
+    .rental-rules p{
+        margin-bottom: 20px;
+        text-align: justify;
+    }
+</style>
+@endsection
 @section('content')
 <section class="mainSection">
         <div class="container">
@@ -8,8 +17,13 @@
             <div class="row">
                 <div class="col-md-6 mx-auto">
                     <div class="contact100-form">   
-                        <h3>IMPORTANT</h3>
-                        <p></p>
+                        <h3>IMPORTANT!</h3>
+                        <div class="rental-rules">
+                            <p>A rental request will not be accepted immediately.</p>
+                            <p>There are fixed choices of destination provided. Other destinations will cost an addition rental fee.</p>
+                            <p>Once accepted we provide you with your van unit and driver’s information for you to negotiate.</p>
+                            <p>You can apply for a walk in rental in the office. See About Us page for the address.</p>
+                        </div>
                     </div> 
                 </div>
                 <div class="col-md-6 mx-auto">

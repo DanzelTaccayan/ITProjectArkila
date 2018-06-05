@@ -22,7 +22,8 @@
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="1" max="5000" name="discountedFare" value="{{$fareDis->fare}}" val-discountFare required>
-      </div>
+      </div> 
+      <p><strong>NOTE:</strong> You can edit the ticket quantity in the manage tickets under Ticket Management tab.</p>
   </div>
   @if($route->is_terminal == true)
   <input type="hidden" name="type" value="Terminal">

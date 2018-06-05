@@ -14,72 +14,68 @@ class BookingRulesController extends Controller
      */
     public function index()
     {
-        return view('bookingrules.index');
+        $reservationRule = BookingRules::where('description', 'Reservation')->get()->first();
+        $rentalRule = BookingRules::where('description', 'Rental')->get()->first();
+        return view('bookingrules.index', compact('reservationRule', 'rentalRule'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function storeOrUpdateReservation(Request $request)
     {
-        //
+        $this->validate($request, [
+            'reservationFee' => 'required|numeric|min:0',
+            'reservationCancellation' => 'required|numeric|min:0',
+            'reservationPayment' => 'required|numeric|min:0',
+            'reservationRefund' => 'required|numeric|min:0',
+        ]);
+        $reservationRule = BookingRules::where('description', 'Reservation')->get()->first();
+        if($reservationRule->count() == 0) {
+            BookingRules::create([
+                'descriprion' => 'Reservation',
+                'fee' => $request->reservationFee,
+                'cancellation_fee' => $request->reservationCancellation,
+                'payment_due' => $request->reservationPayment,
+                'refund_expiry' => $request->reservationRefund,
+            ]);
+        } else {
+            $reservationRule->update([
+                'fee' => $request->reservationFee,
+                'cancellation_fee' => $request->reservationCancellation,
+                'payment_due' => $request->reservationPayment,
+                'refund_expiry' => $request->reservationRefund,
+            ]);
+        }
+        return back()->with('success', 'Reservation rules has been updated successfully');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function storeOrUpdateRental(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'rentalFee' => 'required|numeric|min:0',
+            'rentalCancellation' => 'required|numeric|min:0',
+            'rentalPayment' => 'required|numeric|min:0',
+            'rentalRequest' => 'required|numeric|min:0',
+            'rentalRefund' => 'required|numeric|min:0',
+        ]);
+        $rentalRule = BookingRules::where('description', 'Rental')->get()->first();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\BookingRules  $bookingRules
-     * @return \Illuminate\Http\Response
-     */
-    public function show(BookingRules $bookingRules)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\BookingRules  $bookingRules
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BookingRules $bookingRules)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\BookingRules  $bookingRules
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BookingRules $bookingRules)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\BookingRules  $bookingRules
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(BookingRules $bookingRules)
-    {
-        //
+        if($rentalRule->count() == 0) {
+            BookingRules::create([
+                'descriprion' => 'Rental',
+                'fee' => $request->rentalFee,
+                'cancellation_fee' => $request->rentalCancellation,
+                'payment_due' => $request->rentalPayment,
+                'refund_expiry' => $request->rentalRefund,
+                'request_expiry' => $request->rentalRequest,
+            ]);       
+        } else {
+            $rentalRule->update([
+                'fee' => $request->rentalFee,
+                'cancellation_fee' => $request->rentalCancellation,
+                'payment_due' => $request->rentalPayment,
+                'refund_expiry' => $request->rentalRefund,
+                'request_expiry' => $request->rentalRequest,                
+            ]);
+        }
+        return back()->with('success', 'Rental rules has been updated successfully');
     }
 }

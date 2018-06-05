@@ -1,6 +1,17 @@
 @extends('layouts.master')
 @section('title', 'List of Rentals')
 @section('content')
+<div class="padding-side-10">
+    <div class="box box-solid with-shadow" style="height: 300px; padding: 50px; margin-top:7%;">
+        <div class="box-body">
+            <div class="text-center">
+                <h1><i class="fa fa-warning text-yellow"></i> NO RENTAL RULES</h1>
+                <h4>PLEASE SET UP THE RULES FOR RENTAL FIRST BEFORE USING THE RENTAL FEAUTURE.</h4>
+                <a href="" class="btn btn-success btn-flat"  style="margin-top: 3%;">GO TO BOOKING RULES</a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="padding-side-5">
     <div>
         <h2 class="text-white">RENTALS</h2>

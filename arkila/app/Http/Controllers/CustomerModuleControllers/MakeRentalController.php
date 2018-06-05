@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CustomerModuleControllers;
 use App\User;
 use App\Ledger;
 use App\VanRental;
+use App\BookingRules;
 use App\Destination;
 use App\VanModel;
 use Carbon\Carbon;
@@ -80,7 +81,7 @@ class MakeRentalController extends Controller
                 "comment" => $request->message !== null ? $request->message : null,
               ]);
          
-          return redirect(route('rental.success'))->with('success', 'Successfully created a rental');
+          return redirect(route('rental.success', $rent->rent_id))->with('success', 'Successfully created a rental');
       }
       else
       {
@@ -91,10 +92,11 @@ class MakeRentalController extends Controller
 
     public function rentalTransaction()
     {
+      $rule = $this->rentalRules();
       $rentals = VanRental::all();
       $requests = VanRental::where('user_id', auth()->user()->id)->get();
   
-      return view('customermodule.user.transactions.customerRental', compact('rentals', 'requests'));
+      return view('customermodule.user.transactions.customerRental', compact('rule','rentals', 'requests'));
     }
 
     public function cancelRental(VanRental $rental)
@@ -143,6 +145,7 @@ class MakeRentalController extends Controller
     {  
       // if the cancellation is refundable, he/she is given 7 days to refund
       // else the transaction will expired
+      $rule = $this->rentalRules();
       $rentals = VanRental::where([
         ['is_refundable', true],
         ['status', 'Cancelled']
@@ -152,7 +155,7 @@ class MakeRentalController extends Controller
 
       foreach($rentals as $rental) {
         $updatedAt = Carbon::parse($rental->updated_at);
-        $refundExpiry = $updatedAt->addDays(7);
+        $refundExpiry = $updatedAt->addDays($rule->refund_expiry);
 
         if($now->gt($refundExpiry)) {
           $rental->update([
@@ -179,9 +182,9 @@ class MakeRentalController extends Controller
 
         $rule = $this->rentalRules();
         $updatedAt = Carbon::parse($rental->updated_at);
-        $expired = $updatedAt->addDays($rule->valid_days);
+        $expired = $updatedAt->addDays($rule->payment_due);
         $createdAt = Carbon::parse($rental->created_at);
-        $expiry = $createdAt->addDays($rule->valid_days);
+        $expiry = $createdAt->addDays($rule->request_expiry);
         $time = explode(':', $rental->departure_time);
         $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
 
@@ -212,9 +215,10 @@ class MakeRentalController extends Controller
       return view('customermodule.user.rental.receipt');
     }
 
-    public function success()
+    public function success(VanRental $rental)
     {
-      return view('customermodule.user.rental.success');
+      $rule = $this->rentalRules();
+      return view('customermodule.user.rental.success', compact('rental', 'rule'));
     }
 
     public function rentalRules()

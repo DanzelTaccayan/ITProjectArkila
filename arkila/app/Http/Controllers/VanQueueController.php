@@ -24,7 +24,9 @@ class VanQueueController extends Controller
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
         $drivers = Member::whereNotIn('member_id', function($query) {
             $query->select('driver_id')->from('van_queue');
-        })->where('status','Active')->get();
+        })
+            ->whereNotIn('member_id', Member::all()->where('license_number','IS', NULL)->pluck('member_id'))
+            ->where('status','Active')->get();
 
         $vans = Van::whereNotIn('van_id', function($query) {
             $query->select('van_id')

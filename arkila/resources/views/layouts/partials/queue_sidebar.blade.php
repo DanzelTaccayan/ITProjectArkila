@@ -1,7 +1,7 @@
 
 <aside class="control-sidebar control-sidebar-dark" style="overflow-y: hidden">
-    <div style="padding: 10px 0px 10px 0px;">
-        <h3 class="text-center" style="background: black">VAN QUEUE</h3>
+    <div style="padding: 5px 0px 5px 0px;">
+        <h3 class="text-center" style="padding: 5%; ">VAN QUEUE</h3>
     </div>   
     <div style="padding: 0px 10px 0px 10px;">
     <!-- Tab panes -->

@@ -146,14 +146,14 @@
                                                         <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" class="icheckbox_flat-blue" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
                                                         <td>{{ $ticket->ticket_number }}</td>
                                                         <td>{{ $ticket->destination->destination_name}}</td>
-                                                        <td>{{ $ticket->updated_at }}</td>
+                                                        <td>{{$ticket->updated_at->format('h:i A')." of ".$ticket->updated_at->format('M d, Y')}}</td>
                                                         <td>
                                                             <div class="text-center">
                                                                 <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
 
-                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST</button>
+                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST/EXPIRED</button>
 
-                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-trash"></i> CANCEL</button>
+                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-times"></i> CANCEL</button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -208,7 +208,7 @@
                                                     <h4 class="modal-title"></h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST?</h1>
+                                                    <h1 class="text-center text-yellow"><i class="fa fa-search-minus"></i> LOST OR EXPIRED?</h1>
                                                     <p class="text-center">LOST OR UNRETURNED TICKETS WILL STILL BE <strong class="text-green">RECORDED AS SALE</strong></p>
                                                     <p class="text-center">ARE YOU SURE <strong id="lostTicketNumber" class="text-maroon"></strong> IS LOST OR UNRETURNED?</p>
                                                 </div>

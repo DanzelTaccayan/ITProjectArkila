@@ -52,6 +52,14 @@ class CreateReportController extends Controller
 
     $mainterminal = Destination::where('is_main_terminal', true)->first();
 
+    $dateTimeToday = Carbon::now();
+    $timeRequest = explode(':', $request->timeDeparted);
+    $dateRequest = Carbon::parse($request->dateDeparted)->setTime($timeRequest[0], $timeRequest[1], 00);
+
+    if($dateTimeToday->lte($dateRequest)) {
+      return back()->withErrors('The time deprated cannot be after ' . $dateTimeToday->format('g:i A'));
+    }else{
+      
     $trip =Trip::create([
      'driver_id' => $driver_id->member_id,
      'van_id' => $van_id,
@@ -302,10 +310,9 @@ class CreateReportController extends Controller
           ]);
         }
       }
-      
-      
+    }  
 
-      return redirect('/home/view-trips/'.$trip->trip_id)->with('success', 'Report created successfully!');
+    return redirect('/home/view-trips/'.$trip->trip_id)->with('success', 'Report created successfully!');
 
   }
 }

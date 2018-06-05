@@ -310,6 +310,9 @@ class DriversController extends Controller
             }
 
             $driver->update([
+                'last_name' =>$request->lastName,
+                'first_name' =>$request->firstName,
+                'middle_name' =>$request->middleName,
                 'profile_picture' => $profilePictureName,
                 'operator_id' => $request->operator,
                 'contact_number' => $request->contactNumber,

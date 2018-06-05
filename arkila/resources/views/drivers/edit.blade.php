@@ -7,7 +7,7 @@
     <div class="box box-warning" style="box-shadow: 0px 5px 10px gray;">
         <div class="box-header with-border text-center">
             <h4>
-                <a href="@if(session()->get('opLink') && session()->get('opLink') == URL::previous()) {{ session()->get('opLink') }} @else {{ route('drivers.index')}} @endif" class="pull-left"><i class="fa fa-chevron-left"></i></a>
+                <a href="{{route('drivers.show',[$driver->member_id])}}" class="pull-left"><i class="fa fa-chevron-left"></i></a>
             </h4>
             <h3 class="box-title">
                 EDIT DRIVER INFORMATION
@@ -42,6 +42,18 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Last Name: <span class="text-red">*</span></th>
+                            <td><input value="{{ old('lastName') ?? $driver->last_name}}" type="text" id="lastNAmeO" name="lastName" class="form-control" placeholder="Last Name" val-name required></td>
+                        </tr>
+                        <tr>
+                            <th>First Name: <span class="text-red">*</span></th>
+                            <td><input value="{{ old('firstName') ?? $driver->first_name}}" type="text" id="firstNameO" name="firstName" class="form-control" placeholder="First Name" val-name required></td>
+                        </tr>
+                        <tr>
+                            <th>Middle Name:</th>
+                            <td><input value="{{ old('middleName') ?? $driver->middle_name}}" type="text" id="middleNameO" name="middleName" class="form-control" placeholder="Middle Name" val-name></td>
+                        </tr>
+                        <tr>
                             <th>Contact Number <span class="text-red">*</span></th>
                             <td>
                                 <input value="{{old('contactNumber') ?? $driver->contact_number }}" id="contactNumberO" name="contactNumber" type="text" class="form-control" placeholder="Contact Number" val-contact required>
@@ -68,13 +80,13 @@
                         <tr>
                             <th>License No. <span class="text-red">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No.">
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $driver->license_number }}" name="licenseNo" type="text" class="form-control" placeholder="License No." val-license required>
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date <span class="text-red">*</span></th>
                             <td>
-                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                <input value="{{  old('licenseExpiryDate')  ?? $driver->expiry_date }}" id="licenseExpiryDateO" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" val-license-exp required>
                             </td>
                         </tr>
                         <tr>

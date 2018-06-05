@@ -1,7 +1,7 @@
 @extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
 @section('content')
 <section id="packages" class="bar no-mb">
-        <div data-animate="fadeInUp" class="container"  style="height: 100%">
+        <div data-animate="fadeInUp" class="container"  style="min-height: 100%">
               <div class="heading text-center" >
                 <h2 style="color: #000040;">Fare list</h2>
               </div>

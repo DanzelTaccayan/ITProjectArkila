@@ -40,7 +40,7 @@
                         <td>
                             <div class="text-center">
                                 <a href="{{ route('operators.show', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->member_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteWarning'.$operator->member_id}}"><i class="fa fa-archive"></i> ARCHIVE</button>
                             </div>
                             <!-- /.text -->
                         </td>
@@ -60,17 +60,17 @@
                         <h4 class="modal-title"></h4>
                     </div>
                     <div class="modal-body">
-                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
-                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>
+                        <h1 class="text-center text-red"><i class="fa fa-archive"></i> ARCHIVE</h1>
+                        <p class="text-center">ARE YOU SURE YOU WANT TO ARCHIVE</p>
                         <h4 class="text-center "><strong class="text-red">{{trim($operator->full_name)}}</strong>?</h4>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
+                        <form name="archiveOperatorForm" action="{{ route('operators.archiveOperator', [$operator->member_id]) }}" method="POST">
                             {{csrf_field()}}
                             {{method_field('PATCH')}}
                             <div class="text-center">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                <button type="submit" class="btn btn-danger">DELETE</button>
+                                <button type="submit" class="btn btn-danger">ARCHIVE</button>
                             </div>
                         </form>
                     </div>
@@ -79,6 +79,7 @@
         </div>
         @endforeach
     </div>
+        @include('layouts.partials.preloader_div')
 </div>
 @endsection
 @section('scripts') 
@@ -89,6 +90,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="archiveOperatorForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#operatorList').DataTable({
             'paging': true,
             'lengthChange': false,

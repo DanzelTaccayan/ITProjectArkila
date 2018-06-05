@@ -34,6 +34,7 @@
                                     <td>
                                         <div class="text-center">
                                             <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedVan->van_id}}"><i class="fa fa-undo"></i> RESTORE</a>
+                                             <button type="button" data-toggle="modal" data-target="#delete" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -44,8 +45,8 @@
             <!-- /.box-body -->
             <!--RESTORE MODAL-->
             @foreach($archivedVans as $archivedVan)
-                <div class="modal" id="{{'restoreDriver'.$archivedVan->van_id}}">
-                <form method="POST" action="{{route('vans.restoreArchivedVan',[$archivedVan->van_id])}}">
+            <div class="modal" id="{{'restoreDriver'.$archivedVan->van_id}}">
+                <form name="vanRestoreForm" method="POST" action="{{route('vans.restoreArchivedVan',[$archivedVan->van_id])}}">
                     {{csrf_field()}}
                     {{method_field('PATCH')}}
                     <div class="modal-dialog" style="margin-top: 10%;">
@@ -78,9 +79,37 @@
                     </div>
                 </form>
             </div>
+
+            <!--delete modal -->
+                <div class="modal" id="delete">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-red"><i class="fa fa-trash"></i>DELETE</h1>
+                                <p class="text-center">ARE YOU SURE YOU WANT TO PERMANENTLY DELETE</p>
+                                <h4 class="text-center "><strong class="text-red">{{$archivedVan->plate_number}}</strong>?</h4>
+                            </div>
+                            <div class="modal-footer">
+                                <form name="" action="" method="POST">
+                                    
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                        <button type="submit" class="btn btn-danger">DELETE</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
            @endforeach
         </div>
         <!-- /.box -->
+        @include('layouts.partials.preloader_div')
     </div>
 </div>  
  
@@ -93,6 +122,13 @@
 <script src="{{ URL::asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 <script>
     $(function() {
+        $('form[name="vanRestoreForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
         $('#archiveVan').DataTable({
             'paging': true,
             'lengthChange': false,

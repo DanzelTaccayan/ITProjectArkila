@@ -28,6 +28,7 @@
             <label>Closing Time: </label>
             <input type="time" class="form-control" name="closeTime" value="{{old('closeTime') ?? $company_profile->close_time }}" val-time required>
         </div>
+        <div class="clearfix"></div>
     </div>
 
 @endsection

@@ -85,4 +85,6 @@ class HomeController extends Controller
         $notification->markAsRead();
     }
 
+
+
 }

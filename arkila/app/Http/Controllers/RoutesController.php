@@ -7,6 +7,7 @@ use App\Http\Requests\RouteRequest;
 use App\Destination;
 use App\Ticket;
 use App\SoldTicket;
+use DB;
 
 
 class RoutesController extends Controller
@@ -63,131 +64,140 @@ class RoutesController extends Controller
         $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         $disTicketCount = 0;
         $counter = 0;
+        DB::beginTransaction();
+        try{
 
-        if ($request->type == 'Terminal')
-        {    
-            $terminal = Destination::create([
-                'destination_name' => $name,
-                'booking_fee' => $request->bookingFee,
-                'short_trip_fare' => $request->sTripFare,
-                'short_trip_fare_discount' => $request->sdTripFare,
-                'is_terminal' => true,
-                'is_main_terminal' => false,
-                'number_of_tickets' => $request->numticket,
-            ]);
-
-            for($c=1; $c <= $request->numticketDis; $c++)
+            if ($request->type == 'Terminal')
             {
-                if($disTicketCount >= 26)
-                {
-                    $disTicketCount = 0;
-                    $counter++;
-                }
-    
-                if($c <= 26)
-                {
-                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
-                }
-                else
-                {
-                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;                
-                }
-    
-                $disTicketCount++;
-                Ticket::create([
-                    'ticket_number' => $ticketNumber,
-                    'destination_id' => $terminal->destination_id,
-                    'fare' => $request->discountedFare,
-                    'type' => 'Discount'
+
+                $terminal = Destination::create([
+                    'destination_name' => $name,
+                    'booking_fee' => $request->bookingFee,
+                    'short_trip_fare' => $request->sTripFare,
+                    'short_trip_fare_discount' => $request->sdTripFare,
+                    'is_terminal' => true,
+                    'is_main_terminal' => false,
+                    'number_of_tickets' => $request->numticket,
                 ]);
+
+                for($c=1; $c <= $request->numticketDis; $c++)
+                {
+                    if($disTicketCount >= 26)
+                    {
+                        $disTicketCount = 0;
+                        $counter++;
+                    }
+
+                    if($c <= 26)
+                    {
+                        $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
+                    }
+                    else
+                    {
+                        $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;
+                    }
+
+                    $disTicketCount++;
+                    Ticket::create([
+                        'ticket_number' => $ticketNumber,
+                        'destination_id' => $terminal->destination_id,
+                        'fare' => $request->discountedFare,
+                        'type' => 'Discount'
+                    ]);
+                }
+
+                for($i=1; $i <= $request->numticket; $i++ )
+                {
+                    $ticketName = $name.'-'.$i;
+                    Ticket::create([
+                        'ticket_number' => $ticketName,
+                        'destination_id' => $terminal->destination_id,
+                        'fare' => $request->regularFare,
+                        'type' => 'Regular'
+                    ]);
+                }
+
+                $terminal->routeOrigin()
+                    ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
+
+                DB::commit();
+                return redirect('/home/route#terminal'.$terminal->destination_id)->with('success', 'The terminal '. $name .' has been successfully created');
+
             }
-    
-            for($i=1; $i <= $request->numticket; $i++ )
+            else
             {
-                $ticketName = $name.'-'.$i;
-                Ticket::create([
-                    'ticket_number' => $ticketName,
-                    'destination_id' => $terminal->destination_id,
-                    'fare' => $request->regularFare,
-                    'type' => 'Regular'
+                $route = Destination::create([
+                    'destination_name' => $name,
+                    'is_terminal' => false,
+                    'is_main_terminal' => false,
+                    'number_of_tickets' => $request->numticket,
                 ]);
+
+                // foreach($discountedTickets as $discountedTicket)
+                // {
+                //     $ticketNumber = $name.'-'.$discountedTicket;
+                //     Ticket::create([
+                //         'ticket_number' => $ticketNumber,
+                //         'destination_id' => $route->destination_id,
+                //         'is_sold' => false,
+                //         'fare' => $request->discountedFare,
+                //         'type' => 'Discount'
+                //     ]);
+                // }
+
+                for($c=1; $c <= $request->numticketDis; $c++)
+                {
+                    if($disTicketCount >= 26)
+                    {
+                        $disTicketCount = 0;
+                        $counter++;
+                    }
+
+                    if($c <= 26)
+                    {
+                        $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
+                    }
+                    else
+                    {
+                        $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;
+                    }
+
+                    $disTicketCount++;
+                    Ticket::create([
+                        'ticket_number' => $ticketNumber,
+                        'destination_id' => $route->destination_id,
+                        'fare' => $request->discountedFare,
+                        'type' => 'Discount'
+                    ]);
+                }
+
+
+                for($i=1; $i <= $request->numticket; $i++ ) {
+                    $ticketName = $name.'-'.$i;
+                    Ticket::create([
+                        'ticket_number' => $ticketName,
+                        'destination_id' => $route->destination_id,
+                        'fare' => $request->regularFare,
+                        'type' => 'Regular'
+                    ]);
+                }
+
+                foreach ($terminals as $count => $terminal) {
+                    if (isset($request->dest[$count])) {
+                        $route->routeOrigin()
+                            ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
+                    }
+                }
+
+                DB::commit();
+                return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->with('success', 'The route '. $name .' has been successfully created');
+
             }
-
-            $terminal->routeOrigin()
-            ->attach($main->destination_id, ['terminal_destination' => $terminal->destination_id]);
-
-            return redirect('/home/route#terminal'.$terminal->destination_id)->with('success', 'The terminal '. $name .' has been successfully created');
-
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
-        else 
-        {
-            $route = Destination::create([
-                'destination_name' => $name,
-                'is_terminal' => false,
-                'is_main_terminal' => false,
-                'number_of_tickets' => $request->numticket,
-            ]);
 
-            // foreach($discountedTickets as $discountedTicket)
-            // {
-            //     $ticketNumber = $name.'-'.$discountedTicket;
-            //     Ticket::create([
-            //         'ticket_number' => $ticketNumber,
-            //         'destination_id' => $route->destination_id,
-            //         'is_sold' => false,
-            //         'fare' => $request->discountedFare,
-            //         'type' => 'Discount'
-            //     ]);
-            // }
-
-            for($c=1; $c <= $request->numticketDis; $c++)
-            {
-                if($disTicketCount >= 26)
-                {
-                    $disTicketCount = 0;
-                    $counter++;
-                }
-    
-                if($c <= 26)
-                {
-                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount];
-                }
-                else
-                {
-                    $ticketNumber = $name.'-'.$discountedTickets[$disTicketCount].$counter;                
-                }
-    
-                $disTicketCount++;
-                Ticket::create([
-                    'ticket_number' => $ticketNumber,
-                    'destination_id' => $route->destination_id,
-                    'fare' => $request->discountedFare,
-                    'type' => 'Discount'
-                ]);
-            }
-
-
-            for($i=1; $i <= $request->numticket; $i++ )
-            {
-                $ticketName = $name.'-'.$i;
-                Ticket::create([
-                    'ticket_number' => $ticketName,
-                    'destination_id' => $route->destination_id,
-                    'fare' => $request->regularFare,
-                    'type' => 'Regular'
-                ]);
-            }
-            
-            foreach ($terminals as $count => $terminal) {
-                if (isset($request->dest[$count])) {
-                    $route->routeOrigin()
-                    ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
-                } 
-            }   
-            
-            return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->with('success', 'The route '. $name .' has been successfully created');
-
-        }
     }
 
     /**
@@ -248,48 +258,51 @@ class RoutesController extends Controller
             ['type', 'Discount']
             ])->get();
 
-        if($request->type == 'Terminal')
-        {
-            $routeAll->update([
-                'booking_fee' => $request->bookingFee,
-                'short_trip_fare' => $request->sTripFare,
-                'short_trip_fare_discount' => $request->sdTripFare,
-            ]);
-
-            $message = $routeAll->destination_name .' has been successfully updated.';
-        }
-        else
-        {
-
-            $routeAll->routeOrigin()->detach($main->destination_id);
-
-            foreach ($terminals as $count => $terminal) {
-                if (isset($request->dest[$count])) {
-                    $routeAll->routeOrigin()
-                    ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
-                } 
-            }   
-            
-            $message = $routeAll->destination_name .' has been successfully updated.';
-        }
-
-        if($request->regularFare !== $ticketRegular->first()->fare)
-        {
-            foreach ($ticketRegular as $ticket) {
-                $ticket->update([
-                    'fare' => $request->regularFare,
+        DB::beginTransaction();
+        try{
+            if($request->type == 'Terminal') {
+                $routeAll->update([
+                    'booking_fee' => $request->bookingFee,
+                    'short_trip_fare' => $request->sTripFare,
+                    'short_trip_fare_discount' => $request->sdTripFare,
                 ]);
-            }                
+
+                $message = $routeAll->destination_name .' has been successfully updated.';
+            } else {
+                $routeAll->routeOrigin()->detach($main->destination_id);
+
+                foreach ($terminals as $count => $terminal) {
+                    if (isset($request->dest[$count])) {
+                        $routeAll->routeOrigin()
+                            ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
+                    }
+                }
+
+                $message = $routeAll->destination_name .' has been successfully updated.';
+            }
+
+            if($request->regularFare !== $ticketRegular->first()->fare) {
+                foreach ($ticketRegular as $ticket) {
+                    $ticket->update([
+                        'fare' => $request->regularFare,
+                    ]);
+                }
+            }
+
+            if($request->discountedFare !== $ticketDiscounted->first()->fare) {
+                foreach ($ticketDiscounted as $ticket) {
+                    $ticket->update([
+                        'fare' => $request->discountedFare,
+                    ]);
+                }
+            }
+            DB::commit();
         }
-        
-        if($request->discountedFare !== $ticketDiscounted->first()->fare)
-        {
-            foreach ($ticketDiscounted as $ticket) {
-                $ticket->update([
-                    'fare' => $request->discountedFare,
-                ]);
-            }                                
+        catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
+
         return redirect('/home/route#terminal' .$routeAll->routeDestination()->first()->destination_id)->with('success', $message);
     }
 
@@ -320,36 +333,43 @@ class RoutesController extends Controller
         $terminal = $route->routeDestination()->first()->destination_id;
         $message = null;
 
-        if($numberOfSoldTickets == 0) {
+        DB::beginTransaction();
+        try{
+            if($numberOfSoldTickets == 0) {
 
-            if($route->vanQueue->count() == 0) {
-    
-                if ($isTerminal == true) {
-                    foreach($route->routeFromDestination as $routes) {
-                        $routes->routeOrigin()->detach($main->destination_id);
-                        $routes->delete();
+                if($route->vanQueue->count() == 0) {
+
+                    if ($isTerminal == true) {
+                        foreach($route->routeFromDestination as $routes) {
+                            $routes->routeOrigin()->detach($main->destination_id);
+                            $routes->delete();
+                        }
+                        $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+                    } else {
+                        $route->routeOrigin()->detach($main->destination_id);
+                        $route->delete();
+                        $message = 'The route '. $route->destination_name .' has been successfully deleted!';
+
                     }
-                    $message = 'The terminal '. $route->destination_name .' has been successfully deleted!';
+                    if($isTerminal == true) {
+                        return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+                    } else {
+                        return redirect('/home/route#terminal' .$terminal)->with('success', $message);
+                    }
                 } else {
-                    $route->routeOrigin()->detach($main->destination_id);
-                    $route->delete();
-                    $message = 'The route '. $route->destination_name .' has been successfully deleted!';
-    
+                    return back()->withErrors('Unable to delete, there are still vans on queue in '. $route->destination_name .' Terminal.');
                 }
+            } else {
                 if($isTerminal == true) {
-                    return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
+                    return back()->withErrors('Unable to delete terminal '. $route->destination_name .', there are still tickets that needs to be returned');
                 } else {
-                    return redirect('/home/route#terminal' .$terminal)->with('success', $message);
-                }  
-            } else {
-                return back()->withErrors('Unable to delete, there are still vans on queue in '. $route->destination_name .' Terminal.');
+                    return back()->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');
+                }
             }
-        } else {
-            if($isTerminal == true) {
-                return back()->withErrors('Unable to delete terminal '. $route->destination_name .', there are still tickets that needs to be returned');            
-            } else {
-                return back()->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');            
-            }
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
     }

@@ -66,15 +66,15 @@
                     </td>
                   </tr>
                   <tr>
-                    <th>License No <span class="text-red">*</span></th>
+                    <th>License No</th>
                     <td>
                       <input value="{{old('licenseNo')}}" name="licenseNo" type="text" class="form-control" placeholder="License No.">
                     </td>
                   </tr>
                   <tr>
-                    <th>License Expiry Date <span class="text-red">*</span></th>
+                    <th>License Expiry Date</th>
                     <td>
-                        <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" data-mask data-parsley-errors-container="#errExpireDate">
+                        <input value="{{old('licenseExpiryDate')}}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
                     </td>
                   </tr>
                   <tr>

@@ -13,61 +13,47 @@
 
                 <div id="navigation" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item">
                             <a href="{{route('customermodule.user.index')}}">Home</a>
                         </li>
-                        <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Services</a>
+                        <li class="nav-item dropdown small"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Services</a>
                             <ul class="dropdown-menu megamenu">
                                 <li>
-                                    <div class="row">
-                                        <div class="col-md-6" style="margin-left:180px;">
-                                            <img src="{{ URL::asset('img/IMG_0752.JPG') }}" alt="" class="img-fluid d-none d-lg-block">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <ul class="list-unstyled">
-                                                <li class="nav-item">
-                                                    <a href="{{route('customermodule.user.rental.customerRental')}}" class="nav-link">Rentals</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="{{route('customermodule.user.reservation.customerReservation')}}" class="nav-link">Reservation</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="{{route('customermodule.fareList')}}" class="nav-link">Fare List</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li class="nav-item">
+                                            <a href="{{route('customermodule.user.rental.customerRental')}}" class="nav-link">Rentals</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('customermodule.user.reservation.customerReservation')}}" class="nav-link">Reservation</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('customermodule.fareList')}}" class="nav-link">Fare List</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown menu-large">
-                            <a href="{{route('customermodule.user.about.customerAbout')}}">About</a>
+                        <li class="nav-item">
+                            <a href="{{route('customermodule.user.about.customerAbout')}}">About Us</a>
                         </li>
-                        <li class="nav-item dropdown menu-large">
-                            <a href="{{route('customermodule.user.help.customerHelp')}}">Help</a>
+                        <li class="nav-item">
+                            <a href="{{route('customermodule.user.help.customerHelp')}}">FAQ</a>
                         </li>
-                        <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle">My Account</a>
+                        <li class="nav-item dropdown menu-small"><a href="#" data-toggle="dropdown" class="dropdown-toggle">My Account</a>
                             <ul class="dropdown-menu megamenu">
                                 <li>
-                                    <div class="row">
-                                        <div class="col-md-6" style="margin-left:180px;">
-                                            <img src="{{ URL::asset('img/IMG_0714.JPG') }}" alt="" class="img-fluid d-none d-lg-block">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <ul class="list-unstyled">
-                                                <li class="nav-item">
-                                                    <a href="{{route('customermodule.rentalTransaction')}}" class="nav-link">My Transactions</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="{{route('customermodule.user.changepassword.index')}}" class="nav-link">Change Password</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li class="nav-item">
+                                            <a href="{{route('customermodule.rentalTransaction')}}" class="nav-link">My Transactions</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('customermodule.user.changepassword.index')}}" class="nav-link">Change Password</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown menu-large">
+                        <li class="nav-item">
                             <a href="{{route('logout')}}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">Sign-out
                             </a>

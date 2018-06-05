@@ -17,11 +17,12 @@ class CreateBookingRulesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('rule_id');
             $table->string('description');
-            $table->integer('valid_days');
-            $table->decimal('cancellation_fee', 11,2)
+            $table->integer('payment_due');
+            $table->integer('refund_expiry');
+            $table->integer('request_expiry')
             ->nullable();
-            $table->decimal('fee', 11,2)
-            ->nullable();
+            $table->decimal('cancellation_fee', 11,2);
+            $table->decimal('fee', 11,2);
             $table->timestamps();
         });
     }

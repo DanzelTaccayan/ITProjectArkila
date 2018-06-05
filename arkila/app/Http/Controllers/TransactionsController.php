@@ -292,6 +292,9 @@ class TransactionsController extends Controller
 
     public function updateOnBoardTransactions()
     {
+
+        $responseArr = [];
+
         if($soldTickets = request('soldTickets')) {
             $this->validate(request(),[
                 'soldTickets.*' => 'required|exists:ticket,ticket_id'
@@ -309,14 +312,26 @@ class TransactionsController extends Controller
                         DB::rollback();
                         return Response::json(['error' => 'There is a given ticket that is already Pending'],422);
                     } else {
+                        $boardedId = $soldTicket->boarded_at;
                         $soldTicket->update([
                             'boarded_at' => null
                         ]);
+
+                        $destinations = $soldTicket->ticket->destination->routeDestination;
+                        if(count($destinations) > 1) {
+                            $responseArr[$soldTicketId] = [];
+
+                            foreach($destinations as $destination) {
+                                if($destination->destination_id != $boardedId) {
+                                    array_push($responseArr[$soldTicketId], $destination->destination_id);
+                                }
+                            }
+                        }
                     }
 
                 }
                 DB::commit();
-                return 'success';
+                return Response::json($responseArr);
             } catch(\Exception $e) {
                 DB::rollback();
                 \Log::info($e);
@@ -331,7 +346,12 @@ class TransactionsController extends Controller
     {
         $drivers = [];
 
-        foreach(Member::where('status','Active')->whereNotNull('license_number')->whereNotIn('member_id',VanQueue::all()->pluck('driver_id'))->get() as $member) {
+        foreach(Member::whereNotIn('member_id', function($query) {
+                $query->select('driver_id')->from('van_queue');
+            })
+            ->whereNotIn('member_id', Member::all()->where('license_number','IS', NULL)->pluck('member_id'))
+            ->where('status','Active')->get() as $member) {
+
             array_push($drivers,[
                 'value' => $member->member_id,
                     'text' => $member->full_name

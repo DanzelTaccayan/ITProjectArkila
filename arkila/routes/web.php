@@ -159,6 +159,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/rental', 'RentalsController',[
         'except' => ['edit']
     ]);
+    Route::post('/home/rental-rule/store', 'BookingRulesController@storeOrUpdateRental')->name('rental.rule');
+    Route::post('/home/reservation-rule/store', 'BookingRulesController@storeOrUpdateReservation')->name('reservation.rule');
     Route::patch('/home/rental/{rental}/updateStatus', 'RentalsController@updateStatus')->name('rental.updateStatus');
     Route::patch('/home/rental/{rental}/change-departure', 'RentalsController@changeDepartureDateTime')->name('rental.changeDeparture');
 
@@ -198,7 +200,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/updateOnBoardTransactions', 'TransactionsController@updateOnBoardTransactions')->name('transactions.updateOnBoardTransactions');
     Route::get('/listSourceDrivers/{driverOnVan}','TransactionsController@listSourceDrivers')->name('transactions.listSourceDrivers');
     Route::patch('/changeDriver/{vanOnQueue}', 'TransactionsController@changeDriver')->name('transactions.changeDriver');
-    Route::get('/home/transactions/managetickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
+    Route::get('/home/transactions/soldTickets','TransactionsController@manageTickets')->name('transactions.manageTickets');
     Route::delete('/home/transactions/{soldTicket}', 'TransactionsController@cancel')->name('transactions.cancel');
     Route::delete('/home/transactions/refund/{soldTicket}','TransactionsController@refund')->name('transactions.refund');
     Route::delete('/multipleRefund','TransactionsController@multipleRefund')->name('transactions.multipleRefund');
