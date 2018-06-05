@@ -298,7 +298,8 @@ Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
 Route::get('/home/create-reservation', 'CustomerModuleControllers\MakeReservationController@createReservation')->name('customermodule.user.reservation.customerReservation')->middleware('online-reservation');
 Route::post('/home/reservation/select-destination', 'CustomerModuleControllers\MakeReservationController@showDetails')->name('customermodule.showDetails')->middleware('online-reservation');
 Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\MakeReservationController@showDate')->name('customermodule.showDate')->middleware('online-reservation');
-
+    /*Help*/
+Route::get('/home/customer/faq', 'CustomerModuleControllers\ViewHelpController@viewHelp')->name('customermodule.user.help.customerHelp');
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
 Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
 Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
@@ -341,8 +342,6 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::post('/customerCheckPassword', 'CustomerModuleControllers\CustomerChangePasswordController@checkCurrentPassword')->name('customermodule.checkCurrentPassword');
     /*About*/
     Route::get('/home/about', 'CustomerModuleControllers\ViewAboutController@viewAbout')->name('customermodule.user.about.customerAbout');
-    /*Help*/
-    Route::get('/home/customer/help', 'CustomerModuleControllers\ViewHelpController@viewHelp')->name('customermodule.user.help.customerHelp');
     /*Notifications*/
     Route::get('/customerNotifications', 'CustomerModuleControllers\ViewNotificationsController@notificaitons')->name('customermodule.notifications');
     Route::get('/markAsRead', 'CustomerModuleControllers\ViewNotificationsController@markAsRead')->name('customermodule.markAsRead');
