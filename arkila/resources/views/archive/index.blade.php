@@ -12,7 +12,7 @@
            <div class="table-responsive">
             <div class="col-md-6">
                 <a href="{{route('operators.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-chevron-left"></i> GO BACK TO OPERATOR LIST</a>
-                <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT ARCHIVE</button>
+                <button onclick="window.open('{{route('pdf.drivers')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
             </div>
             <table class="table table-bordered table-striped archiveOpe">
                 <thead>
@@ -35,8 +35,8 @@
                         <td>
                             <div class="text-center">
                                 <a href="{{ route('archive.showArchivedProfileOperator', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreOperator'.$operator->member_id}}"><i class="fa fa-eye"></i> RESTORE</a>
-                                <button type="button" data-toggle="modal" data-target="#delete" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
+                                <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreOperator'.$operator->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
+                                <button type="button" data-toggle="modal" data-target="#delete{{$operator->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                             </div>
                             <!-- /.text -->
                         </td>
@@ -47,36 +47,35 @@
             </div>
             <!-- /.box-body -->
             @foreach ($operators as $operator)
-                <div class="modal fade" id="{{'restoreOperator'.$operator->member_id}}">
+                <div class="modal" id="{{'restoreOperator'.$operator->member_id}}">
                     <form name="restoreOperatorForm" action="{{route('operators.restoreArchivedOperator',[$operator->member_id])}}" method="POST">
                         {{csrf_field()}}
                         {{method_field('PATCH')}}
-                        <div class="modal-dialog">
-                        <div class="col-md-offset-2 col-md-8">
+                        <div class="modal-dialog" style="margin-top: 10%;">
                             <div class="modal-content">
-                                <div class="modal-header bg-green">
+                                <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                    <h4 class="modal-title"> Confirm</h4>
                                 </div>
-                                <div class="modal-body row" style="margin: 0% 1%;">
-                                    <p style="font-size: 110%;">Are you sure you want to restore <strong>"{{ $operator->full_name }}"</strong>?</p>
+                                <div class="modal-body">
+                                    <h1 class="text-center text-green"><i class="fa fa-undo"></i> RESTORE</h1>
+                                    <p class="text-center">ARE YOU SURE YOU WANT TO RESTORE <strong class="text-green">{{ $operator->full_name }}</strong>?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-success btn-sm" style="width:22%;">Restore</button>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                        <button type="submit" class="btn btn-success">RESTORE</button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.modal-content -->
-                        </div>
-                        <!-- /.col -->
                     </div>
                 </form>
                 <!-- /.modal-dialog -->
                 </div>
                 <!--delete modal -->
-                <div class="modal" id="delete">
+                <div class="modal" id="delete{{$operator->member_id}}">
                     <div class="modal-dialog" style="margin-top: 10%;">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -90,11 +89,33 @@
                                 <h4 class="text-center "><strong class="text-red">{{trim($operator->full_name)}}</strong>?</h4>
                             </div>
                             <div class="modal-footer">
-                                <form name="" action="" method="POST">
-                                    
+                                <form name="deleteOperatorForm" action="{{route('operators.deleteOperator',[$operator->member_id])}}" method="POST">
+                                    {{csrf_field()}}
+                                    {{method_field('DELETE')}}
                                     <div class="text-center">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                                         <button type="submit" class="btn btn-danger">DELETE</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" id="unable{{$operator->member_id}}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-red"><i class="fa fa-ban"></i> RESTRICTED</h1>
+                                <h4 class="text-center">UNABLE TO DELETE <strong class="text-red">{{$operator->full_name}}</strong> PERMANENTLY.</h4>
+                                <p class="text-center ">ONLY THOSE OPERATORS WHO HAVE NO RECORD OR TRANSACTION CAN BE DELETED.</p>
+                            </div>
+                            <div class="modal-footer">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
                                     </div>
                                 </form>
                             </div>
@@ -118,6 +139,13 @@
 <script>
     $(function() {
         $('form[name="restoreOperatorForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
+        $('form[name="deleteOperatorForm"]').on('submit',function () {
             $(this).find('button[type="submit"]').prop('disabled',true);
             $('#submit-loader').removeClass('hidden');
             $('#submit-loader').css("display","block");

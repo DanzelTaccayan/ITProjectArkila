@@ -223,6 +223,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/archive/driver/{archivedDriver}/restore','ArchiveController@restoreArchivedDriver')->name('drivers.restoreArchivedDriver');
     Route::patch('/home/archive/van/{archivedVan}/restore','ArchiveController@restoreArchivedVan')->name('vans.restoreArchivedVan');
 
+    /********Deletion ********/
+    Route::delete('/home/archive/operator/{archivedOperator}','ArchiveController@deleteOperator')->name('operators.deleteOperator');
+    Route::delete('/home/archive/driver/{archivedDriver}','ArchiveController@deleteDriver')->name('drivers.deleteDriver');
+
     /**** Generate PDF ****/
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
     Route::get('/operators/generatePDF', 'OperatorsController@generatePDF')->name('pdf.operators');

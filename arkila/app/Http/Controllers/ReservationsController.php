@@ -31,8 +31,9 @@ class ReservationsController extends Controller
         $destinations = Destination::allTerminal()->get();
         $main = Destination::mainTerminal()->get()->first();
         $reservations = ReservationDate::all();
+        $rule = $this->reservationRules();
 
-        return view('reservations.index', compact('discounts','reservations','main', 'destinations'));
+        return view('reservations.index', compact('discounts','reservations','main', 'destinations', 'rule'));
     }
         /**
      * Display the specified resource.

@@ -37,7 +37,7 @@ class ArchiveController extends Controller
                 if($operator->van()->count()) {
                     foreach($operator->van as $van) {
                         if(count($operator->vanQueue) > 0) {
-                            return back()->withErrors('The operator is chosen as a driver on the queue, please change him as a driver or delete the van on the queue before archiving the operator.');
+                            return back()->withErrors('Unable to archive operator, the operator is on the queue');
                         } else if (VanQueue::where('van_id',$operator->van->pluck('van_id'))->get()->count() > 0) {
                             $vans = Van::whereIn('van_id',VanQueue::where('van_id',$operator->van->pluck('van_id'))->get()->pluck('van_id'))
                                 ->get()
@@ -68,7 +68,7 @@ class ArchiveController extends Controller
                 return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
             }
         } else {
-            return back()->withErrors('The operator is chosen as a driver on the queue, please remove him as a driver or remove the van on the queue before archiving the operator.');
+            return back()->withErrors('Unable to archive operator, the operator is on the queue');
         }
         return back()->with('success', 'Successfully archived '.$operator->full_name);
     }
@@ -96,7 +96,7 @@ class ArchiveController extends Controller
         DB::beginTransaction();
         try {
             if(count($driver->vanQueue) > 0) {
-                return back()->withErrors('The driver is a driver on the queue, please change him as a driver or delete the van on the queue before archiving the driver.');
+                return back()->withErrors('Unable to archive driver, the driver is on the queue');
             }
             if($driver->operator_id) {
                 $driver->archivedOperator()->attach($driver->operator_id);
@@ -150,7 +150,7 @@ class ArchiveController extends Controller
         try
         {
             if($van->vanQueue->count() > 0) {
-                return back()->withErrors('The van to be archived is on queue, remove it first from queue before archiving the van');
+                return back()->withErrors('Unable to archive van, the van is on the queue');
             }
 
             //Archive its operator
@@ -217,5 +217,61 @@ class ArchiveController extends Controller
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
         return back()->with('success', 'Successfully restored van '.$archivedVan->plate_number);
+    }
+
+    public function deleteDriver(Member $member) {
+        $archivedOperators = $member->archivedOperator->count();
+        $archivedVans = $member->archivedVan->count();
+        $trips = $member->trips->count();
+        $memberName = $member->full_name;
+
+        DB::beginTransaction();
+        try {
+            if($archivedOperators) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has archived operators.');
+            } elseif ($archivedVans) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has archived vans.');
+            } elseif ($trips) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has a record in the trip log.');
+            } else {
+                $member->delete();
+            }
+
+            DB::commit();
+            Return back()->with('success','Successfully Deleted operator '.$memberName);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+    }
+
+    public function deleteOperator(Member $member) {
+        $archivedDrivers = $member->archivedDriver->count();
+        $archivedVans = $member->archivedVan->count();
+        $trips = $member->trips->count();
+        $memberName = $member->full_name;
+
+        DB::beginTransaction();
+        try {
+            if($archivedDrivers) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has archived drivers.');
+            } elseif ($archivedVans) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has archived vans.');
+            } elseif ($trips) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has a record in the trip log.');
+            } else {
+                $member->delete();
+            }
+
+            DB::commit();
+            Return back()->with('success','Successfully Deleted operator '.$memberName);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 }

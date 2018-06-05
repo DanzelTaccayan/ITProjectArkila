@@ -33,7 +33,7 @@
                     <span>Terminals and Routes</span>
                 </a>
             </li>
-            <li class="treeview {{ Request::is('home/transactions/managetickets') ? 'active' : '' }} || {{ Request::is('home/ticket-management') ? 'active' : '' }} ">
+            <li class="treeview {{ Request::is('home/transactions/soldTickets') ? 'active' : '' }} || {{ Request::is('home/ticket-management') ? 'active' : '' }} ">
                 <a href="">
                     <i class="fa fa-ticket"></i>
                     <span>Ticket Management</span>
@@ -42,7 +42,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/transactions/managetickets') ? 'active' : '' }}"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
+                    <li class="{{ Request::is('home/transactions/soldTickets') ? 'active' : '' }}"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
                     <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
                 </ul>
             </li>
