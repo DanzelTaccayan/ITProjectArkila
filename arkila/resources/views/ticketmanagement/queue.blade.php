@@ -6,11 +6,11 @@
 
 <style>
     .ticket-box{
-    
+
     }
     .dual-list .list-group {
         margin-top: 8px;
-    } 
+    }
 
     .queueNumber{
         border-top-left-radius: 2px;
@@ -39,7 +39,7 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
      @foreach($terminals as $terminal)
-    <div class="item @if($terminals->first() == $terminal){{'active'}} @endif" id={{$terminal->destination_id}}> 
+    <div class="item @if($terminals->first() == $terminal){{'active'}} @endif" id={{$terminal->destination_id}}>
             <div class="box box-solid ticket-box">
                 <div class="box-header bg-blue bg-gray">
                     <img src="{{ URL::asset('img/bantrans-logo.png') }}" style="width: 75px; height:75px; float: right; margin-right: 2%; margin-top: 1% " alt="User Image">
@@ -48,10 +48,10 @@
                         <h4 id="plno{{$terminal->destination_id}}"></h4>
                     </span>
                 </div>
-                
+
                 <ul class="list-group" id="ticketul{{$terminal->destination_id}}">
                 </ul>
-                         
+
             </div>
     </div>
     @endforeach
@@ -61,7 +61,7 @@
 
 
 @endsection
-@section('scripts') 
+@section('scripts')
 @parent
     <script>
         $(document).ready(function(){
@@ -69,20 +69,15 @@
                 type: 'GET',
                 url: '/getVanQueue',
                 success: function(response){
-                    var counter = 1; 
-                    $.each(response.vanqueue, function(i,item){                            
+                    var counter = 1;
+                    $.each(response.vanqueue, function(i,item){
                         $('.item').each(function(i,obj){
                             if(obj.id == item.destination_id){
                                 $('#plno'+item.destination_id).append('ON DECK: <strong>'+item.van['plate_number']+'</strong>');
                                 $.each(response.tickets, function(i,items){
-                                    console.log(i);
                                     $.each(items, function(q,qtems){
-                                        //console.log(qtems);
                                         $.each(qtems, function(r,rtems){
-                                            //console.log(r);
-                                            //console.log(rtems);
                                             if(obj.id == i){
-                                                //<li data-val='#' class="list-group-item col-lg-4" ><span class="queueNumber bg-blue">#1</span><h4 class="text-center"><strong>Asigan-1</strong></h4></li>
                                                 $('#ticketul'+i).append(
                                                     $('<li>', {class: 'list-group-item col-lg-3'}).append([
                                                         $('<span>', {class: 'queueNumber bg-blue'}).text(counter),
@@ -92,23 +87,23 @@
                                                     ])
                                                 );
                                             }
-                                            counter++;        
+                                            counter++;
                                         });
                                     });
                                 });
-                            } 
+                            }
                         });
                     });
-                    
+
                     //console.log(response.vanqueue);
                     //console.log(response.tickets);
-                }    
+                }
             });
             //setInterval(function(){
-                   
+
             //}, 2000);
         });
-    </script>  
+    </script>
     <script type="text/javascript">
         setTimeout(function(){
            window.location.reload(1);

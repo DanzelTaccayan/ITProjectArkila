@@ -44,7 +44,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/ticket-management', 'TicketManagementController');
     Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
 
-    
+
 
     Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
 
@@ -79,7 +79,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/vans', 'VansController', [
         'except' => ['show']
     ]);
-    
+
     //Check if the driver has already a van
     Route::post('/checkDriverVan', 'VansController@checkDriverVan')->name('checkDriverVan');
 
@@ -115,7 +115,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
 
     Route::get('/adminNotifications', 'HomeController@notifications')->name('admin.getNotifs');
-    Route::post('/markAsRead/{id}', 'HomeController@markAsReadSpecific')->name('admin.markAsReadSpecific');
+    Route::post('/markAsReadSpecific/{id}', 'HomeController@markAsReadSpecific')->name('admin.markAsReadSpecific');
     /****************************************************/
 
     /************ User Management ******************************/
@@ -250,7 +250,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::patch('/home/account-settings/{superAdminid}/change-password', 'SuperAdminChangePasswordController@updatePassword')->name('superadminmodule.changePassword');
     /*View Live Queue*/
     Route::get('/live-queue', 'ViewLiveVanQueueController@index')->name('ticketmanagement.queue');
-    Route::get('/getVanQueue', 'ViewLiveVanQueueController@getVanQueue')->name('ticketmanagement.getVanQueue');    
+    Route::get('/getVanQueue', 'ViewLiveVanQueueController@getVanQueue')->name('ticketmanagement.getVanQueue');
     });
  });
 /*****************************************************************************/
@@ -287,7 +287,7 @@ Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
   /*Notifications*/
   Route::get('/home/notifications', 'DriverModuleControllers\ShowNotificationsControllers@index')->name('drivermodule.notifications');
   Route::get('/driverNotifications', 'DriverModuleControllers\ShowNotificationsControllers@notifications')->name('drivermodule.getNotifs');
-   
+
 });
 /******************************************************************************/
 /******************************************************************************/
