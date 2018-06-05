@@ -45,7 +45,7 @@ class OperatorRequest extends FormRequest
                 'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
                 'contactPersonContactNumber' => ['bail','max:30','required', new checkContactNumber],
                 'licenseNo' => ['bail','required_with:licenseExpiryDate','nullable'],
-                'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date|after:today',
+                'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date',
                 'sss' => 'nullable'
             ];
         } else {
@@ -58,7 +58,7 @@ class OperatorRequest extends FormRequest
                 'contactPersonAddress' => ['bail','required','max:70',new checkSpecialCharacters],
                 'contactPersonContactNumber' => ['bail','max:30','required', new checkContactNumber],
                 'licenseNo' => ['bail','required_with:licenseExpiryDate','nullable'],
-                'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date|after:today',
+                'licenseExpiryDate' => 'bail|required_with:licenseNo|nullable|date',
                 'sss' => 'nullable'
             ];
         }

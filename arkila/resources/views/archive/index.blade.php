@@ -33,10 +33,23 @@
                         <td class="text-uppercase">{{ $operator->address }}</td>
                         <td>{{$operator->updated_at->format('h:i A')." of ".$operator->updated_at->format('M d, Y')}}</td>
                         <td>
+                            @php
+                                $archivedDrivers = $operator->archivedDriver->count();
+                                $archivedVans = $operator->archivedVan->count();
+                                $trips = $operator->trips->count();
+
+                                if($archivedDrivers || $archivedVans || $trips) {
+                                    $result = '#unable'.$operator->member_id;
+                                } else {
+                                    $result = '#delete'.$operator->member_id;
+                                }
+
+                            @endphp
+
                             <div class="text-center">
                                 <a href="{{ route('archive.showArchivedProfileOperator', [$operator->member_id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                 <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreOperator'.$operator->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
-                                <button type="button" data-toggle="modal" data-target="#delete{{$operator->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
+                                <button type="button" data-toggle="modal" data-target="{{$result}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                             </div>
                             <!-- /.text -->
                         </td>
