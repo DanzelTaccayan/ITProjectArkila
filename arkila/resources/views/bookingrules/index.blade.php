@@ -10,49 +10,49 @@
 			<div class="box-header text-center">
 				<h3 class="box-title">Reservation Rules</h3>
 			</div>
-			{{--if no reservation rules--}}
-			<form action="" method="POST">
+			@if(!$reservationRule)
+			<form action="{{route('reservation.rule')}}" method="POST">
 			{{ csrf_field() }}
 				<div class="box-body" style="min-height: 410px;">
 					<div class="padding-side-15">
 						<div class="form-group">
 							<label for="">Reservation Fee</label>
-							<input type="number" class="form-control">
+							<input type="number" name="reservationFee" class="form-control" value="{{old('reservationFee')}}">
 						</div>
 						<div class="form-group">
 							<label for="">Cancellation Fee</label>
-							<input type="number" class="form-control">
+							<input type="number" name="reservationCancellation" class="form-control" value="{{old('reservationCancellation')}}">
 						</div>
 						<div class="form-group">
 							<label for="">Payment Due</label>
-							<select name="" class="form-control" id="">
-								<option value="">1 day after reservation</option>
-								<option value="">2 days after reservation</option>
-								<option value="">3 days after reservation</option>
-								<option value="">4 days after reservation</option>
+							<select name="reservationPayment" class="form-control" id="">
+								<option value="1" @if(old('reservationPayment') == 1) {{'selected'}}@endif>1 day after reservation</option>
+								<option value="2" @if(old('reservationPayment') == 2) {{'selected'}}@endif>2 days after reservation</option>
+								<option value="3" @if(old('reservationPayment') == 3) {{'selected'}}@endif>3 days after reservation</option>
+								<option value="4" @if(old('reservationPayment') == 4) {{'selected'}}@endif>4 days after reservation</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="">Refund Expiry (more than 24 hours before departure date)</label>
-							<select class="form-control">
-								<option value="">1 day after cancellation</option>
-								<option value="">2 days after cancellation</option>
-								<option value="">3 days after cancellation</option>
-								<option value="">4 days after cancellation</option>
-								<option value="">5 days after cancellation</option>
-								<option value="">6 days after cancellation</option>
-								<option value="">7 days after cancellation</option>
+							<select class="form-control" name="reservationRefund">
+								<option value="1" @if(old('reservationRefund') == 1) {{'selected'}}@endif>1 day after cancellation</option>
+								<option value="2" @if(old('reservationRefund') == 2) {{'selected'}}@endif>2 days after cancellation</option>
+								<option value="3" @if(old('reservationRefund') == 3) {{'selected'}}@endif>3 days after cancellation</option>
+								<option value="4" @if(old('reservationRefund') == 4) {{'selected'}}@endif>4 days after cancellation</option>
+								<option value="5" @if(old('reservationRefund') == 5) {{'selected'}}@endif>5 days after cancellation</option>
+								<option value="6" @if(old('reservationRefund') == 6) {{'selected'}}@endif>6 days after cancellation</option>
+								<option value="7" @if(old('reservationRefund') == 7) {{'selected'}}@endif>7 days after cancellation</option>
 							</select>
 						</div>
 					</div>
 				</div>
 				<div class="box-footer">
 					<div class="text-center">
-						<button class="btn btn-success">SET RULES</button>
+						<button type="submit" class="btn btn-success">SET RULES</button>
 					</div>
 				</div>
 			</form>
-			{{--else--}}
+			@else
 			<form action="{{route('reservation.rule')}}" method="POST">
 			{{ csrf_field() }}
 				<div class="box-body" style="min-height: 410px;">
@@ -125,7 +125,7 @@
 					</div>
 				</div>
 			</form>
-			{{--end if of reservation rules--}}
+			@endif
 
 		</div>
 	</div>
@@ -134,58 +134,58 @@
 			<div class="box-header text-center">
 				<h3 class="box-title">Rental Rules</h3>
 			</div>
-			{{--if no rental rules--}}
-			<form action="" method="POST">
+			@if(!$rentalRule)
+			<form action="{{route('rental.rule')}}" method="POST">
 			{{ csrf_field() }}
 				<div class="box-body"  style="min-height: 410px;">
 					<div class="padding-side-15">
 						<div class="form-group">
 							<label for="">Rental Fee</label>
-							<input type="text" class="form-control">
+							<input type="number" name="rentalFee" class="form-control" value="{{old('rentalFee')}}">
 						</div>
 						<div class="form-group">
 							<label for="">Cancellation Fee</label>
-							<input type="text" class="form-control">
+							<input type="number" name="rentalCancellation" class="form-control" value="{{old('rentalCancellation')}}">
 						</div>
 						<div class="form-group">
 							<label for="">Request Expiry</label>
-							<select name="" class="form-control" id="">
-								<option value="">1 day after request</option>
-								<option value="">2 days after request</option>
-								<option value="">3 days after request</option>
-								<option value="">4 days after request</option>
+							<select name="rentalRequest" class="form-control" id="">
+								<option value="1" @if(old('rentalRequest') == 1) {{'selected'}}@endif>1 day after request</option>
+								<option value="2" @if(old('rentalRequest') == 2) {{'selected'}}@endif>2 days after request</option>
+								<option value="3" @if(old('rentalRequest') == 3) {{'selected'}}@endif>3 days after request</option>
+								<option value="4" @if(old('rentalRequest') == 4) {{'selected'}}@endif>4 days after request</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="">Payment Due</label>
-							<select name="" class="form-control" id="">
-								<option value="">1 day after payment</option>
-								<option value="">2 days after payment</option>
-								<option value="">3 days after payment</option>
-								<option value="">4 days after payment</option>
+							<select name="rentalPayment" class="form-control" id="">
+								<option value="1" @if(old('rentalPayment') == 1) {{'selected'}}@endif>1 day after payment</option>
+								<option value="2" @if(old('rentalPayment') == 2) {{'selected'}}@endif>2 days after payment</option>
+								<option value="3" @if(old('rentalPayment') == 3) {{'selected'}}@endif>3 days after payment</option>
+								<option value="4" @if(old('rentalPayment') == 4) {{'selected'}}@endif>4 days after payment</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="">Refund Expiry (more than 24 hours before departure date)</label>
-							<select class="form-control">
-								<option value="">1 day after cancellation</option>
-								<option value="">2 days after cancellation</option>
-								<option value="">3 days after cancellation</option>
-								<option value="">4 days after cancellation</option>
-								<option value="">5 days after cancellation</option>
-								<option value="">6 days after cancellation</option>
-								<option value="">7 days after cancellation</option>
+							<select class="form-control" name="rentalRefund">
+								<option value="1" @if(old('rentalRefund') == 1) {{'selected'}}@endif>1 day after cancellation</option>
+								<option value="2" @if(old('rentalRefund') == 2) {{'selected'}}@endif>2 days after cancellation</option>
+								<option value="3" @if(old('rentalRefund') == 3) {{'selected'}}@endif>3 days after cancellation</option>
+								<option value="4" @if(old('rentalRefund') == 4) {{'selected'}}@endif>4 days after cancellation</option>
+								<option value="5" @if(old('rentalRefund') == 5) {{'selected'}}@endif>5 days after cancellation</option>
+								<option value="6" @if(old('rentalRefund') == 6) {{'selected'}}@endif>6 days after cancellation</option>
+								<option value="7" @if(old('rentalRefund') == 7) {{'selected'}}@endif>7 days after cancellation</option>
 							</select>
 						</div>
 					</div>
 				</div>
 				<div class="box-footer">
 					<div class="text-center">
-						<button class="btn btn-success">SET RULES</button>
+						<button type="submit" class="btn btn-success">SET RULES</button>
 					</div>
 				</div>
 			</form>
-			{{--else--}}
+			@else
 			<form action="{{route('rental.rule')}}" method="POST">
 			{{ csrf_field() }}
 				<div class="box-body"  style="min-height: 410px;">
@@ -271,7 +271,7 @@
 					</div>
 				</div>
 			</form>
-			{{--end if of reservation rules--}}
+			@endif
 
 		</div>
 

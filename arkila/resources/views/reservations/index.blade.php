@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Reservations')
 @section('content')
-@if($rule->count() == 0)
+@if(!$rule)
 <div class="padding-side-10">
     <div class="box box-solid with-shadow" style="height: 300px; padding: 50px; margin-top:7%;">
         <div class="box-body">
