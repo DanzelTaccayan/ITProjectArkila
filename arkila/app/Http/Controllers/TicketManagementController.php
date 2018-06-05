@@ -6,6 +6,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Destination;
 use App\Ticket;
+use App\SoldTicket;
 use DB;
 
 class TicketManagementController extends Controller
@@ -73,11 +74,35 @@ class TicketManagementController extends Controller
      */
     public function update(Destination $ticket_management, Request $request)
     {
-        $soldTickets = Ticket::where([
-            ['destination_id', $ticket_management->destination_id],
-            ['type', 'Regular'],
-            ['status', '!=', null],
-            ])->count();
+        // $soldTickets = Ticket::where([
+        //     ['destination_id', $ticket_management->destination_id],
+        //     ['type', 'Regular'],
+        //     ['status', '!=', null],
+        //     ])->count();
+
+        $numberOfSoldTickets = 0;
+        $isTerminal = $ticket_management->is_terminal;
+        if($isTerminal == true) {
+            foreach($ticket_management->routeFromDestination as $routes) {
+                $soldTickets = SoldTicket::all();
+                if($soldTickets->count() > 0) {
+                    foreach ($soldTickets as $soldTicket) {
+                        if ($soldTicket->ticket->destination_id == $routes->destination_id && $soldTicket->ticket->type == 'Regular') {
+                                $numberOfSoldTickets++;
+                        }
+                    }
+                }
+            }
+        } else {
+            $soldTickets = SoldTicket::all();
+            if($soldTickets->count() > 0) {
+                foreach($soldTickets as $soldTicket) {
+                    if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Regular') {
+                        $numberOfSoldTickets++;
+                    }
+                }
+            }
+        }
         $regularTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Regular'],
@@ -98,7 +123,7 @@ class TicketManagementController extends Controller
             list($name, $lastNumberOfTicket) = explode('-', $regularTicket->first()->ticket_number);
             $startCount = $lastNumberOfTicket + 1;
             
-            if ($soldTickets == 0) {
+            if ($numberOfSoldTickets == 0) {
 
                 if($ticketOrig == $ticketRequest) {
                     return response()->json(['success' => "The number of tickets of ". $ticket_management->destination_name ." remained at ". $ticketRequest, 'ticketqty' => $ticketRequest  ]);
@@ -149,18 +174,36 @@ class TicketManagementController extends Controller
         
                 }
             } else {
-                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.'],422);
+                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be returned first.']);
             }
         }            
     }
 
     public function updateDiscount(Destination $ticket_management, Request $request)
     {
-        $soldTickets = Ticket::where([
-            ['destination_id', $ticket_management->destination_id],
-            ['type', 'Discount'],
-            ['status','!=', null],
-            ])->count();
+        $numberOfSoldTickets = 0;
+        $isTerminal = $ticket_management->is_terminal;
+        if($isTerminal == true) {
+            foreach($ticket_management->routeFromDestination as $routes) {
+                $soldTickets = SoldTicket::all();
+                if($soldTickets->count() > 0) {
+                    foreach ($soldTickets as $soldTicket) {
+                        if ($soldTicket->ticket->destination_id == $routes->destination_id && $soldTicket->ticket->type == 'Discount') {
+                                $numberOfSoldTickets++;
+                        }
+                    }
+                }
+            }
+        } else {
+            $soldTickets = SoldTicket::all();
+            if($soldTickets->count() > 0) {
+                foreach($soldTickets as $soldTicket) {
+                    if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Discount') {
+                        $numberOfSoldTickets++;
+                    }
+                }
+            }
+        }
         $discountTicket = Ticket::where([
             ['destination_id', $ticket_management->destination_id],
             ['type', 'Discount'],
@@ -181,7 +224,7 @@ class TicketManagementController extends Controller
         {
             return response()->json(["error" => "Please make sure that your input is valid, you can only enter numeric values divisible by 26 for the number of discounted tickets."],422);
         } else {
-            if ($soldTickets == 0) {
+            if ($numberOfSoldTickets == 0) {
                 DB::beginTransaction();
                 try{
                     if($requestNumTicket == $discountTicket->count()) {
@@ -236,7 +279,7 @@ class TicketManagementController extends Controller
 
             } else {
                 // session()->flash('error', 'Cannot edit the ticket number, all tickets must be return first.');
-                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be return first.']);
+                return response()->json(['error' => 'Cannot edit the ticket number, all tickets must be returned first.']);
             } 
         }
 
