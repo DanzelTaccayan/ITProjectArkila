@@ -94,10 +94,12 @@
                             <h1 class="text-center text-red"><i class="fa fa-trash"></i>DELETE</h1>
                             <p class="text-center">ARE YOU SURE YOU WANT TO PERMANENTLY DELETE</p>
                             <h4 class="text-center "><strong class="text-red">{{$archivedDriver->full_name}}</strong>?</h4>
+                            <p class="well"> only those who have no record in the system can be deleted</p>
                         </div>
                         <div class="modal-footer">
-                            <form name="" action="" method="POST">
-                                
+                            <form name="driverDeleteForm" action="{{route('drivers.deleteDriver',[$archivedDriver->member_id])}}" method="POST">
+                                {{method_field('DELETE')}}
+                                {{csrf_field()}}
                                 <div class="text-center">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                                     <button type="submit" class="btn btn-danger">DELETE</button>
@@ -124,6 +126,13 @@
 <script>
     $(function() {
         $('form[name="driverRestoreForm"]').on('submit',function () {
+            $(this).find('button[type="submit"]').prop('disabled',true);
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+            $('.modal').modal('hide');
+        });
+
+        $('form[name="driverDeleteForm"]').on('submit',function () {
             $(this).find('button[type="submit"]').prop('disabled',true);
             $('#submit-loader').removeClass('hidden');
             $('#submit-loader').css("display","block");
