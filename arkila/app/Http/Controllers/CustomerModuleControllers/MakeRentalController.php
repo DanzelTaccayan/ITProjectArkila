@@ -65,7 +65,7 @@ class MakeRentalController extends Controller
     
           if($request->destination == 'other')
           {
-            $destination = $request->otherDestination;
+            $destination = ucwords(strtolower($request->otherDestination));            
           }
               $rent = VanRental::create([
                 "user_id" => Auth::id(),

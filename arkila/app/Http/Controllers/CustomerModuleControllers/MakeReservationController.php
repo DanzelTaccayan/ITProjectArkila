@@ -265,7 +265,8 @@ class MakeReservationController extends Controller
 
 	public function cancelReservation(Reservation $reservation)
     {
-      $time = explode(':', $reservation->reservationDate->departure_time);
+	  $rule = $this->reservationRules();
+       $time = explode(':', $reservation->reservationDate->departure_time);
       $dateOfReservation = Carbon::parse($reservation->reservationDate->reservation_date)->setTime($time[0], $time[1], $time[2]);
       $now = Carbon::now();
       $conditionDate = $dateOfReservation->subDays(1);
@@ -291,6 +292,11 @@ class MakeReservationController extends Controller
 			  ]);
 			}
 		  }
+		  Ledger::create([
+			'description' => 'Reservation Fee',
+			'amount' => $rule->cancellation_fee,
+			'type' => 'Revenue',
+		  ]);
 		  return back()->with('success', 'Reservation marked as cancelled');
 		} else {
 			if($reservation->status == 'CANCELLED') {
