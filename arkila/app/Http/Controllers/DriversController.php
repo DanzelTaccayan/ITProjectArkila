@@ -85,7 +85,7 @@ class DriversController extends Controller
                 'first_name' => $createdDriver->first_name,
                 'middle_name' => $createdDriver->middle_name,
                 'last_name' => $createdDriver->last_name,
-                'username' => $createdDriver->first_name[0].$createdDriver->last_name.$createdDriver->member_id,
+                'username' => strtolower($createdDriver->first_name[0].$createdDriver->last_name).$createdDriver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
                 'status' => 'enable'
@@ -149,7 +149,7 @@ class DriversController extends Controller
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
-                'username' => $driver->first_name[0].$driver->last_name.$driver->member_id,
+                'username' => strtolower($driver->first_name[0].$driver->last_name).$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
                 'status' => 'enable'
@@ -225,7 +225,7 @@ class DriversController extends Controller
                 'last_name'=> $request->lastName,
                 'first_name' => $request->firstName,
                 'middle_name' => $request->middleName,
-                'username' => $driver->first_name[0].$driver->last_name.$driver->member_id,
+                'username' => strtolower($driver->first_name[0].$driver->last_name).$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
                 'status' => 'enable'

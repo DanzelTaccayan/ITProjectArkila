@@ -35,7 +35,7 @@ class AdminCreateDriverReportController extends Controller
     //   //$b = $f->where();
     //   foreach($f as $fs){
     //     echo $fs . '<br/>';
-    //   }
+    //   }  
     // }
 
     return view('trips.chooseDestination',compact('terminals', 'superAdminTerminal'));
