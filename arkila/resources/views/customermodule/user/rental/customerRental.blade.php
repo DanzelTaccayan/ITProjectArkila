@@ -19,7 +19,8 @@
                     <div class="contact100-form">   
                         <h3>IMPORTANT!</h3>
                         <div class="rental-rules">
-                            <p>A rental request will not be accepted immediately.</p>
+                            <p>A rental request will be reviewed within {{$rule->request_expiry}} days.</p>
+                            <p>Rentals should be requested {{$rule->request_expiry + $rule->payment_due}} or more days before departure.</p>
                             <p>There are fixed choices of destination provided. Other destinations will cost an addition rental fee.</p>
                             <p>Once accepted we provide you with your van unit and driver’s information for you to negotiate.</p>
                             <p>You can apply for a walk in rental in the office. See About Us page for the address.</p>

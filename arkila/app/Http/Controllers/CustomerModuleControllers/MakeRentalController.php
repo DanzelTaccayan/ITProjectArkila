@@ -29,7 +29,7 @@ class MakeRentalController extends Controller
       $rule = $this->rentalRules();
       if($rule) {
         $destinations = Destination::allRoute()->get();
-        return view('customermodule.user.rental.customerRental', compact('destinations'));
+        return view('customermodule.user.rental.customerRental', compact('destinations', 'rule'));
       } else {
         return back()->withErrors('Rental is not available at this moment.');
       }
@@ -39,6 +39,7 @@ class MakeRentalController extends Controller
     {
       $rule = $this->rentalRules();
       if($rule) {
+        $requestLimitation = $rule->request_expiry + $rule->payment_due;
         $userRequests = VanRental::where('user_id', auth()->user()->id)
         ->where(function($status){
           $status->where([
@@ -51,6 +52,7 @@ class MakeRentalController extends Controller
             })->count();
   
         if($userRequests < 1) {
+          if(Carbon::now()->addDays($requestLimitation)->lt(Carbon::parse($request->date))){
             $carbonDate = new Carbon($request->date);
             $departedDate = $carbonDate->format('Y-m-d');
             $destination = $request->destination;
@@ -84,6 +86,9 @@ class MakeRentalController extends Controller
                 ]);
            
             return redirect(route('rental.success', $rent->rent_id))->with('success', 'Successfully created a rental');
+          } else {
+            return back()->withErrors('Sorry, you can only request a rental ' . $requestLimitation . ' days before departure.');            
+          }
         } else {
           return redirect(route('customermodule.rentalTransaction'))->withErrors('Sorry, you can only request one rent at a time.');
         }   

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Rules\checkSpecialCharacters;
 use App\Rules\checkTime;
 use Illuminate\Http\Request;
+use App\BookingRules;
 use App\Rules\checkContactNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -57,7 +58,9 @@ class CustomerRentalRequest extends FormRequest
         //         "message" => "string|max:300|nullable",
         //     ];
         // }
-        $date = Carbon::now()->addDays(2)->formatLocalized('%d %B %Y');
+        $rule = BookingRules::where('description', 'Rental')->get()->first();
+        $limitedDays = $rule->payment_due + $rule->request_expiry;
+        $date = Carbon::now()->addDays($limitedDays)->formatLocalized('%d %B %Y');
 
         if($request->destination == 'other')
         {
@@ -87,10 +90,11 @@ class CustomerRentalRequest extends FormRequest
 
     public function messages()
     {
-        $dateNow = Carbon::now();
-        $thisDate = $dateNow->setTimezone('Asia/Manila')->format('m/d/Y');
+        $rule = BookingRules::where('description', 'Rental')->get()->first();
+        $limitedDays = $rule->payment_due + $rule->request_expiry;
+        $date = Carbon::now()->addDays($limitedDays)->formatLocalized('%d %B %Y');
         return [
-            "date.after" => "The date must be after or equal " . $thisDate . "",
+            "date.after" => "Rentals should be requested ". $limitedDays ." or more days before departure.",
             "date.required" => "Please enter the preffered departure date",
             "date.date_format" => "The preferred date does not match the format mm/dd/yyyy",
             "numberOfDays.required" => "Please enter the number of days",
