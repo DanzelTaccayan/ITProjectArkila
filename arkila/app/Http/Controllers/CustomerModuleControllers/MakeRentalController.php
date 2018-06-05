@@ -31,7 +31,7 @@ class MakeRentalController extends Controller
         $destinations = Destination::allRoute()->get();
         return view('customermodule.user.rental.customerRental', compact('destinations'));
       } else {
-        return back();
+        return back()->withErrors('Rental is not available at this moment.');
       }
     }
 
@@ -88,7 +88,7 @@ class MakeRentalController extends Controller
           return redirect(route('customermodule.rentalTransaction'))->withErrors('Sorry, you can only request one rent at a time.');
         }   
       } else {
-        return back();
+        return back()->withErrors('Rental is not available at this moment.');
       }
     }
 

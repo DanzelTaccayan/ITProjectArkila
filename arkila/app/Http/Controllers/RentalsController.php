@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\BookingRules;
 use App\Destination;
 use App\Van;
+use App\Ledger;
 use App\User;
 use App\Member;
 use App\Rules\checkTime;
@@ -45,10 +46,14 @@ class RentalsController extends Controller
     public function create()
     {
         $rule = $this->rentalRules();
-        $vans = Van::all();
-        $drivers = Member::allDrivers()->get();
-        $destinations = Destination::allRoute()->get();
-        return view('rental.create', compact('vans', 'drivers', 'destinations', 'rule'));
+        if($rule) {
+	        $vans = Van::all();
+	        $drivers = Member::allDrivers()->get();
+	        $destinations = Destination::allRoute()->get();
+	        return view('rental.create', compact('vans', 'drivers', 'destinations', 'rule'));        	
+        } else {
+        	return redirect(route('rental.index'));
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -58,50 +63,56 @@ class RentalsController extends Controller
      */
     public function store(RentalRequest $request)
     {
-        $time = date('H:i', strtotime($request->time));
-        $date = Carbon::parse($request->date);
-        $fullName = ucwords(strtolower($request->name));
-        if($request->destination == 'other')
-        {
-            $destination = ucwords(strtolower($request->otherDestination));
+        $rule = $this->rentalRules();
+
+        if($rule) {
+	        $time = date('H:i', strtotime($request->time));
+	        $date = Carbon::parse($request->date);
+	        $fullName = ucwords(strtolower($request->name));
+	        if($request->destination == 'other')
+	        {
+	            $destination = ucwords(strtolower($request->otherDestination));
+	        }
+	        else
+	        {
+	            $destination = ucwords(strtolower($request->destination));            
+	        }
+
+	        $codes = VanRental::all();
+	        $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+	        foreach ($codes as $code)
+	        {
+	            $allCodes = $code->rental_code;
+
+	            do
+	            {
+	                $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+	            } while ($rentalCode == $allCodes);
+	        }
+
+	            VanRental::create([
+	                'rental_code' => 'RN'.$rentalCode,
+	                'customer_name' => $fullName,
+	                'van_id' => $request->plateNumber,
+	                'driver_id' => $request->driver,
+	                'departure_date' => $date,
+	                'departure_time' => $time,
+	                'destination' => $destination,
+	                'number_of_days' => $request->days,
+	                'rental_fare' => $request->totalFare,
+	                'contact_number' => $request->contactNumber,
+	                'is_refundable' => true,
+	                'rent_type' => 'Walk-in',
+	                'status' => 'Paid',
+
+	            ]);
+
+	            return redirect('/home/rental/')->with('success', 'Rental request from ' . $fullName . ' was created successfully');
+        } else {
+         		return redirect(route('rental.index'));
         }
-        else
-        {
-            $destination = ucwords(strtolower($request->destination));            
-        }
-
-        $codes = VanRental::all();
-        $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-
-        foreach ($codes as $code)
-        {
-            $allCodes = $code->rental_code;
-
-            do
-            {
-                $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-
-            } while ($rentalCode == $allCodes);
-        }
-
-            VanRental::create([
-                'rental_code' => 'RN'.$rentalCode,
-                'customer_name' => $fullName,
-                'van_id' => $request->plateNumber,
-                'driver_id' => $request->driver,
-                'departure_date' => $date,
-                'departure_time' => $time,
-                'destination' => $destination,
-                'number_of_days' => $request->days,
-                'rental_fare' => $request->totalFare,
-                'contact_number' => $request->contactNumber,
-                'is_refundable' => true,
-                'rent_type' => 'Walk-in',
-                'status' => 'Paid',
-
-            ]);
-
-            return redirect('/home/rental/')->with('success', 'Rental request from ' . $fullName . ' was created successfully');
 
     }
 

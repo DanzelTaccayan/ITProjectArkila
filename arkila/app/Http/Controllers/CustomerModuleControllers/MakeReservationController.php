@@ -28,7 +28,7 @@ class MakeReservationController extends Controller
 			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
 			return view('customermodule.user.reservation.selectDestination', compact('destinations'));
 		} else {
-			return back();
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 	
@@ -47,7 +47,7 @@ class MakeReservationController extends Controller
 				return redirect('/home/reservation/show-reservations');
 			}
 		} else {
-			return back();
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 	public function reservationCreate(ReservationDate $reservation)
@@ -104,7 +104,7 @@ class MakeReservationController extends Controller
 				return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination', 'count'));
 			}
 		} else {
-			return back();
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 
@@ -216,7 +216,7 @@ class MakeReservationController extends Controller
 		if($rule) {
 			return view('customermodule.user.reservation.success', compact('transaction'));
 		} else {
-			return back();
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 
