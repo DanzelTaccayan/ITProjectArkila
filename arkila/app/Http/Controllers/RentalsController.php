@@ -28,12 +28,13 @@ class RentalsController extends Controller
     public function index()
     {
         //
-        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded'], ['status', '!=', 'Expired'], ['status', '!=', 'No Van Available']])
+        $rentals = VanRental::where([['status', '!=', 'Cancelled'],['status', '!=', 'Refunded'], ['status', '!=', 'Expired'], ['status', '!=', 'No Van Available'], ['status', '!=', 'Departed']])
         ->orWhere(function($q){
             $q->where([['status', 'Cancelled']])
             ->where('is_refundable', true);
         })->get();
-        return view('rental.index', compact('rentals'));
+        $rule = $this->rentalRules();
+        return view('rental.index', compact('rentals', 'rule'));
     }
 
     /**

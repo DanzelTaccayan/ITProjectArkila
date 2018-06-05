@@ -65,12 +65,25 @@ class MakeReservationController extends Controller
 		{
 			$getDestination = Session::get('key');
 			$destination = Destination::where('destination_id', $getDestination)->get();
+			$reservations = ReservationDate::all();
+
 			// $terminals = $destination->first()->routeDestination;
 			// dd($terminals);
+			$count = 0;
+			if($destination->first()->routeDestination->count() > 1) {
+				foreach($destination->first()->routeDestination as $route) {
+					if($reservations->where('destination_terminal', $route->destination_id)->count() > 0) {
+						$count++;
+					}
+				}
+			} else {
+				if($reservations->where('destination_terminal', $destination->first()->routeDestination->first()->destination_id)->count() > 0) {
+					$count = 1; 
+				}
+			}
 			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
-			$reservations = ReservationDate::all();
 	
-			return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination'));
+			return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination', 'count'));
 		}
 	}
 
