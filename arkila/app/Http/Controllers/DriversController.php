@@ -48,6 +48,10 @@ class DriversController extends Controller
     public function store(DriverRequest $request)
     {
         // Start transaction!
+        $firstName = ucwords(strtolower($request->firstName));            
+        $lastName = ucwords(strtolower($request->lastName));            
+        $middleName = ucwords(strtolower($request->middleName));            
+
         DB::beginTransaction();
         try {
             $profilePictureName = 'avatar.png';
@@ -63,10 +67,10 @@ class DriversController extends Controller
 
             $createdDriver = Member::create([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
                 'operator_id' => $request->operator,
-                'middle_name' => $request->middleName,
+                'middle_name' => $middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Driver',
                 'address' => $request->address,
@@ -112,6 +116,10 @@ class DriversController extends Controller
 
     public function storeFromOperator(Member $operator, DriverRequest $request)
     {
+        $firstName = ucwords(strtolower($request->firstName));            
+        $lastName = ucwords(strtolower($request->lastName));            
+        $middleName = ucwords(strtolower($request->middleName));            
+
         // Start transaction!
         DB::beginTransaction();
         try {
@@ -128,9 +136,9 @@ class DriversController extends Controller
 
             $driver = $operator->drivers()->create([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Driver',
                 'address' => $request->address,
@@ -146,9 +154,9 @@ class DriversController extends Controller
 
             //Add Account for the driver
             $createdDriverUser = User::create([
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
                 'username' => strtolower($driver->first_name[0].$driver->last_name).$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',
@@ -181,6 +189,10 @@ class DriversController extends Controller
 
     public function storeFromVan(Van $vanNd,DriverRequest $request)
     {
+        $firstName = ucwords(strtolower($request->firstName));            
+        $lastName = ucwords(strtolower($request->lastName));            
+        $middleName = ucwords(strtolower($request->middleName));            
+
         // Start transaction!
         DB::beginTransaction();
         try {
@@ -201,9 +213,9 @@ class DriversController extends Controller
 
             $driver = Member::create([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Driver',
                 'operator_id' => $vanNd->operator()->first()->member_id,
@@ -222,9 +234,9 @@ class DriversController extends Controller
 
             //Add Account for the driver
             $createdDriver = User::create([
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
                 'username' => strtolower($driver->first_name[0].$driver->last_name).$driver->member_id,
                 'password' => Hash::make('driver!@bantrans'),
                 'user_type' => 'Driver',

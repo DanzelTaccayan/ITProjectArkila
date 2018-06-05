@@ -165,7 +165,7 @@ ol.arrow-drag{
 }
 .special-unit-body{
   height: 510px;
-  background: bisque;
+  background: #fdf59a;
 }
 .terminal-body{
   height: 200px;

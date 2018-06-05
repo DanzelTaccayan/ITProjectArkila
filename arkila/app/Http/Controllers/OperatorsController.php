@@ -43,6 +43,10 @@ class OperatorsController extends Controller
     public function store(OperatorRequest $request)
     {
         // Start transaction!
+        $firstName = ucwords(strtolower($request->firstName));            
+        $lastName = ucwords(strtolower($request->lastName));            
+        $middleName = ucwords(strtolower($request->middleName));            
+
         DB::beginTransaction();
         try {
             $profilePictureName = 'avatar.png';
@@ -58,9 +62,9 @@ class OperatorsController extends Controller
 
             Member::create([
                 'profile_picture' => $profilePictureName,
-                'last_name'=> $request->lastName,
-                'first_name' => $request->firstName,
-                'middle_name' => $request->middleName,
+                'last_name'=> $lastName,
+                'first_name' => $firstName,
+                'middle_name' => $middleName,
                 'contact_number' => $request->contactNumber,
                 'role' => 'Operator',
                 'address' => $request->address,
@@ -81,7 +85,7 @@ class OperatorsController extends Controller
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
-        return redirect(route('operators.index'))->with('success', 'Operator '. $request->firstName . $request->middleName . $request->lastName .' has been successfully registered');
+        return redirect(route('operators.index'))->with('success', 'Operator '. $firstName .' '. $middleName .' '.$lastName .' has been successfully registered');
     }
 
     /**

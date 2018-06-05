@@ -60,8 +60,13 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        $destinations = Destination::allTerminal()->get();
-        return view('reservations.create', compact('destinations'));
+        $rule = $this->reservationRules();
+        if($rule) {
+            $destinations = Destination::allTerminal()->get();
+            return view('reservations.create', compact('destinations'));            
+        } else {
+            return redirect(route('reservations.index'));
+        }
     }
 
     /**
@@ -166,11 +171,17 @@ class ReservationsController extends Controller
 
     public function walkInReservation($id)
     {  
-        $dateId = Session::get('id');
-        $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
-        $main = Destination::mainTerminal()->get()->first();
-        $date = ReservationDate::where('id', $dateId)->get()->first();
-        return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));
+        $rule = $this->reservationRules();
+
+        if($rule) {
+            $dateId = Session::get('id');
+            $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
+            $main = Destination::mainTerminal()->get()->first();
+            $date = ReservationDate::where('id', $dateId)->get()->first();
+            return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));            
+        } else {
+            return redirect(route('reservations.index'));
+        }
     }
 
     public function storeWalkIn(Request $request)

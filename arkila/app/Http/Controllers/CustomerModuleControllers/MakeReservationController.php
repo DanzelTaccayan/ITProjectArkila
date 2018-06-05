@@ -22,170 +22,202 @@ class MakeReservationController extends Controller
       $this->middleware('online-reservation');
     }
     public function createReservation()
-    {
-		$destinations = Destination::allRoute()->orderBy('destination_name')->get();
-    	return view('customermodule.user.reservation.selectDestination', compact('destinations'));
+    {	
+		$rule = $this->reservationRules();
+		if($rule) {
+			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+			return view('customermodule.user.reservation.selectDestination', compact('destinations'));
+		} else {
+			return back()->withErrors('Reservation is not available at the moment.');
+		}
 	}
 	
 	public function showDetails(Request $request)
 	{
-		$destination = $request->destination;
-		if($destination == null)
-		{
-			return back();
-		}
-		else
-		{
-			Session::put('key', $destination);	
-			return redirect('/home/reservation/show-reservations');
+		$rule = $this->reservationRules();
+		if($rule) {
+			$destination = $request->destination;
+			if($destination == null)
+			{
+				return back();
+			}
+			else
+			{
+				Session::put('key', $destination);	
+				return redirect('/home/reservation/show-reservations');
+			}
+		} else {
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 	public function reservationCreate(ReservationDate $reservation)
 	{
-		$main = Destination::mainTerminal()->get()->first();
-		$requested = Session::get('key');
-		$dropOff = Destination::where('destination_id', $requested)->get()->first();
-		return view('customermodule.user.reservation.createReservation', compact('reservation', 'main', 'dropOff'));
+		$rule = $this->reservationRules();
+		if($rule) {
+			$main = Destination::mainTerminal()->get()->first();
+			$requested = Session::get('key');
+			$dropOff = Destination::where('destination_id', $requested)->get()->first();
+			return view('customermodule.user.reservation.createReservation', compact('reservation', 'main', 'dropOff'));
+		} else {
+			return back();
+		}
 	}
 
 	public function showDate(Request $request)
 	{
-		if($request->submit == 'Update')
-		{
-			$destination = $request->destination;
-			$getDestination = Session::put('key', $destination);
-			$destination = Destination::where('destination_id', $getDestination)->get();
-			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
-			$reservations = ReservationDate::all();
+		$rule = $this->reservationRules();
+
+		if($rule) {
+			if($request->submit == 'Update')
+			{
+				$destination = $request->destination;
+				$getDestination = Session::put('key', $destination);
+				$destination = Destination::where('destination_id', $getDestination)->get();
+				$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+				$reservations = ReservationDate::all();
+		
+				return redirect('/home/reservation/show-reservations');
 	
-			return redirect('/home/reservation/show-reservations');
-
-		}
-		else
-		{
-			$getDestination = Session::get('key');
-			$destination = Destination::where('destination_id', $getDestination)->get();
-			$reservations = ReservationDate::all();
-
-			// $terminals = $destination->first()->routeDestination;
-			// dd($terminals);
-			$count = 0;
-			if($destination->first()->routeDestination->count() > 1) {
-				foreach($destination->first()->routeDestination as $route) {
-					if($reservations->where('destination_terminal', $route->destination_id)->count() > 0) {
-						$count++;
+			}
+			else
+			{
+				$getDestination = Session::get('key');
+				$destination = Destination::where('destination_id', $getDestination)->get();
+				$reservations = ReservationDate::all();
+	
+				// $terminals = $destination->first()->routeDestination;
+				// dd($terminals);
+				$count = 0;
+				if($destination->first()->routeDestination->count() > 1) {
+					foreach($destination->first()->routeDestination as $route) {
+						if($reservations->where('destination_terminal', $route->destination_id)->count() > 0) {
+							$count++;
+						}
+					}
+				} else {
+					if($reservations->where('destination_terminal', $destination->first()->routeDestination->first()->destination_id)->count() > 0) {
+						$count = 1; 
 					}
 				}
-			} else {
-				if($reservations->where('destination_terminal', $destination->first()->routeDestination->first()->destination_id)->count() > 0) {
-					$count = 1; 
-				}
+				$destinations = Destination::allRoute()->orderBy('destination_name')->get();
+		
+				return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination', 'count'));
 			}
-			$destinations = Destination::allRoute()->orderBy('destination_name')->get();
-	
-			return view('customermodule.user.reservation.selectReservationDate', compact('destinations','destination', 'reservations', 'getDestination', 'count'));
+		} else {
+			return back()->withErrors('Reservation is not available at the moment.');
 		}
 	}
 
 	public function storeRequest(Request $request, ReservationDate $reservation)
 	{
-		$userReservations = Reservation::where('user_id', auth()->user()->id)
-		->where(function($status){
-            $status->where([
-				['status','!=', 'DEPARTED'],
-				['status','!=', 'EXPIRED'],
-				['status','!=', 'REFUNDED'],
-				['status','!=', 'CANCELLED']
-				]);
-			})->count();
+		$rule = $this->reservationRules();
 
-		if($userReservations < 2)
-		{
-			if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
+		if($rule) {
+			$userReservations = Reservation::where('user_id', auth()->user()->id)
+			->where(function($status){
+				$status->where([
+					['status','!=', 'DEPARTED'],
+					['status','!=', 'EXPIRED'],
+					['status','!=', 'REFUNDED'],
+					['status','!=', 'CANCELLED']
+					]);
+				})->count();
+	
+			if($userReservations < 2)
 			{
-				if($reservation->status == 'OPEN')
-				{			
-					$quantity = $request->quantity;
-					$slot = $reservation->number_of_slots;
-					if($quantity <= $slot)
-					{
-						$this->validate(request(), [
-							'contactNumber' => 'bail|numeric|required',
-							'quantity' => 'bail|numeric|required|min:1|max:4',
-						]);
-						$codes = Reservation::all();
-						$newCode = bin2hex(openssl_random_pseudo_bytes(5));
-						foreach ($codes as $code)
+				if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
+				{
+					if($reservation->status == 'OPEN')
+					{			
+						$quantity = $request->quantity;
+						$slot = $reservation->number_of_slots;
+						if($quantity <= $slot)
 						{
-							$allCodes = $code->rsrv_code;
-			
-							do
+							$this->validate(request(), [
+								'contactNumber' => 'bail|numeric|required',
+								'quantity' => 'bail|numeric|required|min:1|max:4',
+							]);
+							$codes = Reservation::all();
+							$newCode = bin2hex(openssl_random_pseudo_bytes(5));
+							foreach ($codes as $code)
 							{
-								$newCode =  bin2hex(openssl_random_pseudo_bytes(5));
-			
-							} while ($newCode == $allCodes);
-						}
-						$rule = $this->reservationRules();
-						$time = explode(':', $reservation->departure_time);
-						$newSlot = $reservation->number_of_slots - $request->quantity;
-						$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
-						$ticket = Ticket::where([['destination_id', $destination->destination_id], ['type', 'Regular']])->get()->first();
-						$toBePaid = ($ticket->fare * $quantity) + $rule->fee;
-						$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
-						
-						if($expiry->lt(Carbon::now())) {
-							$expiry = $reservation->reservation_date->setTime($time[0], $time[1], $time[2]);
-						} else {
-							$expiry = Carbon::now()->addDays($rule->payment_due)->setTime($time[0], $time[1], $time[2]);
-						}
+								$allCodes = $code->rsrv_code;
 				
-			
-						$transaction = Reservation::create([
-							'user_id' => auth()->user()->id,
-							'date_id' => $reservation->id,
-							'destination_name' => $destination->destination_name,
-							'rsrv_code' => 'RV'.$newCode,
-							'name' => auth()->user()->full_name,
-							'contact_number' => $request->contactNumber,
-							'ticket_quantity' => $quantity,
-							'fare' => $toBePaid,
-							'expiry_date' => $expiry,
-							'type' => 'Online',
-						]);
-			
-						$reservation->update([
-							'number_of_slots' => $newSlot,
-						]);
-			
-						return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
-			
+								do
+								{
+									$newCode =  bin2hex(openssl_random_pseudo_bytes(5));
 				
+								} while ($newCode == $allCodes);
+							}
+							$rule = $this->reservationRules();
+							$time = explode(':', $reservation->departure_time);
+							$newSlot = $reservation->number_of_slots - $request->quantity;
+							$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
+							$ticket = Ticket::where([['destination_id', $destination->destination_id], ['type', 'Regular']])->get()->first();
+							$toBePaid = ($ticket->fare * $quantity) + $rule->fee;
+							$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
+							
+							if($expiry->lt(Carbon::now())) {
+								$expiry = $reservation->reservation_date->setTime($time[0], $time[1], $time[2]);
+							} else {
+								$expiry = Carbon::now()->addDays($rule->payment_due)->setTime($time[0], $time[1], $time[2]);
+							}
+					
+				
+							$transaction = Reservation::create([
+								'user_id' => auth()->user()->id,
+								'date_id' => $reservation->id,
+								'destination_name' => $destination->destination_name,
+								'rsrv_code' => 'RV'.$newCode,
+								'name' => auth()->user()->full_name,
+								'contact_number' => $request->contactNumber,
+								'ticket_quantity' => $quantity,
+								'fare' => $toBePaid,
+								'expiry_date' => $expiry,
+								'type' => 'Online',
+							]);
+				
+							$reservation->update([
+								'number_of_slots' => $newSlot,
+							]);
+				
+							return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
+				
+					
+						}
+						else
+						{
+							return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
+						}
 					}
 					else
 					{
-						return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
+						return redirect(route('customermodule.showDate'))->withErrors('Sorry, reservation is closed.');	
 					}
 				}
 				else
 				{
-					return redirect(route('customermodule.showDate'))->withErrors('Sorry, reservation is closed.');	
+					//reservation day limit
+					return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
 				}
 			}
 			else
 			{
-				//reservation day limit
-				return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
+				return redirect(route('customermodule.showDate'))->withErrors('Sorry, you exceeded the number of reservations allowed.');							
 			}
-		}
-		else
-		{
-			return redirect(route('customermodule.showDate'))->withErrors('Sorry, you exceeded the number of reservations allowed.');							
+		} else {
+			return back();
 		}
 	}
 
 	public function reservationSuccess(Reservation $transaction)
 	{
-		return view('customermodule.user.reservation.success', compact('transaction'));
+		$rule = $this->reservationRules();
+		if($rule) {
+			return view('customermodule.user.reservation.success', compact('transaction'));
+		} else {
+			return back()->withErrors('Reservation is not available at the moment.');
+		}
 	}
 
 	public function reservationTransaction()
@@ -265,7 +297,8 @@ class MakeReservationController extends Controller
 
 	public function cancelReservation(Reservation $reservation)
     {
-      $time = explode(':', $reservation->reservationDate->departure_time);
+	  $rule = $this->reservationRules();
+       $time = explode(':', $reservation->reservationDate->departure_time);
       $dateOfReservation = Carbon::parse($reservation->reservationDate->reservation_date)->setTime($time[0], $time[1], $time[2]);
       $now = Carbon::now();
       $conditionDate = $dateOfReservation->subDays(1);
@@ -291,6 +324,11 @@ class MakeReservationController extends Controller
 			  ]);
 			}
 		  }
+		  Ledger::create([
+			'description' => 'Reservation Fee',
+			'amount' => $rule->cancellation_fee,
+			'type' => 'Revenue',
+		  ]);
 		  return back()->with('success', 'Reservation marked as cancelled');
 		} else {
 			if($reservation->status == 'CANCELLED') {
