@@ -102,7 +102,7 @@
                                         <h4 class="text-center "><strong class="text-red">{{$routes->destination_name}}</strong>?</h4>
                                     </div>
                                     <div class="modal-footer">
-                                        <form method="POST" action="{{route('route.destroy', [$routes->destination_id])}}">
+                                        <form name="deleteFormRoute" method="POST" action="{{route('route.destroy', [$routes->destination_id])}}">
                                             {{csrf_field()}}
                                             {{method_field('DELETE')}}
                                             <div class="text-center">
@@ -120,6 +120,7 @@
                 @endforeach
             </div>
         </div>
+        @include('layouts.partials.preloader_div')
     </div>
 </div> 
 @endif
@@ -128,6 +129,12 @@
 @parent
 <script>
 $(function(){
+    $('form[name="deleteFormRoute"]').on('submit',function(){
+        $('#submit-loader').removeClass('hidden');
+        $('#submit-loader').css("display","block");
+        $(this).find('button[type="submit"]').prop('disabled',true);
+        $('.modal').modal('hide');
+    });
  var url = window.location.href;
  var activeTab = document.location.hash;
 

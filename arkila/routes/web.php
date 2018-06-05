@@ -47,6 +47,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 
 
     Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');
+    Route::patch('/home/bookingfee/{bookingfee}', 'FeesController@updateBookingFee')->name('bookingfee.update');
 
     Route::get('/home/route/create', 'RoutesController@createRoute')->name('route.create');
     Route::get('/home/terminal/create', 'RoutesController@createTerminal')->name('terminalCreate.create');
@@ -92,9 +93,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     /****************************************************/
 
     /************ Settings ******************************/
-    Route::resource('/home/settings/destinations', 'DestinationController', [
-        'except' => ['index','show']
-    ]);
+
 
     Route::resource('/home/settings/terminal', 'TerminalController', [
         'except' => ['index','show']

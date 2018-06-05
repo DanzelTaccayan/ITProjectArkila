@@ -135,9 +135,10 @@
 
     <script>
     $(function () {
-        $('form[name="preloadSubmit"]').on('submit',function(){
-            $(this).prop('disabled',true);
-
+        $('button[type="submit"]').on('click',function() {
+            if($('input[name="licenseExpiryDate"]').val() === "") {
+                $('input[name="licenseExpiryDate"]').val(null);
+            }
         });
 
         $('.select2').select2();

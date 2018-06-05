@@ -1,15 +1,15 @@
 @extends('layouts.form')
 @section('title', 'Edit Booking Fee')
-@section('back-link', route('route.index'))
-@section('form-action', route('settings.index'))
+@section('back-link', route('settings.index'))
+@section('form-action', route('bookingfee.update',[$bookingfee->destination_id]))
+@section('method_field', method_field('PATCH'))
 @section('form-title', 'EDIT BOOKING FEE')
 @section('form-body')
 
-{{ csrf_field() }} {{ method_field('PATCH') }}
   
     <div class="form-group">
         <label>Terminal Name: <span class="text-red">*</span> </label>
-        <input type="text" class="form-control" name="addTerminal" value="{{$bookingfee->destination_name}}" disabled>
+        <input type="text" class="form-control" value="{{$bookingfee->destination_name}}" disabled>
     </div>
     <input type="hidden" name="type" value="Terminal">
   

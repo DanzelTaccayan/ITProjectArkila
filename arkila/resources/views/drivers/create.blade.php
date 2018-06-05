@@ -239,59 +239,12 @@
  <script>
      $(document).ready(function(){
          $('input[type="submit"]').on('click',function(){
-             $('input[name="childrenBDay[]"]').each(function(key,value) {
-                 if($(value).val() === '')
-                 {
-                     $(value).val(null);
-                 }
-             });
-
-             if($('input[name="sss"]').val() === ""){
-                 $('input[name="sss"]').val(null);
-             }
-
-             if($('input[name="spouseBirthDate"]').val() === ""){
-                 $('input[name="spouseBirthDate"]').val(null);
-             }
-
-             if($('input[name="licenseExpiryDate"]').val() === ""){
+             if($('input[name="licenseExpiryDate"]').val() === "") {
                  $('input[name="licenseExpiryDate"]').val(null);
              }
          });
 
          cloneDateMask();
-         switch($('select[name="civilStatus"]').val()){
-             case "Single":
-                 $('input[name="nameOfSpouse"]').prop('disabled',true);
-                 $('input[name="spouseBirthDate"]').prop('disabled', true);
-                 break;
-             case "Divorced":
-                 $('input[name="nameOfSpouse"]').prop('disabled',true);
-                 $('input[name="spouseBirthDate"]').prop('disabled', true);
-                 break;
-             default:
-                 $('input[name="nameOfSpouse"]').prop('disabled',false);
-                 $('input[name="spouseBirthDate"]').prop('disabled', false);
-                 break;
-         }
-
-
-         $('select[name="civilStatus"]').change(function(){
-             switch($('select[name="civilStatus"]').val()){
-                 case "Single":
-                     $('input[name="nameOfSpouse"]').prop('disabled',true);
-                     $('input[name="spouseBirthDate"]').prop('disabled', true);
-                     break;
-                 case "Divorced":
-                     $('input[name="nameOfSpouse"]').prop('disabled',true);
-                     $('input[name="spouseBirthDate"]').prop('disabled', true);
-                     break;
-                 default:
-                     $('input[name="nameOfSpouse"]').prop('disabled',false);
-                     $('input[name="spouseBirthDate"]').prop('disabled', false);
-                     break;
-             }
-         });
      });
 
         function cloneDateMask() {
@@ -299,36 +252,6 @@
             //Date picker
             $('.date-mask').inputmask('mm/dd/yyyy',{removeMaskOnSubmit: true})
 
-        }
-
-
-
-        function addDependent() {
-            var tablebody = document.getElementById('childrens');
-            if (tablebody.rows.length == 1) {
-                tablebody.rows[0].cells[tablebody.rows[0].cells.length - 1].children[0].children[0].style.display = "";
-            }   
-
-
-            var tablebody = document.getElementById('childrens');
-            var iClone = tablebody.children[0].cloneNode(true);
-            for (var i = 0; i < iClone.cells.length; i++) {
-                iClone.cells[i].children[0].value = "";
-                iClone.cells[1].children[0].children[1].value="";
-            
-            }
-            tablebody.appendChild(iClone);
-            cloneDateMask();
-        }
-        
-
-        function rmv() {
-            var tabRow = document.getElementById("childrens");
-            if (tabRow.rows.length == 1) {
-                tabRow.rows[0].cells[tabRow.rows[0].cells.length - 1].children[0].children[0].style.display = "none";
-            } else {
-                tabRow.rows[0].cells[tabRow.rows[0].cells.length - 1].children[0].children[0].style.display = "";
-            }
         }
     </script>
 

@@ -6,6 +6,7 @@ use App\Fee;
 use App\Rules\checkCurrency;
 use Illuminate\Http\Request;
 use App\Destination;
+use DB;
 
 class FeesController extends Controller
 {
@@ -33,13 +34,22 @@ class FeesController extends Controller
             "addFeeAmount" => ['required',new checkCurrency,'numeric','min:1','max:5000']
         ]);
 
-        Fee::create([
-            "description" => request('addFeesDesc'),
-            "amount" => request('addFeeAmount'),
-        ]);
+        DB::beginTransaction();
+        try{
+            Fee::create([
+                "description" => request('addFeesDesc'),
+                "amount" => request('addFeeAmount'),
+            ]);
 
-        session()->flash('message', 'Fee created successfully');
-        return redirect('/home/settings');
+            session()->flash('message', 'Fee created successfully');
+
+            DB::commit();
+            return redirect('/home/settings');
+        }
+        catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 
     /**
@@ -64,15 +74,24 @@ class FeesController extends Controller
     public function update(Fee $fee)
     {
         $this->validate(request(),[
-            "editFeeAmount" => ['required',new checkCurrency, 'numeric', 'min:1','max:5000'],
+            "editFeeAmount" => ['required',new checkCurrency, 'min:1','max:5000'],
         ]);
 
-        $fee->update([
-            'amount' => request("editFeeAmount"),
-        ]);
-        
-        session()->flash('message', 'Fee created successfully');
-        return redirect('/home/settings');
+        DB::beginTransaction();
+        try{
+            $fee->update([
+                'amount' => request("editFeeAmount"),
+            ]);
+
+            session()->flash('message', 'Fee created successfully');
+            DB::commit();
+            return redirect('/home/settings');
+        }
+        catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     /**
@@ -83,13 +102,43 @@ class FeesController extends Controller
      */
     public function destroy(FeesAndDeduction $fee)
     {
-        $fee->delete();
-        session()->flash('message', 'Fee deleted successfully');
-        return back();
+        DB::beginTransaction();
+        try{
+            $fee->delete();
+            session()->flash('message', 'Fee deleted successfully');
+            DB::commit();
+            return back();
+        }
+        catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function editBooking(Destination $bookingfee)
     {
         return view('settings.editBookingFee', compact('bookingfee'));
+    }
+
+    public function updateBookingFee(Destination $bookingfee)
+    {
+        $this->validate(request(),[
+           'bookingFee' => ['required', new checkCurrency]
+        ]);
+
+        DB::beginTransaction();
+        try{
+            $bookingfee->update([
+                'booking_fee' => request('bookingFee')
+            ]);
+
+            DB::commit();
+            return redirect(route('settings.index'))->with('success','Successfully updated the booking fee of '.$bookingfee->destination_name.' terminal');
+        }
+        catch(\Exception $e) {
+            DB::rollback();
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 }

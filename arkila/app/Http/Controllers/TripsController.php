@@ -20,9 +20,6 @@ use Illuminate\Validation\Rule;
 class TripsController extends Controller
 {
 
-    public function store(Destination $terminal) {
-
-    }
 
     public function tripLog()
     {
