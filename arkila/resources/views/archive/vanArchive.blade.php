@@ -12,7 +12,7 @@
            <div class="table-responsive">
                 <div class="col-md-6">
                     <a href="{{route('vans.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-chevron-left"></i> GO BACK TO VAN LIST</a>
-                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT VAN ARCHIVE</button>
+                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <table id="archiveVan" class="table table-bordered table-striped">
                         <thead>

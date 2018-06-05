@@ -12,7 +12,7 @@
            <div class="table-responsive">
                 <div class="col-md-6">
                     <a href="{{route('drivers.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-chevron-left"></i> GO BACK TO DRIVER LIST</a>
-                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT DRIVER ARCHIVE</button>
+                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <table id="archiveDriver" class="table table-bordered table-striped">
                     <thead>
@@ -35,7 +35,7 @@
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                         <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedDriver->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
-                                        <button type="button" data-toggle="modal" data-target="#delete" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
+                                        <button type="button" data-toggle="modal" data-target="#unable{{$archivedDriver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                     </div>
                                 </td>
                             </tr>
@@ -59,9 +59,9 @@
                             </div>
                             <div class="modal-body">
                                 <h1 class="text-center text-green"><i class="fa fa-undo"></i> RESTORE</h1>
-                                <p class="text-center">RESTORE <strong class="text-green text-uppercase">{{$archivedDriver->full_name}} </strong>AS A DRIVER.</p>
+                                <h4 class="text-center">RESTORE <strong class="text-green text-uppercase">{{$archivedDriver->full_name}} </strong>AS A DRIVER.</h4>
                                 <p class="text-center">CHOOSE OPERATOR</p>
-                                <div class="form-group">
+                                <div class="form-group padding-side-25">
                                     <select name="operator" class="form-control select2">
                                         <option value="">None</option>
                                         @foreach($activeOperators as $activeOperator)
@@ -82,19 +82,17 @@
                 </form>
             </div>
             <!--delete modal -->
-            <div class="modal" id="delete">
+            <div class="modal" id="delete{{$archivedDriver->member_id}}">
                 <div class="modal-dialog" style="margin-top: 10%;">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title"></h4>
                         </div>
                         <div class="modal-body">
                             <h1 class="text-center text-red"><i class="fa fa-trash"></i>DELETE</h1>
                             <p class="text-center">ARE YOU SURE YOU WANT TO PERMANENTLY DELETE</p>
                             <h4 class="text-center "><strong class="text-red">{{$archivedDriver->full_name}}</strong>?</h4>
-                            <p class="well"> only those who have no record in the system can be deleted</p>
                         </div>
                         <div class="modal-footer">
                             <form name="driverDeleteForm" action="{{route('drivers.deleteDriver',[$archivedDriver->member_id])}}" method="POST">
@@ -103,6 +101,28 @@
                                 <div class="text-center">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
                                     <button type="submit" class="btn btn-danger">DELETE</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="modal" id="unable{{$archivedDriver->member_id}}">
+                <div class="modal-dialog" style="margin-top: 10%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <h1 class="text-center text-red"><i class="fa fa-ban"></i> RESTRICTED</h1>
+                            <h4 class="text-center">UNABLE TO DELETE <strong class="text-red">{{$archivedDriver->full_name}}</strong> PERMANENTLY.</h4>
+                            <p class="text-center ">ONLY THOSE DRIVERS WHO HAVE NO RECORD OR TRANSACTION CAN BE DELETED.</p>
+                        </div>
+                        <div class="modal-footer">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
                                 </div>
                             </form>
                         </div>
