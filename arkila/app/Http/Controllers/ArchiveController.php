@@ -218,4 +218,60 @@ class ArchiveController extends Controller
         }
         return back()->with('success', 'Successfully restored van '.$archivedVan->plate_number);
     }
+
+    public function deleteDriver(Member $member) {
+        $archivedOperators = $member->archivedOperator->count();
+        $archivedVans = $member->archivedVan->count();
+        $trips = $member->trips->count();
+        $memberName = $member->full_name;
+
+        DB::beginTransaction();
+        try {
+            if($archivedOperators) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has archived operators.');
+            } elseif ($archivedVans) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has archived vans.');
+            } elseif ($trips) {
+                return back()->withErrors('Cannot delete driver '.$memberName.'. The member has a record in the trip log.');
+            } else {
+                $member->delete();
+            }
+
+            DB::commit();
+            Return back()->with('success','Successfully Deleted operator '.$memberName);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+    }
+
+    public function deleteOperator(Member $member) {
+        $archivedDrivers = $member->archivedDriver->count();
+        $archivedVans = $member->archivedVan->count();
+        $trips = $member->trips->count();
+        $memberName = $member->full_name;
+
+        DB::beginTransaction();
+        try {
+            if($archivedDrivers) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has archived drivers.');
+            } elseif ($archivedVans) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has archived vans.');
+            } elseif ($trips) {
+                return back()->withErrors('Cannot delete operator '.$memberName.'. The member has a record in the trip log.');
+            } else {
+                $member->delete();
+            }
+
+            DB::commit();
+            Return back()->with('success','Successfully Deleted operator '.$memberName);
+
+        } catch(\Exception $e) {
+            DB::rollback();
+            Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+    }
 }
