@@ -62474,6 +62474,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63020,20 +63021,38 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-md-6" }, [_vm._v("Notifications")]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-md-6" }, [
-              _c(
-                "a",
-                {
-                  attrs: { href: "#", role: "button" },
-                  on: { click: _vm.markNotificationAsRead }
-                },
-                [_vm._v("Mark All as Read")]
-              )
-            ])
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.unreadNotifications.length > 0,
+                    expression: "unreadNotifications.length > 0"
+                  }
+                ],
+                staticClass: "col-md-6"
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#", role: "button" },
+                    on: { click: _vm.markNotificationAsRead }
+                  },
+                  [_vm._v("Mark All as Read")]
+                )
+              ]
+            )
           ])
         ]),
         _vm._v(" "),
         _c("li", [
+          _vm.unreadNotifications.length == 0
+            ? _c("div", [_c("p", [_vm._v("You have no notifications")])])
+            : _vm._e(),
+          _vm._v(" "),
           _c(
             "div",
             _vm._l(_vm.unreadNotifications, function(unread) {
