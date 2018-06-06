@@ -35,8 +35,6 @@
             <!--/ .content -->
 
         @include('layouts.partials.customer_footer')
-
-@include('layouts.partials.customer_notification')
     <!-- ./wrapper -->
     @section('scripts')
 	    @include('layouts.partials.customer_scripts')
