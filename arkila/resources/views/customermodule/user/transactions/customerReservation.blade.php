@@ -144,6 +144,8 @@
                                                     <td>Expired</td>
                 									@elseif($reservation->status == 'REFUNDED')
                                                     <td>REFUNDED</td>
+                                                    @elseif($reservation->status == 'CANCELLED' && $reservation->is_refundable == false)
+                                                    <td>CANCELLED</td>
                                                     @else
                                                     <td>{{$reservation->refund_code ?? 'Please pay first to get a refund code.'}}</td>
                                                     @endif

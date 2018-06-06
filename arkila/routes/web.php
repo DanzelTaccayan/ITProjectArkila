@@ -95,20 +95,13 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     /************ Settings ******************************/
 
 
-    Route::resource('/home/settings/terminal', 'TerminalController', [
-        'except' => ['index','show']
-    ]);
-
     Route::resource('/home/settings/fees', 'FeesController', [
         'except' => ['index','show']
     ]);
     Route::resource('/home/settings/discounts', 'DiscountsController', [
         'except' => ['index', 'show']
     ]);
-
-    Route::resource('/home/settings/tickets','TicketsController',[
-        'except' => ['index','show']
-    ]);
+    
     Route::get('/home/settings', 'HomeController@settings')->name('settings.index');
 
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');

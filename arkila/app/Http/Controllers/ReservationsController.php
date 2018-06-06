@@ -293,14 +293,6 @@ class ReservationsController extends Controller
                     'refund_code' => null, 
                     'is_refundable' => false,
                 ]);
-                $newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
-                $reservation->reservationDate->update([
-                    'number_of_slots' => $newSlot,
-                ]);
-
-                $reservation->update([
-                    'returned_slot' => true,
-                ]);
                 return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
             } else {
                 return back()->withErrors('Refund code does not match.');
