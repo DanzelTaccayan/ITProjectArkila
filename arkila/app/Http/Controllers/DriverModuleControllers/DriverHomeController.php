@@ -11,10 +11,6 @@ use App\Trip;
 
 class DriverHomeController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth::driver');
-    // }
 
     public function index()
     {
