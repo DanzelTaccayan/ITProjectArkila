@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Notifications\TripReportsDriverNotification;
 use PDF;
 use Illuminate\Validation\Rule;
+use DB;
 
 
 class TripsController extends Controller
@@ -108,25 +109,47 @@ class TripsController extends Controller
 
     public function acceptReport(Trip $trip)
     {
-        $trip->update([
-            "report_status" => 'Accepted',
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $trip->update([
+                "report_status" => 'Accepted',
+            ]);
 
-        $trip->transactions()->update(['status' => 'Accepted']);
+            $trip->transactions()->update(['status' => 'Accepted']);
 
-        $message = "Trip " . $trip->trip_id . " successfully accepted";
-        return redirect(route('trips.tripLog'))->with('success', $message);
+            $message = "Trip " . $trip->trip_id . " successfully accepted";
+            DB::commit();
+            return redirect(route('trips.tripLog'))->with('success', $message);
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function declineReport(Trip $trip)
     {
-        $trip->update([
-            "report_status" => 'Declined',
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $trip->update([
+                "report_status" => 'Declined',
+            ]);
 
-        $trip->transactions()->update(['status' => 'Declined']);
-        $message = "Trip " . $trip->trip_id . " successfully declined";
-        return redirect(route('trips.driverReport'))->with('success', $message);
+            $trip->transactions()->update(['status' => 'Declined']);
+            $message = "Trip " . $trip->trip_id . " successfully declined";
+
+            DB::commit();
+            return redirect(route('trips.driverReport'))->with('success', $message);
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function viewTripLog(Trip $trip)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Announcement;
 use Carbon\Carbon;
-
+use DB;
 
 class AnnouncementsController extends Controller
 {
@@ -48,18 +48,28 @@ class AnnouncementsController extends Controller
             "title" =>  'required|max:50',
 
         ]);
-        $current_time = \Carbon\Carbon::now();
-        $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $current_time = \Carbon\Carbon::now();
+            $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-        Announcement::create([
-            'title' => $request->title,
-            'description' => $request->announce,
-            'viewer' => request('viewer'),
-            'created_at' => $dateNow,
-            'updated_at' => $dateNow,
-        ]);
+            Announcement::create([
+                'title' => $request->title,
+                'description' => $request->announce,
+                'viewer' => request('viewer'),
+                'created_at' => $dateNow,
+                'updated_at' => $dateNow,
+            ]);
+            DB::commit();
+            return redirect('/home/announcements/')->with('success', 'Announcement posted successfully');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
 
-        return redirect('/home/announcements/')->with('success', 'Announcement posted successfully');
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
 
     }
 
@@ -102,19 +112,30 @@ class AnnouncementsController extends Controller
 
         ]);
 
-        $current_time = \Carbon\Carbon::now();
-        $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $current_time = \Carbon\Carbon::now();
+            $dateNow = $current_time->setTimezone('Asia/Manila')->format('Y-m-d H:i:s');
 
-        $announcement->update([
-            'title' => request('title'),
-            'description' => request('announce'),
-            'viewer' => request('viewer'),
-            'updated_at' => $dateNow,
+            $announcement->update([
+                'title' => request('title'),
+                'description' => request('announce'),
+                'viewer' => request('viewer'),
+                'updated_at' => $dateNow,
 
-        ]);
-        session()->flash('message', 'Announcement ' . request('title') . ' has been edited successfully');
+            ]);
+            session()->flash('message', 'Announcement ' . request('title') . ' has been edited successfully');
 
-        return redirect('/home/announcements/');
+            DB::commit();
+            return redirect('/home/announcements/');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     /**
@@ -125,9 +146,17 @@ class AnnouncementsController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
-        $announcement->delete();
-    	return back();
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $announcement->delete();
+            DB::commit();
+            return back();
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
 
-        //
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 }

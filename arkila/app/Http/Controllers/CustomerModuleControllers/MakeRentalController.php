@@ -14,6 +14,7 @@ use App\Notifications\CustomerRent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CustomerRentalRequest;
 use App\Notifications\OnlineRentalAdminNotification;
+use DB;
 
 use App\Http\Controllers\Controller;
 
@@ -21,236 +22,278 @@ class MakeRentalController extends Controller
 {
     public function __construct()
     {
-      $this->middleware('online-rental');
+        $this->middleware('online-rental');
     }
 
     public function createRental()
     {
-      $rule = $this->rentalRules();
-      if($rule) {
-        $destinations = Destination::allRoute()->get();
-        return view('customermodule.user.rental.customerRental', compact('destinations', 'rule'));
-      } else {
-        return back()->withErrors('Rental is not available at this moment.');
-      }
+        $rule = $this->rentalRules();
+        if($rule) {
+            $destinations = Destination::allRoute()->get();
+            return view('customermodule.user.rental.customerRental', compact('destinations', 'rule'));
+        } else {
+            return back()->withErrors('Rental is not available at this moment.');
+        }
     }
 
     public function storeRental(CustomerRentalRequest $request)
     {
-      $rule = $this->rentalRules();
-      if($rule) {
-        $requestLimitation = $rule->request_expiry + $rule->payment_due;
-        $userRequests = VanRental::where('user_id', auth()->user()->id)
-        ->where(function($status){
-          $status->where([
-              ['status','!=', 'Departed'],
-              ['status','!=', 'Expired'],
-              ['status','!=', 'Refunded'],
-              ['status','!=', 'No Van Available'],
-              ['status','!=', 'Cancelled']
-              ]);
-            })->count();
-  
-        if($userRequests < 1) {
-          if(Carbon::now()->addDays($requestLimitation)->lt(Carbon::parse($request->date))){
-            $carbonDate = new Carbon($request->date);
-            $departedDate = $carbonDate->format('Y-m-d');
-            $destination = $request->destination;
-      
-            $codes = VanRental::all();
-            $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-      
-            foreach ($codes as $code) {
-                $allCodes = $code->rental_code;
-      
-                do {
-                    $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
-                } while ($rentalCode == $allCodes);
+        $rule = $this->rentalRules();
+        if($rule) {
+            $requestLimitation = $rule->request_expiry + $rule->payment_due;
+            $userRequests = VanRental::where('user_id', auth()->user()->id)
+                ->where(function($status){
+                    $status->where([
+                        ['status','!=', 'Departed'],
+                        ['status','!=', 'Expired'],
+                        ['status','!=', 'Refunded'],
+                        ['status','!=', 'No Van Available'],
+                        ['status','!=', 'Cancelled']
+                    ]);
+                })->count();
+
+            if($userRequests < 1) {
+                // Start transaction!
+                DB::beginTransaction();
+                try  {
+
+                    if(Carbon::now()->addDays($requestLimitation)->lt(Carbon::parse($request->date))) {
+                        $carbonDate = new Carbon($request->date);
+                        $departedDate = $carbonDate->format('Y-m-d');
+                        $destination = $request->destination;
+
+                        $codes = VanRental::all();
+                        $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+
+                        foreach ($codes as $code) {
+                            $allCodes = $code->rental_code;
+
+                            do {
+                                $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
+                            } while ($rentalCode == $allCodes);
+                        }
+
+                        if($request->destination == 'other') {
+                            $destination = ucwords(strtolower($request->otherDestination));
+                        }
+                        $rent = VanRental::create([
+                            "user_id" => Auth::id(),
+                            "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
+                            "departure_date" => $departedDate,
+                            "rental_code" => 'RN'.$rentalCode,
+                            "departure_time" => $request->time,
+                            "number_of_days" => $request->numberOfDays,
+                            "destination" => $destination,
+                            "contact_number" => $request->contactNumber,
+                            "status" => 'Pending',
+                            "rent_type" => 'Online',
+                            "comment" => $request->message !== null ? $request->message : null,
+                        ]);
+                        DB::commit();
+                        return redirect(route('rental.success', $rent->rent_id))->with('success', 'Successfully created a rental');
+                    } else {
+                        DB::rollback();
+                        return back()->withErrors('Sorry, you can only request a rental ' . $requestLimitation . ' days before departure.');
+                    }
+                } catch(\Exception $e) {
+                    DB::rollback();
+                    \Log::info($e);
+
+                    return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+                }
+
+
+            } else {
+                return redirect(route('customermodule.rentalTransaction'))->withErrors('Sorry, you can only request one rent at a time.');
             }
-      
-            if($request->destination == 'other') {
-              $destination = ucwords(strtolower($request->otherDestination));            
-            }
-                $rent = VanRental::create([
-                  "user_id" => Auth::id(),
-                  "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
-                  "departure_date" => $departedDate,
-                  "rental_code" => 'RN'.$rentalCode,
-                  "departure_time" => $request->time,
-                  "number_of_days" => $request->numberOfDays,
-                  "destination" => $destination,
-                  "contact_number" => $request->contactNumber,
-                  "status" => 'Pending',
-                  "rent_type" => 'Online',
-                  "comment" => $request->message !== null ? $request->message : null,
-                ]);
-           
-            return redirect(route('rental.success', $rent->rent_id))->with('success', 'Successfully created a rental');
-          } else {
-            return back()->withErrors('Sorry, you can only request a rental ' . $requestLimitation . ' days before departure.');            
-          }
         } else {
-          return redirect(route('customermodule.rentalTransaction'))->withErrors('Sorry, you can only request one rent at a time.');
-        }   
-      } else {
-        return back()->withErrors('Rental is not available at this moment.');
-      }
+            return back()->withErrors('Rental is not available at this moment.');
+        }
     }
 
     public function rentalTransaction()
     {
-      $rule = $this->rentalRules();
-      $rentals = VanRental::all();
-      $requests = VanRental::where('user_id', auth()->user()->id)->get();
-  
-      return view('customermodule.user.transactions.customerRental', compact('rule','rentals', 'requests'));
+        $rule = $this->rentalRules();
+        $rentals = VanRental::all();
+        $requests = VanRental::where('user_id', auth()->user()->id)->get();
+
+        return view('customermodule.user.transactions.customerRental', compact('rule','rentals', 'requests'));
     }
 
     public function cancelRental(VanRental $rental)
     {
-      $rule = $this->rentalRules();
-      $time = explode(':', $rental->departure_time);
-      $dateOfRental = Carbon::parse($rental->departure_date)->setTime($time[0], $time[1], $time[2]);
-      $now = Carbon::now();
-      $conditionDate = $dateOfRental->subDays(1);
+        $rule = $this->rentalRules();
+        $time = explode(':', $rental->departure_time);
+        $dateOfRental = Carbon::parse($rental->departure_date)->setTime($time[0], $time[1], $time[2]);
+        $now = Carbon::now();
+        $conditionDate = $dateOfRental->subDays(1);
 
-      if($rental->status == 'Unpaid' || $rental->status == 'Pending') {
-        $rental->update([
-          'status' => 'Cancelled',
-          'driver_id' => null,
-          'van_id' => null,
-        ]);
-      } elseif($rental->status == 'Paid') {
-        
-        Ledger::create([
-          'description' => 'Cancellation Fee',
-          'amount' => $rule->cancellation_fee, 
-          'type' => 'Revenue',
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if($rental->status == 'Unpaid' || $rental->status == 'Pending') {
+                $rental->update([
+                    'status' => 'Cancelled',
+                    'driver_id' => null,
+                    'van_id' => null,
+                ]);
+            } elseif($rental->status == 'Paid') {
 
-        if($now->gt($conditionDate)) {
-          $rental->update([
-            'status' => 'Cancelled',
-            'refund_code' => null,
-            'is_refundable' => false,
-            'driver_id' => null,
-            'van_id' => null,
-          ]);
-        } else {
-          $rental->update([
-            'status' => 'Cancelled',
-            'is_refundable' => true,
-            'driver_id' => null,
-            'van_id' => null,
-          ]);
+                Ledger::create([
+                    'description' => 'Cancellation Fee',
+                    'amount' => $rule->cancellation_fee,
+                    'type' => 'Revenue',
+                ]);
+
+                if($now->gt($conditionDate)) {
+                    $rental->update([
+                        'status' => 'Cancelled',
+                        'refund_code' => null,
+                        'is_refundable' => false,
+                        'driver_id' => null,
+                        'van_id' => null,
+                    ]);
+                } else {
+                    $rental->update([
+                        'status' => 'Cancelled',
+                        'is_refundable' => true,
+                        'driver_id' => null,
+                        'van_id' => null,
+                    ]);
+                }
+            }
+            DB::commit();
+            return back()->with('success', 'Rental marked as cancelled');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
-      }
-      return back()->with('success', 'Rental marked as cancelled');
     }
-    
+
     public function refundExpiry()
-    {  
-      // if the cancellation is refundable, he/she is given 7 days to refund
-      // else the transaction will expired
-      $rule = $this->rentalRules();
-      $rentals = VanRental::where([
-        ['is_refundable', true],
-        ['status', 'Cancelled']
+    {
+        // if the cancellation is refundable, he/she is given 7 days to refund
+        // else the transaction will expired
+        $rule = $this->rentalRules();
+        $rentals = VanRental::where([
+            ['is_refundable', true],
+            ['status', 'Cancelled']
         ])->get();
 
-      $now = Carbon::now();
+        $now = Carbon::now();
 
-      foreach($rentals as $rental) {
-        $updatedAt = Carbon::parse($rental->updated_at);
-        $refundExpiry = $updatedAt->addDays($rule->refund_expiry);
+        foreach($rentals as $rental) {
 
-        if($now->gt($refundExpiry)) {
-          $rental->update([
-            'is_refundable' => false,
-            'refund_code' => null,
-            'status' => 'Expired',
-            'driver_id' => null,
-            'van_id' => null,
-          ]);
+            // Start transaction!
+            DB::beginTransaction();
+            try  {
+                $updatedAt = Carbon::parse($rental->updated_at);
+                $refundExpiry = $updatedAt->addDays($rule->refund_expiry);
+
+                if($now->gt($refundExpiry)) {
+                    $rental->update([
+                        'is_refundable' => false,
+                        'refund_code' => null,
+                        'status' => 'Expired',
+                        'driver_id' => null,
+                        'van_id' => null,
+                    ]);
+                }
+                DB::commit();
+            } catch(\Exception $e) {
+                DB::rollback();
+                \Log::info($e);
+
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+            }
         }
-      }
     }
 
     public function expiredStatus()
     {
-      $rentals = VanRental::where([
-        ['status', '!=', 'Cancelled'],
-        ['status', '!=', 'Departed']
+        $rentals = VanRental::where([
+            ['status', '!=', 'Cancelled'],
+            ['status', '!=', 'Departed']
         ])->get();
 
-      $now = Carbon::now();
+        $now = Carbon::now();
 
-      foreach($rentals as $rental) {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            foreach($rentals as $rental) {
 
-        $rule = $this->rentalRules();
-        $updatedAt = Carbon::parse($rental->updated_at);
-        $expired = $updatedAt->addDays($rule->payment_due);
-        $createdAt = Carbon::parse($rental->created_at);
-        $expiry = $createdAt->addDays($rule->request_expiry);
-        $time = explode(':', $rental->departure_time);
-        $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
-        $paidStatusExpiry = $rental->departure_date->setTime($time[0], $time[1]+15, $time[2]);
+                $rule = $this->rentalRules();
+                $updatedAt = Carbon::parse($rental->updated_at);
+                $expired = $updatedAt->addDays($rule->payment_due);
+                $createdAt = Carbon::parse($rental->created_at);
+                $expiry = $createdAt->addDays($rule->request_expiry);
+                $time = explode(':', $rental->departure_time);
+                $paidExpiry = $rental->departure_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
+                $paidStatusExpiry = $rental->departure_date->setTime($time[0], $time[1]+15, $time[2]);
 
-        if($rental->status == 'Pending' && $now->gt($expiry)){
-          $rental->update([
-            'status' => 'No Van Available',
-          ]);
-        } elseif($rental->status == 'Unpaid' && $now->gt($expired)) {
-          $rental->update([
-            'status' => 'Expired',
-            'driver_id' => null,
-            'van_id' => null,
-          ]);
-        } elseif($rental->status == 'Paid' && $now->gt($paidExpiry)) {
-          if($now->gt($paidStatusExpiry)) {
-            $rental->update([
-              'status' => 'Expired',
-              'is_refundable' => false,
-              'refund_code' => null,
-              'driver_id' => null,
-              'van_id' => null,
-            ]);              
-          } else {
-            $rental->update([
-              // 'status' => 'Cancelled',
-              'is_refundable' => false,
-              'refund_code' => null,
-              'driver_id' => null,
-              'van_id' => null,
-            ]);
-          }
+                if($rental->status == 'Pending' && $now->gt($expiry)){
+                    $rental->update([
+                        'status' => 'No Van Available',
+                    ]);
+                } elseif($rental->status == 'Unpaid' && $now->gt($expired)) {
+                    $rental->update([
+                        'status' => 'Expired',
+                        'driver_id' => null,
+                        'van_id' => null,
+                    ]);
+                } elseif($rental->status == 'Paid' && $now->gt($paidExpiry)) {
+                    if($now->gt($paidStatusExpiry)) {
+                        $rental->update([
+                            'status' => 'Expired',
+                            'is_refundable' => false,
+                            'refund_code' => null,
+                            'driver_id' => null,
+                            'van_id' => null,
+                        ]);
+                    } else {
+                        $rental->update([
+                            // 'status' => 'Cancelled',
+                            'is_refundable' => false,
+                            'refund_code' => null,
+                            'driver_id' => null,
+                            'van_id' => null,
+                        ]);
+                    }
+                }
+            }
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
-      }
     }
 
     public function receipt(VanRental $rental)
     {
-      $rule = $this->rentalRules();
-      if($rule) {
-        $destinations = Destination::where('destination_name', $rental->destination)->get();
-        return view('e_receipt.rental-receipt', compact('rental', 'rule', 'destinations'));
-      } else {
-        return back()->withErrors('Rental is not available at this moment.');
-      }
+        $rule = $this->rentalRules();
+        if($rule) {
+            $destinations = Destination::where('destination_name', $rental->destination)->get();
+            return view('e_receipt.rental-receipt', compact('rental', 'rule', 'destinations'));
+        } else {
+            return back()->withErrors('Rental is not available at this moment.');
+        }
     }
 
     public function success(VanRental $rental)
     {
-      $rule = $this->rentalRules();
-      if($rule) {
-        return view('customermodule.user.rental.success', compact('rental', 'rule'));
-      } else {
-        return back()->withErrors('Rental is not available at this moment.');
-      }
+        $rule = $this->rentalRules();
+        if($rule) {
+            return view('customermodule.user.rental.success', compact('rental', 'rule'));
+        } else {
+            return back()->withErrors('Rental is not available at this moment.');
+        }
     }
 
     public function rentalRules()
-	  {   
-		  return BookingRules::where('description', 'Rental')->get()->first();;
-	  } 
+    {
+        return BookingRules::where('description', 'Rental')->get()->first();;
+    }
 }

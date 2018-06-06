@@ -10,6 +10,7 @@ use App\Rules\checkContactNumber;
 use App\Rules\checkTime;
 use \Carbon\Carbon;
 use Validator;
+use DB;
 
 
 
@@ -87,17 +88,25 @@ class ProfileController extends Controller
             'openTime' => 'required|date_format:H:i',
             'closeTime' => 'required|date_format:H:i',
         ]);
-        
-        $company_profile->update([
-            'contact_number' => request('contactNumber'),
-            'address' => request('address'),
-            'email' => request('email'),
-            'open_time' => request('openTime'),
-            'close_time' => request('closeTime'),
-        ]);
 
-        return redirect('/home/company-profile')->with('success', 'Profile has been successfully updated');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $company_profile->update([
+                'contact_number' => request('contactNumber'),
+                'address' => request('address'),
+                'email' => request('email'),
+                'open_time' => request('openTime'),
+                'close_time' => request('closeTime'),
+            ]);
+            DB::commit();
+            return redirect('/home/company-profile')->with('success', 'Profile has been successfully updated');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
 
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 
     /**
