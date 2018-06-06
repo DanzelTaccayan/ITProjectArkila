@@ -1,11 +1,22 @@
 @extends(Auth::user() ? 'layouts.customer_user' : 'layouts.customer_non_user')
+@section('links')
+@parent
+<style>
+    .question-list{
+        margin-bottom: 10%;
+    }
+    .question-item{
+        margin-bottom: 3%;
+    }
+</style>
+@endsection
 @section('content')
 <section class="mainSection">
         <div class="col-md-8 mx-auto">
             <div class="heading text-center">
                 <h2>FAQs</h2>
             </div>
-            <div class="box box-solid">
+            <div class="box box-solid boxContainer">
                 <div class="box-body">
                     <h4>YOUR ACCOUNT</h4>
                     <div class="question-list">  
