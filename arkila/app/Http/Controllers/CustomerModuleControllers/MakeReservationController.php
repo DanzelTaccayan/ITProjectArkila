@@ -223,7 +223,7 @@ class MakeReservationController extends Controller
 
 	public function reservationTransaction()
 	{
-		$requests = Reservation::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+		$requests = Reservation::where([['user_id', auth()->user()->id], ['date_id', '!=', null]])->orderBy('created_at', 'DESC')->get();
 
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
@@ -294,9 +294,22 @@ class MakeReservationController extends Controller
 		// if cancelled and more than one day before departure		  
 		  
 		  if($reservation->status == 'UNPAID') {
+
 			$reservation->update([
 			  'status' => 'CANCELLED',
 			]);
+
+			if($now->lt($conditionDate)) {
+				$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+				$reservation->reservationDate->update([
+					'number_of_slots' => $newSlot,
+				]);
+
+				$reservation->update([
+					'returned_slot' => true,
+				]);
+			}
+
 		  } elseif($reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
 			
 			if($now->gt($conditionDate)) {

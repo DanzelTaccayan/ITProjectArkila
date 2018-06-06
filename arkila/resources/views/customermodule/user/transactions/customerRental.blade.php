@@ -97,7 +97,7 @@
                                     <p>Its less than 24 hours before your specified departure time, if you will cancel now <strong class="text-red">you will NOT be able to refund</strong>.
                                     Are you sure you want to cancel your van rental?</p>
                                     @else
-                                    <p>If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund minus a cancellation fee.
+                                    <p>If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the rental fee, if any. A cancellation fee will also be charged.
                                     Are you sure you want to cancel your van rental?</p>
                                     @endif
                                     @elseif($rental->status == 'Pending' || $rental->status == 'Unpaid')
