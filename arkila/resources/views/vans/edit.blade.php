@@ -75,22 +75,24 @@
 @section('form-btn')
 <button id="editVanBtn" class="btn btn-primary" type="submit">Save Changes</button>
 <div id="editVanBtnM" class="hidden">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Save Changes</button>
-    <div class="modal" id="driverWithVan-modal">
-        <div class="modal-dialog modal-sm" style="margin-top: 10%;">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
+    <div class="modal" id="driverWithVan-modal">                          
+        <div class="modal-dialog" style="margin-top: 10%;">
             <div class="modal-content">
-                <div class="modal-header bg-yellow">
-                    <h4 class="modal-title">WARNING</h4>
+                <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <h4>There's already a van associated to this driver. If you wish to continue, the driver will be associated to this van instead.</h4>
+                    <h1 class="text-center text-yellow"><i class="fa fa-exclamation-triangle text-yellow"></i> WARNING!</h1>
+                    <p class="text-center">A VAN HAS ALREADY BEEN ASSOCIATED TO THIS DRIVER</p>
+                    <p class="text-center">IF YOU WISH TO CONTINUE, THE DRIVER WILL BE ASSOICIATED TO THIS VAN INSTEAD.</p>
                 </div>
                 <div class="modal-footer">
-                    <div class="pull-right">    
-                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
-                        <button type="submit" class="btn btn-primary">Continue</button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                        <button type="submit" class="btn bg-yellow">CONTINUE</button>
                     </div>
                 </div>
             </div>
@@ -174,13 +176,13 @@ $('select[name="driver"]').on('change', function(){
    console.log(van);
    if(van !== null){
     console.log(van);
-    $( "#addVanBtn" ).hide();
-    $( "#addVanBtnM" ).show();
-    $( "#addVanBtnM" ).removeClass("hidden");
+    $( "#editVanBtn" ).hide();
+    $( "#editVanBtnM" ).show();
+    $( "#editVanBtnM" ).removeClass("hidden");
    } else {
     console.log(van);
-    $( "#addVanBtn" ).show();
-    $( "#addVanBtnM" ).hide();
+    $( "#editVanBtn" ).show();
+    $( "#editVanBtnM" ).hide();
    }
 });
 </script>

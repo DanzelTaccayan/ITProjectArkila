@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class checkSpecialCharacters implements Rule
+class checkAddress implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,7 +25,7 @@ class checkSpecialCharacters implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match('/^[A-Za-z\-\d .()]*$/',$value);
+        return preg_match('/^[A-Za-z\-\d .()#,]*$/',$value);
     }
 
     /**
@@ -35,6 +35,6 @@ class checkSpecialCharacters implements Rule
      */
     public function message()
     {
-        return 'The :attribute field may only contain letters, numbers and special characters including hyphen (-), period(.), white spaces, and parenthesis (())';
+        return 'The :attribute field may only contain letters, numbers and special characters including white spaces, hyphen (-), period(.), number sign (#), commas (,) and parenthesis (())';
     }
 }

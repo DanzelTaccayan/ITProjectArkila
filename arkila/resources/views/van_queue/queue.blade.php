@@ -165,7 +165,7 @@ ol.arrow-drag{
 }
 .special-unit-body{
   height: 510px;
-  background: bisque;
+  background: #fdf59a;
 }
 .terminal-body{
   height: 200px;
@@ -548,6 +548,15 @@ ol.arrow-drag{
      $(activeTab + "-menu").addClass("active");
 
      $('a[href="#queue'+ activeTab +'"]').tab('show')
+
+        var activeDestinationId = activeTab[activeTab.length-1];
+     if(activeDestinationId) {
+         if($('#destination').val() !== activeDestinationId) {
+             $('#destination').val(activeDestinationId);
+             $('#destination').trigger('change');
+         }
+     }
+
     });
 
     $(function(){
@@ -567,7 +576,12 @@ ol.arrow-drag{
     
         $(function() {
             specialUnitChecker();
+            $('#destinationTerminals').children().on('click', function(){
+                var destinationId = $(this).data('val');
 
+                $('#destination').val(destinationId);
+                $('#destination').trigger('change');
+            });
             //Update Remarks
             $('button[name="updateRemarksButton"]').on('click',function() {
                 var queueId = $(this).data('val');

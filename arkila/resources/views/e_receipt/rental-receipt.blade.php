@@ -54,7 +54,7 @@
           <tbody>
             <tr>
               <th>Rental Code:</th>
-              <td>RN1234567890</td>
+              <td>{{$rental->rental_code}}</td>
             </tr>
           </tbody>
         </table>
@@ -67,7 +67,7 @@
           <tbody>
             <tr>
               <th>Customer:</th>
-              <td>John Doe</td>
+              <td>{{$rental->customer_name}}</td>
             </tr>
           </tbody>
         </table>
@@ -104,11 +104,11 @@
           </thead>
           <tbody>
           <tr>
-            <td>Asingan</td>
-            <td>20 May 2019</td>
-            <td class="text-right">1:00 PM</td>
-            <td class="text-right">1</td>
-            <td class="text-right">₱ 200.00</td>
+            <td>{{$rental->destination}}</td>
+            <td>{{$rental->departure_date->formatLocalized('%d %B %Y')}}</td>
+            <td class="text-right">{{date('g:i A', strtotime($rental->departure_time))}}</td>
+            <td class="text-right">{{$rental->number_of_days}}</td>
+            <td class="text-right">₱{{$rental->rental_fare}}</td>
           </tr>
           </tbody>
         </table>
@@ -123,23 +123,30 @@
         <div class="well">
           <div class="table-responsive">
             <table class="table ">
+            @if(!$destinations)
               <tr>
                 <th style="width:50%">Subtotal:</th>
-                <td class="text-right">₱ 200.00</td>
+                <td class="text-right">₱{{$rental->rental_fare}}</td>
               </tr>
               <tr>
                 <th>Rental Fee</th>
-                <td class="text-right">₱ 200.00</td>
+                <td class="text-right">₱{{$rule->fee}}</td>
               </tr>
               <tr style="border-top: 2px solid black;">
                 <th class="text-blue"><h4>Total:</h4></th>
-                <td class="text-blue text-right"><h4>₱ 400.00</h4></td>
+                <td class="text-blue text-right"><h4>₱{{$rental->rental_fare + $rule->fee}}</h4></td>
               </tr>
+              @else
+              <tr style="border-top: 2px solid black;">
+                <th class="text-blue"><h4>Total:</h4></th>
+                <td class="text-blue text-right"><h4>₱{{$rental->rental_fare}}</h4></td>
+              </tr>
+              @endif              
             </table>
           </div>
         </div>
         <div>
-          <p><strong>Date Paid:</strong> 20 May 2019</p>
+          <p><strong>Date Paid:</strong> {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</p>
         </div>
       </div>
       <!-- /.col -->
@@ -156,10 +163,10 @@
             </thead>
             <tbody>
               <tr>
-                <td>AAA 123</td>
-                <td>Hi Ace</td>
-                <td class="text-right">15</td>
-                <td>John Doe</td>
+                <td>{{$rental->van->plate_number}}</td>
+                <td>{{$rental->van->model->description}}</td>
+                <td class="text-right">{{$rental->van->seating_capacity}}</td>
+                <td>{{$rental->driver->full_name}}</td>
               </tr>
             </tbody>
           </table>

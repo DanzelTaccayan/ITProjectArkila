@@ -29,7 +29,7 @@
     <div class="box" style="box-shadow: 0px 5px 10px gray;">
         <div class="box-body">
             <div class="row">
-                <form action="{{route('trips.admin.storeReport', [$terminals->destination_id, $destination->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
+                <form name="createReportForm" action="{{route('trips.admin.storeReport', [$terminals->destination_id, $destination->destination_id])}}" method="POST" class="form-horizontal" data-parsley-validate="">
                     {{csrf_field()}}
                     <input type="hidden" name="orgId" value="{{$terminals->destination_id}}">
 
@@ -169,6 +169,7 @@
             </div>
         </div>
     </div>
+    @include('layouts.partials.preloader_div')
 </div>
 
 @endsection
@@ -221,6 +222,12 @@
     }
     $(function() {
 
+        $('form[name="createReportForm"]').on('submit', function () {
+            $('#submit-loader').removeClass('hidden');
+            $('#submit-loader').css("display","block");
+
+            $(this).find('button[type="submit"]').prop('disabled',true);
+        });
         //Date picker
         cloneDatePicker();
 

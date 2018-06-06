@@ -32,10 +32,23 @@
                                 <td>{{$archivedDriver->contact_number}}</td>
                                 <td>{{$archivedDriver->updated_at->format('h:i A')." of ".$archivedDriver->updated_at->format('M d, Y')}}</td>
                                 <td>
+                                    @php
+                                        $archivedOperators = $archivedDriver->archivedOperator->count();
+                                        $archivedVans = $archivedDriver->archivedVan->count();
+                                        $trips = $archivedDriver->trips->count();
+                                        $result = '';
+
+                                    if($archivedOperators || $archivedVans || $trips) {
+                                        $result = '#unable'.$archivedDriver->member_id;
+                                    } else {
+                                        $result = '#delete'.$archivedDriver->member_id;
+                                    }
+
+                                    @endphp
                                     <div class="text-center">
                                         <a href="{{route('drivers.show',[$archivedDriver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
                                         <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#{{'restoreDriver'.$archivedDriver->member_id}}"><i class="fa fa-undo"></i> RESTORE</a>
-                                        <button type="button" data-toggle="modal" data-target="#unable{{$archivedDriver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
+                                        <button type="button" data-toggle="modal" data-target="{{$result}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i> DELETE</button>
                                     </div>
                                 </td>
                             </tr>

@@ -60,6 +60,8 @@ class VansController extends Controller
 
     public function store()
     {
+        $plateNumber = trim(strtoupper(request('plateNumber')));
+
         $this->validate(request(), [
             "operator" => ['required','numeric','exists:member,member_id',new checkOperator],
             "driver" => ['nullable','numeric','exists:member,member_id',new checkDriver],
@@ -84,7 +86,7 @@ class VansController extends Controller
             }
 
             $van = Van::create([
-                'plate_number' => request('plateNumber'),
+                'plate_number' => $plateNumber,
                 'model_id' => $vanModel->model_id,
                 'seating_capacity' => request('seatingCapacity'),
                 'location' => $this->mainTerminal->destination_name
@@ -127,7 +129,7 @@ class VansController extends Controller
             \Log::info($e);
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
-        return redirect(route('vans.index'))->with('success', 'Van  '. request('plateNumber') .' successfully registered');
+        return redirect(route('vans.index'))->with('success', 'Van  '. $plateNumber .' successfully registered');
     }
 
     /**
@@ -145,6 +147,8 @@ class VansController extends Controller
             "seatingCapacity" => 'required|numeric|min:1'
         ]);
 
+        $plateNumber = trim(strtoupper(request('plateNumber')));
+
         // Start transaction!
         DB::beginTransaction();
         try
@@ -161,7 +165,7 @@ class VansController extends Controller
             }
 
             $van = Van::create([
-                'plate_number' => request('plateNumber'),
+                'plate_number' => $plateNumber,
                 'model_id' => $vanModel->model_id,
                 'seating_capacity' => request('seatingCapacity'),
                 'location' => $this->mainTerminal->destination_name
@@ -203,7 +207,7 @@ class VansController extends Controller
         }
         else
         {
-            return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Van  '. request('plateNumber') .' successfully registered');
+            return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Van  '. $plateNumber .' successfully registered');
         }
     }
 
@@ -238,6 +242,8 @@ class VansController extends Controller
                 "plateNumber" => 'bail|required',
                 "vanModel" => ['bail','required',new checkVanModel, 'exists:van_model,description'],
             ]);
+
+            $plateNumber = trim(strtoupper(request('plateNumber')));
 
             $vanCount = Van::all()
                 ->whereIn('plate_number', Van::all()->whereNotIn('plate_number', $van->plate_number)->pluck('plate_number'))
@@ -310,7 +316,7 @@ class VansController extends Controller
                 $oldVanModel = $van->model;
 
                 $van->update([
-                    'plate_number' => request('plateNumber'),
+                    'plate_number' => $plateNumber,
                     'seating_capacity' => request('seatingCapacity'),
                     'model_id' => $vanModel->model_id
                 ]);
@@ -320,7 +326,7 @@ class VansController extends Controller
                 }
 
                 DB::commit();
-                session()->flash('message','Van '.request('plateNumber').'Successfully updated');
+                session()->flash('message','Van '.$plateNumber.'Successfully updated');
             }
             catch(\Exception $e)
             {
@@ -334,7 +340,7 @@ class VansController extends Controller
             }
             else
             {
-                return redirect(route('vans.index'))->with('success', 'Van  '. request('plateNumber') .' successfully updated');
+                return redirect(route('vans.index'))->with('success', 'Van  '. $plateNumber .' successfully updated');
             }
         }
         else

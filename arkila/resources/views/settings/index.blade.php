@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <form method="POST" action="{{route('home.restoreDatabase')}}">
+                <form name="restoreBackupForm" method="POST" action="{{route('home.restoreDatabase')}}">
                     {{csrf_field()}}
                 <p class="text-center">Click "Restore" to retreive all saved data.</p>
                 <button type="submit" class="btn btn-primary btn-sm btn-flat btn-block pull-right">RESTORE</button>
@@ -111,6 +111,7 @@
             </div>
         </div>
     </div>
+    @include('layouts.partials.preloader_div')
 </div>
 
 
@@ -121,8 +122,14 @@
     @include('message.error')
     <script>
         $(document).ready(function() {
-            $('.sidebar-menu').tree()
-        })
+            $('.sidebar-menu').tree();
+
+            $('form[name="restoreBackupForm" ]').on('submit', function(){
+                        $('#submit-loader').removeClass('hidden');
+                        $('#submit-loader').css("display","block");
+                        $(this).find('button[type="submit"]').prop('disabled',true);
+            });
+        });
 
 
       $(document).ready(function(){

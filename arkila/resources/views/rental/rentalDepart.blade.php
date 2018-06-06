@@ -37,7 +37,7 @@
                     </tr>
                     @endif
                 </table>
-                <p><strong>REFUNDABLE UNTIL:</strong></p>
+                <p><strong>REFUNDABLE UNTIL: @if($rental->status == 'Paid') {{$rental->departure_date->subDays(2)->formatLocalized('%d %B %Y')}} @elseif ($rental->status == 'Cancelled' && $rental->is_refundable == true) {{$rental->updated_at->addDays($rules->refund_expiry)->formatLocalized('%d %B %Y')}} @endif</strong></p>
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
