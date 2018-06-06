@@ -290,7 +290,6 @@
                                             </div>
                                             <div>
                                                 <hr>
-
                                                 <div class="pull-right">
                                                 <a href="{{route('transactions.manageTickets')}}" type="button" class="btn bg-maroon btn-flat" style="height: 50px; padding-top: 13px;">SOLD TICKETS</a>
                                                 @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->where('queue_number',1)->first() ?? null)
@@ -392,8 +391,9 @@
                                                                 </ul>
                                                             </div>   
                                                         </div>
-
                                                     </div>
+                                                    <p> Sold Tickets: <strong id="pendingListCount{{$terminal->destination_id}}"></strong>
+                                                    </p>
                                                 </div>
 
                                                 <div class="list-arrows col-md-2 text-center">
@@ -482,7 +482,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                        <p> On Board Tickets:<strong id="onBoardListCount{{$terminal->destination_id}}"></strong>
+                                                        </p>
                                                 </div>
+                                                
 
                                             </div>
                                             <div>
@@ -571,6 +574,8 @@
 @parent
 {{ Html::script('/jquery/bootstrap3-editable/js/bootstrap-editable.min.js') }}
 
+
+
 <script>
     $(function(){
         $('.select2').select2();
@@ -601,14 +606,13 @@
             var scrollmem = $('body').scrollTop() || $('html').scrollTop();
             window.location.hash = this.hash;
             $('html,body').scrollTop(scrollmem);
-        });
+        });h
 
         $('a[data-toggle="tab"]').on('click',function(){
             $('.tab-pane').removeClass('hidden');
         });
 
     });
-
 </script>
 
 {{--Selecting and Unselecting Tickets--}}
@@ -1038,6 +1042,17 @@
                                 checkBox.removeClass('selected');
                                 checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                             }
+
+                            var pendingCount = $("#pendingList"+terminalId+" li").length;
+                            $("#pendingListCount"+terminalId).text(pendingCount);
+
+                            var onBoardCount = $("#onBoardList"+terminalId+" li").length;
+                            $("#onBoardListCount"+terminalId).text(onBoardCount);
+
+                            $("#onBoardList"+terminalId+" li").mouseup(function(){
+                                var onBoardSelectedCount = $("#onBoardList"+terminalId+" li.active").length;
+                                $("#onBoardSelectedCount"+terminalId).text(onBoardSelectedCount);
+                            }); 
                         },
                         error:function(response) {
                             $('div[data-notify="container"]').remove();
@@ -1103,6 +1118,11 @@
                                 checkBox.removeClass('selected');
                                 checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                             }
+                              var pendingCount = $("#pendingList"+terminalId+" li").length;
+                            $("#pendingListCount"+terminalId).text(pendingCount);
+
+                            var onBoardCount = $("#onBoardList"+terminalId+" li").length;
+                            $("#onBoardListCount"+terminalId).text(onBoardCount);
                         },
                         error:function(response) {
                             $('div[data-notify="container"]').remove();
@@ -1375,14 +1395,12 @@
 
         $('button[name="boardPageBtn"]').click(function(){
             var terminalId = $(this).data('terminal');
-
             $("#sellTickets"+terminalId).hide();
             $("#boardTickets"+terminalId).show();
         });
 
         $('button[name="sellPageBtn"]').click(function(){
             var terminalId = $(this).data('terminal');
-
             $("#sellTickets"+terminalId).show();
             $("#boardTickets"+terminalId).hide();
         });
@@ -1483,5 +1501,22 @@ function myFunction() {
         }
     }
 }
+</script>
+<script>
+    @foreach($terminals as $terminal)
+        var pendingCount = $("#pendingList{{$terminal->destination_id}} li").length;
+        $('#pendingListCount{{$terminal->destination_id}}').text(pendingCount);
+
+        var onBoardCount = $("#onBoardList{{$terminal->destination_id}} li").length;
+        $('#onBoardListCount{{$terminal->destination_id}}').text(onBoardCount);
+
+        $("#onBoardList{{$terminal->destination_id}} li").mouseup(function(){
+            var onBoardSelectedCount = $("#onBoardList{{$terminal->destination_id}} li.active").length;
+            $('#onBoardSelectedCount{{$terminal->destination_id}}').text(onBoardSelectedCount);
+        });
+
+        var onBoardSelectedCount = $("#onBoardList{{$terminal->destination_id}} li.active").length;
+        $('#onBoardSelectedCount{{$terminal->destination_id}}').text(onBoardSelectedCount);
+    @endforeach
 </script>
 @endsection
