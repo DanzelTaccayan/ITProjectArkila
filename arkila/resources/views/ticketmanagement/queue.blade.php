@@ -65,11 +65,11 @@
 @parent
     <script>
         $(document).ready(function(){
+            var counter = 1; 
             $.ajax({
                 type: 'GET',
                 url: '/getVanQueue',
                 success: function(response){
-                    var counter = 1; 
                     $.each(response.vanqueue, function(i,item){                            
                         $('.item').each(function(i,obj){
                             if(obj.id == item.destination_id){

@@ -16,7 +16,7 @@
     <div id="terminalForm">
       <div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="bookingFee" value="{{$bookingfee->booking_fee}}" val-partAmount required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" step=".01" name="bookingFee" value="{{$bookingfee->booking_fee}}" val-bookingFee required>
       </div>
     </div>
 
