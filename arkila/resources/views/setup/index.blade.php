@@ -97,7 +97,7 @@
                 </div>
                 <div class="form-group">
                     <label>Booking Fee: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control terminalInput terminalRequired" min="1" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
+                    <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" step=".01" name="mainBookingFee" value="{{old('mainBookingFee')}}" required>
                 </div>
                 <hr>    
                 <h4><strong><i class="fa fa-map-marker"></i> Destination Terminal</strong></h4> 
@@ -159,7 +159,7 @@
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>
-                    <input type="number" class="form-control" name="addSop" min="1" step="0.25" placeholder="Php 0.00" value="{{old('addSop')}}" val-sop required>
+                    <input type="number" class="form-control" name="addSop" min="1"  max="5000" step=".01" placeholder="Php 0.00" value="{{old('addSop')}}" val-sop required>
                 </div>
                 <div class="form-group">
                     <label>Description:</label>
@@ -168,7 +168,7 @@
                 </div>
                 <div class="form-group">
                     <label>Amount: <span class="text-red">*</span></label>
-                    <input type="number" class="form-control" name="addComFund" min="1" placeholder="Php 0.00" value="{{old('addComFund')}}" val-cf required>
+                    <input type="number" class="form-control" name="addComFund" min="1"  max="5000" step=".01" placeholder="Php 0.00" value="{{old('addComFund')}}" val-cf required>
                 </div>
                 <p class="font-italic"><strong>NOTE:</strong> The amounts can be edited later in the Fees and Features page under the Settings tab.</p>
             </div>
