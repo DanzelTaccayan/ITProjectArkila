@@ -181,7 +181,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Driver Contact Number</th>
-                                                    <td>{{$rental->driver->contact_number ?? 'No driver assigned.'}}</td>
+                                                    <td>{{$rental->driver->member->contact_number ?? 'No driver assigned.'}}</td>
                                                 </tr>
                                                 @if($rental->status == 'Paid' || $rental->status == 'Refunded' || $rental->status == 'Unpaid' || $rental->status == 'Cancelled')
                                                 <tr>
