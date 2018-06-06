@@ -134,8 +134,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/user-management/customer/change-status', array('as' => 'changeCustomerStatus','uses' => 'CustomerUserManagementController@changeCustomerStatus'));
     /****************************************************/
 
-    Route::resource('/home/test', 'TestController');
-    Route::resource('/home/testing', 'TestingController');
+
 
     Route::resource('/home/reservations', 'ReservationsController', [
         'except' => ['edit']
