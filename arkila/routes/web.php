@@ -24,6 +24,7 @@ Route::get('/home/register/success', 'Auth\SuccessRegistrationController@success
 Route::get('/ticketmanagement','TransactionsController@manage');
 
 Route::post('/markAsRead', 'MarkAsReadNotificationController@markAsRead');
+Route::post('/markAsReadSpecific/{id}', 'MarkAsReadNotificationController@markAsReadSpecific')->name('markAsReadSpecific');
 
 Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNonUser')->name('customer.non-user.index');
 /***********************Super-Admin Module************************************/
@@ -107,7 +108,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
 
     Route::get('/adminNotifications', 'HomeController@notifications')->name('admin.getNotifs');
-    Route::post('/markAsReadSpecific/{id}', 'HomeController@markAsReadSpecific')->name('admin.markAsReadSpecific');
+
     /****************************************************/
 
     /************ User Management ******************************/

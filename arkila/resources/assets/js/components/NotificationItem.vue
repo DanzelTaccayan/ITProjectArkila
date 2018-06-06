@@ -1,17 +1,16 @@
 <template>
-  <p v-if="unread == 0">You don't have any notifications</p>
-  <div v-else-if="unread != 0" class="row">
-    <div class="col-md-9">
-      <a  v-bind:href="notificationUrl">
-        <p style="margin:0 0 0;">{{title}}</p>
+<a v-bind:href="notificationUrl" class="list-group-item">
+  <div class="row">
+    <div class="col-md-10">
+        <p class="text-limit-1" style="margin:0 0 0;">{{title}}</p>
         <span class="text-orange fa fa-book"></span>
         <small>{{details}}</small>
-      </a>
     </div>
-    <div class="col-md-3">
-      <button @click="markSpecificAsRead" type="button" class="btn btn-default btn-xs" name="button"><i class="fa fa-circle-o"></i></button>
+    <div class="col-md-2">
+      <button @click="markSpecificAsRead" type="button" class="btn btn-xs" name="button"><i class="fa fa-circle-o"></i></button>
     </div>
   </div>
+</a>
 </template>
 <script>
 import moment from 'moment';

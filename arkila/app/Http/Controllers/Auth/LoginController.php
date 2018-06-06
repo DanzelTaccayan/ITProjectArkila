@@ -55,31 +55,40 @@ class LoginController extends Controller
     public function authenticated(Request $request, $user)
     {
         $customermodule = Feature::where('description','Customer Module')->first();
-        if($customermodule->status == 'enable'){
-          if($user->isCustomer()){
-            if($user->isEnable()){
-              return redirect(route('customermodule.user.index'));
-            }else{
-              Auth::logout();
-              return redirect()->back()->withErrors('You need to confirm your account. We have sent you an activation link to your e-mail address');
-            }
-          }
+        $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+        if($mainterminal == true){
+          return redirect()->back()->withErrors('Your credentials does not match');
         }else{
-          return redirect()->back();
+          if($customermodule->status == 'enable'){
+            if($user->isCustomer()){
+              if($user->isEnable()){
+                return redirect(route('customermodule.user.index'));
+              }else{
+                Auth::logout();
+                return redirect()->back()->withErrors('You need to confirm your account. We have sent you an activation link to your e-mail address');
+              }
+            }
+          }else{
+            return redirect()->back();
+          }
         }
 
         $drivermodule = Feature::where('description','Driver Module')->first();
-        if($drivermodule->status == 'enable'){
-          if($user->isDriver()){
-            if($user->isEnable()){
-              return redirect(route('drivermodule.index'));
-            }else{
-              Auth::logout();
-              return redirect()->back()->withErrors('Your user account has been disabled by the administrator. Contact the administrator if you have any concerns'); 
-            }
-          }
+        if($mainterminal == true){
+          return redirect()->back()->withErrors('Your credentials does not match');
         }else{
-          return redirect()->back();
+          if($drivermodule->status == 'enable'){
+            if($user->isDriver()){
+              if($user->isEnable()){
+                return redirect(route('drivermodule.index'));
+              }else{
+                Auth::logout();
+                return redirect()->back()->withErrors('Your user account has been disabled by the administrator. Contact the administrator if you have any concerns'); 
+              }
+            }
+          }else{
+            return redirect()->back();
+          }
         }
 
         if($user->isSuperAdmin() && $user->isEnable()){
