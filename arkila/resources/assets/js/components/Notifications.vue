@@ -51,10 +51,8 @@
       }
     },
     mounted() {
-      console.log('Component mounted');
       Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
-        console.log(notification.id);
         let newUnreadNotifications = {
           id:notification.id,
           data:{
@@ -66,7 +64,6 @@
           }
         };
         this.unreadNotifications.push(newUnreadNotifications);
-        console.log(newUnreadNotifications);
         });
     }
   }

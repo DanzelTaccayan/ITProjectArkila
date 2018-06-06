@@ -27,8 +27,6 @@ import moment from 'moment';
       }
     },
     mounted(){
-      console.log('HELLO WORlD');
-      console.log(this.unread.id);
       //Done
       if(this.unread.data.notif_type == 'Van Rental'){
         if(this.unread.data.info.status == 'Pending'){

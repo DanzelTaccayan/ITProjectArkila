@@ -62507,9 +62507,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
-    console.log('Component mounted');
     Echo.private('App.User.' + this.userid).notification(function (notification) {
-      console.log(notification.id);
       var newUnreadNotifications = {
         id: notification.id,
         data: {
@@ -62521,7 +62519,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       };
       _this.unreadNotifications.push(newUnreadNotifications);
-      console.log(newUnreadNotifications);
     });
   }
 });
@@ -62610,8 +62607,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   mounted: function mounted() {
-    console.log('HELLO WORlD');
-    console.log(this.unread.id);
     //Done
     if (this.unread.data.notif_type == 'Van Rental') {
       if (this.unread.data.info.status == 'Pending') {
