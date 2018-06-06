@@ -1,5 +1,5 @@
 <h2><strong>STATUS: 
-    @if($reservation->status == 'OPEN')
+    @if($reservation->status == 'PAID')
     <span class="text-aqua">PAID</span>
     @elseif($reservation->status == 'CANCELLED')
     <span class="text-red">CANCELLED</span>
@@ -23,7 +23,7 @@
             </tr>
         </tbody>
     </table>
-    <p class=""><strong>REFUNDABLE UNTIL: </strong>@if($reservation->status == 'PAID'){{$reservation->reservationDate->reservation_date->subDays(2)->formatLocalized('%d %B %Y')}}@elseif($reservation->status == 'CANCELLED' && $reservation->is_refundable == true) {{$reservation->updated_at->addDays($rules->refund_expiry)->formatLocalized('%d %B %Y')}} @endif</p>
+    <p class=""><strong>REFUNDABLE UNTIL: </strong>@if($reservation->status == 'PAID'){{$reservation->reservationDate->reservation_date->subDays(2)->formatLocalized('%d %B %Y')}}@elseif($reservation->status == 'CANCELLED' && $reservation->is_refundable == true) {{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{date('g:i A', strtotime($reservation->expiry_date))}} @endif</p>
     <form action="{{route('reservation.refund', $reservation->id)}}" method="POST">
     {{ csrf_field() }} {{ method_field('PATCH') }}
     <table class="table table-striped table-bordered">

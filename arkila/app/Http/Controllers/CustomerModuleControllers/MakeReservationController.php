@@ -308,11 +308,22 @@ class MakeReservationController extends Controller
 			  $reservation->update([
 				'status' => 'CANCELLED',
 				'is_refundable' => true,
-			  ]);
-			}
+				]);
+				$reservation->update([
+					'expiry_date' => $reservation->updated_at->addDays($rule->refund_expiry),
+					]);
+					$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+					$reservation->reservationDate->update([
+						'number_of_slots' => $newSlot,
+					]);
+	
+					$reservation->update([
+						'returned_slot' => true,
+					]);
+				}
 		  }
 		  Ledger::create([
-			'description' => 'Reservation Fee',
+			'description' => 'Reservation Cancellation Fee',
 			'amount' => $rule->cancellation_fee,
 			'type' => 'Revenue',
 		  ]);
