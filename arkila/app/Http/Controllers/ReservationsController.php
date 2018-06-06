@@ -253,7 +253,7 @@ class ReservationsController extends Controller
 
             Ledger::create([
                 'description' => 'Reservation Fee',
-                'amount' => $rule->reservation_fee,
+                'amount' => $rule->fee,
                 'type' => 'Revenue',
             ]);
 
