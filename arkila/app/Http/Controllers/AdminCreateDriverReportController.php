@@ -49,7 +49,7 @@ class AdminCreateDriverReportController extends Controller
   {
 
    	$totalPassengers = $request->totalPassengers;
-    dd(request('totalPassengers'));
+    
     $totalBookingFee = $terminals->booking_fee * $totalPassengers;
     $totalPassenger = (float)$request->totalPassengers;
 
