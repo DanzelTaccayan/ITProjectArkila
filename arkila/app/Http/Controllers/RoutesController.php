@@ -318,15 +318,24 @@ class RoutesController extends Controller
         $numberOfSoldTickets = 0;
         if($isTerminal == true) {
             foreach($route->routeFromDestination as $routes) {
-                $soldTickets = SoldTicket::where('destination_id', $routes->destination_id)->get();
-                foreach ($soldTickets as $soldTicket) {
-                    if ($soldTicket != null) {
-                        $numberOfSoldTickets++;
+                $soldTickets = SoldTicket::all();
+                if($soldTickets->count() > 0) {
+                    foreach ($soldTickets as $soldTicket) {
+                        if ($soldTicket->ticket->destination_id == $routes->destination_id) {
+                                $numberOfSoldTickets++;
+                        }
                     }
                 }
             }
         } else {
-            $numberOfSoldTickets = SoldTicket::where('destination_id', $route->destination_id)->count();
+            $soldTickets = SoldTicket::all();
+            if($soldTickets->count() > 0) {
+                foreach($soldTickets as $soldTicket) {
+                    if ($soldTicket->ticket->destination_id == $route->destination_id) {
+                        $numberOfSoldTickets++;
+                    }
+                }
+            }
         }
         $main = Destination::where('is_main_terminal', '1')->first();
         $terminals = Destination::allTerminal()->get();
@@ -361,9 +370,9 @@ class RoutesController extends Controller
                 }
             } else {
                 if($isTerminal == true) {
-                    return back()->withErrors('Unable to delete terminal '. $route->destination_name .', there are still tickets that needs to be returned');
+                    return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->withErrors('Unable to delete terminal '. $route->destination_name .', there are still tickets that needs to be returned');
                 } else {
-                    return back()->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');
+                    return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');
                 }
             }
             DB::commit();
