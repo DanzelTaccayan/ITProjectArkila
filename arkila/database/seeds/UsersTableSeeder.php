@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
             'middle_name' => 'admin',
             'first_name' => 'admin',
             'username' => 'admin',
-            'password' => '$2y$10$FdmN2gaCDcq00rV1FYX5.OZEFHcU80QsKJqHwUL3z3MeKheH1/9li',
+            'password' => '$2y$10$CEegohccFrevtvhZO1NxJ.sHxP8mTFFICDAmiqa50TGy72yufpGyC',
             'user_type' => 'Super-Admin',
             'status' => 'enable',
         ]);
@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
             'middle_name' => 'Loren',
             'first_name' => 'Diaz',
             'username' => 'customer',
-            'password' => '$2y$10$9cyV8.dgRdGfOwVSpnUtb.ft4QdFUm5w5dyaMeSzv3i6v799W4W3m',
+            'password' => '$2y$10$XJLLfpTnT0PRWizYi9YL7urIAm6qHB7j2Li5CUFZw2Jjzl7vDKP1C',
             'user_type' => 'Customer',
             'status' => 'enable'
         ]);
