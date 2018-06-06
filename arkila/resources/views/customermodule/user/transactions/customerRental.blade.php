@@ -131,7 +131,7 @@
                                             <tbody>
                                                 <tr>
                                                     <th>Rental Code</th>
-                                                    <td>{{$rental->rental_code}}</td>
+                                                    <td>{{strtoupper($rental->rental_code)}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Destination</th>

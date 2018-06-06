@@ -315,8 +315,8 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     Route::post('/home/store-rental', 'CustomerModuleControllers\MakeRentalController@storeRental')->name('customermodule.storeRental')->middleware('online-rental');
     /*Reservation*/
     Route::patch('/home/reservation/{reservation}/cancelReservation', 'CustomerModuleControllers\MakeReservationController@cancelReservation')->name('reservation.cancel')->middleware('online-reservation');
+    Route::get('/home/reservation/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@receipt')->name('reservation.receipt');
 
-    Route::get('/home/receipt/{reservation}', 'CustomerModuleControllers\MakeReservationController@reservationPdf')->name('reservation.receipt');
     Route::get('/home/routes/fare-list', 'CustomerModuleControllers\MakeReservationController@fareList')->name('reservation.fareList');
 
     Route::get('/home/reservation/create-success/{transaction}', 'CustomerModuleControllers\MakeReservationController@reservationSuccess')->name('customermodule.success')->middleware('online-reservation');

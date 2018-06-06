@@ -32,7 +32,7 @@
       <div class="col-xs-12">
         <h2 class="page-header">
           <i class="fa fa-globe"></i> Arkila - BanTrans 
-          <small class="pull-right">Date: 2/10/2014</small>
+          <small class="pull-right">Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
         </h2>
       </div>
       <!-- /.col -->
@@ -47,7 +47,7 @@
           <tbody>
             <tr>
               <th>Rental Code:</th>
-              <td>{{$rental->rental_code}}</td>
+              <td>{{strtoupper($rental->rental_code)}}</td>
             </tr>
           </tbody>
         </table>
@@ -130,6 +130,15 @@
                 <td class="text-blue text-right"><h4>₱{{$rental->rental_fare + $rule->fee}}</h4></td>
               </tr>
               @else
+              <tr>
+                <th style="width:50%">Subtotal:</th>
+                <td class="text-right">₱{{$rental->rental_fare}}</td>
+              </tr>
+              <tr>
+                <th>Rental Fee</th>
+                <td class="text-right">₱0.00</td>
+              </tr>
+
               <tr style="border-top: 2px solid black;">
                 <th class="text-blue"><h4>Total:</h4></th>
                 <td class="text-blue text-right"><h4>₱{{$rental->rental_fare}}</h4></td>
@@ -174,8 +183,8 @@
 
 
         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-          <strong>NOTE:</strong> Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr
-          jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+          <strong>NOTE:</strong> Its less than 24 hours before your specified departure time, if you will cancel now you will NOT be able to refund. 
+          If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the rental fee, if any. A cancellation fee will also be charged.
         </p>
   </section>
   <!-- /.content -->

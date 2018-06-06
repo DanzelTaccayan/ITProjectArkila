@@ -123,7 +123,7 @@
                                             <tbody>
                                                 <tr>
                                                     <th>Reservation Code</th>
-                                                    <td>{{$reservation->rsrv_code}}</td>
+                                                    <td>{{strtoupper($reservation->rsrv_code)}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Destination</th>

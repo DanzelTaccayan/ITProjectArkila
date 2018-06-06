@@ -374,6 +374,17 @@ class MakeReservationController extends Controller
 
 	  }
 
+	  public function receipt(Reservation $reservation)
+	  {
+		  $rule = $this->reservationRules();
+		  if($rule) {
+			  $main = Destination::mainTerminal()->get();
+			  return view('e_receipt.reservation-receipt', compact('reservation', 'rule', 'destinations', 'main'));
+		  } else {
+			  return back()->withErrors('Rental is not available at this moment.');
+		  }
+	  }
+
 	  public function reservationRules()
 	  {
 		  return BookingRules::where('description', 'Reservation')->get()->first();;

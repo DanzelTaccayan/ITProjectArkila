@@ -33,7 +33,7 @@
       <div class="col-xs-12">
         <h2 class="page-header">
           <i class="fa fa-globe"></i> Arkila - BanTrans 
-          <small class="pull-right">Date: 2/10/2014</small>
+          <small class="pull-right">Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
         </h2>
       </div>
       <!-- /.col -->
@@ -48,7 +48,7 @@
           <tbody>
             <tr>
               <th>Reservation Code:</th>
-              <td>RV1234567890</td>
+              <td>{{strtoupper($reservation->rsrv_code)}}</td>
             </tr>
           </tbody>
         </table>
@@ -61,7 +61,7 @@
           <tbody>
             <tr>
               <th>Customer:</th>
-              <td>John Doe</td>
+              <td>{{$reservation->name}}</td>
             </tr>
           </tbody>
         </table>
@@ -89,7 +89,7 @@
         <table class="table table-striped">
           <thead>
           <tr>
-            <th>Terminal</th>
+            <th>Terminal Origin</th>
             <th>Destination</th>
             <th>Departure Date</th>
             <th>Estimated Time</th>
@@ -99,12 +99,12 @@
           </thead>
           <tbody>
           <tr>
-            <td>San Jose</td>
-            <td>Asingan</td>
-            <td>20 May 2019</td>
-            <td class="text-right">1:00 PM</td>
-            <td class="text-right">1</td>
-            <td class="text-right">₱ 200.00</td>
+            <td>{{$main->first()->destination_name}}</td>
+            <td>{{$reservation->destination_name}}</td>
+            <td>{{$reservation->reservationDate->reservation_date->formatLocalized('%d %B %Y')}}</td>
+            <td class="text-right">{{date('g:i A', strtotime($reservation->reservationDate->departure_time))}}</td>
+            <td class="text-right">{{$reservation->ticket_quantity}}</td>
+            <td class="text-right">₱{{$reservation->fare - $rule->fee}}</td>
           </tr>
           </tbody>
         </table>
@@ -123,21 +123,21 @@
             <table class="table ">
               <tr>
                 <th style="width:50%">Subtotal:</th>
-                <td class="text-right">₱ 200.00</td>
+                <td class="text-right">₱{{number_format($reservation->fare - $rule->fee, 2)}}</td>
               </tr>
               <tr>
                 <th>Reservation Fee</th>
-                <td class="text-right">₱ 200.00</td>
+                <td class="text-right">₱{{$rule->fee}}</td>
               </tr>
               <tr style="border-top: 2px solid black;">
                 <th class="text-blue"><h4>Total:</h4></th>
-                <td class="text-blue text-right"><h4>₱ 400.00</h4></td>
+                <td class="text-blue text-right"><h4>₱{{$reservation->fare}}</h4></td>
               </tr>
             </table>
           </div>
         </div>
         <div>
-          <p><strong>Date Paid:</strong> 20 May 2019</p>
+          <p><strong>Date Paid:</strong> {{$reservation->date_paid->formatLocalized('%d %B %Y')}}</p>
         </div>
       </div>
       <!-- /.col -->
@@ -153,8 +153,8 @@
 
 
         <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-          <strong>NOTE:</strong> Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr
-          jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+          <strong>NOTE:</strong> If less than 24 hours before your specified departure time, if you will cancel now you will NOT be able to refund.
+          If you cancel your reservation more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the reservation fee and an additional charge for the cancellation fee.
         </p>
   </section>
   <!-- /.content -->
