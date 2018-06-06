@@ -137,6 +137,7 @@
                                                     <th>Ticket No.</th>
                                                     <th>Destination</th>
                                                     <th>Date Purchased</th>
+                                                    <th>Status</th>
                                                     <th id="actionHead" class="text-center">Actions</th>
                                                 </tr>
                                                 </thead>
@@ -147,6 +148,11 @@
                                                         <td>{{ $ticket->ticket_number }}</td>
                                                         <td>{{ $ticket->destination->destination_name}}</td>
                                                         <td>{{$ticket->updated_at->format('h:i A')." of ".$ticket->updated_at->format('M d, Y')}}</td>
+                                                        @if($ticket->soldTicket->is_expired == true)
+                                                        <td>Expired</td>
+                                                        @else
+                                                        <td>{{$ticket->soldTicket->status}}</td>
+                                                        @endif
                                                         <td>
                                                             <div class="text-center">
                                                                 <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>

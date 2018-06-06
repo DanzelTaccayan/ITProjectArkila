@@ -238,6 +238,7 @@ class MakeReservationController extends Controller
 	public function slotsAndExpiryDate()
 	{
 		$reservations = Reservation::where([
+			['date_id', '!=', null],
 			['status', '!=', 'DEPARTED'],
 			['status', '!=', 'REFUNDED'],
 			])->get();
