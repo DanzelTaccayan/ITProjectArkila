@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+use PDF;
+use Carbon\Carbon;
 use App\Member;
 use App\VanQueue;
 use App\Van;
@@ -273,5 +275,29 @@ class ArchiveController extends Controller
             Log::info($e);
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
+    }
+
+    public function generateArchiveOperatorPdf()
+    {
+      $operators = Member::allOperators()->where('status','Inactive')->get();
+      $date = Carbon::now();
+      $pdf = PDF::loadView('pdf.archiveOperator', compact('operators', 'date'));
+      return $pdf->stream('operators.pdf');
+    }
+
+    public function generateArchiveDriverPdf()
+    {
+      $archivedDrivers = Member::allDrivers()->where('status','Inactive')->get();
+      $date = Carbon::now();
+      $pdf = PDF::loadView('pdf.archiveDriver', compact('archivedDrivers', 'date'));
+      return $pdf->stream('archive_drivers.pdf');
+    }
+
+    public function generateArchiveVanPdf()
+    {
+      $archivedVans = Van::where('status','Inactive')->get();
+      $date = Carbon::now();
+      $pdf = PDF::loadView('pdf.archiveVan', compact('archivedVans', 'date'));
+      return $pdf->stream('archived_vans.pdf');
     }
 }

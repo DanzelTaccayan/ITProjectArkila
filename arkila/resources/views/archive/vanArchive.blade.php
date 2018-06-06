@@ -1,8 +1,8 @@
 @extends('layouts.master')
 @section('title', 'Van Archive')
 @section('content')
-    {{session(['opLink'=> Request::url()])}} 
- <div class="padding-side-5"> 
+    {{session(['opLink'=> Request::url()])}}
+ <div class="padding-side-5">
     <div>
         <h2 class="text-white">ARCHIVE OF VANS</h2>
     </div>
@@ -12,7 +12,7 @@
            <div class="table-responsive">
                 <div class="col-md-6">
                     <a href="{{route('vans.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-chevron-left"></i> GO BACK TO VAN LIST</a>
-                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
+                    <button onclick="window.open('{{route('pdf.generateArchiveVanPdf')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <table id="archiveVan" class="table table-bordered table-striped">
                         <thead>
@@ -83,10 +83,10 @@
         <!-- /.box -->
         @include('layouts.partials.preloader_div')
     </div>
-</div>  
- 
-@stop 
-@section('scripts') 
+</div>
+
+@stop
+@section('scripts')
 @parent
 
 <!-- DataTables -->
@@ -115,6 +115,6 @@
             }]
         })
     });
-</script>    
-        
+</script>
+
 @stop

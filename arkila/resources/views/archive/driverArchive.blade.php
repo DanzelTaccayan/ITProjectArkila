@@ -1,8 +1,8 @@
 @extends('layouts.master')
 @section('title', 'Driver Archive')
 @section('content')
-    {{session(['opLink'=> Request::url()])}} 
- <div class="padding-side-5"> 
+    {{session(['opLink'=> Request::url()])}}
+ <div class="padding-side-5">
     <div>
         <h2 class="text-white">ARCHIVE OF DRIVERS</h2>
     </div>
@@ -12,7 +12,7 @@
            <div class="table-responsive">
                 <div class="col-md-6">
                     <a href="{{route('drivers.index')}}" class="btn btn-info btn-sm btn-flat"><i class="fa  fa-chevron-left"></i> GO BACK TO DRIVER LIST</a>
-                    <button onclick="window.open('')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
+                    <button onclick="window.open('{{route('pdf.generateArchiveDriverPdf')}}')"  class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i> PRINT</button>
                 </div>
                 <table id="archiveDriver" class="table table-bordered table-striped">
                     <thead>
@@ -147,10 +147,10 @@
         @include('layouts.partials.preloader_div')
         <!-- /.box -->
     </div>
-</div>  
- 
-@stop 
-@section('scripts') 
+</div>
+
+@stop
+@section('scripts')
 @parent
 
 <!-- DataTables -->
@@ -186,6 +186,6 @@
             }]
         })
     });
-</script>    
-        
+</script>
+
 @stop

@@ -101,7 +101,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/settings/discounts', 'DiscountsController', [
         'except' => ['index', 'show']
     ]);
-    
+
     Route::get('/home/settings', 'HomeController@settings')->name('settings.index');
 
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
@@ -219,7 +219,10 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::delete('/home/archive/operator/{archivedOperator}','ArchiveController@deleteOperator')->name('operators.deleteOperator');
     Route::delete('/home/archive/driver/{archivedDriver}','ArchiveController@deleteDriver')->name('drivers.deleteDriver');
 
-    /**** Generate PDF ****/
+    /*** Generate PDF ****/
+    Route::get('/archived-operators/generatePdf', 'ArchiveController@generateArchiveOperatorPdf')->name('pdf.generateArchiveOperatorPdf');
+    Route::get('/archived-drivers/generatePdf', 'ArchiveController@generateArchiveDriverPdf')->name('pdf.generateArchiveDriverPdf');
+    Route::get('/archived-vans/generatePdf', 'ArchiveController@generateArchiveVanPdf')->name('pdf.generateArchiveVanPdf');
     Route::get('/drivers/generatePDF', 'DriversController@generatePDF')->name('pdf.drivers');
     Route::get('/operators/generatePDF', 'OperatorsController@generatePDF')->name('pdf.operators');
     Route::get('/drivers/generatePerDriver/{driver}', 'DriversController@generatePerDriver')->name('pdf.perDriver');
