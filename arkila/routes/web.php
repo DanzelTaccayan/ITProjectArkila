@@ -43,7 +43,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     ]);
     Route::resource('/home/ticket-management', 'TicketManagementController');
     Route::patch('/home/ticket-management/{ticket_management}/updateDiscount', 'TicketManagementController@updateDiscount');
-
+    Route::post('/home/ticket/rule', 'TicketManagementController@ticketRule')->name('ticket.rule');
 
 
     Route::get('/home/bookingfee/{bookingfee}/edit', 'FeesController@editBooking')->name('bookingfee.edit');

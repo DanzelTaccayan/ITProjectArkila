@@ -15,6 +15,7 @@ class CreateTicketRuleTable extends Migration
     {
         Schema::create('ticket_rule', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('usable_days');
             $table->timestamps();
         });
     }

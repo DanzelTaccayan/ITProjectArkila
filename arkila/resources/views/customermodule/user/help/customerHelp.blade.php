@@ -46,7 +46,10 @@
                         </div>
                         <div class="question-item">  
                             <p><strong>How to reserve a line?</strong></p>
-                            <p>ANSWER</p>
+                            <p><strong>1.</strong>	Click on the reserve now button on the home page or the reservation button under the services tab.</p>
+                            <p><strong>2.</strong>	Select a destination and click on the show reservations button</p>
+                            <p><strong>3.</strong>	If there is an open reservation, click on the reserve button in the table.</p>
+                            <p><strong>4.</strong>	Make sure all the information is correct and then enter your contact number and the desired quantity of tickets and then click on the reserve button.</p>
                         </div>
                         <div class="question-item">  
                             <p><strong>How to view your rentals/reservations</strong></p>
@@ -67,7 +70,7 @@
                     <div class="question-list"> 
                         <div class="question-item">  
                             <p><strong>How can I pay?</strong></p>
-                            <p>You can pay by going to the cashier at the terminal.</p>
+                            <p>You can pay by going to the cashier at the terminal. Our address is in the about us page.</p>
                         </div>
                     </div>
                     <h4>JOB</h4>
