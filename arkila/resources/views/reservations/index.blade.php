@@ -32,51 +32,52 @@
         </div>
         <div class="box">
             <div class="box-body">
-                            <div class="col-md-6">
-                                <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
-                            </div>
-                            <table class="table table-bordered table-striped listReservation">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Reservation #</th>
-                                        <th class="text-center">Destination</th>
-                                        <th class="text-center">Reservation Date</th>
-                                        <th class="text-center">Departure Time</th>
-                                        <th class="text-center">Number of Slots</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody> 
+                 <div class="table-responsive">
+                    <div class="col-md-6">
+                        <a href="/home/reservations/create" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i> CREATE RESERVATION DATE</a>
+                    </div>
+                    <table class="table table-bordered table-striped listReservation">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Reservation #</th>
+                                <th class="text-center">Destination</th>
+                                <th class="text-center">Reservation Date</th>
+                                <th class="text-center">Departure Time</th>
+                                <th class="text-center">Number of Slots</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody> 
 
-                                    @foreach ($reservations->sortByDesc('id') as $reservation) 
-                                    <tr>
-                                        <td>{{ $reservation->id }}</td>
-                                        <td>{{ $reservation->destination->destination_name }}</td>
-                                        <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
-                                        <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
-                                        <td class="text-right">{{ $reservation->number_of_slots }}</td>
-                                        <td class="text-right" id="status{{$reservation->id}}">{{ $reservation->status }}</td>
-                                        <td>
-                                            <div class="text-center"> 
-                                                <form action="{{route('reservations.update', $reservation->id)}}" method="POST">
-                                                {{ csrf_field() }} {{ method_field('PATCH') }}  
-                                                    <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>  
-                                                    @if($reservation->status == 'OPEN')
-                                                    <button name="status" value="CLOSED" class="btn btn-danger btn-sm">CLOSE</button>               
-                                                    @elseif($reservation->status == 'CLOSED')
-                                                    <button name="status" value="OPEN" class="btn btn-success btn-sm">OPEN</button>
-                                                    <button name="deleteBtn" class="btn btn-outline-danger btn-sm">DELETE</button>
-                                                    @endif
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        
-                        <!-- /.box-body -->
+                            @foreach ($reservations->sortByDesc('id') as $reservation) 
+                            <tr>
+                                <td>{{ $reservation->id }}</td>
+                                <td>{{ $reservation->destination->destination_name }}</td>
+                                <td class="text-right">{{ $reservation->reservation_date->formatLocalized('%d %B %Y') }}</td>
+                                <td class="text-right">{{ date('g:i A', strtotime($reservation->departure_time)) }}</td>
+                                <td class="text-right">{{ $reservation->number_of_slots }}</td>
+                                <td class="text-right" id="status{{$reservation->id}}">{{ $reservation->status }}</td>
+                                <td>
+                                    <div class="text-center"> 
+                                        <form action="{{route('reservations.update', $reservation->id)}}" method="POST">
+                                        {{ csrf_field() }} {{ method_field('PATCH') }}  
+                                            <a href="{{route('reservations.show', $reservation->id)}}" class="btn btn-primary btn-sm"> <i class="fa fa-eye"></i> VIEW</a>  
+                                            @if($reservation->status == 'OPEN')
+                                            <button name="status" value="CLOSED" class="btn btn-danger btn-sm">CLOSE</button>               
+                                            @elseif($reservation->status == 'CLOSED')
+                                            <button name="status" value="OPEN" class="btn btn-success btn-sm">OPEN</button>
+                                            <button name="deleteBtn" class="btn btn-outline-danger btn-sm">DELETE</button>
+                                            @endif
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
             </div>
         </div>
     @endif
