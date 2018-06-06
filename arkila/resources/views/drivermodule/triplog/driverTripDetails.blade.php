@@ -119,7 +119,7 @@
                     </table>
                 </div>
 
-                <button onclick="window.open('')" class="btn btn-default btn-sm btn-flat pull-right"> <i class="fa fa-print" style="margin-bottom: 2%"></i> SAVE TRIP INFORMATION</button>
+                
 
             </div>
 
