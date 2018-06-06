@@ -30,6 +30,8 @@ class CreateSoldTicketTable extends Migration
 
             $table->decimal('amount_paid', 11, 2);
             $table->enum('status', ['Pending','OnBoard']);
+            $table->boolean('is_expired')
+            ->default(false);
             $table->timestamps();
 
             $table->foreign('ticket_id')

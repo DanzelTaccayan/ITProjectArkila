@@ -53,7 +53,7 @@ class VansController extends Controller
 
     public function createFromOperator(Member $operator)
     {
-        $drivers = $operator->drivers()->doesntHave('van')->where('status','Active')->get();
+        $drivers = $operator->drivers()->where('status','Active')->get();
         $models = VanModel::all();
         return view('vans.create',compact('drivers','operator','models'));
     }
