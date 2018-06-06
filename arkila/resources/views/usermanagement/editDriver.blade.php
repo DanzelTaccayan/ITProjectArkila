@@ -54,14 +54,14 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <h1 class="text-center text-red"><i class="fa fa-exclamation-triangle"></i> CONFIRMATION</h1>
+                    <h1 class="text-center text-yellow"><i class="fa fa-exclamation-triangle"></i> WARNING</h1>
                     <p class="text-center">ARE YOU SURE YOU WANT TO RESET PASSWORD OF</p>             
                     <h4 class="text-center "><strong class="text-red">{{$driver_user->first_name . " " . $driver_user->middle_name . " " . $driver_user->last_name}}</strong>?</h4>
                 </div>
                 <div class="modal-footer">   
                   <div class="text-center">
                       <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                      <button type="submit" class="btn btn-danger">RESET PASSWORD</button>
+                      <button type="submit" class="btn bg-yellow">RESET PASSWORD</button>
                   </div>
                     
                 </div>
