@@ -130,6 +130,14 @@
                                                     <td>{{$reservation->destination_name}}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Departure Date</th>
+                                                    <td>{{$reservation->reservationDate->reservation_date->formatLocalized('%d %B %Y')}} {{date('g:i A', strtotime($reservation->reservationDate->departure_time))}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Departure Day</th>
+                                                    <td>{{$reservation->reservationDate->reservation_date->formatLocalized('%A')}}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Expiry Date</th>
                                                     <td>{{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{$reservation->expiry_date->format('g:i A')}}</td>
                                                 </tr>

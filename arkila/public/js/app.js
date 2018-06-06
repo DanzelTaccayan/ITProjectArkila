@@ -62475,6 +62475,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -62496,9 +62507,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
-    console.log('Component mounted');
     Echo.private('App.User.' + this.userid).notification(function (notification) {
-      console.log(notification.id);
       var newUnreadNotifications = {
         id: notification.id,
         data: {
@@ -62510,7 +62519,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       };
       _this.unreadNotifications.push(newUnreadNotifications);
-      console.log(newUnreadNotifications);
     });
   }
 });
@@ -62584,7 +62592,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -62600,8 +62607,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   mounted: function mounted() {
-    console.log('HELLO WORlD');
-    console.log(this.unread.id);
     //Done
     if (this.unread.data.notif_type == 'Van Rental') {
       if (this.unread.data.info.status == 'Pending') {
@@ -62974,35 +62979,37 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.unread == 0
-    ? _c("p", [_vm._v("You don't have any notifications")])
-    : _vm.unread != 0
-      ? _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-9" }, [
-            _c("a", { attrs: { href: _vm.notificationUrl } }, [
-              _c("p", { staticStyle: { margin: "0 0 0" } }, [
-                _vm._v(_vm._s(_vm.title))
-              ]),
-              _vm._v(" "),
-              _c("span", { staticClass: "text-orange fa fa-book" }),
-              _vm._v(" "),
-              _c("small", [_vm._v(_vm._s(_vm.details))])
-            ])
-          ]),
+  return _c(
+    "a",
+    { staticClass: "list-group-item", attrs: { href: _vm.notificationUrl } },
+    [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-10" }, [
+          _c(
+            "p",
+            { staticClass: "text-limit-1", staticStyle: { margin: "0 0 0" } },
+            [_vm._v(_vm._s(_vm.title))]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "col-md-3" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default btn-xs",
-                attrs: { type: "button", name: "button" },
-                on: { click: _vm.markSpecificAsRead }
-              },
-              [_c("i", { staticClass: "fa fa-circle-o" })]
-            )
-          ])
+          _c("span", { staticClass: "text-orange fa fa-book" }),
+          _vm._v(" "),
+          _c("small", [_vm._v(_vm._s(_vm.details))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-2" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-xs",
+              attrs: { type: "button", name: "button" },
+              on: { click: _vm.markSpecificAsRead }
+            },
+            [_c("i", { staticClass: "fa fa-circle-o" })]
+          )
         ])
-      : _vm._e()
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63049,55 +63056,76 @@ var render = function() {
       _c("ul", { staticClass: "dropdown-menu", attrs: { role: "menu" } }, [
         _c("li", { staticClass: "header" }, [
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-md-6" }, [_vm._v("Notifications")]),
+            _c("div", { staticClass: "col-xs-6" }, [_vm._v("Notifications")]),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.unreadNotifications.length > 0,
-                    expression: "unreadNotifications.length > 0"
-                  }
-                ],
-                staticClass: "col-md-6"
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    attrs: { href: "#", role: "button" },
-                    on: { click: _vm.markNotificationAsRead }
-                  },
-                  [_vm._v("Mark All as Read")]
-                )
-              ]
-            )
+            _c("div", { staticClass: "col-xs-6" }, [
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.unreadNotifications.length > 0,
+                      expression: "unreadNotifications.length > 0"
+                    }
+                  ]
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-primary btn-flat btn-xs",
+                      attrs: { href: "#", role: "button" },
+                      on: { click: _vm.markNotificationAsRead }
+                    },
+                    [_vm._v("Mark All as Read")]
+                  )
+                ]
+              )
+            ])
           ])
         ]),
         _vm._v(" "),
-        _c("li", [
-          _vm.unreadNotifications.length == 0
-            ? _c("div", [_c("p", [_vm._v("You have no notifications")])])
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "div",
-            _vm._l(_vm.unreadNotifications, function(unread) {
-              return _c("notification-item", {
-                key: unread.user_id,
-                attrs: { unread: unread }
-              })
-            })
-          )
-        ])
+        _c(
+          "li",
+          {
+            staticClass: "scrollbar scrollbar-info thin",
+            staticStyle: { height: "300px" }
+          },
+          [
+            _vm.unreadNotifications.length == 0
+              ? _c("div", [_vm._m(0)])
+              : _c("div", [
+                  _c(
+                    "div",
+                    { staticClass: "list-group" },
+                    _vm._l(_vm.unreadNotifications, function(unread) {
+                      return _c("notification-item", {
+                        key: unread.user_id,
+                        attrs: { unread: unread }
+                      })
+                    })
+                  )
+                ])
+          ]
+        )
       ])
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticStyle: { "margin-top": "10%" } }, [
+      _c("h4", { staticClass: "text-center text-gray" }, [
+        _vm._v("You have no notifications")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

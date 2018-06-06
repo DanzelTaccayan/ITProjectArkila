@@ -32,7 +32,7 @@
                         <td class="text-right">₱{{$rules->fee}}</td>
                     </tr>
                     <tr>
-                        <th>Refund</th>
+                        <th>Refund Amount</th>
                         <td class="text-right"><strong>₱{{number_format(($rental->rental_fare - $rules->cancellation_fee) - $rules->fee, 2)}}</strong></td>
                     </tr>
                     @endif

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerReservationRequest;
+use DB;
 use Session;
 use Carbon\Carbon;
 use App\Ticket;
@@ -124,28 +125,22 @@ class MakeReservationController extends Controller
 					]);
 				})->count();
 	
-			if($userReservations < 2)
-			{
-				if ($reservation->reservation_date->subDays(1)->gt(Carbon::now()))
-				{
-					if($reservation->status == 'OPEN')
-					{			
+			if($userReservations < 2) {
+				if ($reservation->reservation_date->subDays(1)->gt(Carbon::now())) {
+					if($reservation->status == 'OPEN') {
 						$quantity = $request->quantity;
 						$slot = $reservation->number_of_slots;
-						if($quantity <= $slot)
-						{
+						if($quantity <= $slot) {
 							$this->validate(request(), [
 								'contactNumber' => 'bail|numeric|required',
 								'quantity' => 'bail|numeric|required|min:1|max:4',
 							]);
 							$codes = Reservation::all();
 							$newCode = bin2hex(openssl_random_pseudo_bytes(5));
-							foreach ($codes as $code)
-							{
+							foreach ($codes as $code) {
 								$allCodes = $code->rsrv_code;
 				
-								do
-								{
+								do {
 									$newCode =  bin2hex(openssl_random_pseudo_bytes(5));
 				
 								} while ($newCode == $allCodes);
@@ -163,47 +158,44 @@ class MakeReservationController extends Controller
 							} else {
 								$expiry = Carbon::now()->addDays($rule->payment_due)->setTime($time[0], $time[1], $time[2]);
 							}
-					
-				
-							$transaction = Reservation::create([
-								'user_id' => auth()->user()->id,
-								'date_id' => $reservation->id,
-								'destination_name' => $destination->destination_name,
-								'rsrv_code' => 'RV'.$newCode,
-								'name' => auth()->user()->full_name,
-								'contact_number' => $request->contactNumber,
-								'ticket_quantity' => $quantity,
-								'fare' => $toBePaid,
-								'expiry_date' => $expiry,
-								'type' => 'Online',
-							]);
-				
-							$reservation->update([
-								'number_of_slots' => $newSlot,
-							]);
-				
-							return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
-				
-					
-						}
-						else
-						{
+
+                            // Start transaction!
+                            DB::beginTransaction();
+                            try  {
+                                $transaction = Reservation::create([
+                                    'user_id' => auth()->user()->id,
+                                    'date_id' => $reservation->id,
+                                    'destination_name' => $destination->destination_name,
+                                    'rsrv_code' => 'RV'.$newCode,
+                                    'name' => auth()->user()->full_name,
+                                    'contact_number' => $request->contactNumber,
+                                    'ticket_quantity' => $quantity,
+                                    'fare' => $toBePaid,
+                                    'expiry_date' => $expiry,
+                                    'type' => 'Online',
+                                ]);
+                                $reservation->update([
+                                    'number_of_slots' => $newSlot,
+                                ]);
+                                DB::commit();
+                                return redirect(route('customermodule.success', $transaction->id))->with('success', 'Successfully created a reservation.');
+                            } catch(\Exception $e) {
+                                DB::rollback();
+                                \Log::info($e);
+
+                                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+                            }
+						} else {
 							return back()->withErrors('There are not enough slots for '.$quantity.' persons.');
 						}
-					}
-					else
-					{
+					} else {
 						return redirect(route('customermodule.showDate'))->withErrors('Sorry, reservation is closed.');	
 					}
-				}
-				else
-				{
+				} else {
 					//reservation day limit
 					return redirect(route('customermodule.showDate'))->withErrors('Sorry, you can not reserve 2 days before the departure date.');				
 				}
-			}
-			else
-			{
+			} else {
 				return redirect(route('customermodule.showDate'))->withErrors('Sorry, you exceeded the number of reservations allowed.');							
 			}
 		} else {
@@ -255,28 +247,40 @@ class MakeReservationController extends Controller
 				$conditionDate = $dateOfReservation->subDays(1);
 		  
 				$expiry_date = $reservation->expiry_date;
-				//if transaction is not expired and exceeded the expiry date
-				if($reservation->status !== 'EXPIRED' && Carbon::now()->gt($reservation->expiry_date))
-				{
-						$reservation->update([
-							'status' => 'EXPIRED',
-						]);
-				}
 
-				if($reservation->reservationDate->reservation_date->subDays(1)->gt($reservation->expiry_date) && $reservation->status == 'EXPIRED' && $reservation->returned_slot == false)
-				{
-					$quantity = $reservation->ticket_quantity;
-					$orig = $reservation->reservationDate->number_of_slots;
-					$updatedSlots = $quantity + $orig;
+                // Start transaction!
+                DB::beginTransaction();
+                try  {
+                    //if transaction is not expired and exceeded the expiry date
+                    if($reservation->status !== 'EXPIRED' && Carbon::now()->gt($reservation->expiry_date))
+                    {
+                        $reservation->update([
+                            'status' => 'EXPIRED',
+                        ]);
+                    }
 
-					$reservation->reservationDate->update([
-						'number_of_slots' => $updatedSlots,
-					]);
-					$reservation->update([
-						'returned_slot' => true,
-					]);
-					
-				}
+                    if($reservation->reservationDate->reservation_date->subDays(1)->gt($reservation->expiry_date) && $reservation->status == 'EXPIRED' && $reservation->returned_slot == false)
+                    {
+                        $quantity = $reservation->ticket_quantity;
+                        $orig = $reservation->reservationDate->number_of_slots;
+                        $updatedSlots = $quantity + $orig;
+
+                        $reservation->reservationDate->update([
+                            'number_of_slots' => $updatedSlots,
+                        ]);
+                        $reservation->update([
+                            'returned_slot' => true,
+                        ]);
+
+                    }
+                    DB::commit();
+                } catch(\Exception $e) {
+                    DB::rollback();
+                    \Log::info($e);
+
+                    return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+                }
+
 
 			}
 		}
@@ -290,85 +294,84 @@ class MakeReservationController extends Controller
       $now = Carbon::now();
       $conditionDate = $dateOfReservation->subDays(1);
 
-	  if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
-		// if cancelled and more than one day before departure		  
-		  
-		  if($reservation->status == 'UNPAID') {
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
 
-			$reservation->update([
-			  'status' => 'CANCELLED',
-			]);
+            if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+                // if cancelled and more than one day before departure
 
-			if($now->lt($conditionDate)) {
-				$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
-				$reservation->reservationDate->update([
-					'number_of_slots' => $newSlot,
-				]);
-
-				$reservation->update([
-					'returned_slot' => true,
-				]);
-			}
-
-		  } elseif($reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
-			
-			if($now->gt($conditionDate)) {
-			  $reservation->update([
-				'status' => 'CANCELLED',
-				'refund_code' => null,
-				'is_refundable' => false,
-			  ]);
-			} else {
-			  $reservation->update([
-				'status' => 'CANCELLED',
-				'is_refundable' => true,
-				]);
-				$reservation->update([
-					'expiry_date' => $reservation->updated_at->addDays($rule->refund_expiry),
+                if($reservation->status == 'UNPAID') {
+                    $reservation->update([
+                        'status' => 'CANCELLED',
 					]);
-					$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
-					$reservation->reservationDate->update([
-						'number_of_slots' => $newSlot,
-					]);
-	
-					$reservation->update([
-						'returned_slot' => true,
-					]);
-				}
-		  }
-		  Ledger::create([
-			'description' => 'Reservation Cancellation Fee',
-			'amount' => $rule->cancellation_fee,
-			'type' => 'Revenue',
-		  ]);
-		  return back()->with('success', 'Reservation marked as cancelled');
-		} else {
-			if($reservation->status == 'CANCELLED') {
-				$message = 'The reservation is already marked as CANCELLED.';
-			} elseif($reservation->status == 'DEPARTED') {
-				$message = 'The reservation is already marked as DEPARTED.';
-			} elseif($reservation->status == 'EXPIRED') {
-				$message = 'The reservation is already marked as EXPIRED.';
-			} elseif($reservation->status == 'REFUNDED') {
-				$message = 'The reservation is already marked as REFUNDED.';
-			}
-			return back()->withErrors($message);
-		}
+					
+					if($now->lt($conditionDate)) {
+						$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+						$reservation->reservationDate->update([
+							'number_of_slots' => $newSlot,
+						]);
+		
+						$reservation->update([
+							'returned_slot' => true,
+						]);
+					}
+		
+                } elseif($reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
 
-		if($now->lt($conditionDate)) {
-			$quantity = $reservation->ticket_quantity;
-			$orig = $reservation->reservationDate->number_of_slots;
-			$updatedSlots = $quantity + $orig;
+                    if($now->gt($conditionDate)) {
+                        $reservation->update([
+                            'status' => 'CANCELLED',
+                            'refund_code' => null,
+                            'is_refundable' => false,
+                        ]);
+                    } else {
+                        $reservation->update([
+                            'status' => 'CANCELLED',
+                            'is_refundable' => true,
+                        ]);
+                        $reservation->update([
+                            'expiry_date' => $reservation->updated_at->addDays($rule->refund_expiry),
+                        ]);
+                        $newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+                        $reservation->reservationDate->update([
+                            'number_of_slots' => $newSlot,
+                        ]);
 
-			$reservation->reservationDate->update([
-				'number_of_slots' => $updatedSlots,
-			]);
+                        $reservation->update([
+                            'returned_slot' => true,
+                        ]);
+                    }
+                }
+                Ledger::create([
+                    'description' => 'Reservation Cancellation Fee',
+                    'amount' => $rule->cancellation_fee,
+                    'type' => 'Revenue',
+                ]);
 
-			$reservation->update([
-				'returned_slot' => true,
-			]);
+            } else {
+                if($reservation->status == 'CANCELLED') {
+                    $message = 'The reservation is already marked as CANCELLED.';
+                } elseif($reservation->status == 'DEPARTED') {
+                    $message = 'The reservation is already marked as DEPARTED.';
+                } elseif($reservation->status == 'EXPIRED') {
+                    $message = 'The reservation is already marked as EXPIRED.';
+                } elseif($reservation->status == 'REFUNDED') {
+                    $message = 'The reservation is already marked as REFUNDED.';
+                }
+                DB::rollback();
+                return back()->withErrors($message);
+            }
 
-		}
+            DB::commit();
+            return back()->with('success', 'Reservation marked as cancelled');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
 	  }
 
 	  public function reservationRules()

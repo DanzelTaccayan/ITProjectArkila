@@ -14,7 +14,7 @@ class ShowNotificationsControllers extends Controller
 
     public function notifications()
     {
-      return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+      return auth()->user()->unreadNotifications()->get()->toArray();
     }
 
     public function markAsRead()
