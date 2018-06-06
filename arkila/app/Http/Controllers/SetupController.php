@@ -55,9 +55,9 @@ class SetupController extends Controller
     public function store(Request $request)
     {
         $this->validate(request(), [
-            "contactNumber" => 'max:15',
-            "email" => 'nullable|email|max:100',
-            "address" => 'max:200',
+            "contactNumber" => 'required|max:15',
+            "email" => 'required|email|max:100',
+            "address" => 'required|max:200',
             "openTime" => 'required|date_format:H:i',
             "closeTime" => 'required|date_format:H:i',
             "addMainTerminal" => 'required|unique:destination,destination_name|max:70',
