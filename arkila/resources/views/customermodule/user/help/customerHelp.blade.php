@@ -70,7 +70,10 @@
                         </div>
                         <div class="question-item">  
                             <p><strong>Can I refund?</strong></p>
-                            <p>Yes, you can refund your tickets at the clerk in the terminal.</p>
+                            <p>Reservations cancelled more than 24 hours before can be refunded excluding the reservation fee and a cancellation fee will be charged.</p>
+                            <p>Reservations cancelled less than 24 hours before are non refundable.</p>
+                            <p>Rentals cancelled more than 24 hours before can be refunded excluding the rental fee and a cancellation fee will be charged.</p>
+                            <p>Rentals cancelled less than 24 hours before are non refundable.</p>
                         </div>
                         <div class="question-item">  
                             <p><strong>How do I reach you?</strong></p>
