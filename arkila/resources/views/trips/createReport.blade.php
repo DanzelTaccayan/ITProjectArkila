@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label for="driver" class="col-sm-4">Driver:</label>
                             <div class="col-sm-8">
-                                <select name="driverAndOperator" id="driver" class="form-control select2">
+                                <select name="driverAndOperator" id="driver" class="form-control select2" required>
                                     @foreach($driverAndOperators as $driverAndOperator)
                                     <option value="{{$driverAndOperator->member_id}}">{{$driverAndOperator->first_name . ' ' . $driverAndOperator->last_name}}</option>
                                     @endforeach
@@ -51,7 +51,7 @@
                         <div class="form-group">
                             <label for="driver" class="col-sm-4">Van:</label>
                             <div class="col-sm-8">
-                                <select name="van_platenumber" id="originTerminal" class="form-control select2">
+                                <select name="van_platenumber" id="originTerminal" class="form-control select2" required>
                                     @foreach($plate_numbers as $plate_number)
                                     <option value="{{$plate_number->van_id}}">{{$plate_number->plate_number}}</option>
                                     @endforeach

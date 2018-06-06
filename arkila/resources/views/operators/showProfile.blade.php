@@ -372,7 +372,42 @@
             }]
         })
     });
+</script>
 
+<script>
+    $(function(){
+     var url = window.location.href;
+     var activeTab = document.location.hash;
+
+     if(!activeTab){
+            activeTab = "#info";
+    }
+
+     $(".tab-pane").removeClass("active in");
+     $(".tab-menu").removeClass("active in");
+     $(activeTab).addClass("active");
+     $(activeTab + "-menu").addClass("active");
+
+     $('a[href="#'+ activeTab +'"]').tab('show')
+
+    var activeDestinationId = activeTab[activeTab.length-1];
+
+    });
+
+    $(function(){
+      var hash = window.location.hash;
+      if(!hash){
+            hash = "#info";
+        }
+      hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+      $('.nav-stacked a').click(function (e) {
+      $(this).tab('show');
+      var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+      window.location.hash = this.hash;
+      $('html,body').scrollTop(scrollmem);
+      });
+    });
 </script>
 
 @stop

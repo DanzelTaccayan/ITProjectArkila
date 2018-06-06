@@ -1047,7 +1047,7 @@
                             $('#button-loader').hide();
                             new PNotify({
                                     title: "Success!",
-                                    text: "Boarded Successfully",
+                                    text: "Boarded "+soldTickets.length+" passengers successfully",
                                     animate: {
                                     animate: true,
                                     in_class: 'slideInDown',
@@ -1127,23 +1127,7 @@
                     $('#button-load').hide();
                     $('#button-loader').show();
                     $('#button-loader').removeClass('hidden');
-                    new PNotify({
-                            title: "Success!",
-                            text: "Unboarded Successfully",
-                            animate: {
-                            animate: true,
-                            in_class: 'slideInDown',
-                            out_class: 'fadeOut'
-                            },
-                            animate_speed: 'fast',
-                            nonblock: {
-                                nonblock: true
-                            },
-                            cornerclass: "",
-                            width: "",
-                            type: "success",
-                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
-                    });
+
 
                     $(this).find('button[name="board"]').prop('disabled',true);
 
@@ -1162,6 +1146,24 @@
                         success: function (response) {
                             $('#button-load').show();
                             $('#button-loader').hide();
+
+                            new PNotify({
+                                title: "Success!",
+                                text: "Unboarded "+soldTickets.length+" passengers successfully",
+                                animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                },
+                                animate_speed: 'fast',
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                cornerclass: "",
+                                width: "",
+                                type: "success",
+                                stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
 
                             $.each(actives,function(index,element){
                                 var ticket = $(element).data('val');
