@@ -38,7 +38,7 @@ class AdminCreateDriverReportRequest extends FormRequest
         "dateDeparted" => "required|date_format:m/d/Y|before_or_equal: ".$now,
         "timeDeparted" => 'required|date_format:H:i|',
         // "qty" => "present|array",
-        "totalPassengers" => "numeric|min:1|max:18|required",
+        "totalPassengers" => "required|numeric|min:1|max:18",
       ];
 
         $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
@@ -74,10 +74,14 @@ class AdminCreateDriverReportRequest extends FormRequest
             $rules['qty'] = "numeric|min:1|max:".$totalPass."|required";
           }
 
-          if(($qtyCounter == count($qty) && $descCounter == count($desc))
+          if(($qtyCounter == array_sum($qty) && $descCounter == array_sum($desc))
           && ($this->request->get('totalPassengers') !== null || $this->request->get('totalPassengers') != 0)){
             $rules['qty'] = "min:1";
           }
+
+          // if((array_sum($qty) == 0 ||  && array_sum($desc) == 0)){
+          //
+          // }
 
           if($totalPass != $totalSum){
             $rules['totalPassengers'] = "in:" . $qtySum;
@@ -86,10 +90,10 @@ class AdminCreateDriverReportRequest extends FormRequest
         }else{
 
           $rules = [
-            "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric",
-            "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric",
-            "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
-            "numDisST" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
+            "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric|min:1",
+            "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric|min:1",
+            "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
+            "numDisST" => "required_without_all:numPassMain,numPassST,numDisMain|numeric|min:1",
           ];
 
 
@@ -163,7 +167,7 @@ class AdminCreateDriverReportRequest extends FormRequest
          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') != null || $this->request->get('numDisST') != 0))){
            $rules['numPassST'] = "nullable";
            $rules['numDisMain'] = "nullable";
-         //15.   
+         //15.
          }else if((($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') != null || $this->request->get('numDisST') != 0))){
            $rules['numPassMain'] = "nullable";
@@ -237,10 +241,18 @@ class AdminCreateDriverReportRequest extends FormRequest
           "numPassST.numeric" => "Short trip passengers must be numeric",
           "numPassST.min" => "The number of short trip passengers must at least be 1",
           "numDisMain.numeric" => "Discouted passengers for the main terminal must be numeric",
-          "numDisMain.min" => "The number of discounted passengers must at least be 1",
+          "numDisMain.min" => "The number of discounted main terminal passengers must at least be 1",
           "numDisST.numeric" => "Discouted passengers for short trips must be numeric",
           "numDisST.min" => "The number of discounted passengers must at least be 1",
         ];
+
+        // if(($this->request->get('numPassMain') == 0 || $this->request->get('numPassMain') == null)
+        // && ($this->request->get('numPassST') == 0 || $this->request->get('numPassST') == null)
+        // && ($this->request->get('numDisMain') == 0 || $this->request->get('numDisMain') == null)
+        // && ($this->request->get('numDisST') == 0 || $this->request->get('numDisST') == null)
+        // && ($this->request->get('totalPassengers') == 0 || $this->request->get('totalPassengers') == null)){
+        //   $messages['totalPassengers.min'] = "The number of passengers must at least be 1";
+        // }
 
       }
       return $messages;

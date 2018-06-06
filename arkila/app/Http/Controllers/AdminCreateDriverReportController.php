@@ -26,18 +26,6 @@ class AdminCreateDriverReportController extends Controller
   public function chooseTerminal()
   {
     $terminals = Destination::where('is_terminal', true)->get();
-
-
-    //dd($originDestinationArr);
-
-    // foreach($terminals as $t){
-    //   $f = $t->terminalDestination()->groupBy('terminal_destination')->get();
-    //   //$b = $f->where();
-    //   foreach($f as $fs){
-    //     echo $fs . '<br/>';
-    //   }
-    // }
-
     return view('trips.chooseDestination',compact('terminals', 'superAdminTerminal'));
   }
 
@@ -61,6 +49,7 @@ class AdminCreateDriverReportController extends Controller
   {
 
    	$totalPassengers = $request->totalPassengers;
+    dd(request('totalPassengers'));
     $totalBookingFee = $terminals->booking_fee * $totalPassengers;
     $totalPassenger = (float)$request->totalPassengers;
 
