@@ -215,7 +215,7 @@ class MakeReservationController extends Controller
 
 	public function reservationTransaction()
 	{
-		$requests = Reservation::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+		$requests = Reservation::where([['user_id', auth()->user()->id], ['date_id', '!=', null]])->orderBy('created_at', 'DESC')->get();
 
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
@@ -294,9 +294,76 @@ class MakeReservationController extends Controller
       $now = Carbon::now();
       $conditionDate = $dateOfReservation->subDays(1);
 
+<<<<<<< HEAD
         // Start transaction!
         DB::beginTransaction();
         try  {
+=======
+	  if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+		// if cancelled and more than one day before departure		  
+		  
+		  if($reservation->status == 'UNPAID') {
+
+			$reservation->update([
+			  'status' => 'CANCELLED',
+			]);
+
+			if($now->lt($conditionDate)) {
+				$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+				$reservation->reservationDate->update([
+					'number_of_slots' => $newSlot,
+				]);
+
+				$reservation->update([
+					'returned_slot' => true,
+				]);
+			}
+
+		  } elseif($reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
+			
+			if($now->gt($conditionDate)) {
+			  $reservation->update([
+				'status' => 'CANCELLED',
+				'refund_code' => null,
+				'is_refundable' => false,
+			  ]);
+			} else {
+			  $reservation->update([
+				'status' => 'CANCELLED',
+				'is_refundable' => true,
+				]);
+				$reservation->update([
+					'expiry_date' => $reservation->updated_at->addDays($rule->refund_expiry),
+					]);
+					$newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
+					$reservation->reservationDate->update([
+						'number_of_slots' => $newSlot,
+					]);
+	
+					$reservation->update([
+						'returned_slot' => true,
+					]);
+				}
+		  }
+		  Ledger::create([
+			'description' => 'Reservation Cancellation Fee',
+			'amount' => $rule->cancellation_fee,
+			'type' => 'Revenue',
+		  ]);
+		  return back()->with('success', 'Reservation marked as cancelled');
+		} else {
+			if($reservation->status == 'CANCELLED') {
+				$message = 'The reservation is already marked as CANCELLED.';
+			} elseif($reservation->status == 'DEPARTED') {
+				$message = 'The reservation is already marked as DEPARTED.';
+			} elseif($reservation->status == 'EXPIRED') {
+				$message = 'The reservation is already marked as EXPIRED.';
+			} elseif($reservation->status == 'REFUNDED') {
+				$message = 'The reservation is already marked as REFUNDED.';
+			}
+			return back()->withErrors($message);
+		}
+>>>>>>> d5d2eb6465befd97cd0449a4aa1b491caa15c743
 
             if($reservation->status == 'UNPAID' || $reservation->status == 'PAID' || $reservation->status == 'TICKET ON HAND') {
                 // if cancelled and more than one day before departure

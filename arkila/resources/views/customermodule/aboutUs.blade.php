@@ -55,9 +55,13 @@
                             <h2>Our services</h2>
                         </div>
                         <ul class="ul-icons list-unstyled">
-                            <li>
-                                <div class="icon-filled bg-green"><i class="fa fa-clock-o"></i></div>Main terminal open from <strong>{{date('g:i A', strtotime($profile->first()->open_time))}}</strong> to <strong>{{date('g:i A', strtotime($profile->first()->close_time))}}</strong>.
-                            </li>
+                            @if($profile->count() !== 0)
+                                @if($profile->first()->open_time !== null || $profile->first()->close_time !== null)
+                                <li>
+                                    <div class="icon-filled bg-green"><i class="fa fa-clock-o"></i></div>Main terminal is open from <strong>{{date('g:i A', strtotime($profile->first()->open_time))}}</strong> to <strong>{{date('g:i A', strtotime($profile->first()->close_time))}}</strong> daily.
+                                </li>
+                                @endif
+                            @endif
                             <li>
                                 <div class="icon-filled bg-green"><i class="fa fa-check"></i></div>Regular trips to different destinations.
                             </li>

@@ -85,7 +85,18 @@
                                         <span aria-hidden="true">&times;</span></button>
                                     </div>
                                     <div class="modal-body">
-                                        Are you sure?
+                                    @php $time = explode(':', $reservation->reservationDate->departure_time); @endphp
+                                    @if($reservation->status == 'PAID')
+                                    @if(Carbon\Carbon::now()->gt($reservation->reservationDate->reservation_date->subDays(1)->setTime($time[0], $time[1], $time[2])))
+                                    <p>Its less than 24 hours before your specified departure time, if you will cancel now <strong class="text-red">you will NOT be able to refund</strong>.
+                                    Are you sure you want to cancel your reservation?</p>
+                                    @else
+                                    <p>If you cancel your reservation more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the reservation fee and an additional charge for the cancellation fee.
+                                    Are you sure you want to cancel your reservation?</p>
+                                    @endif
+                                    @elseif($reservation->status == 'PENDING' || $reservation->status == 'UNPAID')
+                                    <p>Are you sure you want to cancel your reservation?</p>
+                                    @endif
                                     </div>
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
