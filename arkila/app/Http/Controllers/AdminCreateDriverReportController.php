@@ -190,7 +190,7 @@ class AdminCreateDriverReportController extends Controller
                   $numberofmaindiscount = $request->numDisMain;
                   $numberofstpassengers = $request->numPassST;
                   $numberofstdiscount = $request->numDisST;
-
+                     
                   $terminal = Destination::find($request->orgId);
                   $shortTripFare = $terminal->short_trip_fare;
                   $shortTripDiscountFare = $terminal->short_trip_fare_discount;
@@ -199,9 +199,12 @@ class AdminCreateDriverReportController extends Controller
                   //1. If all are true
                   if(($numberofmainpassengers !== null && $numberofmaindiscount !== null) &&
                       ($numberofstpassengers !== null && $numberofstdiscount !== null)){
-                      for($i = 0; $i < $numberofmainpassengers; $i++){
+                        //echo $numberofmainpassengers . ' ' . $numberofmaindiscount . ' ' . $numberofstpassengers . ' ' . $numberofstdiscount . '<br/>';
+                        
+                        for($i = 0; $i < $numberofmainpassengers; $i++){
                           $terminalfare = Ticket::where('destination_id', $terminal->destination_id)->where('type','Regular')->first()->fare;
                           $amountpaid = $terminalfare;
+                        //   dd($amountpaid);
                           Transaction::create([
                               "trip_id" => $trip->trip_id,
                               "destination" => $mainterm,
