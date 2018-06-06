@@ -65,6 +65,7 @@
 @parent
     <script>
         $(document).ready(function(){
+            var counter = 1; 
             $.ajax({
                 type: 'GET',
                 url: '/getVanQueue',
