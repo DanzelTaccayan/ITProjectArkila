@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Member;
 use App\Trip;
+use DB;
+use Response;
 
 
 class DriverProfileController extends Controller
@@ -32,19 +34,31 @@ class DriverProfileController extends Controller
 
       public function changeNotificationStatus()
       {
-          $id = request('id');
+          // Start transaction!
+          DB::beginTransaction();
+          try  {
 
-          $user = Member::findOrFail($id);
-          if($user->notification === "Enable"){
-              $user->notification = "Disable";
-              $message = ["success" => "You have successfully disabled your notifications"];
-          }elseif($user->notification === "Disable"){
-              $user->notification = "Enable";
-              $message = ["success" => "You have successfully enabled your notifications"];
+              $id = request('id');
+
+              $user = Member::findOrFail($id);
+              if($user->notification === "Enable"){
+                  $user->notification = "Disable";
+                  $message = ["success" => "You have successfully disabled your notifications"];
+              }elseif($user->notification === "Disable"){
+                  $user->notification = "Enable";
+                  $message = ["success" => "You have successfully enabled your notifications"];
+              }
+
+              $user->save();
+
+              DB::commit();
+              return response()->json($message);
+          } catch(\Exception $e) {
+              DB::rollback();
+              \Log::info($e);
+              return Response::json(['error'=>'Oops! Something went wrong on the server. If the problem persists contact the administrator'],422);
           }
 
-          $user->save();
-          return response()->json($message);
       }
 
       public function checkCurrentPassword()
@@ -77,9 +91,21 @@ class DriverProfileController extends Controller
             "password" => "required|confirmed",
         ]);
 
-        Auth::user()->password = Hash::make(request('password'));
-        Auth::user()->save();
-        Auth::logout();
-        return redirect('/login')->with('success', 'Successfully changed password');
+          // Start transaction!
+          DB::beginTransaction();
+          try  {
+              Auth::user()->password = Hash::make(request('password'));
+              Auth::user()->save();
+              Auth::logout();
+
+
+              DB::commit();
+              return redirect('/login')->with('success', 'Successfully changed password');
+          } catch(\Exception $e) {
+              DB::rollback();
+              \Log::info($e);
+
+              return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+          }
       }
 }
