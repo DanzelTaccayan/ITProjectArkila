@@ -33,19 +33,17 @@ class AdminCreateDriverReportRequest extends FormRequest
     public function rules()
     {
       $now = Carbon::now()->formatLocalized('%B %d %Y');
+      $seatingCapacity = Van::find($this->request->get('van_platenumber'));
+      //dd($this->request->get('totalPassengers'));
       $rules = [
         "driverAndOperator" => "required|exists:member,member_id",
         "dateDeparted" => "required|date_format:m/d/Y|before_or_equal: ".$now,
         "timeDeparted" => 'required|date_format:H:i|',
-        // "qty" => "present|array",
-        "totalPassengers" => "required|numeric|min:1|max:18",
       ];
 
         $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
 
         if($this->request->get('orgId') == $mainTerminal){
-
-          // $rules["origin"] = "required|exists:destination,destination_id";
 
           $totalPass = $this->request->get('totalPassengers');
           $qtyCounter = 0;
@@ -79,28 +77,32 @@ class AdminCreateDriverReportRequest extends FormRequest
             $rules['qty'] = "min:1";
           }
 
-          // if((array_sum($qty) == 0 ||  && array_sum($desc) == 0)){
-          //
-          // }
-
           if($totalPass != $totalSum){
             $rules['totalPassengers'] = "in:" . $qtySum;
+          }
+
+          if($totalPass == 0 || $totalPass == null){
+            $rules['totalPassengers'] = "min:1";
           }
 
         }else{
 
           $rules = [
-            "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric|min:1",
-            "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric|min:1",
-            "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
-            "numDisST" => "required_without_all:numPassMain,numPassST,numDisMain|numeric|min:1",
+            "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric",
+            "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric",
+            "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
+            "numDisST" => "required_without_all:numPassMain,numPassST,numDisMain|numeric",
           ];
 
-
+          if($this->request->get('totalPassengers') > $seatingCapacity->seating_capacity || (($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+          && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
+            $rules['totalPassengers'] = "required|numeric|min:1|max:".$seatingCapacity->seating_capacity;
+          }
           //1
          if((($this->request->get('numPassMain') != null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
          && (($this->request->get('numPassST') != null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') != null || $this->request->get('numDisST') != 0))){
            $rules['numDisMain'] = "nullable";
+
          //2.
          }else if((($this->request->get('numPassMain') != null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
          && (($this->request->get('numPassST') != null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
@@ -182,6 +184,7 @@ class AdminCreateDriverReportRequest extends FormRequest
 
     public function messages()
     {
+      $seatingCapacity = Van::find($this->request->get('van_platenumber'));
       $messages = [
         "driverAndOperator.required" => "Please select a driver",
         "driverAndOperator.exists" => "Driver does not exists",
@@ -190,7 +193,7 @@ class AdminCreateDriverReportRequest extends FormRequest
         "timeDeparted.required" => "Please enter time of departure",
         "totalPassengers.numeric" => "Please enter a valid number for the total number of passengers",
         "totalPassengers.required" => "Please enter the number of passengers per destination",
-        "totalPassengers.max" => "Please enter the number of passengers per destination",
+        "totalPassengers.max" => "The maximum number of passengers for " . $seatingCapacity->plate_number . " is " . $seatingCapacity->seating_capacity,
       ];
 
       $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first()->destination_id;
@@ -232,7 +235,11 @@ class AdminCreateDriverReportRequest extends FormRequest
         }
 
         if($totalPass != $totalSum){
-          $messages["totalPassengers"] = "The total number of passengers must be equal to the sum of passengers per destination";
+          $messages["totalPassengers.max"] = "The total number of passengers must be equal to the sum of passengers per destination";
+        }
+
+        if($totalPass == 0 || $totalPass == null){
+          $messages['totalPassengers.min'] = "Please enter at least 1 for the number of passengers per destination";
         }
       }else{
         $messages = [

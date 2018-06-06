@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Rules\checkCurrency;
 use App\Rules\checkTime;
+use App\User;
 use App\Member;
 use Carbon\Carbon;
 
@@ -28,20 +29,24 @@ class CreateReportRequest extends FormRequest
      */
     public function rules()
     {
+      $user = User::find(Auth::id());
 
       $now = Carbon::now()->formatLocalized('%B %d %Y');
         $rules = [
           "dateDeparted" => "required|date_format:m/d/Y|before_or_equal:" .$now,
           "timeDeparted" => 'required|date_format:H:i|',
           "totalPassengers" => "required|numeric|min:1|max:18",
-          "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric|min:1",
-          "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric|min:1",
-          "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
-          "numDisST" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
+          "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric",
+          "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric",
+          "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
+          "numDisST" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
           "origin" => "required|exists:destination,destination_id"
         ];
 
-
+        if($this->request->get('totalPassengers') > $user->member->van->first()->seating_capacity || (($this->request->get('numPassMain') == null || $this->request->get('numPassMain') == 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
+        && (($this->request->get('numPassST') == null || $this->request->get('numPassST') == 0) && ($this->request->get('numDisST') == null || $this->request->get('numDisST') == 0))){
+          $rules['totalPassengers'] = "required|numeric|min:1|max:".$user->member->van->first()->seating_capacity;
+        }
          //1
         if((($this->request->get('numPassMain') != null || $this->request->get('numPassMain') != 0) && ($this->request->get('numDisMain') == null || $this->request->get('numDisMain') == 0))
         && (($this->request->get('numPassST') != null || $this->request->get('numPassST') != 0) && ($this->request->get('numDisST') != null || $this->request->get('numDisST') != 0))){
@@ -125,13 +130,14 @@ class CreateReportRequest extends FormRequest
 
     public function messages()
     {
+      $user = User::find(Auth::id());
       $messages = [
         "dateDeparted.required" => "Please enter the date of departure",
         "dateDeparted.date_format" => "Please enter the correct format for the date of departure: mm/dd/yyyy",
         "timeDeparted.required" => "Please enter time of departure",
         "totalPassengers.numeric" => "Please enter a valid number for the total number of passengers",
-        "totalPassengers.required" => "Please enter the number of passengers per destination",
-        "totalPassengers.max" => "Number of passengers cannot exceed 18 which is the maximum number of passengers in a van",
+        "totalPassengers.required" => "The total number of passengers must at least be 1",
+        "totalPassengers.max" => "Number of passengers cannot exceed " .$user->member->van->first()->seating_capacity." which is the maximum number of passengers of your van",
         "origin.exists" => "Your origin terminal is not valid",
         "numPassMain.numeric" => "Main terminal passengers must be numeric",
         "numPassMain.min" => "The number of main terminal passengers must at least be 1",

@@ -24,15 +24,15 @@ class TripLogController extends Controller
     {
       $mainTerminal = Destination::where('is_main_terminal', true)->first()->destination_name;
       $transactions = $trip->transactions->where('ticket_name', '!=', null)->count() > 0 ? true : false;
-      
+
       if($trip->origin == $mainTerminal  && $transactions == false){
-        
+
         $transaction = Transaction::where('trip_id',$trip->trip_id)
         ->selectRaw('COUNT(amount_paid) as ampd, origin, destination, amount_paid, transaction_ticket_type')
         ->groupBy('amount_paid', 'destination')
         ->orderBy('amount_paid', 'ampd','DESC')
         ->get();
-   
+
         $destinationCount = Transaction::where('trip_id',$trip->trip_id)
           ->selectRaw('COUNT(destination) as descount, origin, destination, amount_paid')
           ->groupBy('destination')->get();
@@ -43,21 +43,17 @@ class TripLogController extends Controller
         $finalArr = null;
         foreach($destinationCount as $desKey => $desValues){
             $tempArr[$desValues->destination] = array_fill_keys(
-              array('Regular', 'Discount'), ''
+              array('Regular', 'Discount'), 0
             );
         }
 
         foreach($transaction  as $transkeys => $transvalues){
           if($transvalues->transaction_ticket_type == "Regular"){
-            $tempArr[$transvalues->destination]['Regular'] = $transvalues->ampd; 
-          }else{
-            $tempArr[$transvalues->destination]['Regular'] = 0;
+            $tempArr[$transvalues->destination]['Regular'] = $transvalues->ampd;
           }
 
           if($transvalues->transaction_ticket_type == "Discount"){
             $tempArr[$transvalues->destination]['Discount'] = $transvalues->ampd;
-          }else{
-            $tempArr[$transvalues->destination]['Discount'] = 0;  
           } 
         }
 
@@ -91,7 +87,7 @@ class TripLogController extends Controller
             ->where('transaction_ticket_type', 'Discount')
             ->groupBy('tickets')
             ->get();
-          
+
           $regular = Transaction::where('trip_id',$trip->trip_id)
             ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
             ->where('transaction_ticket_type', 'Regular')
@@ -102,8 +98,8 @@ class TripLogController extends Controller
             ->selectRaw("COUNT(SUBSTRING_INDEX(ticket_name, '-', '1')) as counts, SUBSTRING_INDEX(ticket_name, '-', '1') as tickets, transaction_ticket_type")
             ->groupBy('tickets')
             ->get();
-             
-          
+
+
           $tempArr = null;
 
           foreach($transactions as $tranKey => $tranValues){
@@ -113,14 +109,14 @@ class TripLogController extends Controller
           }
 
           foreach($discount as $tran){
-            $tempArr[$tran->tickets]['Discount'] = $tran->counts; 
-          }  
-          
+            $tempArr[$tran->tickets]['Discount'] = $tran->counts;
+          }
+
           foreach($regular as $tran){
             $tempArr[$tran->tickets]['Regular'] = $tran->counts;
-          }  
+          }
 
-          
+
 
           $totalPassenger = 0;
           $totalDiscountedPassenger = 0;
@@ -133,7 +129,7 @@ class TripLogController extends Controller
               }
             }
           }
-          
+
           $driverShare = 0;
           $totalFare = 0;
           foreach($transactions  as $transkeys => $transvalues){
@@ -142,7 +138,7 @@ class TripLogController extends Controller
 
           $driverShare = $totalFare - ($trip->total_booking_fee + $trip->community_fund + $trip->SOP);
           $officeShare = $totalFare - $driverShare;
-        
+
         return view('drivermodule.triplog.driverTripDetails', compact('tempArr', 'trip', 'driverShare', 'totalFare', 'officeShare', 'totalPassenger','totalDiscountedPassenger'));
       }else{
 
@@ -160,7 +156,7 @@ class TripLogController extends Controller
 
           $driverShare = 0;
           $totalFare = 0;
-          
+
           foreach($transaction as $trans){
             if($trans->is_short_trip == false){
               for($i = 0; $i < $trans->ampd; $i++){

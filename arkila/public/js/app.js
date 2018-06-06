@@ -62659,7 +62659,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.title = this.unread.data.name + ' has made a trip from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination;
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/driver-report/" + this.unread.data.info.trip_id;
-      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reported_by == 'Super-Admin') {
+      } else if (this.unread.data.info.report_status == 'Accepted' && this.unread.data.info.reported_by == 'Admin') {
         this.title = 'The Admin has departed you from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination;
         this.details = "On " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.date_departed).format('MM D YYYY') + " " + __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.time_departed, 'HH:mm').format('hh:mm a');
         this.notificationUrl = "/home/view-trips/" + this.unread.data.info.trip_id;
