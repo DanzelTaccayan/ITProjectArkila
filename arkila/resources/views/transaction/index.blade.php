@@ -44,8 +44,8 @@
         }
 
 .ticket-overflow {
-    min-height: 320px;
-    max-height: 320px;
+    min-height: 310px;
+    max-height: 310px;
 }
 
 .scrollbar-info::-webkit-scrollbar-track {
@@ -389,14 +389,17 @@
                                                                         <li data-val='{{$ticket->soldTicket->sold_ticket_id}}' class="list-group-item">{{$ticket->ticket_number}}</li>
                                                                     @endforeach
                                                                 </ul>
-                                                            </div>   
+                                                            </div>  
+                                                            <div class="text-center">
+                                                                <p> Sold <strong class="badge badge-pill bg-yellow" id="pendingListCount{{$terminal->destination_id}}"></strong>
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <p> Sold Tickets: <strong id="pendingListCount{{$terminal->destination_id}}"></strong>
-                                                    </p>
                                                 </div>
 
                                                 <div class="list-arrows col-md-2 text-center">
+                                                    <div  id="button-load">
                                                     <button data-terminal="{{$terminal->destination_id}}" name="board" class="btn btn-outline-primary btn-sm btn-flat move-right">
                                                         BOARD <i class="glyphicon glyphicon-chevron-right"></i>
                                                     </button>
@@ -404,6 +407,11 @@
                                                     <button data-terminal="{{$terminal->destination_id}}" name="unboard" class="btn btn-outline-warning btn-sm btn-flat move-left">
                                                         <i class="glyphicon glyphicon-chevron-left"></i> UNBOARD 
                                                     </button>
+                                                    </div>
+                                                    <div id="button-loader" class="text-center hidden">
+                                                        <img src="{{ URL::asset('img/loading.gif') }}">
+                                                        <h5>Please  wait...</h5>
+                                                    </div>
                                                 </div>
 
                                                 <div id="list-left" class="dual-list list-left col-md-5">
@@ -480,13 +488,13 @@
                                                                 @endforeach
                                                             </ul>
                                                             </div>
+                                                            <div class="text-center">   
+                                                                <p> On Board <strong class="badge badge-pill bg-blue" id="onBoardListCount{{$terminal->destination_id}}"></strong> / {{$terminal->vanQueue->where('queue_number',1)->first()->van->seating_capacity}}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                        <p> On Board Tickets:<strong id="onBoardListCount{{$terminal->destination_id}}"></strong>
-                                                        </p>
                                                 </div>
-                                                
-
                                             </div>
                                             <div>
                                                 <hr>
@@ -1012,7 +1020,14 @@
                 var terminalId = $(this).data('terminal');
                 var actives = $('#pendingList'+terminalId).children('.active');
 
+
                 if (actives.length > 0) {
+
+                    $('#button-load').hide();
+                    $('#button-loader').show();
+                    $('#button-loader').removeClass('hidden');
+                    $(this).find('button[name="board"]').prop('disabled',true);
+
                     var soldTickets = [];
 
                     actives.each(function () {
@@ -1028,6 +1043,25 @@
                             'destination' : terminalId
                         },
                         success: function(){
+                            $('#button-load').show();
+                            $('#button-loader').hide();
+                            new PNotify({
+                                    title: "Success!",
+                                    text: "Boarded Successfully",
+                                    animate: {
+                                    animate: true,
+                                    in_class: 'slideInDown',
+                                    out_class: 'fadeOut'
+                                    },
+                                    animate_speed: 'fast',
+                                    nonblock: {
+                                        nonblock: true
+                                    },
+                                    cornerclass: "",
+                                    width: "",
+                                    type: "success",
+                                    stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                            });
                             soldTickets.forEach(function(element){
                                 $('.pendingList').find('li[data-val="'+element+'"]').remove();
                             });
@@ -1055,6 +1089,8 @@
                             }); 
                         },
                         error:function(response) {
+                            $('#button-load').show();
+                            $('#button-loader').hide();
                             $('div[data-notify="container"]').remove();
                             $.notify({
                                 // options
@@ -1087,6 +1123,30 @@
                 var actives = $('#onBoardList'+terminalId).children('.active');
 
                 if (actives.length > 0) {
+
+                    $('#button-load').hide();
+                    $('#button-loader').show();
+                    $('#button-loader').removeClass('hidden');
+                    new PNotify({
+                            title: "Success!",
+                            text: "Unboarded Successfully",
+                            animate: {
+                            animate: true,
+                            in_class: 'slideInDown',
+                            out_class: 'fadeOut'
+                            },
+                            animate_speed: 'fast',
+                            nonblock: {
+                                nonblock: true
+                            },
+                            cornerclass: "",
+                            width: "",
+                            type: "success",
+                            stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
+                    });
+
+                    $(this).find('button[name="board"]').prop('disabled',true);
+
                     var soldTickets = [];
                     actives.each(function () {
                         soldTickets.push($(this).data('val'));
@@ -1100,6 +1160,9 @@
                             'soldTickets': soldTickets
                         },
                         success: function (response) {
+                            $('#button-load').show();
+                            $('#button-loader').hide();
+
                             $.each(actives,function(index,element){
                                 var ticket = $(element).data('val');
 
@@ -1125,6 +1188,9 @@
                             $("#onBoardListCount"+terminalId).text(onBoardCount);
                         },
                         error:function(response) {
+                            $('#button-load').show();
+                            $('#button-loader').hide();
+
                             $('div[data-notify="container"]').remove();
                             $.notify({
                                 // options
