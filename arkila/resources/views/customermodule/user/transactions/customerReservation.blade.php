@@ -22,7 +22,7 @@
                         <div class=" boxContainer" style="min-height:350px;">
                             <div id="reservation">
                             @if ($requests->count() == 0)
-                                <h2 class="text-center"  style="padding-top: 10%">NO RESERVATION AVAILABLE.</h2>
+                                <h2 class="text-center"  style="padding-top: 10%; color: lightgray;">NO TRANSACTION.</h2>
                             @else
                                 <ul class="list-group">
                                     @foreach($requests as $reservation)
