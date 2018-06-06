@@ -100,21 +100,21 @@ class FeesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FeesAndDeduction $fee)
-    {
-        DB::beginTransaction();
-        try{
-            $fee->delete();
-            session()->flash('message', 'Fee deleted successfully');
-            DB::commit();
-            return back();
-        }
-        catch(\Exception $e) {
-            DB::rollback();
-            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
-        }
+    // public function destroy(FeesAndDeduction $fee)
+    // {
+    //     DB::beginTransaction();
+    //     try{
+    //         $fee->delete();
+    //         session()->flash('message', 'Fee deleted successfully');
+    //         DB::commit();
+    //         return back();
+    //     }
+    //     catch(\Exception $e) {
+    //         DB::rollback();
+    //         return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+    //     }
 
-    }
+    // }
 
     public function editBooking(Destination $bookingfee)
     {
