@@ -85,7 +85,7 @@ class TransactionsController extends Controller
                 DB::rollback();
                 \Log::info($e);
 
-                return Response::json(['error' => 'Oops! Something went wront on the server. If the problem persists contact the administrator'], 422);
+                return Response::json(['error' => 'Oops! Something went wrong on the server. If the problem persists contact the administrator'], 422);
             }
 
         } else {

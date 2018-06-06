@@ -11,6 +11,7 @@ use App\Fee;
 use App\Feature;
 use App\Rules\checkTime;
 use App\Rules\checkCurrency;
+use DB;
 
 class SetupController extends Controller
 {
@@ -54,9 +55,9 @@ class SetupController extends Controller
     public function store(Request $request)
     {
         $this->validate(request(), [
-            "contactNumber" => 'max:15',
-            "email" => 'nullable|email|max:100',
-            "address" => 'max:200',
+            "contactNumber" => 'required|max:15',
+            "email" => 'required|email|max:100',
+            "address" => 'required|max:200',
             "openTime" => 'required|date_format:H:i',
             "closeTime" => 'required|date_format:H:i',
             "addMainTerminal" => 'required|unique:destination,destination_name|max:70',
@@ -75,100 +76,107 @@ class SetupController extends Controller
             "addComFund" => ['required', new checkCurrency, 'numeric','min:1','max:10000'],
         ]);
 
-        $mainName = ucwords(strtolower($request->addMainTerminal));
-        $destName = ucwords(strtolower($request->addTerminal));
-        $address = ucwords(strtolower($request->address));
-        $feeDescriptionFund = ucwords(strtolower($request->addFeesDescCom));
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $mainName = ucwords(strtolower($request->addMainTerminal));
+            $destName = ucwords(strtolower($request->addTerminal));
+            $address = ucwords(strtolower($request->address));
+            $feeDescriptionFund = ucwords(strtolower($request->addFeesDescCom));
 
 
 
-        $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        $disTicketCount = 0;
-        $counter = 0;
+            $discountedTickets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+            $disTicketCount = 0;
+            $counter = 0;
 
-        Profile::create([
-            'contact_number' => $request->contactNumber,
-            'email' => $request->email,
-            'address' => $address,
-            'open_time' => $request->openTime,
-            'close_time' => $request->closeTime,
-        ]);
-
-        $mainTerminal = Destination::create([
-            'destination_name' => $mainName,
-            'booking_fee' => $request->mainBookingFee,
-            'is_terminal' => true,
-            'is_main_terminal' => true,
-        ]);
-
-        $destTerminal = Destination::create([
-            'destination_name' => $destName,
-            'booking_fee' => $request->bookingFee,
-            'number_of_tickets' => $request->numticket,
-            'is_terminal' => true,
-            'is_main_terminal' => false,
-            'short_trip_fare' => $request->sTripFare,
-            'short_trip_fare_discount' => $request->sdTripFare,
-        ]);
-        
-        $destTerminal->routeOrigin()
-        ->attach($mainTerminal->destination_id, ['terminal_destination' => $destTerminal->destination_id]);
-
-        // foreach($discountedTickets as $discountedTicket)
-        // {
-
-        // }
-        for($c=1; $c <= $request->numticketDis; $c++)
-        {
-            if($disTicketCount >= 26)
-            {
-                $disTicketCount = 0;
-                $counter++;
-            }
-
-            if($c <= 26)
-            {
-                $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount];
-            }
-            else
-            {
-                $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount].$counter;                
-            }
-
-            $disTicketCount++;
-            Ticket::create([
-                'ticket_number' => $ticketNumber,
-                'destination_id' => $destTerminal->destination_id,
-                'fare' => $request->discountedFare,
-                'type' => 'Discount'
+            Profile::create([
+                'contact_number' => $request->contactNumber,
+                'email' => $request->email,
+                'address' => $address,
+                'open_time' => $request->openTime,
+                'close_time' => $request->closeTime,
             ]);
+
+            $mainTerminal = Destination::create([
+                'destination_name' => $mainName,
+                'booking_fee' => $request->mainBookingFee,
+                'is_terminal' => true,
+                'is_main_terminal' => true,
+            ]);
+
+            $destTerminal = Destination::create([
+                'destination_name' => $destName,
+                'booking_fee' => $request->bookingFee,
+                'number_of_tickets' => $request->numticket,
+                'is_terminal' => true,
+                'is_main_terminal' => false,
+                'short_trip_fare' => $request->sTripFare,
+                'short_trip_fare_discount' => $request->sdTripFare,
+            ]);
+
+            $destTerminal->routeOrigin()
+                ->attach($mainTerminal->destination_id, ['terminal_destination' => $destTerminal->destination_id]);
+
+            for($c=1; $c <= $request->numticketDis; $c++)
+            {
+                if($disTicketCount >= 26)
+                {
+                    $disTicketCount = 0;
+                    $counter++;
+                }
+
+                if($c <= 26)
+                {
+                    $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount];
+                }
+                else
+                {
+                    $ticketNumber = $destName.'-'.$discountedTickets[$disTicketCount].$counter;
+                }
+
+                $disTicketCount++;
+                Ticket::create([
+                    'ticket_number' => $ticketNumber,
+                    'destination_id' => $destTerminal->destination_id,
+                    'fare' => $request->discountedFare,
+                    'type' => 'Discount'
+                ]);
+            }
+
+            for($i=1; $i <= $request->numticket; $i++ )
+            {
+                $ticketName = $destName.'-'.$i;
+                Ticket::create([
+                    'ticket_number' => $ticketName,
+                    'destination_id' => $destTerminal->destination_id,
+                    'fare' => $request->regularFare,
+                    'type' => 'Regular'
+                ]);
+            }
+
+            Fee::create([
+                'description' => $request->addFeesDescSop,
+                'amount' => $request->addSop,
+            ]);
+
+            Fee::create([
+                'description' => $feeDescriptionFund,
+                'amount' => $request->addComFund,
+            ]);
+
+            $setup =  Feature::where('description','SetUp Page')->first();
+            $setup->update(['status' => 'disable']);
+
+            DB::commit();
+            return redirect('/home/route')->with('success', 'Setup successfully completed!');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
-        for($i=1; $i <= $request->numticket; $i++ )
-        {
-            $ticketName = $destName.'-'.$i;
-            Ticket::create([
-                'ticket_number' => $ticketName,
-                'destination_id' => $destTerminal->destination_id,
-                'fare' => $request->regularFare,
-                'type' => 'Regular'
-            ]);
-        }
-
-        Fee::create([
-            'description' => $request->addFeesDescSop,
-            'amount' => $request->addSop,
-        ]);
-
-        Fee::create([
-            'description' => $feeDescriptionFund,
-            'amount' => $request->addComFund,
-        ]);
-
-        $setup =  Feature::where('description','SetUp Page')->first();
-        $setup->update(['status' => 'disable']);
-
-        return redirect('/home/route')->with('success', 'Setup successfully completed!');
     }
 
     /**

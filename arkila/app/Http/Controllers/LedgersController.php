@@ -92,15 +92,26 @@ class LedgersController extends Controller
             ]);
         }
 
-        Ledger::create([
-            'payee' => $request->payor,
-            'description' => $request->particulars,
-            'or_number' => $request->or,
-            'amount' => $request->amount,
-            'type' => $request->type,
-        ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            Ledger::create([
+                'payee' => $request->payor,
+                'description' => $request->particulars,
+                'or_number' => $request->or,
+                'amount' => $request->amount,
+                'type' => $request->type,
+            ]);
 
-        return redirect('/home/ledger');
+            DB::commit();
+            return redirect('/home/ledger');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     /**
@@ -145,16 +156,27 @@ class LedgersController extends Controller
                 Rule::in(['Revenue', 'Expense'])
             ],
         ]);
-        
-        $ledger->update([
-            'payee' => request('payor'),
-            'description' => request('particulars'),
-            'or_number' => request('or'),
-            'amount' => request('amount'),
-            'type' => request('type'), 
-        ]);
 
-        return redirect('/home/ledger');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $ledger->update([
+                'payee' => request('payor'),
+                'description' => request('particulars'),
+                'or_number' => request('or'),
+                'amount' => request('amount'),
+                'type' => request('type'),
+            ]);
+
+            DB::commit();
+            return redirect('/home/ledger');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
 
     }
 
@@ -166,8 +188,19 @@ class LedgersController extends Controller
      */
     public function destroy(Ledger $ledger)
     {
-        $ledger->delete();
-        return back();
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $ledger->delete();
+            DB::commit();
+            return back();
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function generalLedger(Request $request) {

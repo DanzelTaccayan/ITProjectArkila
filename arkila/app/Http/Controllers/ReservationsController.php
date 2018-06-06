@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Session;
 use Validator;
+use DB;
 
 class ReservationsController extends Controller
 {
@@ -78,18 +79,28 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $dateCarbon = new Carbon(request('date'));
-        $date = $dateCarbon->format('Y-m-d');
-        $timeCarbon = new Carbon(request('time'));
-        $time = $timeCarbon->format('H:i:s');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $dateCarbon = new Carbon(request('date'));
+            $date = $dateCarbon->format('Y-m-d');
+            $timeCarbon = new Carbon(request('time'));
+            $time = $timeCarbon->format('H:i:s');
 
-        ReservationDate::create([
-            'reservation_date' => $date,
-            'departure_time' => $time,
-            'destination_terminal' => $request->destination,
-            'number_of_slots' => $request->slot,
-        ]);
-        return redirect('/home/reservations/')->with('success', 'You have created a reservation date successfully');
+            ReservationDate::create([
+                'reservation_date' => $date,
+                'departure_time' => $time,
+                'destination_terminal' => $request->destination,
+                'number_of_slots' => $request->slot,
+            ]);
+            DB::commit();
+            return redirect('/home/reservations/')->with('success', 'You have created a reservation date successfully');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
 
@@ -111,48 +122,52 @@ class ReservationsController extends Controller
               ],              
         ]);
 
-        if($request->status == 'OPEN')
-        {
-            $reservation->update([
-                'status' => 'OPEN',
-            ]);
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            if($request->status == 'OPEN') {
+                $reservation->update([
+                    'status' => 'OPEN',
+                ]);
+                DB::commit();
+                return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now open for requests.');
 
-            return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now open for requests.');
+            } elseif($request->status == 'CLOSED') {
+                $reservation->update([
+                    'status' => 'CLOSED',
+                ]);
+                DB::commit();
+                return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now closed.');
 
-        }
-        elseif($request->status == 'CLOSED')
-        {
-            $reservation->update([
-                'status' => 'CLOSED',
-            ]); 
-
-            return back()->with('success', 'Reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' is now closed.');
-           
-        }
-        else
-        {
-        	if($reservation->transaction == null){
-        		$countReservedSlots = 0;
-        	} else {
-				 $countReservedSlots = $reservation->transaction->where('date_id', $reservation->id)
-	            ->where(function($q){
-	                $q->where('status', 'PAID')
-	                ->orWhere('status', 'UNPAID')
-	                ->orWhere('status', 'TICKET ON HAND');
-	            })->count();
-        	}
+            } else {
+                if($reservation->transaction == null){
+                    $countReservedSlots = 0;
+                } else {
+                    $countReservedSlots = $reservation->transaction->where('date_id', $reservation->id)
+                        ->where(function($q){
+                            $q->where('status', 'PAID')
+                                ->orWhere('status', 'UNPAID')
+                                ->orWhere('status', 'TICKET ON HAND');
+                        })->count();
+                }
 
 
-            if($countReservedSlots == 0 && $reservation->status == 'CLOSED')
-            {
-                $reservation->delete();
-                return back()->with('success', 'Reservation date '.$reservation->reservation_date.' is successfully deleted.');
+                if($countReservedSlots == 0 && $reservation->status == 'CLOSED') {
+                    $reservation->delete();
+                    DB::commit();
+                    return back()->with('success', 'Reservation date '.$reservation->reservation_date.' is successfully deleted.');
+                } else {
+                    DB::rollback();
+                    return back()->withErrors('Cannot delete reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' because there are still pending requests.');
+                }
+
             }
-            else
-            {
-                return back()->withErrors('Cannot delete reservation date of '.$reservation->reservation_date->formatLocalized('%d %B %Y').' because there are still pending requests.');
-            }
 
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
     }
 
@@ -225,45 +240,56 @@ class ReservationsController extends Controller
     
                 } while ($newCode == $allCodes);
             }
-            $rule = $this->reservationRules();
-            $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
-            $toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
-            $time = explode(':', $dates->departure_time);
-            $dateOfDeparture = $dates->reservation_date;
-            $expiryDate = $dateOfDeparture->setTime($time[0], $time[1], $time[2]);
+            // Start transaction!
+            DB::beginTransaction();
+            try  {
 
-    
-            $destination = Destination::where('destination_id', $request->destination)->get()->first();
-    
-            Reservation::create([
-                'date_id' => $dateId,
-                'destination_name' => $destination->destination_name,
-                'rsrv_code' => 'RV'.$newCode,
-                'refund_code' => $refundCode,
-                'fare' => $toBePaid,
-                'name' => $name,
-                'is_refundable' => true,
-                'contact_number' => $request->contactNumber,
-                'expiry_date' => $expiryDate,
-                'date_paid' => Carbon::now(),
-                'ticket_quantity' => $quantity,
-                'type' => 'Walk-in',
-                'status' => 'Paid',
-            ]);
+                $rule = $this->reservationRules();
+                $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
+                $toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
+                $time = explode(':', $dates->departure_time);
+                $dateOfDeparture = $dates->reservation_date;
+                $expiryDate = $dateOfDeparture->setTime($time[0], $time[1], $time[2]);
 
-            Ledger::create([
-                'description' => 'Reservation Fee',
-                'amount' => $rule->fee,
-                'type' => 'Revenue',
-            ]);
 
-            $newNumTicket = $dates->number_of_slots - $quantity;
+                $destination = Destination::where('destination_id', $request->destination)->get()->first();
 
-            $dates->update([
-                'number_of_slots' => $newNumTicket,
-            ]);
+                Reservation::create([
+                    'date_id' => $dateId,
+                    'destination_name' => $destination->destination_name,
+                    'rsrv_code' => 'RV'.$newCode,
+                    'refund_code' => $refundCode,
+                    'fare' => $toBePaid,
+                    'name' => $name,
+                    'is_refundable' => true,
+                    'contact_number' => $request->contactNumber,
+                    'expiry_date' => $expiryDate,
+                    'date_paid' => Carbon::now(),
+                    'ticket_quantity' => $quantity,
+                    'type' => 'Walk-in',
+                    'status' => 'Paid',
+                ]);
 
-            return redirect('/home/reservations/'. $dateId)->with('success', 'Succesfully created reservation for '. $name);
+                Ledger::create([
+                    'description' => 'Reservation Fee',
+                    'amount' => $rule->fee,
+                    'type' => 'Revenue',
+                ]);
+
+                $newNumTicket = $dates->number_of_slots - $quantity;
+
+                $dates->update([
+                    'number_of_slots' => $newNumTicket,
+                ]);
+
+                DB::commit();
+                return redirect('/home/reservations/'. $dateId)->with('success', 'Succesfully created reservation for '. $name);
+            } catch(\Exception $e) {
+                DB::rollback();
+                \Log::info($e);
+
+                return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+            }
         }
         else
         {
@@ -276,6 +302,7 @@ class ReservationsController extends Controller
         $this->validate(request(), [
             'refundCode' => 'required',
         ]);
+
         $rule = $this->reservationRules();
         $time = explode(':', $reservation->reservationDate->departure_time);
         if($reservation->status == 'CANCELLED' && $reservation->is_refundable == true) {
@@ -286,14 +313,22 @@ class ReservationsController extends Controller
         }
 
         if($limitDate->gt(Carbon::now())) {
-            if($request->refundCode == $reservation->refund_code)
-            {
-                $reservation->update([
-                    'status' => 'REFUNDED',
-                    'refund_code' => null, 
-                    'is_refundable' => false,
-                ]);
-                return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
+            if($request->refundCode == $reservation->refund_code) {
+                // Start transaction!
+                DB::beginTransaction();
+                try  {
+                    $reservation->update([
+                        'status' => 'REFUNDED',
+                        'refund_code' => null,
+                        'is_refundable' => false,
+                    ]);
+                    DB::commit();
+                    return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
+                } catch(\Exception $e) {
+                    DB::rollback();
+                    \Log::info($e);
+                    return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+                }
             } else {
                 return back()->withErrors('Refund code does not match.');
             }
@@ -304,6 +339,10 @@ class ReservationsController extends Controller
 
     public function payment(Request $request, Reservation $reservation)
     {
+
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
             $rule = $this->reservationRules();
             $time = explode(':', $reservation->reservationDate->departure_time);
             $dateOfDeparture = $reservation->reservationDate->reservation_date;
@@ -324,7 +363,14 @@ class ReservationsController extends Controller
                 'type' => 'Revenue',
             ]);
 
+            DB::commit();
             return back()->with('success', 'The reservation has been paid.');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function showReservation(Reservation $reservation)

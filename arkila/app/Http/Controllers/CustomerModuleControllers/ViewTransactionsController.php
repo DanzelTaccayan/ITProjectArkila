@@ -7,6 +7,7 @@ use App\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use DB;
 
 class ViewTransactionsController extends Controller
 {
@@ -20,23 +21,55 @@ class ViewTransactionsController extends Controller
 
     public function cancelRental(Rental $rental)
     {
-    	$rental->update([
-        'status' => 'Cancelled',
-      ]);
-    	return back()->with('success','Your rental has been cancelled successfully');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $rental->update([
+                'status' => 'Cancelled',
+            ]);
+            DB::commit();
+            return back()->with('success','Your rental has been cancelled successfully');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 
     public function destroyRental(Rental $rental)
     {
-      $rental->update([
-        'status' => 'Cancelled',
-      ]);
-    	return back()->with('success','Rental has been deleted successfully');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $rental->update([
+                'status' => 'Cancelled',
+            ]);
+            DB::commit();
+            return back()->with('success','Rental has been deleted successfully');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
     }
 
     public function destroyReservation(Reservation $reservation)
     {
-    	$reservation->delete();
-    	return back()->with('success', 'Reservation has been deleted successfully');
+        // Start transaction!
+        DB::beginTransaction();
+        try  {
+            $reservation->delete();
+
+            DB::commit();
+            return back()->with('success', 'Reservation has been deleted successfully');
+        } catch(\Exception $e) {
+            DB::rollback();
+            \Log::info($e);
+
+            return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
+        }
+
     }
 }
