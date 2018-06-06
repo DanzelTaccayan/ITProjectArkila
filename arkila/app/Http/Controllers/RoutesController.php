@@ -360,6 +360,7 @@ class RoutesController extends Controller
                         $message = 'The route '. $route->destination_name .' has been successfully deleted!';
 
                     }
+                    DB::commit();
                     if($isTerminal == true) {
                         return redirect('/home/route#terminal' .$terminals->first()->destination_id)->with('success', $message);
                     } else {
@@ -375,7 +376,6 @@ class RoutesController extends Controller
                     return redirect('/home/route#terminal'.$route->routeDestination()->first()->destination_id)->withErrors('Unable to delete route '. $route->destination_name .', there are still tickets that needs to be returned');
                 }
             }
-            DB::commit();
         } catch(\Exception $e) {
             DB::rollback();
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
