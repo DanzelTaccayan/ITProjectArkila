@@ -96,7 +96,7 @@ class OperatorsController extends Controller
      */
     public function show(Member $operator)
     {
-        return view('operators.showProfile',compact('operator'));
+        return view('operators.show',compact('operator'));
     }
 
     /**

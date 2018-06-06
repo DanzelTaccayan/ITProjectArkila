@@ -207,7 +207,7 @@ class VansController extends Controller
         }
         else
         {
-            return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Van  '. $plateNumber .' successfully registered');
+            return redirect('/home/operators/'.$operator->member_id.'#vans')->with('success', 'Van  '. $plateNumber .' successfully registered');
         }
     }
 
@@ -234,7 +234,6 @@ class VansController extends Controller
      */
     public function update(Van $van)
     {
-
         if(request('addDriver') != 'on') {
             $this->validate(request(), [
                 "driver" => ['bail','nullable','numeric','exists:member,member_id',new checkDriver],
@@ -336,7 +335,7 @@ class VansController extends Controller
 
             if(session()->get('opLink'))
             {
-                return redirect(session()->get('opLink'));
+                return redirect(session()->get('opLink').'#vans')->with('success', 'Van  '. $plateNumber .' successfully updated.');
             }
             else
             {

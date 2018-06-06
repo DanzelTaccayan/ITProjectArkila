@@ -28,7 +28,7 @@ class UserDriversManagementController extends Controller
         $driver_user->password = Hash::make($defaultpassword);
         $driver_user->save();
         $driverName = $driver_user->first_name . " " . $driver_user->middle_name . " " . $driver_user->last_name;
-        return redirect('/home/user-management')->with('success', 'Password reset successful for ' . $driverName . '');
+        return redirect('/home/user-management#driverUser')->with('success', 'Successfully reset password for ' . $driverName . '.');
     }
 
     public function changeDriverStatus()

@@ -172,7 +172,7 @@ class DriversController extends Controller
             return back()->withErrors('Oops! Something went wrong on the server. If the problem persists contact the administrator');
         }
 
-        return redirect(route('operators.show',[$operator->member_id]))->with('success', 'Driver '. $driver->first_name .' '. $driver->middle_name .' '. $driver->last_name .' has been registered successfully');
+        return redirect('/home/operators/'.$operator->member_id.'#drivers')->with('success', 'Driver '. $driver->first_name .' '. $driver->middle_name .' '. $driver->last_name .' has been registered successfully');
     }
 
     public function createFromVan(Van $vanNd)
