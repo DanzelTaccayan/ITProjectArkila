@@ -1,5 +1,5 @@
 @extends('layouts.master') 
-@section('title', 'List of Drivers') 
+@section('title', 'Manage Tickets') 
 @section('content-header', 'List of Drivers') 
 @section('content')
 <div class="">
@@ -83,7 +83,7 @@
                   </tbody>
                 </table>
               </div>
-              <p class="font-italic"><strong>NOTE:</strong> Make sure that all tickets have been returned before editing the number of tickets for a specific route.</p>
+              <p><strong>NOTE:</strong> Make sure that all tickets have been returned before editing the number of tickets of a specific route.</p>
               <!-- /.tab-pane -->
             </div>
             <!-- /.tab-content -->

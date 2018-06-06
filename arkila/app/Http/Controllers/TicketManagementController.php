@@ -81,25 +81,11 @@ class TicketManagementController extends Controller
         //     ])->count();
 
         $numberOfSoldTickets = 0;
-        $isTerminal = $ticket_management->is_terminal;
-        if($isTerminal == true) {
-            foreach($ticket_management->routeFromDestination as $routes) {
-                $soldTickets = SoldTicket::all();
-                if($soldTickets->count() > 0) {
-                    foreach ($soldTickets as $soldTicket) {
-                        if ($soldTicket->ticket->destination_id == $routes->destination_id && $soldTicket->ticket->type == 'Regular') {
-                                $numberOfSoldTickets++;
-                        }
-                    }
-                }
-            }
-        } else {
-            $soldTickets = SoldTicket::all();
-            if($soldTickets->count() > 0) {
-                foreach($soldTickets as $soldTicket) {
-                    if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Regular') {
-                        $numberOfSoldTickets++;
-                    }
+        $soldTickets = SoldTicket::all();
+        if($soldTickets->count() > 0) {
+            foreach($soldTickets as $soldTicket) {
+                if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Regular') {
+                    $numberOfSoldTickets++;
                 }
             }
         }
@@ -182,25 +168,11 @@ class TicketManagementController extends Controller
     public function updateDiscount(Destination $ticket_management, Request $request)
     {
         $numberOfSoldTickets = 0;
-        $isTerminal = $ticket_management->is_terminal;
-        if($isTerminal == true) {
-            foreach($ticket_management->routeFromDestination as $routes) {
-                $soldTickets = SoldTicket::all();
-                if($soldTickets->count() > 0) {
-                    foreach ($soldTickets as $soldTicket) {
-                        if ($soldTicket->ticket->destination_id == $routes->destination_id && $soldTicket->ticket->type == 'Discount') {
-                                $numberOfSoldTickets++;
-                        }
-                    }
-                }
-            }
-        } else {
-            $soldTickets = SoldTicket::all();
-            if($soldTickets->count() > 0) {
-                foreach($soldTickets as $soldTicket) {
-                    if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Discount') {
-                        $numberOfSoldTickets++;
-                    }
+        $soldTickets = SoldTicket::all();
+        if($soldTickets->count() > 0) {
+            foreach($soldTickets as $soldTicket) {
+                if ($soldTicket->ticket->destination_id == $ticket_management->destination_id && $soldTicket->ticket->type == 'Discount') {
+                    $numberOfSoldTickets++;
                 }
             }
         }

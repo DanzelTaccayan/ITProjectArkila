@@ -78,7 +78,7 @@
                                             <td>
                                                 <div class="text-center">
                                                     <a href="{{route('route.edit', [$routes->destination_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
-                                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'route'.$routes->destination_id}}"><i class="fa fa-trash"></i> DELETE</button>
+                                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'route'.$terminal->destination_id.$routes->destination_id}}"><i class="fa fa-trash"></i> DELETE</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         @foreach($terminal->routeFromDestination as $routes)
-                        <div class="modal" id="{{'route'.$routes->destination_id}}">
+                        <div class="modal" id="{{'route'.$terminal->destination_id.$routes->destination_id}}">
                             <div class="modal-dialog" style="margin-top: 10%;">
                                 <div class="modal-content">
                                     <div class="modal-header">

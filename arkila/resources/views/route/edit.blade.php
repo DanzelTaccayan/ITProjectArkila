@@ -17,11 +17,11 @@
       </div>
       <div class="form-group">
           <label>Regular Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="1" max="5000" name="regularFare" value="{{$fareReg->fare}}" val-regularFare required>
+          <input type="number" class="form-control" min="1" max="5000" step=".01" name="regularFare" value="{{$fareReg->fare}}" val-regularFare required>
       </div>
       <div class="form-group">
           <label>Discounted Fare: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="1" max="5000" name="discountedFare" value="{{$fareDis->fare}}" val-discountFare required>
+          <input type="number" class="form-control" min="1" max="5000" step=".01" name="discountedFare" value="{{$fareDis->fare}}" val-discountFare required>
       </div> 
       <p><strong>NOTE:</strong> You can edit the ticket quantity in the manage tickets under Ticket Management tab.</p>
   </div>
@@ -31,15 +31,15 @@
     <div id="terminalForm">
       <div class="form-group">
           <label>Booking Fee: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="bookingFee" value="{{$route->booking_fee}}" val-bookingFee required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="bookingFee" value="{{$route->booking_fee}}" val-bookingFee step=".01" required>
       </div>
       <div class="form-group" id="shotTripReg">
           <label>Short Trip Fare Regular: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sTripFare" value="{{$route->short_trip_fare}}" val-regularStFare required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sTripFare" value="{{$route->short_trip_fare}}" val-regularStFare step=".01" required>
       </div>
        <div class="form-group" id="shotTripDis">
           <label>Short Trip Fare Discounted: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sdTripFare" value="{{$route->short_trip_fare_discount}}" val-discountStFare required>
+          <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" name="sdTripFare" value="{{$route->short_trip_fare_discount}}" step=".01" val-discountStFare required>
       </div>
     </div>
     @elseif($route->is_terminal == false)

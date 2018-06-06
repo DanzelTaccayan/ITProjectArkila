@@ -4,6 +4,7 @@
 @section('content')
 <div class="padding-side-10">
 <h2 class="text-white text-center">BOOKING RULES</h2>
+@include('layouts.partials.preloader_div')
 <div class="row">
 	<div class="col-md-6">
 		<div class="box box-success">
@@ -309,6 +310,13 @@
        	$('#editBtnRental').show();
         $('#editRentalRules').hide();
         $('#viewBtnsRental').hide()
+    });
+</script>
+<script>
+    $('form').on('submit',function() {
+        $('#submit-loader').removeClass('hidden');
+        $('#submit-loader').css("display","block");
+        $(this).find('button[type="submit"]').prop('disabled',true);
     });
 </script>
 @endsection
