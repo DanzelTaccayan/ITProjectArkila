@@ -31,7 +31,7 @@ class CustomerUserManagementController extends Controller
         $customer_user->save();
         $customerName = $customer_user->first_name . " " . $customer_user->middle_name . " " . $customer_user->last_name;
 
-        return redirect('/home/user-management')->with('success', 'Password reset successful for ' . $customerName . '');
+        return redirect('/home/user-management#customerUser')->with('success', 'Successfully reset password for ' . $customerName . '.');
     }
 
     public function changeCustomerStatus()

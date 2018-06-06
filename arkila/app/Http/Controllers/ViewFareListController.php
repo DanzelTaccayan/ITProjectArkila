@@ -9,7 +9,7 @@ class ViewFareListController extends Controller
 {
     public function fareList()
 	{
-		$destinations = Destination::allTerminal()->get();
+		$destinations = Destination::allRoute()->orderBy('destination_name')->get();
 		return view('customermodule.fareList', compact('destinations'));
 	}
 

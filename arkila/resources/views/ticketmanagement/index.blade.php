@@ -2,11 +2,15 @@
 @section('title', 'Manage Tickets') 
 @section('content-header', 'List of Drivers') 
 @section('content')
-<div class="">
-        <div class="padding-side-15">
-        <div>
-            <h2 class="text-white">DESTINATION TICKETS MANAGEMENT</h2>
-        </div>
+<div class="row">
+  <div class="col-md-12">
+    <div>
+        <h2 class="text-white">DESTINATION TICKETS MANAGEMENT</h2>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
@@ -89,12 +93,73 @@
             <!-- /.tab-content -->
           </div>
           <!-- nav-tabs-custom -->
-        </div>
+  </div>
+  <form action="{{route('ticket.rule')}}" method="POST">
+  {{csrf_field()}}
+  <div class="col-md-4">
+    <div class="box box-solid">
+      <div class="box-body">
+        <table class="table table-striped table-bordered">
+          <tbody>
+            <tr>
+              <th class="text-center" style="width: 35%;">Ticket Expiry</th>
+                <td style="width: 55%;" class="viewExpiry">
+                  @if($ticketRule)
+                    @if($ticketRule->first()->usable_days == 0)
+                    No expiry
+                    @else
+                    {{$ticketRule->first()->usable_days}} day after ticket sold
+                    @endif
+                  @else
+                    No expiry
+                  @endif
+                </td>
+                <td style="width: 15%;" class="viewExpiry">
+                  <div class="text-center">
+                    <button type="button" id="editExpiryBtn" class="btn btn-primary btn-sm">EDIT</button>
+                  </div>
+                </td>
+              <td id="editExpiry" class="hidden" colspan="2">
+                <select name="ticketExpiry" id="" class="form-control">
+                  <option value="0"@if(!$ticketRule){{'selected'}} @elseif($ticketRule->usable_days == 0)@endif>No expiry</option>
+                  <option value="1"@if($ticketRule) @if($ticketRule->usable_days == 1) {{'selected'}} @endif @endif>1 day after ticket has sold</option>
+                  <option value="2"@if($ticketRule) @if($ticketRule->usable_days == 2) {{'selected'}} @endif @endif>2 days after ticket has sold</option>
+                  <option value="3"@if($ticketRule) @if($ticketRule->usable_days == 3) {{'selected'}} @endif @endif>3 days after ticket has sold</option>
+                  <option value="4"@if($ticketRule) @if($ticketRule->usable_days == 4) {{'selected'}} @endif @endif>4 days after ticket has sold</option>
+                  <option value="5"@if($ticketRule) @if($ticketRule->usable_days == 5) {{'selected'}} @endif @endif>5 days after ticket has sold</option>
+                  <option value="6"@if($ticketRule) @if($ticketRule->usable_days == 6) {{'selected'}} @endif @endif>6 days after ticket has sold</option>
+                  <option value="7"@if($ticketRule) @if($ticketRule->usable_days == 7) {{'selected'}} @endif @endif>7 days after ticket has sold</option>
+                </select>
+                <div class="pull-right"  style="margin-top: 7%;">
+                  <button type="button" id="viewExpiryBtn" class="btn btn-default btn-sm">CANCEL</button>
+                  <button type="submit" id="saveExpiryBtn" class="btn btn-success btn-sm">SAVE</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+</form>  
+</div>
 @endsection
 @section('scripts') 
 @parent
 <script>
+$(document).ready(function () {
+  $("#editExpiry").hide();
+  $("#editExpiryBtn").click(function(){
+    $("#editExpiry").show();
+    $("#editExpiry").removeClass("hidden");
+    $(".viewExpiry").hide();
+  })
+  $("#viewExpiryBtn").click(function(){
+    $("#editExpiry").hide();
+    $(".viewExpiry").show();
+  })
+});
+
 @foreach ($routes as $route)
   $(document).ready(function(){
     $("#regEditQty{{$route->destination_id}}").hide();
@@ -108,6 +173,22 @@
       $("#regViewQty{{$route->destination_id}}").show();
       $("#regViewAction{{$route->destination_id}}").show();
       $("#regEditQty{{$route->destination_id}}").hide();
+    })
+  });
+
+  $(document).ready(function(){
+    $("#discEditQty{{$route->destination_id}}").hide();
+    $("#discEditBtn{{$route->destination_id}}").click(function(){
+      $("#discEditQty{{$route->destination_id}}").show();
+      $("#discViewQty{{$route->destination_id}}").hide();
+      $("#discViewAction{{$route->destination_id}}").hide();
+      $("#discEditQty{{$route->destination_id}}").removeClass("hidden");
+
+    })
+    $("#discViewBtn{{$route->destination_id}}").click(function(){
+      $("#discViewQty{{$route->destination_id}}").show();
+      $("#discViewAction{{$route->destination_id}}").show();
+      $("#discEditQty{{$route->destination_id}}").hide();
     })
   });
 

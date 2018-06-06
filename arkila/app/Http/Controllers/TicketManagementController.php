@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
 use App\Destination;
+use Carbon\Carbon;
 use App\Ticket;
+use App\TicketRule;
 use App\SoldTicket;
 use DB;
 
@@ -18,8 +20,9 @@ class TicketManagementController extends Controller
      */
     public function index()
     {
+        $ticketRule = TicketRule::get()->first();
         $routes = Destination::all()->where('is_main_terminal', false);
-        return view('ticketmanagement.index', compact('routes'));
+        return view('ticketmanagement.index', compact('routes', 'ticketRule'));
     }
 
     /**
@@ -257,14 +260,43 @@ class TicketManagementController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function ticketRule(Request $request) 
     {
-        //
+        $ticketRule = TicketRule::get()->first();
+
+        if($ticketRule) {
+            $rule = $ticketRule->first();
+            $this->validate($request, [
+                'ticketExpiry' => 'required|numeric|min:0',
+            ]);
+
+            $rule->update([
+                'usable_days' => $request->ticketExpiry,
+            ]);
+        } else {
+            TicketRule::create([
+                'usable_days' => $request->ticketExpiry,
+            ]);
+        }
+
+        return back()->with('success', 'Expiration of tickets has been successfully updated.');
+    }
+
+    public function ticketExpiry()
+    {
+        $rule = TicketRule::get()->first();
+
+        if($rule) {
+            $usableDays = $rule->usable_days;
+            $soldTickets = SoldTicket::all();
+    
+            foreach ($soldTickets as $soldTicket) {
+                if($soldTicket->created_at->addDays($usableDays)->lt(Carbon::now())) {
+                    $soldTicket->update([
+                        'is_expired' => true,
+                    ]);
+                }
+            }
+        }
     }
 }

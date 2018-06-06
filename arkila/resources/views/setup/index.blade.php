@@ -54,16 +54,16 @@
 
             <div style="padding: 2% 10% 0% 10%" class="padding-side-25">
                 <div class="form-group">
-                    <label for="contactNumber">Contact Number: </label>
+                    <label for="contactNumber">Contact Number: <span class="text-red">*</span></label>
                     <input type="text" class="form-control" name="contactNumber" value="{{old('contactNumber')}}" val-contact required>    
                 </div>
 
                 <div class="form-group">
-                    <label>Address:</label>
+                    <label>Address: <span class="text-red">*</span></label>
                     <input type="text" class="form-control" name="address" value="{{old('address')}}" val-address required>
                 </div>
                 <div class="form-group">
-                    <label>Email: </label>
+                    <label>Email: <span class="text-red">*</span> </label>
                     <input type="email" class="form-control" name="email" value="{{old('email')}}" val-email required>
                 </div>
                 <div class="form-group col-md-6 left">

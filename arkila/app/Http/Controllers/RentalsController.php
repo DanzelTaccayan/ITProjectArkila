@@ -170,12 +170,12 @@ class RentalsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(VanRental $rental)
-    {
-        $rental->delete();
-        return back()->with('message', 'Successfully Deleted');
+    // public function destroy(VanRental $rental)
+    // {
+    //     $rental->delete();
+    //     return back()->with('message', 'Successfully Deleted');
 
-    }
+    // }
 
     public function updateStatus(VanRental $rental)
     {
@@ -217,20 +217,21 @@ class RentalsController extends Controller
                     Rule::in(['Paid'])
                 ],
             ]);
+            $totalPayment = request('fare');
 
             $destination = Destination::allRoute()->where('destination_name', $rental->destination)->count();
             if($destination == 0) {
                 $rule = $this->rentalRules();
-                $totalPayment = request('fare') + $rule->fee;
+                // $totalPayment = request('fare') + $rule->fee;
 
                 Ledger::create([
                     'description' => 'Rental Fee',
                     'amount' => $rule->fee,
                     'type' => 'Revenue',
                 ]);
-            } else {
-                $totalPayment = request('fare');
             }
+            // } else {
+            // }
 
             $rental->update([
                 'rental_fare' => $totalPayment,

@@ -47,6 +47,11 @@ class Kernel extends ConsoleKernel
             $expiryStatus->expiredStatus();
         })->everyMinute();
 
+        $schedule->call(function() {
+            $expiry = new \App\Http\Controllers\TicketManagementController();
+            $expiry->ticketExpiry();
+        })->everyMinute();
+
     }
 
     /**

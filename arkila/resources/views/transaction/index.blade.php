@@ -164,9 +164,13 @@
                                                             <label for="">Customer</label>
                                                             <select class="form-control select2" data-terminal="{{$terminal->destination_id}}" name="customer">
                                                                 <option value="walkIn">Walk-in Customer</option>
-                                                                @foreach($reservations as $reservation)
-                                                                <option value="{{$reservation->id}}">{{$reservation->rsrv_code}}</option>
-                                                                @endforeach
+                                                                @if($reservations)
+                                                                    @foreach($reservations as $reservation)
+                                                                        @if($reservation->reservationDate->reservation_date->format('Y-m-d') == (Carbon\Carbon::now()->format('Y-m-d')))
+                                                                        <option value="{{$reservation->id}}">{{strtoupper($reservation->rsrv_code)}}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
                                                              </select>
                                                         </div>
                                                         <div class="" style="margin-top: 3%">

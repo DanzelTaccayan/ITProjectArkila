@@ -34,7 +34,8 @@
 @else
 
 <div class="form-group">
-    <label for="">Operator:</label> <span>{{$operator->full_name}}</span>
+    <label for="">Operator:</label>
+    <p class="info-container">{{$operator->full_name}}</p>
 </div>
 @endif
 
@@ -66,7 +67,7 @@
         <select name="driver" id="driver" class="form-control select2">
         <option value="" data-van="null">None</option>
         @foreach($drivers as $driver)
-            <option value="{{$driver->member_id}}">{{$driver->full_name}}</option>
+            <option value="{{$driver->member_id}}" data-van="{{$driver->van->first()->van_id ?? 'null'}}">{{$driver->full_name}}</option>
         @endforeach
     </select> 
     @endif
