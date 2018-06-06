@@ -11,7 +11,9 @@
         @include('layouts.partials.stylesheets_form')
     @show
 </head>
-
+<script>
+    var submitStatus = false;
+</script>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="layout-top-nav bgform-image hidden">
     <div id="loader">
@@ -28,6 +30,7 @@
                 </section>
         </form>
     </div>
+    @include('layouts.partials.preloader_div')
 
     <!-- jQuery 3 -->
     @section('scripts')
@@ -36,10 +39,28 @@
 
         <script>
             $(document).ready(function(){
+                $("form").on('submit', function(e){
+                    if(submitStatus) {
+                        e.preventDefault();
+                    } else {
+
+                        var form = $(this);
+
+                        if (form.parsley().isValid()){
+                            submitStatus = true;
+                            $('#submit-loader').removeClass('hidden');
+                            $('#submit-loader').css("display","block");
+                            $(this).find('button[type="submit"]').prop('disabled',true);
+                        }
+                    }
+
+                });
                     $("#loader").hide();
                     $("#startup").show();
                     $("body").removeClass('hidden');
             });
+
+
         </script>
     @show
 </body>

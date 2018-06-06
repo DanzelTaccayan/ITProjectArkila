@@ -47,7 +47,8 @@ class ReservationsController extends Controller
         $requests = Reservation::where('date_id', $reservation->id)
         ->where(function($q){
             $q->where('status', 'PAID')
-            ->orWhere('status', 'UNPAID');
+            ->orWhere('status', 'UNPAID')
+            ->orWhere([['status', 'CANCELLED'], ['is_refundable', true]]);
         })->get();
         
         return view('reservations.show', compact('reservation', 'requests'));
@@ -60,8 +61,13 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        $destinations = Destination::allTerminal()->get();
-        return view('reservations.create', compact('destinations'));
+        $rule = $this->reservationRules();
+        if($rule) {
+            $destinations = Destination::allTerminal()->get();
+            return view('reservations.create', compact('destinations'));            
+        } else {
+            return redirect(route('reservations.index'));
+        }
     }
 
     /**
@@ -166,11 +172,17 @@ class ReservationsController extends Controller
 
     public function walkInReservation($id)
     {  
-        $dateId = Session::get('id');
-        $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
-        $main = Destination::mainTerminal()->get()->first();
-        $date = ReservationDate::where('id', $dateId)->get()->first();
-        return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));
+        $rule = $this->reservationRules();
+
+        if($rule) {
+            $dateId = Session::get('id');
+            $destinations = Destination::allTerminal()->where('destination_id', $id)->get()->first();
+            $main = Destination::mainTerminal()->get()->first();
+            $date = ReservationDate::where('id', $dateId)->get()->first();
+            return view('reservations.createWalkIn', compact('destinations', 'id', 'main', 'date'));            
+        } else {
+            return redirect(route('reservations.index'));
+        }
     }
 
     public function storeWalkIn(Request $request)
@@ -264,19 +276,23 @@ class ReservationsController extends Controller
         $this->validate(request(), [
             'refundCode' => 'required',
         ]);
-
+        $rule = $this->reservationRules();
         $time = explode(':', $reservation->reservationDate->departure_time);
-        $limitDate = $reservation->reservationDate->reservation_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
+        if($reservation->status == 'CANCELLED' && $reservation->is_refundable == true) {
+            $limitDate = $reservation->updated_at->addDays($rule->refund_expiry)->setTime($time[0], $time[1], $time[2]);
+        } else {
+            $limitDate = $reservation->reservationDate->reservation_date->subDays(1)->setTime($time[0], $time[1], $time[2]);
 
-        if($request->refundCode == $reservation->refund_code)
-        {
-            $reservation->update([
-                'status' => 'REFUNDED',
-                'refund_code' => null, 
-                'is_refundable' => false,
-            ]);
-            if($limitDate->gt(Carbon::now()))
+        }
+
+        if($limitDate->gt(Carbon::now())) {
+            if($request->refundCode == $reservation->refund_code)
             {
+                $reservation->update([
+                    'status' => 'REFUNDED',
+                    'refund_code' => null, 
+                    'is_refundable' => false,
+                ]);
                 $newSlot = $reservation->ticket_quantity + $reservation->reservationDate->number_of_slots;
                 $reservation->reservationDate->update([
                     'number_of_slots' => $newSlot,
@@ -285,13 +301,12 @@ class ReservationsController extends Controller
                 $reservation->update([
                     'returned_slot' => true,
                 ]);
+                return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
+            } else {
+                return back()->withErrors('Refund code does not match.');
             }
-
-            return redirect(route('reservations.show', $reservation->reservationDate->id))->with('success', 'The reservation had been successfully refunded.');
-        }
-        else
-        {
-            return back()->withErrors('Refund code does not match.');
+        } else {
+            return back()->withErrors('Reservation can not be refunded. It has exceeded the given expiration date.');            
        }
     }
 
@@ -313,7 +328,7 @@ class ReservationsController extends Controller
 
             Ledger::create([
                 'description' => 'Reservation Fee',
-                'amount' => $rule->reservation_fee,
+                'amount' => $rule->fee,
                 'type' => 'Revenue',
             ]);
 
@@ -322,7 +337,7 @@ class ReservationsController extends Controller
 
     public function showReservation(Reservation $reservation)
     {
-        $rules = BookingRules::where('cancellation_fee', null)->get()->first();
+        $rules = $this->reservationRules();
         return view('reservations.showReservation', compact('reservation', 'rules'));
     }
 

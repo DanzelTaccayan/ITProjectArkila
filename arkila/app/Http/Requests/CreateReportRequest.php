@@ -33,11 +33,11 @@ class CreateReportRequest extends FormRequest
         $rules = [
           "dateDeparted" => "required|date_format:m/d/Y|before_or_equal:" .$now,
           "timeDeparted" => 'required|date_format:H:i|',
-          "totalPassengers" => "numeric|min:1|max:18|required",
-          "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric",
-          "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric",
-          "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
-          "numDisST" => "required_without_all:numPassMain,numPassST,numDisST|numeric",
+          "totalPassengers" => "required|numeric|min:1|max:18",
+          "numPassMain" => "required_without_all:numPassST,numDisMain,numDisST|numeric|min:1",
+          "numPassST" => "required_without_all:numPassMain,numDisMain,numDisST|numeric|min:1",
+          "numDisMain" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
+          "numDisST" => "required_without_all:numPassMain,numPassST,numDisST|numeric|min:1",
           "origin" => "required|exists:destination,destination_id"
         ];
 
@@ -138,7 +138,7 @@ class CreateReportRequest extends FormRequest
         "numPassST.numeric" => "Short trip passengers must be numeric",
         "numPassST.min" => "The number of short trip passengers must at least be 1",
         "numDisMain.numeric" => "Discouted passengers for the main terminal must be numeric",
-        "numDisMain.min" => "The number of discounted passengers must at least be 1",
+        "numDisMain.min" => "The number of discounted main terminal passengers must at least be 1",
         "numDisST.numeric" => "Discouted passengers for short trips must be numeric",
         "numDisST.min" => "The number of discounted passengers must at least be 1",
       ];

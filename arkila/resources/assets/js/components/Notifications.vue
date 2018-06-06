@@ -17,7 +17,7 @@
       <li>
           <div v-if="unreadNotifications.length == 0"><p>You have no notifications</p></div>
           <div><notification-item v-for="unread in unreadNotifications" :key="unread.user_id" :unread="unread"></notification-item></div>
-          
+
       </li>
   </ul>
 </li>
@@ -43,9 +43,9 @@
       console.log('Component mounted');
       Echo.private(`App.User.` + this.userid)
         .notification((notification) => {
-        console.log('puta');
-        console.log(notification);  
+        console.log(notification.id);
         let newUnreadNotifications = {
+          id:notification.id,
           data:{
             notif_type:notification.notif_type,
             reservation_date:notification.reservation_date == null ? null : notification.reservation_date,
@@ -55,7 +55,6 @@
           }
         };
         this.unreadNotifications.push(newUnreadNotifications);
-        console.log('HI');
         console.log(newUnreadNotifications);
         });
     }

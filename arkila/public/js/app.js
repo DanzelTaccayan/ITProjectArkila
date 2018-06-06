@@ -62498,9 +62498,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     console.log('Component mounted');
     Echo.private('App.User.' + this.userid).notification(function (notification) {
-      console.log('puta');
-      console.log(notification);
+      console.log(notification.id);
       var newUnreadNotifications = {
+        id: notification.id,
         data: {
           notif_type: notification.notif_type,
           reservation_date: notification.reservation_date == null ? null : notification.reservation_date,
@@ -62510,7 +62510,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       };
       _this.unreadNotifications.push(newUnreadNotifications);
-      console.log('HI');
       console.log(newUnreadNotifications);
     });
   }
@@ -62579,6 +62578,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -62594,6 +62600,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   mounted: function mounted() {
+    console.log('HELLO WORlD');
+    console.log(this.unread.id);
     //Done
     if (this.unread.data.notif_type == 'Van Rental') {
       if (this.unread.data.info.status == 'Pending') {
@@ -62611,7 +62619,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/rental/" + this.unread.data.info.rent_id;
       }
-      //Done  
+      //Done
     } else if (this.unread.data.notif_type == 'VanRentalDriver') {
       if (this.unread.data.info.status == 'Unpaid') {
         this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
@@ -62628,7 +62636,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/view-rentals";
       }
-      //Done  
+      //Done
     } else if (this.unread.data.notif_type == 'Reservation') {
       if (this.unread.data.info.status == 'UNPAID') {
         this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
@@ -62645,7 +62653,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/reservations/" + this.unread.data.reservation_date.id;
       }
-      //DONE  
+      //DONE
     } else if (this.unread.data.notif_type == 'Trip') {
       if (this.unread.data.info.report_status == 'Pending' && this.unread.data.info.reported_by == 'Driver') {
         this.title = this.unread.data.name + ' has made a trip from ' + this.unread.data.info.origin + ' to ' + this.unread.data.info.destination;
@@ -62680,6 +62688,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/view-rentals";
       }
+    }
+  },
+
+  methods: {
+    markSpecificAsRead: function markSpecificAsRead() {
+      axios.post('/markAsReadSpecific/' + this.unread.id);
     }
   }
 });
@@ -62963,14 +62977,30 @@ var render = function() {
   return _vm.unread == 0
     ? _c("p", [_vm._v("You don't have any notifications")])
     : _vm.unread != 0
-      ? _c("a", { attrs: { href: _vm.notificationUrl } }, [
-          _c("p", { staticStyle: { margin: "0 0 0" } }, [
-            _vm._v(_vm._s(_vm.title))
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-9" }, [
+            _c("a", { attrs: { href: _vm.notificationUrl } }, [
+              _c("p", { staticStyle: { margin: "0 0 0" } }, [
+                _vm._v(_vm._s(_vm.title))
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-orange fa fa-book" }),
+              _vm._v(" "),
+              _c("small", [_vm._v(_vm._s(_vm.details))])
+            ])
           ]),
           _vm._v(" "),
-          _c("span", { staticClass: "text-orange fa fa-book" }),
-          _vm._v(" "),
-          _c("small", [_vm._v(_vm._s(_vm.details))])
+          _c("div", { staticClass: "col-md-3" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-default btn-xs",
+                attrs: { type: "button", name: "button" },
+                on: { click: _vm.markSpecificAsRead }
+              },
+              [_c("i", { staticClass: "fa fa-circle-o" })]
+            )
+          ])
         ])
       : _vm._e()
 }

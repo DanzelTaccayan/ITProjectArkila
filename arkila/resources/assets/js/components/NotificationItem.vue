@@ -1,10 +1,17 @@
 <template>
-<p v-if="unread == 0">You don't have any notifications</p>
-    <a v-else-if="unread != 0" v-bind:href="notificationUrl">
-      <p style="margin:0 0 0;">{{title}}</p>
-      <span class="text-orange fa fa-book"></span>
-      <small>{{details}}</small>
-    </a>
+  <p v-if="unread == 0">You don't have any notifications</p>
+  <div v-else-if="unread != 0" class="row">
+    <div class="col-md-9">
+      <a  v-bind:href="notificationUrl">
+        <p style="margin:0 0 0;">{{title}}</p>
+        <span class="text-orange fa fa-book"></span>
+        <small>{{details}}</small>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <button @click="markSpecificAsRead" type="button" class="btn btn-default btn-xs" name="button"><i class="fa fa-circle-o"></i></button>
+    </div>
+  </div>
 </template>
 <script>
 import moment from 'moment';
@@ -21,6 +28,8 @@ import moment from 'moment';
       }
     },
     mounted(){
+      console.log('HELLO WORlD');
+      console.log(this.unread.id);
       //Done
       if(this.unread.data.notif_type == 'Van Rental'){
         if(this.unread.data.info.status == 'Pending'){
@@ -38,7 +47,7 @@ import moment from 'moment';
           this.details=this.destination + " on " + this.date + " at " + this.time;
           this.notificationUrl="/home/rental/"+this.unread.data.info.rent_id;
         }
-      //Done  
+      //Done
       }else if(this.unread.data.notif_type == 'VanRentalDriver'){
         if(this.unread.data.info.status == 'Unpaid'){
           this.title=this.unread.data.notif_type + " Request by " + this.unread.data.name;
@@ -55,7 +64,7 @@ import moment from 'moment';
           this.details=this.destination + " on " + this.date + " at " + this.time;
           this.notificationUrl="/home/view-rentals";
         }
-      //Done  
+      //Done
       }else if(this.unread.data.notif_type == 'Reservation'){
         if(this.unread.data.info.status == 'UNPAID'){
           this.title=this.unread.data.notif_type + " Request by " + this.unread.data.name;
@@ -72,7 +81,7 @@ import moment from 'moment';
           this.details=this.destination + " on " + this.date + " at " + this.time;
           this.notificationUrl="/home/reservations/"+this.unread.data.reservation_date.id;
         }
-      //DONE  
+      //DONE
       }else if(this.unread.data.notif_type == 'Trip'){
         if(this.unread.data.info.report_status == 'Pending' && this.unread.data.info.reported_by == 'Driver'){
           this.title = this.unread.data.name + ' has made a trip from '+ this.unread.data.info.origin +' to ' + this.unread.data.info.destination;
@@ -108,7 +117,12 @@ import moment from 'moment';
           this.notificationUrl="/home/view-rentals";
         }
       }
-      
+
+    },
+    methods:{
+      markSpecificAsRead(){
+        axios.post('/markAsReadSpecific/'+this.unread.id);
+      }
     }
   }
 </script>
