@@ -59,15 +59,19 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>License No <span class="text-red">*</span></th>
+                            <th>Operator/Driver</th>
+                            <td class="text-center"><input type="checkbox" id="operatorDriver" class="" name="operatorDriver"> Check the box if this operator is also a driver.</td>
+                          </tr>
+                        <tr>
+                            <th>License No <span class="licenseReq text-red hidden">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No.">
+                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." disabled="disabled">
                             </td>
                         </tr>
                         <tr>
-                            <th>License Expiry Date</th>
+                            <th>License Expiry Date <span class="licenseReq text-red hidden">*</span></th>
                             <td>
-                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" disabled="disabled">
                           </td>
                         </tr>
                         <tr>
@@ -153,5 +157,27 @@
     });
 
 
+    </script>
+
+    <script>
+      $(document).ready(function() {
+
+          $('#operatorDriver').change(function() {
+              if($(this).is(":checked")) {
+                $('.licenseReq').removeClass('hidden');
+                $('.licenseReq').show();
+                $('input[name="licenseNo"]').prop('disabled',false);
+                $('[name="licenseExpiryDate"]').prop('disabled',false);
+                $('input[name="licenseNo"]').prop('required',true);
+                $('[name="licenseExpiryDate"]').prop('required',true);
+              } else{
+                $('.licenseReq').hide();
+                $('[name="licenseNo"]').prop('disabled',true);
+                $('[name="licenseExpiryDate"]').prop('disabled',true);
+                $('input[name="licenseNo"]').prop('required',false);
+                $('[name="licenseExpiryDate"]').prop('required',false);
+              }     
+          });
+      });
     </script>
 @stop
