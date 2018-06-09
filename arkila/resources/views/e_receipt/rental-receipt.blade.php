@@ -4,55 +4,36 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Arkila- BanTrans | Receipt</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  @include('layouts.partials.stylesheets')
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
   <style>
     .table>tbody>tr>th,.table>tbody>tr>td {
       border-top: none;
     }
   </style>
 
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body onload="window.print();">
-<div class="wrapper">
+<body>
+<div>
   <!-- Main content -->
-  <section class="invoice">
+  <section>
     <!-- title row -->
-    <div class="row">
-      <div class="col-xs-12">
-        <h2 class="page-header">
+    <div>
+      <div>
+        <h2>
           Arkila - BanTrans 
-          <small class="pull-right">Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
+          <small>Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
         </h2>
       </div>
       <!-- /.col -->
     </div>
-    <div class="row"> 
-      <div class="col-md-12"> 
-        <div class="pull-right"> 
-          <img src="{{ URL::asset('img/apple-touch-icon.png')}}" alt="arkila_logo" style="width:80px;height:80px;">
-          <img src="{{ URL::asset('img/bantrans-logo.png') }}" alt="bantrans_logo" style="height:80px; width:80px;">
-          <div class="clearfix">  </div>
-        </div>
-      </div>
-    </div>
+
     <!-- info row -->
-    <div class="row invoice-info">
-      <div class="col-sm-12">
+    <div>
+      <div>
         <h4>Customer Information</h4>
       </div>
-      <div class="col-sm-4 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Rental Code:</th>
@@ -64,8 +45,8 @@
         </address>
       </div>
       <!-- /.col -->
-      <div class="col-sm-4 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Customer:</th>
@@ -75,8 +56,8 @@
         </table>
       </div>
       <!-- /.col -->
-      <div class="col-sm-3 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Receipt Type:</th>
@@ -91,10 +72,10 @@
     <!-- /.row -->
 
     <!-- Table row -->
-    <div class="row">
-      <div class="col-xs-12 table-responsive">
+    <div>
+      <div>
         <h4>Itenerary</h4>
-        <table class="table table-striped">
+        <table>
           <thead>
           <tr>
             <th>Destination</th>
@@ -108,9 +89,9 @@
           <tr>
             <td>{{$rental->destination}}</td>
             <td>{{$rental->departure_date->formatLocalized('%d %B %Y')}}</td>
-            <td class="text-right">{{date('g:i A', strtotime($rental->departure_time))}}</td>
-            <td class="text-right">{{$rental->number_of_days}}</td>
-            <td class="text-right">₱{{$rental->rental_fare}}</td>
+            <td>{{date('g:i A', strtotime($rental->departure_time))}}</td>
+            <td>{{$rental->number_of_days}}</td>
+            <td>P{{$rental->rental_fare}}</td>
           </tr>
           </tbody>
         </table>
@@ -119,38 +100,38 @@
     </div>
     <!-- /.row -->
 
-    <div class="row">
-      <div class="col-xs-6">
+    <div>
+      <div>
         <h4>Receipt</h4>
-        <div class="well">
-          <div class="table-responsive">
-            <table class="table ">
-            @if(!$destinations)
+        <div>
+          <div>
+            <table>
+            @if($destinations)
               <tr>
-                <th style="width:50%">Subtotal:</th>
-                <td class="text-right">₱{{$rental->rental_fare}}</td>
+                <th>Subtotal:</th>
+                <td>P{{number_format($rental->rental_fare - $rental->rental_fee, 2)}}</td>
               </tr>
               <tr>
                 <th>Rental Fee</th>
-                <td class="text-right">₱{{$rule->fee}}</td>
+                <td>P{{$rental->rental_fee}}</td>
               </tr>
-              <tr style="border-top: 2px solid black;">
-                <th class="text-blue"><h4>Total:</h4></th>
-                <td class="text-blue text-right"><h4>₱{{$rental->rental_fare + $rule->fee}}</h4></td>
+              <tr>
+                <th><h4>Total:</h4></th>
+                <td><h4>P{{number_format($rental->rental_fare, 2)}}</h4></td>
               </tr>
               @else
               <tr>
-                <th style="width:50%">Subtotal:</th>
-                <td class="text-right">₱{{$rental->rental_fare}}</td>
+                <th>Subtotal:</th>
+                <td>P{{$rental->rental_fare}}</td>
               </tr>
               <tr>
                 <th>Rental Fee</th>
-                <td class="text-right">₱0.00</td>
+                <td>P0.00</td>
               </tr>
 
-              <tr style="border-top: 2px solid black;">
-                <th class="text-blue"><h4>Total:</h4></th>
-                <td class="text-blue text-right"><h4>₱{{$rental->rental_fare}}</h4></td>
+              <tr>
+                <th><h4>Total:</h4></th>
+                <td><h4>P{{$rental->rental_fare}}</h4></td>
               </tr>
               @endif              
             </table>
@@ -161,9 +142,9 @@
         </div>
       </div>
       <!-- /.col -->
-      <div class="col-xs-6">
+      <div>
           <h4>Van Details</h4>
-          <table class="table">
+          <table>
             <thead>
               <tr>
                 <th>Van Unit</th>
@@ -176,13 +157,13 @@
               <tr>
                 <td>{{$rental->van->plate_number}}</td>
                 <td>{{$rental->van->model->description}}</td>
-                <td class="text-right">{{$rental->van->seating_capacity}}</td>
+                <td>{{$rental->van->seating_capacity}}</td>
                 <td>{{$rental->driver->full_name}}</td>
               </tr>
             </tbody>
           </table>
-        <div class="padding-side-15">
-          <p class="well text-center">PLEASE BRING A VALID ID</p>
+        <div>
+          <p>PLEASE BRING A VALID ID</p>
         </div>
       </div>
       <!-- /.col -->
@@ -191,7 +172,7 @@
     <!-- /.row -->
 
 
-        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+        <p>
           <strong>NOTE:</strong> Its less than 24 hours before your specified departure time, if you will cancel now you will NOT be able to refund. 
           If you cancel your rental more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the rental fee, if any. A cancellation fee will also be charged.
         </p>

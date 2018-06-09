@@ -71,10 +71,12 @@ class RentalsController extends Controller
 	        $date = Carbon::parse($request->date);
 	        $fullName = ucwords(strtolower($request->name));
 	        if($request->destination == 'other') {
-	            $destination = ucwords(strtolower($request->otherDestination));
+                $destination = ucwords(strtolower($request->otherDestination));
+                $rentalFee = $rule->fee;
 	        }
 	        else {
-	            $destination = ucwords(strtolower($request->destination));            
+                $destination = ucwords(strtolower($request->destination));  
+                $rentalFee = null;          
 	        }
 
 	        $codes = VanRental::all();
@@ -101,6 +103,8 @@ class RentalsController extends Controller
                     'destination' => $destination,
                     'number_of_days' => $request->days,
                     'rental_fare' => $request->totalFare,
+                    'rental_fee' => $rentalFee,
+                    'cancellation_fee' => $rule->cancellation_fee,
                     'contact_number' => $request->contactNumber,
                     'is_refundable' => true,
                     'rent_type' => 'Walk-in',

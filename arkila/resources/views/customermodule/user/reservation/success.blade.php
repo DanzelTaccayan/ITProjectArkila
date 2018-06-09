@@ -44,7 +44,7 @@
                     			</tr>
                     			<tr>
                     				<th>Total Amount to Pay</th>
-                    				<td>{{$transaction->fare}}</td>
+                    				<td>₱{{number_format($transaction->fare + $transaction->reservation_fee, 2)}}</td>
                     			</tr>
                     		</tbody>
                     	</table>

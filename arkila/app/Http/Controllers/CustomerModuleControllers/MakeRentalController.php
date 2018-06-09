@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CustomerRentalRequest;
 use App\Notifications\OnlineRentalAdminNotification;
 use DB;
+use PDF;
 
 use App\Http\Controllers\Controller;
 
@@ -60,7 +61,6 @@ class MakeRentalController extends Controller
                     if(Carbon::now()->addDays($requestLimitation)->lt(Carbon::parse($request->date))) {
                         $carbonDate = new Carbon($request->date);
                         $departedDate = $carbonDate->format('Y-m-d');
-                        $destination = $request->destination;
 
                         $codes = VanRental::all();
                         $rentalCode = bin2hex(openssl_random_pseudo_bytes(5));
@@ -75,7 +75,12 @@ class MakeRentalController extends Controller
 
                         if($request->destination == 'other') {
                             $destination = ucwords(strtolower($request->otherDestination));
+                            $rentalFee = $rule->fee;
+                        } else {
+                            $destination = ucwords(strtolower($request->destination));
+                            $rentalFee = null;
                         }
+
                         $rent = VanRental::create([
                             "user_id" => Auth::id(),
                             "customer_name" => Auth::user()->first_name . ' ' . Auth::user()->middle_name . ' ' . Auth::user()->last_name,
@@ -83,6 +88,8 @@ class MakeRentalController extends Controller
                             "rental_code" => 'RN'.$rentalCode,
                             "departure_time" => $request->time,
                             "number_of_days" => $request->numberOfDays,
+                            "rental_fee" => $rentalFee,
+                            "cancellation_fee" => $rule->cancellation_fee,
                             "destination" => $destination,
                             "contact_number" => $request->contactNumber,
                             "status" => 'Pending',
@@ -272,15 +279,25 @@ class MakeRentalController extends Controller
     }
 
     public function receipt(VanRental $rental)
-    {
-        $rule = $this->rentalRules();
-        if($rule) {
-            $destinations = Destination::where('destination_name', $rental->destination)->get();
-            return view('e_receipt.rental-receipt', compact('rental', 'rule', 'destinations'));
-        } else {
-            return back()->withErrors('Rental is not available at this moment.');
-        }
-    }
+	{
+		$date = Carbon::now();
+        $main = Destination::mainTerminal()->get();
+        $destinations = Destination::where('destination_name', $rental->destination)->get();
+        $pdf = PDF::loadView('e_receipt.rental-receipt', compact('rental','destinations', 'date', 'main'));
+		return $pdf->stream("Receipt No. ". $rental->rental_code .".pdf");
+	}
+
+
+    // public function receipt(VanRental $rental)
+    // {
+    //     $rule = $this->rentalRules();
+    //     if($rule) {
+            // $destinations = Destination::where('destination_name', $rental->destination)->get();
+    //         return view('e_receipt.rental-receipt', compact('rental', 'rule', 'destinations'));
+    //     } else {
+    //         return back()->withErrors('Rental is not available at this moment.');
+    //     }
+    // }
 
     public function success(VanRental $rental)
     {
