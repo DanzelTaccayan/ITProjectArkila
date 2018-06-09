@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OperatorRequest;
 use App\Member;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use PDF;
@@ -60,7 +62,7 @@ class OperatorsController extends Controller
                     ->save( public_path('uploads/profilePictures/'.$profilePictureName));
             }
 
-            Member::create([
+            $createdOperator = Member::create([
                 'profile_picture' => $profilePictureName,
                 'last_name'=> $lastName,
                 'first_name' => $firstName,
@@ -74,9 +76,26 @@ class OperatorsController extends Controller
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
                 'SSS' => $request->sss,
-                'license_number' => $request->licenseNo,
-                'expiry_date' => $request->licenseExpiryDate,
             ]);
+
+            if($request->operatorDriver) {
+                //Add Account for the operator
+                $createdUserOperator = User::create([
+                    'first_name' => $createdOperator->first_name,
+                    'middle_name' => $createdOperator->middle_name,
+                    'last_name' => $createdOperator->last_name,
+                    'username' => strtolower($createdOperator->first_name[0].$createdOperator->last_name).$createdOperator->member_id,
+                    'password' => Hash::make('driver!@bantrans'),
+                    'user_type' => 'Driver',
+                    'status' => 'enable'
+                ]);
+
+                $createdOperator->update([
+                    'user_id' => $createdUserOperator->id,
+                    'license_number' => $request->licenseNo,
+                    'expiry_date' => $request->licenseExpiryDate,
+                ]);
+            }
 
             DB::commit();
         } catch(\Exception $e) {
@@ -154,6 +173,41 @@ class OperatorsController extends Controller
                 'license_number' => $request->licenseNo,
                 'expiry_date' => $request->licenseExpiryDate,
             ]);
+
+            //check if the operator is an operator/driver
+            if($operator->user) {
+                //If it is, then check if the operatorDriver checkbox in unchecked
+                if(is_null($request->operatorDriver)) {
+                    //Delete the operator's account
+                    $operator->user->delete();
+
+                    //Update the operators license
+                    $operator->update([
+                        'user_id' => null,
+                        'license_number' => null,
+                        'expiry_date' => null
+                    ]);
+                }
+            } else {
+                if($request->operatorDriver) {
+                    //Add Account for the operator
+                    User::create([
+                        'first_name' => $operator->first_name,
+                        'middle_name' => $operator->middle_name,
+                        'last_name' => $operator->last_name,
+                        'username' => strtolower($operator->first_name[0].$operator->last_name).$operator->member_id,
+                        'password' => Hash::make('driver!@bantrans'),
+                        'user_type' => 'Driver',
+                        'status' => 'enable'
+                    ]);
+
+                    $operator->update([
+                        'user_id' => $operator->id,
+                        'license_number' => $request->licenseNo,
+                        'expiry_date' => $request->licenseExpiryDate,
+                    ]);
+                }
+            }
 
             DB::commit();
         } catch(\Exception $e) {
