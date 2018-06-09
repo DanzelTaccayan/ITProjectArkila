@@ -170,28 +170,26 @@ class OperatorsController extends Controller
                 'emergency_address' => $request->contactPersonAddress,
                 'emergency_contactno' => $request->contactPersonContactNumber,
                 'SSS' => $request->sss,
-                'license_number' => $request->licenseNo,
-                'expiry_date' => $request->licenseExpiryDate,
             ]);
 
             //check if the operator is an operator/driver
             if($operator->user) {
                 //If it is, then check if the operatorDriver checkbox in unchecked
                 if(is_null($request->operatorDriver)) {
-                    //Delete the operator's account
-                    $operator->user->delete();
-
                     //Update the operators license
                     $operator->update([
                         'user_id' => null,
                         'license_number' => null,
                         'expiry_date' => null
                     ]);
-                }
-            } else {
-                if($request->operatorDriver) {
-                    //Add Account for the operator
-                    User::create([
+
+                    //Delete
+                    $userId =  $operator->user->id;
+                    $operatorUser = User::find($userId);
+                    $operatorUser->delete();
+
+                } else {
+                    $operator->user->update([
                         'first_name' => $operator->first_name,
                         'middle_name' => $operator->middle_name,
                         'last_name' => $operator->last_name,
@@ -202,9 +200,34 @@ class OperatorsController extends Controller
                     ]);
 
                     $operator->update([
-                        'user_id' => $operator->id,
+                        'user_id' =>  $operator->user->id,
                         'license_number' => $request->licenseNo,
                         'expiry_date' => $request->licenseExpiryDate,
+                    ]);
+                }
+            } else {
+                if($request->operatorDriver) {
+                    //Add Account for the operator
+                    $createdOperatorAccount = User::create([
+                        'first_name' => $operator->first_name,
+                        'middle_name' => $operator->middle_name,
+                        'last_name' => $operator->last_name,
+                        'username' => strtolower($operator->first_name[0].$operator->last_name).$operator->member_id,
+                        'password' => Hash::make('driver!@bantrans'),
+                        'user_type' => 'Driver',
+                        'status' => 'enable',
+
+                    ]);
+
+                    $operator->update([
+                        'user_id' => $createdOperatorAccount->id,
+                        'license_number' => $request->licenseNo,
+                        'expiry_date' => $request->licenseExpiryDate,
+                    ]);
+                } else {
+                    $operator->update([
+                        'license_number' => null,
+                        'expiry_date' => null,
                     ]);
                 }
             }

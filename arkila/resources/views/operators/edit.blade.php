@@ -60,18 +60,34 @@
                         </tr>
                         <tr>
                             <th>Operator/Driver</th>
-                            <td class="text-center"><input type="checkbox" id="operatorDriver" class="" name="operatorDriver"> Check the box if this operator is also a driver.</td>
-                          </tr>
+                            @if($operator->user)
+                                <td class="text-center"><input type="checkbox" id="operatorDriver" class="" name="operatorDriver" checked> Check the box if this operator is also a driver.</td>
+                            @else
+                                <td class="text-center"><input type="checkbox" id="operatorDriver" class="" name="operatorDriver" > Check the box if this operator is also a driver.</td>
+                            @endif
+                        </tr>
                         <tr>
                             <th>License No <span class="licenseReq text-red hidden">*</span></th>
                             <td>
-                                <input id="licenseNoO" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." disabled="disabled">
+                                @if($operator->user)
+                                    <input id="licenseNo" value="{{  old('licenseNo') ?? $operator->license_number }}"  name="licenseNo" type="text" class="form-control" placeholder="License No." >
+                                    <input id="licenseNoHidden" value="" type="hidden" class="form-control" placeholder="License No." disabled="disabled" >
+                                @else
+                                    <input id="licenseNo" value="{{  old('licenseNo') ?? $operator->license_number }}" type="hidden" class="form-control" placeholder="License No." >
+                                    <input id="licenseNoHidden" value="" type="text" class="form-control" placeholder="License No." disabled="disabled" >
+                                @endif
                             </td>
                         </tr>
                         <tr>
                             <th>License Expiry Date <span class="licenseReq text-red hidden">*</span></th>
                             <td>
-                                <input value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" disabled="disabled">
+                                @if($operator->user)
+                                    <input id="licenseExpiry" value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" name="licenseExpiryDate" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                    <input id="licenseExpiryHidden" value="" type="hidden" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" disabled="disabled">
+                                @else
+                                    <input id="licenseExpiry" value="{{old('licenseExpiryDate') ?? $operator->expiry_date }}" type="hidden" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'">
+                                    <input id="licenseExpiryHidden" value="" type="text" class="form-control date-mask" placeholder="mm/dd/yyyy" data-inputmask="'alias': 'mm/dd/yyyy'" disabled="disabled">
+                                @endif
                           </td>
                         </tr>
                         <tr>
@@ -130,6 +146,27 @@
         });
 
         cloneDateMask();
+
+        $('#operatorDriver').on('change', function(){
+           if(this.checked) {
+               $('#licenseNo').attr('type','text');
+               $('#licenseNo').attr('name','licenseNo');
+               $('#licenseExpiry').attr('type','text');
+               $('#licenseExpiry').attr('name','licenseExpiryDate');
+
+               $('#licenseNoHidden').attr('type','hidden');
+               $('#licenseExpiryHidden').attr('type','hidden');
+           } else {
+               $('#licenseExpiry').attr('type','hidden');
+               $('#licenseExpiry').attr('name','');
+               $('#licenseNo').attr('type','hidden');
+               $('#licenseNo').attr('name','');
+
+               $('#licenseNoHidden').attr('type','text');
+               $('#licenseExpiryHidden').attr('type','text');
+
+           }
+        });
     });
 
     function cloneDateMask() {
