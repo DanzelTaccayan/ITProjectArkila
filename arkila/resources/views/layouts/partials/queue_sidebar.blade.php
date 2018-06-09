@@ -46,14 +46,14 @@
             </div>
         <!-- /.carousel-inner -->
         </div>
-        <a href="{{route('vanqueue.index')}}" class="btn btn-success btn-sm btn-flat">GO TO VAN QUEUE PAGE</a>
+        <a href="{{route('vanqueue.index')}}" tabIndex="-1" class="btn btn-success btn-sm btn-flat">GO TO VAN QUEUE PAGE</a>
 
         <div class="pull-right">
-            <a class="previous round step-btn" href="#home-slider" role="button" data-slide="prev" tabindex="-1">
+            <a class="previous round step-btn" href="#home-slider" role="button" data-slide="prev" tabIndex="-1">
                 <i class="fa fa-chevron-left"></i>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="next round step-btn" href="#home-slider" role="button" data-slide="next" tabindex="-1">
+            <a class="next round step-btn" href="#home-slider" role="button" data-slide="next" tabIndex="-1">
                 <i class="fa fa-chevron-right"></i>
                 <span class="sr-only">Next</span>
             </a>
