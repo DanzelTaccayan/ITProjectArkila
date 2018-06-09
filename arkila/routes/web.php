@@ -99,10 +99,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::resource('/home/settings/fees', 'FeesController', [
         'except' => ['index','show']
     ]);
-    Route::resource('/home/settings/discounts', 'DiscountsController', [
-        'except' => ['index', 'show']
-    ]);
-
+    
     Route::get('/home/settings', 'HomeController@settings')->name('settings.index');
 
     Route::post('/home/settings/changeFeature/{feature}', 'HomeController@changeFeatures')->name('settings.changeFeature');
@@ -258,8 +255,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
 Route::group(['middleware' => ['auth', 'driver', 'prevent-back']], function(){
   /*Driver Dashboard*/
   Route::get('/home/driver-dashboard', 'DriverModuleControllers\DriverHomeController@index')->name('drivermodule.index');
-  /*AJAX GET for queue and announcements*/
-  Route::get('/home/view-vanqueue', 'DriverModuleControllers\ViewVanQueueController@showVanQueue')->name('drivermodule.vanQueue');
   Route::get('/home/view-announcement', 'DriverModuleControllers\ViewAnnouncementsController@showAnnouncement')->name('drivermodule.indexAnnouncements');
   /*Driver Profile*/
   Route::get('/home/profile', 'DriverModuleControllers\DriverProfileController@showDriverProfile')->name('drivermodule.profile.driverProfile');
@@ -296,16 +291,12 @@ Route::get('/home/reservation/show-reservations', 'CustomerModuleControllers\Mak
     /*Help*/
 Route::get('/home/customer/faq', 'CustomerModuleControllers\ViewHelpController@viewHelp')->name('customermodule.user.help.customerHelp');
 Route::get('/about', 'CustomerModuleControllers\CustomerNonUserHomeController@aboutNonUser')->name('customermodule.aboutUsNonUser');
-Route::get('/home/get-announcement', 'ViewAnnouncementsNonUserController@showAnnouncement')->name('index.getAnnouncements');
-Route::get('/home/farelist', 'ViewVanQueueNonUserController@showQueue')->name('customermodule.non-user.fare-list.fareList');
 Route::get('/routes/fare-list/', 'ViewFareListController@fareList')->name('customermodule.fareList');
 Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*User Dashboard*/
     Route::get('/home', 'CustomerModuleControllers\CustomerUserHomeController@index')->name('customermodule.user.index');
     // Route::get('/home/fare-list', 'CustomerModuleControllers\ViewQueueController@showVanQueue')->name('customermodule.user.fair_list.fairList');
     Route::get('/home/user/view-announcement', 'CustomerModuleControllers\ViewAnnouncementsController@showAnnouncement')->name('customermodule.user.indexAnnouncements');
-    Route::get('/home/user/view-announcement/modal', 'CustomerModuleControllers\AnnouncementModalController@showModalAnnouncement')->name('customermodule.user.indexAnnouncementModal');
-    Route::get('/home/view-announcements', 'CustomerModuleControllers\ViewAllAnnouncementsController@viewAnnouncements')->name('customermodule.user.indexAllAnnouncements');
     /**Services**/
     /*Rental*/
     Route::get('/home/rental/receipt/{rental}', 'CustomerModuleControllers\MakeRentalController@receipt')->name('rental.receipt');

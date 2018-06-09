@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 use App\Feature;
+use App\Destination;
 class CustomerAuthenticated
 {
     /**
@@ -17,39 +18,48 @@ class CustomerAuthenticated
     public function handle($request, Closure $next)
     {
         if(Auth::check()){
-          $drivermodule = Feature::where('description','Driver Module')->first();
-          if(Auth::user()->isSuperAdmin() || $drivermodule->status == 'enable'){
-            if(Auth::user()->isDriver()){
-              if(Auth::user()->isEnable()){
-                return redirect(route('drivermodule.index'));
-              }else{
-                Auth::logout();
-                abort(403);
+
+          $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
+
+          if($mainterminal == false){
+            $drivermodule = Feature::where('description','Driver Module')->first();
+            if(Auth::user()->isSuperAdmin() || $drivermodule->status == 'enable'){
+              if(Auth::user()->isDriver()){
+                if(Auth::user()->isEnable()){
+                  return redirect(route('drivermodule.index'));
+                }else{
+                  Auth::logout();
+                  abort(403);
+                }
               }
+            }else{
+              Auth::logout();
+              abort(403);
+            }
+
+            $customermodule = Feature::where('description','Customer Module')->first();
+            if(Auth::user()->isSuperAdmin() || $customermodule->status == 'enable'){
+              if(Auth::user()->isCustomer()){
+                if(Auth::user()->isEnable()){
+                  return $next($request);  
+                }else{
+                  Auth::logout();
+                  abort(403);
+                }
+              }
+            }else{
+              Auth::logout();
+              abort(403);
             }
           }else{
             Auth::logout();
-            abort(403);
+            return redirect(route('login'))->withErrors('Your credentials does not match');
           }
 
           if(Auth::user()->isSuperAdmin() && Auth::user()->isEnable()){
             return redirect('home/vanqueue');
           }
 
-          $customermodule = Feature::where('description','Customer Module')->first();
-          if(Auth::user()->isSuperAdmin() || $customermodule->status == 'enable'){
-            if(Auth::user()->isCustomer()){
-              if(Auth::user()->isEnable()){
-                return $next($request);  
-              }else{
-                Auth::logout();
-                abort(403);
-              }
-            }
-          }else{
-            Auth::logout();
-            abort(403);
-          }
 
         }
 
