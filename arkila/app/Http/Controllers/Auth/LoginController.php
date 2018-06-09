@@ -57,7 +57,7 @@ class LoginController extends Controller
         $customermodule = Feature::where('description','Customer Module')->first();
         $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
         if($mainterminal == true){
-          return redirect(route('login'))->withErrors('Your credentials does not match');
+          return redirect()->back()->withErrors('Your credentials does not match');
         }else{
           if($customermodule->status == 'enable'){
             if($user->isCustomer()){
@@ -75,7 +75,7 @@ class LoginController extends Controller
 
         $drivermodule = Feature::where('description','Driver Module')->first();
         if($mainterminal == true){
-          return redirect(route('login'))->withErrors('Your credentials does not match');
+          return redirect()->back()->withErrors('Your credentials does not match');
         }else{
           if($drivermodule->status == 'enable'){
             if($user->isDriver()){
