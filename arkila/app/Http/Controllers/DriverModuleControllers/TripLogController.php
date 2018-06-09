@@ -144,7 +144,7 @@ class TripLogController extends Controller
 
         $transaction = Transaction::where('trip_id', $trip->trip_id)
             ->selectRaw('COUNT(amount_paid) as ampd, origin, is_short_trip, transaction_ticket_type,amount_paid')
-            ->groupBy('amount_paid')->get();
+            ->groupBy('amount_paid','is_short_trip','transaction_ticket_type')->get();
 
           $mainRegCount = 0;
           $mainDisCount = 0;
