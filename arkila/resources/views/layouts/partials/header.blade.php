@@ -100,7 +100,7 @@
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-list-ol"></i></a>
+                    <a href="#" data-toggle="control-sidebar"  tabIndex="-1"><i class="fa fa-list-ol"></i></a>
                 </li>
             </ul>
         </div>

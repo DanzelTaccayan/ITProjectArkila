@@ -32,11 +32,20 @@
     <div class="row">
       <div class="col-xs-12">
         <h2 class="page-header">
-          <i class="fa fa-globe"></i> Arkila - BanTrans 
+          Arkila - BanTrans 
           <small class="pull-right">Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
         </h2>
       </div>
       <!-- /.col -->
+    </div>
+    <div class="row"> 
+      <div class="col-md-12"> 
+        <div class="pull-right"> 
+          <img src="{{ URL::asset('img/apple-touch-icon.png')}}" alt="arkila_logo" style="width:80px;height:80px;">
+          <img src="{{ URL::asset('img/bantrans-logo.png') }}" alt="bantrans_logo" style="height:80px; width:80px;">
+          <div class="clearfix">  </div>
+        </div>
+      </div>
     </div>
     <!-- info row -->
     <div class="row invoice-info">
