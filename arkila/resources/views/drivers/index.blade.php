@@ -34,11 +34,19 @@
                             <td>{{trim(strtoupper($driver->full_name ?? null))}}</td>
                             <td>{{trim(strtoupper($driver->operator->full_name ?? null)) }}</td>
                             <td>{{$driver->contact_number}}</td>
-                            <th>Operator Driver</th>
+                            @if($driver->role === "Driver")
+                                <th>Driver</th>
+                            @else
+                                <th>Operator/Driver</th>
+                            @endif
                             <td>
                                 <div class="text-center">
-                                    <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
-                                    
+                                    @if($driver->role === "Driver")
+                                        <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                    @else
+                                        <a href="{{route('operators.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
+                                    @endif
+
                                     <button type="button" data-toggle="modal" data-target="#{{'deleteWarning'.$driver->member_id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-archive"></i> ARCHIVE</button>
                                 </div>
                                 <!-- /.text-->
@@ -65,14 +73,26 @@
                         <h4 class="text-center "><strong class="text-red">{{trim($driver->full_name)}}</strong>?</h4>
                     </div>
                     <div class="modal-footer">
-                        <form name="archiveDriverForm" action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
-                            {{csrf_field()}}
-                            {{method_field('PATCH')}}
-                            <div class="text-center">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                <button type="submit" class="btn btn-danger">ARCHIVE</button>
-                            </div>
-                        </form>
+                        @if($driver->role === "Driver")
+                            <form name="archiveDriverForm" action="{{route('drivers.archiveDriver', $driver->member_id)}}" method="POST">
+                                {{csrf_field()}}
+                                {{method_field('PATCH')}}
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                </div>
+                            </form>
+                        @else
+                            <form name="archiveDriverForm" action="{{route('operators.archiveOperator', $driver->member_id)}}" method="POST">
+                                {{csrf_field()}}
+                                {{method_field('PATCH')}}
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+                                    <button type="submit" class="btn btn-danger">ARCHIVE</button>
+                                </div>
+                            </form>
+                        @endif
+
                     </div>
                 </div>
             </div>

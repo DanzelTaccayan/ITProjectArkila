@@ -22,7 +22,7 @@ class DriversController extends Controller
      */
     public function index()
     {
-        $drivers = Member::allDrivers()->where('status','Active')->get();
+        $drivers = Member::has('user')->get();
 
         return view('drivers.index', compact('drivers'));
     }
