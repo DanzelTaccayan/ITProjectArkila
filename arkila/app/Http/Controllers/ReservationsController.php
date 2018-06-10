@@ -246,7 +246,7 @@ class ReservationsController extends Controller
 
                 $rule = $this->reservationRules();
                 $ticket = Ticket::where('destination_id', $request->destination)->get()->first();
-                $toBePaid = ($ticket->fare * $quantity) + $rule->reservation_fee;
+                $toBePaid = $ticket->fare * $quantity;
                 $time = explode(':', $dates->departure_time);
                 $dateOfDeparture = $dates->reservation_date;
                 $expiryDate = $dateOfDeparture->setTime($time[0], $time[1], $time[2]);
@@ -260,6 +260,8 @@ class ReservationsController extends Controller
                     'rsrv_code' => 'RV'.$newCode,
                     'refund_code' => $refundCode,
                     'fare' => $toBePaid,
+                    'reservation_fee' => $rule->fee,
+                    'cancellation_fee' => $rule->cancellation_fee,
                     'name' => $name,
                     'is_refundable' => true,
                     'contact_number' => $request->contactNumber,

@@ -140,7 +140,11 @@
     <script>
       $(document).ready(function() {
 
+
           $('#operatorDriver').change(function() {
+              $('input[name="licenseNo"]').val('');
+              $('input[name="licenseExpiryDate"]').val('');
+
               if($(this).is(":checked")) {
                 $('.licenseReq').removeClass('hidden');
                 $('.licenseReq').show();

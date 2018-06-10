@@ -19,21 +19,21 @@
                     </tr>
                     <tr>
                         <th>Cancellation Fee</th>
-                        <td class="text-right">₱{{$rules->cancellation_fee}}</td>
+                        <td class="text-right">₱{{$rental->cancellation_fee}}</td>
                     </tr>
                     @if($destination)
                     <tr>
-                        <th>Refund</th>
-                        <td class="text-right"><strong>₱{{number_format($rental->rental_fare - $rules->cancellation_fee, 2)}}</strong></td>
+                        <th>Refund Amount</th>
+                        <td class="text-right"><strong>₱{{number_format($rental->rental_fare - $rental->cancellation_fee, 2)}}</strong></td>
                     </tr>
                     @else
                     <tr style="border-bottom: 2px solid black">
                         <th>Rental Fee</th>
-                        <td class="text-right">₱{{$rules->fee}}</td>
+                        <td class="text-right">₱{{$rental->rental_fee}}</td>
                     </tr>
                     <tr>
                         <th>Refund Amount</th>
-                        <td class="text-right"><strong>₱{{number_format(($rental->rental_fare - $rules->cancellation_fee) - $rules->fee, 2)}}</strong></td>
+                        <td class="text-right"><strong>₱{{number_format(($rental->rental_fare - $rental->cancellation_fee) - $rental->rental_fee, 2)}}</strong></td>
                     </tr>
                     @endif
                 </table>

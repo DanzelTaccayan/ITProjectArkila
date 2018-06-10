@@ -4,56 +4,35 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Arkila- BanTrans | Receipt</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.7 -->
-  @include('layouts.partials.stylesheets')
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
   <style>
     .table>tbody>tr>th,.table>tbody>tr>td {
       border-top: none;
     }
   </style>
 
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body onload="window.print();">
-<div class="wrapper">
+<body>
+<div>
   <!-- Main content -->
-  <section class="invoice">
+  <section>
     <!-- title row -->
-    <div class="row">
-      <div class="col-xs-12">
-        <h2 class="page-header">
+    <div>
+      <div >
+        <h2>
           Arkila - BanTrans 
-          <small class="pull-right">Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
+          <small>Date: {{Carbon\Carbon::now()->formatLocalized('%d %B %Y')}}</small>
         </h2>
       </div>
       <!-- /.col -->
     </div>
-    <div class="row"> 
-      <div class="col-md-12"> 
-        <div class="pull-right"> 
-          <img src="{{ URL::asset('img/apple-touch-icon.png')}}" alt="arkila_logo" style="width:80px;height:80px;">
-          <img src="{{ URL::asset('img/bantrans-logo.png') }}" alt="bantrans_logo" style="height:80px; width:80px;">
-          <div class="clearfix">  </div>
-        </div>
-      </div>
-    </div>
     <!-- info row -->
-    <div class="row invoice-info">
-      <div class="col-sm-12">
+    <div>
+      <div >
         <h4>Customer Information</h4>
       </div>
-      <div class="col-sm-4 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Reservation Code:</th>
@@ -65,8 +44,8 @@
         </address>
       </div>
       <!-- /.col -->
-      <div class="col-sm-4 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Customer:</th>
@@ -76,8 +55,8 @@
         </table>
       </div>
       <!-- /.col -->
-      <div class="col-sm-3 invoice-col">
-        <table class="table borderless">
+      <div>
+        <table>
           <tbody>
             <tr>
               <th>Receipt Type:</th>
@@ -92,10 +71,10 @@
     <!-- /.row -->
 
     <!-- Table row -->
-    <div class="row">
-      <div class="col-xs-12 table-responsive">
+    <div>
+       <div>
         <h4>Reservation Details</h4>
-        <table class="table table-striped">
+        <table>
           <thead>
           <tr>
             <th>Terminal Origin</th>
@@ -111,9 +90,9 @@
             <td>{{$main->first()->destination_name}}</td>
             <td>{{$reservation->destination_name}}</td>
             <td>{{$reservation->reservationDate->reservation_date->formatLocalized('%d %B %Y')}}</td>
-            <td class="text-right">{{date('g:i A', strtotime($reservation->reservationDate->departure_time))}}</td>
-            <td class="text-right">{{$reservation->ticket_quantity}}</td>
-            <td class="text-right">₱{{$reservation->fare - $rule->fee}}</td>
+            <td>{{date('g:i A', strtotime($reservation->reservationDate->departure_time))}}</td>
+            <td>{{$reservation->ticket_quantity}}</td>
+            <td>P{{number_format($reservation->fare + $reservation->reservation_fee, 2)}}</td>
           </tr>
           </tbody>
         </table>
@@ -122,25 +101,25 @@
     </div>
     <!-- /.row -->
 
-    <div class="row">
-      <div class="col-xs-12">
+    <div>
+       <div>
         <h4>Receipt</h4>
       </div>
-      <div class="col-xs-6">
-        <div class="well">
-          <div class="table-responsive">
-            <table class="table ">
-              <tr>
-                <th style="width:50%">Subtotal:</th>
-                <td class="text-right">₱{{number_format($reservation->fare - $rule->fee, 2)}}</td>
+      <div>
+        <div>
+          <div>
+            <table>
+            <tr>
+                <th>Subtotal:</th>
+                <td>P{{$reservation->fare}}</td>
               </tr>
               <tr>
                 <th>Reservation Fee</th>
-                <td class="text-right">₱{{$rule->fee}}</td>
+                <td>P{{$reservation->reservation_fee}}</td>
               </tr>
-              <tr style="border-top: 2px solid black;">
-                <th class="text-blue"><h4>Total:</h4></th>
-                <td class="text-blue text-right"><h4>₱{{$reservation->fare}}</h4></td>
+              <tr>
+                <th><h4>Total:</h4></th>
+                <td><h4>P{{number_format($reservation->fare + $reservation->reservation_fee, 2)}}</h4></td>
               </tr>
             </table>
           </div>
@@ -150,9 +129,9 @@
         </div>
       </div>
       <!-- /.col -->
-      <div class="col-xs-4">
+      <div>
         <div>
-          <p class="well text-center">PLEASE BRING A VALID ID</p>
+          <p>PLEASE BRING A VALID ID</p>
         </div>
       </div>
       <!-- /.col -->
@@ -161,7 +140,7 @@
     <!-- /.row -->
 
 
-        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+        <p>
           <strong>NOTE:</strong> If less than 24 hours before your specified departure time, if you will cancel now you will NOT be able to refund.
           If you cancel your reservation more than 1 day (24 Hours) before your specified departure time, you will receive a full refund excluding the reservation fee and an additional charge for the cancellation fee.
         </p>

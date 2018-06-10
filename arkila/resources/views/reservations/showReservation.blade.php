@@ -30,7 +30,7 @@
 		                		</tr>
 		                		<tr>
 		                			<th>Total Fare</th>
-		                			<td>₱{{$reservation->fare}}</td>
+		                			<td>₱{{number_format($reservation->fare + $reservation->reservation_fee, 2)}}</td>
 		                		</tr>
 		                		<tr>
 		                			<th>Status</th>

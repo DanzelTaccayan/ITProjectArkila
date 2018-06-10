@@ -4,7 +4,7 @@
 <div class="padding-side-10" style="margin-top: 10%;">
     <h4>RESERVATION FARE</h4>
     <div style="border: 1px solid lightgray; margin-bottom: 5%;">
-        <h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">₱ {{$reservation->fare}}</strong></h3>
+        <h3 class="text-center" style="padding: 3%; font-size: 40px;"><strong class="text-green">₱ {{number_format($reservation->fare + $reservation->reservation_fee, 2)}}</strong></h3>
         <p class="text-center"><strong>EXPIRE DATE:</strong> {{$reservation->expiry_date->formatLocalized('%d %B %Y')}}</p>
     </div>
     <div class="text-center">

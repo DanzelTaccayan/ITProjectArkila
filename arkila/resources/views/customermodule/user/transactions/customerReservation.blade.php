@@ -155,7 +155,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Total Fee</th>
-                                                    <td>{{$reservation->fare}}</td>
+                                                    <td>₱{{number_format($reservation->fare + $reservation->reservation_fee, 2)}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Refund Code</th>
@@ -175,7 +175,7 @@
                                     <div class="modal-footer">   
                                         <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
                                         @if($reservation->status == 'PAID')
-                                        <button onclick="window.open('{{route('reservation.receipt', $reservation->id)}}')" class="btn btn-info"><i class="fa fa-download"></i> Receipt</button> 
+                                        <a href="{{route('reservation.receipt', $reservation->id)}}" class="btn btn-info"><i class="fa fa-download"></i> Receipt</a> 
                                         @endif
                                     </div>
                                 </div>

@@ -150,7 +150,7 @@ class MakeReservationController extends Controller
 							$newSlot = $reservation->number_of_slots - $request->quantity;
 							$destination = Destination::where('destination_id', Session::get('key'))->get()->first();
 							$ticket = Ticket::where([['destination_id', $destination->destination_id], ['type', 'Regular']])->get()->first();
-							$toBePaid = ($ticket->fare * $quantity) + $rule->fee;
+							$toBePaid = $ticket->fare * $quantity;
 							$expiry = $reservation->reservation_date->subDays(2)->setTime($time[0], $time[1], $time[2]);
 							
 							if($expiry->lt(Carbon::now())) {
@@ -170,7 +170,9 @@ class MakeReservationController extends Controller
                                     'name' => auth()->user()->full_name,
                                     'contact_number' => $request->contactNumber,
                                     'ticket_quantity' => $quantity,
-                                    'fare' => $toBePaid,
+									'fare' => $toBePaid,
+									'reservation_fee' => $rule->fee,
+									'cancellation_fee' => $rule->cancellation_fee,
                                     'expiry_date' => $expiry,
                                     'type' => 'Online',
                                 ]);
@@ -220,12 +222,13 @@ class MakeReservationController extends Controller
 		return view('customermodule.user.transactions.customerReservation', compact('requests'));
 	}
 
-	// public function reservationPdf(Reservation $reservation)
-	// {
-	// 	$date = Carbon::now();
-    //     $pdf = PDF::loadView('pdf.reservationPdf', compact('reservation', 'date'));
-	// 	return $pdf->stream("Receipt No. ". $reservation->rsrv_code .".pdf");
-	// }
+	public function receipt(Reservation $reservation)
+	{
+		$date = Carbon::now();
+		$main = Destination::mainTerminal()->get();
+        $pdf = PDF::loadView('e_receipt.reservation-receipt', compact('reservation', 'date', 'main'));
+		return $pdf->download("Receipt No. ". $reservation->rsrv_code .".pdf");
+	}
 
 	public function slotsAndExpiryDate()
 	{
@@ -328,7 +331,8 @@ class MakeReservationController extends Controller
                     } else {
                         $reservation->update([
                             'status' => 'CANCELLED',
-                            'is_refundable' => true,
+							'is_refundable' => true,
+							'cancellation_fee' => $rule->cancellation_fee,
                         ]);
                         $reservation->update([
                             'expiry_date' => $reservation->updated_at->addDays($rule->refund_expiry),
@@ -374,16 +378,16 @@ class MakeReservationController extends Controller
 
 	  }
 
-	  public function receipt(Reservation $reservation)
-	  {
-		  $rule = $this->reservationRules();
-		  if($rule) {
-			  $main = Destination::mainTerminal()->get();
-			  return view('e_receipt.reservation-receipt', compact('reservation', 'rule', 'destinations', 'main'));
-		  } else {
-			  return back()->withErrors('Rental is not available at this moment.');
-		  }
-	  }
+	//   public function receipt(Reservation $reservation)
+	//   {
+	// 	  $rule = $this->reservationRules();
+	// 	  if($rule) {
+			//   $main = Destination::mainTerminal()->get();
+	// 		  return view('e_receipt.reservation-receipt', compact('reservation', 'rule', 'destinations', 'main'));
+	// 	  } else {
+	// 		  return back()->withErrors('Rental is not available at this moment.');
+	// 	  }
+	//   }
 
 	  public function reservationRules()
 	  {

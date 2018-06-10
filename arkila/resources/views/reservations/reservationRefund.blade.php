@@ -11,28 +11,20 @@
         <tbody>
             <tr>
                 <th>Paid Fare</th>
-                <td class="text-right">₱{{$reservation->fare}} </td>
+                <td class="text-right">₱{{number_format($reservation->fare + $reservation->reservation_fee, 2)}} </td>
             </tr>
             <tr>
                 <th>Reservation Fee</th>
-                <td class="text-right">₱{{$rules->fee}}</td>
+                <td class="text-right">₱{{$reservation->reservation_fee}}</td>
             </tr>
-            @if($reservation->status == 'CANCELLED' && $rules->fee)
             <tr>
                 <th>Cancellation Fee</th>
-                <td class="text-right">₱{{$rules->cancellation_fee}}</td>
+                <td class="text-right">₱{{$reservation->cancellation_fee}}</td>
             </tr>
             <tr style="border-top: 2px solid black">
                 <th>Refund Amount</th>
-                <td class="text-right">₱{{number_format(($reservation->fare - $rules->fee) - $rules->cancellation_fee, 2)}}</td>
+                <td class="text-right">₱{{number_format($reservation->fare - $reservation->cancellation_fee, 2)}}</td>
             </tr>
-            @else
-            <tr style="border-top: 2px solid black">
-                <th>Refund Amount</th>
-                <td class="text-right">₱{{number_format($reservation->fare - $rules->fee, 2)}}</td>
-            </tr>
-
-            @endif
         </tbody>
     </table>
     <p class=""><strong>REFUNDABLE UNTIL: </strong>@if($reservation->status == 'PAID'){{$reservation->reservationDate->reservation_date->subDays(2)->formatLocalized('%d %B %Y')}}@elseif($reservation->status == 'CANCELLED' && $reservation->is_refundable == true) {{$reservation->expiry_date->formatLocalized('%d %B %Y')}} {{date('g:i A', strtotime($reservation->expiry_date))}} @endif</p>
