@@ -88,16 +88,16 @@
                                                     ])
                                                 );
                                             }
-                                            counter++;
                                         });
+                                        counter++;
                                     });
                                 });
                             }
                         });
                     });
 
-                    //console.log(response.vanqueue);
-                    //console.log(response.tickets);
+                    console.log(response.vanqueue);
+                    console.log(response.tickets);
                 }
             });
             //setInterval(function(){
