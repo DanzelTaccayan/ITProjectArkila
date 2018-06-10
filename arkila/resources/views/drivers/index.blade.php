@@ -23,6 +23,7 @@
                             <th>Name</th>
                             <th>Operator</th>
                             <th>Contact Number</th>
+                            <th>Role</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
@@ -33,6 +34,7 @@
                             <td>{{trim(strtoupper($driver->full_name ?? null))}}</td>
                             <td>{{trim(strtoupper($driver->operator->full_name ?? null)) }}</td>
                             <td>{{$driver->contact_number}}</td>
+                            <th>Operator Driver</th>
                             <td>
                                 <div class="text-center">
                                     <a href="{{route('drivers.show',[$driver->member_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i> VIEW</a>
