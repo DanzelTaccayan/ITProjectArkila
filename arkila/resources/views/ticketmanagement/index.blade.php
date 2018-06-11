@@ -10,6 +10,54 @@
   </div>
 </div>
 <div class="row">
+  <div class="col-md-4">
+    <form action="{{route('ticket.rule')}}" method="POST">
+    {{csrf_field()}}
+      <div class="box box-solid">
+        <div class="box-body">
+          <table class="table table-striped table-bordered">
+            <tbody>
+              <tr>
+                <th class="text-center" style="width: 35%;">Ticket Expiry</th>
+                  <td style="width: 55%;" class="viewExpiry">
+                    @if($ticketRule)
+                      @if($ticketRule->first()->usable_days == 0)
+                      No expiry
+                      @else
+                      {{$ticketRule->first()->usable_days}} day after ticket sold
+                      @endif
+                    @else
+                      No expiry
+                    @endif
+                  </td>
+                  <td style="width: 15%;" class="viewExpiry">
+                    <div class="text-center">
+                      <button type="button" id="editExpiryBtn" class="btn btn-primary btn-sm">EDIT</button>
+                    </div>
+                  </td>
+                <td id="editExpiry" class="hidden" colspan="2">
+                  <select name="ticketExpiry" id="" class="form-control">
+                    <option value="0"@if(!$ticketRule){{'selected'}} @elseif($ticketRule->usable_days == 0)@endif>No expiry</option>
+                    <option value="1"@if($ticketRule) @if($ticketRule->usable_days == 1) {{'selected'}} @endif @endif>1 day after ticket has sold</option>
+                    <option value="2"@if($ticketRule) @if($ticketRule->usable_days == 2) {{'selected'}} @endif @endif>2 days after ticket has sold</option>
+                    <option value="3"@if($ticketRule) @if($ticketRule->usable_days == 3) {{'selected'}} @endif @endif>3 days after ticket has sold</option>
+                    <option value="4"@if($ticketRule) @if($ticketRule->usable_days == 4) {{'selected'}} @endif @endif>4 days after ticket has sold</option>
+                    <option value="5"@if($ticketRule) @if($ticketRule->usable_days == 5) {{'selected'}} @endif @endif>5 days after ticket has sold</option>
+                    <option value="6"@if($ticketRule) @if($ticketRule->usable_days == 6) {{'selected'}} @endif @endif>6 days after ticket has sold</option>
+                    <option value="7"@if($ticketRule) @if($ticketRule->usable_days == 7) {{'selected'}} @endif @endif>7 days after ticket has sold</option>
+                  </select>
+                  <div class="pull-right"  style="margin-top: 7%;">
+                    <button type="button" id="viewExpiryBtn" class="btn btn-default btn-sm">CANCEL</button>
+                    <button type="submit" id="saveExpiryBtn" class="btn btn-success btn-sm">SAVE</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>  
   <div class="col-md-8">
           <!-- Custom Tabs -->
           <div class="nav-tabs-custom">
@@ -94,54 +142,6 @@
           </div>
           <!-- nav-tabs-custom -->
   </div>
-  <form action="{{route('ticket.rule')}}" method="POST">
-  {{csrf_field()}}
-  <div class="col-md-4">
-    <div class="box box-solid">
-      <div class="box-body">
-        <table class="table table-striped table-bordered">
-          <tbody>
-            <tr>
-              <th class="text-center" style="width: 35%;">Ticket Expiry</th>
-                <td style="width: 55%;" class="viewExpiry">
-                  @if($ticketRule)
-                    @if($ticketRule->first()->usable_days == 0)
-                    No expiry
-                    @else
-                    {{$ticketRule->first()->usable_days}} day after ticket sold
-                    @endif
-                  @else
-                    No expiry
-                  @endif
-                </td>
-                <td style="width: 15%;" class="viewExpiry">
-                  <div class="text-center">
-                    <button type="button" id="editExpiryBtn" class="btn btn-primary btn-sm">EDIT</button>
-                  </div>
-                </td>
-              <td id="editExpiry" class="hidden" colspan="2">
-                <select name="ticketExpiry" id="" class="form-control">
-                  <option value="0"@if(!$ticketRule){{'selected'}} @elseif($ticketRule->usable_days == 0)@endif>No expiry</option>
-                  <option value="1"@if($ticketRule) @if($ticketRule->usable_days == 1) {{'selected'}} @endif @endif>1 day after ticket has sold</option>
-                  <option value="2"@if($ticketRule) @if($ticketRule->usable_days == 2) {{'selected'}} @endif @endif>2 days after ticket has sold</option>
-                  <option value="3"@if($ticketRule) @if($ticketRule->usable_days == 3) {{'selected'}} @endif @endif>3 days after ticket has sold</option>
-                  <option value="4"@if($ticketRule) @if($ticketRule->usable_days == 4) {{'selected'}} @endif @endif>4 days after ticket has sold</option>
-                  <option value="5"@if($ticketRule) @if($ticketRule->usable_days == 5) {{'selected'}} @endif @endif>5 days after ticket has sold</option>
-                  <option value="6"@if($ticketRule) @if($ticketRule->usable_days == 6) {{'selected'}} @endif @endif>6 days after ticket has sold</option>
-                  <option value="7"@if($ticketRule) @if($ticketRule->usable_days == 7) {{'selected'}} @endif @endif>7 days after ticket has sold</option>
-                </select>
-                <div class="pull-right"  style="margin-top: 7%;">
-                  <button type="button" id="viewExpiryBtn" class="btn btn-default btn-sm">CANCEL</button>
-                  <button type="submit" id="saveExpiryBtn" class="btn btn-success btn-sm">SAVE</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</form>  
 </div>
 @endsection
 @section('scripts') 
