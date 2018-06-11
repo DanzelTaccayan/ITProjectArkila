@@ -122,50 +122,52 @@
                         <div class="tab-content">
                             @foreach($terminals as $terminal)
                                     <div class="tab-pane @if($terminals->first() == $terminal){{'active'}}@endif" id="terminal{{$terminal->destination_id}}">
-                                        <div id="manageTickets{{$terminal->destination_id}}">
-                                            <div class="pull-left col-md-6">
-                                                <div class="btn-group">
-                                                    <button type="button" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i></button>
-                                                    <button name="initialMultiRefund" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
-                                                    <button name="initialMultiCancel" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
+                                        <div class="table-responsive">
+                                            <div id="manageTickets{{$terminal->destination_id}}">
+                                                <div class="pull-left col-md-6">
+                                                    <div class="btn-group">
+                                                        <button type="button" data-terminal="{{$terminal->destination_id}}" class="btn btn-default btn-sm  btn-flat checkbox-toggle"><i class="fa fa-square-o"></i></button>
+                                                        <button name="initialMultiRefund" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-money"></i></button>
+                                                        <button name="initialMultiCancel" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-default btn-sm btn-flat"><i  class="fa fa-trash"></i></button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <table id="sold-tickets{{$terminal->destination_id}}" class="table table-bordered sold-tickets">
-                                                <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Ticket No.</th>
-                                                    <th>Destination</th>
-                                                    <th>Date Purchased</th>
-                                                    <th>Status</th>
-                                                    <th id="actionHead" class="text-center">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->whereIn('ticket.ticket_id',App\SoldTicket::whereNull('boarded_at')->pluck('sold_ticket.ticket_id'))->get()  as $ticket)
-                                                    <tr id="ticket{{$ticket->soldTicket->sold_ticket_id}}">
-                                                        <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" class="icheckbox_flat-blue" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
-                                                        <td>{{ $ticket->ticket_number }}</td>
-                                                        <td>{{ $ticket->destination->destination_name}}</td>
-                                                        <td>{{$ticket->updated_at->format('h:i A')." of ".$ticket->updated_at->format('M d, Y')}}</td>
-                                                        @if($ticket->soldTicket->is_expired == true)
-                                                        <td>Expired</td>
-                                                        @else
-                                                        <td>{{$ticket->soldTicket->status}}</td>
-                                                        @endif
-                                                        <td>
-                                                            <div class="text-center">
-                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
-
-                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST/EXPIRED</button>
-
-                                                                <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-times"></i> CANCEL</button>
-                                                            </div>
-                                                        </td>
+                                                <table id="sold-tickets{{$terminal->destination_id}}" class="table table-bordered sold-tickets">
+                                                    <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Ticket No.</th>
+                                                        <th>Destination</th>
+                                                        <th>Date Purchased</th>
+                                                        <th>Status</th>
+                                                        <th id="actionHead" class="text-center">Actions</th>
                                                     </tr>
-                                        @endforeach
-                                        </tbody>
-                                        </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach(App\Ticket::whereIn('destination_id',$terminal->routeFromDestination->pluck('destination_id'))->whereIn('ticket.ticket_id',App\SoldTicket::whereNull('boarded_at')->pluck('sold_ticket.ticket_id'))->get()  as $ticket)
+                                                        <tr id="ticket{{$ticket->soldTicket->sold_ticket_id}}">
+                                                            <td><input value="{{$ticket->soldTicket->sold_ticket_id}}" name="checkInput" class="icheckbox_flat-blue" type="checkbox" data-terminal="{{$terminal->destination_id}}"></td>
+                                                            <td>{{ $ticket->ticket_number }}</td>
+                                                            <td>{{ $ticket->destination->destination_name}}</td>
+                                                            <td>{{$ticket->updated_at->format('h:i A')." of ".$ticket->updated_at->format('M d, Y')}}</td>
+                                                            @if($ticket->soldTicket->is_expired == true)
+                                                            <td>Expired</td>
+                                                            @else
+                                                            <td>{{$ticket->soldTicket->status}}</td>
+                                                            @endif
+                                                            <td>
+                                                                <div class="text-center">
+                                                                    <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" data-amount="{{$ticket->soldTicket->amount_paid}}" name="initialRefund"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#refund-modal"><i class="fa fa-money"></i> REFUND</button>
+
+                                                                    <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialLost" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#lost-modal"><i class="fa fa-search-minus"></i> LOST/EXPIRED</button>
+
+                                                                    <button type="button" data-soldticketid="{{$ticket->soldTicket->sold_ticket_id}}" data-ticketnumber="{{$ticket->ticket_number}}" name="initialCancel" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel-modal"><i class="fa fa-times"></i> CANCEL</button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                            @endforeach
+                                            </tbody>
+                                            </table>
+                                            </div>
                                         </div>
                                     </div>
                             @endforeach

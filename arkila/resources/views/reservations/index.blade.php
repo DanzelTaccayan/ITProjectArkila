@@ -3,9 +3,9 @@
 @section('content')
 @if(!$rule)
 <div class="padding-side-10">
-    <div class="box box-solid with-shadow" style="height: 300px; padding: 50px; margin-top:7%;">
+    <div class="box box-solid with-shadow" style="min-height: 300px; margin-top:7%;">
         <div class="box-body">
-            <div class="text-center">
+            <div class="text-center" style=" margin-top:7%;">
                 <h1><i class="fa fa-warning text-yellow"></i> NO RESERVATION RULES</h1>
                 <h4>PLEASE SET UP THE RULES FOR RESERVATION FIRST BEFORE USING THE RESERVATION FEAUTURE.</h4>
                 <a href="{{route('bookingRules.index')}}" class="btn btn-success btn-flat" style="margin-top: 3%;">GO TO BOOKING RULES</a>
