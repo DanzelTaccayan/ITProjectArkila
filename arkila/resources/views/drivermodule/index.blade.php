@@ -146,13 +146,7 @@
 @endsection
 @section('scripts')
 @parent
-<script type="text/javascript">
-$(document).ready(function(){
-  $("#announcements").load("{{route('drivermodule.indexAnnouncements')}}");
-  $("#van-queue").load("{{route('drivermodule.vanQueue')}}");
-});
 
-</script>
 <script>
   $(function() {
 

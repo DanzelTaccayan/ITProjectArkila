@@ -21,7 +21,7 @@ class DriverAuthenticated
         $mainterminal = (Destination::where('is_main_terminal', true)->select('destination_name')->first() == null ? true : false);
 
         if(!Auth::user()->isSuperAdmin()){
-          if($mainterminal == false)){
+          if($mainterminal == false){
           $customermodule = Feature::where('description','Customer Module')->first();
             if(Auth::user()->isSuperAdmin() || $customermodule->status == 'enable'){
               if(Auth::user()->isCustomer()){
