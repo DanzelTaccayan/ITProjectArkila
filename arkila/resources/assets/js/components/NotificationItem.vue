@@ -46,15 +46,16 @@ import moment from 'moment';
         }
       //Done
       }else if(this.unread.data.notif_type == 'VanRentalDriver'){
+        var admin = this.unread.data.name.split(' ');
         if(this.unread.data.info.status == 'Unpaid'){
-          this.title=this.unread.data.notif_type + " Request by " + this.unread.data.name;
+          this.title= admin[0].charAt(0).toUpperCase()+admin[0].slice(1)+" has appointed you a Van Rental for "+this.unread.data.info.customer_name;
           this.destination=this.unread.data.info.destination;
           this.date=moment(this.unread.data.info.departure_date).format('MM D YYYY');
           this.time=moment(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
           this.details=this.destination + " on " + this.date + " at " + this.time;
           this.notificationUrl="/home/view-rentals";
         }else if(this.unread.data.info.status == 'Cancelled'){
-          this.title= this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
+          this.title= this.unread.data.notif_type + " Request by " + this.unread.data.info.customer_name + " -- Cancelled";
           this.destination=this.unread.data.info.destination;
           this.date=moment(this.unread.data.info.departure_date).format('MM D YYYY');
           this.time=moment(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');

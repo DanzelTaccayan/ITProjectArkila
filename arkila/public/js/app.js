@@ -1541,9 +1541,9 @@
 
             mom = createUTC([2000, 1]).day(i);
             if (strict && !this._fullWeekdaysParse[i]) {
-                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\\.?') + '$', 'i');
-                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\\.?') + '$', 'i');
-                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\\.?') + '$', 'i');
+                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
+                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
+                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
             }
             if (!this._weekdaysParse[i]) {
                 regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
@@ -2346,7 +2346,7 @@
 
     function preprocessRFC2822(s) {
         // Remove comments and folding whitespace and replace multiple-spaces with a single space
-        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').trim();
     }
 
     function checkWeekday(weekdayStr, parsedInput, config) {
@@ -4525,7 +4525,7 @@
     // Side effect imports
 
 
-    hooks.version = '2.22.2';
+    hooks.version = '2.22.1';
 
     setHookCallback(createLocal);
 
@@ -6370,7 +6370,7 @@ module.exports = Cancel;
         relativeTime : {
             future : '%s sonra',
             past : '%s əvvəl',
-            s : 'birneçə saniyə',
+            s : 'birneçə saniyyə',
             ss : '%d saniyə',
             m : 'bir dəqiqə',
             mm : '%d dəqiqə',
@@ -6465,7 +6465,7 @@ module.exports = Cancel;
         weekdays : {
             format: 'нядзелю_панядзелак_аўторак_сераду_чацвер_пятніцу_суботу'.split('_'),
             standalone: 'нядзеля_панядзелак_аўторак_серада_чацвер_пятніца_субота'.split('_'),
-            isFormat: /\[ ?[Ууў] ?(?:мінулую|наступную)? ?\] ?dddd/
+            isFormat: /\[ ?[Вв] ?(?:мінулую|наступную)? ?\] ?dddd/
         },
         weekdaysShort : 'нд_пн_ат_ср_чц_пт_сб'.split('_'),
         weekdaysMin : 'нд_пн_ат_ср_чц_пт_сб'.split('_'),
@@ -13696,7 +13696,7 @@ module.exports = Cancel;
         calendar : {
             sameDay : '[ਅਜ] LT',
             nextDay : '[ਕਲ] LT',
-            nextWeek : '[ਅਗਲਾ] dddd, LT',
+            nextWeek : 'dddd, LT',
             lastDay : '[ਕਲ] LT',
             lastWeek : '[ਪਿਛਲੇ] dddd, LT',
             sameElse : 'L'
@@ -62023,18 +62023,15 @@ module.exports = Vue;
 /* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
-            (typeof self !== "undefined" && self) ||
-            window;
-var apply = Function.prototype.apply;
+/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
 
 // DOM APIs, for completeness
 
 exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
 };
 exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
 };
 exports.clearTimeout =
 exports.clearInterval = function(timeout) {
@@ -62049,7 +62046,7 @@ function Timeout(id, clearFn) {
 }
 Timeout.prototype.unref = Timeout.prototype.ref = function() {};
 Timeout.prototype.close = function() {
-  this._clearFn.call(scope, this._id);
+  this._clearFn.call(window, this._id);
 };
 
 // Does not start the time, just sets up the members needed.
@@ -62077,7 +62074,7 @@ exports._unrefActive = exports.active = function(item) {
 
 // setimmediate attaches itself to the global object
 __webpack_require__(163);
-// On some exotic environments, it's not clear which object `setimmediate` was
+// On some exotic environments, it's not clear which object `setimmeidate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
 exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
@@ -62629,15 +62626,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
       //Done
     } else if (this.unread.data.notif_type == 'VanRentalDriver') {
+      var admin = this.unread.data.name.split(' ');
       if (this.unread.data.info.status == 'Unpaid') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name;
+        this.title = admin[0].charAt(0).toUpperCase() + admin[0].slice(1) + " has appointed you a Van Rental for " + this.unread.data.info.customer_name;
         this.destination = this.unread.data.info.destination;
         this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
         this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
         this.details = this.destination + " on " + this.date + " at " + this.time;
         this.notificationUrl = "/home/view-rentals";
       } else if (this.unread.data.info.status == 'Cancelled') {
-        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.name + " -- Cancelled";
+        this.title = this.unread.data.notif_type + " Request by " + this.unread.data.info.customer_name + " -- Cancelled";
         this.destination = this.unread.data.info.destination;
         this.date = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_date).format('MM D YYYY');
         this.time = __WEBPACK_IMPORTED_MODULE_0_moment___default()(this.unread.data.info.departure_time, 'HH:mm').format('hh:mm a');
