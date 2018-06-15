@@ -34,6 +34,12 @@ class TransactionsController extends Controller
         return view('transaction.index',compact('terminals','soldTickets','selectedTickets', 'reservations'));
     }
 
+    public function transactionList()
+    {
+        $transactions = Transaction::all();
+        return view('ledger.transactionList', compact('transactions'));
+    }
+
     public function manageTickets()
     {
         $terminals = Destination::where('is_main_terminal','!=',1)->where('is_terminal',1)->get();
