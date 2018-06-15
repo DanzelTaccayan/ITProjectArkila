@@ -36,7 +36,7 @@
                     </thead>
                     <tbody>
                         @foreach ($ledgers->sortByDesc('ledger_id') as $ledger) 
-                        
+                        @if($ledger->created_at != null)
                         @if ($ledger->created_at->format('m-d-Y') == $date->format('m-d-Y'))
                         <tr>
                             @if ($ledger->description !== 'Booking Fee' && $ledger->description !== 'SOP' && $ledger->description !== 'Expired Ticket')
@@ -64,6 +64,7 @@
                             </td>
                         </tr>
                         @endif 
+                        @endif
                         @endif
 
                         <div class="modal" id="{{'deleteLedger'. $ledger->ledger_id}}">
@@ -157,6 +158,32 @@
                 'autoWidth': false,
                 'order': [[ 6, "desc" ]]
             })
+        });
+
+                    
+                    "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+
+                // Total rev
+                revPageTotal = api
+                    .column( 3, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+
+            }, 
+
         });
     </script>
 @stop

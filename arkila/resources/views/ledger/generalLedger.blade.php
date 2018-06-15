@@ -238,7 +238,7 @@
 
                 // balance
                 $( api.column( 5 ).footer() ).html(
-                    pageTotal +' ('+ total +' total)'
+                    'P'+pageTotal.toFixed(2) +' (P'+ total.toFixed(2) +' total)'
                 );
 
                 // Total exp
@@ -251,7 +251,7 @@
 
                 // show exp
                 $( api.column( 4 ).footer() ).html(
-                    expPageTotal
+                    'P'+expPageTotal.toFixed(2)
                 );
 
                 // Total rev
@@ -264,7 +264,7 @@
 
                 // show rev
                 $( api.column( 3 ).footer() ).html(
-                    revPageTotal
+                    'P'+revPageTotal.toFixed(2)
                 );
 
             }, 
