@@ -17,12 +17,12 @@
             
             <div class="table-responsive">
                 <div class="col col-md-6">
-                    <a href="{{route('ledger.create')}}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-back"></i>
+                    <a href="{{route('ledger.index')}}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-chevron-left"></i>
                         GO BACK
                     </a>
-                    <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>
+                    <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT BREAKDOWN</button>
                 </div>
-                <table id="dailyLedgerTable" class="table table-bordered table-striped">
+                <table id="breakdownTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Payee/Payor</th>
@@ -90,7 +90,7 @@
 @parent
     <script>
         $(function() {
-            $('#dailyLedgerTable').DataTable({
+            $('#breakdownTable').DataTable({
                 'paging': false,
                 'lengthChange': true,
                 'searching': true,
@@ -101,30 +101,5 @@
             })
         });
 
-                    
-                    "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-
-                // Remove the formatting to get integer data for summation
-                var intVal = function ( i ) {
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '')*1 :
-                        typeof i === 'number' ?
-                            i : 0;
-                };
-
-
-                // Total rev
-                revPageTotal = api
-                    .column( 3, { page: 'current'} )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
-
-
-            }, 
-
-        });
     </script>
 @stop

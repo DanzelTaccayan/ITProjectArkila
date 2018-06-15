@@ -20,7 +20,7 @@
                     <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>
                         ADD REVENUE/EXPENSE
                     </a> 
-                    <a href="" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-book"></i>
+                    <a href="{{route('breakdown-list')}}" class="btn btn-primary btn-flat btn-sm"><i class="fa fa-book"></i>
                         SHOW BREAKDOWN
                     </a>
                     <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>

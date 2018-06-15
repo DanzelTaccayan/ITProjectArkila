@@ -87,7 +87,7 @@
                     <li class="{{ Request::is('home/driver-report') ? 'active' : '' }} || {{ Request::is('home/driver-report/*') ? 'active' : '' }}"><a href="{{route('trips.driverReport')}}"><i class="fa fa-circle-o"></i> Driver Report</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/ledger') ? 'active' : '' }} || {{ Request::is('home/general-ledger') ? 'active' : '' }} || {{ Request::is('home/transaction-list') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is('home/ledger') ? 'active' : '' }} || {{ Request::is('home/general-ledger') ? 'active' : '' }} || {{ Request::is('home/transaction-list') ? 'active' : '' }} || {{ Request::is('home/breakdown-list') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-calculator"></i>
                     <span>Accounting</span>
@@ -96,7 +96,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/ledger') ? 'active' : '' }}"><a href="{{route('ledger.index')}}"><i class="fa fa-circle-o"></i> Daily Ledger</a></li>
+                    <li class="{{ Request::is('home/ledger') ? 'active' : '' }} || {{ Request::is('home/breakdown-list') ? 'active' : '' }}"><a href="{{route('ledger.index')}}"><i class="fa fa-circle-o"></i> Daily Ledger</a></li>
                     <li class="{{ Request::is('home/general-ledger') ? 'active' : '' }}"><a href="{{route('ledger.generalLedger')}}"><i class="fa fa-circle-o"></i> General Ledger</a></li>
                     <li class="{{ Request::is('home/transaction-list') ? 'active' : '' }}"><a href="{{route('transaction-list')}}"><i class="fa fa-circle-o"></i> Transactions</a></li>
                 </ul>
