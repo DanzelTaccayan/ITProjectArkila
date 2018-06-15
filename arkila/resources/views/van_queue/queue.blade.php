@@ -325,6 +325,85 @@ ol.arrow-drag{
   <script src="{{ URL::asset('/jquery/jquery-sortable.js') }}"></script>
 
   <script>
+    $('button[name="moveToSpecialUnits"]').on('click',function(){
+         var vanOnQueue = $(this).data('van');
+         $.ajax({
+             method:'PATCH',
+             url: '/moveToSpecialUnit/'+vanOnQueue,
+             data: {
+                 '_token': '{{csrf_token()}}',
+                 'fromDepart' : true
+             },
+             success: function(){
+                 location.reload();
+             },
+             error:function(response) {
+                 $.notify({
+                     // options
+                     icon: 'fa fa-warning',
+                     message: response.responseJSON.error
+                 },{
+                     // settings
+                     type: 'danger',
+                     autoHide: true,
+                     clickToHide: true,
+                     autoHideDelay: 2500,
+                     placement: {
+                         from: 'bottom',
+                         align: 'right'
+                     },
+                     icon_type: 'class',
+                     animate: {
+                         enter: 'animated bounceIn',
+                         exit: 'animated bounceOut'
+                     }
+                 });
+             }
+         });
+     });
+
+     $('button[name="remainOnDeck"]').on('click',function(){
+         var vanOnQueue = $(this).data('van');
+
+         $.ajax({
+             method:'PATCH',
+             url: '/home/vanqueue/'+vanOnQueue+'/updateRemarks',
+             data: {
+                 '_token': '{{csrf_token()}}',
+                 'remarks' : 'NULL',
+                 'fromDepart' : true
+             },
+             success: function(){
+                 location.reload();
+             },
+             error:function(response) {
+                 $.notify({
+                     // options
+                     icon: 'fa fa-warning',
+                     message: response.responseJSON.error
+                 },{
+                     // settings
+                     type: 'danger',
+                     autoHide: true,
+                     clickToHide: true,
+                     autoHideDelay: 2500,
+                     placement: {
+                         from: 'bottom',
+                         align: 'right'
+                     },
+                     icon_type: 'class',
+                     animate: {
+                         enter: 'animated bounceIn',
+                         exit: 'animated bounceOut'
+                     }
+                 });
+             }
+
+         });
+     });
+  </script>
+
+  <script>
     $('.select2').select2();
     setDriver();
 
@@ -411,7 +490,6 @@ ol.arrow-drag{
     <script>
     
         $(function() {
-            specialUnitChecker();
             $('#destinationTerminals').children().on('click', function(){
                 var destinationId = $(this).data('val');
 
@@ -460,7 +538,6 @@ ol.arrow-drag{
                                 type: "success",
                                 stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                             });
-                            specialUnitChecker();
                         },
                         error: function(response){
                             button.prop('disabled',false);
@@ -542,7 +619,6 @@ ol.arrow-drag{
                                     stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                                 });
 
-                                specialUnitChecker();
                             } else {
                                 new PNotify({
                                     title: "Notification",
@@ -684,7 +760,6 @@ ol.arrow-drag{
                                     $('#posOption' + element.vanQueueId).val(element.queueNumber);
                                 });
 
-                                specialUnitChecker();
                             }
                         },
                     error:
@@ -756,49 +831,6 @@ ol.arrow-drag{
                     }
                 });
             });
-
-
-            function specialUnitChecker() {
-                $.ajax( {
-                        method:'POST',
-                        url: '/specialUnitChecker',
-                        data: {
-                                '_token': '{{csrf_token()}}'
-                            },
-                        success: function(response) {
-                            if(response.length > 0) {
-                                PNotify.removeAll();
-                                response.forEach(function(element){
-                                    new PNotify({
-                                        title: element.terminal+' Terminal',
-                                        text: 'The van unit('+element.plateNumber+') on deck has a remark of '+element.remarks+' and cannot depart. Please move it to the special units list in order for the next van to be on deck  or remove its remark in order to board passengers',
-                                        icon: 'glyphicon glyphicon-exclamation-sign',
-                                        hide: false,
-                                        confirm: {
-                                            confirm: true,
-                                            buttons: [{
-                                                text: 'Ok',
-                                                addClass: 'btn-primary',
-                                                click: function(notice) {
-                                                    notice.remove();
-                                                }
-                                            },
-                                                null]
-                                        },
-                                        buttons: {
-                                            closer: false,
-                                            sticker: false
-                                        },
-                                        history: {
-                                            history: false
-                                        }
-                                    });
-                                });
-
-                            }
-                        }
-                    });
-            }
 
             $('#specialUnitList').load('/listSpecialUnits/'+$('#destinationTerminals li.active').data('val'));
 
@@ -961,7 +993,6 @@ ol.arrow-drag{
                     stack: {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0}
                 });
 
-               specialUnitChecker();
             },
               error: function(response){
                   $.notify({
