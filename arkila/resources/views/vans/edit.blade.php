@@ -48,9 +48,9 @@
     <label for="">Driver</label>
 
         <select name="driver" id="driver" class="form-control select2">
-            <option value="">None</option>
+            <option value="" data-van="null">None</option>
             @foreach($drivers as $driver)
-                <option @if($van->driver->first()->member_id ?? null) @if($driver->member_id == $van->driver->first()->member_id) {{'selected'}} @endif @endif value="{{$driver->member_id}}">{{$driver->full_name}}</option>
+                <option @if($van->driver->first()->member_id ?? null) @if($driver->member_id == $van->driver->first()->member_id) {{'selected'}} @endif @endif value="{{$driver->member_id}}" data-van="{{$driver->van->first()->van_id ?? 'null'}}">{{$driver->full_name}}</option>
             @endforeach
 
         </select>
@@ -75,7 +75,7 @@
 @section('form-btn')
 <button id="editVanBtn" class="btn btn-primary" type="submit">Save Changes</button>
 <div id="editVanBtnM" class="hidden">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Add unit</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#driverWithVan-modal">Save Changes</button>
     <div class="modal" id="driverWithVan-modal">                          
         <div class="modal-dialog" style="margin-top: 10%;">
             <div class="modal-content">

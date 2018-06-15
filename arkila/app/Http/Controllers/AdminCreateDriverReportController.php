@@ -99,8 +99,8 @@ class AdminCreateDriverReportController extends Controller
                       ]);
 
                       $insertLegderQuery = array(
-                          array('description' => 'SOP', 'amount' => $trip->SOP, 'type' => 'Revenue'),
-                          array('description' => 'Booking Fee', 'amount' => $trip->total_booking_fee, 'type' => 'Revenue'),
+                          array('description' => 'SOP', 'amount' => $trip->SOP, 'type' => 'Revenue', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()),
+                          array('description' => 'Booking Fee', 'amount' => $trip->total_booking_fee, 'type' => 'Revenue', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()),
                       );
 
                       Ledger::insert($insertLegderQuery);
@@ -124,6 +124,8 @@ class AdminCreateDriverReportController extends Controller
                           'description' => 'Booking Fee',
                           'amount' => $trip->total_booking_fee,
                           'type' => 'Revenue',
+                          'created_at' => Carbon::now(), 
+                          'updated_at' => Carbon::now(),
                       ]);
 
                   }

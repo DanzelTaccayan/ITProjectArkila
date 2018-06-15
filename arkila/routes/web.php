@@ -19,7 +19,7 @@ Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 /*Email Verification*/
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 /*Success Registration*/
-Route::get('/home/register/success', 'Auth\SuccessRegistrationController@successRegistration');
+Route::get('/home/register/success', 'Auth\SuccessRegistrationController@successRegistration')->name('auth.registrationSuccess');
 
 Route::get('/ticketmanagement','TransactionsController@manage');
 
@@ -37,7 +37,7 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
         Route::get('/home/superadmin-dashboard', 'HomeController@index')->name('home');
     Route::post('/home/restoreDatabase','RestoreDatabaseController@restoreDatabase')->name('home.restoreDatabase');
     Route::resource('/home/ledger', 'DailyLedgerController');
-
+    Route::get('/home/transaction-list', 'TransactionsController@transactionList')->name('transaction-list');
     Route::resource('/home/announcements', 'AnnouncementsController');
     Route::resource('/home/route', 'RoutesController',[
         'except' => ['create', 'show']
