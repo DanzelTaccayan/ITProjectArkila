@@ -65,7 +65,7 @@
         <select name="driver" id="driver" class="form-control select2"@if(count($operators) == 0) disabled @endif></select>
     @else
         <select name="driver" id="driver" class="form-control select2">
-        <option value="" data-van="null">None</option>
+        <option value="" data-van=null>None</option>
         @foreach($drivers as $driver)
             <option value="{{$driver->member_id}}" data-van="{{$driver->van->first()->van_id ?? 'null'}}">{{$driver->full_name}}</option>
         @endforeach
@@ -169,7 +169,7 @@ $('select[name="operator"]').on('change',function(){
             'operator':$('select[name="operator"]').val()
         },
         success: function(drivers){
-            $('[name="driver"]').append('<option value="" data-van="null">None</option>');
+            $('[name="driver"]').append('<option value="" data-van=null>None</option>');
             drivers.forEach(function(driverObj){
 
                 $('[name="driver"]').append('<option value='+driverObj.id+' data-van='+driverObj.van+'> '+driverObj.name+'</option>');
