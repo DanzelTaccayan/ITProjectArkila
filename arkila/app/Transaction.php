@@ -19,4 +19,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(Ticket::Class, 'ticket_id');
     }
+
+    public function getTotalAmountAttribute()
+    {
+        return $this->sum('amount_paid');
+    }
+
 }
