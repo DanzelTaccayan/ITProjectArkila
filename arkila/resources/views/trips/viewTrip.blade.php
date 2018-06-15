@@ -34,7 +34,6 @@
     </div>
     <div class="d-inline back">
         <a href="{{route('trips.tripLog')}}" class="btn btn-default btn-flat"><strong>TRIP LOG</strong></a>
-        <a href="{{route('transactions.index')}}" class="btn bg-maroon btn-flat"><strong>SELL AND DEPART</strong></a>
     </div>
     <div class="box" style="box-shadow: 0px 5px 10px gray;">
         <div class="row">

@@ -21,30 +21,11 @@
                     <span>Van Queue</span>
                 </a>
             </li>
-            <li class="{{ Request::is('home/transactions') ? 'active' : '' }}">
-                <a href="{{route('transactions.index')}}">
-                    <i class="fa fa-th"></i>
-                    <span>Sell and Depart</span>
-                </a>
-            </li>
             <li class="{{ Request::is('home/route') ? 'active' : '' }}">
                 <a href="/home/route">
                     <i class="fa fa-road"></i>
                     <span>Terminals and Routes</span>
                 </a>
-            </li>
-            <li class="treeview {{ Request::is('home/transactions/soldTickets') ? 'active' : '' }} || {{ Request::is('home/ticket-management') ? 'active' : '' }} ">
-                <a href="">
-                    <i class="fa fa-ticket"></i>
-                    <span>Ticket Management</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ Request::is('home/transactions/soldTickets') ? 'active' : '' }}"><a href="{{route('transactions.manageTickets')}}"><i class="fa fa-circle-o"></i>Sold Tickets</a></li>
-                    <li class="{{ Request::is('home/ticket-management') ? 'active' : '' }}"><a href="{{route('ticket-management.index')}}"><i class="fa fa-circle-o"></i>Manage Tickets</a></li>
-                </ul>
             </li>
             <li class="treeview {{ Request::is('home/rental/*') ? 'active' : '' }} || {{ Request::is('home/rental') ? 'active' : '' }} || {{ Request::is('home/reservations/*') ? 'active' : '' }} || {{ Request::is('home/reservations') ? 'active' : '' }} || {{ Request::is('home/booking-rules') ? 'active' : '' }}">
                 <a href="#">
@@ -100,7 +81,8 @@
                     <li class="{{ Request::is('home/general-ledger') ? 'active' : '' }}"><a href="{{route('ledger.generalLedger')}}"><i class="fa fa-circle-o"></i> General Ledger</a></li>
                 </ul>
             </li>
-            <li class="treeview {{ Request::is('home/settings') ? 'active' : '' }} || {{ Request::is('home/company-profile') ? 'active' : '' }}">
+            <li class="treeview {{ Request::is(
+            'home/settings') ? 'active' : '' }} || {{ Request::is('home/company-profile') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-gear"></i>
                     <span>Settings</span>
