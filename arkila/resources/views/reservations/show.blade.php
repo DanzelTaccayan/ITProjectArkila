@@ -28,6 +28,7 @@
 						</tbody>
 					</table>
 					<div>
+		                <a href="{{route('reservations.show', $reservation->date_id)}}" class="btn btn-primary btn-block btn-sm">DEPART</a>
 						<a href="{{route('reservations.index')}}" class="btn btn-default btn-block btn-sm">BACK</a>
 					</div>
 				</div>
