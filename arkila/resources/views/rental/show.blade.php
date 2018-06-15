@@ -50,7 +50,7 @@
 		                        </tr>
 		                        <tr>
 		                            <th>Driver</th>
-		                            <td>{{ $rental->driver->full_name ?? 'None' }}</td>
+		                            <td>{{ $rental->driver->member->full_name ?? 'None' }}</td>
 		                        </tr>
 		                        <tr>
 		                            <th>Comment</th>

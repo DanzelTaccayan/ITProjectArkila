@@ -8,14 +8,17 @@
                 <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="img-circle" alt="User Image" style="margin-top:15px;">
             </div>
             <div class="pull-right info">
-                @php $fullname = null; @endphp
-                @if(Auth::user()->middle_name !== null)
+                @php 
+                    $fullname = null; 
+                    $driver_member = \App\Member::where('user_id', Auth::id())->first();
+                @endphp
+                @if($driver_member->middle_name !== null)
                     @php 
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->middle_name . " " .     Auth::user()->last_name; 
+                        $fullname = $driver_member->first_name . " " . $driver_member->middle_name . " " . $driver_member->last_name; 
                     @endphp
                 @else
                     @php 
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->last_name; 
+                        $fullname = $driver_member->first_name . " " . $driver_member->last_name; 
                     @endphp
                 @endif
                 <h4>{{$fullname}}</h4>
