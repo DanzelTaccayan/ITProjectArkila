@@ -20,6 +20,9 @@
                     <a href="{{route('ledger.create')}}" class="btn btn-success btn-flat btn-sm"><i class="fa fa-plus"></i>
                         ADD REVENUE/EXPENSE
                     </a>
+                    <a href="{{route('ledger.create')}}" class="btn btn-primary btn-flat btn-sm"><i class="fa book-open"></i>
+                        SHOW BREAKDOWN
+                    </a>
                     <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>
                 </div>
                 <table id="dailyLedgerTable" class="table table-bordered table-striped">
@@ -31,98 +34,51 @@
                             <th>IN</th>
                             <th>OUT</th>
                             <th>Balance</th>
-                            <th class="text-center">Action</th>
+                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($ledgers->sortByDesc('ledger_id') as $ledger) 
-                        
-                        @if ($ledger->created_at->format('m-d-Y') == $date->format('m-d-Y'))
-                        <tr>
-                            @if ($ledger->description !== 'Booking Fee' && $ledger->description !== 'SOP' && $ledger->description !== 'Expired Ticket')
-                            <td>{{$ledger->payee}}</td>
-                            <td>{{$ledger->description}}</td>
-                            <td>{{$ledger->or_number}}</td>
-                            @if ($ledger->type == 'Revenue')
-
-                            <td class="text-right">{{$ledger->amount}}</td>
-                            <td></td>
-                            <td class="text-right">{{$ledger->amount}}</td>
-
-                            @else
-                            <td></td>
-                            <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
-                            <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
-
-                            @endif
-
-                            <td class="center-block">
-                                <div class="text-center">
-                                    <a href="{{route('ledger.edit', $ledger->ledger_id)}}" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o"></i>EDIT</a>
-                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#{{'deleteLedger'. $ledger->ledger_id}}"><i class="fa fa-trash"></i> DELETE</button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endif 
-                        @endif
-
-                        <div class="modal" id="{{'deleteLedger'. $ledger->ledger_id}}">
-                            <div class="modal-dialog" style="margin-top: 10%;">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title"></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h1 class="text-center text-red"><i class="fa fa-trash"></i> DELETE</h1>
-                                        <p class="text-center">ARE YOU SURE YOU WANT TO DELETE</p>             
-                                        <h4 class="text-center "><strong class="text-red">{{$ledger->description}}</strong>?</h4>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="{{route('ledger.destroy', $ledger->ledger_id)}}" method="POST">
-                                            {{csrf_field()}} 
-                                            {{method_field('DELETE')}}
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-                                                <button type="submit" class="btn btn-danger">DELETE</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @endforeach 
-                        
-                        @if ($ledgers->count() > 0)
-
                             <tr>
                                 <td></td>
-                                <td>Booking Fee({{$mainTerminal->destination_name}})</td>
+                                <td><a href="">Booking Fee(Baguio)</a></td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
+                                <td class="text-right">600</td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->booking_fee, 2) }}</td>
+                                <td class="text-right">600</td>
                                 <td class="text-center">No Action</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>SOP</td>
+                                <td><a href="">SOP</a></td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
+                                <td class="text-right">200</td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->sop, 2) }}</td>
+                                <td class="text-right">200</td>
                                 <td class="text-center">No Action</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>Lost/Expired Ticket</td>
+                                <td>Electric Bill</td>
+                                <td>CA236663</td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
+                                <td class="text-right">2000</td>
+                                <td class="text-right">2000</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-primary">VIEW</button>
+                                    <button class="btn btn-sm btn-danger">DELETE</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cardo Dalisay</td>
+                                <td>Montly Due</td>
                                 <td></td>
-                                <td class="text-right">{{ number_format($ledger->expired_ticket, 2) }}</td>
-                                <td class="text-center">No Action</td>
+                                <td class="text-right">250</td>
+                                <td></td>
+                                <td class="text-right">250</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-primary">VIEW</button>
+                                    <button class="btn btn-sm btn-danger">DELETE</button>
+                                </td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -130,14 +86,13 @@
                                 <th></th>
                                 <th></th>
                                 <th>TOTAL:</th>
-                                <th class="text-right">{{ number_format($ledger->total_revenue, 2)}}</th>
-                                <th class="text-right">{{ number_format($ledger->total_expense, 2) }}</th>
-                                <th class="text-right">{{ number_format($ledger->balance, 2) }}</th>
+                                <th class="text-right">1050</th>
+                                <th class="text-right">2000</th>
+                                <th class="text-right">-950</th>
                                 <th></th>
                             </tr>
                         </tfoot>
-                    @endif
-                </table>
+                    </table>
             </div>
         </div>
     </div>

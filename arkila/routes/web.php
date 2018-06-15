@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-
+Route::get('/show-test', 'TestController@show');
 /*Log in*/
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 /*Email Verification*/
