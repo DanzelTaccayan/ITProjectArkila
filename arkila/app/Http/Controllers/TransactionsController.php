@@ -40,6 +40,13 @@ class TransactionsController extends Controller
         return view('ledger.transactionList', compact('transactions'));
     }
 
+    public function breakdown()
+    {
+        $ledgers = Ledger::orderBy('created_at', 'DESC')->get();
+        $date = Carbon::now();
+        return view('ledger.breakdown', compact('ledgers','date'));
+    }
+
     public function manageTickets()
     {
         $terminals = Destination::where('is_main_terminal','!=',1)->where('is_terminal',1)->get();

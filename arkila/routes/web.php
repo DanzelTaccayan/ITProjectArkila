@@ -39,6 +39,8 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::post('/home/restoreDatabase','RestoreDatabaseController@restoreDatabase')->name('home.restoreDatabase');
     Route::resource('/home/ledger', 'DailyLedgerController');
     Route::get('/home/transaction-list', 'TransactionsController@transactionList')->name('transaction-list');
+    Route::get('/home/breakdown-list', 'TransactionsController@breakdown')->name('breakdown-list');
+
     Route::resource('/home/announcements', 'AnnouncementsController');
     Route::resource('/home/route', 'RoutesController',[
         'except' => ['create', 'show']
