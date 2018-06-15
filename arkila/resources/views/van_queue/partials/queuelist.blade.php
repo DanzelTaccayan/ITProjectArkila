@@ -114,12 +114,91 @@
   <div class="col-md-5">
     <div class="well">
       <div class="text-center">
-        <button id="boardBtn{{$terminal->destination_id}}" class="btn btn-primary btn-lg">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+        @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->where('queue_number',1)->first() ?? null)
+            <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-primary btn-lg">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+        @elseif ($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','OB')->orderBy('queue_number')->first() ?? null)
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ondeckOB-modal{{$vanOnQueue->van_queue_id}}">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+                <div class="modal" id="ondeckOB-modal{{$vanOnQueue->van_queue_id}}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                <p class="text-center"><strong class="text-blue" style="font-size: 20px">{{$vanOnQueue->van->plate_number}}</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">OB</strong>. WILL IT REMAIN ON DECK?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button data-van="{{$vanOnQueue->van_queue_id}}" name="moveToSpecialUnits" type="button" class="btn btn-default"><i class="text-yellow fa fa-star"></i> MOVE TO SPECIAL UNITS</button>
+                                    <button data-van="{{$vanOnQueue->van_queue_id}}" name="remainOnDeck" type="button" class="btn btn-primary ">REMAIN ON DECK</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+        @elseif($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','ER')->orWhere('remarks','CC')->orderBy('queue_number')->first() ?? null)
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ondeckERCC-modal{{$vanOnQueue->van_queue_id}}">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+
+                <div class="modal" id="ondeckERCC-modal{{$vanOnQueue->van_queue_id}}">
+                    <div class="modal-dialog" style="margin-top: 10%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title"></h4>
+                            </div>
+                            <div class="modal-body">
+                                <h1 class="text-center text-aqua"><i class="fa fa-exclamation-circle"></i> CONFIRMATION</h1>
+                                <p class="text-center"><strong class="text-blue" style="font-size: 20px">{{$vanOnQueue->van->plate_number}}</strong> IS ON DECK AND HAS A REMARK OF <strong class="text-green" style="font-size: 20px">{{$vanOnQueue->remarks}}</strong>. THEREFORE IT CANNOT DEPART AND MUST BE MOVED TO THE SPECIAL UNITS</p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="text-center">
+                                    <button data-van="{{$vanOnQueue->van_queue_id}}" name="moveToSpecialUnits" type="button" class="btn btn-default"><i class="text-yellow fa fa-star"></i> MOVE TO SPECIAL UNITS</button>
+                                    <button data-van="{{$vanOnQueue->van_queue_id}}" name="remainOnDeck" type="button" class="btn btn-primary ">REMOVE REMARK</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+        @else
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#novan-modal{{$terminal->destination_id}}">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+                <div class="modal" id="novan-modal{{$terminal->destination_id}}">
+                  <div class="modal-dialog" style="margin-top: 10%;">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">×</span></button>
+                              <h4 class="modal-title"></h4>
+                          </div>
+                          <div class="modal-body">
+                              <h1 class="text-center text-danger"><i class="fa fa-ban"></i> NOT ALLOWED</h1>
+                              <div class="padding-side-5">
+                              <p class="text-center"><strong class="text-gray" style="font-size: 20px">UNABLE TO BOARD PASSENGERS BECAUSE THERE IS NO VAN ON DECK</strong></p>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <div class="text-center">
+                                  <button type="button" class="btn btn-default"  data-dismiss="modal" >CLOSE</button>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- /.modal-content -->
+                  </div>
+                  <!-- /.modal-dialog -->
+                </div>
+        @endif
       </div>
     </div>
     {{-- Special Unit --}}
     <div id="special-unit" class="special-unit-heading">
-    <h4><i class="fa fa-star"></i> SPECIAL UNITS</h4>
+        <h4><i class="fa fa-star"></i> SPECIAL UNITS</h4>
     </div>
     <div class="well scrollbar scrollbar-info  thin special-unit-body">
       <ol id='specialUnitList{{$terminal->destination_id}}' class="special-list">
@@ -185,5 +264,5 @@
           @endforeach
       </ol>
     </div>
-                          </div>
-                        </div>
+  </div>
+</div>
