@@ -134,7 +134,7 @@
                     <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
                 </div>
-                <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys)</p>
+                <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the letters of the alphabet. (use up and down arrow keys)</p>
                 <p class="font-italic"><strong>NOTE:</strong> You can add more destination terminals later in the Terminals and Routes page.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">

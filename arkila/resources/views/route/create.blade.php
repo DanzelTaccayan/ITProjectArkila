@@ -30,7 +30,7 @@
       <div class="form-group">
           <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
-          <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys.)</p> 
+          <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the letters of the alphabet. (use up and down arrow keys.)</p> 
       </div>
   </div>
   @if ($type == 'Terminal')
