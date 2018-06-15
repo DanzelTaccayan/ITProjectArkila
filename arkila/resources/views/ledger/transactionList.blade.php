@@ -41,7 +41,7 @@
                         <th></th>
                         <th></th>
                         <th style="text-align:right">Total:</th>
-                        <th colspan="2" style="text-align:left"></th>
+                        <th style="text-align:right;"></th>
                         
                     </tr>
                 </tfoot>
@@ -104,7 +104,7 @@
                     }, 0 );
 
                 $( api.column( 5 ).footer() ).html(
-                    'P'+amount.toFixed(2)+' (P{{$transaction->total_amount}} total)'
+                    amount.toFixed(2)+' ({{$transaction->total_amount}} total)'
                 );
 
                 },
