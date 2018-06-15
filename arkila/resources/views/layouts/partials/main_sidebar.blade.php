@@ -79,6 +79,7 @@
                 <ul class="treeview-menu">
                     <li class="{{ Request::is('home/ledger') ? 'active' : '' }}"><a href="{{route('ledger.index')}}"><i class="fa fa-circle-o"></i> Daily Ledger</a></li>
                     <li class="{{ Request::is('home/general-ledger') ? 'active' : '' }}"><a href="{{route('ledger.generalLedger')}}"><i class="fa fa-circle-o"></i> General Ledger</a></li>
+                    <li class=""><a href=""><i class="fa fa-circle-o"></i> Transactions</a></li>
                 </ul>
             </li>
             <li class="treeview {{ Request::is(
