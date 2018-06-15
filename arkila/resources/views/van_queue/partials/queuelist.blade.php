@@ -115,7 +115,7 @@
     <div class="well">
       <div class="text-center">
         @if($terminal->vanQueue()->whereNotNull('queue_number')->whereNull('remarks')->where('queue_number',1)->first() ?? null)
-            <button name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-primary btn-lg">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
+            <button id="boardBtn{{$terminal->destination_id}}" name="boardPageBtn" data-terminal="{{$terminal->destination_id}}" type="button" class="btn btn-primary btn-lg">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
         @elseif ($vanOnQueue = $terminal->vanQueue()->where('queue_number',1)->where('remarks','OB')->orderBy('queue_number')->first() ?? null)
                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ondeckOB-modal{{$vanOnQueue->van_queue_id}}">BOARD PASSENGERS <i class="fa fa-arrow-circle-o-right"></i></button>
                 <div class="modal" id="ondeckOB-modal{{$vanOnQueue->van_queue_id}}">
