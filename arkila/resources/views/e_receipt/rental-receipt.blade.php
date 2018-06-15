@@ -158,7 +158,7 @@
                 <td>{{$rental->van->plate_number}}</td>
                 <td>{{$rental->van->model->description}}</td>
                 <td>{{$rental->van->seating_capacity}}</td>
-                <td>{{$rental->driver->full_name}}</td>
+                <td>{{$rental->driver->member->full_name}}</td>
               </tr>
             </tbody>
           </table>
