@@ -126,15 +126,6 @@
                     <label>Short Trip Discounted Fare: <span class="text-red">*</span> </label>
                     <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" step=".01" name="sdTripFare" placeholder="Php 0.00" value="{{old('sdTripFare')}}" val-discountStFare required>
                 </div>
-                <div class="form-group col-md-6 left">
-                    <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
-                </div>
-                <div class="form-group col-md-6 right">
-                    <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
-                    <input type="number" class="form-control disTicket" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
-                </div>
-                <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys)</p>
                 <p class="font-italic"><strong>NOTE:</strong> You can add more destination terminals later in the Terminals and Routes page.</p>
             </div>
             <div style="text-align:center;margin-top:40px;">

@@ -23,15 +23,6 @@
           <label>Discounted Fare: <span class="text-red">*</span> </label>
           <input type="number" class="form-control" min="1" max="5000" placeholder="Php 0.00" name="discountedFare" value="{{old('discountedFare')}}" val-discountFare step=".01" required>
       </div>
-      <div class="form-group">
-          <label>Number of Regular Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="1" step="1" name="numticket" value="{{old('numticket')}}" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" val-regularTick required>
-      </div>
-      <div class="form-group">
-          <label>Number of Discount Tickets: <span class="text-red">*</span> </label>
-          <input type="number" class="form-control" min="26" step="26" name="numticketDis" value="{{old('numticketDis')}}" val-discountTick required>
-          <p><strong>NOTE:</strong> Discount tickets are in intervals of 26 based on the number of alphabets. (use up and down arrow keys.)</p> 
-      </div>
   </div>
   @if ($type == 'Terminal')
   <input type="hidden" name="type" value="Terminal">

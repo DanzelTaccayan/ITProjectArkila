@@ -357,7 +357,7 @@
                             <tr>
                                 <td></td>
                                 <td>Electric Bill</td>
-                                <td></td>
+                                <td>CA236663</td>
                                 <td></td>
                                 <td class="text-right">2000</td>
                                 <td class="text-right">-2000</td>
