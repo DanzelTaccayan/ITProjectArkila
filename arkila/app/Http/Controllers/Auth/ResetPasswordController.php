@@ -52,6 +52,8 @@ class ResetPasswordController extends Controller
             'password' => bcrypt($password),
             'remember_token' => Str::random(60),
         ])->save();
+
+        session()->flash('success','Password reset Successful');
     }
 
     public function showResetForm(Request $request, $token = null)

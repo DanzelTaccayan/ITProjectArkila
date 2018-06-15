@@ -11,6 +11,9 @@
         <!-- /.box-header -->
         <div class="box-body">
           @include('message.error')
+                <form method="POST" action="{{route('password.request')}}">
+                    <input type="hidden" name="token" value="{{$token}}">
+                    {{csrf_field()}}
                 <!-- /.row -->
                 <div class="row form-group">
                     <label class="control-label col-sm-3">Email:</label>
@@ -40,7 +43,8 @@
                         <button type="submit" class="btn btn-flat btn-primary">Submit</button>
                     </div>
                 </div>
-                <!-- /.row -->
+                <!-- /.row -->                    
+                </form>
         </div>
         <!-- /.box-body -->
     </div>

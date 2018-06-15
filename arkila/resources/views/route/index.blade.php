@@ -58,8 +58,6 @@
                                             <th>Name</th>
                                             <th>Regular Fee</th>
                                             <th>Discounted Fee</th>  
-                                            <th>Regular Tickets</th>
-                                            <th>Discounted Tickets</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -73,8 +71,6 @@
                                             @foreach($fareDis->where('destination_id', $routes->destination_id) as $discounted)
                                             <td class="text-right">{{$discounted->fare}}</td>
                                             @endforeach
-                                            <td class="text-right">{{$routes->number_of_tickets}}</td>
-                                            <td class="text-right">{{$routes->tickets->where('type', 'Discount')->count()}}</td>
                                             <td>
                                                 <div class="text-center">
                                                     <a href="{{route('route.edit', [$routes->destination_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>EDIT</a>
