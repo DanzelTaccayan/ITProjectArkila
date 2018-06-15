@@ -160,7 +160,7 @@ $('select[name="operator"]').on('change',function(){
             'operator':$('select[name="operator"]').val()
         },
         success: function(drivers){
-            $('[name="driver"]').append('<option value="" data-van=null>None</option>');
+            $('[name="driver"]').append('<option value="" data-van="null">None</option>');
             drivers.forEach(function(driverObj){
 
                 $('[name="driver"]').append('<option value='+driverObj.id+' data-van='+driverObj.van+'> '+driverObj.name+'</option>');
