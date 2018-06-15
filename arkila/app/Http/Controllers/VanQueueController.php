@@ -20,6 +20,7 @@ class VanQueueController extends Controller
      */
     public function index()
     {
+        $destinations = Destination::allRoute()->orderBy('destination_name')->get();
         $terminals = Destination::allTerminal()->get();
         $queue = VanQueue::whereNotNull('queue_number')->orderBy('queue_number')->get();
         $drivers = Member::whereNotIn('member_id', function($query) {
