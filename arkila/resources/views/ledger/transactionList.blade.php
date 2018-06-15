@@ -13,7 +13,6 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Ticket Name</th>
                         <th>Destination</th>
                         <th>Origin</th>
                         <th>Ticket Type</th>
@@ -25,18 +24,20 @@
                 @foreach($transactions as $transaction)   
                     <tr>
                         <td class="hidden-xs" name="opId">{{$transaction->transaction_id}}</td>
-                        <td class="text-uppercase">{{$transaction->ticket_name ?? 'NONE'}}</td>
                         <td class="text-uppercase">{{$transaction->destination}}</td>
                         <td class="text-uppercase">{{$transaction->origin}}</td>
+                        @if($transaction->transaction_ticket_type == 'Discount')
+                        <td>DISCOUNTED</td>
+                        @else                        
                         <td class="text-uppercase">{{$transaction->transaction_ticket_type}}</td>
+                        @endif
                         <td class="text-right">{{$transaction->amount_paid}}</td>
-                        <td>{{$transaction->created_at->formatLocalized('%d %B %Y')}}</td>
+                        <td>{{date('g:i A', strtotime($transaction->created_at, 2))}} of {{$transaction->created_at->formatLocalized('%d %B %Y')}}</td>
                     </tr>
                 @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -97,14 +98,14 @@
 
                 // Total rev
                 amount = api
-                    .column( 5, { page: 'current'} )
+                    .column( 4, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
-                $( api.column( 5 ).footer() ).html(
-                    'P'+amount.toFixed(2)+' (P{{$transaction->total_amount}} total)'
+                $( api.column( 4 ).footer() ).html(
+                    amount.toFixed(2)+' ({{$transaction->total_amount}} total)'
                 );
 
                 },
