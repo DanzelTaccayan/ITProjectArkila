@@ -120,6 +120,11 @@
                 </a>
             </li>
             <li>
+                <a onclick=" window.open('/live-queue')">
+                    <i class="fa fa-tv"></i> <span>Ticket Queue</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{route('logout')}}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                     <i class="fa fa-sign-out"></i>

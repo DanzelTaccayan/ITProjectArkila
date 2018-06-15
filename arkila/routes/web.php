@@ -20,7 +20,8 @@ Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 /*Success Registration*/
 Route::get('/home/register/success', 'Auth\SuccessRegistrationController@successRegistration')->name('auth.registrationSuccess');
-
+/*View Live Queue*/
+Route::get('/live-queue', 'ViewLiveVanQueueController@index')->name('ticketmanagement.queue');
 Route::get('/ticketmanagement','TransactionsController@manage');
 
 Route::post('/markAsRead', 'MarkAsReadNotificationController@markAsRead');
@@ -240,8 +241,6 @@ Route::get('/', 'CustomerModuleControllers\CustomerNonUserHomeController@indexNo
     Route::get('/home/account-settings', 'SuperAdminChangePasswordController@viewAccountSettings')->name('accountSettings');
     Route::post('/checkCurrentPassAdmin', 'SuperAdminChangePasswordController@checkCurrentPassword')->name('checkPass');
     Route::patch('/home/account-settings/{superAdminid}/change-password', 'SuperAdminChangePasswordController@updatePassword')->name('superadminmodule.changePassword');
-    /*View Live Queue*/
-    Route::get('/live-queue', 'ViewLiveVanQueueController@index')->name('ticketmanagement.queue');
     Route::get('/getVanQueue', 'ViewLiveVanQueueController@getVanQueue')->name('ticketmanagement.getVanQueue');
     });
  });
@@ -331,6 +330,7 @@ Route::group(['middleware' => ['auth', 'customer', 'prevent-back']], function(){
     /*Notifications*/
     Route::get('/customerNotifications', 'CustomerModuleControllers\ViewNotificationsController@notificaitons')->name('customermodule.notifications');
     Route::get('/markAsRead', 'CustomerModuleControllers\ViewNotificationsController@markAsRead')->name('customermodule.markAsRead');
+
 });
 /******************************************************************************/
 /******************************************************************************/

@@ -17,13 +17,7 @@
     $('[val-contact]').attr('data-parsley-pattern-message','Please use only numbers and symbols [().+-].');
     $('[val-contact]').attr('data-parsley-required-message','Please enter contact number.');
 
-  // Validate address.
-    $('[val-address]').parsley({
-      maxlength: 70,
-    	pattern: /([A-Za-z\d ]|[\d #])[A-Za-z\d .,-]*[A-Za-z\d ]$/
-    });
-
-    $('[val-address]').attr('data-parsley-pattern-message','Please use only letters (a-z),numbers and symbols [(),.-+#].');
+  // Validate address. 
     $('[name="address"]').attr('data-parsley-required-message','Please enter address.');
     $('[name="provincialAddress"]').attr('data-parsley-required-message','Please enter provincial address.');
 
