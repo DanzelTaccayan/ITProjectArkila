@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'user-status' => \App\Http\Middleware\ChangeUserStatus::class,
         'getting-started' => \App\Http\Middleware\GettingStarted::class,
         'prevent-back' => \App\Http\Middleware\PreventBackHistory::class,
+        'prevent-back-registration-success' => \App\Http\Middleware\RegistrationSuccess::class,
     ];
 }

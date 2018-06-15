@@ -19,7 +19,7 @@ Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 /*Email Verification*/
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 /*Success Registration*/
-Route::get('/home/register/success', 'Auth\SuccessRegistrationController@successRegistration');
+Route::get('/home/register/success', 'Auth\SuccessRegistrationController@successRegistration')->name('auth.registrationSuccess');
 
 Route::get('/ticketmanagement','TransactionsController@manage');
 
