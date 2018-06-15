@@ -83,6 +83,7 @@
     @endif
     </div>
 </div>
+    @include('layouts.partials.preloader_div')
 @endif
 @endsection 
 @section('scripts') 
@@ -189,5 +190,12 @@
             showInputs: false
         })
     })
+</script>
+<script>
+    $('button[name="status"]').click(function() {
+        $('#submit-loader').removeClass('hidden');
+        $('#submit-loader').css("display","block");
+    });
+</script>
 
 @endsection
