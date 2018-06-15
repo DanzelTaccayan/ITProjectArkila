@@ -48,9 +48,9 @@
     <label for="">Driver</label>
 
         <select name="driver" id="driver" class="form-control select2">
-            <option value="">None</option>
+            <option value="" data-van="">None</option>
             @foreach($drivers as $driver)
-                <option @if($van->driver->first()->member_id ?? null) @if($driver->member_id == $van->driver->first()->member_id) {{'selected'}} @endif @endif value="{{$driver->member_id}}">{{$driver->full_name}}</option>
+                <option @if($van->driver->first()->member_id ?? null) @if($driver->member_id == $van->driver->first()->member_id) {{'selected'}} @endif @endif value="{{$driver->member_id}}" data-van="{{$driver->van->first()->van_id ?? 'null'}}">{{$driver->full_name}}</option>
             @endforeach
 
         </select>
