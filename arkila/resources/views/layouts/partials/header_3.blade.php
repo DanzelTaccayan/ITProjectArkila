@@ -55,17 +55,23 @@
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
               <a href="{{ route('drivermodule.profile.driverProfile') }}">
-                <!-- The user image in the navbar-->
-                <img src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" class="user-image" alt="User Image">
+                @php
+                    $driver = \App\Member::where('user_id', Auth::id())->first();
+                @endphp
+                <img src="{{ URL::asset('uploads/profilePictures/'.$driver->profile_picture) }}" class="user-image" alt="User Image">
+                
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                @php $fullname = null; @endphp
-                @if(Auth::user()->middle_name !== null)
-                    @php
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->middle_name . " " .     Auth::user()->last_name;
+                @php 
+                    $fullname = null; 
+                    $driver_member = \App\Member::where('user_id', Auth::id())->first();
+                @endphp
+                @if($driver_member->middle_name !== null)
+                    @php 
+                        $fullname = $driver_member->first_name . " " . $driver_member->middle_name . " " . $driver_member->last_name; 
                     @endphp
                 @else
-                    @php
-                        $fullname = Auth::user()->first_name . " " . Auth::user()->last_name;
+                    @php 
+                        $fullname = $driver_member->first_name . " " . $driver_member->last_name; 
                     @endphp
                 @endif
                 <span class="hidden-xs">{{$fullname}}</span>

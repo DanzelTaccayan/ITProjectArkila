@@ -5,7 +5,8 @@
     <div class="col-md-5">
         <div class="box box-solid">
             <div class="box-body box-profile">
-                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('adminlte/dist/img/avatar.png') }}" alt="User profile picture">
+
+                <img class="profile-user-img img-responsive img-circle" src="{{ URL::asset('uploads/profilePictures/'.$profile->profile_picture) }}" alt="User profile picture">
                 <h3 class="profile-username text-center" style="margin-bottom: 0">
                     {{ $profile->first_name.' '.$profile->middle_name.' '.$profile->last_name }}
                 </h3>
