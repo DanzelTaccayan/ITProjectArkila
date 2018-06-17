@@ -18,6 +18,7 @@ use App\Ticket;
 use App\Trip;
 use App\User;
 use App\Fee;
+use App\Van;
 use DB;
 
 class CreateReportController extends Controller
@@ -27,13 +28,14 @@ class CreateReportController extends Controller
   {
     $origins = Destination::where('is_terminal', true)->where('is_main_terminal', false)->get();
     $mainTerminal =  Destination::where('is_terminal', true)->where('is_main_terminal', true)->first();
-    //$destinations = $terminals->routeFromDestination;
+
     $fees = Fee::all();
     $dateNow = Carbon::now()->format('m/d/Y');
     $timeNow = Carbon::now()->format('g:i A');
+    $vans = Van::all();
 
     $member = Member::where('user_id', Auth::id())->first();
-    return view('drivermodule.report.driverCreateReport', compact('dateNow', 'timeNow','terminals', 'destinations', 'fad', 'member', 'origins'));
+    return view('drivermodule.report.driverCreateReport', compact('dateNow', 'timeNow','terminals', 'destinations', 'fad', 'member', 'origins', 'vans'));
   }
 
   public function storeReport(CreateReportRequest $request)
@@ -48,7 +50,8 @@ class CreateReportController extends Controller
     $sop = Fee::where('description', 'SOP')->first();
 
     $driver_user = User::find(Auth::id());
-    $van_id = $driver_user->member->van->first()->van_id;
+    // $van_id = $driver_user->member->van->first()->van_id;
+    $van_id = $request->van_platenumber;
     $driver_id = Member::where('user_id', Auth::id())->select('member_id')->first();
 
     $dateDeparted = $request->dateDeparted;

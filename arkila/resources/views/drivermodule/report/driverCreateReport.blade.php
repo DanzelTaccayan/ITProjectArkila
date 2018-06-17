@@ -18,7 +18,6 @@
 </style>
 @endsection
 @section('content')
-@if($member->van->count() > 0)
 <div class="row">
     <div class="col-md-offset-1 col-md-10">
         <form action="{{route('drivermodule.storeReport')}}" method="POST" id="createReport" class="form-horizontal create-rep" data-parsley-validate="">
@@ -38,6 +37,16 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="van" class="col-sm-4">Van</label>
+                            <div class="col-sm-8">
+                                <select name="van_platenumber" id="platenumber" class="form-control select2">
+                                    @foreach($vans as $van)
+                                    <option value="{{$van->van_id}}">{{$van->plate_number}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>        
                         </div>
                         <div class="form-group">
                             <label for="departureDate" class="col-sm-4">Departure Date:</label>
@@ -104,12 +113,7 @@
         </form>
     </div>
 </div>
-@else
-<div class="container text-center" style="margin-top: 18%">
-    <h1>Currently you don't have a registered van</h1>
-    <p>Please approach the clerk in the Baguio Terminal to register your van unit</p>
-</div>
-@endif
+
 @endsection
 @section('scripts')
 @parent
