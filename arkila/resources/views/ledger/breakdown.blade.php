@@ -22,7 +22,7 @@
                     </a>
                     <button onclick="window.open('{{route('pdf.ledger')}}')" class="btn btn-default btn-sm btn-flat"> <i class="fa fa-print"></i>PRINT DAILY LEDGER</button>
                 </div>
-                <table id="dailyLedgerTable" class="table table-bordered table-striped">
+                <table id="breakdown" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Payee/Payor</th>
@@ -36,322 +36,31 @@
                     </thead>
                     <tbody>
                             <tr>
-                                <td>Cardo Dalisay</td>
+                                <td>Densor Loperamide</td>
                                 <td>Booking Fee(Baguio)</td>
                                 <td></td>
-                                <td class="text-right">20</td>
+                                <td class="text-right">150</td>
                                 <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
+                                <td class="text-right">150</td>
+                                <td>8:00 AM</td>
                             </tr>
                             <tr>
                                 <td>Cardo Dalisay</td>
                                 <td>Booking Fee(Baguio)</td>
                                 <td></td>
-                                <td class="text-right">20</td>
+                                <td class="text-right">75</td>
                                 <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>11:00 AM</td>
-                            </tr>
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
+                                <td class="text-right">75</td>
                                 <td>1:00 PM</td>
                             </tr>
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>    
-                                <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-                            <tr>
-                                <td>Mike Garcia</td>
-                                <td>Booking Fee(Baguio)</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td></td>
-                                <td class="text-right">20</td>
-                                <td>1:00 PM</td>
-                            </tr> 
-
-
-                            <tr>
-                                <td>Cardo Dalisay</td>
-                                <td>SOP</td>
-                                <td></td>
-                                <td class="text-right">100</td>
-                                <td></td>
-                                <td class="text-right">100</td>
-                                <td>11:00 AM</td>
-                            </tr>
+                            
                             <tr>
                                 <td>Mike Garcia</td>
                                 <td>SOP</td>
                                 <td></td>
-                                <td class="text-right">100</td>
+                                <td class="text-right">300</td>
                                 <td></td>
-                                <td class="text-right">100</td>
+                                <td class="text-right">300</td>
                                 <td>1:00 PM</td>
                             </tr>
                             <tr>
@@ -399,7 +108,8 @@
 @parent
     <script>
         $(function() {
-            $('#dailyLedgerTable').DataTable({
+            $('#breakdown').DataTable({
+                'pageLength': 10,
                 'paging': false,
                 'lengthChange': true,
                 'searching': true,

@@ -55,7 +55,7 @@
                             <td class="text-right">{{ $booking->total_amount }}</td>
                             <td></td>
                             <td class="text-right">{{ $booking->total_amount }}</td>
-                            <td>{{$booking->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td>{{$booking->created_at}}</td>
                             <td class="text-center"> No Action</td>
                         </tr>
                         @endforeach
@@ -67,7 +67,7 @@
                             <td class="text-right">{{ $sop->total_amount }}</td>
                             <td></td>
                             <td class="text-right">{{ $sop->total_amount }}</td>
-                            <td>{{$sop->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td>{{$sop->created_at}}</td>
                             <td class="text-center"> No Action</td>
                         </tr>
                         @endforeach
@@ -79,7 +79,7 @@
                             <td class="text-right">{{ $expire->total_amount }}</td>
                             <td></td>
                             <td class="text-right">{{ $expire->total_amount }}</td>
-                            <td>{{$expire->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td>{{$expire->created_at}}</td>
                             <td class="text-center"> No Action</td>
                         </tr>
                         @endforeach
@@ -103,7 +103,7 @@
                             <td class="text-right">{{number_format($ledger->amount * -1, 2)}}</td>
                             @endif
 
-                            <td>{{$ledger->created_at->formatLocalized('%B %d, %Y')}}</td>
+                            <td>{{$ledger->created_at}}</td>
 
                             <td class="center-block">
                                 <div class="text-center">
