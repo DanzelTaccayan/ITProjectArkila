@@ -80,6 +80,15 @@ class RoutesController extends Controller
                     'number_of_tickets' => $request->numticket,
                 ]);
 
+                if($request->dest != null) {
+                    foreach ($terminals as $count => $terminalDestination) {
+                        if (isset($request->dest[$count])) {
+                            $terminal->routeOrigin()
+                                ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
+                        }
+                    }
+                }
+
                 for($c=1; $c <= $request->numticketDis; $c++)
                 {
                     if($disTicketCount >= 26)
@@ -267,6 +276,16 @@ class RoutesController extends Controller
                     'short_trip_fare_discount' => $request->sdTripFare,
                 ]);
 
+                if($request->dest != null) {
+                    $routeAll->routeOrigin()->detach($main->destination_id);
+
+                    foreach ($terminals as $count => $terminal) {
+                        if (isset($request->dest[$count])) {
+                            $routeAll->routeOrigin()
+                                ->attach($main->destination_id, ['terminal_destination' => $request->dest[$count]]);
+                        }
+                    }
+                }
                 $message = $routeAll->destination_name .' has been successfully updated.';
             } else {
                 $routeAll->routeOrigin()->detach($main->destination_id);

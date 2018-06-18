@@ -49,6 +49,16 @@
           <label>Short Trip Discounted Fare: <span class="text-red">*</span> </label>
           <input type="number" class="form-control terminalInput terminalRequired" min="1" max="5000" placeholder="Php 0.00" name="sdTripFare" value="{{old('sdTripFare')}}" step=".01" val-discountStFare required>
       </div>
+        @if($terminals->count() > 0)
+        <div class="form-group" id="destinationTerminal">
+            <label>Destination Terminal: <span class="text-red">*</span> </label>
+            @foreach($terminals as $count => $terminal)
+                <div class="checkbox">
+                    <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
+                </div>
+            @endforeach
+        </div>
+            @endif
     </div>
     @elseif ($type == 'Route')
     <input type="hidden" name="type" value="Route">
