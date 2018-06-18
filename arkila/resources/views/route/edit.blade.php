@@ -59,7 +59,7 @@
         <input type="text" class="form-control" name="originTerm" value="{{$mainTerminal->destination_name}}" disabled>
       </div>
       <div class="form-group" id="destination">
-          <label>Destination Terminal: <span class="text-red">*</span> </label>
+          <label>Route:</label>
           @foreach($terminals as $count => $terminal)
           <div class="checkbox">
             <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}"@foreach($route->routeDestination as $routeDes)@if($routeDes->destination_id == $terminal->destination_id) {{'checked'}}@endif @endforeach>{{$terminal->destination_name}}</label>

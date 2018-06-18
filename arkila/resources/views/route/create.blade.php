@@ -51,7 +51,7 @@
       </div>
         @if($terminals->count() > 0)
         <div class="form-group" id="destinationTerminal">
-            <label>Destination Terminal: <span class="text-red">*</span> </label>
+            <label>Route: </label>
             @foreach($terminals as $count => $terminal)
                 <div class="checkbox">
                     <label><input type="checkbox" class="routeRequired" name="dest[]" value="{{$terminal->destination_id}}">{{$terminal->destination_name}}</label>
