@@ -61,6 +61,7 @@
             info:notification.info,
             id:notification.user_id,
             name:notification.name,
+            date:notification.date,
           }
         };
         this.unreadNotifications.push(newUnreadNotifications);

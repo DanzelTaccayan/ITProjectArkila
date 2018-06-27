@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
+use App\Notifications\RentalOneDayBeforeNotification;
 class Kernel extends ConsoleKernel
 {
     /**
@@ -51,6 +51,23 @@ class Kernel extends ConsoleKernel
             $expiry = new \App\Http\Controllers\TicketManagementController();
             $expiry->ticketExpiry();
         })->everyMinute();
+
+        $schedule->call(function() {
+            $now = \Carbon\Carbon::now()->format('Y-m-d');
+            $rentals = \App\VanRental::selectRaw('COUNT(departure_date) as num, departure_date')
+              ->where('status', 'Paid')->groupBy('departure_date')->get();
+
+            if(count($rentals) > 0){
+              foreach($rentals as $rental){
+                $dateBeforeRental = \Carbon\Carbon::parse($rental->departure_date)->subday();
+                if($dateBeforeRental->format('Y-m-d') == $now){
+                  $admin = \App\User::where('user_type', 'Super-Admin')->first();
+                  $departure_date = \Carbon\Carbon::parse($rental->departure_date)->format('Y-m-d');
+                  $admin->notify(new RentalOneDayBeforeNotification($rental->num, $departure_date));
+                }
+              }
+            }
+        })->daily();
 
     }
 
